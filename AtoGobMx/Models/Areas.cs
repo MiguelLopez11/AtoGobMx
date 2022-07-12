@@ -10,5 +10,7 @@ namespace AtoGobMx.Models
         public int AreasId { get; set; }
         public string Nombre { get; set; }
 
+        public DateTime FechaAlta { get; set; }
+        public DateTime? FechaBaja { get; set; }
     }
 }

@@ -5,7 +5,9 @@ namespace AtoGobMx.Context
 {
     public class AtoGobMxContext : DbContext
     {
+        public AtoGobMxContext(DbContextOptions<AtoGobMxContext> options) : base(options) 
+        { 
+        }
         public DbSet<Areas> Area { get; set; }
-        public AtoGobMxContext(DbContextOptions<AtoGobMxContext> options) : base(options) { }
     }
 }
