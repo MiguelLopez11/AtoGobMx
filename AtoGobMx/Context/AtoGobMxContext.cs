@@ -9,5 +9,6 @@ namespace AtoGobMx.Context
         { 
         }
         public DbSet<Areas> Area { get; set; }
+        public DbSet<empleados> Empleados { get; set; }
     }
 }
