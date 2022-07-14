@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20220712173442_Empleados")]
+    partial class Empleados
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,14 +48,6 @@ namespace AtoGobMx.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("CURP")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("RFC")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<string>("apellidoMaterno")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -62,15 +56,8 @@ namespace AtoGobMx.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<bool>("archivado")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("direccion")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("fechaNacimiento")
-                        .HasColumnType("datetime(6)");
+                    b.Property<DateOnly>("fechaNacimiento")
+                        .HasColumnType("date");
 
                     b.Property<string>("nombre")
                         .IsRequired()
