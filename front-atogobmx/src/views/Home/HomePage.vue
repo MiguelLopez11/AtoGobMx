@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h6> Prueba </h6>
+        <h1>Paginda de inicio</h1>
     </div>
 </template>
 
@@ -9,5 +9,4 @@
 </script>
 
 <style lang="scss" scoped>
-
 </style>

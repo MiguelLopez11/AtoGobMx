@@ -20,7 +20,8 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult> GetEmpleados()
         {
             var empleados = await _context.Empleados
-                .Where(w => !w.archivado)
+                .Include(i => i.Area)
+                .Where(w => !w.Archivado)
                 .ToListAsync();
             return Ok(empleados);
         }
@@ -78,7 +79,7 @@ namespace AtoGobMx.Controllers
             {
                 return NotFound();
             }
-            empleado.archivado = true; 
+            empleado.Archivado = true; 
             _context.Empleados.Update(empleado);
             await _context.SaveChangesAsync();
             return Ok("Empleado archivado");

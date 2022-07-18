@@ -32,11 +32,11 @@ namespace AtoGobMx.Controllers
             return Ok(Area);
         }
         [HttpPost]
-        public async Task<IActionResult> PostArea(Areas areas)
+        public async Task<ActionResult<Areas>> PostArea(Areas areas)
         {
             _context.Area.Add(areas);
             await _context.SaveChangesAsync();
-            return StatusCode(400, "Se ha creado area correctamente");
+            return StatusCode(200, "Se ha creado area correctamente");
         }
     }
 }
