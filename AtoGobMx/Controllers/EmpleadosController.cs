@@ -20,7 +20,8 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult> GetEmpleados()
         {
             var empleados = await _context.Empleados
-                .Where(w => !w.archivado)
+                .Include(i => i.Area)
+                .Where(w => !w.Archivado)
                 .ToListAsync();
             return Ok(empleados);
         }
@@ -43,6 +44,32 @@ namespace AtoGobMx.Controllers
             await _context.SaveChangesAsync();
             return StatusCode(200,"Se ha credo exitosamente");
         }
+        [HttpPut("{EmpleadoId}")]
+        public async Task<IActionResult> PutEmpleado(int EmpleadoId, empleados empleado)
+        {
+           if(empleado.idEmpleado != EmpleadoId)
+            {
+                return BadRequest("Los ID ingresados no coinciden");
+            }
+            //var emp =  _context.Empleados.Find(EmpleadoId);
+            //if(emp == null)
+            //{
+            //    return BadRequest("El empledo no existe");
+            //}
+            //emp.idEmpleado = empleado.idEmpleado;
+            //emp.nombre = empleado.nombre;
+            //emp.apellidoPaterno = empleado.apellidoPaterno;
+            //emp.apellidoMaterno = empleado.apellidoMaterno;
+            //emp.fechaNacimiento = empleado.fechaNacimiento;
+            //emp.RFC = empleado.RFC;
+            //emp.CURP = empleado.CURP;
+            //emp.direccion = empleado.direccion;
+            //emp.archivado = empleado.archivado;
+
+            _context.Empleados.Update(empleado);
+            await _context.SaveChangesAsync();
+            return Ok("Empleado actualizado correctamente");
+        }
         [HttpDelete]
         public async Task<IActionResult> DeleteEmpleados(int Id)
         {
@@ -52,7 +79,7 @@ namespace AtoGobMx.Controllers
             {
                 return NotFound();
             }
-            empleado.archivado = true; 
+            empleado.Archivado = true; 
             _context.Empleados.Update(empleado);
             await _context.SaveChangesAsync();
             return Ok("Empleado archivado");
