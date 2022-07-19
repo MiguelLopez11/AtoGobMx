@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20220715020832_Areas-Empleados_Relations")]
+    partial class AreasEmpleados_Relations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,7 +23,7 @@ namespace AtoGobMx.Migrations
 
             modelBuilder.Entity("AtoGobMx.Models.Areas", b =>
                 {
-                    b.Property<int>("AreaId")
+                    b.Property<int>("AreasId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -36,7 +38,7 @@ namespace AtoGobMx.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.HasKey("AreaId");
+                    b.HasKey("AreasId");
 
                     b.ToTable("Area");
                 });
@@ -54,39 +56,38 @@ namespace AtoGobMx.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("ApellidoPaterno")
+                    b.Property<string>("RFC")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<bool>("Archivado")
+                    b.Property<string>("apellidoMaterno")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("apellidoPaterno")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<bool>("archivado")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<int>("AreaId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CURP")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("Direccion")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<DateTime>("FechaNacimiento")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Nombre")
+                    b.Property<string>("direccion")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("RFC")
+                    b.Property<DateTime>("fechaNacimiento")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("nombre")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
                     b.HasKey("idEmpleado");
+
+                    b.HasIndex("AreaTrabajoId");
 
                     b.ToTable("Empleados");
                 });
