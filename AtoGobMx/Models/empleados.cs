@@ -10,18 +10,24 @@ namespace AtoGobMx.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 
         public int idEmpleado { get; set; }
-        public string Nombre { get; set; }
-        public string ApellidoPaterno { get; set; }
-        public string ApellidoMaterno { get; set; }
-        public DateTime FechaNacimiento { get; set; }
-        public string Direccion { get; set; }
+        [Required]
+        [MaxLength(100)]
+        public string nombre { get; set; }
+        [Required]
+        [MaxLength(100)]
+        public string apellidoPaterno { get; set; }
+        [Required]
+        [MaxLength(100)]
+        public string apellidoMaterno { get; set; }
+        [Required]
+        public DateTime fechaNacimiento { get; set; }
+        [Required]
+        public string direccion { get; set; }
+        [Required]
         public string CURP { get; set; }
+        [Required]
         public string RFC { get; set; }
         
-        public bool Archivado { get; set; }
-        public int AreaId { get; set; }
-
-        //[JsonIgnore]
-        public virtual Areas? Area { get; set; }
+        public bool archivado { get; set; }
     }
 }
