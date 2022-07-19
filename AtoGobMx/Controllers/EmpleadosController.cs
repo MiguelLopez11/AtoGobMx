@@ -17,7 +17,7 @@ namespace AtoGobMx.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetEmpleados()
+        public async Task<ActionResult<empleados>> GetEmpleados()
         {
             var empleados = await _context.Empleados
                 .Where(w => !w.archivado)
