@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,13 +11,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20220718144721_relation-Area-Empleado")]
+    partial class relationAreaEmpleado
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.7")
+                .HasAnnotation("ProductVersion", "6.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("AtoGobMx.Models.Areas", b =>
@@ -25,11 +27,10 @@ namespace AtoGobMx.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Descripcion")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<DateTime>("FechaAlta")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("FechaBaja")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Nombre")
@@ -47,10 +48,7 @@ namespace AtoGobMx.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("AreaTrabajoId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CURP")
+                    b.Property<string>("ApellidoMaterno")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -66,13 +64,11 @@ namespace AtoGobMx.Migrations
 
                     b.Property<string>("CURP")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Direccion")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("FechaNacimiento")
                         .HasColumnType("datetime(6)");
@@ -83,23 +79,24 @@ namespace AtoGobMx.Migrations
 
                     b.Property<string>("RFC")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("idEmpleado");
+
+                    b.HasIndex("AreaId");
 
                     b.ToTable("Empleados");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.empleados", b =>
                 {
-                    b.HasOne("AtoGobMx.Models.Areas", "AreaTrabajo")
+                    b.HasOne("AtoGobMx.Models.Areas", "Area")
                         .WithMany("Empleados")
-                        .HasForeignKey("AreaTrabajoId")
+                        .HasForeignKey("AreaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("AreaTrabajo");
+                    b.Navigation("Area");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Areas", b =>
