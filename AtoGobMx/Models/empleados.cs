@@ -15,7 +15,7 @@ namespace AtoGobMx.Models
         public string? Nombre { get; set; }
         [Required]
         [MaxLength(100)]
-        public string? ApellidoPaterno { get; set; }
+        public string apellidoPaterno { get; set; }
         [Required]
         [MaxLength(100)]
         public string? ApellidoMaterno { get; set; }

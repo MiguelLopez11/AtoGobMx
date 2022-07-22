@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20220719154337_fechas-empleado")]
+    partial class fechasempleado
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,6 +28,7 @@ namespace AtoGobMx.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Descripcion")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Nombre")
@@ -56,8 +59,7 @@ namespace AtoGobMx.Migrations
                     b.Property<bool>("Archivado")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<int?>("AreaTrabajoId")
-                        .IsRequired()
+                    b.Property<int>("AreaTrabajoId")
                         .HasColumnType("int");
 
                     b.Property<string>("CURP")
@@ -66,11 +68,15 @@ namespace AtoGobMx.Migrations
 
                     b.Property<string>("Direccion")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("FechaNacimiento")
-                        .IsRequired()
+                    b.Property<DateTime?>("FechaAlta")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("FechaBaja")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("FechaNacimiento")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Nombre")
@@ -91,13 +97,13 @@ namespace AtoGobMx.Migrations
 
             modelBuilder.Entity("AtoGobMx.Models.empleados", b =>
                 {
-                    b.HasOne("AtoGobMx.Models.Areas", "Areas")
+                    b.HasOne("AtoGobMx.Models.Areas", "AreaTrabajo")
                         .WithMany("Empleados")
                         .HasForeignKey("AreaTrabajoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Areas");
+                    b.Navigation("AreaTrabajo");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Areas", b =>
