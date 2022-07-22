@@ -2,7 +2,7 @@
     <div>
         <h1>Empleados:</h1>
     </div>
-    <div>
+    <div class="col-9 display-center">
         <table class="table">
             <thead class="thead-dark">
                 <tr>
@@ -32,7 +32,11 @@
 <script>
 import EmployeeServices from '@/Services/employee.Services'
 import { ref } from 'vue'
+// import { BButton } from 'bootstrap-vue'
 export default {
+  components: {
+    // BButton
+  },
   setup () {
     const { getEmployees } = EmployeeServices()
     const employees = ref([])
