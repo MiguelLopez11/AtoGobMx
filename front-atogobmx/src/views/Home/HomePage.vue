@@ -1,11 +1,24 @@
 <template>
     <div>
-        <h1>Paginda de inicio</h1>
+        Home Page
     </div>
 </template>
 
-<script setup>
+<script>
+import { ref } from 'vue'
+export default {
+  setup () {
+    const clicked = ref(false)
+    const method = () => {
+      clicked.value = true
+    }
+    return {
+      clicked,
 
+      method
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
