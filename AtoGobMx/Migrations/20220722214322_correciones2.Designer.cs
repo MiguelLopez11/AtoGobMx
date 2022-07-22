@@ -11,33 +11,33 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    [Migration("20220718144532_Rename-Table-Empleados")]
-    partial class RenameTableEmpleados
+    [Migration("20220722214322_correciones2")]
+    partial class correciones2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.6")
+                .HasAnnotation("ProductVersion", "6.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("AtoGobMx.Models.Areas", b =>
                 {
-                    b.Property<int>("AreasId")
+                    b.Property<int>("AreaId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("FechaAlta")
-                        .HasColumnType("datetime(6)");
+                    b.Property<string>("Descripcion")
+                        .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("FechaBaja")
+                    b.Property<DateTime>("FechaAlta")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.HasKey("AreasId");
+                    b.HasKey("AreaId");
 
                     b.ToTable("Area");
                 });
@@ -48,29 +48,16 @@ namespace AtoGobMx.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("ApellidoMaterno")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("ApellidoPaterno")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<bool>("Archivado")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<int>("AreaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AreaTrabajoId")
+                        .HasColumnType("int");
+
                     b.Property<string>("CURP")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Direccion")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("FechaNacimiento")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Nombre")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -78,9 +65,45 @@ namespace AtoGobMx.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("apellidoMaterno")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("apellidoPaterno")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("direccion")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("fechaNacimiento")
+                        .IsRequired()
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("nombre")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
                     b.HasKey("idEmpleado");
 
+                    b.HasIndex("AreaId");
+
                     b.ToTable("Empleados");
+                });
+
+            modelBuilder.Entity("AtoGobMx.Models.empleados", b =>
+                {
+                    b.HasOne("AtoGobMx.Models.Areas", "Area")
+                        .WithMany()
+                        .HasForeignKey("AreaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Area");
                 });
 #pragma warning restore 612, 618
         }

@@ -9,9 +9,9 @@ namespace AtoGobMx.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "FechaBaja",
-                table: "Area");
+            //migrationBuilder.DropColumn(
+            //    name: "FechaBaja",
+            //    table: "Area");
 
             migrationBuilder.AlterColumn<string>(
                 name: "nombre",

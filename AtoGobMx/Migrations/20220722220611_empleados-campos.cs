@@ -4,7 +4,7 @@
 
 namespace AtoGobMx.Migrations
 {
-    public partial class RenameTableEmpleados : Migration
+    public partial class empleadoscampos : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -19,14 +19,19 @@ namespace AtoGobMx.Migrations
                 newName: "FechaNacimiento");
 
             migrationBuilder.RenameColumn(
+                name: "fechaBaja",
+                table: "Empleados",
+                newName: "FechaBaja");
+
+            migrationBuilder.RenameColumn(
+                name: "fechaAlta",
+                table: "Empleados",
+                newName: "FechaAlta");
+
+            migrationBuilder.RenameColumn(
                 name: "direccion",
                 table: "Empleados",
                 newName: "Direccion");
-
-            migrationBuilder.RenameColumn(
-                name: "archivado",
-                table: "Empleados",
-                newName: "Archivado");
 
             migrationBuilder.RenameColumn(
                 name: "apellidoPaterno",
@@ -52,14 +57,19 @@ namespace AtoGobMx.Migrations
                 newName: "fechaNacimiento");
 
             migrationBuilder.RenameColumn(
+                name: "FechaBaja",
+                table: "Empleados",
+                newName: "fechaBaja");
+
+            migrationBuilder.RenameColumn(
+                name: "FechaAlta",
+                table: "Empleados",
+                newName: "fechaAlta");
+
+            migrationBuilder.RenameColumn(
                 name: "Direccion",
                 table: "Empleados",
                 newName: "direccion");
-
-            migrationBuilder.RenameColumn(
-                name: "Archivado",
-                table: "Empleados",
-                newName: "archivado");
 
             migrationBuilder.RenameColumn(
                 name: "ApellidoPaterno",

@@ -20,7 +20,6 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<empleados>> GetEmpleados()
         {
             var empleados = await _context.Empleados
-                .Include(i => i.Area)
                 .Where(w => !w.Archivado)
                 .ToListAsync();
             return Ok(empleados);
@@ -45,28 +44,29 @@ namespace AtoGobMx.Controllers
             return StatusCode(200,"Se ha credo exitosamente");
         }
         [HttpPut("{EmpleadoId}")]
-        public async Task<IActionResult> PutEmpleado(int EmpleadoId, empleados empleado)
+        public async Task<ActionResult> PutEmpleado(int EmpleadoId, empleados empleado)
         {
            if(empleado.idEmpleado != EmpleadoId)
             {
-                return BadRequest("Los ID ingresados no coinciden");
+                return Ok("Los ID ingresados no coinciden");
             }
-            //var emp =  _context.Empleados.Find(EmpleadoId);
-            //if(emp == null)
-            //{
-            //    return BadRequest("El empledo no existe");
-            //}
-            //emp.idEmpleado = empleado.idEmpleado;
-            //emp.nombre = empleado.nombre;
-            //emp.apellidoPaterno = empleado.apellidoPaterno;
-            //emp.apellidoMaterno = empleado.apellidoMaterno;
-            //emp.fechaNacimiento = empleado.fechaNacimiento;
-            //emp.RFC = empleado.RFC;
-            //emp.CURP = empleado.CURP;
-            //emp.direccion = empleado.direccion;
-            //emp.archivado = empleado.archivado;
+            var emp = _context.Empleados.Find(EmpleadoId);
+            if (emp == null)
+            {
+                return BadRequest("El empledo no existe");
+            }
+            emp.idEmpleado = empleado.idEmpleado;
+            emp.Nombre = empleado.Nombre;
+            emp.ApellidoPaterno = empleado.ApellidoPaterno;
+            emp.ApellidoMaterno = empleado.ApellidoMaterno;
+            emp.FechaNacimiento = empleado.FechaNacimiento;
+            emp.RFC = empleado.RFC;
+            emp.CURP = empleado.CURP;
+            emp.Direccion = empleado.Direccion;
+            emp.Archivado = empleado.Archivado;
+            emp.FechaAlta = empleado.FechaAlta;
 
-            _context.Empleados.Update(empleado);
+            _context.Empleados.Update(emp);
             await _context.SaveChangesAsync();
             return Ok("Empleado actualizado correctamente");
         }
@@ -79,7 +79,8 @@ namespace AtoGobMx.Controllers
             {
                 return NotFound();
             }
-            empleado.Archivado = true; 
+            empleado.Archivado = true;
+            empleado.FechaBaja = DateTime.Today;
             _context.Empleados.Update(empleado);
             await _context.SaveChangesAsync();
             return Ok("Empleado archivado");

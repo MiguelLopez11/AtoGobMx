@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20220722221957_areaId")]
+    partial class areaId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,6 +58,9 @@ namespace AtoGobMx.Migrations
                     b.Property<bool>("Archivado")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<int?>("AreaId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("AreaTrabajoId")
                         .IsRequired()
                         .HasColumnType("int");
@@ -90,25 +95,18 @@ namespace AtoGobMx.Migrations
 
                     b.HasKey("idEmpleado");
 
-                    b.HasIndex("AreaTrabajoId");
+                    b.HasIndex("AreaId");
 
                     b.ToTable("Empleados");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.empleados", b =>
                 {
-                    b.HasOne("AtoGobMx.Models.Areas", "Areas")
-                        .WithMany("Empleados")
-                        .HasForeignKey("AreaTrabajoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("AtoGobMx.Models.Areas", "Area")
+                        .WithMany()
+                        .HasForeignKey("AreaId");
 
-                    b.Navigation("Areas");
-                });
-
-            modelBuilder.Entity("AtoGobMx.Models.Areas", b =>
-                {
-                    b.Navigation("Empleados");
+                    b.Navigation("Area");
                 });
 #pragma warning restore 612, 618
         }
