@@ -12,8 +12,8 @@ namespace AtoGobMx.Models
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
 
-        public virtual ICollection<empleados> Empleados { get; set; }
-        public DateTime FechaAlta { get; set; }
-        public DateTime? FechaBaja { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<empleados>? Empleados { get; set; }
+        
     }
 }
