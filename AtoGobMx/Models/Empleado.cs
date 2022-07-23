@@ -1,6 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace AtoGobMx.Models
 {
@@ -10,8 +11,8 @@ namespace AtoGobMx.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 
         public int EmpleadoId { get; set; }
-        [ForeignKey("Area")]
-        public int? AreaId { get; set; }
+        
+        public int AreaId { get; set; }
         [Required]
         [MaxLength(100)]
         public string? Nombre { get; set; }
@@ -35,7 +36,7 @@ namespace AtoGobMx.Models
         public DateTime? FechaBaja { get; set; }
         [Required]
         public bool Archivado { get; set; }
-        [JsonIgnore]
+        [ForeignKey("AreaId")]
         public  Area? Area { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using AtoGobMx.Context;
 using AtoGobMx.Models;
-using Microsoft.AspNetCore.Http;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,17 +11,19 @@ namespace AtoGobMx.Controllers
     public class EmpleadosController : ControllerBase
     {
         private readonly AtoGobMxContext _context;
-        public EmpleadosController(AtoGobMxContext Context)
+        private readonly IMapper _mapper;
+        public EmpleadosController(AtoGobMxContext Context, IMapper mapper)
         {
             _context = Context;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<ActionResult<Empleado>> GetEmpleados()
         {
             var empleados = await _context.Empleados
-                .Include(i => i.Area)
                 .Where(w => !w.Archivado)
+                .Select(s => _mapper.Map<Empleado>(s))
                 .ToListAsync();
             return Ok(empleados);
         }

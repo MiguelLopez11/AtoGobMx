@@ -13,6 +13,6 @@ namespace AtoGobMx.Models
         public string? Descripcion { get; set; }
 
         //[Newtonsoft.Json.JsonIgnore]
-        public  ICollection<Empleado>? Empleados { get; set; }
+        public ICollection<Empleado> Empleados { get; set; }
     }
 }
