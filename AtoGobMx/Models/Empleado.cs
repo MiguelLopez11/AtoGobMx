@@ -4,18 +4,20 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AtoGobMx.Models
 {
-    public class empleados
+    public class Empleado
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 
-        public int idEmpleado { get; set; }
+        public int EmpleadoId { get; set; }
+        [ForeignKey("Area")]
+        public int? AreaId { get; set; }
         [Required]
         [MaxLength(100)]
         public string? Nombre { get; set; }
         [Required]
         [MaxLength(100)]
-        public string apellidoPaterno { get; set; }
+        public string? ApellidoPaterno { get; set; }
         [Required]
         [MaxLength(100)]
         public string? ApellidoMaterno { get; set; }
@@ -24,21 +26,16 @@ namespace AtoGobMx.Models
         [Required]
         public string? Direccion { get; set; }
         [Required]
-        public string CURP { get; set; }
+        public string? CURP { get; set; }
         [Required]
-        public string RFC { get; set; }
+        public string? RFC { get; set; }
         [Required]
         public DateTime FechaAlta { get; set; }
         [Required]
         public DateTime? FechaBaja { get; set; }
         [Required]
-        [ForeignKey("Areas")]
-        public int? AreaTrabajoId { get; set; }
-        [Required]
         public bool Archivado { get; set; }
-
         [JsonIgnore]
-        public virtual Areas? Areas { get; set; }
-
+        public  Area? Area { get; set; }
     }
 }

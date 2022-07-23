@@ -8,7 +8,7 @@ namespace AtoGobMx.Context
         public AtoGobMxContext(DbContextOptions<AtoGobMxContext> options) : base(options) 
         { 
         }
-        public DbSet<Areas> Area { get; set; }
-        public DbSet<empleados> Empleados { get; set; }
+        public DbSet<Area> Area { get; set; }
+        public DbSet<Empleado> Empleados { get; set; }
     }
 }

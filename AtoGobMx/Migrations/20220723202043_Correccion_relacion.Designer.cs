@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    [Migration("20220722230002_relation-employee")]
-    partial class relationemployee
+    [Migration("20220723202043_Correccion_relacion")]
+    partial class Correccion_relacion
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,7 @@ namespace AtoGobMx.Migrations
                 .HasAnnotation("ProductVersion", "6.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("AtoGobMx.Models.Areas", b =>
+            modelBuilder.Entity("AtoGobMx.Models.Area", b =>
                 {
                     b.Property<int>("AreaId")
                         .ValueGeneratedOnAdd()
@@ -39,9 +39,9 @@ namespace AtoGobMx.Migrations
                     b.ToTable("Area");
                 });
 
-            modelBuilder.Entity("AtoGobMx.Models.empleados", b =>
+            modelBuilder.Entity("AtoGobMx.Models.Empleado", b =>
                 {
-                    b.Property<int>("idEmpleado")
+                    b.Property<int>("EmpleadoId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -57,6 +57,9 @@ namespace AtoGobMx.Migrations
 
                     b.Property<bool>("Archivado")
                         .HasColumnType("tinyint(1)");
+
+                    b.Property<int?>("AreaId")
+                        .HasColumnType("int");
 
                     b.Property<string>("CURP")
                         .IsRequired()
@@ -86,9 +89,25 @@ namespace AtoGobMx.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.HasKey("idEmpleado");
+                    b.HasKey("EmpleadoId");
+
+                    b.HasIndex("AreaId");
 
                     b.ToTable("Empleados");
+                });
+
+            modelBuilder.Entity("AtoGobMx.Models.Empleado", b =>
+                {
+                    b.HasOne("AtoGobMx.Models.Area", "Area")
+                        .WithMany("Empleados")
+                        .HasForeignKey("AreaId");
+
+                    b.Navigation("Area");
+                });
+
+            modelBuilder.Entity("AtoGobMx.Models.Area", b =>
+                {
+                    b.Navigation("Empleados");
                 });
 #pragma warning restore 612, 618
         }

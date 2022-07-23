@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    [Migration("20220722214917_fechas")]
-    partial class fechas
+    [Migration("20220723200345_relation")]
+    partial class relation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,7 @@ namespace AtoGobMx.Migrations
                 .HasAnnotation("ProductVersion", "6.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("AtoGobMx.Models.Areas", b =>
+            modelBuilder.Entity("AtoGobMx.Models.Area", b =>
                 {
                     b.Property<int>("AreaId")
                         .ValueGeneratedOnAdd()
@@ -29,9 +29,6 @@ namespace AtoGobMx.Migrations
 
                     b.Property<string>("Descripcion")
                         .HasColumnType("longtext");
-
-                    b.Property<DateTime>("FechaAlta")
-                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -42,75 +39,78 @@ namespace AtoGobMx.Migrations
                     b.ToTable("Area");
                 });
 
-            modelBuilder.Entity("AtoGobMx.Models.empleados", b =>
+            modelBuilder.Entity("AtoGobMx.Models.Empleado", b =>
                 {
                     b.Property<int>("idEmpleado")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<string>("ApellidoMaterno")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("ApellidoPaterno")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
                     b.Property<bool>("Archivado")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<int>("AreaId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("AreaTrabajoId")
+                    b.Property<int?>("AreaTrabajoId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("CURP")
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("Direccion")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("FechaAlta")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("FechaBaja")
+                        .IsRequired()
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("FechaNacimiento")
+                        .IsRequired()
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
                     b.Property<string>("RFC")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("apellidoMaterno")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("apellidoPaterno")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("direccion")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("fechaAlta")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime?>("fechaBaja")
-                        .IsRequired()
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime?>("fechaNacimiento")
-                        .IsRequired()
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("nombre")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
                     b.HasKey("idEmpleado");
 
-                    b.HasIndex("AreaId");
+                    b.HasIndex("AreaTrabajoId");
 
                     b.ToTable("Empleados");
                 });
 
-            modelBuilder.Entity("AtoGobMx.Models.empleados", b =>
+            modelBuilder.Entity("AtoGobMx.Models.Empleado", b =>
                 {
-                    b.HasOne("AtoGobMx.Models.Areas", "Area")
-                        .WithMany()
-                        .HasForeignKey("AreaId")
+                    b.HasOne("AtoGobMx.Models.Area", "AreaTrabajo")
+                        .WithMany("Empleados")
+                        .HasForeignKey("AreaTrabajoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Area");
+                    b.Navigation("AreaTrabajo");
+                });
+
+            modelBuilder.Entity("AtoGobMx.Models.Area", b =>
+                {
+                    b.Navigation("Empleados");
                 });
 #pragma warning restore 612, 618
         }

@@ -19,7 +19,7 @@ namespace AtoGobMx.Migrations
                 .HasAnnotation("ProductVersion", "6.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("AtoGobMx.Models.Areas", b =>
+            modelBuilder.Entity("AtoGobMx.Models.Area", b =>
                 {
                     b.Property<int>("AreaId")
                         .ValueGeneratedOnAdd()
@@ -37,9 +37,9 @@ namespace AtoGobMx.Migrations
                     b.ToTable("Area");
                 });
 
-            modelBuilder.Entity("AtoGobMx.Models.empleados", b =>
+            modelBuilder.Entity("AtoGobMx.Models.Empleado", b =>
                 {
-                    b.Property<int>("idEmpleado")
+                    b.Property<int>("EmpleadoId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -56,7 +56,7 @@ namespace AtoGobMx.Migrations
                     b.Property<bool>("Archivado")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<int?>("AreaTrabajoId")
+                    b.Property<int?>("AreaId")
                         .IsRequired()
                         .HasColumnType("int");
 
@@ -66,8 +66,14 @@ namespace AtoGobMx.Migrations
 
                     b.Property<string>("Direccion")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("FechaAlta")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("FechaBaja")
+                        .IsRequired()
+                        .HasColumnType("datetime(6)");
 
                     b.Property<DateTime?>("FechaNacimiento")
                         .IsRequired()
@@ -82,25 +88,25 @@ namespace AtoGobMx.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.HasKey("idEmpleado");
+                    b.HasKey("EmpleadoId");
 
-                    b.HasIndex("AreaTrabajoId");
+                    b.HasIndex("AreaId");
 
                     b.ToTable("Empleados");
                 });
 
-            modelBuilder.Entity("AtoGobMx.Models.empleados", b =>
+            modelBuilder.Entity("AtoGobMx.Models.Empleado", b =>
                 {
-                    b.HasOne("AtoGobMx.Models.Areas", "Areas")
+                    b.HasOne("AtoGobMx.Models.Area", "Area")
                         .WithMany("Empleados")
-                        .HasForeignKey("AreaTrabajoId")
+                        .HasForeignKey("AreaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Areas");
+                    b.Navigation("Area");
                 });
 
-            modelBuilder.Entity("AtoGobMx.Models.Areas", b =>
+            modelBuilder.Entity("AtoGobMx.Models.Area", b =>
                 {
                     b.Navigation("Empleados");
                 });

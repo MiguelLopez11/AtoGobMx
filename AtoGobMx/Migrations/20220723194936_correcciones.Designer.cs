@@ -10,30 +10,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    [Migration("20220712040301_pruebaAreas")]
-    partial class pruebaAreas
+    [Migration("20220723194936_correcciones")]
+    partial class correcciones
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.6")
+                .HasAnnotation("ProductVersion", "6.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
-
-            modelBuilder.Entity("AtoGobMx.Models.Areas", b =>
-                {
-                    b.Property<int>("AreasId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("AreasId");
-
-                    b.ToTable("Area");
-                });
 #pragma warning restore 612, 618
         }
     }

@@ -17,9 +17,10 @@ namespace AtoGobMx.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<empleados>> GetEmpleados()
+        public async Task<ActionResult<Empleado>> GetEmpleados()
         {
             var empleados = await _context.Empleados
+                .Include(i => i.Area)
                 .Where(w => !w.Archivado)
                 .ToListAsync();
             return Ok(empleados);
@@ -37,16 +38,16 @@ namespace AtoGobMx.Controllers
             return Ok(Empleado);
         }
         [HttpPost]
-        public async Task<IActionResult> PostEmpleados(empleados Empleado)
+        public async Task<IActionResult> PostEmpleados(Empleado Empleado)
         {
             _context.Empleados.Add(Empleado);
             await _context.SaveChangesAsync();
-            return StatusCode(200,"Se ha credo exitosamente");
+            return StatusCode(200, "Se ha credo exitosamente");
         }
         [HttpPut("{EmpleadoId}")]
-        public async Task<ActionResult> PutEmpleado(int EmpleadoId, empleados empleado)
+        public async Task<ActionResult> PutEmpleado(int EmpleadoId, Empleado empleado)
         {
-           if(empleado.idEmpleado != EmpleadoId)
+            if (empleado.EmpleadoId != EmpleadoId)
             {
                 return Ok("Los ID ingresados no coinciden");
             }
@@ -55,7 +56,7 @@ namespace AtoGobMx.Controllers
             {
                 return BadRequest("El empledo no existe");
             }
-            emp.idEmpleado = empleado.idEmpleado;
+            emp.EmpleadoId = empleado.EmpleadoId;
             emp.Nombre = empleado.Nombre;
             emp.ApellidoPaterno = empleado.ApellidoPaterno;
             emp.ApellidoMaterno = empleado.ApellidoMaterno;
@@ -74,8 +75,8 @@ namespace AtoGobMx.Controllers
         public async Task<IActionResult> DeleteEmpleados(int Id)
         {
             var empleado = _context.Empleados
-                .FirstOrDefault(f => f.idEmpleado == Id);
-            if(empleado == null)
+                .FirstOrDefault(f => f.EmpleadoId == Id);
+            if (empleado == null)
             {
                 return NotFound();
             }

@@ -25,14 +25,14 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult> GetAreasById(int AreaId)
         {
             var Area = await _context.Area.FindAsync(AreaId);
-            if(Area == null)
+            if (Area == null)
             {
                 Ok($"No se encuentra el area con el ID: {AreaId}");
             }
             return Ok(Area);
         }
         [HttpPost]
-        public async Task<ActionResult<Areas>> PostArea(Areas areas)
+        public async Task<ActionResult<Area>> PostArea(Area areas)
         {
             _context.Area.Add(areas);
             await _context.SaveChangesAsync();
