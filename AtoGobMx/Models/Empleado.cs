@@ -11,8 +11,6 @@ namespace AtoGobMx.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 
         public int EmpleadoId { get; set; }
-        
-        public int AreaId { get; set; }
         [Required]
         [MaxLength(100)]
         public string? Nombre { get; set; }
@@ -36,7 +34,9 @@ namespace AtoGobMx.Models
         public DateTime? FechaBaja { get; set; }
         [Required]
         public bool Archivado { get; set; }
+
+        public int AreaId { get; set; }
         [ForeignKey("AreaId")]
-        public  Area? Area { get; set; }
+        public Area? Area { get; set; }
     }
 }

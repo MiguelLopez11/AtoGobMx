@@ -22,6 +22,7 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<Empleado>> GetEmpleados()
         {
             var empleados = await _context.Empleados
+                .Include(i => i.Area)
                 .Where(w => !w.Archivado)
                 .Select(s => _mapper.Map<Empleado>(s))
                 .ToListAsync();
