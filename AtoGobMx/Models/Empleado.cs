@@ -9,7 +9,6 @@ namespace AtoGobMx.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-
         public int EmpleadoId { get; set; }
         [Required]
         [MaxLength(100)]
