@@ -24,18 +24,16 @@ namespace AtoGobMx.Models
         [Required]
         public string? Direccion { get; set; }
         [Required]
-        public string? CURP { get; set; }
-        [Required]
-        public string? RFC { get; set; }
-        [Required]
         public DateTime FechaAlta { get; set; }
         [Required]
         public DateTime? FechaBaja { get; set; }
         [Required]
         public bool Archivado { get; set; }
-
         public int AreaId { get; set; }
         [ForeignKey("AreaId")]
         public Area? Area { get; set; }
+
+        [JsonIgnore]
+        public virtual IEnumerable<ExpedienteEmpleado>? ExpedienteEmpleados { get; set; }
     }
 }

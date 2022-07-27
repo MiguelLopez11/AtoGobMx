@@ -13,11 +13,14 @@ namespace AtoGobMx.Controllers
     {
         private readonly AtoGobMxContext _context;
         private readonly IMapper _mapper;
-        public UsuariosController(AtoGobMxContext Context, IMapper mapper)
+        private readonly IWebHostEnvironment _env;
+        public UsuariosController(AtoGobMxContext Context, IMapper mapper, IWebHostEnvironment env)
         {
             _context = Context;
             _mapper = mapper;
+            _env = env;
         }
+        #region CRUD
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarios()
         {
@@ -85,5 +88,10 @@ namespace AtoGobMx.Controllers
             await _context.SaveChangesAsync();
             return Ok("Usuario archivado");
         }
+        #endregion
+        #region UploadImages
+
+
+        #endregion
     }
 }

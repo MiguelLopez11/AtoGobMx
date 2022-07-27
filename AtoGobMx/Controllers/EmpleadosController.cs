@@ -41,14 +41,14 @@ namespace AtoGobMx.Controllers
             return Ok(Empleado);
         }
         [HttpPost]
-        public async Task<IActionResult> PostEmpleados(Empleado Empleado)
+        public async Task<IActionResult> PostEmpleados([FromForm] Empleado Empleado)
         {
             _context.Empleados.Add(Empleado);
             await _context.SaveChangesAsync();
             return StatusCode(200, "Se ha credo exitosamente");
         }
         [HttpPut("{EmpleadoId}")]
-        public async Task<ActionResult> PutEmpleado(int EmpleadoId, Empleado empleado)
+        public async Task<ActionResult> PutEmpleado([FromForm] int EmpleadoId, Empleado empleado)
         {
             if (empleado.EmpleadoId != EmpleadoId)
             {
@@ -64,8 +64,8 @@ namespace AtoGobMx.Controllers
             emp.ApellidoPaterno = empleado.ApellidoPaterno;
             emp.ApellidoMaterno = empleado.ApellidoMaterno;
             emp.FechaNacimiento = empleado.FechaNacimiento;
-            emp.RFC = empleado.RFC;
-            emp.CURP = empleado.CURP;
+            //emp.RFC = empleado.RFC;
+            //emp.CURP = empleado.CURP;
             emp.Direccion = empleado.Direccion;
             emp.Archivado = empleado.Archivado;
             emp.FechaAlta = empleado.FechaAlta;

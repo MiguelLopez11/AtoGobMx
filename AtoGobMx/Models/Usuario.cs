@@ -13,10 +13,10 @@ namespace AtoGobMx.Models
         [Required(ErrorMessage = "La contraseña es requerido")]
         [DataType(DataType.Password)]
         public string? Contraseña { get; set; }
+        [MinLength(8)]
         [Required(ErrorMessage = "Confirmar contraseña es requerido")]
-        [DataType(DataType.Password)]
         [Compare("Contraseña")]
-        public string? ConfirmarContraseña{get;set;}
+        public string? ConfirmarContraseña { get; set; }
         [Required]
         public bool Archivado { get; set; }
         [Required]
