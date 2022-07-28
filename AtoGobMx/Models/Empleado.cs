@@ -30,8 +30,12 @@ namespace AtoGobMx.Models
         [Required]
         public bool Archivado { get; set; }
         public int AreaId { get; set; }
+        public int? UsuarioId { get; set; }
+
         [ForeignKey("AreaId")]
         public Area? Area { get; set; }
+        [ForeignKey("UsuarioId")]
+        public Usuario? Usuario { get; set; }
 
         [JsonIgnore]
         public virtual IEnumerable<ExpedienteEmpleado>? ExpedienteEmpleados { get; set; }

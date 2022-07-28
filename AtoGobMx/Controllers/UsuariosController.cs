@@ -69,6 +69,8 @@ namespace AtoGobMx.Controllers
             Usuario.ConfirmarContraseña = usuario.ConfirmarContraseña;
             Usuario.Archivado = usuario.Archivado;
             Usuario.RoleId = usuario.RoleId;
+            Usuario.EmpleadoId = usuario.EmpleadoId;
+
 
             _context.Usuarios.Update(Usuario);
             await _context.SaveChangesAsync();
