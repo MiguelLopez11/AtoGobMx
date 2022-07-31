@@ -91,6 +91,28 @@ namespace AtoGobMx.Controllers
             return Ok("Usuario archivado");
         }
         #endregion
+        #region login
+        [HttpGet("{NombreUsuario}/{Contraseña}")]
+        public bool LogInUser(string NombreUsuario, string Contraseña)
+        {
+            try
+            {
+                var usuario = _context.Usuarios
+                .Where(w => w.NombreUsuario == NombreUsuario)
+                .Where(w => w.Contraseña == Contraseña)
+                .FirstOrDefaultAsync();
+                if (usuario.Result == null)
+                {
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        #endregion
         #region UploadImages
 
 
