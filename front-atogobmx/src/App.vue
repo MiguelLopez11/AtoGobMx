@@ -1,7 +1,15 @@
 <template>
-<nav class="navbar navbar-expand-lg bg-light">
+<b-card
+  align="center"
+  class="m-3"
+  v-if="login == false"
+>
+<nav class="navbar navbar-expand-lg">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/">AtoGobMx</a>
+    <a class="navbar-brand" href="/">
+    <img src="@/Images/Logo2.jpg" width="50" height="50">
+    AtoGobMx
+    </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -28,15 +36,46 @@
           <a class="nav-link disabled">Disabled</a>
         </li>
       </ul>
-      <form class="d-flex" role="search">
+      <div class="d-flex">
+        <b-button
+          pressed
+          variant="success"
+          @click="toLogin"
+        >
+          <!-- to="/login" -->
+          <i class="bi bi-box-arrow-in-right"></i>
+          Iniciar Sesion
+        </b-button>
+      </div>
+      <!-- <form class="d-flex" role="search">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
+      </form> -->
     </div>
   </div>
 </nav>
-<router-view></router-view>
+</b-card>
+<router-view> </router-view>
 </template>
+<script>
+
+import { ref } from 'vue'
+import router from './router'
+
+export default ({
+  setup () {
+    const login = ref(false)
+    const toLogin = () => {
+      login.value = true
+      router.push('/Login')
+    }
+    return {
+      login,
+      toLogin
+    }
+  }
+})
+</script>
 
 <style>
 #app {
@@ -45,6 +84,7 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  background-color: #E5E8E8;
 }
 
 nav {

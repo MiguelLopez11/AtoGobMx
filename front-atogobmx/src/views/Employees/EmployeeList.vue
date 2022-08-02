@@ -1,6 +1,9 @@
 <template>
+<b-card
+  class="m-3"
+>
   <div class="row justify-content-center mt-5">
-    <div class="col-9">
+    <div class="col-12">
       <!-- bordered -->
       <b-table-simple
         hover
@@ -49,6 +52,7 @@
       </b-table-simple>
     </div>
   </div>
+</b-card>
 </template>
 
 <script>
