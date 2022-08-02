@@ -19,6 +19,9 @@
           <a class="nav-link active" aria-current="page" href='/Empleados/list'>Empleados</a>
         </li>
         <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href='/AlumbradoPublico/list'>AlumbradoPublico</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" href="#">Link</a>
         </li>
         <li class="nav-item dropdown">
