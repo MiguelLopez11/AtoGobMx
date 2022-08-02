@@ -69,6 +69,8 @@ namespace AtoGobMx.Controllers
             Usuario.ConfirmarContraseña = usuario.ConfirmarContraseña;
             Usuario.Archivado = usuario.Archivado;
             Usuario.RoleId = usuario.RoleId;
+            Usuario.EmpleadoId = usuario.EmpleadoId;
+
 
             _context.Usuarios.Update(Usuario);
             await _context.SaveChangesAsync();
@@ -87,6 +89,28 @@ namespace AtoGobMx.Controllers
             _context.Usuarios.Update(usuario);
             await _context.SaveChangesAsync();
             return Ok("Usuario archivado");
+        }
+        #endregion
+        #region login
+        [HttpGet("{NombreUsuario}/{Contraseña}")]
+        public bool LogInUser(string NombreUsuario, string Contraseña)
+        {
+            try
+            {
+                var usuario = _context.Usuarios
+                .Where(w => w.NombreUsuario == NombreUsuario)
+                .Where(w => w.Contraseña == Contraseña)
+                .FirstOrDefaultAsync();
+                if (usuario.Result == null)
+                {
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
         #endregion
         #region UploadImages

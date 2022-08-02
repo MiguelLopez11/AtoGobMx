@@ -23,17 +23,21 @@ namespace AtoGobMx.Models
         public DateTime? FechaNacimiento { get; set; }
         [Required]
         public string? Direccion { get; set; }
-        [Required]
-        public DateTime FechaAlta { get; set; }
-        [Required]
+        public DateTime? FechaAlta { get; set; }
         public DateTime? FechaBaja { get; set; }
         [Required]
         public bool Archivado { get; set; }
         public int AreaId { get; set; }
+        //public int? UsuarioId { get; set; }
+
         [ForeignKey("AreaId")]
         public Area? Area { get; set; }
+        //[ForeignKey("UsuarioId")]
+        //public Usuario? Usuario { get; set; }
 
         [JsonIgnore]
         public virtual IEnumerable<ExpedienteEmpleado>? ExpedienteEmpleados { get; set; }
+        [JsonIgnore]
+        public virtual IEnumerable<Usuario>? Usuarios { get; set; }
     }
 }

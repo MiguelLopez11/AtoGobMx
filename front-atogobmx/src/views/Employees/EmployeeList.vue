@@ -1,12 +1,16 @@
 <template>
+<b-card
+  class="m-3"
+>
   <div class="row justify-content-center mt-5">
-    <div class="col-9">
-      <b-table-simple responsive>
-        <colgroup>
-          <col />
-          <col />
-        </colgroup>
-        <b-thead head-variant="white">
+    <div class="col-12">
+      <!-- bordered -->
+      <b-table-simple
+        hover
+        outlined
+        caption-top
+      >
+        <b-thead head-variant="Light">
           <b-tr>
             <b-th scope="col">ID</b-th>
             <b-th scope="col">Nombre</b-th>
@@ -22,37 +26,44 @@
             <b-td scope="row">{{ data.apellidoPaterno }}</b-td>
             <b-td>{{ data.apellidoMaterno }}</b-td>
             <b-td>
-              <div class="col-6">
-                <b-button variant="primary" class="m-1">
+              <div>
+                <b-dropdown
+                  text="Acciones"
+                  dropright
+                  offset="-50"
+                  variant="primary"
+                >
+                  <b-dropdown-item>First Action</b-dropdown-item>
+                  <b-dropdown-item variant="primary">Second Action</b-dropdown-item>
+                  <b-dropdown-item active>Active action</b-dropdown-item>
+                  <b-dropdown-item disabled>Disabled action</b-dropdown-item>
+                  <b-dropdown-item href="Badge">Badge</b-dropdown-item>
+                </b-dropdown>
+                <!-- <b-button variant="primary" class="m-1">
                   <i class="bi bi-file-earmark-person">Expediente</i>
                 </b-button>
                 <b-button variant="danger">
                   <i class="bi bi-trash"></i>
-                </b-button>
+                </b-button> -->
               </div>
-              <div></div>
             </b-td>
           </b-tr>
         </b-tbody>
       </b-table-simple>
     </div>
   </div>
+</b-card>
 </template>
 
 <script>
 import EmployeeServices from '@/Services/employee.Services'
 import { ref } from 'vue'
-// import { BButton } from 'bootstrap-vue'
 export default {
-  components: {
-    // BButton
-  },
   setup () {
     const { getEmployees } = EmployeeServices()
     const employees = ref([])
     getEmployees((data) => {
       employees.value = data
-      console.log(employees.value)
     })
     return {
       employees

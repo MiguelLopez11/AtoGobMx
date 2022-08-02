@@ -41,14 +41,15 @@ namespace AtoGobMx.Controllers
             return Ok(Empleado);
         }
         [HttpPost]
-        public async Task<IActionResult> PostEmpleados([FromForm] Empleado Empleado)
+        public async Task<IActionResult> PostEmpleados(Empleado Empleado)
         {
+
             _context.Empleados.Add(Empleado);
             await _context.SaveChangesAsync();
             return StatusCode(200, "Se ha credo exitosamente");
         }
         [HttpPut("{EmpleadoId}")]
-        public async Task<ActionResult> PutEmpleado([FromForm] int EmpleadoId, Empleado empleado)
+        public async Task<ActionResult> PutEmpleado(int EmpleadoId, Empleado empleado)
         {
             if (empleado.EmpleadoId != EmpleadoId)
             {

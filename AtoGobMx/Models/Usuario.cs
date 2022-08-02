@@ -11,18 +11,18 @@ namespace AtoGobMx.Models
         [Required]
         public string? NombreUsuario { get; set; }
         [Required(ErrorMessage = "La contraseña es requerido")]
-        [DataType(DataType.Password)]
         public string? Contraseña { get; set; }
         [MinLength(8)]
-        [Required(ErrorMessage = "Confirmar contraseña es requerido")]
         [Compare("Contraseña")]
         public string? ConfirmarContraseña { get; set; }
         [Required]
         public bool Archivado { get; set; }
         [Required]
         public int RoleId { get; set; }
+        public int EmpleadoId { get; set; }
         [ForeignKey("RoleId")]
         public Role? Role { get; set; }
-
+        [ForeignKey("EmpleadoId")]
+        public Empleado? Empleado { get; set; }
     }
 }

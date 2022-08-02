@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20220728185218_Relations-Users")]
+    partial class RelationsUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,11 +65,11 @@ namespace AtoGobMx.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("FechaAlta")
-                        .IsRequired()
+                    b.Property<DateTime>("FechaAlta")
                         .HasColumnType("datetime(6)");
 
                     b.Property<DateTime?>("FechaBaja")
+                        .IsRequired()
                         .HasColumnType("datetime(6)");
 
                     b.Property<DateTime?>("FechaNacimiento")
@@ -79,9 +81,14 @@ namespace AtoGobMx.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
+                    b.Property<int?>("UsuarioId")
+                        .HasColumnType("int");
+
                     b.HasKey("EmpleadoId");
 
                     b.HasIndex("AreaId");
+
+                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Empleados");
                 });
@@ -175,7 +182,13 @@ namespace AtoGobMx.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("AtoGobMx.Models.Usuario", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("UsuarioId");
+
                     b.Navigation("Area");
+
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.ExpedienteEmpleado", b =>
@@ -192,7 +205,7 @@ namespace AtoGobMx.Migrations
             modelBuilder.Entity("AtoGobMx.Models.Usuario", b =>
                 {
                     b.HasOne("AtoGobMx.Models.Empleado", "Empleado")
-                        .WithMany("Usuarios")
+                        .WithMany()
                         .HasForeignKey("EmpleadoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -216,8 +229,6 @@ namespace AtoGobMx.Migrations
             modelBuilder.Entity("AtoGobMx.Models.Empleado", b =>
                 {
                     b.Navigation("ExpedienteEmpleados");
-
-                    b.Navigation("Usuarios");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Role", b =>
