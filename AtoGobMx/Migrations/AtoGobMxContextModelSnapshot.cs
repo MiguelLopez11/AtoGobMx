@@ -64,7 +64,6 @@ namespace AtoGobMx.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<DateTime?>("FechaAlta")
-                        .IsRequired()
                         .HasColumnType("datetime(6)");
 
                     b.Property<DateTime?>("FechaBaja")
@@ -108,6 +107,35 @@ namespace AtoGobMx.Migrations
                     b.HasIndex("EmpleadoId");
 
                     b.ToTable("ExpedienteEmpleado");
+                });
+
+            modelBuilder.Entity("AtoGobMx.Models.FallasAlumbradoPublico", b =>
+                {
+                    b.Property<int>("FallaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Archivado")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("DescripcionDomicilio")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("NombreFalla")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("FallaId");
+
+                    b.ToTable("FallasAlumbradoPublico");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Role", b =>

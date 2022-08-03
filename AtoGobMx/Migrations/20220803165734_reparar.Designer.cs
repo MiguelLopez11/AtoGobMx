@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    [Migration("20220725200152_UsuarioArchivado")]
-    partial class UsuarioArchivado
+    [Migration("20220803165734_reparar")]
+    partial class reparar
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -61,19 +61,14 @@ namespace AtoGobMx.Migrations
                     b.Property<int>("AreaId")
                         .HasColumnType("int");
 
-                    b.Property<string>("CURP")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<string>("Direccion")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime>("FechaAlta")
+                    b.Property<DateTime?>("FechaAlta")
                         .HasColumnType("datetime(6)");
 
                     b.Property<DateTime?>("FechaBaja")
-                        .IsRequired()
                         .HasColumnType("datetime(6)");
 
                     b.Property<DateTime?>("FechaNacimiento")
@@ -85,15 +80,64 @@ namespace AtoGobMx.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
-                    b.Property<string>("RFC")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.HasKey("EmpleadoId");
 
                     b.HasIndex("AreaId");
 
                     b.ToTable("Empleados");
+                });
+
+            modelBuilder.Entity("AtoGobMx.Models.ExpedienteEmpleado", b =>
+                {
+                    b.Property<int>("ExpedienteEmpleadoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("CURP")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("EmpleadoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RFC")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("ExpedienteEmpleadoId");
+
+                    b.HasIndex("EmpleadoId");
+
+                    b.ToTable("ExpedienteEmpleado");
+                });
+
+            modelBuilder.Entity("AtoGobMx.Models.FallasAlumbradoPublico", b =>
+                {
+                    b.Property<int>("FallaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Archivado")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("DescripcionDomicilio")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("NombreFalla")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("FallaId");
+
+                    b.ToTable("FallasAlumbradoPublico");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Role", b =>
@@ -127,9 +171,15 @@ namespace AtoGobMx.Migrations
                     b.Property<bool>("Archivado")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<string>("ConfirmarContraseña")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Contraseña")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<int>("EmpleadoId")
+                        .HasColumnType("int");
 
                     b.Property<string>("NombreUsuario")
                         .IsRequired()
@@ -139,6 +189,8 @@ namespace AtoGobMx.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("UsuarioId");
+
+                    b.HasIndex("EmpleadoId");
 
                     b.HasIndex("RoleId");
 
@@ -156,13 +208,32 @@ namespace AtoGobMx.Migrations
                     b.Navigation("Area");
                 });
 
+            modelBuilder.Entity("AtoGobMx.Models.ExpedienteEmpleado", b =>
+                {
+                    b.HasOne("AtoGobMx.Models.Empleado", "Empleado")
+                        .WithMany("ExpedienteEmpleados")
+                        .HasForeignKey("EmpleadoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Empleado");
+                });
+
             modelBuilder.Entity("AtoGobMx.Models.Usuario", b =>
                 {
+                    b.HasOne("AtoGobMx.Models.Empleado", "Empleado")
+                        .WithMany("Usuarios")
+                        .HasForeignKey("EmpleadoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("AtoGobMx.Models.Role", "Role")
                         .WithMany("Usuarios")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Empleado");
 
                     b.Navigation("Role");
                 });
@@ -170,6 +241,13 @@ namespace AtoGobMx.Migrations
             modelBuilder.Entity("AtoGobMx.Models.Area", b =>
                 {
                     b.Navigation("Empleados");
+                });
+
+            modelBuilder.Entity("AtoGobMx.Models.Empleado", b =>
+                {
+                    b.Navigation("ExpedienteEmpleados");
+
+                    b.Navigation("Usuarios");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Role", b =>

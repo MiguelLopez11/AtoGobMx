@@ -4,7 +4,7 @@
 
 namespace AtoGobMx.Migrations
 {
-    public partial class correcciones : Migration
+    public partial class reparacion : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

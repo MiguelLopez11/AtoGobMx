@@ -45,7 +45,7 @@ namespace AtoGobMx.Controllers
             return StatusCode(200, "Se ha credo exitosamente");
         }
         [HttpPut("{FallaId}")]
-        public async Task<ActionResult> PutFallasAlumbradoPublico( int FallaId, FallasAlumbradoPublico fallas)
+        public async Task<ActionResult> PutFallasAlumbradoPublico(int FallaId, FallasAlumbradoPublico fallas)
         {
             if (fallas.FallaId != FallaId)
             {

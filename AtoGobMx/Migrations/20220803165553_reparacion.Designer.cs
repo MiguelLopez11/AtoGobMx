@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    [Migration("20220723194936_correcciones")]
-    partial class correcciones
+    [Migration("20220803165553_reparacion")]
+    partial class reparacion
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
