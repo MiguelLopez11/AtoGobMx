@@ -1,17 +1,17 @@
 <template>
   <b-card class="m-3">
-    <!-- <div class="row form-inline">
-     
-    </div> -->
     <b-container fluid class="text-light text-center">
-      <b-row align-h="end" class="form-inline">
-        <b-col cols="3">
-          <b-form-select
+      <b-row>
+        <b-col align-self="start" cols="2">
+          <v-select
+            style="color: black"
             v-model="perPage"
+            :value="perPage"
             :options="perPageSelect"
-          ></b-form-select>
+          >
+          </v-select>
         </b-col>
-        <b-col cols="3" class="mr-auto p-3">
+        <b-col align-self="end" cols="3">
           <b-form-input
             inline
             v-model="filter"
@@ -20,7 +20,7 @@
           >
           </b-form-input>
         </b-col>
-        <b-col cols="auto" class="mr-auto p-3">
+        <b-col align-self="end" cols="auto">
           <b-button variant="success"> Agregar </b-button>
         </b-col>
       </b-row>
@@ -43,54 +43,12 @@
       >
       </b-pagination>
     </b-container>
-
-    <!-- <div class="row justify-content-center mt-5">
-    <div class="col-12">
-      <b-table-simple
-        hover
-        outlined
-        caption-top
-      >
-        <b-thead head-variant="Light">
-          <b-tr>
-            <b-th scope="col">ID</b-th>
-            <b-th scope="col">Nombre</b-th>
-            <b-th scope="col">Apellido Paterno</b-th>
-            <b-th scope="col">Apellido Materno</b-th>
-            <b-th scope="col">Acciones</b-th>
-          </b-tr>
-        </b-thead>
-        <b-tbody v-for="data in employees" :key="data">
-          <b-tr>
-            <b-td scope="row">{{ data.empleadoId }}</b-td>
-            <b-td>{{ data.nombre }}</b-td>
-            <b-td scope="row">{{ data.apellidoPaterno }}</b-td>
-            <b-td>{{ data.apellidoMaterno }}</b-td>
-            <b-td>
-              <div>
-                <b-dropdown
-                  text="Acciones"
-                  dropright
-                  offset="-50"
-                  variant="primary"
-                >
-                  <b-dropdown-item>First Action</b-dropdown-item>
-                  <b-dropdown-item variant="primary">Second Action</b-dropdown-item>
-                  <b-dropdown-item active>Active action</b-dropdown-item>
-                  <b-dropdown-item disabled>Disabled action</b-dropdown-item>
-                  <b-dropdown-item href="Badge">Badge</b-dropdown-item>
-                </b-dropdown>
-              </div>
-            </b-td>
-          </b-tr>
-        </b-tbody>
-      </b-table-simple>
-    </div>
-  </div> -->
   </b-card>
 </template>
 
 <script>
+import "vue-select/dist/vue-select.css";
+
 import EmployeeServices from "@/Services/employee.Services";
 import { ref } from "vue";
 export default {
