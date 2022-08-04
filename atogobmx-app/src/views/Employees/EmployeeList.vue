@@ -1,32 +1,49 @@
 <template>
   <b-card class="m-3">
-    <div class="col-3 row form-inline">
-      <b-form-input
-        inline
-        v-model="filter"
-        type="search"
-        placeholder="Buscar..."
+    <!-- <div class="row form-inline">
+     
+    </div> -->
+    <b-container fluid class="text-light text-center">
+      <b-row align-h="end" class="form-inline">
+        <b-col cols="3">
+          <b-form-select
+            v-model="perPage"
+            :options="perPageSelect"
+          ></b-form-select>
+        </b-col>
+        <b-col cols="3" class="mr-auto p-3">
+          <b-form-input
+            inline
+            v-model="filter"
+            type="search"
+            placeholder="Buscar..."
+          >
+          </b-form-input>
+        </b-col>
+        <b-col cols="auto" class="mr-auto p-3">
+          <b-button variant="success"> Agregar </b-button>
+        </b-col>
+      </b-row>
+      <b-table
+        id="employeeTable"
+        :items="employees"
+        :fields="fields"
+        :filter="filter"
+        :per-page="perPage"
+        :current-page="currentPage"
+        @filtered="onFiltered"
       >
-      </b-form-input>
-    </div>
-    <b-table
-      id="employeeTable"
-      :items="employees"
-      :fields="fields"
-      :filter="filter"
-      :per-page="perPage"
-      :current-page="currentPage"
-      @filtered="onFiltered"
-    >
-    </b-table>
-    <b-pagination
-      v-model="currentPage"
-      :total-rows="rows"
-      :per-page="perPage"
-      aria-controls="employeeTable"
-      align="right"
-    >
-    </b-pagination>
+      </b-table>
+      <b-pagination
+        v-model="currentPage"
+        :total-rows="rows"
+        :per-page="perPage"
+        aria-controls="employeeTable"
+        align="right"
+      >
+      </b-pagination>
+    </b-container>
+
     <!-- <div class="row justify-content-center mt-5">
     <div class="col-12">
       <b-table-simple
@@ -80,10 +97,11 @@ export default {
   setup() {
     const { getEmployees } = EmployeeServices();
     const employees = ref([]);
-    const perPage = ref(5);
+    const perPage = ref(10);
     const currentPage = ref(1);
     const rows = ref(null);
     const filter = ref(null);
+    const perPageSelect = ref([10, 25, 50, 100]);
     const fields = ref([
       { key: "empleadoId", label: "ID" },
       { key: "nombre", label: "Nombre" },
@@ -110,6 +128,7 @@ export default {
       currentPage,
       rows,
       filter,
+      perPageSelect,
 
       onFiltered,
     };
