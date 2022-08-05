@@ -28,6 +28,14 @@
                   >Empleados</a
                 >
               </li>
+              <li>
+                <a
+                  class="nav-link active"
+                  aria-current="page"
+                  href="/FallasAlumbrado/list"
+                  >Fallas Alumbrado</a
+                >
+              </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">Link</a>
               </li>

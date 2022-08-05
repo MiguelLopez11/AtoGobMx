@@ -19,6 +19,12 @@ const routes = [
     name: "Empleados",
     component: () => import("@/views/Employees/EmployeeList.vue"),
   },
+  {
+    path: "/FallasAlumbrado/list",
+    name: "FallasAlumbrado",
+    component: () =>
+      import("@/views/LightingFailures/LightingFailuresList.vue"),
+  },
 ];
 
 const router = new VueRouter({
