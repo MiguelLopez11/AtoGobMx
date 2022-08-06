@@ -4,8 +4,10 @@ import "./registerServiceWorker";
 import router from "./router";
 import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 import vSelect from "vue-select";
+import { FormSelectPlugin } from "bootstrap-vue";
 
 Vue.component("v-select", vSelect);
+Vue.use(FormSelectPlugin);
 Vue.config.productionTip = false;
 
 Vue.use(BootstrapVue);
