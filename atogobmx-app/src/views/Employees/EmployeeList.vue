@@ -1,7 +1,6 @@
 <template>
   <b-card class="m-3">
     <div>
-      <!-- <b-form inline> -->
       <div>
         <div class="col-1" style="float: right">
           <button class="btn btn-success" v-b-modal.modal-add-employee>
@@ -12,6 +11,7 @@
           <b-form-input v-model="filter" type="search" placeholder="Buscar...">
           </b-form-input>
         </div>
+        <span>Mostrar: </span>
         <div class="form-inline">
           <v-select
             style="width: 90px"
@@ -20,37 +20,10 @@
             :options="perPageSelect"
           >
           </v-select>
-          <div>
-            <span>Mostrar: </span>
-          </div>
+          <div></div>
         </div>
       </div>
-      <!-- </b-form> -->
     </div>
-    <!-- <b-form inline>
-      <v-select
-        class="mb-2 mr-sm-2 mb-sm-0 col-2"
-        style="color: black"
-        v-model="perPage"
-        :value="perPage"
-        :options="perPageSelect"
-      >
-      </v-select>
-      <b-button
-        class="mb-2 mr-sm-2 mb-sm-0"
-        style="float: right"
-        variant="success"
-      >
-        Agregar
-      </b-button>
-      <b-form-input
-        class="mb-2 mr-sm-2 mb-sm-0"
-        v-model="filter"
-        type="search"
-        placeholder="Buscar..."
-      >
-      </b-form-input>
-    </b-form> -->
     <b-table
       id="employeeTable"
       hover
@@ -59,8 +32,9 @@
       bordered
       show-empty
       empty-text="No se encuentran empleados registrados"
-      class="mt-5 mb-3"
+      class="mt-3 mb-3"
       fixed
+      ref="refEmployeeTable"
       :items="employees"
       :fields="fields"
       :filter="filter"
@@ -94,12 +68,9 @@
       centered
       no-close-on-esc
       size="xl"
+      @ok="addEmployee"
     >
-      <!-- @show="resetModal"
-      @hidden="resetModal"
-      @ok="handleOk" -->
       <template #modal-header="{ close }">
-        <!-- Emulate built in modal header close button action -->
         <div class="mx-auto h5" style="width: 200px">Agregar Empleado</div>
         <div>
           <b-button size="sm" variant="outline-danger" @click="close()">
@@ -107,21 +78,30 @@
           </b-button>
         </div>
       </template>
-      <form ref="form" @submit.stop.prevent="handleSubmit">
+      <form ref="form">
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre">
-              <b-form-input required></b-form-input>
+              <b-form-input
+                required
+                v-model="EmployeesFields.nombre"
+              ></b-form-input>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Apellido Paterno">
-              <b-form-input required></b-form-input>
+              <b-form-input
+                required
+                v-model="EmployeesFields.apellidoPaterno"
+              ></b-form-input>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Apellido Materno">
-              <b-form-input required></b-form-input>
+              <b-form-input
+                required
+                v-model="EmployeesFields.apellidoMaterno"
+              ></b-form-input>
             </b-form-group>
           </b-col>
           <b-col>
@@ -132,7 +112,27 @@
                 close-button
                 locale="es"
                 dropup
+                v-model="EmployeesFields.fechaNacimiento"
               ></b-form-datepicker>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Dirección">
+              <b-form-input
+                required
+                v-model="EmployeesFields.direccion"
+              ></b-form-input>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Area">
+              <v-select
+                required
+                :options="areas"
+                label="nombre"
+                :reduce="(areas) => areas.areaId"
+                v-model="EmployeesFields.areaId"
+              ></v-select>
             </b-form-group>
           </b-col>
         </b-row>
@@ -145,16 +145,32 @@
 import "vue-select/dist/vue-select.css";
 
 import EmployeeServices from "@/Services/employee.Services";
+import AreaServices from "@/Services/area.Services";
 import { ref } from "vue";
 export default {
   setup() {
-    const { getEmployees } = EmployeeServices();
+    const { getEmployees, createEmployee } = EmployeeServices();
+    const { getAreas } = AreaServices();
+    const refEmployeeTable = ref("");
     const employees = ref([]);
+    const areas = ref([]);
     const perPage = ref(5);
     const currentPage = ref(1);
     const rows = ref(null);
     const filter = ref(null);
     const perPageSelect = ref([5, 10, 25, 50, 100]);
+    const EmployeesFields = ref({
+      empleadoId: 0,
+      nombre: null,
+      apellidoPaterno: null,
+      apellidoMaterno: null,
+      fechaNacimiento: null,
+      direccion: null,
+      fechaAlta: null,
+      fechaBaja: null,
+      archivado: false,
+      areaId: null,
+    });
     const fields = ref([
       { key: "empleadoId", label: "ID" },
       { key: "nombre", label: "Nombre" },
@@ -167,12 +183,20 @@ export default {
       employees.value = data;
       rows.value = data.length;
     });
-    // onMounted(() => {
-    //   rows.value = employees.value.length;
-    // });
+    getAreas((data) => {
+      areas.value = data;
+    });
     const onFiltered = (filteredItems) => {
       rows.value = filteredItems.length;
       currentPage.value = 1;
+    };
+    const addEmployee = () => {
+      createEmployee(EmployeesFields.value);
+      refreshTable();
+    };
+    const refreshTable = () => {
+      // $refs.refreshTable.refresh();
+      this.$refs.MyReference.$refs.refEmployeeTable.refresh();
     };
     return {
       employees,
@@ -182,8 +206,13 @@ export default {
       rows,
       filter,
       perPageSelect,
+      areas,
+      refEmployeeTable,
+      EmployeesFields,
 
       onFiltered,
+      refreshTable,
+      addEmployee,
     };
   },
 };

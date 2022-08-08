@@ -65,8 +65,7 @@ namespace AtoGobMx.Controllers
             emp.ApellidoPaterno = empleado.ApellidoPaterno;
             emp.ApellidoMaterno = empleado.ApellidoMaterno;
             emp.FechaNacimiento = empleado.FechaNacimiento;
-            //emp.RFC = empleado.RFC;
-            //emp.CURP = empleado.CURP;
+            emp.AreaId = empleado.AreaId;
             emp.Direccion = empleado.Direccion;
             emp.Archivado = empleado.Archivado;
             emp.FechaAlta = empleado.FechaAlta;

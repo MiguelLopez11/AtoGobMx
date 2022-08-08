@@ -6,7 +6,11 @@ export default function EmployeeServices() {
       callback(response.data);
     });
   };
+  const createEmployee = (data) => {
+    axios.post("https://localhost:7065/api/Empleados", data);
+  };
   return {
     getEmployees,
+    createEmployee,
   };
 }
