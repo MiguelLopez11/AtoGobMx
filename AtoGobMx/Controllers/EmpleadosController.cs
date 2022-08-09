@@ -24,6 +24,7 @@ namespace AtoGobMx.Controllers
             var empleados = await _context.Empleados
                 .Include(i => i.Area)
                 .Where(w => !w.Archivado)
+                .OrderBy(o => o.EmpleadoId)
                 .Select(s => _mapper.Map<Empleado>(s))
                 .ToListAsync();
             return Ok(empleados);
@@ -65,8 +66,7 @@ namespace AtoGobMx.Controllers
             emp.ApellidoPaterno = empleado.ApellidoPaterno;
             emp.ApellidoMaterno = empleado.ApellidoMaterno;
             emp.FechaNacimiento = empleado.FechaNacimiento;
-            //emp.RFC = empleado.RFC;
-            //emp.CURP = empleado.CURP;
+            emp.AreaId = empleado.AreaId;
             emp.Direccion = empleado.Direccion;
             emp.Archivado = empleado.Archivado;
             emp.FechaAlta = empleado.FechaAlta;

@@ -21,12 +21,17 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a
+                <router-link
+                 class="nav-link active"
+                 aria-current="page"
+                 to="/Empleados/list"
+                >Empleados</router-link>
+                <!-- <a
                   class="nav-link active"
                   aria-current="page"
                   href="/Empleados/list"
                   >Empleados</a
-                >
+                > -->
               </li>
               <li>
                 <a
@@ -73,26 +78,41 @@
         </div>
       </nav>
     </b-card>
-    <router-view></router-view>
+    <!-- <b-card class="m-3">
+    <b-card
+      align="center"
+      class="m-3"
+      :img-src="background"
+      no-body
+      style="max-width: 200rem"
+    >
+    </b-card>
+  </b-card> -->
   </div>
+  <router-view></router-view>
 </template>
 <script>
-import { ref } from "vue";
-import router from "./router";
+import { ref } from 'vue'
+import router from './router'
+import LogoAtogobMx from '@/Images/LogoAtogobMx.jpg'
 
 export default {
-  setup() {
-    const login = ref(false);
+
+  setup () {
+    const login = ref(false)
+    const background = ref(LogoAtogobMx)
+
     const toLogin = () => {
-      login.value = true;
-      router.push("/Login");
-    };
+      login.value = true
+      router.push('/Login')
+    }
     return {
       login,
       toLogin,
-    };
-  },
-};
+      background
+    }
+  }
+}
 </script>
 
 <style>
