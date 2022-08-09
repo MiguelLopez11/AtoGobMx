@@ -1,4 +1,4 @@
-# atogobmx-app
+# atogobmx-front
 
 ## Project setup
 ```

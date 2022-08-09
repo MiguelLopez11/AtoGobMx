@@ -13,13 +13,12 @@
         </div>
         <span>Mostrar: </span>
         <div class="form-inline">
-          <v-select
+          <b-form-select
             style="width: 90px"
             v-model="perPage"
-            :value="perPage"
             :options="perPageSelect"
           >
-          </v-select>
+          </b-form-select>
           <div></div>
         </div>
       </div>
@@ -38,8 +37,8 @@
       :items="employees"
       :fields="fields"
       :filter="filter"
-      :per-page="perPage"
-      :current-page="currentPage"
+      :perPage="perPage"
+      :currentpage="currentPage"
       @filtered="onFiltered"
     >
       <template #cell(actions)>
@@ -126,13 +125,13 @@
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Area">
-              <v-select
-                required
+              <b-form-select
+                autofocus
                 :options="areas"
-                label="nombre"
+                value-field="nombre"
                 :reduce="(areas) => areas.areaId"
                 v-model="EmployeesFields.areaId"
-              ></v-select>
+              ></b-form-select>
             </b-form-group>
           </b-col>
         </b-row>
@@ -142,23 +141,22 @@
 </template>
 
 <script>
-import "vue-select/dist/vue-select.css";
 
-import EmployeeServices from "@/Services/employee.Services";
-import AreaServices from "@/Services/area.Services";
-import { ref } from "vue";
+import EmployeeServices from '@/Services/employee.Services'
+import AreaServices from '@/Services/area.Services'
+import { ref } from 'vue'
 export default {
-  setup() {
-    const { getEmployees, createEmployee } = EmployeeServices();
-    const { getAreas } = AreaServices();
-    const refEmployeeTable = ref("");
-    const employees = ref([]);
-    const areas = ref([]);
-    const perPage = ref(5);
-    const currentPage = ref(1);
-    const rows = ref(null);
-    const filter = ref(null);
-    const perPageSelect = ref([5, 10, 25, 50, 100]);
+  setup () {
+    const { getEmployees, createEmployee } = EmployeeServices()
+    const { getAreas } = AreaServices()
+    // const refEmployeeTable = ref(null)
+    const employees = ref([])
+    const areas = ref([])
+    const perPage = ref(5)
+    const currentPage = ref(1)
+    const rows = ref(null)
+    const filter = ref(null)
+    const perPageSelect = ref([5, 10, 25, 50, 100])
     const EmployeesFields = ref({
       empleadoId: 0,
       nombre: null,
@@ -169,35 +167,35 @@ export default {
       fechaAlta: null,
       fechaBaja: null,
       archivado: false,
-      areaId: null,
-    });
+      areaId: null
+    })
     const fields = ref([
-      { key: "empleadoId", label: "ID" },
-      { key: "nombre", label: "Nombre" },
-      { key: "apellidoPaterno", label: "Apellido Paterno" },
-      { key: "apellidoPaterno", label: "Apellido Materno" },
-      { key: "area.nombre", label: "Area de Trabajo" },
-      { key: "actions", label: "Acciones" },
-    ]);
+      { key: 'empleadoId', label: 'ID' },
+      { key: 'nombre', label: 'Nombre' },
+      { key: 'apellidoPaterno', label: 'Apellido Paterno' },
+      { key: 'apellidoPaterno', label: 'Apellido Materno' },
+      { key: 'area.nombre', label: 'Area de Trabajo' },
+      { key: 'actions', label: 'Acciones' }
+    ])
     getEmployees((data) => {
-      employees.value = data;
-      rows.value = data.length;
-    });
+      employees.value = data
+      rows.value = data.length
+    })
     getAreas((data) => {
-      areas.value = data;
-    });
+      areas.value = data
+    })
     const onFiltered = (filteredItems) => {
-      rows.value = filteredItems.length;
-      currentPage.value = 1;
-    };
+      rows.value = filteredItems.length
+      currentPage.value = 1
+    }
     const addEmployee = () => {
-      createEmployee(EmployeesFields.value);
-      refreshTable();
-    };
-    const refreshTable = () => {
-      // $refs.refreshTable.refresh();
-      this.$refs.MyReference.$refs.refEmployeeTable.refresh();
-    };
+      createEmployee(EmployeesFields.value)
+      refreshData()
+    }
+    const refreshData = () => {
+      // refEmployeeTable.value.refresh()
+      this.$refs.table.refresh()
+    }
     return {
       employees,
       fields,
@@ -207,15 +205,14 @@ export default {
       filter,
       perPageSelect,
       areas,
-      refEmployeeTable,
       EmployeesFields,
 
       onFiltered,
-      refreshTable,
       addEmployee,
-    };
-  },
-};
+      refreshData
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped></style>
