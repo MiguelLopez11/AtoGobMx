@@ -1,9 +1,23 @@
 <template>
   <b-card class="m-3">
     <b-row class="justify-content-end">
-        <b-form-input class="w-25  m-3" v-model="filter" type="search" placeholder="Buscar...">
-        </b-form-input>
-        <button id="buttonAdd" class="btn col-1 m-3" v-b-modal.modal-add-employee>Agregar</button>
+      <div class="col-3">
+      <b-form-select
+        class="mt-3"
+        :options="searchFieldFilter"
+        v-model="searchField"
+      ></b-form-select>
+      </div>
+      <b-form-input
+        class="w-25 m-3"
+        v-model="searchValue"
+        type="search"
+        placeholder="Buscar..."
+      >
+      </b-form-input>
+      <button id="buttonAdd" class="btn col-1 m-3" v-b-modal.modal-add-employee>
+        Agregar
+      </button>
     </b-row>
     <EasyDataTable
       :headers="fields"
@@ -12,17 +26,27 @@
       border-cell
       :rows-per-page="5"
       table-class-name="customize-table"
+      :search-field="searchField"
+      :search-value="searchValue"
     >
       <template #header-actions="header">
         {{ header.text }}
       </template>
       <template #item-actions>
-        <b-dropdown text="Acciones" variant="primary" dropright>
+        <b-button class="m-1" variant="outline-danger"
+          ><i class="bi bi-trash3"></i
+        ></b-button>
+        <b-button class="m-1" variant="outline-warning"
+          ><i class="bi bi-pencil-square"></i
+        ></b-button>
+        <!-- <b-dropdown text="Acciones" variant="primary" dropright>
           <b-dropdown-item variant="danger">
             <i class="bi bi-trash-fill"></i> Eliminar
           </b-dropdown-item>
-          <b-dropdown-item> <i class="bi bi-pencil-square"></i> Editar </b-dropdown-item>
-        </b-dropdown>
+          <b-dropdown-item>
+            <i class="bi bi-pencil-square"></i> Editar
+          </b-dropdown-item>
+        </b-dropdown> -->
       </template>
     </EasyDataTable>
     <!-- <b-table
@@ -68,21 +92,16 @@
       centered
       no-close-on-esc
       size="xl"
-      @ok="addEmployee"
+      hide-footer
     >
-      <template #modal-header="{ close }">
-        <div class="mx-auto h5" style="width: 200px">Agregar Empleado</div>
-        <div>
-          <b-button size="sm" variant="outline-danger" @click="close()">
-            Cerrar
-          </b-button>
-        </div>
-      </template>
       <form ref="form">
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre">
-              <b-form-input required v-model="EmployeesFields.nombre"></b-form-input>
+              <b-form-input
+                required
+                v-model="EmployeesFields.nombre"
+              ></b-form-input>
             </b-form-group>
           </b-col>
           <b-col>
@@ -103,12 +122,17 @@
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Fecha de nacimiento">
-              <Datepicker v-model="EmployeesFields.fechaNacimiento"></Datepicker>
+              <Datepicker
+                v-model="EmployeesFields.fechaNacimiento"
+              ></Datepicker>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Dirección">
-              <b-form-input required v-model="EmployeesFields.direccion"></b-form-input>
+              <b-form-input
+                required
+                v-model="EmployeesFields.direccion"
+              ></b-form-input>
             </b-form-group>
           </b-col>
           <b-col>
@@ -116,7 +140,6 @@
               <b-form-select
                 autofocus
                 :options="areas"
-                value-field="nombre"
                 :reduce="(areas) => areas.areaId"
                 v-model="EmployeesFields.areaId"
               ></b-form-select>
@@ -124,6 +147,9 @@
           </b-col>
         </b-row>
       </form>
+      <!-- <b-button>
+        Guardar
+      </b-button> -->
     </b-modal>
   </b-card>
 </template>
@@ -150,7 +176,10 @@ export default {
     const rows = ref(null)
     const filter = ref(null)
     const perPageSelect = ref([5, 10, 25, 50, 100])
+    const searchFieldFilter = ref(['nombre', 'empleadoId'])
     const loading = ref(false)
+    const searchValue = ref('')
+    const searchField = ref('nombre')
     const EmployeesFields = ref({
       empleadoId: 0,
       nombre: null,
@@ -183,6 +212,7 @@ export default {
       currentPage.value = 1
     }
     const addEmployee = () => {
+      console.log('holi')
       createEmployee(EmployeesFields.value)
       refreshData()
     }
@@ -201,6 +231,9 @@ export default {
       areas,
       EmployeesFields,
       loading,
+      searchValue,
+      searchField,
+      searchFieldFilter,
 
       onFiltered,
       addEmployee,
@@ -211,7 +244,7 @@ export default {
 </script>
 
 <style>
-#buttonAdd{
+#buttonAdd {
   background: #0d6efd;
   color: #ffffff;
 }
