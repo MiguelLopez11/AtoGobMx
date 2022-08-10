@@ -1,13 +1,13 @@
 <template>
   <b-card class="m-3">
-    <!-- <b-card
+    <b-card
       align="center"
       class="m-3"
       :img-src="background"
       no-body
       style="max-width: 200rem"
     >
-    </b-card> -->
+    </b-card>
   </b-card>
 </template>
 

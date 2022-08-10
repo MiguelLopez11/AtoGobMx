@@ -1,29 +1,31 @@
 <template>
   <b-card class="m-3">
-    <div>
-      <div>
-        <div class="col-1" style="float: right">
-          <button class="btn btn-success" v-b-modal.modal-add-employee>
-            Agregar
-          </button>
-        </div>
-        <div class="col-3" style="float: right; margin-right: 20px">
-          <b-form-input v-model="filter" type="search" placeholder="Buscar...">
-          </b-form-input>
-        </div>
-        <span>Mostrar: </span>
-        <div class="form-inline">
-          <b-form-select
-            style="width: 90px"
-            v-model="perPage"
-            :options="perPageSelect"
-          >
-          </b-form-select>
-          <div></div>
-        </div>
-      </div>
-    </div>
-    <b-table
+    <b-row class="justify-content-end">
+        <b-form-input class="w-25  m-3" v-model="filter" type="search" placeholder="Buscar...">
+        </b-form-input>
+        <button id="buttonAdd" class="btn col-1 m-3" v-b-modal.modal-add-employee>Agregar</button>
+    </b-row>
+    <EasyDataTable
+      :headers="fields"
+      :items="employees"
+      buttons-pagination
+      border-cell
+      :rows-per-page="5"
+      table-class-name="customize-table"
+    >
+      <template #header-actions="header">
+        {{ header.text }}
+      </template>
+      <template #item-actions>
+        <b-dropdown text="Acciones" variant="primary" dropright>
+          <b-dropdown-item variant="danger">
+            <i class="bi bi-trash-fill"></i> Eliminar
+          </b-dropdown-item>
+          <b-dropdown-item> <i class="bi bi-pencil-square"></i> Editar </b-dropdown-item>
+        </b-dropdown>
+      </template>
+    </EasyDataTable>
+    <!-- <b-table
       id="employeeTable"
       hover
       caption-top
@@ -32,14 +34,13 @@
       show-empty
       empty-text="No se encuentran empleados registrados"
       class="mt-3 mb-3"
-      fixed
       ref="refEmployeeTable"
       :items="employees"
       :fields="fields"
+      @filtered="onFiltered"
       :filter="filter"
       :perPage="perPage"
       :currentpage="currentPage"
-      @filtered="onFiltered"
     >
       <template #cell(actions)>
         <b-dropdown text="Acciones" variant="primary" dropright>
@@ -60,7 +61,7 @@
       aria-controls="employeeTable"
       align="right"
     >
-    </b-pagination>
+    </b-pagination> -->
     <b-modal
       id="modal-add-employee"
       ref="modal"
@@ -81,10 +82,7 @@
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre">
-              <b-form-input
-                required
-                v-model="EmployeesFields.nombre"
-              ></b-form-input>
+              <b-form-input required v-model="EmployeesFields.nombre"></b-form-input>
             </b-form-group>
           </b-col>
           <b-col>
@@ -105,22 +103,12 @@
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Fecha de nacimiento">
-              <b-form-datepicker
-                today-button
-                reset-button
-                close-button
-                locale="es"
-                dropup
-                v-model="EmployeesFields.fechaNacimiento"
-              ></b-form-datepicker>
+              <Datepicker v-model="EmployeesFields.fechaNacimiento"></Datepicker>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Dirección">
-              <b-form-input
-                required
-                v-model="EmployeesFields.direccion"
-              ></b-form-input>
+              <b-form-input required v-model="EmployeesFields.direccion"></b-form-input>
             </b-form-group>
           </b-col>
           <b-col>
@@ -141,15 +129,20 @@
 </template>
 
 <script>
-
 import EmployeeServices from '@/Services/employee.Services'
 import AreaServices from '@/Services/area.Services'
+import Datepicker from '@vuepic/vue-datepicker'
+import '@vuepic/vue-datepicker/dist/main.css'
 import { ref } from 'vue'
 export default {
+  components: {
+    Datepicker,
+    EasyDataTable: window['vue3-easy-data-table']
+  },
   setup () {
     const { getEmployees, createEmployee } = EmployeeServices()
     const { getAreas } = AreaServices()
-    // const refEmployeeTable = ref(null)
+
     const employees = ref([])
     const areas = ref([])
     const perPage = ref(5)
@@ -157,6 +150,7 @@ export default {
     const rows = ref(null)
     const filter = ref(null)
     const perPageSelect = ref([5, 10, 25, 50, 100])
+    const loading = ref(false)
     const EmployeesFields = ref({
       empleadoId: 0,
       nombre: null,
@@ -170,12 +164,12 @@ export default {
       areaId: null
     })
     const fields = ref([
-      { key: 'empleadoId', label: 'ID' },
-      { key: 'nombre', label: 'Nombre' },
-      { key: 'apellidoPaterno', label: 'Apellido Paterno' },
-      { key: 'apellidoPaterno', label: 'Apellido Materno' },
-      { key: 'area.nombre', label: 'Area de Trabajo' },
-      { key: 'actions', label: 'Acciones' }
+      { value: 'empleadoId', text: 'ID', sortable: true },
+      { value: 'nombre', text: 'Nombre' },
+      { value: 'apellidoPaterno', text: 'Apellido Paterno' },
+      { value: 'apellidoPaterno', text: 'Apellido Materno' },
+      { value: 'area.nombre', text: 'Area de Trabajo' },
+      { value: 'actions', text: 'Acciones' }
     ])
     getEmployees((data) => {
       employees.value = data
@@ -206,6 +200,7 @@ export default {
       perPageSelect,
       areas,
       EmployeesFields,
+      loading,
 
       onFiltered,
       addEmployee,
@@ -215,4 +210,47 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style>
+#buttonAdd{
+  background: #0d6efd;
+  color: #ffffff;
+}
+.customize-table {
+  /* --easy-table-border: 1px solid #445269;
+  --easy-table-row-border: 1px solid #445269; */
+
+  --easy-table-header-font-size: 18px;
+  --easy-table-header-height: 50px;
+  --easy-table-header-font-color: #ffffff;
+  --easy-table-header-background-color: #42b883;
+
+  --easy-table-header-item-padding: 10px 15px;
+  --easy-table-header-item-align: center;
+  /* --easy-table-body-even-row-font-color: #fff;
+  --easy-table-body-even-row-background-color: #4c5d7a; */
+
+  /* --easy-table-body-row-font-color: #c0c7d2;
+  --easy-table-body-row-background-color: #2d3a4f; */
+  --easy-table-body-row-height: 50px;
+  --easy-table-body-row-font-size: 20px;
+  --easy-table-border-radius: 15px;
+  /*
+  --easy-table-body-row-hover-font-color: #2d3a4f;
+  --easy-table-body-row-hover-background-color: #eee; */
+
+  --easy-table-body-item-padding: 10px 15px;
+
+  /* --easy-table-footer-background-color: #138BC2;
+  --easy-table-footer-font-color: #D1D1D1; */
+  --easy-table-footer-font-size: 20px;
+  --easy-table-footer-padding: 0px 10px;
+  --easy-table-footer-height: 50px;
+
+  /* --easy-table-scrollbar-track-color: #2d3a4f;
+  --easy-table-scrollbar-color: #2d3a4f;
+  --easy-table-scrollbar-thumb-color: #4c5d7a;;
+  --easy-table-scrollbar-corner-color: #2d3a4f;
+
+  --easy-table-loading-mask-background-color: #2d3a4f; */
+}
+</style>
