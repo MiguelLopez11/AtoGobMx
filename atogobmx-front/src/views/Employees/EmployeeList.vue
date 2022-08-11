@@ -1,24 +1,46 @@
 <template>
   <b-card class="m-3">
-    <b-row class="justify-content-end">
-      <div class="col-3">
-      <b-form-select
-        class="mt-3"
-        :options="searchFieldFilter"
-        v-model="searchField"
-      ></b-form-select>
-      </div>
-      <b-form-input
-        class="w-25 m-3"
-        v-model="searchValue"
-        type="search"
-        placeholder="Buscar..."
-      >
-      </b-form-input>
-      <button id="buttonAdd" class="btn col-1 m-3" v-b-modal.modal-add-employee>
-        Agregar
-      </button>
-    </b-row>
+    <b-container fluid>
+      <b-row align-h="end" cols-lg="4">
+        <b-col sm="9">
+          <b-row align-h="end">
+            <b-col cols="8">
+              <b-form-input
+                class="m-3"
+                style="height: 50px;"
+                v-model="searchValue"
+                type="search"
+                placeholder="Buscar empleado..."
+              >
+              </b-form-input
+            ></b-col>
+            <b-col cols="4">
+              <button
+                class="btn btn-primary m-3"
+                style="height: 50px"
+                v-b-modal.modal-employee
+              >
+                Agregar
+              </button>
+            </b-col>
+          </b-row>
+        </b-col>
+        <!-- <b-col >
+        <b-form-input
+          class="m-3"
+          v-model="searchValue"
+          type="search"
+          placeholder="Buscar..."
+        >
+        </b-form-input>
+      </b-col>
+      <b-col>
+        <button class="btn btn-primary m-3 " size="lg" v-b-modal.modal-employee>
+          Agregar
+        </button>
+      </b-col> -->
+      </b-row>
+    </b-container>
     <EasyDataTable
       :headers="fields"
       :items="employees"
@@ -49,50 +71,15 @@
         </b-dropdown> -->
       </template>
     </EasyDataTable>
-    <!-- <b-table
-      id="employeeTable"
-      hover
-      caption-top
-      head-row-variant="primary"
-      bordered
-      show-empty
-      empty-text="No se encuentran empleados registrados"
-      class="mt-3 mb-3"
-      ref="refEmployeeTable"
-      :items="employees"
-      :fields="fields"
-      @filtered="onFiltered"
-      :filter="filter"
-      :perPage="perPage"
-      :currentpage="currentPage"
-    >
-      <template #cell(actions)>
-        <b-dropdown text="Acciones" variant="primary" dropright>
-          <b-dropdown-item variant="danger">
-            <i class="bi bi-trash-fill"></i> Eliminar
-          </b-dropdown-item>
-          <b-dropdown-item>
-            <i class="bi bi-pencil-square"></i> Editar
-          </b-dropdown-item>
-        </b-dropdown>
-      </template>
-    </b-table>
-    <b-pagination
-      pills
-      v-model="currentPage"
-      :total-rows="rows"
-      :per-page="perPage"
-      aria-controls="employeeTable"
-      align="right"
-    >
-    </b-pagination> -->
     <b-modal
-      id="modal-add-employee"
-      ref="modal"
-      centered
-      no-close-on-esc
-      size="xl"
+      id="modal-employee"
+      @ok="addEmployee"
       hide-footer
+      title="Agregar empleados"
+      size="lg"
+      centered
+      hide-backdrop
+      button-size="lg"
     >
       <form ref="form">
         <b-row cols="3">
@@ -123,6 +110,10 @@
           <b-col>
             <b-form-group class="mt-3" label="Fecha de nacimiento">
               <Datepicker
+                locale="es"
+                selectText="Seleccionar"
+                cancelText="Cerrar"
+                :enableTimePicker="false"
                 v-model="EmployeesFields.fechaNacimiento"
               ></Datepicker>
             </b-form-group>
@@ -140,16 +131,15 @@
               <b-form-select
                 autofocus
                 :options="areas"
-                :reduce="(areas) => areas.areaId"
+                value-field="areaId"
+                text-field="nombre"
                 v-model="EmployeesFields.areaId"
               ></b-form-select>
             </b-form-group>
           </b-col>
         </b-row>
+        <!-- <button @click="isOpen = false">Cerrar</button> -->
       </form>
-      <!-- <b-button>
-        Guardar
-      </b-button> -->
     </b-modal>
   </b-card>
 </template>
@@ -158,8 +148,8 @@
 import EmployeeServices from '@/Services/employee.Services'
 import AreaServices from '@/Services/area.Services'
 import Datepicker from '@vuepic/vue-datepicker'
-import '@vuepic/vue-datepicker/dist/main.css'
 import { ref } from 'vue'
+import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
     Datepicker,
@@ -171,12 +161,12 @@ export default {
 
     const employees = ref([])
     const areas = ref([])
+    const isOpen = ref(false)
     const perPage = ref(5)
     const currentPage = ref(1)
     const rows = ref(null)
     const filter = ref(null)
     const perPageSelect = ref([5, 10, 25, 50, 100])
-    const searchFieldFilter = ref(['nombre', 'empleadoId'])
     const loading = ref(false)
     const searchValue = ref('')
     const searchField = ref('nombre')
@@ -214,11 +204,6 @@ export default {
     const addEmployee = () => {
       console.log('holi')
       createEmployee(EmployeesFields.value)
-      refreshData()
-    }
-    const refreshData = () => {
-      // refEmployeeTable.value.refresh()
-      this.$refs.table.refresh()
     }
     return {
       employees,
@@ -233,11 +218,10 @@ export default {
       loading,
       searchValue,
       searchField,
-      searchFieldFilter,
+      isOpen,
 
       onFiltered,
-      addEmployee,
-      refreshData
+      addEmployee
     }
   }
 }
@@ -247,6 +231,7 @@ export default {
 #buttonAdd {
   background: #0d6efd;
   color: #ffffff;
+  height: auto;
 }
 .customize-table {
   /* --easy-table-border: 1px solid #445269;
