@@ -30,24 +30,24 @@ namespace AtoGobMx.Controllers
             return Ok(empleados);
         }
 
-        [HttpGet("{EmpleadosId}")]
-        public async Task<ActionResult> GetEmpleadosById(int EmpleadosId)
+        [HttpGet("{EmpleadoId}")]
+        public async Task<ActionResult> GetEmpleadosById(int EmpleadoId)
         {
             var Empleado = await _context.Empleados
-                .FindAsync(EmpleadosId);
+                .FindAsync(EmpleadoId);
             if (Empleado == null)
             {
-                Ok($"No se encuentra el area con el ID: {EmpleadosId}");
+                Ok($"No se encuentra el area con el ID: {EmpleadoId}");
             }
             return Ok(Empleado);
         }
         [HttpPost]
-        public async Task<IActionResult> PostEmpleados(Empleado Empleado)
+        public async Task<ActionResult<Empleado>> PostEmpleados(Empleado Empleado)
         {
 
             _context.Empleados.Add(Empleado);
             await _context.SaveChangesAsync();
-            return StatusCode(200, "Se ha credo exitosamente");
+            return CreatedAtAction("GetEmpleadosById", new { EmpleadoId = Empleado.EmpleadoId }, Empleado);
         }
         [HttpPut("{EmpleadoId}")]
         public async Task<ActionResult> PutEmpleado(int EmpleadoId, Empleado empleado)

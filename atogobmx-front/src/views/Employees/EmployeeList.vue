@@ -1,13 +1,13 @@
 <template>
   <b-card class="m-3">
-    <b-container fluid>
+    <b-container>
       <b-row align-h="end" cols-lg="4">
         <b-col sm="9">
           <b-row align-h="end">
             <b-col cols="8">
               <b-form-input
                 class="m-3"
-                style="height: 50px;"
+                style="height: 50px"
                 v-model="searchValue"
                 type="search"
                 placeholder="Buscar empleado..."
@@ -42,6 +42,7 @@
       </b-row>
     </b-container>
     <EasyDataTable
+      ref="refemployeesTable"
       :headers="fields"
       :items="employees"
       buttons-pagination
@@ -114,6 +115,7 @@
                 selectText="Seleccionar"
                 cancelText="Cerrar"
                 :enableTimePicker="false"
+                autoApply
                 v-model="EmployeesFields.fechaNacimiento"
               ></Datepicker>
             </b-form-group>
@@ -158,7 +160,7 @@ export default {
   setup () {
     const { getEmployees, createEmployee } = EmployeeServices()
     const { getAreas } = AreaServices()
-
+    const refemployeesTable = ref()
     const employees = ref([])
     const areas = ref([])
     const isOpen = ref(false)
@@ -186,7 +188,7 @@ export default {
       { value: 'empleadoId', text: 'ID', sortable: true },
       { value: 'nombre', text: 'Nombre' },
       { value: 'apellidoPaterno', text: 'Apellido Paterno' },
-      { value: 'apellidoPaterno', text: 'Apellido Materno' },
+      { value: 'apellidoMaterno', text: 'Apellido Materno' },
       { value: 'area.nombre', text: 'Area de Trabajo' },
       { value: 'actions', text: 'Acciones' }
     ])
@@ -201,9 +203,17 @@ export default {
       rows.value = filteredItems.length
       currentPage.value = 1
     }
+    const refreshTable = () => {
+      getEmployees((data) => {
+        employees.value = data
+        rows.value = data.length
+      })
+      return 'datos recargados'
+    }
     const addEmployee = () => {
-      console.log('holi')
-      createEmployee(EmployeesFields.value)
+      createEmployee(EmployeesFields.value, (data) => {
+        refreshTable()
+      })
     }
     return {
       employees,
@@ -219,9 +229,11 @@ export default {
       searchValue,
       searchField,
       isOpen,
+      refemployeesTable,
 
       onFiltered,
-      addEmployee
+      addEmployee,
+      refreshTable
     }
   }
 }

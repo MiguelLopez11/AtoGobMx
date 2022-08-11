@@ -6,8 +6,10 @@ export default function EmployeeServices () {
       callback(response.data)
     })
   }
-  const createEmployee = (data) => {
-    axios.post('https://localhost:7065/api/Empleados', data)
+  const createEmployee = (data, callback) => {
+    axios.post('https://localhost:7065/api/Empleados', data).then((response) => {
+      callback(response.data)
+    })
   }
   return {
     getEmployees,
