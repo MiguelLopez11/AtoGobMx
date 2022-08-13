@@ -1,75 +1,51 @@
 <template>
   <b-card class="m-3">
-    <b-container>
-      <b-row align-h="end" cols-lg="4">
-        <b-col sm="9">
-          <b-row align-h="end">
-            <b-col cols="8">
-              <b-form-input
-                class="m-3"
-                style="height: 50px"
-                v-model="searchValue"
-                type="search"
-                placeholder="Buscar empleado..."
-              >
-              </b-form-input
-            ></b-col>
-            <b-col cols="4">
-              <button
-                class="btn btn-primary m-3"
-                style="height: 50px"
-                v-b-modal.modal-employee
-              >
-                Agregar
-              </button>
-            </b-col>
-          </b-row>
+      <b-row align-h="end" class="mb-3 mr-1">
+        <b-col cols="3">
+          <b-form-input
+            size="lg"
+            v-model="searchValue"
+            type="search"
+            placeholder="Buscar empleado..."
+          >
+          </b-form-input>
+          </b-col>
+        <b-col cols="2">
+          <button
+            class="btn btn-primary"
+            style="height: 50px; width: 150px"
+            v-b-modal.modal-employee
+          >
+            Agregar
+          </button>
         </b-col>
-        <!-- <b-col >
-        <b-form-input
-          class="m-3"
-          v-model="searchValue"
-          type="search"
-          placeholder="Buscar..."
-        >
-        </b-form-input>
-      </b-col>
-      <b-col>
-        <button class="btn btn-primary m-3 " size="lg" v-b-modal.modal-employee>
-          Agregar
-        </button>
-      </b-col> -->
       </b-row>
-    </b-container>
     <EasyDataTable
       ref="refemployeesTable"
-      :headers="fields"
-      :items="employees"
+      rows-per-page-message="registros por pagina"
+      empty-message="No se encuentran registros"
       buttons-pagination
       border-cell
-      :rows-per-page="5"
       table-class-name="customize-table"
+      :headers="fields"
+      :items="employees"
+      :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
     >
       <template #header-actions="header">
         {{ header.text }}
       </template>
-      <template #item-actions>
-        <b-button class="m-1" variant="outline-danger"
+      <template #item-actions="items">
+        <b-button
+          @click="RemoveEmployee(items.empleadoId)"
+          class="m-1"
+          variant="outline-danger"
           ><i class="bi bi-trash3"></i
         ></b-button>
-        <b-button class="m-1" variant="outline-warning"
+        <b-button class="m-1" variant="outline-warning" :to="{ name:'ExpedienteEmpleados', params:{ empleadoId: items.empleadoId }}"
           ><i class="bi bi-pencil-square"></i
         ></b-button>
-        <!-- <b-dropdown text="Acciones" variant="primary" dropright>
-          <b-dropdown-item variant="danger">
-            <i class="bi bi-trash-fill"></i> Eliminar
-          </b-dropdown-item>
-          <b-dropdown-item>
-            <i class="bi bi-pencil-square"></i> Editar
-          </b-dropdown-item>
-        </b-dropdown> -->
       </template>
     </EasyDataTable>
     <b-modal
@@ -77,7 +53,7 @@
       @ok="addEmployee"
       hide-footer
       title="Agregar empleados"
-      size="lg"
+      size="xl"
       centered
       hide-backdrop
       button-size="lg"
@@ -85,26 +61,29 @@
       <form ref="form">
         <b-row cols="3">
           <b-col>
-            <b-form-group class="mt-3" label="Nombre">
+            <b-form-group
+              class="mt-3"
+              label="Nombre"
+            >
               <b-form-input
-                required
                 v-model="EmployeesFields.nombre"
+                required
               ></b-form-input>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Apellido Paterno">
               <b-form-input
-                required
                 v-model="EmployeesFields.apellidoPaterno"
+                required
               ></b-form-input>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Apellido Materno">
               <b-form-input
-                required
                 v-model="EmployeesFields.apellidoMaterno"
+                required
               ></b-form-input>
             </b-form-group>
           </b-col>
@@ -123,8 +102,8 @@
           <b-col>
             <b-form-group class="mt-3" label="Dirección">
               <b-form-input
-                required
                 v-model="EmployeesFields.direccion"
+                required
               ></b-form-input>
             </b-form-group>
           </b-col>
@@ -140,7 +119,6 @@
             </b-form-group>
           </b-col>
         </b-row>
-        <!-- <button @click="isOpen = false">Cerrar</button> -->
       </form>
     </b-modal>
   </b-card>
@@ -158,7 +136,7 @@ export default {
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup () {
-    const { getEmployees, createEmployee } = EmployeeServices()
+    const { getEmployees, createEmployee, deleteEmployee } = EmployeeServices()
     const { getAreas } = AreaServices()
     const refemployeesTable = ref()
     const employees = ref([])
@@ -215,6 +193,11 @@ export default {
         refreshTable()
       })
     }
+    const RemoveEmployee = (employeeId) => {
+      deleteEmployee(employeeId, (data) => {
+        refreshTable()
+      })
+    }
     return {
       employees,
       fields,
@@ -233,7 +216,8 @@ export default {
 
       onFiltered,
       addEmployee,
-      refreshTable
+      refreshTable,
+      RemoveEmployee
     }
   }
 }
@@ -244,6 +228,7 @@ export default {
   background: #0d6efd;
   color: #ffffff;
   height: auto;
+  width: 100px;
 }
 .customize-table {
   /* --easy-table-border: 1px solid #445269;
@@ -256,6 +241,7 @@ export default {
 
   --easy-table-header-item-padding: 10px 15px;
   --easy-table-header-item-align: center;
+  --easy-table-message-font-size: 20px;
   /* --easy-table-body-even-row-font-color: #fff;
   --easy-table-body-even-row-background-color: #4c5d7a; */
 

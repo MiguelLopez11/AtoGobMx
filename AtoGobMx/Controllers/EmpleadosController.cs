@@ -75,11 +75,11 @@ namespace AtoGobMx.Controllers
             await _context.SaveChangesAsync();
             return Ok("Empleado actualizado correctamente");
         }
-        [HttpDelete]
-        public async Task<IActionResult> DeleteEmpleados(int Id)
+        [HttpDelete("{empleadoId}")]
+        public async Task<IActionResult> DeleteEmpleados(int empleadoId)
         {
             var empleado = _context.Empleados
-                .FirstOrDefault(f => f.EmpleadoId == Id);
+                .FirstOrDefault(f => f.EmpleadoId == empleadoId);
             if (empleado == null)
             {
                 return NotFound();

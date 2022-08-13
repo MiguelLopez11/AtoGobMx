@@ -15,6 +15,11 @@ const routes = [
     path: '/Empleados/list',
     name: 'Empleados',
     component: () => import('@/views/Employees/EmployeeList.vue')
+  },
+  {
+    path: '/Empleados/:empleadoId',
+    name: 'ExpedienteEmpleados',
+    component: () => import('@/views/Employees/EmployeeExpedient.vue')
   }
 ]
 
