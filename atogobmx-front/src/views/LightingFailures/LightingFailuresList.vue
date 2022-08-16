@@ -47,57 +47,64 @@
       size="xl"
       @ok="addLightingFailures"
     >
-    <template #modal-header="{ close }">
-      <div class="mx-auto h5" style="width: 200px">Agregar Fallas de Alumbrado</div>
-      <div>
-        <b-button size="sm" variant="outline-danger" @click="close()">Cerrar</b-button>
-      </div>
-    </template>
+      <template #modal-header="{ close }">
+        <div class="mx-auto h5" style="width: 200px">
+          Agregar Fallas de Alumbrado
+        </div>
+        <div>
+          <b-button size="sm" variant="outline-danger" @click="close()"
+            >Cerrar</b-button
+          >
+        </div>
+      </template>
       <form ref="form">
         <b-row cols="3">
           <b-col>
-            <b-form-group class="mt-3" label="Nombrefalla">
-              <b-form-input required v-model="LightingFailuresFields.nombre"></b-form-input>
+            <b-form-group class="mt-3" label="nombreFalla">
+              <b-form-input
+                required
+                v-model="LightingFailuresFields.nombreFalla"
+              ></b-form-input>
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="">
-            <b-form-input re quired v-model="LightingFailuresFields."></b-form-input>
+            <b-form-group class="mt-3" label="descripcion">
+              <b-form-input
+                required
+                v-model="LightingFailuresFields.descripcion"
+              ></b-form-input>
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="">
-
+            <b-form-group class="mt-3" label="fecha">
+              <Datepicker
+                v-model="LightingFailuresFields.fecha"
+              ></Datepicker>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="descripcionDomicilio">
+              <b-form-input
+                required
+                v-model="LightingFailuresFields.descripcionDomicilio"
+              ></b-form-input>
             </b-form-group>
           </b-col>
         </b-row>
       </form>
     </b-modal>
-    
-    <b-table
-      id="lightingfailuresTable"
-      :items="lightingfailures"
-      :fields="fields"
-      :filter="filter"
-      :per-page="perPage"
-      :current-page="currentPage"
-      @filtered="onFiltered"
-    >
-    </b-table>
-    <b-pagination
-      v-model="currentPage"
-      :total-rows="rows"
-      :per-page="perPage"
-      aria-controls="lightingfailuresTable"
-      align="right"
-    ></b-pagination>
   </b-card>
 </template>
 
 <script>
 import LightingfailuresServices from '@/Services/lightingfailures.Services'
+import Datepicker from '@vuepic/vue-datepicker'
 import { ref } from 'vue'
 export default {
+  components: {
+    Datepicker,
+    EasyDataTable: window['vue3-easy-data-table']
+  },
   setup () {
     const { getLightingFailures } = LightingfailuresServices()
     const Lightingfailures = ref([])
@@ -134,4 +141,47 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style>
+#buttonAdd {
+  background: #0d6efd;
+  color: #ffffff;
+}
+.customize-table {
+  /* --easy-table-border: 1px solid #445269;
+  --easy-table-row-border: 1px solid #445269; */
+
+  --easy-table-header-font-size: 18px;
+  --easy-table-header-height: 50px;
+  --easy-table-header-font-color: #ffffff;
+  --easy-table-header-background-color: #42b883;
+
+  --easy-table-header-item-padding: 10px 15px;
+  --easy-table-header-item-align: center;
+  /* --easy-table-body-even-row-font-color: #fff;
+  --easy-table-body-even-row-background-color: #4c5d7a; */
+
+  /* --easy-table-body-row-font-color: #c0c7d2;
+  --easy-table-body-row-background-color: #2d3a4f; */
+  --easy-table-body-row-height: 50px;
+  --easy-table-body-row-font-size: 20px;
+  --easy-table-border-radius: 15px;
+  /*
+  --easy-table-body-row-hover-font-color: #2d3a4f;
+  --easy-table-body-row-hover-background-color: #eee; */
+
+  --easy-table-body-item-padding: 10px 15px;
+
+  /* --easy-table-footer-background-color: #138BC2;
+  --easy-table-footer-font-color: #D1D1D1; */
+  --easy-table-footer-font-size: 20px;
+  --easy-table-footer-padding: 0px 10px;
+  --easy-table-footer-height: 50px;
+
+  /* --easy-table-scrollbar-track-color: #2d3a4f;
+  --easy-table-scrollbar-color: #2d3a4f;
+  --easy-table-scrollbar-thumb-color: #4c5d7a;;
+  --easy-table-scrollbar-corner-color: #2d3a4f;
+
+  --easy-table-loading-mask-background-color: #2d3a4f; */
+}
+</style>
