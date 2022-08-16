@@ -78,6 +78,9 @@
           <b-col>
             <b-form-group class="mt-3" label="fecha">
               <Datepicker
+                locale="es"
+                :enableTimePicker="false"
+                autoApply
                 v-model="LightingFailuresFields.fecha"
               ></Datepicker>
             </b-form-group>
@@ -108,15 +111,29 @@ export default {
   setup () {
     const { getLightingFailures } = LightingfailuresServices()
     const Lightingfailures = ref([])
+    const isOpen = ref(false)
     const perPage = ref(5)
     const currentPage = ref(1)
     const rows = ref(null)
     const filter = ref(null)
+    const perPageSelect = ref([5, 10, 25, 50, 100])
+    const loading = ref(false)
+    const searchValue = ref('')
+    const searchField = ref('fallaId')
+    const LightingFailuresFields = ref({
+      fallaId: 0,
+      nombreFalla: null,
+      descripcion: null,
+      fecha: null,
+      descripcionDomicilio: null,
+      archivado: false
+    })
     const fields = ref([
-      { key: 'fallaId', label: 'ID' },
-      { key: 'nombreFalla', label: 'NombreFalla' },
-      { key: 'descripcion', label: 'Descripcion' },
-      { key: 'fecha', label: 'Fecha' }
+      { value: 'fallaId', text: 'ID', sortable: true },
+      { value: 'nombreFalla', text: 'NombreFalla' },
+      { value: 'descripcion', text: 'Descripcion' },
+      { value: 'fecha', text: 'Fecha' },
+      { value: 'descripcionDomicilio', text: 'DescripcionDomicilio' }
     ])
     getLightingFailures((data) => {
       Lightingfailures.value = data
@@ -127,25 +144,49 @@ export default {
       rows.value = filteredItems.length
       currentPage.value = 1
     }
+
+    const refreshTable = () => {
+      getLightingFailures((data) => {
+        Lightingfailures.value = data
+        rows.value = data.length
+      })
+      return 'datos recargados'
+    }
+
+    const addLightingFailures = () => {
+      createLightingFailures(LightingFailuresFields.value, (data) => {
+        refreshTable()
+      })
+    }
+
+    const RemoveLightingFailures = (LightingFailuresId) => {
+      deleteLightingFailures(LightingFailuresId, (date) => {
+        refreshTable()
+      })
+    }
     return {
       Lightingfailures,
+      isOpen,
       perPage,
       currentPage,
       rows,
       filter,
+      perPageSelect,
+      loading,
+      searchValue,
+      searchField,
       fields,
 
-      onFiltered
+      onFiltered,
+      addLightingFailures,
+      refreshTable,
+      RemoveLightingFailures
     }
   }
 }
 </script>
 
 <style>
-#buttonAdd {
-  background: #0d6efd;
-  color: #ffffff;
-}
 .customize-table {
   /* --easy-table-border: 1px solid #445269;
   --easy-table-row-border: 1px solid #445269; */
@@ -163,7 +204,7 @@ export default {
   /* --easy-table-body-row-font-color: #c0c7d2;
   --easy-table-body-row-background-color: #2d3a4f; */
   --easy-table-body-row-height: 50px;
-  --easy-table-body-row-font-size: 20px;
+  --easy-table-body-row-font-size: 15px;
   --easy-table-border-radius: 15px;
   /*
   --easy-table-body-row-hover-font-color: #2d3a4f;
@@ -173,7 +214,7 @@ export default {
 
   /* --easy-table-footer-background-color: #138BC2;
   --easy-table-footer-font-color: #D1D1D1; */
-  --easy-table-footer-font-size: 20px;
+  --easy-table-footer-font-size: 15px;
   --easy-table-footer-padding: 0px 10px;
   --easy-table-footer-height: 50px;
 
