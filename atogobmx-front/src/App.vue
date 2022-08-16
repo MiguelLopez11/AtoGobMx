@@ -25,7 +25,7 @@
                  class="nav-link active"
                  aria-current="page"
                  to="/Empleados/list"
-                >Empleados</router-link>
+                >Recursos Humanos</router-link>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">Link</a>
