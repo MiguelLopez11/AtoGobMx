@@ -67,7 +67,10 @@ namespace AtoGobMx.Controllers
             emp.ApellidoMaterno = empleado.ApellidoMaterno;
             emp.FechaNacimiento = empleado.FechaNacimiento;
             emp.AreaId = empleado.AreaId;
-            emp.Direccion = empleado.Direccion;
+            emp.Municipio = empleado.Municipio;
+            emp.Calle = empleado.Calle;
+            emp.NumeroExterior = empleado.NumeroExterior;
+            emp.NumeroInterior = empleado.NumeroInterior;
             emp.Archivado = empleado.Archivado;
             emp.FechaAlta = empleado.FechaAlta;
 

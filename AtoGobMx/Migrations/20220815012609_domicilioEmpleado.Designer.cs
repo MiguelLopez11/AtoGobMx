@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20220815012609_domicilioEmpleado")]
+    partial class domicilioEmpleado
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,14 +65,6 @@ namespace AtoGobMx.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("CodigoPostal")
-                        .IsRequired()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Estado")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<DateTime?>("FechaAlta")
                         .HasColumnType("datetime(6)");
 
@@ -80,9 +74,6 @@ namespace AtoGobMx.Migrations
                     b.Property<DateTime?>("FechaNacimiento")
                         .IsRequired()
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Localidad")
-                        .HasColumnType("longtext");
 
                     b.Property<string>("Municipio")
                         .IsRequired()

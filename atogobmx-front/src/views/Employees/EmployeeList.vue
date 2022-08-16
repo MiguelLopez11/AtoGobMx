@@ -21,12 +21,11 @@
         </b-col>
       </b-row>
     <EasyDataTable
-      ref="refemployeesTable"
       rows-per-page-message="registros por pagina"
       empty-message="No se encuentran registros"
+      table-class-name="customize-table"
       buttons-pagination
       border-cell
-      table-class-name="customize-table"
       :headers="fields"
       :items="employees"
       :rows-per-page="5"
@@ -100,9 +99,33 @@
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="Dirección">
+            <b-form-group class="mt-3" label="Municipio">
               <b-form-input
-                v-model="EmployeesFields.direccion"
+                v-model="EmployeesFields.municipio"
+                required
+              ></b-form-input>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Calle">
+              <b-form-input
+                v-model="EmployeesFields.calle"
+                required
+              ></b-form-input>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Numero Exterior">
+              <b-form-input
+                v-model="EmployeesFields.numeroExterior"
+                required
+              ></b-form-input>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Numero Interior">
+              <b-form-input
+                v-model="EmployeesFields.numeroInterior"
                 required
               ></b-form-input>
             </b-form-group>
@@ -138,7 +161,7 @@ export default {
   setup () {
     const { getEmployees, createEmployee, deleteEmployee } = EmployeeServices()
     const { getAreas } = AreaServices()
-    const refemployeesTable = ref()
+    // const refemployeesTable = ref()
     const employees = ref([])
     const areas = ref([])
     const isOpen = ref(false)
@@ -156,7 +179,10 @@ export default {
       apellidoPaterno: null,
       apellidoMaterno: null,
       fechaNacimiento: null,
-      direccion: null,
+      municipio: null,
+      calle: null,
+      numeroExterior: null,
+      numeroInterior: null,
       fechaAlta: null,
       fechaBaja: null,
       archivado: false,
@@ -212,7 +238,7 @@ export default {
       searchValue,
       searchField,
       isOpen,
-      refemployeesTable,
+      // refemployeesTable,
 
       onFiltered,
       addEmployee,
@@ -236,8 +262,8 @@ export default {
 
   --easy-table-header-font-size: 18px;
   --easy-table-header-height: 50px;
-  --easy-table-header-font-color: #ffffff;
-  --easy-table-header-background-color: #42b883;
+  --easy-table-header-font-color: #FCF6F5FF;
+  --easy-table-header-background-color: #2BAE66FF;
 
   --easy-table-header-item-padding: 10px 15px;
   --easy-table-header-item-align: center;
@@ -250,14 +276,14 @@ export default {
   --easy-table-body-row-height: 50px;
   --easy-table-body-row-font-size: 20px;
   --easy-table-border-radius: 15px;
-  /*
-  --easy-table-body-row-hover-font-color: #2d3a4f;
-  --easy-table-body-row-hover-background-color: #eee; */
+
+  --easy-table-body-row-hover-font-color: rgb(0, 0, 0);
+  --easy-table-body-row-hover-background-color: rgb(212, 212, 212);
 
   --easy-table-body-item-padding: 10px 15px;
 
-  /* --easy-table-footer-background-color: #138BC2;
-  --easy-table-footer-font-color: #D1D1D1; */
+  --easy-table-footer-background-color: #2BAE66FF;
+  --easy-table-footer-font-color: #FCF6F5FF;
   --easy-table-footer-font-size: 20px;
   --easy-table-footer-padding: 0px 10px;
   --easy-table-footer-height: 50px;
