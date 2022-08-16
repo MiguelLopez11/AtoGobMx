@@ -1,114 +1,133 @@
 <template>
   <b-card class="m-3">
-    <b-row class="justify-content-end">
-        <b-form-input class="w-25  m-3" v-model="filter" type="search" placeholder="Buscar...">
-        </b-form-input>
-        <button id="buttonAdd" class="btn col-1 m-3" v-b-modal.modal-add-employee>Agregar</button>
-    </b-row>
+      <b-row align-h="end" class="mb-3 mr-1">
+        <b-col cols="3">
+          <b-form-input
+            size="lg"
+            v-model="searchValue"
+            type="search"
+            placeholder="Buscar empleado..."
+          >
+          </b-form-input>
+          </b-col>
+        <b-col cols="2">
+          <button
+            class="btn btn-primary"
+            style="height: 50px; width: 150px"
+            v-b-modal.modal-employee
+          >
+            Agregar
+          </button>
+        </b-col>
+      </b-row>
     <EasyDataTable
-      :headers="fields"
-      :items="employees"
+      rows-per-page-message="registros por pagina"
+      empty-message="No se encuentran registros"
+      table-class-name="customize-table"
       buttons-pagination
       border-cell
+      :headers="fields"
+      :items="employees"
       :rows-per-page="5"
-      table-class-name="customize-table"
+      :search-field="searchField"
+      :search-value="searchValue"
     >
       <template #header-actions="header">
         {{ header.text }}
       </template>
-      <template #item-actions>
-        <b-dropdown text="Acciones" variant="primary" dropright>
-          <b-dropdown-item variant="danger">
-            <i class="bi bi-trash-fill"></i> Eliminar
-          </b-dropdown-item>
-          <b-dropdown-item> <i class="bi bi-pencil-square"></i> Editar </b-dropdown-item>
-        </b-dropdown>
+      <template #item-actions="items">
+        <b-button
+          @click="RemoveEmployee(items.empleadoId)"
+          class="m-1"
+          variant="outline-danger"
+          ><i class="bi bi-trash3"></i
+        ></b-button>
+        <b-button class="m-1" variant="outline-warning" :to="{ name:'ExpedienteEmpleados', params:{ empleadoId: items.empleadoId }}"
+          ><i class="bi bi-pencil-square"></i
+        ></b-button>
       </template>
     </EasyDataTable>
-    <!-- <b-table
-      id="employeeTable"
-      hover
-      caption-top
-      head-row-variant="primary"
-      bordered
-      show-empty
-      empty-text="No se encuentran empleados registrados"
-      class="mt-3 mb-3"
-      ref="refEmployeeTable"
-      :items="employees"
-      :fields="fields"
-      @filtered="onFiltered"
-      :filter="filter"
-      :perPage="perPage"
-      :currentpage="currentPage"
-    >
-      <template #cell(actions)>
-        <b-dropdown text="Acciones" variant="primary" dropright>
-          <b-dropdown-item variant="danger">
-            <i class="bi bi-trash-fill"></i> Eliminar
-          </b-dropdown-item>
-          <b-dropdown-item>
-            <i class="bi bi-pencil-square"></i> Editar
-          </b-dropdown-item>
-        </b-dropdown>
-      </template>
-    </b-table>
-    <b-pagination
-      pills
-      v-model="currentPage"
-      :total-rows="rows"
-      :per-page="perPage"
-      aria-controls="employeeTable"
-      align="right"
-    >
-    </b-pagination> -->
     <b-modal
-      id="modal-add-employee"
-      ref="modal"
-      centered
-      no-close-on-esc
-      size="xl"
+      id="modal-employee"
       @ok="addEmployee"
+      hide-footer
+      title="Agregar empleados"
+      size="xl"
+      centered
+      hide-backdrop
+      button-size="lg"
     >
-      <template #modal-header="{ close }">
-        <div class="mx-auto h5" style="width: 200px">Agregar Empleado</div>
-        <div>
-          <b-button size="sm" variant="outline-danger" @click="close()">
-            Cerrar
-          </b-button>
-        </div>
-      </template>
       <form ref="form">
         <b-row cols="3">
           <b-col>
-            <b-form-group class="mt-3" label="Nombre">
-              <b-form-input required v-model="EmployeesFields.nombre"></b-form-input>
+            <b-form-group
+              class="mt-3"
+              label="Nombre"
+            >
+              <b-form-input
+                v-model="EmployeesFields.nombre"
+                required
+              ></b-form-input>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Apellido Paterno">
               <b-form-input
-                required
                 v-model="EmployeesFields.apellidoPaterno"
+                required
               ></b-form-input>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Apellido Materno">
               <b-form-input
-                required
                 v-model="EmployeesFields.apellidoMaterno"
+                required
               ></b-form-input>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Fecha de nacimiento">
-              <Datepicker v-model="EmployeesFields.fechaNacimiento"></Datepicker>
+              <Datepicker
+                locale="es"
+                selectText="Seleccionar"
+                cancelText="Cerrar"
+                :enableTimePicker="false"
+                autoApply
+                v-model="EmployeesFields.fechaNacimiento"
+              ></Datepicker>
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="Dirección">
-              <b-form-input required v-model="EmployeesFields.direccion"></b-form-input>
+            <b-form-group class="mt-3" label="Municipio">
+              <b-form-input
+                v-model="EmployeesFields.municipio"
+                required
+              ></b-form-input>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Calle">
+              <b-form-input
+                v-model="EmployeesFields.calle"
+                required
+              ></b-form-input>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Numero Exterior">
+              <b-form-input
+                v-model="EmployeesFields.numeroExterior"
+                required
+              ></b-form-input>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Numero Interior">
+              <b-form-input
+                v-model="EmployeesFields.numeroInterior"
+                required
+              ></b-form-input>
             </b-form-group>
           </b-col>
           <b-col>
@@ -116,8 +135,8 @@
               <b-form-select
                 autofocus
                 :options="areas"
-                value-field="nombre"
-                :reduce="(areas) => areas.areaId"
+                value-field="areaId"
+                text-field="nombre"
                 v-model="EmployeesFields.areaId"
               ></b-form-select>
             </b-form-group>
@@ -132,32 +151,38 @@
 import EmployeeServices from '@/Services/employee.Services'
 import AreaServices from '@/Services/area.Services'
 import Datepicker from '@vuepic/vue-datepicker'
-import '@vuepic/vue-datepicker/dist/main.css'
 import { ref } from 'vue'
+import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
     Datepicker,
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup () {
-    const { getEmployees, createEmployee } = EmployeeServices()
+    const { getEmployees, createEmployee, deleteEmployee } = EmployeeServices()
     const { getAreas } = AreaServices()
-
+    // const refemployeesTable = ref()
     const employees = ref([])
     const areas = ref([])
+    const isOpen = ref(false)
     const perPage = ref(5)
     const currentPage = ref(1)
     const rows = ref(null)
     const filter = ref(null)
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const loading = ref(false)
+    const searchValue = ref('')
+    const searchField = ref('nombre')
     const EmployeesFields = ref({
       empleadoId: 0,
       nombre: null,
       apellidoPaterno: null,
       apellidoMaterno: null,
       fechaNacimiento: null,
-      direccion: null,
+      municipio: null,
+      calle: null,
+      numeroExterior: null,
+      numeroInterior: null,
       fechaAlta: null,
       fechaBaja: null,
       archivado: false,
@@ -167,7 +192,7 @@ export default {
       { value: 'empleadoId', text: 'ID', sortable: true },
       { value: 'nombre', text: 'Nombre' },
       { value: 'apellidoPaterno', text: 'Apellido Paterno' },
-      { value: 'apellidoPaterno', text: 'Apellido Materno' },
+      { value: 'apellidoMaterno', text: 'Apellido Materno' },
       { value: 'area.nombre', text: 'Area de Trabajo' },
       { value: 'actions', text: 'Acciones' }
     ])
@@ -182,13 +207,22 @@ export default {
       rows.value = filteredItems.length
       currentPage.value = 1
     }
-    const addEmployee = () => {
-      createEmployee(EmployeesFields.value)
-      refreshData()
+    const refreshTable = () => {
+      getEmployees((data) => {
+        employees.value = data
+        rows.value = data.length
+      })
+      return 'datos recargados'
     }
-    const refreshData = () => {
-      // refEmployeeTable.value.refresh()
-      this.$refs.table.refresh()
+    const addEmployee = () => {
+      createEmployee(EmployeesFields.value, (data) => {
+        refreshTable()
+      })
+    }
+    const RemoveEmployee = (employeeId) => {
+      deleteEmployee(employeeId, (data) => {
+        refreshTable()
+      })
     }
     return {
       employees,
@@ -201,19 +235,26 @@ export default {
       areas,
       EmployeesFields,
       loading,
+      searchValue,
+      searchField,
+      isOpen,
+      // refemployeesTable,
 
       onFiltered,
       addEmployee,
-      refreshData
+      refreshTable,
+      RemoveEmployee
     }
   }
 }
 </script>
 
 <style>
-#buttonAdd{
+#buttonAdd {
   background: #0d6efd;
   color: #ffffff;
+  height: auto;
+  width: 100px;
 }
 .customize-table {
   /* --easy-table-border: 1px solid #445269;
@@ -221,11 +262,12 @@ export default {
 
   --easy-table-header-font-size: 18px;
   --easy-table-header-height: 50px;
-  --easy-table-header-font-color: #ffffff;
-  --easy-table-header-background-color: #42b883;
+  --easy-table-header-font-color: #FCF6F5FF;
+  --easy-table-header-background-color: #2BAE66FF;
 
   --easy-table-header-item-padding: 10px 15px;
   --easy-table-header-item-align: center;
+  --easy-table-message-font-size: 20px;
   /* --easy-table-body-even-row-font-color: #fff;
   --easy-table-body-even-row-background-color: #4c5d7a; */
 
@@ -234,14 +276,14 @@ export default {
   --easy-table-body-row-height: 50px;
   --easy-table-body-row-font-size: 20px;
   --easy-table-border-radius: 15px;
-  /*
-  --easy-table-body-row-hover-font-color: #2d3a4f;
-  --easy-table-body-row-hover-background-color: #eee; */
+
+  --easy-table-body-row-hover-font-color: rgb(0, 0, 0);
+  --easy-table-body-row-hover-background-color: rgb(212, 212, 212);
 
   --easy-table-body-item-padding: 10px 15px;
 
-  /* --easy-table-footer-background-color: #138BC2;
-  --easy-table-footer-font-color: #D1D1D1; */
+  --easy-table-footer-background-color: #2BAE66FF;
+  --easy-table-footer-font-color: #FCF6F5FF;
   --easy-table-footer-font-size: 20px;
   --easy-table-footer-padding: 0px 10px;
   --easy-table-footer-height: 50px;

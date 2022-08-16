@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20220814013836_Area")]
+    partial class Area
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,15 +61,7 @@ namespace AtoGobMx.Migrations
                     b.Property<int?>("AreaId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Calle")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int?>("CodigoPostal")
-                        .IsRequired()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Estado")
+                    b.Property<string>("Direccion")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -81,24 +75,10 @@ namespace AtoGobMx.Migrations
                         .IsRequired()
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("Localidad")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Municipio")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
-
-                    b.Property<int?>("NumeroExterior")
-                        .IsRequired()
-                        .HasColumnType("int");
-
-                    b.Property<int?>("NumeroInterior")
-                        .HasColumnType("int");
 
                     b.HasKey("EmpleadoId");
 
