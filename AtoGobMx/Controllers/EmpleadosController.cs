@@ -26,7 +26,7 @@ namespace AtoGobMx.Controllers
                 .Where(w => !w.Archivado)
                 .OrderBy(o => o.EmpleadoId)
                 .Select(s => _mapper.Map<Empleado>(s))
-                .ToListAsync();
+                .ToArrayAsync();
             return Ok(empleados);
         }
 
@@ -34,10 +34,10 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult> GetEmpleadosById(int EmpleadoId)
         {
             var Empleado = await _context.Empleados
-                .FindAsync(EmpleadoId);
+                .FirstOrDefaultAsync(f => f.EmpleadoId == EmpleadoId);
             if (Empleado == null)
             {
-                Ok($"No se encuentra el area con el ID: {EmpleadoId}");
+                return NotFound();
             }
             return Ok(Empleado);
         }
@@ -67,10 +67,10 @@ namespace AtoGobMx.Controllers
             emp.ApellidoMaterno = empleado.ApellidoMaterno;
             emp.FechaNacimiento = empleado.FechaNacimiento;
             emp.AreaId = empleado.AreaId;
-            emp.Municipio = empleado.Municipio;
-            emp.Calle = empleado.Calle;
-            emp.NumeroExterior = empleado.NumeroExterior;
-            emp.NumeroInterior = empleado.NumeroInterior;
+            //emp.Municipio = empleado.Municipio;
+            //emp.Calle = empleado.Calle;
+            //emp.NumeroExterior = empleado.NumeroExterior;
+            //emp.NumeroInterior = empleado.NumeroInterior;
             emp.Archivado = empleado.Archivado;
             emp.FechaAlta = empleado.FechaAlta;
 

@@ -1,7 +1,8 @@
 <template>
   <b-card class="m-3">
-    <b-row align-h="end" class="mb-3 mr-1">
+    <b-row align-h="end" class="mb-2 mr-1">
       <b-col cols="3">
+        <b-form-group>
         <b-form-input
           size="lg"
           v-model="searchValue"
@@ -9,15 +10,20 @@
           placeholder="Buscar empleado..."
         >
         </b-form-input>
+        </b-form-group>
       </b-col>
-      <b-col cols="2">
+      <b-col cols="3" style="float: right">
+        <b-form-group>
         <button
           class="btn btn-primary"
-          style="height: 50px; width: 150px"
+          style="height: 50px; width: auto; font-size: 18px"
           v-b-modal.modal-employee
+          type="submit"
         >
-          Agregar
+        <i class="bi bi-person-plus-fill"></i>
+          Agregar Empleado
         </button>
+        </b-form-group>
       </b-col>
     </b-row>
     <EasyDataTable
@@ -63,6 +69,9 @@
       centered
       hide-backdrop
       button-size="lg"
+      lazy
+      ok-title="Registrar empleado"
+      cancel-title="Cancelar"
     >
       <form ref="form">
         <b-row cols="3">
@@ -355,14 +364,14 @@ export default {
 
   --easy-table-header-item-padding: 10px 15px;
   --easy-table-header-item-align: center;
-  --easy-table-message-font-size: 15px;
+  --easy-table-message-font-size: 17px;
   /* --easy-table-body-even-row-font-color: #fff;
   --easy-table-body-even-row-background-color: #4c5d7a; */
 
   /* --easy-table-body-row-font-color: #c0c7d2;
   --easy-table-body-row-background-color: #2d3a4f; */
   --easy-table-body-row-height: 50px;
-  --easy-table-body-row-font-size: 15px;
+  --easy-table-body-row-font-size: 17px;
   --easy-table-border-radius: 15px;
 
   --easy-table-body-row-hover-font-color: rgb(0, 0, 0);
@@ -372,7 +381,7 @@ export default {
 
   --easy-table-footer-background-color: #2bae66ff;
   --easy-table-footer-font-color: #fcf6f5ff;
-  --easy-table-footer-font-size: 15px;
+  --easy-table-footer-font-size: 17px;
   --easy-table-footer-padding: 0px 10px;
   --easy-table-footer-height: 50px;
 

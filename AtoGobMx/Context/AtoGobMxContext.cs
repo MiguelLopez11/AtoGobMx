@@ -13,5 +13,6 @@ namespace AtoGobMx.Context
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<FallasAlumbradoPublico> FallasAlumbradoPublico { get; set; }
+        public DbSet<ExpedienteDigital> ExpedienteDigitales { get; set; }
     }
 }
