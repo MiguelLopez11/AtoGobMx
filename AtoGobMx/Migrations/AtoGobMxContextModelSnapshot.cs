@@ -34,7 +34,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasKey("AreaId");
 
-                    b.ToTable("Area");
+                    b.ToTable("Area", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Empleado", b =>
@@ -79,7 +79,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasIndex("AreaId");
 
-                    b.ToTable("Empleados");
+                    b.ToTable("Empleados", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.ExpedienteDigital", b =>
@@ -131,7 +131,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasKey("ExpedienteDigitalId");
 
-                    b.ToTable("ExpedienteDigitales");
+                    b.ToTable("ExpedienteDigitales", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.ExpedienteEmpleado", b =>
@@ -155,7 +155,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasIndex("EmpleadoId");
 
-                    b.ToTable("ExpedienteEmpleado");
+                    b.ToTable("ExpedienteEmpleado", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.FallasAlumbradoPublico", b =>
@@ -184,7 +184,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasKey("FallaId");
 
-                    b.ToTable("FallasAlumbradoPublico");
+                    b.ToTable("FallasAlumbradoPublico", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Role", b =>
@@ -206,7 +206,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasKey("RoleId");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Usuario", b =>
@@ -241,7 +241,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Usuarios");
+                    b.ToTable("Usuarios", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Empleado", b =>

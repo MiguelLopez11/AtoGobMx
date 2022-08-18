@@ -22,8 +22,8 @@ namespace AtoGobMx.Models
         [Required]
         public int? CodigoPostal { get; set; }
         public string? CorreoElectronico { get; set; }
-        //public DateTime FechaIngreso { get; set; }
-        //public DateTime FechaBaja { get; set; }
+        //[Required]
+        //public string fotoPerfil  { get; set; }
         public bool Archivado { get; set; }
         
     }
