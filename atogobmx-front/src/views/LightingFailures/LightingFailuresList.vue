@@ -18,23 +18,23 @@
 
     <EasyDataTable
       :headers="fields"
-      :items="lightingfailures"
+      :items="lightingFailures"
       buttons-pagination
       border-cell
       :rows-per-page="5"
-      table-class-name="ccustomize-table"
+      table-class-name="customize-table"
     >
       <template #header-actions="header">
         {{ header.text }}
       </template>
       <template #item-actions>
         <b-dropdown text="Acciones" variant="primary" dropright>
-          <b-dropdow-item variant="danger">
+          <b-dropdown-item variant="danger">
             <i class="bi bi-trash-fill"></i>Eliminar
-          </b-dropdow-item>
-          <b-dropdow-item>
+          </b-dropdown-item>
+          <b-dropdown-item>
             <i class="bi bi-pencil-square"></i> Editar
-          </b-dropdow-item>
+          </b-dropdown-item>
         </b-dropdown>
       </template>
     </EasyDataTable>
@@ -63,7 +63,7 @@
             <b-form-group class="mt-3" label="nombreFalla">
               <b-form-input
                 required
-                v-model="LightingFailuresFields.nombreFalla"
+                v-model="lightingFailuresFields.nombreFalla"
               ></b-form-input>
             </b-form-group>
           </b-col>
@@ -71,7 +71,7 @@
             <b-form-group class="mt-3" label="descripcion">
               <b-form-input
                 required
-                v-model="LightingFailuresFields.descripcion"
+                v-model="lightingFailuresFields.descripcion"
               ></b-form-input>
             </b-form-group>
           </b-col>
@@ -81,7 +81,7 @@
                 locale="es"
                 :enableTimePicker="false"
                 autoApply
-                v-model="LightingFailuresFields.fecha"
+                v-model="lightingFailuresFields.fecha"
               ></Datepicker>
             </b-form-group>
           </b-col>
@@ -89,7 +89,7 @@
             <b-form-group class="mt-3" label="descripcionDomicilio">
               <b-form-input
                 required
-                v-model="LightingFailuresFields.descripcionDomicilio"
+                v-model="lightingFailuresFields.descripcionDomicilio"
               ></b-form-input>
             </b-form-group>
           </b-col>
@@ -109,8 +109,8 @@ export default {
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup () {
-    const { getLightingFailures } = LightingfailuresServices()
-    const Lightingfailures = ref([])
+    const { getLightingFailures, createLightingFailures, deleteLightingFailures } = LightingfailuresServices()
+    const lightingFailures = ref([])
     const isOpen = ref(false)
     const perPage = ref(5)
     const currentPage = ref(1)
@@ -120,7 +120,7 @@ export default {
     const loading = ref(false)
     const searchValue = ref('')
     const searchField = ref('fallaId')
-    const LightingFailuresFields = ref({
+    const lightingFailuresFields = ref({
       fallaId: 0,
       nombreFalla: null,
       descripcion: null,
@@ -136,7 +136,7 @@ export default {
       { value: 'descripcionDomicilio', text: 'DescripcionDomicilio' }
     ])
     getLightingFailures((data) => {
-      Lightingfailures.value = data
+      lightingFailures.value = data
       rows.value = data.length
     })
 
@@ -147,14 +147,14 @@ export default {
 
     const refreshTable = () => {
       getLightingFailures((data) => {
-        Lightingfailures.value = data
+        lightingFailures.value = data
         rows.value = data.length
       })
       return 'datos recargados'
     }
 
     const addLightingFailures = () => {
-      createLightingFailures(LightingFailuresFields.value, (data) => {
+      createLightingFailures(lightingFailuresFields.value, (data) => {
         refreshTable()
       })
     }
@@ -165,7 +165,8 @@ export default {
       })
     }
     return {
-      Lightingfailures,
+      lightingFailures,
+      lightingFailuresFields,
       isOpen,
       perPage,
       currentPage,
