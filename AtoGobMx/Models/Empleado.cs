@@ -32,9 +32,9 @@ namespace AtoGobMx.Models
         public Area? Area { get; set; }
 
         [JsonIgnore]
-        public virtual IEnumerable<ExpedienteEmpleado>? ExpedienteEmpleados { get; set; }
+        public virtual IEnumerable<ExpedienteDigital>? ExpedientesDigitales { get; set; }
         [JsonIgnore]
         public virtual IEnumerable<Usuario>? Usuarios { get; set; }
-        public virtual IEnumerable<Archivos>? Archivos { get; set; }
+        //public virtual IEnumerable<Archivos>? Archivos { get; set; }
     }
 }

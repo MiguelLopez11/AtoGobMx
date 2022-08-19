@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace AtoGobMx.Models
 {
@@ -22,9 +23,16 @@ namespace AtoGobMx.Models
         [Required]
         public int? CodigoPostal { get; set; }
         public string? CorreoElectronico { get; set; }
-        //[Required]
-        //public string fotoPerfil  { get; set; }
+        [Required]
         public bool Archivado { get; set; }
-        
+
+
+        [ForeignKey("EmpleadoId")]
+        public Empleado? empleado { get; set; }
+
+
+        [JsonIgnore]
+        public virtual IEnumerable<Archivos>? Archivos { get; set; }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AtoGobMx.Models
@@ -12,12 +13,11 @@ namespace AtoGobMx.Models
         public string? Nombre { get; set; }
         [MaxLength(100)]
         public string? TipoArchivo { get; set; }
-        [MaxLength]
-        public byte[]? DataFiles { get; set; }
-        public int EmpleadoId { get; set; }
+        //[MaxLength]
+        //public byte[]? DataFiles { get; set; }
+        public int ExpedienteDigitalId { get; set; }
 
-        [ForeignKey("EmpleadoId")]
-        public Empleado? Empleado { get; set; }
-        //public DateTime? CreatedOn { get; set; }
+        [ForeignKey("ExpedienteDigitalId")]
+        public ExpedienteDigital? expedienteDigital { get; set; }
     }
 }
