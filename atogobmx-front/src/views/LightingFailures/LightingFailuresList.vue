@@ -1,12 +1,16 @@
 <template>
   <b-card class="m-3">
-    <b-row>
-      <b-form-input
-        class="w-25 m-3"
-        v-model="filter"
-        type="search"
-        placeholder="Buscar..."
-      ></b-form-input>
+    <b-row align-h="end" class="mb-2 mr-1">
+      <b-col cols="3">
+        <b-form-group>
+          <b-form-input
+            size="lg"
+            v-model="searchValue"
+            type="search"
+            placeholder="Buscar Falla..."
+          ></b-form-input>
+        </b-form-group>
+      </b-col>
       <button
         id="buttonAdd"
         class="btn col-1 m-3"
@@ -109,7 +113,11 @@ export default {
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup () {
-    const { getLightingFailures, createLightingFailures, deleteLightingFailures } = LightingfailuresServices()
+    const {
+      getLightingFailures,
+      createLightingFailures,
+      deleteLightingFailures
+    } = LightingfailuresServices()
     const lightingFailures = ref([])
     const isOpen = ref(false)
     const perPage = ref(5)
