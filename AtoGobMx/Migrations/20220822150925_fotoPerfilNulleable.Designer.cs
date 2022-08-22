@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20220822150925_fotoPerfilNulleable")]
+    partial class fotoPerfilNulleable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,9 +27,6 @@ namespace AtoGobMx.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("ExpedienteDigitalId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Nombre")
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
@@ -37,8 +36,6 @@ namespace AtoGobMx.Migrations
                         .HasColumnType("varchar(100)");
 
                     b.HasKey("ArchivoId");
-
-                    b.HasIndex("ExpedienteDigitalId");
 
                     b.ToTable("Archivos");
                 });
@@ -132,6 +129,9 @@ namespace AtoGobMx.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("FotoPerfil")
+                        .HasColumnType("int");
+
                     b.Property<string>("Localidad")
                         .HasColumnType("longtext");
 
@@ -149,6 +149,8 @@ namespace AtoGobMx.Migrations
                     b.HasKey("ExpedienteDigitalId");
 
                     b.HasIndex("EmpleadoId");
+
+                    b.HasIndex("FotoPerfil");
 
                     b.ToTable("ExpedienteDigital");
                 });
@@ -239,17 +241,6 @@ namespace AtoGobMx.Migrations
                     b.ToTable("Usuarios");
                 });
 
-            modelBuilder.Entity("AtoGobMx.Models.Archivos", b =>
-                {
-                    b.HasOne("AtoGobMx.Models.ExpedienteDigital", "expedienteDigital")
-                        .WithMany("Archivos")
-                        .HasForeignKey("ExpedienteDigitalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("expedienteDigital");
-                });
-
             modelBuilder.Entity("AtoGobMx.Models.Empleado", b =>
                 {
                     b.HasOne("AtoGobMx.Models.Area", "Area")
@@ -266,6 +257,12 @@ namespace AtoGobMx.Migrations
                         .HasForeignKey("EmpleadoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("AtoGobMx.Models.Archivos", "archivos")
+                        .WithMany("ExpedienteDigital")
+                        .HasForeignKey("FotoPerfil");
+
+                    b.Navigation("archivos");
 
                     b.Navigation("empleado");
                 });
@@ -289,6 +286,11 @@ namespace AtoGobMx.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("AtoGobMx.Models.Archivos", b =>
+                {
+                    b.Navigation("ExpedienteDigital");
+                });
+
             modelBuilder.Entity("AtoGobMx.Models.Area", b =>
                 {
                     b.Navigation("Empleados");
@@ -299,11 +301,6 @@ namespace AtoGobMx.Migrations
                     b.Navigation("ExpedientesDigitales");
 
                     b.Navigation("Usuarios");
-                });
-
-            modelBuilder.Entity("AtoGobMx.Models.ExpedienteDigital", b =>
-                {
-                    b.Navigation("Archivos");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Role", b =>

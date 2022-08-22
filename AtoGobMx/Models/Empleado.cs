@@ -21,7 +21,6 @@ namespace AtoGobMx.Models
         public string? ApellidoMaterno { get; set; }
         [Required]
         public DateTime? FechaNacimiento { get; set; }
-        [Required]
         public DateTime? FechaAlta { get; set; }
         public DateTime? FechaBaja { get; set; }
         [Required]

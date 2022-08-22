@@ -305,6 +305,9 @@ export default {
       return 'datos recargados'
     }
     const addEmployee = () => {
+      if (areas.value.length === 0) {
+        $toast.warning('No se encuentran registros de areas de trabajo, registre una primero para registrar un empleado')
+      }
       createEmployee(EmployeesFields.value, (data) => {
         refreshTable()
         $toast.success('Empleado registrado correctamente.', {
@@ -314,7 +317,6 @@ export default {
       })
     }
     const RemoveEmployee = (employeeId) => {
-      // $toast.warning('',?options)
       isloading.value = true
       deleteEmployee(employeeId, (data) => {
         refreshTable()

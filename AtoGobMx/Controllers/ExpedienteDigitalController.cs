@@ -22,6 +22,8 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<ExpedienteDigital>> GetExpedientesDigitales()
         {
             var expedientes = await _context.ExpedienteDigital
+                //.Include(i => i.archivos)
+                .Include(i => i.empleado)
                 .Where(w => !w.Archivado)
                 .OrderBy(o => o.ExpedienteDigitalId)
                 .Select(s => _mapper.Map<ExpedienteDigital>(s))
@@ -32,6 +34,8 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult> GetExpedienteById(int ExpedienteDigitalId)
         {
             var expedienteDigital = await _context.ExpedienteDigital
+                //.Include(i => i.archivos)
+                .Include(i => i.empleado)
                 .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == ExpedienteDigitalId);
             if (expedienteDigital == null)
             {
@@ -43,6 +47,8 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult> GetExpedienteDigitalByEmpleadoId(int EmpleadoId)
         {
             var expedienteDigital = await _context.ExpedienteDigital
+                //.Include(i => i.archivos)
+                .Include(i => i.empleado)
                 .FirstOrDefaultAsync(f => f.EmpleadoId == EmpleadoId);
             if (expedienteDigital == null)
             {

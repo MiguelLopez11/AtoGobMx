@@ -10,7 +10,7 @@ namespace AtoGobMx.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ExpedienteDigitalId { get; set; }
         public int EmpleadoId { get; set; }
-        public int FotoPerfil { get; set; }
+        //public int? FotoPerfil { get; set; }
         [Required]
         public string? Estado { get; set; }
         [Required]
@@ -30,12 +30,12 @@ namespace AtoGobMx.Models
 
         [ForeignKey("EmpleadoId")]
         public Empleado? empleado { get; set; }
-        [ForeignKey("FotoPerfil")]
-        public Archivos? archivos { get; set; }
+        //[ForeignKey("FotoPerfil")]
+        //public Archivos? archivos { get; set; }
 
 
-        //[JsonIgnore]
-        //public virtual IEnumerable<Archivos>? Archivos { get; set; }
+        [JsonIgnore]
+        public virtual IEnumerable<Archivos>? Archivos { get; set; }
 
     }
 }

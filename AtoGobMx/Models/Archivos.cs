@@ -13,12 +13,12 @@ namespace AtoGobMx.Models
         public string? Nombre { get; set; }
         [MaxLength(100)]
         public string? TipoArchivo { get; set; }
-        //public int ExpedienteDigitalId { get; set; }
+        public int ExpedienteDigitalId { get; set; }
 
-        //[ForeignKey("ExpedienteDigitalId")]
-        //public ExpedienteDigital? expedienteDigital { get; set; }
+        [ForeignKey("ExpedienteDigitalId")]
+        public ExpedienteDigital? expedienteDigital { get; set; }
 
-        [JsonIgnore]
-        public virtual IEnumerable<ExpedienteDigital>? ExpedienteDigital { get; set; }
+        //[JsonIgnore]
+        //public virtual IEnumerable<ExpedienteDigital>? ExpedienteDigital { get; set; }
     }
 }
