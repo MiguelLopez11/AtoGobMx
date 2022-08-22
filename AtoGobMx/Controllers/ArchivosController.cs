@@ -18,32 +18,38 @@ namespace AtoGobMx.Controllers
             _context = Context;
             _mapper = mapper;
         }
-        [HttpGet("{expedienteDigitalId}")]
-        public async Task<IActionResult> GetImagenPerfil(int expedienteDigitalId)
-        {
-            var expediente = await _context.Archivos.FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expedienteDigitalId);
-            var image = System.IO.File.OpenRead($"Files/Images/{expediente.Nombre}");
-            return File(image, "image/jpeg");
+        //[HttpGet("{expedienteDigitalId}")]
+        //public async Task<IActionResult> GetImagenPerfil(int expedienteDigitalId)
+        //{
+        //    var expediente = await _context.Archivos.FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expedienteDigitalId);
+        //    var image = System.IO.File.OpenRead($"Files/Images/{expediente.Nombre}");
+        //    return File(image, "image/jpeg");
 
-        }
-        [HttpPost("{expedienteDigitalId}")]
-        public async Task<IActionResult> UploadFile(IFormFile file, int expedienteDigitalId)
+        //}
+        [HttpPost("FotoPerfil/{expedienteDigitalId}")]
+        public async Task<IActionResult> UploadPhotoProfile(IFormFile file, int expedienteDigitalId)
         {
             try
             {
+                //var expediente = await _context.Archivos.FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expedienteDigitalId);
+
+
                 var path = Path.Combine(Directory.GetCurrentDirectory(), "Files/Images", file.FileName);
                 var stream = new FileStream(path, FileMode.Create);
                 await file.CopyToAsync(stream);
                 var fileName = file.FileName;
                 var fileExtension = Path.GetExtension(fileName);
-                //var newFileName = String.Concat(Convert.ToString(Guid.NewGuid()), fileExtension);
 
+                if (fileExtension != ".png" || fileExtension != ".jpg")
+                {
+                    return BadRequest("No es un archivo válido");
+                }
                 var archivo = new Archivos()
                 {
                     ArchivoId = 0,
                     Nombre = file.FileName,
                     TipoArchivo = fileExtension,
-                    ExpedienteDigitalId = expedienteDigitalId
+                    //ExpedienteDigitalId = expedienteDigitalId
 
                 };
                 _context.Archivos.Add(archivo);
