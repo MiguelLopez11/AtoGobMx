@@ -25,13 +25,7 @@
                  class="nav-link active"
                  aria-current="page"
                  to="/Empleados/list"
-                >Empleados</router-link>
-                <!-- <a
-                  class="nav-link active"
-                  aria-current="page"
-                  href="/Empleados/list"
-                  >Empleados</a
-                > -->
+                >Recursos Humanos</router-link>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">Link</a>
@@ -61,7 +55,7 @@
               </li>
             </ul>
             <div class="d-flex">
-              <b-button pressed variant="success" @click="toLogin">
+              <b-button pressed variant="success" @click="toLogin" size="lg">
                 <i class="bi bi-box-arrow-in-right"></i>
                 Iniciar Sesion
               </b-button>
@@ -70,16 +64,6 @@
         </div>
       </nav>
     </b-card>
-    <!-- <b-card class="m-3">
-    <b-card
-      align="center"
-      class="m-3"
-      :img-src="background"
-      no-body
-      style="max-width: 200rem"
-    >
-    </b-card>
-  </b-card> -->
   </div>
   <router-view></router-view>
 </template>

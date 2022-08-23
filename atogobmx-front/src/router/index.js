@@ -1,4 +1,4 @@
-import { createRouter, createMemoryHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   {
@@ -15,11 +15,16 @@ const routes = [
     path: '/Empleados/list',
     name: 'Empleados',
     component: () => import('@/views/Employees/EmployeeList.vue')
+  },
+  {
+    path: '/Empleados/:empleadoId',
+    name: 'ExpedienteEmpleados',
+    component: () => import('@/views/Employees/EmployeeExpedient.vue')
   }
 ]
 
 const router = createRouter({
-  history: createMemoryHistory(),
+  history: createWebHistory(),
   routes
 })
 

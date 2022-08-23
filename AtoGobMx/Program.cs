@@ -11,6 +11,10 @@ builder.Services.AddDbContext<AtoGobMxContext>(options =>
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
+//builder.Services.AddMvc(options =>
+//{
+//    options.SuppressAsyncSuffixInActionNames = false;
+//});
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
@@ -23,6 +27,7 @@ builder.Services.AddCors(options =>
                           policy.WithOrigins("http://localhost:8081",
                                               "http://192.168.1.110:8081");
                           policy.AllowAnyHeader();
+                          policy.AllowCredentials();
                           policy.AllowAnyMethod();
                       });
 });

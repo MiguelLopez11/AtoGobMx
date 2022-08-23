@@ -26,28 +26,28 @@ namespace AtoGobMx.Controllers
                 .Where(w => !w.Archivado)
                 .OrderBy(o => o.EmpleadoId)
                 .Select(s => _mapper.Map<Empleado>(s))
-                .ToListAsync();
+                .ToArrayAsync();
             return Ok(empleados);
         }
 
-        [HttpGet("{EmpleadosId}")]
-        public async Task<ActionResult> GetEmpleadosById(int EmpleadosId)
+        [HttpGet("{EmpleadoId}")]
+        public async Task<ActionResult> GetEmpleadosById(int EmpleadoId)
         {
             var Empleado = await _context.Empleados
-                .FindAsync(EmpleadosId);
+                .FirstOrDefaultAsync(f => f.EmpleadoId == EmpleadoId);
             if (Empleado == null)
             {
-                Ok($"No se encuentra el area con el ID: {EmpleadosId}");
+                return NotFound();
             }
             return Ok(Empleado);
         }
         [HttpPost]
-        public async Task<IActionResult> PostEmpleados(Empleado Empleado)
+        public async Task<ActionResult<Empleado>> PostEmpleados(Empleado Empleado)
         {
 
             _context.Empleados.Add(Empleado);
             await _context.SaveChangesAsync();
-            return StatusCode(200, "Se ha credo exitosamente");
+            return CreatedAtAction("GetEmpleadosById", new { EmpleadoId = Empleado.EmpleadoId }, Empleado);
         }
         [HttpPut("{EmpleadoId}")]
         public async Task<ActionResult> PutEmpleado(int EmpleadoId, Empleado empleado)
@@ -67,7 +67,10 @@ namespace AtoGobMx.Controllers
             emp.ApellidoMaterno = empleado.ApellidoMaterno;
             emp.FechaNacimiento = empleado.FechaNacimiento;
             emp.AreaId = empleado.AreaId;
-            emp.Direccion = empleado.Direccion;
+            //emp.Municipio = empleado.Municipio;
+            //emp.Calle = empleado.Calle;
+            //emp.NumeroExterior = empleado.NumeroExterior;
+            //emp.NumeroInterior = empleado.NumeroInterior;
             emp.Archivado = empleado.Archivado;
             emp.FechaAlta = empleado.FechaAlta;
 
@@ -75,11 +78,11 @@ namespace AtoGobMx.Controllers
             await _context.SaveChangesAsync();
             return Ok("Empleado actualizado correctamente");
         }
-        [HttpDelete]
-        public async Task<IActionResult> DeleteEmpleados(int Id)
+        [HttpDelete("{empleadoId}")]
+        public async Task<IActionResult> DeleteEmpleados(int empleadoId)
         {
             var empleado = _context.Empleados
-                .FirstOrDefault(f => f.EmpleadoId == Id);
+                .FirstOrDefault(f => f.EmpleadoId == empleadoId);
             if (empleado == null)
             {
                 return NotFound();

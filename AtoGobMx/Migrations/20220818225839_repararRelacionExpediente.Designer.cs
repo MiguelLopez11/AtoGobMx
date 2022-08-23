@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20220818225839_repararRelacionExpediente")]
+    partial class repararRelacionExpediente
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,6 +26,9 @@ namespace AtoGobMx.Migrations
                     b.Property<int>("ArchivoId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.Property<byte[]>("DataFiles")
+                        .HasColumnType("longblob");
 
                     b.Property<int>("ExpedienteDigitalId")
                         .HasColumnType("int");
@@ -84,6 +89,7 @@ namespace AtoGobMx.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("FechaAlta")
+                        .IsRequired()
                         .HasColumnType("datetime(6)");
 
                     b.Property<DateTime?>("FechaBaja")
@@ -242,7 +248,7 @@ namespace AtoGobMx.Migrations
             modelBuilder.Entity("AtoGobMx.Models.Archivos", b =>
                 {
                     b.HasOne("AtoGobMx.Models.ExpedienteDigital", "expedienteDigital")
-                        .WithMany("Archivos")
+                        .WithMany()
                         .HasForeignKey("ExpedienteDigitalId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -299,11 +305,6 @@ namespace AtoGobMx.Migrations
                     b.Navigation("ExpedientesDigitales");
 
                     b.Navigation("Usuarios");
-                });
-
-            modelBuilder.Entity("AtoGobMx.Models.ExpedienteDigital", b =>
-                {
-                    b.Navigation("Archivos");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Role", b =>
