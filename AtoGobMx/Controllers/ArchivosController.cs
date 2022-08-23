@@ -22,12 +22,16 @@ namespace AtoGobMx.Controllers
         public async Task<IActionResult> GetImagenPerfil(int expedienteDigitalId)
         {
             var expediente = await _context.Archivos.FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expedienteDigitalId);
+            if(expediente == null)
+            {
+                return NotFound("no se encuentra expediente");
+            }
             var image = System.IO.File.OpenRead($"Files/Images/{expediente.Nombre}");
             return File(image, "image/jpeg");
 
         }
-        [HttpPost("FotoPerfil/{expedienteDigitalId}")]
-        public async Task<IActionResult> UploadPhotoProfile(IFormFile file, int expedienteDigitalId)
+        [HttpPost("FotoPerfil/{expedienteDigitalId}/{nombreUsuario}")]
+        public async Task<IActionResult> UploadPhotoProfile(IFormFile file, int expedienteDigitalId, string nombreUsuario)
         {
             try
             {
@@ -60,7 +64,12 @@ namespace AtoGobMx.Controllers
                     .ToArrayAsync();
                 if (archivoExpediente.Length < 1)
                 {
-                    var path = Path.Combine(Directory.GetCurrentDirectory(), "Files/Images/", $"Foto_Perfil: {file.FileName}");
+                    var pathFolder = $@"Files/Images/{nombreUsuario}";
+                    if (!Directory.Exists(pathFolder))
+                    {
+                        Directory.CreateDirectory(pathFolder);
+                    }
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), pathFolder, file.FileName);
                     //Directory.CreateDirectory(path);
                     var stream = new FileStream(path, FileMode.Create);
                     await file.CopyToAsync(stream);
