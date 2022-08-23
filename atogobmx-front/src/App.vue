@@ -26,19 +26,6 @@
                  aria-current="page"
                  to="/Empleados/list"
                 >Empleados</router-link>
-                <!-- <a
-                  class="nav-link active"
-                  aria-current="page"
-                  href="/Empleados/list"
-                  >Empleados</a
-                > -->
-              </li>
-              <li>
-                <router-link
-                  class="nav-link active"
-                  aria-current="page"
-                  to="/FallasAlumbrado/list"
-                  >FallasAlumbrado</router-link>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">Link</a>
