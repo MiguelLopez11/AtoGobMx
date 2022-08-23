@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <Folder Include="Files\Images\" />
+    <Folder Include="Files\Images\Miki\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 
