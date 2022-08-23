@@ -11,27 +11,46 @@
           ></b-form-input>
         </b-form-group>
       </b-col>
-      <button
-        id="buttonAdd"
-        class="btn col-1 m-3"
-        v-b-modal.modal-add-lightingfailures
-      >
-        Agregar
-      </button>
+      <b-col cols="3" style="float: right">
+        <b-form-group>
+          <button
+            class="btn btn-primary"
+            style="height: 50px; widows: auto; font-size: 18px"
+            id="buttonAdd"
+            v-b-modal.modal-lightingfailures
+            type="submit"
+          >
+            <i class="bi bi-person-plus-fill"></i>
+            Agregar Falla
+          </button>
+        </b-form-group>
+      </b-col>
     </b-row>
 
     <EasyDataTable
-      :headers="fields"
-      :items="lightingFailures"
+      rows-per-page-message="registros por pagina"
+      empty-message="No se encontro ningun registro"
+      table-class-name="customize-table"
       buttons-pagination
       border-cell
+      :Loading="isloading"
+      :headers="fields"
+      :items="lightingFailures"
       :rows-per-page="5"
-      table-class-name="customize-table"
+      search-field="searchField"
+      search-value="searchValue"
     >
       <template #header-actions="header">
         {{ header.text }}
       </template>
-      <template #item-actions>
+      <template #item-actions="items">
+        <button
+          @click="RemoveLightingFailures(items.fallaId)"
+          class="m-1"
+          variant="outline-danger"
+        >
+          <i class="bi bi-trash3"></i>
+        </button>
         <b-dropdown text="Acciones" variant="primary" dropright>
           <b-dropdown-item variant="danger">
             <i class="bi bi-trash-fill"></i>Eliminar
@@ -44,14 +63,19 @@
     </EasyDataTable>
 
     <b-modal
-      id="modal-add-lightingfailures"
-      ref="modal"
-      centered
-      no-close-on-esc
-      size="xl"
+      id="modal-lightingfailures"
       @ok="addLightingFailures"
+      hide-footer
+      title="Agreagr Falla"
+      size="xl"
+      centered
+      hide-backdrop
+      button-size="lg"
+      lazy
+      ok-title="Registrar Falla"
+      cancel-title="cancelar"
     >
-      <template #modal-header="{ close }">
+      <!-- <template #modal-header="{ close }">
         <div class="mx-auto h5" style="width: 200px">
           Agregar Fallas de Alumbrado
         </div>
@@ -60,11 +84,11 @@
             >Cerrar</b-button
           >
         </div>
-      </template>
+      </template> -->
       <form ref="form">
         <b-row cols="3">
           <b-col>
-            <b-form-group class="mt-3" label="nombreFalla">
+            <b-form-group class="mt-3" label="NombreFalla">
               <b-form-input
                 required
                 v-model="lightingFailuresFields.nombreFalla"
@@ -72,7 +96,7 @@
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="descripcion">
+            <b-form-group class="mt-3" label="Descripcion">
               <b-form-input
                 required
                 v-model="lightingFailuresFields.descripcion"
@@ -80,7 +104,7 @@
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="fecha">
+            <b-form-group class="mt-3" label="Fecha">
               <Datepicker
                 locale="es"
                 :enableTimePicker="false"
@@ -90,7 +114,7 @@
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="descripcionDomicilio">
+            <b-form-group class="mt-3" label="Descripcion Domicilio">
               <b-form-input
                 required
                 v-model="lightingFailuresFields.descripcionDomicilio"
@@ -125,7 +149,7 @@ export default {
     const rows = ref(null)
     const filter = ref(null)
     const perPageSelect = ref([5, 10, 25, 50, 100])
-    const loading = ref(false)
+    const isloading = ref(false)
     const searchValue = ref('')
     const searchField = ref('fallaId')
     const lightingFailuresFields = ref({
@@ -181,7 +205,7 @@ export default {
       rows,
       filter,
       perPageSelect,
-      loading,
+      isloading,
       searchValue,
       searchField,
       fields,
