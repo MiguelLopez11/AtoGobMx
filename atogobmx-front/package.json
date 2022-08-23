@@ -23,7 +23,6 @@
     "vue-router": "^4.0.3",
     "vue-select": "^3.20.0",
     "vue-sidebar-menu": "^5.2.4",
-    "vue-swal": "^1.0.0",
     "vue-toast-notification": "3.0",
     "vue3-easy-data-table": "^1.4.12",
     "vue3-table-lite": "^1.2.4"
