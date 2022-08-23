@@ -22,13 +22,19 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
                 <router-link
-                 class="nav-link active"
-                 aria-current="page"
-                 to="/Empleados/list"
-                >Recursos Humanos</router-link>
+                  class="nav-link active"
+                  aria-current="page"
+                  to="/Empleados/list"
+                  >Empleados</router-link
+                >
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
+                <router-link
+                  class="nav-link active"
+                  aria-current="page"
+                  to="/FallasAlumbrado/list"
+                  >Servicios Publicos
+                </router-link>
               </li>
               <li class="nav-item dropdown">
                 <a
@@ -73,7 +79,6 @@ import router from './router'
 import LogoAtogobMx from '@/Images/LogoAtogobMx.jpg'
 
 export default {
-
   setup () {
     const login = ref(false)
     const background = ref(LogoAtogobMx)

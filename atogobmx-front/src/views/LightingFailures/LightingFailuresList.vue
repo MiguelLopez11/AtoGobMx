@@ -1,14 +1,14 @@
 <template>
   <b-card class="m-3">
     <div>
-      <b-form-input
+          <b-form-input
         inline
         v-model="filter"
-        type="search"
+            type="search"
         placeholder="Buscar..."
-      >
+          >
       </b-form-input>
-    </div>
+        </div>
     <b-table
       id="lightingfailuresTable"
       :items="lightingfailures"
@@ -17,7 +17,7 @@
       :per-page="perPage"
       :current-page="currentPage"
       @filtered="onFiltered"
-    >
+          >
     </b-table>
     <b-pagination
       v-model="currentPage"
@@ -61,6 +61,10 @@ export default {
       currentPage,
       rows,
       filter,
+      perPageSelect,
+      isloading,
+      searchValue,
+      searchField,
       fields,
 
       onFiltered,
