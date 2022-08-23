@@ -31,37 +31,55 @@ namespace AtoGobMx.Controllers
         {
             try
             {
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "Files/Images", file.FileName);
-                var stream = new FileStream(path, FileMode.Create);
-                await file.CopyToAsync(stream);
+                #region Comprobar si el expediente existe
+                var expediente = await _context.ExpedienteDigital.FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expedienteDigitalId);
+                if (expediente == null)
+                {
+                    return NotFound("No se encuentra el expediente digital");
+                }
+                #endregion
+                #region Comprobar que el archivo sea una imagen
                 var fileName = file.FileName;
                 var fileExtension = Path.GetExtension(fileName);
 
-                if(fileExtension != ".png")
+                if (fileExtension != ".png")
                 {
-                    if(fileExtension != ".jpg")
+                    if (fileExtension != ".jpg")
                     {
-                        return BadRequest("El tipo de archivo no es válido para foto de perfil");
+                        if (fileExtension != ".jpeg")
+                        {
+                            return BadRequest("El tipo de archivo no es válido para foto de perfil");
+                        }
                     }
                 }
+                #endregion
+                #region Comprobar si ya existe una imagen registrada al expediente, crearlo
                 var archivoExpediente = await _context.Archivos
                     .Where(w => w.ExpedienteDigitalId == expedienteDigitalId)
-                    .Where(w => w.TipoArchivo == ".png")
-                    .ToListAsync();
-                if (archivoExpediente != null)
+                    .Where(w => w.TipoArchivo.Contains(".png") || w.TipoArchivo.Contains(".jpg") || w.TipoArchivo.Contains(".jpeg"))
+                    .ToArrayAsync();
+                if (archivoExpediente.Length < 1)
                 {
-                    return Ok(archivoExpediente);
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "Files/Images/", $"Foto_Perfil: {file.FileName}");
+                    //Directory.CreateDirectory(path);
+                    var stream = new FileStream(path, FileMode.Create);
+                    await file.CopyToAsync(stream);
+                    var archivo = new Archivos()
+                    {
+                        ArchivoId = 0,
+                        Nombre = $"Foto_Perfil: {file.FileName}",
+                        TipoArchivo = fileExtension,
+                        ExpedienteDigitalId = expedienteDigitalId
+                    };
+                    _context.Archivos.Add(archivo);
+                    await _context.SaveChangesAsync();
+                    return Ok(new { length = file.Length, name = file.FileName });
                 }
-                var archivo = new Archivos()
+                else
                 {
-                    ArchivoId = 0,
-                    Nombre = file.FileName,
-                    TipoArchivo = fileExtension,
-                    ExpedienteDigitalId = expedienteDigitalId
-                };
-                _context.Archivos.Add(archivo);
-                await _context.SaveChangesAsync();
-                return Ok(new { length = file.Length, name = file.FileName });
+                    return BadRequest("Ya se encuentra una foto de perfil ");
+                }
+                #endregion
             }
             catch
             {
