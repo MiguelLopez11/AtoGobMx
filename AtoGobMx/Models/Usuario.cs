@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace AtoGobMx.Models
 {
@@ -19,10 +20,13 @@ namespace AtoGobMx.Models
         public bool Archivado { get; set; }
         [Required]
         public int RoleId { get; set; }
-        public int EmpleadoId { get; set; }
         [ForeignKey("RoleId")]
         public Role? Role { get; set; }
-        [ForeignKey("EmpleadoId")]
-        public Empleado? Empleado { get; set; }
+
+        [JsonIgnore]
+        public virtual IEnumerable<Empleado>? Empleados { get; set; }
+        //public int EmpleadoId { get; set; }
+        //[ForeignKey("EmpleadoId")]
+        //public Empleado? Empleado { get; set; }
     }
 }

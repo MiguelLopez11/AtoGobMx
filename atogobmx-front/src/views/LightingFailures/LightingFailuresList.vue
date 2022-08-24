@@ -30,47 +30,47 @@
 </template>
 
 <script>
-import LightingfailuresServices from "@/Services/lightingfailures.Services";
-import { ref } from "vue";
+import LightingfailuresServices from '@/Services/lightingfailures.Services'
+import { ref } from 'vue'
 export default {
-  setup() {
-    const { getLightingFailures } = LightingfailuresServices();
-    const Lightingfailures = ref([]);
-    const perPage = ref(5);
-    const currentPage = ref(1);
-    const rows = ref(null);
-    const filter = ref(null);
+  setup () {
+    const { getLightingFailures } = LightingfailuresServices()
+    const Lightingfailures = ref([])
+    const perPage = ref(5)
+    const currentPage = ref(1)
+    const rows = ref(null)
+    const filter = ref(null)
     const fields = ref([
-      { key: "fallaId", label: "ID" },
-      { key: "nombreFalla", label: "NombreFalla" },
-      { key: "descripcion", label: "Descripcion" },
-      { key: "fecha", label: "Fecha" },
-    ]);
+      { key: 'fallaId', label: 'ID' },
+      { key: 'nombreFalla', label: 'NombreFalla' },
+      { key: 'descripcion', label: 'Descripcion' },
+      { key: 'fecha', label: 'Fecha' }
+    ])
     getLightingFailures((data) => {
-      Lightingfailures.value = data;
-      rows.value = data.length;
-    });
+      Lightingfailures.value = data
+      rows.value = data.length
+    })
 
     const onFiltered = (filteredItems) => {
-      rows.value = filteredItems.length;
-      currentPage.value = 1;
-    };
+      rows.value = filteredItems.length
+      currentPage.value = 1
+    }
     return {
       Lightingfailures,
       perPage,
       currentPage,
       rows,
       filter,
-      perPageSelect,
-      isloading,
-      searchValue,
-      searchField,
+      // perPageSelect,
+      // isloading,
+      // searchValue,
+      // searchField,
       fields,
 
-      onFiltered,
-    };
-  },
-};
+      onFiltered
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped></style>

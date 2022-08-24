@@ -18,25 +18,38 @@ namespace AtoGobMx.Controllers
             _context = Context;
             _mapper = mapper;
         }
-        [HttpGet("{expedienteDigitalId}")]
+        [HttpGet("FotoPerfil/{expedienteDigitalId}/")]
         public async Task<IActionResult> GetImagenPerfil(int expedienteDigitalId)
         {
-            var expediente = await _context.Archivos.FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expedienteDigitalId);
+            var expediente = await _context.ExpedienteDigital.FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expedienteDigitalId);
             if(expediente == null)
             {
-                return NotFound("no se encuentra expediente");
+                return NotFound("El ID del expediente no existe.");
             }
-            var image = System.IO.File.OpenRead($"Files/Images/{expediente.Nombre}");
+            var fotoPerfil = await _context.Archivos.FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expedienteDigitalId);
+            if(fotoPerfil == null)
+            {
+                return NotFound("No se encuentra foto de perfil registrado a ese expediente.");
+            }
+            var empleado = await _context.Empleados.Include(i => i.usuario).FirstOrDefaultAsync(f => f.EmpleadoId == expediente.EmpleadoId);
+            if(empleado == null)
+            {
+                return BadRequest();
+            }
+            var image = System.IO.File.OpenRead($"Files/Images/{empleado.usuario.NombreUsuario}/{fotoPerfil.Nombre}");
             return File(image, "image/jpeg");
 
         }
-        [HttpPost("FotoPerfil/{expedienteDigitalId}/{nombreUsuario}")]
-        public async Task<IActionResult> UploadPhotoProfile(IFormFile file, int expedienteDigitalId, string nombreUsuario)
+        [HttpPost("FotoPerfil/{expedienteDigitalId}/")]
+        public async Task<IActionResult> UploadPhotoProfile(IFormFile file, int expedienteDigitalId)
         {
             try
             {
                 #region Comprobar si el expediente existe
-                var expediente = await _context.ExpedienteDigital.FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expedienteDigitalId);
+                var expediente = await _context.ExpedienteDigital
+                    .Include(i => i.empleado)
+                    .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expedienteDigitalId);
+
                 if (expediente == null)
                 {
                     return NotFound("No se encuentra el expediente digital");
@@ -61,10 +74,11 @@ namespace AtoGobMx.Controllers
                 var archivoExpediente = await _context.Archivos
                     .Where(w => w.ExpedienteDigitalId == expedienteDigitalId)
                     .Where(w => w.TipoArchivo.Contains(".png") || w.TipoArchivo.Contains(".jpg") || w.TipoArchivo.Contains(".jpeg"))
-                    .ToArrayAsync();
-                if (archivoExpediente.Length < 1)
+                    .ToListAsync();
+                if (archivoExpediente != null)
                 {
-                    var pathFolder = $@"Files/Images/{nombreUsuario}";
+                    var empleado = await _context.Empleados.Include(i => i.usuario).FirstOrDefaultAsync(f => f.EmpleadoId == expediente.EmpleadoId);
+                    var pathFolder = $@"Files/Images/{empleado.usuario.NombreUsuario}";
                     if (!Directory.Exists(pathFolder))
                     {
                         Directory.CreateDirectory(pathFolder);
@@ -76,7 +90,7 @@ namespace AtoGobMx.Controllers
                     var archivo = new Archivos()
                     {
                         ArchivoId = 0,
-                        Nombre = $"Foto_Perfil: {file.FileName}",
+                        Nombre = file.FileName,
                         TipoArchivo = fileExtension,
                         ExpedienteDigitalId = expedienteDigitalId
                     };

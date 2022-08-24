@@ -63,7 +63,6 @@
     <b-modal
       id="modal-employee"
       @ok="addEmployee"
-      hide-footer
       title="Agregar empleados"
       size="xl"
       centered

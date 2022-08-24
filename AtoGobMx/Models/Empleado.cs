@@ -29,11 +29,14 @@ namespace AtoGobMx.Models
 
         [ForeignKey("AreaId")]
         public Area? Area { get; set; }
+        public int? UsuarioId { get; set; }
+
+        [ForeignKey("UsuarioId")]
+        public Usuario? usuario { get; set; }
 
         [JsonIgnore]
         public virtual IEnumerable<ExpedienteDigital>? ExpedientesDigitales { get; set; }
-        [JsonIgnore]
-        public virtual IEnumerable<Usuario>? Usuarios { get; set; }
+        
         //public virtual IEnumerable<Archivos>? Archivos { get; set; }
     }
 }
