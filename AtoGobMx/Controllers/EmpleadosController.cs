@@ -27,7 +27,7 @@ namespace AtoGobMx.Controllers
                 .Include(i => i.usuario.Role)
                 .Where(w => !w.Archivado)
                 .OrderBy(o => o.EmpleadoId)
-                .ToArrayAsync();
+                .ToListAsync();
             return Ok(empleados);
         }
 
@@ -39,7 +39,7 @@ namespace AtoGobMx.Controllers
                 .Include(i => i.usuario)
                 .Include(i => i.usuario.Role)
                 .Where(w => w.EmpleadoId == EmpleadoId)
-                .ToArrayAsync();
+                .ToListAsync();
             if (Empleado == null)
             {
                 return NotFound();

@@ -16,6 +16,11 @@ export default function EmployeeServices () {
       callback(response.data)
     })
   }
+  const updateEmployee = (data, callback) => {
+    axios.put(`https://localhost:7065/api/Empleados/${data.empleadoId}`, data).then((response) => {
+      callback(response.data)
+    })
+  }
   const deleteEmployee = (employeeId, callback) => {
     axios.delete(`https://localhost:7065/api/Empleados/${employeeId}`).then((response) => {
       callback(response.data)
@@ -25,6 +30,7 @@ export default function EmployeeServices () {
     getEmployees,
     getEmployee,
     createEmployee,
+    updateEmployee,
     deleteEmployee
   }
 }

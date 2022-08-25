@@ -14,12 +14,12 @@ const routes = [
   {
     path: '/Empleados/list',
     name: 'Empleados',
-    component: () => import('@/views/Employees/EmployeeList.vue')
+    component: () => import('@/views/RecursosHumanos/Employees/EmployeeList.vue')
   },
   {
     path: '/Empleados/:EmpleadoId',
     name: 'Empleados-Edit',
-    component: () => import('@/views/Employees/EmployeeEdit.vue')
+    component: () => import('@/views/RecursosHumanos/Employees/EmployeeEdit.vue')
   },
   {
     path: '/FallasAlumbrado/list',

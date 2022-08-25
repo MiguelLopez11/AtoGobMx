@@ -1,5 +1,5 @@
 <template>
-  <b-card>
+  <b-card class="m-3">
     <b-card
       class="mb-4"
     >
@@ -63,6 +63,10 @@
           </b-col>
         </b-row>
       </form>
+      <b-row align-h="end">
+          <b-button class="col-1 m-2 text-white" variant="primary" to="/Empleados/list" type="reset">Cancelar</b-button>
+          <b-button class="col-1 m-2" variant="success" @click="onUpdateEmployee()">Guardar</b-button>
+      </b-row>
     </b-card>
   </b-card>
 </template>
@@ -71,19 +75,22 @@
 import EmployeeServices from '@/Services/employee.Services'
 import AreaServices from '@/Services/area.Services'
 import { ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import Datepicker from '@vuepic/vue-datepicker'
+import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
     Datepicker
   },
   setup () {
-    const { getEmployee } = EmployeeServices()
+    const { getEmployee, updateEmployee } = EmployeeServices()
     const { getAreas } = AreaServices()
+    const $toast = useToast()
     const employee = ref([])
     const areas = ref([])
     const router = useRoute()
+    const route = useRouter()
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
       { text: 'Empleados', to: '/Empleados/list' },
@@ -92,6 +99,16 @@ export default {
     getEmployee(router.params.EmpleadoId, data => {
       employee.value = data[0]
     })
+    const onUpdateEmployee = () => {
+      updateEmployee(employee.value, data => {
+        route.push('/Empleados/list')
+        $toast.success('Empleado actualizado correctamente.', {
+          position: 'top-right',
+          duration: 10,
+          dismissible: false
+        })
+      })
+    }
     getAreas((data) => {
       areas.value = data
     })
@@ -100,7 +117,9 @@ export default {
       employee,
       areas,
       breadcrumbItems,
-      router
+      router,
+
+      onUpdateEmployee
     }
   }
 
