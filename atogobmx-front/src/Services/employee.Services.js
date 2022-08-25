@@ -6,6 +6,11 @@ export default function EmployeeServices () {
       callback(response.data)
     })
   }
+  const getEmployee = (EmployeeId, callback) => {
+    axios.get(`https://localhost:7065/api/Empleados/${EmployeeId}`).then((response) => {
+      callback(response.data)
+    })
+  }
   const createEmployee = (data, callback) => {
     axios.post('https://localhost:7065/api/Empleados', data).then((response) => {
       callback(response.data)
@@ -18,6 +23,7 @@ export default function EmployeeServices () {
   }
   return {
     getEmployees,
+    getEmployee,
     createEmployee,
     deleteEmployee
   }

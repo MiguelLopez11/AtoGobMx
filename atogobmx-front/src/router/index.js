@@ -17,9 +17,9 @@ const routes = [
     component: () => import('@/views/Employees/EmployeeList.vue')
   },
   {
-    path: '/Empleados/:empleadoId',
-    name: 'ExpedienteEmpleados',
-    component: () => import('@/views/Employees/EmployeeExpedient.vue')
+    path: '/Empleados/:EmpleadoId',
+    name: 'Empleados-Edit',
+    component: () => import('@/views/Employees/EmployeeEdit.vue')
   },
   {
     path: '/FallasAlumbrado/list',

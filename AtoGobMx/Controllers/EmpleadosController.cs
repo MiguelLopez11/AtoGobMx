@@ -23,9 +23,10 @@ namespace AtoGobMx.Controllers
         {
             var empleados = await _context.Empleados
                 .Include(i => i.Area)
+                .Include(i => i.usuario)
+                .Include(i => i.usuario.Role)
                 .Where(w => !w.Archivado)
                 .OrderBy(o => o.EmpleadoId)
-                .Select(s => _mapper.Map<Empleado>(s))
                 .ToArrayAsync();
             return Ok(empleados);
         }
@@ -34,7 +35,11 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult> GetEmpleadosById(int EmpleadoId)
         {
             var Empleado = await _context.Empleados
-                .FirstOrDefaultAsync(f => f.EmpleadoId == EmpleadoId);
+                .Include(i => i.Area)
+                .Include(i => i.usuario)
+                .Include(i => i.usuario.Role)
+                .Where(w => w.EmpleadoId == EmpleadoId)
+                .ToArrayAsync();
             if (Empleado == null)
             {
                 return NotFound();

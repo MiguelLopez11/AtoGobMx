@@ -53,8 +53,8 @@
           class="m-1"
           variant="outline-warning"
           :to="{
-            name: 'ExpedienteEmpleados',
-            params: { empleadoId: items.empleadoId },
+            name: 'Empleados-Edit',
+            params: { EmpleadoId: items.empleadoId },
           }"
           ><i class="bi bi-pencil-square"></i
         ></b-button>

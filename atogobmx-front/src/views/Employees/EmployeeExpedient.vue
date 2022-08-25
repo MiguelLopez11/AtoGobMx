@@ -1,10 +1,18 @@
 <template>
-  <h1>¡En proceso!</h1>
+  <b-card
+    class="m-3"
+  >
+
+  </b-card>
 </template>
 
 <script>
 export default {
+  setup () {
+    return {
 
+    }
+  }
 }
 </script>
 
