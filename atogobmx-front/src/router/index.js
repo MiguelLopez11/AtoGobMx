@@ -22,6 +22,11 @@ const routes = [
     component: () => import('@/views/RecursosHumanos/Employees/EmployeeEdit.vue')
   },
   {
+    path: '/ExpedientesDigitales/list',
+    name: 'ExpedientesDigitales',
+    component: () => import('@/views/RecursosHumanos/ExpedienteDigital/ExpedientDigitalList.vue')
+  },
+  {
     path: '/FallasAlumbrado/list',
     name: 'FallasAlumbrado',
     component: () => import('@/views/LightingFailures/LightingFailuresList.vue')

@@ -7,7 +7,7 @@
           size="lg"
           v-model="searchValue"
           type="search"
-          placeholder="Buscar empleado..."
+          placeholder="Buscar Empleado..."
         >
         </b-form-input>
         </b-form-group>
@@ -203,7 +203,6 @@ export default {
     const $toast = useToast()
     const employees = ref([])
     const areas = ref([])
-    const isOpen = ref(false)
     const perPage = ref(5)
     const currentPage = ref(1)
     const rows = ref(null)
@@ -311,7 +310,7 @@ export default {
         refreshTable()
         $toast.success('Empleado registrado correctamente.', {
           position: 'top-right',
-          duration: 10
+          duration: 1500
         })
       })
     }
@@ -334,10 +333,7 @@ export default {
       isloading,
       searchValue,
       searchField,
-      isOpen,
       states,
-      // refemployeesTable,
-
       onFiltered,
       addEmployee,
       refreshTable,
@@ -348,12 +344,6 @@ export default {
 </script>
 
 <style>
-#buttonAdd {
-  background: #0d6efd;
-  color: #ffffff;
-  height: auto;
-  width: 100px;
-}
 .customize-table {
   /* --easy-table-border: 1px solid #445269;
   --easy-table-row-border: 1px solid #445269; */

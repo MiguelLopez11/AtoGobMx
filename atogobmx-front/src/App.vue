@@ -20,13 +20,41 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <router-link
-                  class="nav-link active"
-                  aria-current="page"
-                  to="/Empleados/list"
-                  >Empleados</router-link
+              <li class="nav-item dropdown">
+                <a
+                  class="nav-link dropdown-toggle"
+                  href="#"
+                  id="navbarDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
                 >
+                  Recursos Humanos
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li>
+                    <a class="dropdown-item">
+                      <router-link
+                        class="nav-link active text-dark"
+                        aria-current="page"
+                        to="/Empleados/list"
+                      >
+                        Empleados
+                      </router-link>
+                      </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item">
+                      <router-link
+                        class="nav-link active text-dark"
+                        aria-current="page"
+                        to="/ExpedientesDigitales/list"
+                      >
+                        Expedientes Digitales
+                      </router-link>
+                    </a>
+                  </li>
+                </ul>
               </li>
               <li class="nav-item">
                 <router-link

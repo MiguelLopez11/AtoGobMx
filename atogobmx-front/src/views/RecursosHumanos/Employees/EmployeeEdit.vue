@@ -101,13 +101,12 @@ export default {
     })
     const onUpdateEmployee = () => {
       updateEmployee(employee.value, data => {
-        route.push('/Empleados/list')
-        $toast.success('Empleado actualizado correctamente.', {
-          position: 'top-right',
-          duration: 10,
-          dismissible: false
-        })
       })
+      $toast.success('Empleado actualizado correctamente.', {
+        position: 'top-right',
+        duration: 1500
+      })
+      route.push('/Empleados/list')
     }
     getAreas((data) => {
       areas.value = data
