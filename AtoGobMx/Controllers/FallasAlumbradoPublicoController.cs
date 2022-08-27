@@ -23,7 +23,8 @@ namespace AtoGobMx.Controllers
         {
             var fallas = await _context.FallasAlumbradoPublico
                 .Where(w => !w.Archivado)
-                .ToListAsync();
+                .Select(s => _mapper.Map<FallasAlumbradoPublico>(s))
+                .ToArrayAsync();
             return Ok(fallas);
         }
         [HttpGet("{FallasId}")]
