@@ -11,14 +11,14 @@ namespace AtoGobMx.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int EmpleadoId { get; set; }
         [Required]
-        [MaxLength(100)]
-        public string? Nombre { get; set; }
-        [Required]
-        [MaxLength(100)]
-        public string? ApellidoPaterno { get; set; }
-        [Required]
-        [MaxLength(100)]
-        public string? ApellidoMaterno { get; set; }
+        [MaxLength(200)]
+        public string? NombreCompleto { get; set; }
+        //[Required]
+        //[MaxLength(100)]
+        //public string? ApellidoPaterno { get; set; }
+        //[Required]
+        //[MaxLength(100)]
+        //public string? ApellidoMaterno { get; set; }
         [Required]
         public DateTime? FechaNacimiento { get; set; }
         public DateTime? FechaAlta { get; set; }

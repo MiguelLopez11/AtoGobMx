@@ -28,6 +28,10 @@ namespace AtoGobMx.Controllers
                 .Where(w => !w.Archivado)
                 .OrderBy(o => o.EmpleadoId)
                 .ToListAsync();
+            if(empleados.Count == 0)
+            {
+                return BadRequest("No se encuentran empleados registrados");
+            }
             return Ok(empleados);
         }
 
@@ -67,9 +71,9 @@ namespace AtoGobMx.Controllers
                 return BadRequest("El empledo no existe");
             }
             emp.EmpleadoId = empleado.EmpleadoId;
-            emp.Nombre = empleado.Nombre;
-            emp.ApellidoPaterno = empleado.ApellidoPaterno;
-            emp.ApellidoMaterno = empleado.ApellidoMaterno;
+            emp.NombreCompleto = empleado.NombreCompleto;
+            //emp.ApellidoPaterno = empleado.ApellidoPaterno;
+            //emp.ApellidoMaterno = empleado.ApellidoMaterno;
             emp.FechaNacimiento = empleado.FechaNacimiento;
             emp.AreaId = empleado.AreaId;
             //emp.Municipio = empleado.Municipio;

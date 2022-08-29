@@ -1,30 +1,23 @@
 <template>
   <b-card class="m-3">
-    <b-row align-h="end" class="mb-2 mr-1">
-      <b-col cols="3">
-        <b-form-group>
+    <b-row align-h="end" class="mb-3 mr-1">
         <b-form-input
           size="lg"
+          style="width: 350px"
           v-model="searchValue"
           type="search"
           placeholder="Buscar Empleado..."
         >
         </b-form-input>
-        </b-form-group>
-      </b-col>
-      <b-col cols="3" style="float: right">
-        <b-form-group>
         <button
           class="btn btn-primary"
-          style="height: 50px; width: auto; font-size: 18px"
+          style="height: 50px; width: auto; font-size: 18px; margin-right: 15px; margin-left: 20px"
           v-b-modal.modal-employee
           type="submit"
         >
         <i class="bi bi-person-plus-fill"></i>
           Agregar Empleado
         </button>
-        </b-form-group>
-      </b-col>
     </b-row>
     <EasyDataTable
       rows-per-page-message="registros por pagina"
@@ -75,25 +68,9 @@
       <form ref="form">
         <b-row cols="3">
           <b-col>
-            <b-form-group class="mt-3" label="Nombre">
+            <b-form-group class="mt-3" label="Nombre Completo">
               <b-form-input
-                v-model="EmployeesFields.nombre"
-                required
-              ></b-form-input>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Apellido Paterno">
-              <b-form-input
-                v-model="EmployeesFields.apellidoPaterno"
-                required
-              ></b-form-input>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Apellido Materno">
-              <b-form-input
-                v-model="EmployeesFields.apellidoMaterno"
+                v-model="EmployeesFields.nombreCompleto"
                 required
               ></b-form-input>
             </b-form-group>
@@ -106,64 +83,6 @@
                 autoApply
                 v-model="EmployeesFields.fechaNacimiento"
               ></Datepicker>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Estado">
-              <b-form-select
-                autofocus
-                :options="states"
-                v-model="EmployeesFields.estado"
-              ></b-form-select>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Municipio">
-              <b-form-input
-                v-model="EmployeesFields.municipio"
-                required
-              ></b-form-input>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Localidad">
-              <b-form-input
-                v-model="EmployeesFields.localidad"
-                required
-              ></b-form-input>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Calle">
-              <b-form-input
-                v-model="EmployeesFields.calle"
-                required
-              ></b-form-input>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Numero Exterior">
-              <b-form-input
-                v-model="EmployeesFields.numeroExterior"
-                required
-              ></b-form-input>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Numero Interior">
-              <b-form-input
-                v-model="EmployeesFields.numeroInterior"
-                required
-              ></b-form-input>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Codigo Postal">
-              <b-form-input
-                v-model="EmployeesFields.codigoPostal"
-                required
-                type="number"
-              ></b-form-input>
             </b-form-group>
           </b-col>
           <b-col>
@@ -245,27 +164,18 @@ export default {
       'Zacatecas'])
     const EmployeesFields = ref({
       empleadoId: 0,
-      nombre: null,
-      apellidoPaterno: null,
-      apellidoMaterno: null,
+      nombreCompleto: null,
       fechaNacimiento: null,
-      estado: null,
-      municipio: null,
-      localidad: null,
-      calle: null,
-      numeroExterior: null,
-      numeroInterior: null,
-      codigoPostal: null,
       fechaAlta: null,
       fechaBaja: null,
       archivado: false,
-      areaId: null
+      areaId: null,
+      usuarioId: null
     })
+    const EmployeesFieldsBlank = ref(JSON.parse(JSON.stringify(EmployeesFields)))
     const fields = ref([
       { value: 'empleadoId', text: 'ID', sortable: true },
-      { value: 'nombre', text: 'Nombre' },
-      { value: 'apellidoPaterno', text: 'Apellido Paterno' },
-      { value: 'apellidoMaterno', text: 'Apellido Materno' },
+      { value: 'nombreCompleto', text: 'Nombre' },
       { value: 'area.nombre', text: 'Area de Trabajo' },
       { value: 'actions', text: 'Acciones' }
     ])
@@ -313,6 +223,7 @@ export default {
           duration: 1500
         })
       })
+      EmployeesFields.value = JSON.parse(JSON.stringify(EmployeesFieldsBlank))
     }
     const RemoveEmployee = (employeeId) => {
       isloading.value = true
@@ -329,6 +240,7 @@ export default {
       filter,
       perPageSelect,
       areas,
+      EmployeesFieldsBlank,
       EmployeesFields,
       isloading,
       searchValue,

@@ -19,23 +19,7 @@
           <b-col>
             <b-form-group class="mt-3" label="Nombre">
               <b-form-input
-                v-model="employee.nombre"
-                required
-              ></b-form-input>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Apellido Paterno">
-              <b-form-input
-                v-model="employee.apellidoPaterno"
-                required
-              ></b-form-input>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Apellido Materno">
-              <b-form-input
-                v-model="employee.apellidoMaterno"
+                v-model="employee.nombreCompleto"
                 required
               ></b-form-input>
             </b-form-group>
