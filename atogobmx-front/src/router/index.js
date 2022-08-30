@@ -27,6 +27,11 @@ const routes = [
     component: () => import('@/views/RecursosHumanos/ExpedienteDigital/ExpedientDigitalList.vue')
   },
   {
+    path: '/ExpedientesDigitales/:ExpedienteDigitalId',
+    name: 'ExpedienteDigital-edit',
+    component: () => import('@/views/RecursosHumanos/ExpedienteDigital/ExpedientDigitalEdit.vue')
+  },
+  {
     path: '/FallasAlumbrado/list',
     name: 'FallasAlumbrado',
     component: () => import('@/views/LightingFailures/LightingFailuresList.vue')

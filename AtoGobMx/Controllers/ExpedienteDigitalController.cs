@@ -24,6 +24,8 @@ namespace AtoGobMx.Controllers
             var expedientes = await _context.ExpedienteDigital
                 //.Include(i => i.archivos)
                 .Include(i => i.empleado)
+                .Include(i => i.empleado.usuario)
+                .Include(i => i.empleado.usuario.Role)
                 .Where(w => !w.Archivado)
                 .OrderBy(o => o.ExpedienteDigitalId)
                 .Select(s => _mapper.Map<ExpedienteDigital>(s))
@@ -36,6 +38,8 @@ namespace AtoGobMx.Controllers
             var expedienteDigital = await _context.ExpedienteDigital
                 //.Include(i => i.archivos)
                 .Include(i => i.empleado)
+                .Include(i => i.empleado.usuario)
+                .Include(i => i.empleado.usuario.Role)
                 .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == ExpedienteDigitalId);
             if (expedienteDigital == null)
             {

@@ -1,25 +1,29 @@
 <template>
-  <b-card
-    class="m-3"
-  >
- <b-row align-h="end" class="mb-3 mr-1">
-        <b-form-input
-          size="lg"
-          style="width: 350px"
-          v-model="searchValue"
-          type="search"
-          placeholder="Buscar Expediente..."
-        >
-        </b-form-input>
-        <button
-          class="btn btn-primary"
-          style="height: 50px; width: auto; font-size: 18px; margin-right: 15px; margin-left: 20px"
-          v-b-modal.modal-employee
-          type="submit"
-        >
+  <b-card class="m-3">
+    <b-row align-h="end" class="mb-3 mr-1">
+      <b-form-input
+        size="lg"
+        style="width: 350px"
+        v-model="searchValue"
+        type="search"
+        placeholder="Buscar Expediente..."
+      >
+      </b-form-input>
+      <button
+        class="btn btn-primary"
+        style="
+          height: 50px;
+          width: auto;
+          font-size: 18px;
+          margin-right: 15px;
+          margin-left: 20px;
+        "
+        v-b-modal.modal-employee
+        type="submit"
+      >
         <i class="bi bi-person-plus-fill"></i>
-          Agregar Expediente Digital
-        </button>
+        Agregar Expediente Digital
+      </button>
     </b-row>
     <EasyDataTable
       rows-per-page-message="registros por pagina"
@@ -41,18 +45,18 @@
         <b-button
           @click="RemoveEmployee(items.empleadoId)"
           class="m-1"
-          variant="outline-danger"
-          ><i class="bi bi-trash3"></i
-        ></b-button>
+          variant="outline-danger">
+          <i class="bi bi-trash3"></i>
+        </b-button>
         <b-button
           class="m-1"
           variant="outline-warning"
           :to="{
-            name: 'Empleados-Edit',
-            params: { EmpleadoId: items.empleadoId },
-          }"
-          ><i class="bi bi-pencil-square"></i
-        ></b-button>
+            name: 'ExpedienteDigital-edit',
+            params: { ExpedienteDigitalId: items.expedienteDigitalId },
+          }">
+          <i class="bi bi-pencil-square"></i>
+        </b-button>
       </template>
     </EasyDataTable>
   </b-card>
@@ -76,14 +80,14 @@ export default {
     const searchValue = ref('')
     const searchField = ref('expedienteDigitalId')
     const fields = ref([
-      { value: 'empleado.nombreCompleto', text: 'Empleado', sortable: true },
-      { value: 'estado', text: 'Nombre' },
-      { value: 'municipio', text: 'Apellido Paterno' },
-      { value: 'localidad', text: 'Apellido Materno' },
-      { value: 'calle', text: 'Area de Trabajo' },
+      { value: 'expedienteDigitalId', text: 'ID', sortable: true },
+      { value: 'empleado.nombreCompleto', text: 'Empleado' },
+      { value: 'correoElectronico', text: 'Correo Electronico' },
+      { value: 'empleado.usuario.nombreUsuario', text: 'Usuario' },
+      { value: 'empleado.usuario.role.nombre', text: 'Role' },
       { value: 'actions', text: 'Acciones' }
     ])
-    getExpedients(data => {
+    getExpedients((data) => {
       expedients.value = data
       if (expedients.value.length > 0) {
         isloading.value = false
@@ -153,5 +157,4 @@ export default {
 
   --easy-table-loading-mask-background-color: #2d3a4f; */
 }
-
 </style>
