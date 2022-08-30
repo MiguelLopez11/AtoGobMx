@@ -113,9 +113,5 @@ namespace AtoGobMx.Controllers
             }
         }
         #endregion
-        #region UploadImages
-
-
-        #endregion
     }
 }

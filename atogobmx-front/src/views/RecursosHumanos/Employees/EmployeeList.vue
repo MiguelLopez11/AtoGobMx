@@ -192,6 +192,9 @@ export default {
     })
     getAreas((data) => {
       areas.value = data
+      if (areas.value.length === 0) {
+        $toast.warning('No se encuentran registros de areas de trabajo, registre una primero para registrar un empleado')
+      }
     })
     const onFiltered = (filteredItems) => {
       rows.value = filteredItems.length
@@ -213,9 +216,6 @@ export default {
       return 'datos recargados'
     }
     const addEmployee = () => {
-      if (areas.value.length === 0) {
-        $toast.warning('No se encuentran registros de areas de trabajo, registre una primero para registrar un empleado')
-      }
       createEmployee(EmployeesFields.value, (data) => {
         refreshTable()
         $toast.success('Empleado registrado correctamente.', {

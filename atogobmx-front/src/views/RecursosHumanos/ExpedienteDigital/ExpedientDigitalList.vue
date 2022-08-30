@@ -80,12 +80,12 @@ export default {
     const searchValue = ref('')
     const searchField = ref('expedienteDigitalId')
     const fields = ref([
-      { value: 'expedienteDigitalId', text: 'ID', sortable: true },
-      { value: 'empleado.nombreCompleto', text: 'Empleado' },
-      { value: 'correoElectronico', text: 'Correo Electronico' },
-      { value: 'empleado.usuario.nombreUsuario', text: 'Usuario' },
-      { value: 'empleado.usuario.role.nombre', text: 'Role' },
-      { value: 'actions', text: 'Acciones' }
+      { value: 'expedienteDigitalId', text: 'ID', sortable: true, Animation },
+      { value: 'empleado.nombreCompleto', text: 'Empleado', Animation },
+      { value: 'correoElectronico', text: 'Correo Electronico', Animation },
+      { value: 'empleado.usuario.nombreUsuario', text: 'Usuario', Animation },
+      { value: 'empleado.usuario.role.nombre', text: 'Role', Animation },
+      { value: 'actions', text: 'Acciones', Animation }
     ])
     getExpedients((data) => {
       expedients.value = data

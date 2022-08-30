@@ -1,17 +1,21 @@
 <template>
+<b-card-group>
   <b-card
-    class="m-3"
+    class="m-3 w-25"
+
   >
-  <b-card>
     <b-img
       :src="`https://localhost:7065/api/Archivos/FotoPerfil/${expedienteDigitalId}`"
       fluid
       width="100"
       height="100"
-      alt="Cargue una imagen de perfil">
+      rounded="circle"
+    >
     </b-img>
+    <footer>Sistemas</footer>
   </b-card>
-  </b-card>
+  <b-card class="m-3 w-75"></b-card>
+</b-card-group>
 </template>
 
 <script>
@@ -24,7 +28,7 @@ export default {
     const photoProfile = ref()
     const router = useRoute()
     const expedienteDigitalId = ref(router.params.ExpedienteDigitalId)
-    getExpedientPhotoProfile(expedienteDigitalId, data => {
+    getExpedientPhotoProfile(expedienteDigitalId.value, data => {
       photoProfile.value = data
     })
     return {

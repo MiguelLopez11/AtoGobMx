@@ -13,12 +13,6 @@ namespace AtoGobMx.Models
         [Required]
         [MaxLength(200)]
         public string? NombreCompleto { get; set; }
-        //[Required]
-        //[MaxLength(100)]
-        //public string? ApellidoPaterno { get; set; }
-        //[Required]
-        //[MaxLength(100)]
-        //public string? ApellidoMaterno { get; set; }
         [Required]
         public DateTime? FechaNacimiento { get; set; }
         public DateTime? FechaAlta { get; set; }
