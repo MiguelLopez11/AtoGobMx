@@ -18,7 +18,9 @@ namespace AtoGobMx.Controllers
         [HttpGet]
         public async Task<ActionResult> GetAreas()
         {
-            var areas = await _context.Area.ToListAsync();
+            var areas = await _context.Area
+                .Where(w => !w.Archivado)
+                .ToListAsync();
             return Ok(areas);
         }
         [HttpGet("{AreaId}")]
@@ -37,6 +39,40 @@ namespace AtoGobMx.Controllers
             _context.Area.Add(areas);
             await _context.SaveChangesAsync();
             return StatusCode(200, "Se ha creado area correctamente");
+        }
+        [HttpPut("{AreaId}")]
+        public async Task<ActionResult> PutEmpleado(int AreaId, Area area)
+        {
+            if (area.AreaId != AreaId)
+            {
+                return Ok("Los ID ingresados no coinciden");
+            }
+            var AreaValue = await _context.Area.FindAsync(AreaId);
+            if (AreaValue == null)
+            {
+                return BadRequest("El area no existe");
+            }
+            AreaValue.AreaId = area.AreaId;
+            AreaValue.Nombre = area.Nombre;
+            AreaValue.Descripcion = area.Descripcion;
+
+            _context.Area.Update(AreaValue);
+            await _context.SaveChangesAsync();
+            return Ok("EL area ha sido actualizada correctamente");
+        }
+        [HttpDelete("{areaId}")]
+        public async Task<IActionResult> DeleteEmpleados(int areaId)
+        {
+            var area = await _context.Area
+                .FirstOrDefaultAsync(f => f.AreaId == areaId);
+            if (area == null)
+            {
+                return NotFound();
+            }
+            area.Archivado = true;
+            _context.Area.Update(area);
+            await _context.SaveChangesAsync();
+            return Ok("El area ha sido archivada correctamente");
         }
     }
 }

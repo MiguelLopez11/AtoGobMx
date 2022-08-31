@@ -90,7 +90,7 @@ export default {
         position: 'top-right',
         duration: 1500
       })
-      route.push('/Empleados/list')
+      route.push('/Empleados/list').then(getEmployee)
     }
     getAreas((data) => {
       areas.value = data
