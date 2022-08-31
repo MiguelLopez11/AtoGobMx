@@ -20,17 +20,22 @@ namespace AtoGobMx.Models
         [Required]
         public bool Archivado { get; set; }
         public int? AreaId { get; set; }
+        public int? UsuarioId { get; set; }
+
+        public int? expedienteDigitalId { get; set; }
+
+        [ForeignKey("expedienteDigitalId")]
+        public ExpedienteDigital? ExpedienteDigital { get; set; }
 
         [ForeignKey("AreaId")]
         public Area? Area { get; set; }
-        public int? UsuarioId { get; set; }
 
         [ForeignKey("UsuarioId")]
         public Usuario? usuario { get; set; }
 
-        [JsonIgnore]
-        public virtual IEnumerable<ExpedienteDigital>? ExpedientesDigitales { get; set; }
-        
+        //[JsonIgnore]
+        //public virtual IEnumerable<ExpedienteDigital>? ExpedientesDigitales { get; set; }
+
         //public virtual IEnumerable<Archivos>? Archivos { get; set; }
     }
 }

@@ -22,21 +22,21 @@ namespace AtoGobMx.Controllers
         public async Task<IActionResult> GetImagenPerfil(int expedienteDigitalId)
         {
             var expediente = await _context.ExpedienteDigital.FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expedienteDigitalId);
-            if(expediente == null)
+            if (expediente == null)
             {
                 return NotFound("El ID del expediente no existe.");
             }
             var fotoPerfil = await _context.Archivos.FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expedienteDigitalId);
-            if(fotoPerfil == null)
+            if (fotoPerfil == null)
             {
                 return NotFound("No se encuentra foto de perfil registrado a ese expediente.");
             }
-            var empleado = await _context.Empleados.Include(i => i.usuario).FirstOrDefaultAsync(f => f.EmpleadoId == expediente.EmpleadoId);
-            if(empleado == null)
-            {
-                return BadRequest();
-            }
-            var image = System.IO.File.OpenRead($"Files/Images/{empleado.usuario.NombreUsuario}/{fotoPerfil.Nombre}");
+            //var empleado = await _context.Empleados.Include(i => i.usuario).FirstOrDefaultAsync(f => f.EmpleadoId == expediente.EmpleadoId);
+            //if(empleado == null)
+            //{
+            //    return BadRequest();
+            //}
+            var image = System.IO.File.OpenRead($"Files/Images/{expediente.Empleados}/{fotoPerfil.Nombre}");
             return File(image, "image/jpeg");
 
         }
@@ -47,7 +47,6 @@ namespace AtoGobMx.Controllers
             {
                 #region Comprobar si el expediente existe
                 var expediente = await _context.ExpedienteDigital
-                    .Include(i => i.empleado)
                     .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expedienteDigitalId);
 
                 if (expediente == null)

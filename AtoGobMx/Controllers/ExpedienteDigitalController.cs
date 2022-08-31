@@ -22,10 +22,10 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<ExpedienteDigital>> GetExpedientesDigitales()
         {
             var expedientes = await _context.ExpedienteDigital
-                //.Include(i => i.archivos)
-                .Include(i => i.empleado)
-                .Include(i => i.empleado.usuario)
-                .Include(i => i.empleado.usuario.Role)
+                .Include(i => i.Archivos)
+                .Include(i => i.Empleados)
+                //.Include(i => i.empleado.usuario)
+                //.Include(i => i.empleado.usuario.Role)
                 .Where(w => !w.Archivado)
                 .OrderBy(o => o.ExpedienteDigitalId)
                 .Select(s => _mapper.Map<ExpedienteDigital>(s))
@@ -36,24 +36,11 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult> GetExpedienteById(int ExpedienteDigitalId)
         {
             var expedienteDigital = await _context.ExpedienteDigital
-                //.Include(i => i.archivos)
-                .Include(i => i.empleado)
-                .Include(i => i.empleado.usuario)
-                .Include(i => i.empleado.usuario.Role)
+                .Include(i => i.Archivos)
+                .Include(i => i.Empleados)
+                //.Include(i => i.empleado.usuario)
+                //.Include(i => i.empleado.usuario.Role)
                 .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == ExpedienteDigitalId);
-            if (expedienteDigital == null)
-            {
-                return NotFound();
-            }
-            return Ok(expedienteDigital);
-        }
-        [HttpGet("/ExpedienteDigital/{EmpleadoId}")]
-        public async Task<ActionResult> GetExpedienteDigitalByEmpleadoId(int EmpleadoId)
-        {
-            var expedienteDigital = await _context.ExpedienteDigital
-                //.Include(i => i.archivos)
-                .Include(i => i.empleado)
-                .FirstOrDefaultAsync(f => f.EmpleadoId == EmpleadoId);
             if (expedienteDigital == null)
             {
                 return NotFound();
@@ -66,7 +53,7 @@ namespace AtoGobMx.Controllers
 
             _context.ExpedienteDigital.Add(expedienteDigital);
             await _context.SaveChangesAsync();
-            return CreatedAtAction("GetExpedienteDigitalByEmpleadoId", new { EmpleadoId = expedienteDigital.EmpleadoId }, expedienteDigital);
+            return CreatedAtAction("GetExpedienteDigitalByEmpleadoId", new { EmpleadoId = expedienteDigital.Empleados }, expedienteDigital);
         }
         [HttpPut("{ExpedienteDitalId}")]
         public async Task<ActionResult> PutEmpleado(int ExpedienteDitalId, ExpedienteDigital expedienteDigital)
@@ -81,7 +68,7 @@ namespace AtoGobMx.Controllers
                 return BadRequest("El empledo no existe");
             }
             expediente.ExpedienteDigitalId = expedienteDigital.ExpedienteDigitalId;
-            expediente.EmpleadoId = expedienteDigital.EmpleadoId;
+            //expediente.EmpleadoId = expedienteDigital.EmpleadoId;
             expediente.Estado = expedienteDigital.Estado;
             expediente.Municipio = expedienteDigital.Municipio;
             expediente.Localidad = expedienteDigital.Localidad;

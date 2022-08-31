@@ -1,21 +1,41 @@
 <template>
-<b-card-group>
-  <b-card
-    class="m-3 w-25"
-
-  >
-    <b-img
-      :src="`https://localhost:7065/api/Archivos/FotoPerfil/${expedienteDigitalId}`"
-      fluid
-      width="100"
-      height="100"
-      rounded="circle"
-    >
-    </b-img>
-    <footer>Sistemas</footer>
+  <b-card class="m-3">
+    <abbr title="Cambiar Foto de perfil">
+      <b-img
+        :src="`https://localhost:7065/api/Archivos/FotoPerfil/${expedienteDigitalId}`"
+        fluid
+        width="150"
+        height="150"
+        rounded="circle"
+        block
+        style="cursor: pointer"
+        v-b-modal.modal-profilePhoto
+      >
+        <!-- @click="change" -->
+      </b-img>
+    </abbr>
   </b-card>
-  <b-card class="m-3 w-75"></b-card>
-</b-card-group>
+    <!-- @ok="addEmployee" -->
+  <b-modal
+    id="modal-profilePhoto"
+    title="Imagen de Perfil"
+    size="xl"
+    centered
+    hide-backdrop
+    button-size="lg"
+    lazy
+    ok-title="Guardar"
+    cancel-title="Cancelar"
+  >
+    <form ref="form">
+      <div class="mb-3">
+        <label for="formFile" class="form-label">
+          Selecciona una imagen
+          </label>
+        <input class="form-control w-75" type="file" id="formFile" />
+      </div>
+    </form>
+  </b-modal>
 </template>
 
 <script>
@@ -28,17 +48,20 @@ export default {
     const photoProfile = ref()
     const router = useRoute()
     const expedienteDigitalId = ref(router.params.ExpedienteDigitalId)
-    getExpedientPhotoProfile(expedienteDigitalId.value, data => {
+    getExpedientPhotoProfile(expedienteDigitalId.value, (data) => {
       photoProfile.value = data
     })
+    const change = () => {
+      alert('Holi')
+    }
     return {
       expedienteDigitalId,
-      photoProfile
+      photoProfile,
+      change
     }
   }
 }
 </script>
 
 <style>
-
 </style>

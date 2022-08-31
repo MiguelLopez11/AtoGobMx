@@ -18,7 +18,7 @@
           margin-right: 15px;
           margin-left: 20px;
         "
-        v-b-modal.modal-employee
+        v-b-modal.modal-expedientDigital
         type="submit"
       >
         <i class="bi bi-person-plus-fill"></i>
@@ -60,18 +60,44 @@
       </template>
     </EasyDataTable>
   </b-card>
+  <b-modal
+    id="modal-expedientDigital"
+    title="Imagen de Perfil"
+    size="xl"
+    centered
+    hide-backdrop
+    button-size="lg"
+    lazy
+    ok-title="Generar expediente"
+    cancel-title="Cancelar"
+  >
+    <b-row>
+      <b-form-group class="mt-3" label="Empleado: ">
+        <b-form-select
+          autofocus
+          :options="employees"
+          value-field="empleadoId"
+          text-field="nombreCompleto"
+        />
+          <!-- v-model="EmployeesFields.areaId" -->
+      </b-form-group>
+    </b-row>
+  </b-modal>
 </template>
 
 <script>
 import { ref } from 'vue'
 import ExpedientDigitalServices from '@/Services/expedientdigital.Services'
+import EmployeeServices from '@/Services/employee.Services'
 export default {
   components: {
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup () {
     const { getExpedients } = ExpedientDigitalServices()
+    const { getEmployees } = EmployeeServices()
     const expedients = ref([])
+    const employees = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
     const filter = ref(null)
@@ -87,6 +113,9 @@ export default {
       { value: 'empleado.usuario.role.nombre', text: 'Role', Animation },
       { value: 'actions', text: 'Acciones', Animation }
     ])
+    getEmployees(data => {
+      employees.value = data
+    })
     getExpedients((data) => {
       expedients.value = data
       if (expedients.value.length > 0) {
@@ -110,6 +139,7 @@ export default {
       searchValue,
       searchField,
       expedients,
+      employees,
 
       onFiltered
     }

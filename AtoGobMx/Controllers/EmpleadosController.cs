@@ -23,8 +23,9 @@ namespace AtoGobMx.Controllers
         {
             var empleados = await _context.Empleados
                 .Include(i => i.Area)
-                .Include(i => i.usuario)
+                //.Include(i => i.usuario)
                 .Include(i => i.usuario.Role)
+                .Include(i => i.ExpedienteDigital)
                 .Where(w => !w.Archivado)
                 .OrderBy(o => o.EmpleadoId)
                 .ToListAsync();
@@ -36,13 +37,30 @@ namespace AtoGobMx.Controllers
         {
             var Empleado = await _context.Empleados
                 .Include(i => i.Area)
-                .Include(i => i.usuario)
+                //.Include(i => i.usuario)
                 .Include(i => i.usuario.Role)
+                .Include(i => i.ExpedienteDigital)
                 .Where(w => w.EmpleadoId == EmpleadoId)
                 .ToListAsync();
             if (Empleado == null)
             {
                 return NotFound();
+            }
+            return Ok(Empleado);
+        }
+        [HttpGet("EmpleadosSinExpedientes")]
+        public async Task<ActionResult> GetEmpleadosSinExpediente()
+        {
+            var Empleado = await _context.Empleados
+                .Include(i => i.Area)
+                .Include(i => i.usuario)
+                .Include(i => i.usuario.Role)
+                .Include(i => i.ExpedienteDigital)
+                .Where(w => w.expedienteDigitalId == null)
+                .ToListAsync();
+            if (Empleado == null)
+            {
+                return BadRequest();
             }
             return Ok(Empleado);
         }
