@@ -6,17 +6,17 @@
           style="width: 350px"
           v-model="searchValue"
           type="search"
-          placeholder="Buscar Empleado..."
+          placeholder="Buscar Area..."
         >
         </b-form-input>
         <b-button
           variant="primary"
           style="height: 50px; width: auto; font-size: 18px; margin-right: 15px; margin-left: 20px"
-          v-b-modal.modal-employee
+          v-b-modal.modal-area
           type="submit"
         >
         <i class="bi bi-person-plus-fill"></i>
-          Agregar Empleado
+          Agregar Area
         </b-button>
     </b-row>
     <EasyDataTable
@@ -27,7 +27,7 @@
       border-cell
       :loading="isloading"
       :headers="fields"
-      :items="employees"
+      :items="areas"
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
@@ -38,7 +38,7 @@
       </template>
       <template #item-actions="items">
         <b-button
-          @click="RemoveEmployee(items.empleadoId)"
+          @click="RemoveArea(items.areaId)"
           class="m-1"
           variant="outline-danger"
           ><i class="bi bi-trash3"></i
@@ -46,55 +46,42 @@
         <b-button
           class="m-1"
           variant="outline-warning"
-          :to="{
+          >
+          <i class="bi bi-pencil-square"/>
+        </b-button>
+          <!-- :to="{
             name: 'Empleados-Edit',
             params: { EmpleadoId: items.empleadoId },
-          }"
-          ><i class="bi bi-pencil-square"></i
-        ></b-button>
+          }" -->
       </template>
     </EasyDataTable>
     <b-modal
-      id="modal-employee"
-      @ok="addEmployee"
-      title="Agregar empleados"
+      id="modal-area"
+      @ok="addArea"
+      title="Agregar areas"
       size="xl"
       centered
       hide-backdrop
       button-size="lg"
       lazy
-      ok-title="Registrar empleado"
+      ok-title="Registrar area"
       cancel-title="Cancelar"
     >
       <form ref="form">
         <b-row cols="3">
           <b-col>
-            <b-form-group class="mt-3" label="Nombre Completo">
+            <b-form-group class="mt-3" label="Nombre">
               <b-form-input
-                v-model="EmployeesFields.nombreCompleto"
+                v-model="areaFields.nombre"
                 required
               ></b-form-input>
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="Fecha de nacimiento">
-              <Datepicker
-                locale="es"
-                :enableTimePicker="false"
-                autoApply
-                v-model="EmployeesFields.fechaNacimiento"
-              ></Datepicker>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Area">
-              <b-form-select
-                autofocus
-                :options="areas"
-                value-field="areaId"
-                text-field="nombre"
-                v-model="EmployeesFields.areaId"
-              ></b-form-select>
+            <b-form-group class="mt-3" label="Descripción">
+              <b-form-input
+                v-model="areaFields.descripcion">
+              </b-form-input>
             </b-form-group>
           </b-col>
         </b-row>
@@ -104,22 +91,20 @@
 </template>
 
 <script>
-import EmployeeServices from '@/Services/employee.Services'
 import AreaServices from '@/Services/area.Services'
-import Datepicker from '@vuepic/vue-datepicker'
+// import Datepicker from '@vuepic/vue-datepicker'
 import { ref } from 'vue'
 import { useToast } from 'vue-toast-notification'
 // import VueSimpleAlert from 'vue-simple-alert'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
-    Datepicker,
+    // Datepicker,
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup () {
-    const { getEmployees, createEmployee, deleteEmployee } = EmployeeServices()
-    const { getAreas } = AreaServices()
-    // const refemployeesTable = ref()
+    // const { getEmployees, createEmployee, deleteEmployee } = EmployeeServices()
+    const { getAreas, createArea, deleteArea } = AreaServices()
     const $toast = useToast()
     const employees = ref([])
     const areas = ref([])
@@ -131,38 +116,31 @@ export default {
     const isloading = ref(true)
     const searchValue = ref('')
     const searchField = ref('nombre')
-    const EmployeesFields = ref({
-      empleadoId: 0,
-      nombreCompleto: null,
-      fechaNacimiento: null,
-      fechaAlta: null,
-      fechaBaja: null,
-      archivado: false,
-      areaId: null,
-      usuarioId: null
+    const areaFields = ref({
+      areaId: 0,
+      nombre: null,
+      descripcion: null,
+      archivado: false
     })
-    const EmployeesFieldsBlank = ref(JSON.parse(JSON.stringify(EmployeesFields)))
+    const areasFieldsBlank = ref(JSON.parse(JSON.stringify(areaFields)))
     const fields = ref([
-      { value: 'empleadoId', text: 'ID', sortable: true },
-      { value: 'nombreCompleto', text: 'Nombre' },
-      { value: 'area.nombre', text: 'Area de Trabajo' },
+      { value: 'areaId', text: 'ID', sortable: true },
+      { value: 'nombre', text: 'Nombre' },
+      { value: 'descripcion', text: 'Descripcion' },
       { value: 'actions', text: 'Acciones' }
     ])
-    getEmployees((data) => {
-      employees.value = data
-      rows.value = data.length
-      if (employees.value.length > 0) {
-        isloading.value = false
-      } else {
-        if (employees.value.length <= 0) {
-          isloading.value = false
-        }
-      }
-    })
+    // getEmployees((data) => {
+    //   employees.value = data
+    //   rows.value = data.length
+    // })
     getAreas((data) => {
       areas.value = data
-      if (areas.value.length === 0) {
-        $toast.warning('No se encuentran registros de areas de trabajo, registre una primero para registrar un empleado')
+      if (areas.value.length > 0) {
+        isloading.value = false
+      } else {
+        if (areas.value.length <= 0) {
+          isloading.value = false
+        }
       }
     })
     const onFiltered = (filteredItems) => {
@@ -171,32 +149,32 @@ export default {
     }
     const refreshTable = () => {
       isloading.value = true
-      getEmployees((data) => {
-        employees.value = data
-        rows.value = data.length
-        if (employees.value.length > 0) {
+
+      getAreas((data) => {
+        areas.value = data
+        if (areas.value.length > 0) {
           isloading.value = false
         } else {
-          if (employees.value.length <= 0) {
+          if (areas.value.length <= 0) {
             isloading.value = false
           }
         }
       })
       return 'datos recargados'
     }
-    const addEmployee = () => {
-      createEmployee(EmployeesFields.value, (data) => {
+    const addArea = () => {
+      createArea(areaFields.value, (data) => {
         refreshTable()
         $toast.success('Empleado registrado correctamente.', {
           position: 'top-right',
-          duration: 1500
+          duration: 2000
         })
       })
-      EmployeesFields.value = JSON.parse(JSON.stringify(EmployeesFieldsBlank))
+      areaFields.value = JSON.parse(JSON.stringify(areasFieldsBlank))
     }
-    const RemoveEmployee = (employeeId) => {
+    const RemoveArea = (areaId) => {
       isloading.value = true
-      deleteEmployee(employeeId, (data) => {
+      deleteArea(areaId, (data) => {
         refreshTable()
       })
     }
@@ -209,15 +187,15 @@ export default {
       filter,
       perPageSelect,
       areas,
-      EmployeesFieldsBlank,
-      EmployeesFields,
+      areasFieldsBlank,
+      areaFields,
       isloading,
       searchValue,
       searchField,
       onFiltered,
-      addEmployee,
+      addArea,
       refreshTable,
-      RemoveEmployee
+      RemoveArea
     }
   }
 }
