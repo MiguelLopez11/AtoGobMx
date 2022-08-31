@@ -53,7 +53,7 @@ namespace AtoGobMx.Controllers
 
             _context.ExpedienteDigital.Add(expedienteDigital);
             await _context.SaveChangesAsync();
-            return CreatedAtAction("GetExpedienteDigitalByEmpleadoId", new { EmpleadoId = expedienteDigital.Empleados }, expedienteDigital);
+            return CreatedAtAction("GetExpedienteById", new { ExpedienteDigitalId = expedienteDigital.ExpedienteDigitalId }, expedienteDigital);
         }
         [HttpPut("{ExpedienteDitalId}")]
         public async Task<ActionResult> PutEmpleado(int ExpedienteDitalId, ExpedienteDigital expedienteDigital)
