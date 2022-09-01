@@ -5,6 +5,12 @@
 //using Microsoft.AspNetCore.Mvc;
 //using Microsoft.EntityFrameworkCore;
 
+using AtoGobMx.Context;
+using AtoGobMx.Models;
+using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
 namespace AtoGobMx.Controllers
 {
     [Route("api/[controller]")]
