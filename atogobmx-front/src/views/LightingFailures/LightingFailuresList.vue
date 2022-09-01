@@ -38,6 +38,7 @@
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
+      :table-height="330"
     >
       <template #header-actions="header">
         {{ header.text }}
@@ -53,7 +54,7 @@
           class="m-1"
           variant="outline-warning"
           :to="{
-            name: 'ExpedienteFallas',
+            name: 'ExpedienteFallas-Edit',
             params: { fallaId: items.fallaId },
           }"
           ><i class="bi bi-pencil-square"></i
@@ -131,7 +132,7 @@ export default {
       createLightingFailures,
       deleteLightingFailures
     } = LightingfailuresServices()
-    // const $toast = useToast()
+    // const $toast = useToast([])
     const lightingFailures = ref([])
     const isOpen = ref(false)
     const perPage = ref(5)
@@ -150,9 +151,14 @@ export default {
       descripcionDomicilio: null,
       archivado: false
     })
+
+    const lightingFailuresFieldsBlank = ref(
+      JSON.parse(JSON.stringify(lightingFailuresFields))
+    )
+
     const fields = ref([
       { value: 'fallaId', text: 'ID', sortable: true },
-      { value: 'nombreFalla', text: 'Nombre Falla' },
+      { value: 'nombreFalla', text: 'NombreFalla' },
       { value: 'descripcion', text: 'Descripción' },
       { value: 'fecha', text: 'Fecha' },
       { value: 'descripcionDomicilio', text: 'Descripcion Domicilio' },
@@ -194,7 +200,12 @@ export default {
     const addLightingFailures = () => {
       createLightingFailures(lightingFailuresFields.value, (data) => {
         refreshTable()
+        // $toast.succes('La falla se registro correctamente', {
+        //   position: 'top-rigth',
+        //   duration: 2000
+        // })
       })
+      lightingFailuresFields.value = JSON.parse(JSON.stringify(lightingFailuresFieldsBlank))
     }
 
     const RemoveLightingFailures = (LightingFailuresId) => {
@@ -215,6 +226,8 @@ export default {
       isloading,
       searchValue,
       searchField,
+      lightingFailuresFieldsBlank,
+      // lightingFailuresValues,
       fields,
 
       onFiltered,

@@ -72,7 +72,7 @@ namespace AtoGobMx.Controllers
             await _context.SaveChangesAsync();
             return Ok("Falla actualizada correctamente");
         }
-        [HttpDelete]
+        [HttpDelete("{Id}")]
         public async Task<IActionResult> DeleteFallasAlumbradoPublico(int Id)
         {
             var fallas = _context.FallasAlumbradoPublico

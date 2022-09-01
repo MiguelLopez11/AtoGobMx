@@ -14,7 +14,7 @@ export default function lightingfailuresServices () {
     })
   }
   const deleteLightingFailures = (fallaId, callback) => {
-    axios.delete(`https://lo  calhost:7065/api/FallasAlumbradoPublico/${fallaId}`).then((response) => {
+    axios.delete(`https://localhost:7065/api/FallasAlumbradoPublico/${fallaId}`).then((response) => {
       callback(response.data)
     })
   }
