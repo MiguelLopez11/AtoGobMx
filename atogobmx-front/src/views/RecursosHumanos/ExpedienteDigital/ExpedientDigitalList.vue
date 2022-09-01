@@ -107,10 +107,10 @@ export default {
     const searchField = ref('expedienteDigitalId')
     const fields = ref([
       { value: 'expedienteDigitalId', text: 'ID', sortable: true, Animation },
-      { value: 'empleado.nombreCompleto', text: 'Empleado', Animation },
+      // { value: 'empleado.nombreCompleto', text: 'Empleado', Animation },
       { value: 'correoElectronico', text: 'Correo Electronico', Animation },
-      { value: 'empleado.usuario.nombreUsuario', text: 'Usuario', Animation },
-      { value: 'empleado.usuario.role.nombre', text: 'Role', Animation },
+      // { value: 'empleado.usuario.nombreUsuario' ? '' : '', text: 'Usuario', Animation },
+      // { value: 'empleado.usuario.role.nombre', text: 'Role', Animation },
       { value: 'actions', text: 'Acciones', Animation }
     ])
     getEmployees(data => {
