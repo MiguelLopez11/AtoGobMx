@@ -23,7 +23,8 @@ namespace AtoGobMx.Controllers
         {
             var fallas = await _context.FallasAlumbradoPublico
                 .Where(w => !w.Archivado)
-                .ToListAsync();
+                .Select(s => _mapper.Map<FallasAlumbradoPublico>(s))
+                .ToArrayAsync();
             return Ok(fallas);
         }
         [HttpGet("{FallasId}")]
@@ -71,7 +72,7 @@ namespace AtoGobMx.Controllers
             await _context.SaveChangesAsync();
             return Ok("Falla actualizada correctamente");
         }
-        [HttpDelete]
+        [HttpDelete("{Id}")]
         public async Task<IActionResult> DeleteFallasAlumbradoPublico(int Id)
         {
             var fallas = _context.FallasAlumbradoPublico
