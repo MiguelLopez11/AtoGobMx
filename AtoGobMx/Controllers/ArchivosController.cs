@@ -31,12 +31,15 @@ namespace AtoGobMx.Controllers
             {
                 return NotFound("No se encuentra foto de perfil registrado a ese expediente.");
             }
-            var empleado = await _context.Empleados.Include(i => i.usuario).FirstOrDefaultAsync(f => f.expedienteDigitalId == expedienteDigitalId);
+            var empleado = await _context.Empleados
+                .Include(i => i.usuario)
+                .Include(i => i.ExpedienteDigital)
+                .FirstOrDefaultAsync(f => f.expedienteDigitalId == expedienteDigitalId);
             if (empleado == null)
             {
-                return BadRequest();
+                return BadRequest("El empleado no tiene registrado el expediente");
             }
-            var image = System.IO.File.OpenRead($"Files/Images/{expediente.Empleados.usuario.NombreUsuario}/{fotoPerfil.Nombre}");
+            var image = System.IO.File.OpenRead($"Files/Images/{empleado.usuario.NombreUsuario}/{fotoPerfil.Nombre}");
             return File(image, "image/jpeg");
 
         }
@@ -47,6 +50,7 @@ namespace AtoGobMx.Controllers
             {
                 #region Comprobar si el expediente existe
                 var expediente = await _context.ExpedienteDigital
+                    .Include(i => i.Empleados)
                     .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expedienteDigitalId);
 
                 if (expediente == null)
@@ -73,12 +77,12 @@ namespace AtoGobMx.Controllers
                 var archivoExpediente = await _context.Archivos
                     .Where(w => w.ExpedienteDigitalId == expedienteDigitalId)
                     .Where(w => w.TipoArchivo.Contains(".png") || w.TipoArchivo.Contains(".jpg") || w.TipoArchivo.Contains(".jpeg"))
-                    .ToListAsync();
-                if (archivoExpediente != null)
+                    .ToArrayAsync();
+                if (archivoExpediente.Length == 0)
                 {
                     var empleado = await _context.Empleados
                         .Include(i => i.usuario)
-                        .FirstOrDefaultAsync(f => f.EmpleadoId == expediente.EmpleadoId);
+                        .FirstOrDefaultAsync(f => f.expedienteDigitalId == expedienteDigitalId);
                     if (empleado.usuario == null)
                     {
                         return BadRequest("empleado no contiene un usuario asignado");

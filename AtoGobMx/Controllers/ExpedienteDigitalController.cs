@@ -56,7 +56,7 @@ namespace AtoGobMx.Controllers
             return CreatedAtAction("GetExpedienteById", new { ExpedienteDigitalId = expedienteDigital.ExpedienteDigitalId }, expedienteDigital);
         }
         [HttpPut("{ExpedienteDitalId}")]
-        public async Task<ActionResult> PutEmpleado(int ExpedienteDitalId, ExpedienteDigital expedienteDigital)
+        public async Task<ActionResult> PutExpediente(int ExpedienteDitalId, ExpedienteDigital expedienteDigital)
         {
             if (expedienteDigital.ExpedienteDigitalId != ExpedienteDitalId)
             {

@@ -23,7 +23,6 @@ namespace AtoGobMx.Controllers
         {
             var empleados = await _context.Empleados
                 .Include(i => i.Area)
-                //.Include(i => i.usuario)
                 .Include(i => i.usuario.Role)
                 .Include(i => i.ExpedienteDigital)
                 .Where(w => !w.Archivado)
@@ -89,6 +88,7 @@ namespace AtoGobMx.Controllers
             emp.FechaNacimiento = empleado.FechaNacimiento;
             emp.AreaId = empleado.AreaId;
             emp.UsuarioId = empleado.UsuarioId;
+            emp.expedienteDigitalId = empleado.expedienteDigitalId;
             emp.Archivado = empleado.Archivado;
             emp.FechaAlta = empleado.FechaAlta;
 
