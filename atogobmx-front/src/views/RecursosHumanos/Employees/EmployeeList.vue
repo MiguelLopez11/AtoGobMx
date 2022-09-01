@@ -125,7 +125,7 @@ export default {
     const areas = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
-    const rows = ref(null)
+    // const rows = ref(null)
     const filter = ref(null)
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
@@ -150,7 +150,7 @@ export default {
     ])
     getEmployees((data) => {
       employees.value = data
-      rows.value = data.length
+      // rows.value = data.length
       if (employees.value.length > 0) {
         isloading.value = false
       } else {
@@ -166,14 +166,14 @@ export default {
       }
     })
     const onFiltered = (filteredItems) => {
-      rows.value = filteredItems.length
+      // rows.value = filteredItems.length
       currentPage.value = 1
     }
     const refreshTable = () => {
       isloading.value = true
       getEmployees((data) => {
         employees.value = data
-        rows.value = data.length
+        // rows.value = data.length
         if (employees.value.length > 0) {
           isloading.value = false
         } else {
@@ -205,7 +205,7 @@ export default {
       fields,
       perPage,
       currentPage,
-      rows,
+      // rows,
       filter,
       perPageSelect,
       areas,
