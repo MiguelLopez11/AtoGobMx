@@ -1,30 +1,23 @@
 <template>
   <b-card class="m-3">
-    <b-row align-h="end" class="mb-2 mr-1">
-      <b-col cols="3">
-        <b-form-group>
+    <b-row align-h="end" class="mb-3 mr-1">
         <b-form-input
           size="lg"
+          style="width: 350px"
           v-model="searchValue"
           type="search"
-          placeholder="Buscar empleado..."
+          placeholder="Buscar Empleado..."
         >
         </b-form-input>
-        </b-form-group>
-      </b-col>
-      <b-col cols="3" style="float: right">
-        <b-form-group>
-        <button
-          class="btn btn-primary"
-          style="height: 50px; width: auto; font-size: 18px"
+        <b-button
+          variant="primary"
+          style="height: 50px; width: auto; font-size: 18px; margin-right: 15px; margin-left: 20px"
           v-b-modal.modal-employee
           type="submit"
         >
         <i class="bi bi-person-plus-fill"></i>
           Agregar Empleado
-        </button>
-        </b-form-group>
-      </b-col>
+        </b-button>
     </b-row>
     <EasyDataTable
       rows-per-page-message="registros por pagina"
@@ -38,6 +31,7 @@
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
+      :table-height="330"
     >
       <template #header-actions="header">
         {{ header.text }}
@@ -53,8 +47,8 @@
           class="m-1"
           variant="outline-warning"
           :to="{
-            name: 'ExpedienteEmpleados',
-            params: { empleadoId: items.empleadoId },
+            name: 'Empleados-Edit',
+            params: { EmpleadoId: items.empleadoId },
           }"
           ><i class="bi bi-pencil-square"></i
         ></b-button>
@@ -75,25 +69,9 @@
       <form ref="form">
         <b-row cols="3">
           <b-col>
-            <b-form-group class="mt-3" label="Nombre">
+            <b-form-group class="mt-3" label="Nombre Completo">
               <b-form-input
-                v-model="EmployeesFields.nombre"
-                required
-              ></b-form-input>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Apellido Paterno">
-              <b-form-input
-                v-model="EmployeesFields.apellidoPaterno"
-                required
-              ></b-form-input>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Apellido Materno">
-              <b-form-input
-                v-model="EmployeesFields.apellidoMaterno"
+                v-model="EmployeesFields.nombreCompleto"
                 required
               ></b-form-input>
             </b-form-group>
@@ -106,64 +84,6 @@
                 autoApply
                 v-model="EmployeesFields.fechaNacimiento"
               ></Datepicker>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Estado">
-              <b-form-select
-                autofocus
-                :options="states"
-                v-model="EmployeesFields.estado"
-              ></b-form-select>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Municipio">
-              <b-form-input
-                v-model="EmployeesFields.municipio"
-                required
-              ></b-form-input>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Localidad">
-              <b-form-input
-                v-model="EmployeesFields.localidad"
-                required
-              ></b-form-input>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Calle">
-              <b-form-input
-                v-model="EmployeesFields.calle"
-                required
-              ></b-form-input>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Numero Exterior">
-              <b-form-input
-                v-model="EmployeesFields.numeroExterior"
-                required
-              ></b-form-input>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Numero Interior">
-              <b-form-input
-                v-model="EmployeesFields.numeroInterior"
-                required
-              ></b-form-input>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Codigo Postal">
-              <b-form-input
-                v-model="EmployeesFields.codigoPostal"
-                required
-                type="number"
-              ></b-form-input>
             </b-form-group>
           </b-col>
           <b-col>
@@ -203,7 +123,6 @@ export default {
     const $toast = useToast()
     const employees = ref([])
     const areas = ref([])
-    const isOpen = ref(false)
     const perPage = ref(5)
     const currentPage = ref(1)
     // const rows = ref(null)
@@ -212,61 +131,20 @@ export default {
     const isloading = ref(true)
     const searchValue = ref('')
     const searchField = ref('nombre')
-    const states = ref(['Aguascalientes',
-      'Baja California',
-      'Baja California Sur',
-      'Campeche',
-      'Chiapas',
-      'Chihuahua',
-      'Coahuila',
-      'Colima',
-      'Distrito Federal',
-      'Durango',
-      'Guanajuato',
-      'Guerrero',
-      'Hidalgo',
-      'Jalisco',
-      'México',
-      'Michoacán',
-      'Morelos',
-      'Nayarit',
-      'Nuevo León',
-      'Oaxaca',
-      'Puebla',
-      'Querétaro',
-      'Quintana Roo',
-      'San Luis Potosí',
-      'Sinaloa',
-      'Sonora',
-      'Tabasco',
-      'Tamaulipas',
-      'Tlaxcala',
-      'Veracruz',
-      'Yucatán',
-      'Zacatecas'])
     const EmployeesFields = ref({
       empleadoId: 0,
-      nombre: null,
-      apellidoPaterno: null,
-      apellidoMaterno: null,
+      nombreCompleto: null,
       fechaNacimiento: null,
-      estado: null,
-      municipio: null,
-      localidad: null,
-      calle: null,
-      numeroExterior: null,
-      numeroInterior: null,
-      codigoPostal: null,
       fechaAlta: null,
       fechaBaja: null,
       archivado: false,
-      areaId: null
+      areaId: null,
+      usuarioId: null
     })
+    const EmployeesFieldsBlank = ref(JSON.parse(JSON.stringify(EmployeesFields)))
     const fields = ref([
       { value: 'empleadoId', text: 'ID', sortable: true },
-      { value: 'nombre', text: 'Nombre' },
-      { value: 'apellidoPaterno', text: 'Apellido Paterno' },
-      { value: 'apellidoMaterno', text: 'Apellido Materno' },
+      { value: 'nombreCompleto', text: 'Nombre' },
       { value: 'area.nombre', text: 'Area de Trabajo' },
       { value: 'actions', text: 'Acciones' }
     ])
@@ -283,6 +161,9 @@ export default {
     })
     getAreas((data) => {
       areas.value = data
+      if (areas.value.length === 0) {
+        $toast.warning('No se encuentran registros de areas de trabajo, registre una primero para registrar un empleado')
+      }
     })
     const onFiltered = (filteredItems) => {
       // rows.value = filteredItems.length
@@ -304,16 +185,14 @@ export default {
       return 'datos recargados'
     }
     const addEmployee = () => {
-      if (areas.value.length === 0) {
-        $toast.warning('No se encuentran registros de areas de trabajo, registre una primero para registrar un empleado')
-      }
       createEmployee(EmployeesFields.value, (data) => {
         refreshTable()
         $toast.success('Empleado registrado correctamente.', {
           position: 'top-right',
-          duration: 10
+          duration: 1500
         })
       })
+      EmployeesFields.value = JSON.parse(JSON.stringify(EmployeesFieldsBlank))
     }
     const RemoveEmployee = (employeeId) => {
       isloading.value = true
@@ -330,14 +209,11 @@ export default {
       filter,
       perPageSelect,
       areas,
+      EmployeesFieldsBlank,
       EmployeesFields,
       isloading,
       searchValue,
       searchField,
-      isOpen,
-      states,
-      // refemployeesTable,
-
       onFiltered,
       addEmployee,
       refreshTable,
@@ -348,12 +224,6 @@ export default {
 </script>
 
 <style>
-#buttonAdd {
-  background: #0d6efd;
-  color: #ffffff;
-  height: auto;
-  width: 100px;
-}
 .customize-table {
   /* --easy-table-border: 1px solid #445269;
   --easy-table-row-border: 1px solid #445269; */

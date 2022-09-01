@@ -49,6 +49,9 @@ namespace AtoGobMx.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<bool>("Archivado")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("Descripcion")
                         .HasColumnType("longtext");
 
@@ -67,16 +70,6 @@ namespace AtoGobMx.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("ApellidoMaterno")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("ApellidoPaterno")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
                     b.Property<bool>("Archivado")
                         .HasColumnType("tinyint(1)");
 
@@ -93,14 +86,24 @@ namespace AtoGobMx.Migrations
                         .IsRequired()
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("Nombre")
+                    b.Property<string>("NombreCompleto")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<int?>("UsuarioId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("expedienteDigitalId")
+                        .HasColumnType("int");
 
                     b.HasKey("EmpleadoId");
 
                     b.HasIndex("AreaId");
+
+                    b.HasIndex("UsuarioId");
+
+                    b.HasIndex("expedienteDigitalId");
 
                     b.ToTable("Empleados");
                 });
@@ -115,40 +118,30 @@ namespace AtoGobMx.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Calle")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int?>("CodigoPostal")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("CorreoElectronico")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("EmpleadoId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Estado")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Localidad")
                         .HasColumnType("longtext");
 
                     b.Property<string>("Municipio")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int?>("NumeroExterior")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int?>("NumeroInterior")
                         .HasColumnType("int");
 
                     b.HasKey("ExpedienteDigitalId");
-
-                    b.HasIndex("EmpleadoId");
 
                     b.ToTable("ExpedienteDigital");
                 });
@@ -220,9 +213,6 @@ namespace AtoGobMx.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("EmpleadoId")
-                        .HasColumnType("int");
-
                     b.Property<string>("NombreUsuario")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -231,8 +221,6 @@ namespace AtoGobMx.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("UsuarioId");
-
-                    b.HasIndex("EmpleadoId");
 
                     b.HasIndex("RoleId");
 
@@ -256,35 +244,28 @@ namespace AtoGobMx.Migrations
                         .WithMany("Empleados")
                         .HasForeignKey("AreaId");
 
+                    b.HasOne("AtoGobMx.Models.Usuario", "usuario")
+                        .WithMany("Empleados")
+                        .HasForeignKey("UsuarioId");
+
+                    b.HasOne("AtoGobMx.Models.ExpedienteDigital", "ExpedienteDigital")
+                        .WithMany("Empleados")
+                        .HasForeignKey("expedienteDigitalId");
+
                     b.Navigation("Area");
-                });
 
-            modelBuilder.Entity("AtoGobMx.Models.ExpedienteDigital", b =>
-                {
-                    b.HasOne("AtoGobMx.Models.Empleado", "empleado")
-                        .WithMany("ExpedientesDigitales")
-                        .HasForeignKey("EmpleadoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("ExpedienteDigital");
 
-                    b.Navigation("empleado");
+                    b.Navigation("usuario");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Usuario", b =>
                 {
-                    b.HasOne("AtoGobMx.Models.Empleado", "Empleado")
-                        .WithMany("Usuarios")
-                        .HasForeignKey("EmpleadoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("AtoGobMx.Models.Role", "Role")
                         .WithMany("Usuarios")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Empleado");
 
                     b.Navigation("Role");
                 });
@@ -294,21 +275,21 @@ namespace AtoGobMx.Migrations
                     b.Navigation("Empleados");
                 });
 
-            modelBuilder.Entity("AtoGobMx.Models.Empleado", b =>
-                {
-                    b.Navigation("ExpedientesDigitales");
-
-                    b.Navigation("Usuarios");
-                });
-
             modelBuilder.Entity("AtoGobMx.Models.ExpedienteDigital", b =>
                 {
                     b.Navigation("Archivos");
+
+                    b.Navigation("Empleados");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Role", b =>
                 {
                     b.Navigation("Usuarios");
+                });
+
+            modelBuilder.Entity("AtoGobMx.Models.Usuario", b =>
+                {
+                    b.Navigation("Empleados");
                 });
 #pragma warning restore 612, 618
         }

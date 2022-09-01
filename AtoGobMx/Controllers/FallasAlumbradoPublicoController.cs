@@ -1,9 +1,9 @@
-﻿using AtoGobMx.Context;
-using AtoGobMx.Models;
-using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿//using AtoGobMx.Context;
+//using AtoGobMx.Models;
+//using AutoMapper;
+//using Microsoft.AspNetCore.Http;
+//using Microsoft.AspNetCore.Mvc;
+//using Microsoft.EntityFrameworkCore;
 
 namespace AtoGobMx.Controllers
 {
