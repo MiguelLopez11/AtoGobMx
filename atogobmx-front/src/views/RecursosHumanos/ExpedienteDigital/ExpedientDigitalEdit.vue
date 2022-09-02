@@ -40,23 +40,18 @@
 
 <script>
 import { ref } from 'vue'
-import FileServices from '@/Services/file.Services'
+// import FileServices from '@/Services/file.Services'
 import { useRoute } from 'vue-router'
 export default {
   setup () {
-    const { getExpedientPhotoProfile } = FileServices()
-    const photoProfile = ref()
+    // const {} = FileServices()
     const router = useRoute()
     const expedienteDigitalId = ref(router.params.ExpedienteDigitalId)
-    getExpedientPhotoProfile(expedienteDigitalId.value, (data) => {
-      photoProfile.value = data
-    })
     const change = () => {
       alert('Holi')
     }
     return {
       expedienteDigitalId,
-      photoProfile,
       change
     }
   }

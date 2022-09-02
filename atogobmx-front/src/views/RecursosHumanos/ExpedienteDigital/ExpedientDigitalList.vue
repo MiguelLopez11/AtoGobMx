@@ -43,18 +43,19 @@
       </template>
       <template #item-actions="items">
         <b-button
-          @click="RemoveEmployee(items.empleadoId)"
+          @click="RemoveEmployee()"
           class="m-1"
           variant="outline-danger">
           <i class="bi bi-trash3"></i>
         </b-button>
         <b-button
-          class="m-1"
-          variant="outline-warning"
           :to="{
             name: 'ExpedienteDigital-edit',
             params: { ExpedienteDigitalId: items.expedienteDigitalId },
-          }">
+          }"
+          class="m-1"
+          variant="outline-warning"
+          >
           <i class="bi bi-pencil-square"></i>
         </b-button>
       </template>
@@ -94,7 +95,7 @@ export default {
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup () {
-    const { getExpedients } = ExpedientDigitalServices()
+    const { getEmployeeExpedients } = ExpedientDigitalServices()
     const { getEmployees } = EmployeeServices()
     const expedients = ref([])
     const employees = ref([])
@@ -104,19 +105,20 @@ export default {
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('expedienteDigitalId')
+    const searchField = ref('nombre')
     const fields = ref([
-      { value: 'expedienteDigitalId', text: 'ID', sortable: true, Animation },
-      // { value: 'empleado.nombreCompleto', text: 'Empleado', Animation },
-      { value: 'correoElectronico', text: 'Correo Electronico', Animation },
-      // { value: 'empleado.usuario.nombreUsuario' ? '' : '', text: 'Usuario', Animation },
-      // { value: 'empleado.usuario.role.nombre', text: 'Role', Animation },
+      { value: 'empleadoId', text: 'ID', sortable: true, Animation },
+      { value: 'nombreCompleto', text: 'Empleado', Animation },
+      { value: 'usuario.correoElectronico', text: 'Correo Electronico', Animation },
+      { value: 'usuario.nombreUsuario', text: 'Usuario', Animation },
+      { value: 'usuario.role.nombre', text: 'Role', Animation },
+      { value: 'expedienteDigitalId', text: 'ExpedienteID', Animation },
       { value: 'actions', text: 'Acciones', Animation }
     ])
     getEmployees(data => {
       employees.value = data
     })
-    getExpedients((data) => {
+    getEmployeeExpedients((data) => {
       expedients.value = data
       if (expedients.value.length > 0) {
         isloading.value = false
