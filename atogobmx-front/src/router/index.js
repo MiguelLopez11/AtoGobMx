@@ -17,6 +17,11 @@ const routes = [
     component: () => import('../views/RecursosHumanos/areas/AreaList.vue')
   },
   {
+    path: '/Areas/:AreaId',
+    name: 'Area-Edit',
+    component: () => import('../views/RecursosHumanos/areas/AreaList.vue')
+  },
+  {
     path: '/Empleados/list',
     name: 'Empleados',
     component: () => import('@/views/RecursosHumanos/Employees/EmployeeList.vue')
