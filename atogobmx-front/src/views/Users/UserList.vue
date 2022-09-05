@@ -6,7 +6,7 @@
           style="width: 350px"
           v-model="searchValue"
           type="search"
-          placeholder="Buscar Area..."
+          placeholder="Buscar Usuario..."
         >
         </b-form-input>
         <b-button
@@ -16,7 +16,7 @@
           type="submit"
         >
         <i class="bi bi-person-plus-fill"></i>
-          Agregar Area
+          Agregar Usuario
         </b-button>
     </b-row>
     <EasyDataTable
@@ -27,7 +27,7 @@
       border-cell
       :loading="isloading"
       :headers="fields"
-      :items="areas"
+      :items="users"
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
@@ -38,7 +38,7 @@
       </template>
       <template #item-actions="items">
         <b-button
-          @click="RemoveArea(items.areaId)"
+          @click="RemoveUser(items.usuarioId)"
           class="m-1"
           variant="outline-danger"
           ><i class="bi bi-trash3"></i
@@ -47,8 +47,8 @@
           class="m-1"
           variant="outline-warning"
           :to="{
-            name: 'Area-Edit',
-            params: { AreaId: items.areaId },
+            name: 'Usuarios-Edit',
+            params: { usuarioId: items.usuarioId },
           }"
           >
           <i class="bi bi-pencil-square"/>
@@ -57,8 +57,8 @@
     </EasyDataTable>
     <b-modal
       id="modal-area"
-      @ok="addArea"
-      title="Agregar areas"
+      @ok="addUser"
+      title="Agregar Usuario"
       size="xl"
       centered
       hide-backdrop
@@ -72,7 +72,7 @@
           <b-col>
             <b-form-group class="mt-3" label="Nombre">
               <b-form-input
-                v-model="areaFields.nombre"
+                v-model="userFields.nombre"
                 required
               ></b-form-input>
             </b-form-group>
@@ -80,7 +80,7 @@
           <b-col>
             <b-form-group class="mt-3" label="Descripción">
               <b-form-input
-                v-model="areaFields.descripcion">
+                v-model="userFields.descripcion">
               </b-form-input>
             </b-form-group>
           </b-col>
@@ -91,7 +91,7 @@
 </template>
 
 <script>
-import AreaServices from '@/Services/area.Services'
+import UsersServices from '@/Services/users.Services'
 // import Datepicker from '@vuepic/vue-datepicker'
 import { ref } from 'vue'
 import { useToast } from 'vue-toast-notification'
@@ -104,98 +104,100 @@ export default {
   },
   setup () {
     // const { getEmployees, createEmployee, deleteEmployee } = EmployeeServices()
-    const { getAreas, createArea, deleteArea } = AreaServices()
+    const { getUsers, deleteUser, createUser } = UsersServices()
     const $toast = useToast()
-    const employees = ref([])
-    const areas = ref([])
+    // const employees = ref([])
+    const users = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
-    const rows = ref(null)
+    // const rows = ref(null)
     const filter = ref(null)
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
     const searchField = ref('nombre')
-    const areaFields = ref({
-      areaId: 0,
-      nombre: null,
-      descripcion: null,
-      archivado: false
+    const userFields = ref({
+      usuarioId: 0,
+      nombreUsuario: '',
+      contraseña: '',
+      confirmarContraseña: '',
+      archivado: false,
+      roleId: null
     })
-    const areasFieldsBlank = ref(JSON.parse(JSON.stringify(areaFields)))
+    const areasFieldsBlank = ref(JSON.parse(JSON.stringify(userFields)))
     const fields = ref([
-      { value: 'areaId', text: 'ID', sortable: true },
-      { value: 'nombre', text: 'Nombre' },
-      { value: 'descripcion', text: 'Descripcion' },
+      { value: 'usuarioId', text: 'ID', sortable: true },
+      { value: 'nombreUsuario', text: 'Nombre de usuario' },
+      { value: 'role.nombre', text: 'Role' },
       { value: 'actions', text: 'Acciones' }
     ])
     // getEmployees((data) => {
     //   employees.value = data
     //   rows.value = data.length
     // })
-    getAreas((data) => {
-      areas.value = data
-      if (areas.value.length > 0) {
+    getUsers((data) => {
+      users.value = data
+      if (users.value.length > 0) {
         isloading.value = false
       } else {
-        if (areas.value.length <= 0) {
+        if (users.value.length <= 0) {
           isloading.value = false
         }
       }
     })
     const onFiltered = (filteredItems) => {
-      rows.value = filteredItems.length
+    //   rows.value = filteredItems.length
       currentPage.value = 1
     }
     const refreshTable = () => {
       isloading.value = true
 
-      getAreas((data) => {
-        areas.value = data
-        if (areas.value.length > 0) {
+      getUsers((data) => {
+        users.value = data
+        if (users.value.length > 0) {
           isloading.value = false
         } else {
-          if (areas.value.length <= 0) {
+          if (users.value.length <= 0) {
             isloading.value = false
           }
         }
       })
       return 'datos recargados'
     }
-    const addArea = () => {
-      createArea(areaFields.value, (data) => {
+    const addUser = () => {
+      createUser(userFields.value, (data) => {
         refreshTable()
         $toast.success('Empleado registrado correctamente.', {
           position: 'top-right',
           duration: 2000
         })
       })
-      areaFields.value = JSON.parse(JSON.stringify(areasFieldsBlank))
+      userFields.value = JSON.parse(JSON.stringify(areasFieldsBlank))
     }
-    const RemoveArea = (areaId) => {
+    const RemoveUser = (areaId) => {
       isloading.value = true
-      deleteArea(areaId, (data) => {
+      deleteUser(areaId, (data) => {
         refreshTable()
       })
     }
     return {
-      employees,
+    //   employees,
       fields,
       perPage,
       currentPage,
-      rows,
+      //   rows,
       filter,
       perPageSelect,
-      areas,
+      users,
       areasFieldsBlank,
-      areaFields,
+      userFields,
       isloading,
       searchValue,
       searchField,
       onFiltered,
-      addArea,
+      addUser,
       refreshTable,
-      RemoveArea
+      RemoveUser
     }
   }
 }

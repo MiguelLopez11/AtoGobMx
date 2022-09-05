@@ -19,7 +19,7 @@ const routes = [
   {
     path: '/Areas/:AreaId',
     name: 'Area-Edit',
-    component: () => import('../views/RecursosHumanos/areas/AreaList.vue')
+    component: () => import('../views/RecursosHumanos/areas/AreaEdit.vue')
   },
   {
     path: '/Empleados/list',
@@ -45,6 +45,16 @@ const routes = [
     path: '/FallasAlumbrado/list',
     name: 'FallasAlumbrado',
     component: () => import('@/views/LightingFailures/LightingFailuresList.vue')
+  },
+  {
+    path: '/Usuarios/list',
+    name: 'Usuarios',
+    component: () => import('@/views/Users/UserList.vue')
+  },
+  {
+    path: '/Usuarios/:usuarioId',
+    name: 'Usuarios-Edit',
+    component: () => import('@/views/Users/UserEdit.vue')
   }
 ]
 
