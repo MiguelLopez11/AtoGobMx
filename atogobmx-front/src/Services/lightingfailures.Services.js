@@ -18,9 +18,15 @@ export default function lightingfailuresServices () {
       callback(response.data)
     })
   }
+  const updateLightingFailures = (data, callback) => {
+    axios.put(`https://localhost:7065/api/FallasAlumbradoPublico/${data.fallaId}`, data).then((response) => {
+      callback(response.data)
+    })
+  }
   return {
     getLightingFailures,
     createLightingFailures,
-    deleteLightingFailures
+    deleteLightingFailures,
+    updateLightingFailures
   }
 }

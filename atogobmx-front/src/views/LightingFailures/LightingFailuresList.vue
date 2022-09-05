@@ -50,15 +50,15 @@
           variant="outline-danger"
           ><i class="bi bi-trash3"></i
         ></b-button>
-        <!-- <b-button
+        <b-button
           class="m-1"
           variant="outline-warning"
           :to="{
-            name: 'ExpedienteFallas-Edit',
-            params: { fallaId: items.fallaId },
+            name: 'FallasAlumbrado-Edit',
+            params: { FallaId: items.fallaId },
           }"
           ><i class="bi bi-pencil-square"></i
-        ></b-button> -->
+        ></b-button>
       </template>
     </EasyDataTable>
 

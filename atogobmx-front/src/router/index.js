@@ -40,6 +40,11 @@ const routes = [
     path: '/FallasAlumbrado/list',
     name: 'FallasAlumbrado',
     component: () => import('@/views/LightingFailures/LightingFailuresList.vue')
+  },
+  {
+    path: '/FallasAlumbrado/:FallaId',
+    name: 'FallasAlumbrado-Edit',
+    component: () => import('@/views/LightingFailures/EditGlitches.vue')
   }
 ]
 
