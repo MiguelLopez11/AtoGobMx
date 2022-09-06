@@ -22,10 +22,6 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<ExpedienteDigital>> GetExpedientesDigitales()
         {
             var expedientes = await _context.ExpedienteDigital
-                .Include(i => i.Archivos)
-                .Include(i => i.Empleados)
-                //.Include(i => i.empleado.usuario)
-                //.Include(i => i.empleado.usuario.Role)
                 .Where(w => !w.Archivado)
                 .OrderBy(o => o.ExpedienteDigitalId)
                 .Select(s => _mapper.Map<ExpedienteDigital>(s))

@@ -96,6 +96,7 @@ namespace AtoGobMx.Controllers
                     //Directory.CreateDirectory(path);
                     var stream = new FileStream(path, FileMode.Create);
                     await file.CopyToAsync(stream);
+                    stream.Close();
                     var archivo = new Archivos()
                     {
                         ArchivoId = 0,
