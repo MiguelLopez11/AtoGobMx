@@ -81,7 +81,7 @@ export default {
       { text: 'Editar-Empleados' }
     ])
     getEmployee(router.params.EmpleadoId, data => {
-      employee.value = data[0]
+      employee.value = data
     })
     const onUpdateEmployee = () => {
       updateEmployee(employee.value, data => {

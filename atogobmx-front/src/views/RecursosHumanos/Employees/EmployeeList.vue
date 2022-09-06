@@ -60,7 +60,6 @@
       title="Agregar empleados"
       size="xl"
       centered
-      hide-backdrop
       button-size="lg"
       lazy
       ok-title="Registrar empleado"
