@@ -39,8 +39,7 @@ namespace AtoGobMx.Controllers
                 //.Include(i => i.usuario)
                 .Include(i => i.usuario.Role)
                 .Include(i => i.ExpedienteDigital)
-                .Where(w => w.EmpleadoId == EmpleadoId)
-                .ToListAsync();
+                .FirstOrDefaultAsync(f => f.EmpleadoId == EmpleadoId);
             if (Empleado == null)
             {
                 return NotFound();

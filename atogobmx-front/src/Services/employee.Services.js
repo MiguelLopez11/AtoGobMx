@@ -17,6 +17,7 @@ export default function EmployeeServices () {
     })
   }
   const updateEmployee = (data, callback) => {
+    console.log(data.empleadoId)
     axios.put(`https://localhost:7065/api/Empleados/${data.empleadoId}`, data).then((response) => {
       callback(response.data)
     })
