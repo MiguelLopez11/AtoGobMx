@@ -47,6 +47,22 @@ namespace AtoGobMx.Controllers
             }
             return Ok(Empleado);
         }
+        [HttpGet("EmpleadoExpedientes")]
+        public async Task<ActionResult> GetEmpleadoExpedientes()
+        {
+            var Empleado = await _context.Empleados
+                .Include(i => i.Area)
+                //.Include(i => i.usuario)
+                .Include(i => i.usuario.Role)
+                .Include(i => i.ExpedienteDigital)
+                .Where(w => w.expedienteDigitalId != null)
+                .ToListAsync();
+            if (Empleado == null)
+            {
+                return BadRequest();
+            }
+            return Ok(Empleado);
+        }
         [HttpGet("EmpleadosSinExpedientes")]
         public async Task<ActionResult> GetEmpleadosSinExpediente()
         {
