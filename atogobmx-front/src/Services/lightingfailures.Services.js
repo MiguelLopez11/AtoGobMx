@@ -20,7 +20,7 @@ export default function lightingfailuresServices () {
   }
   const updateLightingFailures = (data, callback) => {
     console.log(data)
-    axios.put(`https://localhost:7065/api/FallasAlumbradoPublico/${data.fallasId}`, data).then((response) => {
+    axios.put(`https://localhost:7065/api/FallasAlumbradoPublico/${data.fallaId}`, data).then((response) => {
       // console.log(response)
       callback(response.data)
     })
