@@ -61,11 +61,6 @@
             </b-row>
           </form>
         </b-tab>
-        <b-tab title="Usuario">
-          <span>
-            En proceso¡
-          </span>
-        </b-tab>
         <b-tab title="Expediente">
           <span>
             En proceso¡

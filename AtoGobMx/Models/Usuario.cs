@@ -23,7 +23,6 @@ namespace AtoGobMx.Models
         [ForeignKey("RoleId")]
         public Role? Role { get; set; }
 
-        [JsonIgnore]
         public virtual IEnumerable<Empleado>? Empleados { get; set; }
         //public int EmpleadoId { get; set; }
         //[ForeignKey("EmpleadoId")]
