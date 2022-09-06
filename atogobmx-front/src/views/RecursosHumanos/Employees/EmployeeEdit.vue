@@ -1,20 +1,13 @@
 <template>
   <b-card class="m-3">
-    <b-card
-      class="mb-4"
-    >
-        <b-breadcrumb
-          class="p-0"
-          :items="breadcrumbItems"
-        >
-        </b-breadcrumb>
+    <b-card class="mb-4">
+      <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
     </b-card>
     <b-card>
-
-    <div>
+      <div>
         <h3>Editar empleado</h3>
-    </div>
-    <form ref="form">
+      </div>
+      <form ref="form">
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre">
@@ -48,8 +41,19 @@
         </b-row>
       </form>
       <b-row align-h="end">
-          <b-button class="col-1 m-2 text-white" variant="primary" to="/Empleados/list" type="reset">Cancelar</b-button>
-          <b-button class="col-1 m-2" variant="success" @click="onUpdateEmployee()">Guardar</b-button>
+        <b-button
+          class="col-1 m-2 text-white"
+          variant="primary"
+          to="/Empleados/list"
+          type="reset"
+          >Cancelar</b-button
+        >
+        <b-button
+          class="col-1 m-2"
+          variant="success"
+          @click="onUpdateEmployee()"
+          >Guardar</b-button
+        >
       </b-row>
     </b-card>
   </b-card>
@@ -80,12 +84,11 @@ export default {
       { text: 'Empleados', to: '/Empleados/list' },
       { text: 'Editar-Empleados' }
     ])
-    getEmployee(router.params.EmpleadoId, data => {
+    getEmployee(router.params.EmpleadoId, (data) => {
       employee.value = data[0]
     })
     const onUpdateEmployee = () => {
-      updateEmployee(employee.value, data => {
-      })
+      updateEmployee(employee.value, (data) => {})
       $toast.success('Empleado actualizado correctamente.', {
         position: 'top-right',
         duration: 1500
@@ -105,10 +108,8 @@ export default {
       onUpdateEmployee
     }
   }
-
 }
 </script>
 
 <style>
-
 </style>

@@ -22,19 +22,21 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<FallasAlumbradoPublico>> GetFallasAlumbradoPublico()
         {
             var fallas = await _context.FallasAlumbradoPublico
+                .OrderBy(o => o.NombreFalla)
                 .Where(w => !w.Archivado)
                 .Select(s => _mapper.Map<FallasAlumbradoPublico>(s))
                 .ToArrayAsync();
             return Ok(fallas);
         }
-        [HttpGet("{FallasId}")]
-        public async Task<ActionResult> GetFallasAlumbradoPublicoById(int FallasId)
+        [HttpGet("{FallaId}")]
+        public async Task<ActionResult> GetFallasAlumbradoPublicoById(int FallaId)
         {
             var Falla = await _context.FallasAlumbradoPublico
-                .FindAsync(FallasId);
+                .FirstOrDefaultAsync(f => f.FallaId == FallaId);
             if (Falla == null)
             {
-                Ok($"No se encuentra la falla con el ID: {FallasId}");
+                //Ok($"No se encuentra la falla con el ID: {FallasId}");
+                return NotFound();
             }
             return Ok(Falla);
         }
