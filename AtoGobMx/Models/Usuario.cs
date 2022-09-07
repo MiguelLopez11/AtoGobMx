@@ -17,13 +17,17 @@ namespace AtoGobMx.Models
         [Compare("Contraseña")]
         public string? ConfirmarContraseña { get; set; }
         [Required]
-        public bool Archivado { get; set; }
-        [Required]
         public int RoleId { get; set; }
+        [Required]
+        public int EmpleadoId { get; set; }
+        [Required]
+        public bool Archivado { get; set; }
         [ForeignKey("RoleId")]
         public Role? Role { get; set; }
+        [ForeignKey("EmpleadoId")]
+        public Empleado? Empleado { get; set; }
 
-        public virtual IEnumerable<Empleado>? Empleados { get; set; }
+        //public virtual IEnumerable<Empleado>? Empleados { get; set; }
         //public int EmpleadoId { get; set; }
         //[ForeignKey("EmpleadoId")]
         //public Empleado? Empleado { get; set; }

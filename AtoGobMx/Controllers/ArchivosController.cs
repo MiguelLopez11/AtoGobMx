@@ -32,14 +32,15 @@ namespace AtoGobMx.Controllers
                 return NotFound("No se encuentra foto de perfil registrado a ese expediente.");
             }
             var empleado = await _context.Empleados
-                .Include(i => i.usuario)
+                //.Include(i => i.usuario)
                 .Include(i => i.ExpedienteDigital)
                 .FirstOrDefaultAsync(f => f.expedienteDigitalId == expedienteDigitalId);
             if (empleado == null)
             {
                 return BadRequest("El empleado no tiene registrado el expediente");
             }
-            var image = System.IO.File.OpenRead($"Files/Images/{empleado.usuario.NombreUsuario}/{fotoPerfil.Nombre}");
+            //{ empleado.usuario.NombreUsuario}
+            var image = System.IO.File.OpenRead($"Files/Images/{fotoPerfil.Nombre}");
             return File(image, "image/jpeg");
 
         }
@@ -81,13 +82,14 @@ namespace AtoGobMx.Controllers
                 if (archivoExpediente.Length == 0)
                 {
                     var empleado = await _context.Empleados
-                        .Include(i => i.usuario)
+                        //.Include(i => i.usuario)
                         .FirstOrDefaultAsync(f => f.expedienteDigitalId == expedienteDigitalId);
-                    if (empleado.usuario == null)
-                    {
-                        return BadRequest("empleado no contiene un usuario asignado");
-                    }
-                    var pathFolder = $@"Files/Images/{empleado.usuario.NombreUsuario}";
+                    //if (empleado.usuario == null)
+                    //{
+                    //    return BadRequest("empleado no contiene un usuario asignado");
+                    //}
+                    var pathFolder = $@"Files/Images/";
+                    //{ empleado.usuario.NombreUsuario}
                     if (!Directory.Exists(pathFolder))
                     {
                         Directory.CreateDirectory(pathFolder);
