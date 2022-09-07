@@ -18,7 +18,6 @@ export default function EmployeeServices () {
     })
   }
   const updateEmployee = (data, callback) => {
-    console.log(data.empleadoId)
     axios.put(`${BaseUrl}/Empleados/${data.empleadoId}`, data).then((response) => {
       callback(response.data)
     })
