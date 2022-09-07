@@ -26,10 +26,5 @@ namespace AtoGobMx.Models
         public Role? Role { get; set; }
         [ForeignKey("EmpleadoId")]
         public Empleado? Empleado { get; set; }
-
-        //public virtual IEnumerable<Empleado>? Empleados { get; set; }
-        //public int EmpleadoId { get; set; }
-        //[ForeignKey("EmpleadoId")]
-        //public Empleado? Empleado { get; set; }
     }
 }

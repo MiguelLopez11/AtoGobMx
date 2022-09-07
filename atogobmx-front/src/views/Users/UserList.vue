@@ -68,96 +68,96 @@
 </template>
 
 <script>
-import UsersServices from "@/Services/users.Services";
-import EmployeeServices from "@/Services/employee.Services";
-import RoleServices from "@/Services/role.Services";
-import { ref } from "vue";
-import { useToast } from "vue-toast-notification";
-import "@vuepic/vue-datepicker/dist/main.css";
+import UsersServices from '@/Services/users.Services'
+import EmployeeServices from '@/Services/employee.Services'
+import RoleServices from '@/Services/role.Services'
+import { ref } from 'vue'
+import { useToast } from 'vue-toast-notification'
+import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
-    EasyDataTable: window["vue3-easy-data-table"],
+    EasyDataTable: window['vue3-easy-data-table']
   },
-  setup() {
-    const { getUsers, deleteUser, createUser } = UsersServices();
-    const { getEmployees } = EmployeeServices();
-    const { getRoles } = RoleServices();
-    const $toast = useToast();
-    const users = ref([]);
-    const employees = ref([]);
-    const roles = ref([]);
-    const perPage = ref(5);
-    const currentPage = ref(1);
-    const filter = ref(null);
-    const perPageSelect = ref([5, 10, 25, 50, 100]);
-    const isloading = ref(true);
-    const searchValue = ref("");
-    const searchField = ref("nombre");
+  setup () {
+    const { getUsers, deleteUser, createUser } = UsersServices()
+    const { getEmployees } = EmployeeServices()
+    const { getRoles } = RoleServices()
+    const $toast = useToast()
+    const users = ref([])
+    const employees = ref([])
+    const roles = ref([])
+    const perPage = ref(5)
+    const currentPage = ref(1)
+    const filter = ref(null)
+    const perPageSelect = ref([5, 10, 25, 50, 100])
+    const isloading = ref(true)
+    const searchValue = ref('')
+    const searchField = ref('nombre')
     const userFields = ref({
       usuarioId: 0,
-      nombreUsuario: "",
-      contraseña: "",
-      confirmarContraseña: "",
+      nombreUsuario: '',
+      contraseña: '',
+      confirmarContraseña: '',
       archivado: false,
-      roleId: null,
-    });
-    const areasFieldsBlank = ref(JSON.parse(JSON.stringify(userFields)));
+      roleId: null
+    })
+    const areasFieldsBlank = ref(JSON.parse(JSON.stringify(userFields)))
     const fields = ref([
-      { value: "usuarioId", text: "ID", sortable: true },
-      { value: "nombreUsuario", text: "Nombre de usuario" },
-      { value: "role.nombre", text: "Role" },
-      { value: "actions", text: "Acciones" },
-    ]);
+      { value: 'usuarioId', text: 'ID', sortable: true },
+      { value: 'nombreUsuario', text: 'Nombre de usuario' },
+      { value: 'role.nombre', text: 'Role' },
+      { value: 'actions', text: 'Acciones' }
+    ])
     getEmployees((data) => {
-      employees.value = data;
-    });
+      employees.value = data
+    })
     getRoles((data) => {
-      roles.value = data;
-    });
+      roles.value = data
+    })
     getUsers((data) => {
-      users.value = data;
+      users.value = data
       if (users.value.length > 0) {
-        isloading.value = false;
+        isloading.value = false
       } else {
         if (users.value.length <= 0) {
-          isloading.value = false;
+          isloading.value = false
         }
       }
-    });
+    })
     const onFiltered = (filteredItems) => {
-      currentPage.value = 1;
-    };
+      currentPage.value = 1
+    }
     const refreshTable = () => {
-      isloading.value = true;
+      isloading.value = true
 
       getUsers((data) => {
-        users.value = data;
+        users.value = data
         if (users.value.length > 0) {
-          isloading.value = false;
+          isloading.value = false
         } else {
           if (users.value.length <= 0) {
-            isloading.value = false;
+            isloading.value = false
           }
         }
-      });
-      return "datos recargados";
-    };
+      })
+      return 'datos recargados'
+    }
     const addUser = () => {
       createUser(userFields.value, (data) => {
-        refreshTable();
-        $toast.success("Empleado registrado correctamente.", {
-          position: "top-right",
-          duration: 2000,
-        });
-      });
-      userFields.value = JSON.parse(JSON.stringify(areasFieldsBlank));
-    };
+        refreshTable()
+        $toast.success('Empleado registrado correctamente.', {
+          position: 'top-right',
+          duration: 2000
+        })
+      })
+      userFields.value = JSON.parse(JSON.stringify(areasFieldsBlank))
+    }
     const RemoveUser = (areaId) => {
-      isloading.value = true;
+      isloading.value = true
       deleteUser(areaId, (data) => {
-        refreshTable();
-      });
-    };
+        refreshTable()
+      })
+    }
     return {
       fields,
       perPage,
@@ -176,10 +176,10 @@ export default {
       onFiltered,
       addUser,
       refreshTable,
-      RemoveUser,
-    };
-  },
-};
+      RemoveUser
+    }
+  }
+}
 </script>
 
 <style>

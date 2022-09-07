@@ -72,6 +72,7 @@
               <b-form-input
                 v-model="EmployeesFields.nombreCompleto"
                 required
+                v-validate="'required'"
               ></b-form-input>
             </b-form-group>
           </b-col>
