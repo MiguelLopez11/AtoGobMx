@@ -65,14 +65,13 @@
       ok-title="Registrar empleado"
       cancel-title="Cancelar"
     >
-      <form ref="form">
+      <form ref="form" novalidate>
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre Completo">
               <b-form-input
                 v-model="EmployeesFields.nombreCompleto"
                 required
-                v-validate="'required'"
               ></b-form-input>
             </b-form-group>
           </b-col>
