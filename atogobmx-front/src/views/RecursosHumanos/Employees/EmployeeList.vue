@@ -56,23 +56,26 @@
     </EasyDataTable>
     <b-modal
       id="modal-employee"
-      @ok="addEmployee"
       title="Agregar empleados"
       size="xl"
+      hide-footer
       centered
       button-size="lg"
       lazy
       ok-title="Registrar empleado"
       cancel-title="Cancelar"
     >
-      <form ref="form" novalidate>
+      <Form @submit="onUpdateEmployee">
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre Completo">
-              <b-form-input
+              <Field
+                name="nameField"
+                class="form-control"
                 v-model="EmployeesFields.nombreCompleto"
-                required
-              ></b-form-input>
+                :rules="validateName"
+              ></Field>
+              <ErrorMessage name="nameField" style="color:red"/>
             </b-form-group>
           </b-col>
           <b-col>
@@ -87,15 +90,28 @@
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Area">
-              <b-form-select
-                autofocus
-                :options="areas"
-                value-field="areaId"
-                text-field="nombre"
-                v-model="EmployeesFields.areaId"
-              ></b-form-select>
+              <Field
+                name="areaField"
+                as="select"
+                class="form-control"
+                :rules="validateArea"
+              >
+              <option value="" disabled>Select a drink</option>
+              <option v-for="data in areas" :key="data.areaId" :selected="data.nombre">{{ data.nombre }}</option>
+              </Field>
+              <ErrorMessage name="nameField" style="color:red"/>
             </b-form-group>
           </b-col>
+        </b-row>
+          <b-row align-h="end">
+          <b-button
+            class="col-1 m-2 text-white"
+            variant="primary"
+            type="reset"
+            v-b-modal.modal-employee>
+            Cancelar
+            </b-button>
+          <b-button class="col-1 m-2" variant="success" type="submit">Guardar</b-button>
         </b-row>
       </form>
     </b-modal>
@@ -106,25 +122,26 @@
 import EmployeeServices from '@/Services/employee.Services'
 import AreaServices from '@/Services/area.Services'
 import Datepicker from '@vuepic/vue-datepicker'
+import { Field, Form, ErrorMessage } from 'vee-validate'
 import { ref } from 'vue'
 import { useToast } from 'vue-toast-notification'
-// import VueSimpleAlert from 'vue-simple-alert'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
     Datepicker,
+    Field,
+    Form,
+    ErrorMessage,
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup () {
     const { getEmployees, createEmployee, deleteEmployee } = EmployeeServices()
     const { getAreas } = AreaServices()
-    // const refemployeesTable = ref()
     const $toast = useToast()
     const employees = ref([])
     const areas = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
-    // const rows = ref(null)
     const filter = ref(null)
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
@@ -140,6 +157,18 @@ export default {
       areaId: null,
       usuarioId: null
     })
+    const validateName = (value) => {
+      if (!value) {
+        return 'Este campo es requerido'
+      }
+      return true
+    }
+    const validateArea = (value) => {
+      if (!value) {
+        return 'Este campo es requerido'
+      }
+      return true
+    }
     const EmployeesFieldsBlank = ref(JSON.parse(JSON.stringify(EmployeesFields)))
     const fields = ref([
       { value: 'empleadoId', text: 'ID', sortable: true },
@@ -216,7 +245,9 @@ export default {
       onFiltered,
       addEmployee,
       refreshTable,
-      RemoveEmployee
+      RemoveEmployee,
+      validateName,
+      validateArea
     }
   }
 }
