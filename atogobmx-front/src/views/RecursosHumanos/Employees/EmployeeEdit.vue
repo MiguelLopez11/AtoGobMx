@@ -7,7 +7,7 @@
       <div>
         <h3>Editar empleado</h3>
       </div>
-      <Form  @submit="onUpdateEmployee">
+      <!-- <Form  @submit="onUpdateEmployee">
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre">
@@ -52,7 +52,7 @@
           >
           <b-button class="col-1 m-2" variant="success" type="submit">Guardar</b-button>
         </b-row>
-      </Form>
+      </Form> -->
     </b-card>
   </b-card>
 </template>
@@ -60,18 +60,18 @@
 <script>
 import EmployeeServices from '@/Services/employee.Services'
 import AreaServices from '@/Services/area.Services'
-import { Field, Form, ErrorMessage } from 'vee-validate'
+// import { Field, Form, ErrorMessage } from 'vee-validate'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
-import Datepicker from '@vuepic/vue-datepicker'
+// import Datepicker from '@vuepic/vue-datepicker'
 import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
-    Datepicker,
-    Field,
-    Form,
-    ErrorMessage
+    // Datepicker,
+    // Field,
+    // Form,
+    // ErrorMessage
   },
   setup () {
     const { getEmployee, updateEmployee } = EmployeeServices()

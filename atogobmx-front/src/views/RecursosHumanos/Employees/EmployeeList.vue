@@ -1,23 +1,29 @@
 <template>
   <b-card class="m-3">
     <b-row align-h="end" class="mb-3 mr-1">
-        <b-form-input
-          size="lg"
-          style="width: 350px"
-          v-model="searchValue"
-          type="search"
-          placeholder="Buscar Empleado..."
-        >
-        </b-form-input>
-        <b-button
-          variant="primary"
-          style="height: 50px; width: auto; font-size: 18px; margin-right: 15px; margin-left: 20px"
-          v-b-modal.modal-employee
-          type="submit"
-        >
+      <b-form-input
+        size="lg"
+        style="width: 350px"
+        v-model="searchValue"
+        type="search"
+        placeholder="Buscar Empleado..."
+      >
+      </b-form-input>
+      <b-button
+        variant="primary"
+        style="
+          height: 50px;
+          width: auto;
+          font-size: 18px;
+          margin-right: 15px;
+          margin-left: 20px;
+        "
+        v-b-modal.modal-employee
+        type="submit"
+      >
         <i class="bi bi-person-plus-fill"></i>
-          Agregar Empleado
-        </b-button>
+        Agregar Empleado
+      </b-button>
     </b-row>
     <EasyDataTable
       rows-per-page-message="registros por pagina"
@@ -48,7 +54,7 @@
           variant="outline-warning"
           :to="{
             name: 'Empleados-Edit',
-            params: { EmpleadoId: items.empleadoId },
+            params: { EmpleadoId: items.empleadoId }
           }"
           ><i class="bi bi-pencil-square"></i
         ></b-button>
@@ -58,62 +64,65 @@
       id="modal-employee"
       title="Agregar empleados"
       size="xl"
-      hide-footer
       centered
       button-size="lg"
       lazy
       ok-title="Registrar empleado"
       cancel-title="Cancelar"
     >
-      <Form @submit="onUpdateEmployee">
-        <b-row cols="3">
-          <b-col>
-            <b-form-group class="mt-3" label="Nombre Completo">
-              <Field
-                name="nameField"
-                class="form-control"
-                v-model="EmployeesFields.nombreCompleto"
-                :rules="validateName"
-              ></Field>
-              <ErrorMessage name="nameField" style="color:red"/>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Fecha de nacimiento">
-              <Datepicker
-                locale="es"
-                :enableTimePicker="false"
-                autoApply
-                v-model="EmployeesFields.fechaNacimiento"
-              ></Datepicker>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Area">
-              <Field
-                name="areaField"
-                as="select"
-                class="form-control"
-                :rules="validateArea"
-              >
-              <option value="" disabled>Select a drink</option>
-              <option v-for="data in areas" :key="data.areaId" :selected="data.nombre">{{ data.nombre }}</option>
-              </Field>
-              <ErrorMessage name="nameField" style="color:red"/>
-            </b-form-group>
-          </b-col>
-        </b-row>
-          <b-row align-h="end">
-          <b-button
-            class="col-1 m-2 text-white"
-            variant="primary"
-            type="reset"
-            v-b-modal.modal-employee>
-            Cancelar
-            </b-button>
-          <b-button class="col-1 m-2" variant="success" type="submit">Guardar</b-button>
-        </b-row>
-      </form>
+      <b-form>
+        <validation-provider rules="required" v-slot="{ errors }">
+          <b-row cols="3">
+            <b-col>
+              <b-form-group class="mt-3" label="Nombre Completo">
+                <b-form-input
+                  name="nameField"
+                  class="form-control"
+                  v-model="EmployeesFields.nombreCompleto"
+                  :rules="validateName"
+                ></b-form-input>
+                <b-form-invalid-feedback>{{ errors }}</b-form-invalid-feedback>
+              </b-form-group>
+            </b-col>
+            <b-col>
+              <b-form-group class="mt-3" label="Fecha de nacimiento">
+                <Datepicker
+                  locale="es"
+                  :enableTimePicker="false"
+                  autoApply
+                  v-model="EmployeesFields.fechaNacimiento"
+                >
+                </Datepicker>
+              </b-form-group>
+            </b-col>
+            <b-col>
+              <b-form-group class="mt-3" label="Area">
+                <b-form-select
+                  v-model="EmployeesFields.areaId"
+                  autofocus
+                  :options="areas"
+                  value-field="areaId"
+                  text-field="nombre"
+                >
+                </b-form-select>
+              </b-form-group>
+            </b-col>
+          </b-row>
+        </validation-provider>
+      </b-form>
+      <b-row align-h="end">
+        <b-button
+          class="col-1 m-2 text-white"
+          variant="primary"
+          type="reset"
+          v-b-modal.modal-employee
+        >
+          Cancelar
+        </b-button>
+        <b-button class="col-1 m-2" variant="success" type="submit"
+          >Guardar</b-button
+        >
+      </b-row>
     </b-modal>
   </b-card>
 </template>
@@ -122,16 +131,14 @@
 import EmployeeServices from '@/Services/employee.Services'
 import AreaServices from '@/Services/area.Services'
 import Datepicker from '@vuepic/vue-datepicker'
-import { Field, Form, ErrorMessage } from 'vee-validate'
+import { ValidationProvider } from 'vee-validate'
 import { ref } from 'vue'
 import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
     Datepicker,
-    Field,
-    Form,
-    ErrorMessage,
+    ValidationProvider,
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup () {
@@ -157,26 +164,28 @@ export default {
       areaId: null,
       usuarioId: null
     })
-    const validateName = (value) => {
+    const validateName = value => {
       if (!value) {
         return 'Este campo es requerido'
       }
       return true
     }
-    const validateArea = (value) => {
+    const validateArea = value => {
       if (!value) {
         return 'Este campo es requerido'
       }
       return true
     }
-    const EmployeesFieldsBlank = ref(JSON.parse(JSON.stringify(EmployeesFields)))
+    const EmployeesFieldsBlank = ref(
+      JSON.parse(JSON.stringify(EmployeesFields))
+    )
     const fields = ref([
       { value: 'empleadoId', text: 'ID', sortable: true },
       { value: 'nombreCompleto', text: 'Nombre' },
       { value: 'area.nombre', text: 'Area de Trabajo' },
       { value: 'actions', text: 'Acciones' }
     ])
-    getEmployees((data) => {
+    getEmployees(data => {
       employees.value = data
       // rows.value = data.length
       if (employees.value.length > 0) {
@@ -187,19 +196,21 @@ export default {
         }
       }
     })
-    getAreas((data) => {
+    getAreas(data => {
       areas.value = data
       if (areas.value.length === 0) {
-        $toast.warning('No se encuentran registros de areas de trabajo, registre una primero para registrar un empleado')
+        $toast.warning(
+          'No se encuentran registros de areas de trabajo, registre una primero para registrar un empleado'
+        )
       }
     })
-    const onFiltered = (filteredItems) => {
+    const onFiltered = filteredItems => {
       // rows.value = filteredItems.length
       currentPage.value = 1
     }
     const refreshTable = () => {
       isloading.value = true
-      getEmployees((data) => {
+      getEmployees(data => {
         employees.value = data
         // rows.value = data.length
         if (employees.value.length > 0) {
@@ -213,7 +224,7 @@ export default {
       return 'datos recargados'
     }
     const addEmployee = () => {
-      createEmployee(EmployeesFields.value, (data) => {
+      createEmployee(EmployeesFields.value, data => {
         refreshTable()
         $toast.success('Empleado registrado correctamente.', {
           position: 'top-right',
@@ -222,9 +233,9 @@ export default {
       })
       EmployeesFields.value = JSON.parse(JSON.stringify(EmployeesFieldsBlank))
     }
-    const RemoveEmployee = (employeeId) => {
+    const RemoveEmployee = employeeId => {
       isloading.value = true
-      deleteEmployee(employeeId, (data) => {
+      deleteEmployee(employeeId, data => {
         refreshTable()
       })
     }
