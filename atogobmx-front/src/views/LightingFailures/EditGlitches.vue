@@ -68,7 +68,7 @@
 import LightingfailuresServices from '@/Services/lightingfailures.Services'
 // import AreaServices from '@/Services/area.Services'
 import { ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import Datepicker from '@vuepic/vue-datepicker'
 import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -82,7 +82,7 @@ export default {
     const $toast = useToast()
     const lightingFailure = ref([])
     const router = useRoute()
-    const route = useRouter()
+    // const route = useRouter()
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
       { text: 'FallasAlumbrado', to: '/FallasAlumbrado/list' },
@@ -98,7 +98,6 @@ export default {
         position: 'top-right',
         duration: 1500
       })
-      route.push('/FallasAlumbrado/list').then(getLightingFailure)
     }
     // getAreas((data) => {
     //   areas.value = data
