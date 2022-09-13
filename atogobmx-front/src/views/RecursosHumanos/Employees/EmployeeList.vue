@@ -1,23 +1,29 @@
 <template>
   <b-card class="m-3">
     <b-row align-h="end" class="mb-3 mr-1">
-        <b-form-input
-          size="lg"
-          style="width: 350px"
-          v-model="searchValue"
-          type="search"
-          placeholder="Buscar Empleado..."
-        >
-        </b-form-input>
-        <b-button
-          variant="primary"
-          style="height: 50px; width: auto; font-size: 18px; margin-right: 15px; margin-left: 20px"
-          v-b-modal.modal-employee
-          type="submit"
-        >
+      <b-form-input
+        size="lg"
+        style="width: 350px"
+        v-model="searchValue"
+        type="search"
+        placeholder="Buscar Empleado..."
+      >
+      </b-form-input>
+      <b-button
+        variant="primary"
+        style="
+          height: 50px;
+          width: auto;
+          font-size: 18px;
+          margin-right: 15px;
+          margin-left: 20px;
+        "
+        v-b-modal.modal-employee
+        type="submit"
+      >
         <i class="bi bi-person-plus-fill"></i>
-          Agregar Empleado
-        </b-button>
+        Agregar Empleado
+      </b-button>
     </b-row>
     <EasyDataTable
       rows-per-page-message="registros por pagina"
@@ -56,49 +62,90 @@
     </EasyDataTable>
     <b-modal
       id="modal-employee"
-      @ok="addEmployee"
       title="Agregar empleados"
       size="xl"
+      hide-footer
       centered
-      hide-backdrop
       button-size="lg"
       lazy
-      ok-title="Registrar empleado"
-      cancel-title="Cancelar"
     >
-      <form ref="form">
+      <Form @submit="addEmployee">
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre Completo">
-              <b-form-input
-                v-model="EmployeesFields.nombreCompleto"
-                required
-              ></b-form-input>
+              <Field
+                name="nameField"
+                :rules="validateName"
+              >
+                <b-form-input
+                  v-model="EmployeesFields.nombreCompleto"
+                  :state="nameState"
+                />
+              </Field>
+              <ErrorMessage name="nameField"
+                ><span>Este campo es requerido </span
+                ><i class="bi bi-exclamation-circle"></i
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Fecha de nacimiento">
-              <Datepicker
-                locale="es"
-                :enableTimePicker="false"
-                autoApply
-                v-model="EmployeesFields.fechaNacimiento"
-              ></Datepicker>
+              <Field
+                name="DateField"
+                :rules="validateDate"
+              >
+                <Datepicker
+                  v-model="EmployeesFields.fechaNacimiento"
+                  name="date"
+                  locale="es"
+                  autoApply
+                  :enableTimePicker="false"
+                  :state="dateState"
+                >
+                </Datepicker>
+              </Field>
+              <ErrorMessage name="DateField"
+                ><span>Este campo es requerido </span
+                ><i class="bi bi-exclamation-circle"></i
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Area">
-              <b-form-select
-                autofocus
-                :options="areas"
-                value-field="areaId"
-                text-field="nombre"
-                v-model="EmployeesFields.areaId"
-              ></b-form-select>
+              <Field
+                name="AreaField"
+                :rules="validateArea"
+              >
+                <b-form-select
+                  v-model="EmployeesFields.areaId"
+                  autofocus
+                  :options="areas"
+                  value-field="areaId"
+                  text-field="nombre"
+                  :state="areaState"
+                >
+                </b-form-select>
+              </Field>
+              <ErrorMessage name="AreaField"
+                ><span>Este campo es requerido </span
+                ><i class="bi bi-exclamation-circle"></i
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
-      </form>
+        <b-row align-h="end">
+          <b-button
+            class="w-auto m-2 text-white"
+            variant="primary"
+            v-b-modal.modal-employee
+          >
+            Cancelar
+          </b-button>
+          <b-button class="w-auto m-2" variant="success" type="submit">
+            Guardar
+          </b-button>
+        </b-row>
+      </Form>
     </b-modal>
   </b-card>
 </template>
@@ -107,30 +154,35 @@
 import EmployeeServices from '@/Services/employee.Services'
 import AreaServices from '@/Services/area.Services'
 import Datepicker from '@vuepic/vue-datepicker'
-import { ref } from 'vue'
+import { Form, Field, ErrorMessage } from 'vee-validate'
+
+import { ref, onMounted } from 'vue'
 import { useToast } from 'vue-toast-notification'
-// import VueSimpleAlert from 'vue-simple-alert'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
     Datepicker,
-    EasyDataTable: window['vue3-easy-data-table']
+    EasyDataTable: window['vue3-easy-data-table'],
+    Form,
+    Field,
+    ErrorMessage
   },
   setup () {
     const { getEmployees, createEmployee, deleteEmployee } = EmployeeServices()
     const { getAreas } = AreaServices()
-    // const refemployeesTable = ref()
     const $toast = useToast()
     const employees = ref([])
     const areas = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
-    // const rows = ref(null)
     const filter = ref(null)
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('nombre')
+    const searchField = ref('nombreCompleto')
+    const nameState = ref()
+    const dateState = ref()
+    const areaState = ref()
     const EmployeesFields = ref({
       empleadoId: 0,
       nombreCompleto: null,
@@ -141,7 +193,36 @@ export default {
       areaId: null,
       usuarioId: null
     })
-    const EmployeesFieldsBlank = ref(JSON.parse(JSON.stringify(EmployeesFields)))
+    onMounted(() => {
+      //
+    })
+    const validateName = () => {
+      if (!EmployeesFields.value.nombreCompleto) {
+        nameState.value = false
+        return 'Este campo es requerido'
+      }
+      nameState.value = true
+      return true
+    }
+    const validateDate = () => {
+      if (!EmployeesFields.value.fechaNacimiento) {
+        dateState.value = false
+        return 'Este campo es requerido'
+      }
+      dateState.value = true
+      return true
+    }
+    const validateArea = () => {
+      if (!EmployeesFields.value.areaId) {
+        areaState.value = false
+        return 'Este campo es requerido'
+      }
+      areaState.value = true
+      return true
+    }
+    const EmployeesFieldsBlank = ref(
+      JSON.parse(JSON.stringify(EmployeesFields))
+    )
     const fields = ref([
       { value: 'empleadoId', text: 'ID', sortable: true },
       { value: 'nombreCompleto', text: 'Nombre' },
@@ -150,7 +231,6 @@ export default {
     ])
     getEmployees((data) => {
       employees.value = data
-      // rows.value = data.length
       if (employees.value.length > 0) {
         isloading.value = false
       } else {
@@ -162,18 +242,18 @@ export default {
     getAreas((data) => {
       areas.value = data
       if (areas.value.length === 0) {
-        $toast.warning('No se encuentran registros de areas de trabajo, registre una primero para registrar un empleado')
+        $toast.warning(
+          'No se encuentran registros de areas de trabajo, registre una primero para registrar un empleado'
+        )
       }
     })
     const onFiltered = (filteredItems) => {
-      // rows.value = filteredItems.length
       currentPage.value = 1
     }
     const refreshTable = () => {
       isloading.value = true
       getEmployees((data) => {
         employees.value = data
-        // rows.value = data.length
         if (employees.value.length > 0) {
           isloading.value = false
         } else {
@@ -205,7 +285,6 @@ export default {
       fields,
       perPage,
       currentPage,
-      // rows,
       filter,
       perPageSelect,
       areas,
@@ -214,10 +293,16 @@ export default {
       isloading,
       searchValue,
       searchField,
+      nameState,
+      dateState,
+      areaState,
       onFiltered,
       addEmployee,
       refreshTable,
-      RemoveEmployee
+      RemoveEmployee,
+      validateName,
+      validateArea,
+      validateDate
     }
   }
 }

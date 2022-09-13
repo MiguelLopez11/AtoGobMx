@@ -35,7 +35,8 @@ namespace AtoGobMx.Controllers
         [HttpGet("{UsuarioId}")]
         public async Task<ActionResult<Usuario>> GetUsuarioById(int UsuarioId)
         {
-            var usuario = await _context.Usuarios.FindAsync(UsuarioId);
+            var usuario = await _context.Usuarios
+                .FirstOrDefaultAsync(f => f.UsuarioId == UsuarioId);
 
             if (usuario == null)
             {

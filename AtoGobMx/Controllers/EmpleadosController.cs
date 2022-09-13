@@ -23,7 +23,7 @@ namespace AtoGobMx.Controllers
         {
             var empleados = await _context.Empleados
                 .Include(i => i.Area)
-                .Include(i => i.usuario.Role)
+                //.Include(i => i.usuario)
                 .Include(i => i.ExpedienteDigital)
                 .Where(w => !w.Archivado)
                 .OrderBy(o => o.EmpleadoId)
@@ -37,10 +37,9 @@ namespace AtoGobMx.Controllers
             var Empleado = await _context.Empleados
                 .Include(i => i.Area)
                 //.Include(i => i.usuario)
-                .Include(i => i.usuario.Role)
+                //.Include(i => i.usuario.Role)
                 .Include(i => i.ExpedienteDigital)
-                .Where(w => w.EmpleadoId == EmpleadoId)
-                .ToListAsync();
+                .FirstOrDefaultAsync(f => f.EmpleadoId == EmpleadoId);
             if (Empleado == null)
             {
                 return NotFound();
@@ -53,7 +52,7 @@ namespace AtoGobMx.Controllers
             var Empleado = await _context.Empleados
                 .Include(i => i.Area)
                 //.Include(i => i.usuario)
-                .Include(i => i.usuario.Role)
+                //.Include(i => i.usuario.Role)
                 .Include(i => i.ExpedienteDigital)
                 .Where(w => w.expedienteDigitalId != null)
                 .ToListAsync();
@@ -68,8 +67,6 @@ namespace AtoGobMx.Controllers
         {
             var Empleado = await _context.Empleados
                 .Include(i => i.Area)
-                .Include(i => i.usuario)
-                .Include(i => i.usuario.Role)
                 .Include(i => i.ExpedienteDigital)
                 .Where(w => w.expedienteDigitalId == null)
                 .ToListAsync();
@@ -103,7 +100,7 @@ namespace AtoGobMx.Controllers
             emp.NombreCompleto = empleado.NombreCompleto;
             emp.FechaNacimiento = empleado.FechaNacimiento;
             emp.AreaId = empleado.AreaId;
-            emp.UsuarioId = empleado.UsuarioId;
+            //emp.UsuarioId = empleado.UsuarioId;
             emp.expedienteDigitalId = empleado.expedienteDigitalId;
             emp.Archivado = empleado.Archivado;
             emp.FechaAlta = empleado.FechaAlta;

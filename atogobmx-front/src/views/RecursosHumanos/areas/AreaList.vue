@@ -73,7 +73,6 @@
             <b-form-group class="mt-3" label="Nombre">
               <b-form-input
                 v-model="areaFields.nombre"
-                required
               ></b-form-input>
             </b-form-group>
           </b-col>
