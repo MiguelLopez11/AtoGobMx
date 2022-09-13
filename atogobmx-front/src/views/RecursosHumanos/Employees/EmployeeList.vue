@@ -141,9 +141,9 @@
           >
             Cancelar
           </b-button>
-          <b-button class="w-auto m-2" variant="success" type="submit"
-            >Guardar</b-button
-          >
+          <b-button class="w-auto m-2" variant="success" type="submit">
+            Guardar
+          </b-button>
         </b-row>
       </Form>
     </b-modal>
@@ -156,7 +156,7 @@ import AreaServices from '@/Services/area.Services'
 import Datepicker from '@vuepic/vue-datepicker'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
@@ -180,9 +180,9 @@ export default {
     const isloading = ref(true)
     const searchValue = ref('')
     const searchField = ref('nombreCompleto')
-    const nameState = ref('')
-    const dateState = ref('')
-    const areaState = ref('')
+    const nameState = ref()
+    const dateState = ref()
+    const areaState = ref()
     const EmployeesFields = ref({
       empleadoId: 0,
       nombreCompleto: null,
@@ -192,6 +192,9 @@ export default {
       archivado: false,
       areaId: null,
       usuarioId: null
+    })
+    onMounted(() => {
+      //
     })
     const validateName = () => {
       if (!EmployeesFields.value.nombreCompleto) {
@@ -228,7 +231,6 @@ export default {
     ])
     getEmployees((data) => {
       employees.value = data
-      // rows.value = data.length
       if (employees.value.length > 0) {
         isloading.value = false
       } else {
@@ -246,14 +248,12 @@ export default {
       }
     })
     const onFiltered = (filteredItems) => {
-      // rows.value = filteredItems.length
       currentPage.value = 1
     }
     const refreshTable = () => {
       isloading.value = true
       getEmployees((data) => {
         employees.value = data
-        // rows.value = data.length
         if (employees.value.length > 0) {
           isloading.value = false
         } else {
@@ -285,7 +285,6 @@ export default {
       fields,
       perPage,
       currentPage,
-      // rows,
       filter,
       perPageSelect,
       areas,

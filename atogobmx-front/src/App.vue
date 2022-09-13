@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-card align="center" class="m-3" v-if="login == false">
+    <b-card align="center" class="m-3">
       <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
           <a class="navbar-brand" href="/">
@@ -108,7 +108,7 @@
               </li>
             </ul>
             <div class="d-flex">
-              <b-button pressed variant="success" @click="toLogin" size="lg">
+              <b-button pressed variant="success" to="/Login" size="lg">
                 <i class="bi bi-box-arrow-in-right"></i>
                 Iniciar Sesion
               </b-button>
@@ -122,21 +122,12 @@
 </template>
 <script>
 import { ref } from 'vue'
-import router from './router'
 import LogoAtogobMx from '@/Images/LogoAtogobMx.jpg'
 
 export default {
   setup () {
-    const login = ref(false)
     const background = ref(LogoAtogobMx)
-
-    const toLogin = () => {
-      login.value = true
-      router.push('/Login')
-    }
     return {
-      login,
-      toLogin,
       background
     }
   }
