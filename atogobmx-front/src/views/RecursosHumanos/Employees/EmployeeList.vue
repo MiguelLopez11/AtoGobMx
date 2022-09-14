@@ -1,3 +1,4 @@
+<!-- eslint-disable no-unneeded-ternary -->
 <template>
   <b-card class="m-3">
     <b-row align-h="end" class="mb-3 mr-1">
@@ -156,7 +157,7 @@ import AreaServices from '@/Services/area.Services'
 import Datepicker from '@vuepic/vue-datepicker'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
@@ -180,21 +181,18 @@ export default {
     const isloading = ref(true)
     const searchValue = ref('')
     const searchField = ref('nombreCompleto')
-    const nameState = ref()
-    const dateState = ref()
-    const areaState = ref()
+    const nameState = ref(false)
+    const dateState = ref(false)
+    const areaState = ref(false)
     const EmployeesFields = ref({
       empleadoId: 0,
-      nombreCompleto: null,
-      fechaNacimiento: null,
-      fechaAlta: null,
-      fechaBaja: null,
+      nombreCompleto: '',
+      fechaNacimiento: '',
+      fechaAlta: '',
+      fechaBaja: '',
       archivado: false,
-      areaId: null,
-      usuarioId: null
-    })
-    onMounted(() => {
-      //
+      areaId: '',
+      usuarioId: 0
     })
     const validateName = () => {
       if (!EmployeesFields.value.nombreCompleto) {

@@ -84,7 +84,9 @@
           >
         </b-row>
       </Form>
+      {{nameState}}
     </b-card>
+    {{employee}}
   </b-card>
 </template>
 
@@ -121,6 +123,8 @@ export default {
     ])
     getEmployee(router.params.EmpleadoId, (data) => {
       employee.value = data
+      // eslint-disable-next-line no-unneeded-ternary
+      nameState.value = data.nombreCompleto === null ? false : true
     })
     const onUpdateEmployee = () => {
       updateEmployee(employee.value, (data) => {})
@@ -134,27 +138,36 @@ export default {
     })
     const validateName = () => {
       if (!employee.value.nombreCompleto) {
-        nameState.value = false
+        validateState()
         return 'Este campo es requerido'
       }
-      nameState.value = true
+      validateState()
       return true
     }
     const validateDate = () => {
       if (!employee.value.fechaNacimiento) {
-        dateState.value = false
+        validateState()
         return 'Este campo es requerido'
       }
-      dateState.value = true
+      validateState()
       return true
     }
     const validateArea = () => {
       if (!employee.value.areaId) {
-        areaState.value = false
+        validateState()
         return 'Este campo es requerido'
       }
-      areaState.value = true
+      validateState()
       return true
+    }
+    const validateState = () => {
+      // eslint-disable-next-line no-unneeded-ternary
+      nameState.value = employee.value.nombreCompleto === '' ? false : true
+      // eslint-disable-next-line no-unneeded-ternary
+      dateState.value = employee.value.fechaNacimiento === null ? false : true
+      // eslint-disable-next-line no-unneeded-ternary
+      areaState.value = employee.value.areaId === '' ? false : true
+      return 'HOli'
     }
 
     return {
@@ -168,7 +181,8 @@ export default {
       onUpdateEmployee,
       validateName,
       validateDate,
-      validateArea
+      validateArea,
+      validateState
     }
   }
 }
