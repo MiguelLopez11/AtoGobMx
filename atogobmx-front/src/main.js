@@ -1,6 +1,5 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import './registerServiceWorker'
 import router from './router'
 import BootstrapVue3 from 'bootstrap-vue-3'
 import Vue3EasyDataTable from 'vue3-easy-data-table'

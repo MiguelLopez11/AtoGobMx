@@ -107,12 +107,12 @@ export default {
     const searchValue = ref('')
     const searchField = ref('nombre')
     const fields = ref([
-      { value: 'empleadoId', text: 'ID', sortable: true, Animation },
-      { value: 'nombreCompleto', text: 'Empleado', Animation },
-      { value: 'usuario.correoElectronico', text: 'Correo Electronico', Animation },
-      { value: 'usuario.nombreUsuario', text: 'Usuario', Animation },
-      { value: 'usuario.role.nombre', text: 'Role', Animation },
-      { value: 'expedienteDigitalId', text: 'ExpedienteID', Animation },
+      { value: 'expedienteDigitalId', text: 'No.Expediente', sortable: true, Animation },
+      { value: 'nombreCompleto', text: 'Nombre empleado', Animation },
+      // { value: 'usuario.correoElectronico', text: 'Correo Electronico', Animation },
+      // { value: 'usuario.nombreUsuario', text: 'Usuario', Animation },
+      // { value: 'usuario.role.nombre', text: 'Role', Animation },
+      // { value: 'expedienteDigitalId', text: 'ExpedienteID', Animation },
       { value: 'actions', text: 'Acciones', Animation }
     ])
     getEmployees(data => {

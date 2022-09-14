@@ -7,54 +7,83 @@
       <div>
         <h3>Editar empleado</h3>
       </div>
-      <form ref="form">
+      <Form @submit="onUpdateEmployee">
         <b-row cols="3">
           <b-col>
-            <b-form-group class="mt-3" label="Nombre">
-              <b-form-input
-                v-model="employee.nombreCompleto"
-                required
-              ></b-form-input>
+            <b-form-group class="mt-3" label="Nombre Completo">
+              <Field
+                name="nameField"
+                :rules="validateName"
+              >
+                <b-form-input
+                  v-model="employee.nombreCompleto"
+                  :state="nameState"
+                />
+              </Field>
+              <ErrorMessage name="nameField"
+                ><span>Este campo es requerido </span
+                ><i class="bi bi-exclamation-circle"></i
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Fecha de nacimiento">
-              <Datepicker
-                locale="es"
-                :enableTimePicker="false"
-                autoApply
-                v-model="employee.fechaNacimiento"
-              ></Datepicker>
+              <Field
+                name="DateField"
+                :rules="validateDate"
+              >
+                <Datepicker
+                  v-model="employee.fechaNacimiento"
+                  name="date"
+                  locale="es"
+                  autoApply
+                  :enableTimePicker="false"
+                  :state="dateState"
+                >
+                </Datepicker>
+              </Field>
+              <ErrorMessage name="DateField"
+                ><span>Este campo es requerido </span
+                ><i class="bi bi-exclamation-circle"></i
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Area">
-              <b-form-select
-                autofocus
-                :options="areas"
-                value-field="areaId"
-                text-field="nombre"
-                v-model="employee.areaId"
-              ></b-form-select>
+              <Field
+                name="AreaField"
+                :rules="validateArea"
+              >
+                <b-form-select
+                  v-model="employee.areaId"
+                  autofocus
+                  :options="areas"
+                  value-field="areaId"
+                  text-field="nombre"
+                  :state="areaState"
+                >
+                </b-form-select>
+              </Field>
+              <ErrorMessage name="AreaField"
+                ><span>Este campo es requerido </span
+                ><i class="bi bi-exclamation-circle"></i
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
-      </form>
-      <b-row align-h="end">
-        <b-button
-          class="col-1 m-2 text-white"
-          variant="primary"
-          to="/Empleados/list"
-          type="reset"
-          >Cancelar</b-button
-        >
-        <b-button
-          class="col-1 m-2"
-          variant="success"
-          @click="onUpdateEmployee()"
-          >Guardar</b-button
-        >
-      </b-row>
+        <b-row align-h="end">
+          <b-button
+            class="w-auto m-2 text-white"
+            variant="primary"
+            v-b-modal.modal-employee
+          >
+            Cancelar
+          </b-button>
+          <b-button class="w-auto m-2" variant="success" type="submit"
+            >Guardar</b-button
+          >
+        </b-row>
+      </Form>
     </b-card>
   </b-card>
 </template>
@@ -62,14 +91,18 @@
 <script>
 import EmployeeServices from '@/Services/employee.Services'
 import AreaServices from '@/Services/area.Services'
+import { Field, Form, ErrorMessage } from 'vee-validate'
 import { ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import Datepicker from '@vuepic/vue-datepicker'
 import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
-    Datepicker
+    Datepicker,
+    Field,
+    Form,
+    ErrorMessage
   },
   setup () {
     const { getEmployee, updateEmployee } = EmployeeServices()
@@ -78,14 +111,16 @@ export default {
     const employee = ref([])
     const areas = ref([])
     const router = useRoute()
-    const route = useRouter()
+    const nameState = ref(false)
+    const dateState = ref(false)
+    const areaState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
       { text: 'Empleados', to: '/Empleados/list' },
       { text: 'Editar-Empleados' }
     ])
     getEmployee(router.params.EmpleadoId, (data) => {
-      employee.value = data[0]
+      employee.value = data
     })
     const onUpdateEmployee = () => {
       updateEmployee(employee.value, (data) => {})
@@ -93,19 +128,47 @@ export default {
         position: 'top-right',
         duration: 1500
       })
-      route.push('/Empleados/list').then(getEmployee)
     }
     getAreas((data) => {
       areas.value = data
     })
+    const validateName = () => {
+      if (!employee.value.nombreCompleto) {
+        nameState.value = false
+        return 'Este campo es requerido'
+      }
+      nameState.value = true
+      return true
+    }
+    const validateDate = () => {
+      if (!employee.value.fechaNacimiento) {
+        dateState.value = false
+        return 'Este campo es requerido'
+      }
+      dateState.value = true
+      return true
+    }
+    const validateArea = () => {
+      if (!employee.value.areaId) {
+        areaState.value = false
+        return 'Este campo es requerido'
+      }
+      areaState.value = true
+      return true
+    }
 
     return {
       employee,
       areas,
       breadcrumbItems,
       router,
-
-      onUpdateEmployee
+      nameState,
+      dateState,
+      areaState,
+      onUpdateEmployee,
+      validateName,
+      validateDate,
+      validateArea
     }
   }
 }

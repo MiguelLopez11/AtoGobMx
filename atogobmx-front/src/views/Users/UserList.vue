@@ -1,23 +1,29 @@
 <template>
   <b-card class="m-3">
     <b-row align-h="end" class="mb-3 mr-1">
-        <b-form-input
-          size="lg"
-          style="width: 350px"
-          v-model="searchValue"
-          type="search"
-          placeholder="Buscar Usuario..."
-        >
-        </b-form-input>
-        <b-button
-          variant="primary"
-          style="height: 50px; width: auto; font-size: 18px; margin-right: 15px; margin-left: 20px"
-          v-b-modal.modal-area
-          type="submit"
-        >
+      <b-form-input
+        size="lg"
+        style="width: 350px"
+        v-model="searchValue"
+        type="search"
+        placeholder="Buscar Usuario..."
+      >
+      </b-form-input>
+      <b-button
+        variant="primary"
+        style="
+          height: 50px;
+          width: auto;
+          font-size: 18px;
+          margin-right: 15px;
+          margin-left: 20px;
+        "
+        v-b-modal.modal-area
+        type="submit"
+      >
         <i class="bi bi-person-plus-fill"></i>
-          Agregar Usuario
-        </b-button>
+        Agregar Usuario
+      </b-button>
     </b-row>
     <EasyDataTable
       rows-per-page-message="registros por pagina"
@@ -50,18 +56,17 @@
             name: 'Usuarios-Edit',
             params: { usuarioId: items.usuarioId },
           }"
-          >
-          <i class="bi bi-pencil-square"/>
+        >
+          <i class="bi bi-pencil-square" />
         </b-button>
       </template>
     </EasyDataTable>
     <b-modal
       id="modal-area"
-      @ok="addUser"
+      @ok.prevent="addUser"
       title="Agregar Usuario"
       size="xl"
       centered
-      hide-backdrop
       button-size="lg"
       lazy
       ok-title="Registrar area"
@@ -70,18 +75,32 @@
       <form ref="form">
         <b-row cols="3">
           <b-col>
-            <b-form-group class="mt-3" label="Nombre">
+            <b-form-group class="mt-3" label="Nombre de Usuario">
               <b-form-input
+                type="text"
                 v-model="userFields.nombre"
-                required
               ></b-form-input>
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="Descripción">
-              <b-form-input
-                v-model="userFields.descripcion">
-              </b-form-input>
+            <b-form-group class="mt-3" label="Contraseña">
+              <b-form-input type="password" v-model="userFields.contraseña"> </b-form-input>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Confirmar Contraseña">
+              <b-form-input type="password" v-model="userFields.confirmarContraseña"> </b-form-input>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Role">
+              <b-form-select
+                autofocus
+                :options="roles"
+                value-field="roleId"
+                text-field="nombre"
+                v-model="EmployeesFields.areaId"
+              ></b-form-select>
             </b-form-group>
           </b-col>
         </b-row>
@@ -92,6 +111,7 @@
 
 <script>
 import UsersServices from '@/Services/users.Services'
+import RoleServices from '@/Services/role.Services'
 // import Datepicker from '@vuepic/vue-datepicker'
 import { ref } from 'vue'
 import { useToast } from 'vue-toast-notification'
@@ -105,9 +125,11 @@ export default {
   setup () {
     // const { getEmployees, createEmployee, deleteEmployee } = EmployeeServices()
     const { getUsers, deleteUser, createUser } = UsersServices()
+    const { getRoles } = RoleServices()
     const $toast = useToast()
     // const employees = ref([])
     const users = ref([])
+    const roles = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
     // const rows = ref(null)
@@ -131,10 +153,9 @@ export default {
       { value: 'role.nombre', text: 'Role' },
       { value: 'actions', text: 'Acciones' }
     ])
-    // getEmployees((data) => {
-    //   employees.value = data
-    //   rows.value = data.length
-    // })
+    getRoles(data => {
+      roles.value = data
+    })
     getUsers((data) => {
       users.value = data
       if (users.value.length > 0) {
@@ -146,7 +167,6 @@ export default {
       }
     })
     const onFiltered = (filteredItems) => {
-    //   rows.value = filteredItems.length
       currentPage.value = 1
     }
     const refreshTable = () => {
@@ -181,7 +201,6 @@ export default {
       })
     }
     return {
-    //   employees,
       fields,
       perPage,
       currentPage,
@@ -189,6 +208,7 @@ export default {
       filter,
       perPageSelect,
       users,
+      roles,
       areasFieldsBlank,
       userFields,
       isloading,
