@@ -83,7 +83,7 @@
                 />
               </Field>
               <ErrorMessage name="nameField"
-                ><span>Este campo es requerido </span
+                ><span class="text-danger">Este campo es requerido </span
                 ><i class="bi bi-exclamation-circle"></i
               ></ErrorMessage>
             </b-form-group>
@@ -105,7 +105,7 @@
                 </Datepicker>
               </Field>
               <ErrorMessage name="DateField"
-                ><span>Este campo es requerido </span
+                ><span class="text-danger">Este campo es requerido </span
                 ><i class="bi bi-exclamation-circle"></i
               ></ErrorMessage>
             </b-form-group>
@@ -127,7 +127,7 @@
                 </b-form-select>
               </Field>
               <ErrorMessage name="AreaField"
-                ><span>Este campo es requerido </span
+                ><span class="text-danger">Este campo es requerido </span
                 ><i class="bi bi-exclamation-circle"></i
               ></ErrorMessage>
             </b-form-group>
@@ -180,9 +180,9 @@ export default {
     const isloading = ref(true)
     const searchValue = ref('')
     const searchField = ref('nombreCompleto')
-    const nameState = ref()
-    const dateState = ref()
-    const areaState = ref()
+    const nameState = ref(false)
+    const dateState = ref(false)
+    const areaState = ref(false)
     const EmployeesFields = ref({
       empleadoId: 0,
       nombreCompleto: null,
