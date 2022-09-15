@@ -75,13 +75,52 @@
                   >Servicios Publicos
                 </router-link>
               </li>
-              <li class="nav-item">
-                <router-link
-                  class="nav-link active"
-                  aria-current="page"
-                  to="/Usuarios/list"
-                  >Usuarios
-                </router-link>
+              <li class="nav-item dropdown">
+                <a
+                  class="nav-link dropdown-toggle"
+                  href="#"
+                  id="navbarDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Administrador
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li>
+                    <a class="dropdown-item">
+                      <router-link
+                        class="nav-link active text-dark"
+                        aria-current="page"
+                        to="/Usuarios/list"
+                      >
+                        Usuarios
+                      </router-link>
+                      </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item">
+                      <router-link
+                        class="nav-link active text-dark"
+                        aria-current="page"
+                        to="/Roles/list"
+                      >
+                        Roles
+                      </router-link>
+                    </a>
+                  </li>
+                  <!-- <li>
+                    <a class="dropdown-item">
+                      <router-link
+                        class="nav-link active text-dark"
+                        aria-current="page"
+                        to="/Areas/list"
+                      >
+                        Areas de trabajo
+                      </router-link>
+                    </a>
+                  </li>-->
+                </ul>
               </li>
               <li class="nav-item dropdown">
                 <a
