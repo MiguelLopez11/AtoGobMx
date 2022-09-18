@@ -99,7 +99,7 @@
                 :options="roles"
                 value-field="roleId"
                 text-field="nombre"
-                v-model="EmployeesFields.areaId"
+                v-model="userFields.roleId"
               ></b-form-select>
             </b-form-group>
           </b-col>

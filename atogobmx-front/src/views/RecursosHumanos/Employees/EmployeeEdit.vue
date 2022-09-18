@@ -93,7 +93,7 @@ import EmployeeServices from '@/Services/employee.Services'
 import AreaServices from '@/Services/area.Services'
 import { Field, Form, ErrorMessage } from 'vee-validate'
 import { ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import Datepicker from '@vuepic/vue-datepicker'
 import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -111,6 +111,7 @@ export default {
     const employee = ref([])
     const areas = ref([])
     const router = useRoute()
+    const redirect = useRouter()
     const nameState = ref(false)
     const dateState = ref(false)
     const areaState = ref(false)
@@ -126,9 +127,13 @@ export default {
     })
     const onUpdateEmployee = () => {
       updateEmployee(employee.value, (data) => {})
-      $toast.success('Empleado actualizado correctamente.', {
-        position: 'top-right',
-        duration: 1500
+      $toast.open({
+        message: 'Empleado modificado correctamente',
+        position: 'top',
+        duration: 2000,
+        dismissible: true,
+        type: 'success',
+        onDismiss: () => redirect.push('/Empleados/list')
       })
     }
     getAreas((data) => {
@@ -176,6 +181,7 @@ export default {
       nameState,
       dateState,
       areaState,
+      redirect,
       onUpdateEmployee,
       validateName,
       validateDate,
