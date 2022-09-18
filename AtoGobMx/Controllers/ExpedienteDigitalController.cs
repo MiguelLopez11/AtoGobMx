@@ -24,7 +24,6 @@ namespace AtoGobMx.Controllers
             var expedientes = await _context.ExpedienteDigital
                 .Where(w => !w.Archivado)
                 .OrderBy(o => o.ExpedienteDigitalId)
-                .Select(s => _mapper.Map<ExpedienteDigital>(s))
                 .ToListAsync();
             return Ok(expedientes);
         }
@@ -43,13 +42,15 @@ namespace AtoGobMx.Controllers
             }
             return Ok(expedienteDigital);
         }
-        [HttpPost]
-        public async Task<ActionResult<ExpedienteDigital>> PostExpedienteEmpleado(ExpedienteDigital expedienteDigital)
+        [HttpPost("{EmpleadoId}")]
+        public async Task<ActionResult<ExpedienteDigital>> PostExpedienteEmpleado(ExpedienteDigital expedienteDigital, int EmpleadoId)
         {
-
+            var empleado = await _context.Empleados.FirstOrDefaultAsync(f => f.EmpleadoId == EmpleadoId);
             _context.ExpedienteDigital.Add(expedienteDigital);
+            var expediente = CreatedAtAction("GetExpedienteById", new { ExpedienteDigitalId = expedienteDigital.ExpedienteDigitalId }, expedienteDigital);
+            empleado.expedienteDigitalId = expedienteDigital.ExpedienteDigitalId;
             await _context.SaveChangesAsync();
-            return CreatedAtAction("GetExpedienteById", new { ExpedienteDigitalId = expedienteDigital.ExpedienteDigitalId }, expedienteDigital);
+            return Ok(expediente);
         }
         [HttpPut("{ExpedienteDitalId}")]
         public async Task<ActionResult> PutExpediente(int ExpedienteDitalId, ExpedienteDigital expedienteDigital)

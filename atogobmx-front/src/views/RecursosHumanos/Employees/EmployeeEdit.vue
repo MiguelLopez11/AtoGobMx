@@ -75,7 +75,7 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            v-b-modal.modal-employee
+            to="/Empleados/list"
           >
             Cancelar
           </b-button>
@@ -84,9 +84,7 @@
           >
         </b-row>
       </Form>
-      {{nameState}}
     </b-card>
-    {{employee}}
   </b-card>
 </template>
 

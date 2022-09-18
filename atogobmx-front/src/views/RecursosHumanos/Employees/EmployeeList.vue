@@ -97,7 +97,6 @@
               >
                 <Datepicker
                   v-model="EmployeesFields.fechaNacimiento"
-                  name="date"
                   locale="es"
                   autoApply
                   :enableTimePicker="false"
@@ -187,9 +186,9 @@ export default {
     const EmployeesFields = ref({
       empleadoId: 0,
       nombreCompleto: '',
-      fechaNacimiento: '',
-      fechaAlta: '',
-      fechaBaja: '',
+      fechaNacimiento: null,
+      fechaAlta: null,
+      fechaBaja: null,
       archivado: false,
       areaId: '',
       usuarioId: 0

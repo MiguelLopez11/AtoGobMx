@@ -1,15 +1,24 @@
 <template>
-  <section class="vh-100">
-    <div class="container py-5 h-100">
-      <div class="row d-flex align-items-center justify-content-center h-100">
-        <div class="col-md-8 col-lg-7 col-xl-6">
+  <section class="vh-auto">
+    <div class="container py-5 h-auto">
+      <div class="row d-flex align-items-center justify-content-center h-auto">
+        <div class="col-md-6 col-lg-5 col-xl-4">
           <img
             src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"
             class="img-fluid"
-            alt="Phone image"
           />
         </div>
-        <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
+        <div class="col-md-5 col-lg-5 col-xl-5 offset-xl-1">
+          <b-img
+            thumbnail
+            fluid
+            src="https://www.atotonilco.gob.mx/templates/it_headlines/custom/images/logo_h.png"
+            alt="Image 1"
+            width="600"
+            height="800"
+            class="m-5"
+            center
+          ></b-img>
           <form>
             <!-- Email input -->
             <div class="form-outline mb-4">
@@ -61,4 +70,5 @@
 export default {}
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>
