@@ -1,23 +1,29 @@
 <template>
   <b-card class="m-3">
     <b-row align-h="end" class="mb-3 mr-1">
-        <b-form-input
-          size="lg"
-          style="width: 350px"
-          v-model="searchValue"
-          type="search"
-          placeholder="Buscar Area..."
-        >
-        </b-form-input>
-        <b-button
-          variant="primary"
-          style="height: 50px; width: auto; font-size: 18px; margin-right: 15px; margin-left: 20px"
-          v-b-modal.modal-area
-          type="submit"
-        >
+      <b-form-input
+        size="lg"
+        style="width: 350px"
+        v-model="searchValue"
+        type="search"
+        placeholder="Buscar Area..."
+      >
+      </b-form-input>
+      <b-button
+        variant="primary"
+        style="
+          height: 50px;
+          width: auto;
+          font-size: 18px;
+          margin-right: 15px;
+          margin-left: 20px;
+        "
+        v-b-modal.modal-area
+        type="submit"
+      >
         <i class="bi bi-person-plus-fill"></i>
-          Agregar Area
-        </b-button>
+        Agregar Area
+      </b-button>
     </b-row>
     <EasyDataTable
       rows-per-page-message="registros por pagina"
@@ -50,55 +56,66 @@
             name: 'Area-Edit',
             params: { AreaId: items.areaId },
           }"
-          >
-          <i class="bi bi-pencil-square"/>
+        >
+          <i class="bi bi-pencil-square" />
         </b-button>
       </template>
     </EasyDataTable>
     <b-modal
       id="modal-area"
-      @ok="addArea"
       title="Agregar areas"
       size="xl"
       centered
-      hide-backdrop
       button-size="lg"
-      lazy
-      ok-title="Registrar area"
-      cancel-title="Cancelar"
+      hide-footer
     >
-      <form ref="form">
+      <Form @submit="addArea">
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre">
-              <b-form-input
-                v-model="areaFields.nombre"
-              ></b-form-input>
+              <Field name="NameField" :rules="validateArea">
+                <b-form-input v-model="areaFields.nombre" :state="nameState"> </b-form-input>
+              </Field>
+              <ErrorMessage name="NameField">
+                <span>Este campo es requerido</span>
+                <i class="bi bi-exclamation-circle" />
+              </ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Descripción">
-              <b-form-input
-                v-model="areaFields.descripcion">
-              </b-form-input>
+              <b-form-input v-model="areaFields.descripcion"> </b-form-input>
             </b-form-group>
           </b-col>
         </b-row>
-      </form>
+        <b-row align-h="end">
+          <b-button
+            class="w-auto m-2 text-white"
+            variant="primary"
+            v-b-modal.modal-area
+          >
+            Cancelar
+          </b-button>
+          <b-button class="w-auto m-2" variant="success" type="submit">
+            Guardar
+          </b-button>
+        </b-row>
+      </Form>
     </b-modal>
   </b-card>
 </template>
 
 <script>
 import AreaServices from '@/Services/area.Services'
-// import Datepicker from '@vuepic/vue-datepicker'
+import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref } from 'vue'
 import { useToast } from 'vue-toast-notification'
-// import VueSimpleAlert from 'vue-simple-alert'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
-    // Datepicker,
+    Form,
+    Field,
+    ErrorMessage,
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup () {
@@ -115,6 +132,7 @@ export default {
     const isloading = ref(true)
     const searchValue = ref('')
     const searchField = ref('nombre')
+    const nameState = ref(false)
     const areaFields = ref({
       areaId: 0,
       nombre: null,
@@ -132,6 +150,7 @@ export default {
     //   employees.value = data
     //   rows.value = data.length
     // })
+
     getAreas((data) => {
       areas.value = data
       if (areas.value.length > 0) {
@@ -145,6 +164,14 @@ export default {
     const onFiltered = (filteredItems) => {
       rows.value = filteredItems.length
       currentPage.value = 1
+    }
+    const validateArea = () => {
+      if (!areaFields.value.nombre) {
+        nameState.value = false
+        return 'Este campo es requerido'
+      }
+      nameState.value = true
+      return true
     }
     const refreshTable = () => {
       isloading.value = true
@@ -170,6 +197,7 @@ export default {
         })
       })
       areaFields.value = JSON.parse(JSON.stringify(areasFieldsBlank))
+      nameState.value = false
     }
     const RemoveArea = (areaId) => {
       isloading.value = true
@@ -194,7 +222,10 @@ export default {
       onFiltered,
       addArea,
       refreshTable,
-      RemoveArea
+      RemoveArea,
+      nameState,
+
+      validateArea
     }
   }
 }

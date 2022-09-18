@@ -14,13 +14,17 @@
     <div>
         <h3>Editar Area de trabajo</h3>
     </div>
-    <form ref="form">
+    <Form @submit="onUpdateArea()">
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre de area">
-              <b-form-input
-              v-model="area.nombre"
-              />
+              <Field name="NameField" :rules="validateArea">
+                <b-form-input v-model="area.nombre" :state="nameState"> </b-form-input>
+              </Field>
+              <ErrorMessage name="NameField">
+                <span>Este campo es requerido</span>
+                <i class="bi bi-exclamation-circle" />
+              </ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -29,7 +33,7 @@
             </b-form-group>
           </b-col>
         </b-row>
-      </form>
+      </Form>
       <b-row align-h="end">
           <b-button class="col-1 m-2 text-white" variant="primary" to="/Empleados/list" type="reset">Cancelar</b-button>
           <b-button class="col-1 m-2" variant="success" @click="onUpdateArea()">Guardar</b-button>
@@ -41,11 +45,15 @@
 <script>
 import AreaServices from '@/Services/area.Services'
 import { ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { useToast } from 'vue-toast-notification'
+import { Form, Field, ErrorMessage } from 'vee-validate'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
+    Form,
+    Field,
+    ErrorMessage
   },
   setup () {
     const { getArea, updateArea } = AreaServices()
@@ -53,7 +61,7 @@ export default {
     const employee = ref([])
     const area = ref([])
     const router = useRoute()
-    const route = useRouter()
+    const nameState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
       { text: 'Areas', to: '/Areas/list' },
@@ -69,19 +77,33 @@ export default {
         position: 'top-right',
         duration: 1500
       })
-      route.push('/Areas/list').then(getArea)
     }
     getArea(router.params.AreaId, data => {
       area.value = data
     })
-
+    const validateArea = () => {
+      if (!area.value.nombre) {
+        validateState()
+        return 'Este campo es requerido'
+      }
+      validateState()
+      return true
+    }
+    const validateState = () => {
+      // eslint-disable-next-line no-unneeded-ternary
+      nameState.value = employee.value.nombreCompleto === '' ? false : true
+      return 'HOli'
+    }
     return {
       employee,
       area,
       breadcrumbItems,
       //   router
 
-      onUpdateArea
+      onUpdateArea,
+      validateArea,
+      validateState,
+      nameState
     }
   }
 
