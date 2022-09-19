@@ -18,7 +18,7 @@
           margin-right: 15px;
           margin-left: 20px;
         "
-        v-b-modal.modal-area
+        v-b-modal.modal-users
         type="submit"
       >
         <i class="bi bi-person-plus-fill"></i>
@@ -54,7 +54,7 @@
           variant="outline-warning"
           :to="{
             name: 'Usuarios-Edit',
-            params: { usuarioId: items.usuarioId },
+            params: { usuarioId: items.usuarioId }
           }"
         >
           <i class="bi bi-pencil-square" />
@@ -62,49 +62,86 @@
       </template>
     </EasyDataTable>
     <b-modal
-      id="modal-area"
-      @ok.prevent="addUser"
+      id="modal-users"
       title="Agregar Usuario"
       size="xl"
       centered
       button-size="lg"
       lazy
-      ok-title="Registrar area"
-      cancel-title="Cancelar"
+      hide-footer
     >
-      <form ref="form">
+      <Form @submit="addUser">
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre de Usuario">
-              <b-form-input
-                type="text"
-                v-model="userFields.nombre"
-              ></b-form-input>
+              <Field name="userNameField" :rules="validate()">
+                <b-form-input type="text" v-model="userFields.nombre">
+                </b-form-input>
+              </Field>
+              <ErrorMessage name="AreaField">
+                <span>Este campo es requerido </span
+                ><i class="bi bi-exclamation-circle"></i
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Contraseña">
-              <b-form-input type="password" v-model="userFields.contraseña"> </b-form-input>
+              <Field name="passwordField">
+                <b-form-input type="password" v-model="userFields.contraseña" />
+              </Field>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Confirmar Contraseña">
-              <b-form-input type="password" v-model="userFields.confirmarContraseña"> </b-form-input>
+              <Field name="ConfirmPasswordField">
+                <b-form-input
+                  type="password"
+                  v-model="userFields.confirmarContraseña"
+                >
+                </b-form-input>
+              </Field>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Role">
-              <b-form-select
-                autofocus
-                :options="roles"
-                value-field="roleId"
-                text-field="nombre"
-                v-model="userFields.roleId"
-              ></b-form-select>
+              <Field name="roleField">
+                <b-form-select
+                  autofocus
+                  :options="roles"
+                  value-field="roleId"
+                  text-field="nombre"
+                  v-model="userFields.roleId"
+                ></b-form-select>
+              </Field>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Empleado">
+              <Field name="employeeField">
+                <b-form-select
+                  autofocus
+                  :options="employees"
+                  value-field="empleadoId"
+                  text-field="nombreCompleto"
+                  v-model="userFields.empleadoId"
+                ></b-form-select>
+              </Field>
             </b-form-group>
           </b-col>
         </b-row>
-      </form>
+        <b-row align-h="end">
+          <b-button
+            class="w-auto m-2 text-white"
+            variant="primary"
+            v-b-modal.modal-users
+          >
+            Cancelar
+          </b-button>
+          <b-button class="w-auto m-2" variant="success" type="submit">
+            Guardar
+          </b-button>
+        </b-row>
+      </Form>
     </b-modal>
   </b-card>
 </template>
@@ -112,24 +149,27 @@
 <script>
 import UsersServices from '@/Services/users.Services'
 import RoleServices from '@/Services/role.Services'
-// import Datepicker from '@vuepic/vue-datepicker'
+import EmployeeServices from '@/Services/employee.Services'
+import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref } from 'vue'
 import { useToast } from 'vue-toast-notification'
-// import VueSimpleAlert from 'vue-simple-alert'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
-    // Datepicker,
+    Form,
+    Field,
+    ErrorMessage,
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup () {
-    // const { getEmployees, createEmployee, deleteEmployee } = EmployeeServices()
+    const { getEmployees } = EmployeeServices()
     const { getUsers, deleteUser, createUser } = UsersServices()
     const { getRoles } = RoleServices()
     const $toast = useToast()
     // const employees = ref([])
     const users = ref([])
     const roles = ref([])
+    const employees = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
     // const rows = ref(null)
@@ -144,7 +184,8 @@ export default {
       contraseña: '',
       confirmarContraseña: '',
       archivado: false,
-      roleId: null
+      roleId: null,
+      empleadoId: null
     })
     const areasFieldsBlank = ref(JSON.parse(JSON.stringify(userFields)))
     const fields = ref([
@@ -156,7 +197,10 @@ export default {
     getRoles(data => {
       roles.value = data
     })
-    getUsers((data) => {
+    getEmployees(data => {
+      employees.value = data
+    })
+    getUsers(data => {
       users.value = data
       if (users.value.length > 0) {
         isloading.value = false
@@ -166,13 +210,18 @@ export default {
         }
       }
     })
-    const onFiltered = (filteredItems) => {
+    const validate = value => {
+      if (!value) {
+        return 'Este campo es requerido'
+      }
+      return true
+    }
+    const onFiltered = filteredItems => {
       currentPage.value = 1
     }
     const refreshTable = () => {
       isloading.value = true
-
-      getUsers((data) => {
+      getUsers(data => {
         users.value = data
         if (users.value.length > 0) {
           isloading.value = false
@@ -185,7 +234,7 @@ export default {
       return 'datos recargados'
     }
     const addUser = () => {
-      createUser(userFields.value, (data) => {
+      createUser(userFields.value, data => {
         refreshTable()
         $toast.success('Empleado registrado correctamente.', {
           position: 'top-right',
@@ -194,9 +243,9 @@ export default {
       })
       userFields.value = JSON.parse(JSON.stringify(areasFieldsBlank))
     }
-    const RemoveUser = (areaId) => {
+    const RemoveUser = areaId => {
       isloading.value = true
-      deleteUser(areaId, (data) => {
+      deleteUser(areaId, data => {
         refreshTable()
       })
     }
@@ -209,6 +258,7 @@ export default {
       perPageSelect,
       users,
       roles,
+      employees,
       areasFieldsBlank,
       userFields,
       isloading,
@@ -217,7 +267,8 @@ export default {
       onFiltered,
       addUser,
       refreshTable,
-      RemoveUser
+      RemoveUser,
+      validate
     }
   }
 }
