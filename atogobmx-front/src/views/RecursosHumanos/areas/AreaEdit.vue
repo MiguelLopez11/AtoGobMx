@@ -1,25 +1,19 @@
 <template>
   <b-card class="m-3">
-    <b-card
-      class="mb-4"
-    >
-        <b-breadcrumb
-          class="p-0"
-          :items="breadcrumbItems"
-        >
-        </b-breadcrumb>
+    <b-card class="mb-4">
+      <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
     </b-card>
     <b-card>
-
-    <div>
+      <div>
         <h3>Editar Area de trabajo</h3>
-    </div>
-    <Form @submit="onUpdateArea()">
+      </div>
+      <Form @submit="onUpdateArea()">
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre de area">
               <Field name="NameField" :rules="validateArea">
-                <b-form-input v-model="area.nombre" :state="nameState"> </b-form-input>
+                <b-form-input v-model="area.nombre" :state="nameState">
+                </b-form-input>
               </Field>
               <ErrorMessage name="NameField">
                 <span>Este campo es requerido</span>
@@ -35,8 +29,16 @@
         </b-row>
       </Form>
       <b-row align-h="end">
-          <b-button class="col-1 m-2 text-white" variant="primary" to="/Empleados/list" type="reset">Cancelar</b-button>
-          <b-button class="col-1 m-2" variant="success" @click="onUpdateArea()">Guardar</b-button>
+        <b-button
+          class="col-1 m-2 text-white"
+          variant="primary"
+          to="/Empleados/list"
+          type="reset"
+          >Cancelar</b-button
+        >
+        <b-button class="col-1 m-2" variant="success" @click="onUpdateArea()"
+          >Guardar</b-button
+        >
       </b-row>
     </b-card>
   </b-card>
@@ -67,12 +69,8 @@ export default {
       { text: 'Areas', to: '/Areas/list' },
       { text: 'Editar-Area' }
     ])
-    // getEmployee(router.params.EmpleadoId, data => {
-    //   employee.value = data[0]
-    // })
     const onUpdateArea = () => {
-      updateArea(area.value, data => {
-      })
+      updateArea(area.value, data => {})
       $toast.success('Empleado actualizado correctamente.', {
         position: 'top-right',
         duration: 1500
@@ -106,10 +104,7 @@ export default {
       nameState
     }
   }
-
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

@@ -74,11 +74,11 @@
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre de Usuario">
-              <Field name="userNameField" :rules="validate()">
-                <b-form-input type="text" v-model="userFields.nombre">
+              <Field name="userNameField" :rules="validate">
+                <b-form-input type="text" v-model="userFields.nombre" :state="userNameState">
                 </b-form-input>
               </Field>
-              <ErrorMessage name="AreaField">
+              <ErrorMessage name="userNameField">
                 <span>Este campo es requerido </span
                 ><i class="bi bi-exclamation-circle"></i
               ></ErrorMessage>
@@ -86,9 +86,13 @@
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Contraseña">
-              <Field name="passwordField">
-                <b-form-input type="password" v-model="userFields.contraseña" />
+              <Field name="passwordField" :rules="validatePassword">
+                <b-form-input type="password" v-model="userFields.contraseña" :state="passwordState"/>
               </Field>
+              <ErrorMessage name="passwordField">
+                <span>Este campo es requerido </span
+                ><i class="bi bi-exclamation-circle"></i
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -97,13 +101,18 @@
                 <b-form-input
                   type="password"
                   v-model="userFields.confirmarContraseña"
+                  :state="confirmPasswordState"
                 >
                 </b-form-input>
               </Field>
+              <ErrorMessage name="ConfirmPasswordField">
+                <span>Este campo es requerido </span
+                ><i class="bi bi-exclamation-circle"></i
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="Role">
+            <b-form-group class="mt-3" label="Role" :rules="validate">
               <Field name="roleField">
                 <b-form-select
                   autofocus
@@ -111,21 +120,32 @@
                   value-field="roleId"
                   text-field="nombre"
                   v-model="userFields.roleId"
+                  :state="roleState"
+
                 ></b-form-select>
               </Field>
+              <ErrorMessage name="roleField">
+                <span>Este campo es requerido </span
+                ><i class="bi bi-exclamation-circle"></i
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Empleado">
-              <Field name="employeeField">
+              <Field name="employeeField" :rules="validate">
                 <b-form-select
                   autofocus
                   :options="employees"
                   value-field="empleadoId"
                   text-field="nombreCompleto"
                   v-model="userFields.empleadoId"
+                  :state="employeeState"
                 ></b-form-select>
               </Field>
+              <ErrorMessage name="employeeField">
+                <span>Este campo es requerido </span
+                ><i class="bi bi-exclamation-circle"></i
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
@@ -162,27 +182,33 @@ export default {
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup () {
+    // Services
     const { getEmployees } = EmployeeServices()
     const { getUsers, deleteUser, createUser } = UsersServices()
     const { getRoles } = RoleServices()
+    // Data
     const $toast = useToast()
-    // const employees = ref([])
     const users = ref([])
     const roles = ref([])
     const employees = ref([])
+    const userNameState = ref(false)
+    const passwordState = ref(false)
+    const confirmPasswordState = ref(false)
+    const roleState = ref(false)
+    const employeeState = ref(false)
     const perPage = ref(5)
     const currentPage = ref(1)
-    // const rows = ref(null)
     const filter = ref(null)
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
     const searchField = ref('nombre')
+    // Fields
     const userFields = ref({
       usuarioId: 0,
-      nombreUsuario: '',
-      contraseña: '',
-      confirmarContraseña: '',
+      nombreUsuario: null,
+      contraseña: null,
+      confirmarContraseña: null,
       archivado: false,
       roleId: null,
       empleadoId: null
@@ -194,6 +220,7 @@ export default {
       { value: 'role.nombre', text: 'Role' },
       { value: 'actions', text: 'Acciones' }
     ])
+    // Methods
     getRoles(data => {
       roles.value = data
     })
@@ -210,12 +237,6 @@ export default {
         }
       }
     })
-    const validate = value => {
-      if (!value) {
-        return 'Este campo es requerido'
-      }
-      return true
-    }
     const onFiltered = filteredItems => {
       currentPage.value = 1
     }
@@ -249,11 +270,46 @@ export default {
         refreshTable()
       })
     }
+    // Validations
+    const validate = value => {
+      if (!value) {
+        validateState()
+        return 'Este campo es requerido'
+      }
+      validateState()
+      return true
+    }
+    const validatePassword = () => {
+      if (!userFields.value.contraseña) {
+        // eslint-disable-next-line no-unneeded-ternary
+        passwordState.value = false
+        return 'Este campo es requerido'
+      }
+      // eslint-disable-next-line no-useless-escape
+      const regex = '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$'
+      if (!regex.test(userFields.value.contraseña)) {
+        passwordState.value = false
+        return 'La contraseña debe de contener minimo 8 Caracteres, 1 Minuscula, 1 Mayuscula y un número'
+      }
+      passwordState.value = true
+      return true
+    }
+    const validateState = () => {
+      // eslint-disable-next-line no-unneeded-ternary
+      userNameState.value = userFields.value.nombreUsuario === null ? false : true
+      // eslint-disable-next-line no-unneeded-ternary
+      roleState.value = userFields.value.roleId === null ? false : true
+      // eslint-disable-next-line no-unneeded-ternary
+      employeeState.value = userFields.value.empleadoId === null ? false : true
+      // eslint-disable-next-line no-unneeded-ternary
+      // confirmPasswordState.value = userFields.value.confirmarContraseña === null ? false : true
+
+      return ''
+    }
     return {
       fields,
       perPage,
       currentPage,
-      //   rows,
       filter,
       perPageSelect,
       users,
@@ -261,6 +317,11 @@ export default {
       employees,
       areasFieldsBlank,
       userFields,
+      userNameState,
+      passwordState,
+      confirmPasswordState,
+      roleState,
+      employeeState,
       isloading,
       searchValue,
       searchField,
@@ -268,7 +329,9 @@ export default {
       addUser,
       refreshTable,
       RemoveUser,
-      validate
+      validate,
+      validateState,
+      validatePassword
     }
   }
 }
