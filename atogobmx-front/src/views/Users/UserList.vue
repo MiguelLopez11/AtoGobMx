@@ -313,19 +313,21 @@ export default {
       return true
     }
     const validateConfirmPassword = () => {
-      if (!userFields.value.confirmarContraseña) {
-        confirmPasswordState.value = false
-        return 'Este campo es requerido'
-      }
-      // eslint-disable-next-line no-useless-escape
-      const regex = /^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{8,}$/
-      if (!regex.test(userFields.value.confirmarContraseña)) {
-        confirmPasswordState.value = false
-        return 'La contraseña debe de contener minimo 8 Caracteres, minusculas y mayusculas'
+      if (!userFields.value.contraseña) {
+        passwordState.value = false
+        confirmErrorMessage.value = 'Este campo es requerido '
+        return confirmErrorMessage.value
       }
       if (userFields.value.contraseña !== userFields.value.confirmarContraseña) {
         confirmPasswordState.value = false
-        return 'Las constraseñas no coinciden'
+        confirmErrorMessage.value = 'Las contraseñas no coinciden '
+        return confirmErrorMessage.value
+      }
+      const regex = /^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{8,}$/
+      if (!regex.test(userFields.value.contraseña)) {
+        passwordState.value = false
+        confirmErrorMessage.value = 'La contraseña debe de contener minimo 8 Caracteres, minusculas y mayusculas '
+        return confirmErrorMessage.value
       }
       confirmPasswordState.value = true
       return true
