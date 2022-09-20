@@ -89,10 +89,7 @@
               <Field name="passwordField" :rules="validatePassword">
                 <b-form-input type="password" v-model="userFields.contraseña" :state="passwordState"/>
               </Field>
-              <ErrorMessage name="passwordField">
-                <span>Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i
-              ></ErrorMessage>
+              <ErrorMessage name="passwordField" /> <i v-if="!passwordState" class="bi bi-exclamation-circle"></i>
             </b-form-group>
           </b-col>
           <b-col>
@@ -107,8 +104,8 @@
               </Field>
               <ErrorMessage name="ConfirmPasswordField">
                 <span>Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i
-              ></ErrorMessage>
+                ><i class="bi bi-exclamation-circle"></i>
+              </ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -286,10 +283,10 @@ export default {
         return 'Este campo es requerido'
       }
       // eslint-disable-next-line no-useless-escape
-      const regex = '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$'
+      const regex = /^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{8,}$/
       if (!regex.test(userFields.value.contraseña)) {
         passwordState.value = false
-        return 'La contraseña debe de contener minimo 8 Caracteres, 1 Minuscula, 1 Mayuscula y un número'
+        return 'La contraseña debe de contener minimo 8 Caracteres, minusculas y mayusculas'
       }
       passwordState.value = true
       return true
