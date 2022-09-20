@@ -74,8 +74,8 @@
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre de Usuario">
-              <Field name="userNameField" :rules="validate">
-                <b-form-input type="text" v-model="userFields.nombre" :state="userNameState">
+              <Field name="userNameField" :rules="validateUserName">
+                <b-form-input type="text" v-model="userFields.nombreUsuario" :state="userNameState">
                 </b-form-input>
               </Field>
               <ErrorMessage name="userNameField">
@@ -89,12 +89,15 @@
               <Field name="passwordField" :rules="validatePassword">
                 <b-form-input type="password" v-model="userFields.contraseña" :state="passwordState"/>
               </Field>
-              <ErrorMessage name="passwordField" /> <i v-if="!passwordState" class="bi bi-exclamation-circle"></i>
+              <ErrorMessage name="passwordField">
+                <span>{{errorMessage}} </span>
+                <i class="bi bi-exclamation-circle"></i>
+              </ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Confirmar Contraseña">
-              <Field name="ConfirmPasswordField">
+              <Field name="ConfirmPasswordField" :rules="validateConfirmPassword">
                 <b-form-input
                   type="password"
                   v-model="userFields.confirmarContraseña"
@@ -103,14 +106,14 @@
                 </b-form-input>
               </Field>
               <ErrorMessage name="ConfirmPasswordField">
-                <span>Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i>
+                <span>{{confirmErrorMessage}}</span>
+                <i class="bi bi-exclamation-circle"></i>
               </ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="Role" :rules="validate">
-              <Field name="roleField">
+            <b-form-group class="mt-3" label="Role">
+              <Field name="roleField" :rules="validateRole">
                 <b-form-select
                   autofocus
                   :options="roles"
@@ -129,7 +132,7 @@
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Empleado">
-              <Field name="employeeField" :rules="validate">
+              <Field name="employeeField" :rules="validateEmployee">
                 <b-form-select
                   autofocus
                   :options="employees"
@@ -200,15 +203,17 @@ export default {
     const isloading = ref(true)
     const searchValue = ref('')
     const searchField = ref('nombre')
+    const errorMessage = ref('')
+    const confirmErrorMessage = ref('')
     // Fields
     const userFields = ref({
       usuarioId: 0,
-      nombreUsuario: null,
+      nombreUsuario: '',
       contraseña: null,
       confirmarContraseña: null,
       archivado: false,
-      roleId: null,
-      empleadoId: null
+      roleId: 0,
+      empleadoId: 0
     })
     const areasFieldsBlank = ref(JSON.parse(JSON.stringify(userFields)))
     const fields = ref([
@@ -254,7 +259,7 @@ export default {
     const addUser = () => {
       createUser(userFields.value, data => {
         refreshTable()
-        $toast.success('Empleado registrado correctamente.', {
+        $toast.success('Usuario registrado correctamente.', {
           position: 'top-right',
           duration: 2000
         })
@@ -268,8 +273,24 @@ export default {
       })
     }
     // Validations
-    const validate = value => {
-      if (!value) {
+    const validateUserName = () => {
+      if (!userFields.value.nombreUsuario) {
+        validateState()
+        return 'Este campo es requerido'
+      }
+      validateState()
+      return true
+    }
+    const validateRole = () => {
+      if (!userFields.value.roleId) {
+        validateState()
+        return 'Este campo es requerido'
+      }
+      validateState()
+      return true
+    }
+    const validateEmployee = value => {
+      if (!userFields.value.empleadoId) {
         validateState()
         return 'Este campo es requerido'
       }
@@ -278,26 +299,46 @@ export default {
     }
     const validatePassword = () => {
       if (!userFields.value.contraseña) {
-        // eslint-disable-next-line no-unneeded-ternary
         passwordState.value = false
-        return 'Este campo es requerido'
+        errorMessage.value = 'Este campo es requerido '
+        return errorMessage.value
       }
-      // eslint-disable-next-line no-useless-escape
       const regex = /^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{8,}$/
       if (!regex.test(userFields.value.contraseña)) {
         passwordState.value = false
-        return 'La contraseña debe de contener minimo 8 Caracteres, minusculas y mayusculas'
+        errorMessage.value = 'La contraseña debe de contener minimo 8 Caracteres, minusculas y mayusculas '
+        return errorMessage.value
       }
       passwordState.value = true
       return true
     }
+    const validateConfirmPassword = () => {
+      if (!userFields.value.contraseña) {
+        passwordState.value = false
+        confirmErrorMessage.value = 'Este campo es requerido '
+        return confirmErrorMessage.value
+      }
+      if (userFields.value.contraseña !== userFields.value.confirmarContraseña) {
+        confirmPasswordState.value = false
+        confirmErrorMessage.value = 'Las contraseñas no coinciden '
+        return confirmErrorMessage.value
+      }
+      const regex = /^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{8,}$/
+      if (!regex.test(userFields.value.contraseña)) {
+        passwordState.value = false
+        confirmErrorMessage.value = 'La contraseña debe de contener minimo 8 Caracteres, minusculas y mayusculas '
+        return confirmErrorMessage.value
+      }
+      confirmPasswordState.value = true
+      return true
+    }
     const validateState = () => {
       // eslint-disable-next-line no-unneeded-ternary
-      userNameState.value = userFields.value.nombreUsuario === null ? false : true
+      userNameState.value = userFields.value.nombreUsuario === '' ? false : true
       // eslint-disable-next-line no-unneeded-ternary
-      roleState.value = userFields.value.roleId === null ? false : true
+      roleState.value = userFields.value.roleId === 0 ? false : true
       // eslint-disable-next-line no-unneeded-ternary
-      employeeState.value = userFields.value.empleadoId === null ? false : true
+      employeeState.value = userFields.value.empleadoId === 0 ? false : true
       // eslint-disable-next-line no-unneeded-ternary
       // confirmPasswordState.value = userFields.value.confirmarContraseña === null ? false : true
 
@@ -322,13 +363,18 @@ export default {
       isloading,
       searchValue,
       searchField,
+      errorMessage,
+      confirmErrorMessage,
       onFiltered,
       addUser,
       refreshTable,
       RemoveUser,
-      validate,
+      validateUserName,
+      validateRole,
+      validateEmployee,
       validateState,
-      validatePassword
+      validatePassword,
+      validateConfirmPassword
     }
   }
 }

@@ -165,7 +165,7 @@ export default {
     }
     const validateState = () => {
       // eslint-disable-next-line no-unneeded-ternary
-      nameState.value = employee.value.nombreCompleto === '' ? false : true
+      nameState.value = employee.value.nombreCompleto === null ? false : true
       // eslint-disable-next-line no-unneeded-ternary
       dateState.value = employee.value.fechaNacimiento === null ? false : true
       // eslint-disable-next-line no-unneeded-ternary

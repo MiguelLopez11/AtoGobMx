@@ -185,12 +185,12 @@ export default {
     const areaState = ref(false)
     const EmployeesFields = ref({
       empleadoId: 0,
-      nombreCompleto: '',
+      nombreCompleto: null,
       fechaNacimiento: null,
       fechaAlta: null,
       fechaBaja: null,
       archivado: false,
-      areaId: '',
+      areaId: 0,
       usuarioId: 0
     })
     const validateName = () => {
