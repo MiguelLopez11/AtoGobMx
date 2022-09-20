@@ -94,7 +94,7 @@
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Confirmar Contraseña">
-              <Field name="ConfirmPasswordField">
+              <Field name="ConfirmPasswordField" :rules="validateConfirmPassword">
                 <b-form-input
                   type="password"
                   v-model="userFields.confirmarContraseña"
@@ -278,7 +278,6 @@ export default {
     }
     const validatePassword = () => {
       if (!userFields.value.contraseña) {
-        // eslint-disable-next-line no-unneeded-ternary
         passwordState.value = false
         return 'Este campo es requerido'
       }
@@ -289,6 +288,24 @@ export default {
         return 'La contraseña debe de contener minimo 8 Caracteres, minusculas y mayusculas'
       }
       passwordState.value = true
+      return true
+    }
+    const validateConfirmPassword = () => {
+      if (!userFields.value.confirmarContraseña) {
+        confirmPasswordState.value = false
+        return 'Este campo es requerido'
+      }
+      // eslint-disable-next-line no-useless-escape
+      const regex = /^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{8,}$/
+      if (!regex.test(userFields.value.confirmarContraseña)) {
+        confirmPasswordState.value = false
+        return 'La contraseña debe de contener minimo 8 Caracteres, minusculas y mayusculas'
+      }
+      if (userFields.value.contraseña !== userFields.value.confirmarContraseña) {
+        confirmPasswordState.value = false
+        return 'Las constraseñas no coinciden'
+      }
+      confirmPasswordState.value = true
       return true
     }
     const validateState = () => {
@@ -328,7 +345,8 @@ export default {
       RemoveUser,
       validate,
       validateState,
-      validatePassword
+      validatePassword,
+      validateConfirmPassword
     }
   }
 }
