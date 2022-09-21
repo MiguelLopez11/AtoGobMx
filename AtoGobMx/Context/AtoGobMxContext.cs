@@ -15,5 +15,6 @@ namespace AtoGobMx.Context
         public DbSet<FallasAlumbradoPublico> FallasAlumbradoPublico { get; set; }
         public DbSet<ExpedienteDigital> ExpedienteDigital { get; set; }
         public DbSet<Archivos> Archivos { get; set; }
+        public DbSet<Departamentos> Departamentos { get; set; }
     }
 }

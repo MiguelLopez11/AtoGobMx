@@ -7,7 +7,7 @@
       <div>
         <h3>Editar Usuario</h3>
       </div>
-      <Form @submit="onUpdateEmployee">
+      <Form @submit="onUpdateUser">
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre de Usuario">
@@ -110,7 +110,7 @@ import EmployeeServices from '@/Services/employee.Services'
 import { Field, Form, ErrorMessage } from 'vee-validate'
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-// import { useToast } from 'vue-toast-notification'
+import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
@@ -120,9 +120,9 @@ export default {
   },
   setup () {
     const { getEmployees } = EmployeeServices()
-    const { getUser } = UsersServices()
+    const { getUser, updateUser } = UsersServices()
     const { getRoles } = RoleServices()
-    // const $toast = useToast()
+    const $toast = useToast()
     const employees = ref([])
     const user = ref([])
     const roles = ref([])
@@ -194,7 +194,7 @@ export default {
     }
     const validateConfirmPassword = () => {
       if (!user.value.confirmarContraseña) {
-        passwordState.value = false
+        confirmPasswordState.value = false
         confirmErrorMessage.value = 'Este campo es requerido '
         return confirmErrorMessage.value
       }
@@ -222,17 +222,17 @@ export default {
 
       return ''
     }
-    // const onUpdateEmployee = () => {
-    //   updateEmployee(employee.value, (data) => {})
-    //   $toast.open({
-    //     message: 'Empleado modificado correctamente',
-    //     position: 'top',
-    //     duration: 2000,
-    //     dismissible: true,
-    //     type: 'success',
-    //     onDismiss: () => redirect.push('/Empleados/list')
-    //   })
-    // }
+    const onUpdateUser = () => {
+      updateUser(user.value, (data) => {})
+      $toast.open({
+        message: 'Usuario modificado correctamente',
+        position: 'top',
+        duration: 2000,
+        dismissible: true,
+        type: 'success',
+        onDismiss: () => redirect.push('/Usuarios/list')
+      })
+    }
     return {
       user,
       roles,
@@ -252,12 +252,8 @@ export default {
       validateEmployee,
       validateState,
       validatePassword,
-      validateConfirmPassword
-      // onUpdateEmployee,
-      // validateName,
-      // validateDate,
-      // validateArea,
-      // validateState
+      validateConfirmPassword,
+      onUpdateUser
     }
   }
 }

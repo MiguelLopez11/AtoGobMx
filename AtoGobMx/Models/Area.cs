@@ -12,8 +12,12 @@ namespace AtoGobMx.Models
         [Required]
         public string? Nombre { get; set; }
         public string? Descripcion { get; set; }
+        public int DepartamentoId { get; set; }
 
         public bool Archivado { get; set; }
+
+        [ForeignKey("DepartamentoId")]
+        public Departamentos? Departamentos { get; set; }
         [JsonIgnore]
         public virtual IEnumerable<Empleado>? Empleados { get; set; }
     }
