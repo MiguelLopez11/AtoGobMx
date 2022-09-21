@@ -1,30 +1,22 @@
 <template>
   <b-card class="m-3">
-    <b-row align-h="end" class="mb-2 mr-1">
-      <b-col cols="3">
-        <b-form-group>
+    <b-row align-h="end" class="mb-3 mr-1">
           <b-form-input
             size="lg"
+            style="width: 350px"
             v-model="searchValue"
             type="search"
             placeholder="Buscar Falla..."
           ></b-form-input>
-        </b-form-group>
-      </b-col>
-      <b-col cols="3" style="float: right">
-        <b-form-group>
-          <button
-            class="btn btn-primary"
-            style="height: 50px; width: auto; font-size: 18px"
-            id="buttonAdd"
+          <b-button
+            variant="primary"
+            style="height: 50px; width: auto; font-size: 18px; margin-right: 15px; margin-left: 20px"
             v-b-modal.modal-lightingfailures
             type="submit"
           >
             <i class="bi bi-person-plus-fill"></i>
             Agregar Falla
-          </button>
-        </b-form-group>
-      </b-col>
+          </b-button>
     </b-row>
     <EasyDataTable
       rows-per-page-message="registros por pagina"
@@ -61,56 +53,94 @@
         ></b-button>
       </template>
     </EasyDataTable>
-
     <b-modal
       id="modal-lightingfailures"
-      @ok="addLightingFailures"
       title="Agregar Falla"
       size="xl"
+      hide-footer
       centered
       button-size="lg"
       lazy
-      ok-title="Registrar Falla"
-      cancel-title="Cancelar"
     >
-      <form ref="form">
+      <Form @submit="addLightingFailures">
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="NombreFalla">
-              <b-form-input
-                required
-                v-model="lightingFailuresFields.nombreFalla"
-              ></b-form-input>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Descripcion">
-              <b-form-input
-                required
-                v-model="lightingFailuresFields.descripcion"
-              ></b-form-input>
+              <Field  name="faultNameField" :rules="validateFaultName">
+                <b-form-input
+                  v-model="lightingFailuresFields.nombreFalla"
+                  :state="FaultNameState"
+                ></b-form-input>
+              </Field>
+              <ErrorMessage name="faultNameField"
+                ><span>Este campo es requerido </span
+                ><i class="bi bi-exclamation-circle"></i>
+              </ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Fecha">
-              <Datepicker
-                locale="es"
-                :enableTimePicker="false"
-                autoApply
-                v-model="lightingFailuresFields.fecha"
-              ></Datepicker>
+              <Field name="DateField" :rules="validateDate">
+                <Datepicker
+                  locale="es"
+                  name="date"
+                  :enableTimePicker="false"
+                  autoApply
+                  v-model="lightingFailuresFields.fecha"
+                  :state="dateState"
+                ></Datepicker>
+              </Field>
+              <ErrorMessage name="DateField"
+                ><span>Este campo es requerido llenarlo </span
+                ><i class="bi bi-exclamation-circle"></i>
+              </ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Descripcion">
+              <Field name="descriptionField" :rules="validateDescription">
+                <b-form-textarea
+                  v-model="lightingFailuresFields.descripcion"
+                  :state="descriptionState"
+                ></b-form-textarea>
+              </Field>
+              <ErrorMessage name="descriptionField"
+                ><span>Este campo es requerido </span
+                ><i class="bi bi-exclamation-circle"></i>
+              </ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Descripcion Domicilio">
-              <b-form-input
-                required
-                v-model="lightingFailuresFields.descripcionDomicilio"
-              ></b-form-input>
+              <Field
+                name="addresdescriptionField"
+                :rules="validateAddresdescription"
+              >
+                <b-form-textarea
+                  v-model="lightingFailuresFields.descripcionDomicilio"
+                  :state="addresdescriptionState"
+                ></b-form-textarea>
+              </Field>
+              <ErrorMessage name="addresdescriptionField"
+                ><span>Este campo es requerido llenarlo </span
+                ><i class="bi bi-exclamation-circle"></i>
+              </ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
-      </form>
+        <b-row align-h="end">
+          <b-button
+            class="w-auto m-2 text-white"
+            variant="primary"
+            v-b-modal.modal-lightingfailures
+          >
+            Cancelar
+          </b-button>
+          <b-button class="w-auto m-2" variant="success" type="submit">
+            Guardar
+          </b-button>
+        </b-row>
+      </Form>
     </b-modal>
   </b-card>
 </template>
@@ -118,12 +148,16 @@
 <script>
 import LightingfailuresServices from '@/Services/lightingfailures.Services'
 import Datepicker from '@vuepic/vue-datepicker'
+import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref } from 'vue'
-// import { useToast } from 'vue-toast-notification'
+import { useToast } from 'vue-toast-notification'
 export default {
   components: {
     Datepicker,
-    EasyDataTable: window['vue3-easy-data-table']
+    EasyDataTable: window['vue3-easy-data-table'],
+    Form,
+    Field,
+    ErrorMessage
   },
   setup () {
     const {
@@ -131,7 +165,7 @@ export default {
       createLightingFailures,
       deleteLightingFailures
     } = LightingfailuresServices()
-    // const $toast = useToast([])
+    const $toast = useToast()
     const lightingFailures = ref([])
     const isOpen = ref(false)
     const perPage = ref(5)
@@ -142,6 +176,10 @@ export default {
     const isloading = ref(true)
     const searchValue = ref('')
     const searchField = ref('nombreFalla')
+    const FaultNameState = ref(false)
+    const descriptionState = ref(false)
+    const dateState = ref(false)
+    const addresdescriptionState = ref(false)
     const lightingFailuresFields = ref({
       fallaId: 0,
       nombreFalla: null,
@@ -151,6 +189,43 @@ export default {
       archivado: false
     })
 
+    const validateFaultName = () => {
+      if (!lightingFailuresFields.value.nombreFalla) {
+        FaultNameState.value = false
+        return 'Este campo es requerido'
+      }
+      FaultNameState.value = true
+      return true
+    }
+
+    const validateDescription = () => {
+      if (!lightingFailuresFields.value.descripcion) {
+        descriptionState.value = false
+        return 'Este campo es requerido'
+      }
+      descriptionState.value = true
+      return true
+    }
+
+    const validateDate = () => {
+      if (!lightingFailuresFields.value.fecha) {
+        dateState.value = false
+        return 'Este campo es requerido'
+      }
+      dateState.value = true
+      return true
+    }
+
+    const validateAddresdescription = () => {
+      if (!lightingFailuresFields.value.descripcionDomicilio) {
+        addresdescriptionState.value = false
+        return 'Este campo es requerido'
+      }
+      addresdescriptionState.value = true
+      return true
+    }
+
+    // pone mis cambios de mis campos vacios de nuevo
     const lightingFailuresFieldsBlank = ref(
       JSON.parse(JSON.stringify(lightingFailuresFields))
     )
@@ -199,12 +274,14 @@ export default {
     const addLightingFailures = () => {
       createLightingFailures(lightingFailuresFields.value, (data) => {
         refreshTable()
-        // $toast.succes('La falla se registro correctamente', {
-        //   position: 'top-rigth',
-        //   duration: 2000
-        // })
+        $toast.success('Falla registrada correctamente.', {
+          position: 'top-right',
+          duration: 1500
+        })
       })
-      lightingFailuresFields.value = JSON.parse(JSON.stringify(lightingFailuresFieldsBlank))
+      lightingFailuresFields.value = JSON.parse(
+        JSON.stringify(lightingFailuresFieldsBlank)
+      )
     }
 
     const RemoveLightingFailures = (LightingFailuresId) => {
@@ -228,11 +305,19 @@ export default {
       lightingFailuresFieldsBlank,
       // lightingFailuresValues,
       fields,
+      FaultNameState,
+      descriptionState,
+      dateState,
+      addresdescriptionState,
 
       onFiltered,
       addLightingFailures,
       refreshTable,
-      RemoveLightingFailures
+      RemoveLightingFailures,
+      validateFaultName,
+      validateDescription,
+      validateDate,
+      validateAddresdescription
     }
   }
 }
