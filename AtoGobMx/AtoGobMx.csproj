@@ -26,6 +26,7 @@
 	<ItemGroup>
 		<!--<Folder Include="Files\Images\" />-->
 		<Folder Include="Files\Images\" />
+		<Folder Include="Files\Images\" />
 		<Folder Include="Migrations\" />
 	</ItemGroup>
 
