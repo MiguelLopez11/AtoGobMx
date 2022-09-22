@@ -6,7 +6,7 @@
         style="width: 350px"
         v-model="searchValue"
         type="search"
-        placeholder="Buscar Area..."
+        placeholder="Buscar Departamento..."
       >
       </b-form-input>
       <b-button
@@ -18,11 +18,11 @@
           margin-right: 15px;
           margin-left: 20px;
         "
-        v-b-modal.modal-area
+        v-b-modal.modal-departamento
         type="submit"
       >
         <i class="bi bi-person-plus-fill"></i>
-        Agregar Area
+        Agregar Departamento
       </b-button>
     </b-row>
     <EasyDataTable
@@ -33,7 +33,7 @@
       border-cell
       :loading="isloading"
       :headers="fields"
-      :items="areas"
+      :items="departaments"
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
@@ -44,7 +44,7 @@
       </template>
       <template #item-actions="items">
         <b-button
-          @click="RemoveArea(items.areaId)"
+          @click="RemoveDepatamento(items.departamentoId)"
           class="m-1"
           variant="outline-danger"
           ><i class="bi bi-trash3"></i
@@ -53,8 +53,8 @@
           class="m-1"
           variant="outline-warning"
           :to="{
-            name: 'Area-Edit',
-            params: { AreaId: items.areaId },
+            name: 'Departamentos-Edit',
+            params: { DepartamentoId: items.departamentoId },
           }"
         >
           <i class="bi bi-pencil-square" />
@@ -62,19 +62,19 @@
       </template>
     </EasyDataTable>
     <b-modal
-      id="modal-area"
-      title="Agregar areas"
+      id="modal-departamento"
+      title="Agregar Departamento"
       size="xl"
       centered
       button-size="lg"
       hide-footer
     >
-      <Form @submit="addArea">
+      <Form @submit="addDepartamento">
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre">
               <Field name="NameField" :rules="validateArea">
-                <b-form-input v-model="areaFields.nombre" :state="nameState"> </b-form-input>
+                <b-form-input v-model="departamentFields.nombre" :state="nameState"> </b-form-input>
               </Field>
               <ErrorMessage name="NameField">
                 <span>Este campo es requerido</span>
@@ -84,7 +84,7 @@
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Descripción">
-              <b-form-input v-model="areaFields.descripcion"> </b-form-input>
+              <b-form-input v-model="departamentFields.descripcion"> </b-form-input>
             </b-form-group>
           </b-col>
         </b-row>
@@ -92,7 +92,7 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            v-b-modal.modal-area
+            v-b-modal.modal-departamento
           >
             Cancelar
           </b-button>
@@ -106,7 +106,7 @@
 </template>
 
 <script>
-import AreaServices from '@/Services/area.Services'
+import DepartamentServices from '@/Services/departament.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref } from 'vue'
 import { useToast } from 'vue-toast-notification'
@@ -120,10 +120,9 @@ export default {
   },
   setup () {
     // const { getEmployees, createEmployee, deleteEmployee } = EmployeeServices()
-    const { getAreas, createArea, deleteArea } = AreaServices()
+    const { getDepartaments, createDepartament, deleteDepartament } = DepartamentServices()
     const $toast = useToast()
-    const employees = ref([])
-    const areas = ref([])
+    const departaments = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
     const rows = ref(null)
@@ -133,15 +132,15 @@ export default {
     const searchValue = ref('')
     const searchField = ref('nombre')
     const nameState = ref(false)
-    const areaFields = ref({
-      areaId: 0,
+    const departamentFields = ref({
+      departamentoId: 0,
       nombre: null,
       descripcion: null,
       archivado: false
     })
-    const areasFieldsBlank = ref(JSON.parse(JSON.stringify(areaFields)))
+    const departamentFieldsBlank = ref(JSON.parse(JSON.stringify(departamentFields)))
     const fields = ref([
-      { value: 'areaId', text: 'ID', sortable: true },
+      { value: 'departamentoId', text: 'ID', sortable: true },
       { value: 'nombre', text: 'Nombre' },
       { value: 'descripcion', text: 'Descripcion' },
       { value: 'actions', text: 'Acciones' }
@@ -151,12 +150,12 @@ export default {
     //   rows.value = data.length
     // })
 
-    getAreas((data) => {
-      areas.value = data
-      if (areas.value.length > 0) {
+    getDepartaments((data) => {
+      departaments.value = data
+      if (departaments.value.length > 0) {
         isloading.value = false
       } else {
-        if (areas.value.length <= 0) {
+        if (departaments.value.length <= 0) {
           isloading.value = false
         }
       }
@@ -166,7 +165,7 @@ export default {
       currentPage.value = 1
     }
     const validateArea = () => {
-      if (!areaFields.value.nombre) {
+      if (!departamentFields.value.nombre) {
         nameState.value = false
         return 'Este campo es requerido'
       }
@@ -175,54 +174,52 @@ export default {
     }
     const refreshTable = () => {
       isloading.value = true
-
-      getAreas((data) => {
-        areas.value = data
-        if (areas.value.length > 0) {
+      getDepartaments((data) => {
+        departaments.value = data
+        if (departaments.value.length > 0) {
           isloading.value = false
         } else {
-          if (areas.value.length <= 0) {
+          if (departaments.value.length <= 0) {
             isloading.value = false
           }
         }
       })
       return 'datos recargados'
     }
-    const addArea = () => {
-      createArea(areaFields.value, (data) => {
+    const addDepartamento = () => {
+      createDepartament(departamentFields.value, (data) => {
         refreshTable()
-        $toast.success('Empleado registrado correctamente.', {
+        $toast.success('Departamento registrado correctamente.', {
           position: 'top-right',
           duration: 2000
         })
       })
-      areaFields.value = JSON.parse(JSON.stringify(areasFieldsBlank))
+      departamentFields.value = JSON.parse(JSON.stringify(departamentFieldsBlank))
       nameState.value = false
     }
-    const RemoveArea = (areaId) => {
+    const RemoveDepatamento = (departamentoId) => {
       isloading.value = true
-      deleteArea(areaId, (data) => {
+      deleteDepartament(departamentoId, (data) => {
         refreshTable()
       })
     }
     return {
-      employees,
+      departaments,
       fields,
       perPage,
       currentPage,
       rows,
       filter,
       perPageSelect,
-      areas,
-      areasFieldsBlank,
-      areaFields,
+      departamentFieldsBlank,
+      departamentFields,
       isloading,
       searchValue,
       searchField,
       onFiltered,
-      addArea,
+      addDepartamento,
       refreshTable,
-      RemoveArea,
+      RemoveDepatamento,
       nameState,
 
       validateArea

@@ -75,7 +75,7 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            v-b-modal.modal-employee
+            to="/Empleados/list"
           >
             Cancelar
           </b-button>
@@ -93,7 +93,7 @@ import EmployeeServices from '@/Services/employee.Services'
 import AreaServices from '@/Services/area.Services'
 import { Field, Form, ErrorMessage } from 'vee-validate'
 import { ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import Datepicker from '@vuepic/vue-datepicker'
 import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -111,6 +111,7 @@ export default {
     const employee = ref([])
     const areas = ref([])
     const router = useRoute()
+    const redirect = useRouter()
     const nameState = ref(false)
     const dateState = ref(false)
     const areaState = ref(false)
@@ -121,12 +122,18 @@ export default {
     ])
     getEmployee(router.params.EmpleadoId, (data) => {
       employee.value = data
+      // eslint-disable-next-line no-unneeded-ternary
+      nameState.value = data.nombreCompleto === null ? false : true
     })
     const onUpdateEmployee = () => {
       updateEmployee(employee.value, (data) => {})
-      $toast.success('Empleado actualizado correctamente.', {
-        position: 'top-right',
-        duration: 1500
+      $toast.open({
+        message: 'Empleado modificado correctamente',
+        position: 'top',
+        duration: 2000,
+        dismissible: true,
+        type: 'success',
+        onDismiss: () => redirect.push('/Empleados/list')
       })
     }
     getAreas((data) => {
@@ -134,27 +141,36 @@ export default {
     })
     const validateName = () => {
       if (!employee.value.nombreCompleto) {
-        nameState.value = false
+        validateState()
         return 'Este campo es requerido'
       }
-      nameState.value = true
+      validateState()
       return true
     }
     const validateDate = () => {
       if (!employee.value.fechaNacimiento) {
-        dateState.value = false
+        validateState()
         return 'Este campo es requerido'
       }
-      dateState.value = true
+      validateState()
       return true
     }
     const validateArea = () => {
       if (!employee.value.areaId) {
-        areaState.value = false
+        validateState()
         return 'Este campo es requerido'
       }
-      areaState.value = true
+      validateState()
       return true
+    }
+    const validateState = () => {
+      // eslint-disable-next-line no-unneeded-ternary
+      nameState.value = employee.value.nombreCompleto === null ? false : true
+      // eslint-disable-next-line no-unneeded-ternary
+      dateState.value = employee.value.fechaNacimiento === null ? false : true
+      // eslint-disable-next-line no-unneeded-ternary
+      areaState.value = employee.value.areaId === '' ? false : true
+      return 'HOli'
     }
 
     return {
@@ -165,10 +181,12 @@ export default {
       nameState,
       dateState,
       areaState,
+      redirect,
       onUpdateEmployee,
       validateName,
       validateDate,
-      validateArea
+      validateArea,
+      validateState
     }
   }
 }
