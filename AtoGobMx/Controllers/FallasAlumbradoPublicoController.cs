@@ -22,7 +22,7 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<FallasAlumbradoPublico>> GetFallasAlumbradoPublico()
         {
             var fallas = await _context.FallasAlumbradoPublico
-                .OrderBy(o => o.NombreFalla)
+                .OrderBy(o => o.TipoFalla)
                 .Where(w => !w.Archivado)
                 .Select(s => _mapper.Map<FallasAlumbradoPublico>(s))
                 .ToArrayAsync();
@@ -60,9 +60,11 @@ namespace AtoGobMx.Controllers
                 return BadRequest("La falla no existe");
             }
             fall.FallaId = fallas.FallaId;
-            fall.NombreFalla = fallas.NombreFalla;
-            fall.Descripcion = fallas.Descripcion;
-            fall.Fecha = fallas.Fecha;
+            fall.TipoFalla = fallas.TipoFalla;
+            fall.DescripcionSolucion = fallas.DescripcionSolucion;
+            fall.FechaAlta = fallas.FechaAlta;
+            fall.FechaBaja = fallas.FechaBaja;
+            fall.Domicilio = fallas.Domicilio;
             fall.DescripcionDomicilio = fallas.DescripcionDomicilio;
             //emp.RFC = empleado.RFC;
             //emp.CURP = empleado.CURP;

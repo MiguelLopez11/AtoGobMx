@@ -47,6 +47,7 @@
                 <b-form-textarea
                   v-model="lightingFailure.descripcion"
                   :state="descriptionState"
+                  rows="4"
                 ></b-form-textarea>
               </Field>
               <ErrorMessage name="descriptionField"
@@ -64,6 +65,7 @@
                 <b-form-textarea
                   v-model="lightingFailure.descripcionDomicilio"
                   :state="addresdescriptionState"
+                  rows="4"
                 ></b-form-textarea>
               </Field>
               <ErrorMessage name="addresdescriptionField"
