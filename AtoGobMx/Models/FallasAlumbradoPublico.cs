@@ -9,12 +9,14 @@ namespace AtoGobMx.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 
         public int FallaId { get; set; }
-        public string NombreFalla { get; set; }
-        public string Descripcion { get; set; }
-        public DateTime Fecha { get; set; }
+        public string TipoFalla { get; set; }
+        public string DescripcionSolucion { get; set; }
+        public DateTime FechaAlta { get; set; }
+        public DateTime FechaBaja { get; set; }
+        public string Domicilio { get; set; }
         public string DescripcionDomicilio { get; set; }
         public bool Archivado   { get; set; }
-
+       
 
     }
 }

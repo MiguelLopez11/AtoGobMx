@@ -1,30 +1,28 @@
 <template>
   <b-card class="m-3">
-    <b-row align-h="end" class="mb-2 mr-1">
-      <b-col cols="3">
-        <b-form-group>
-          <b-form-input
-            size="lg"
-            v-model="searchValue"
-            type="search"
-            placeholder="Buscar Falla..."
-          ></b-form-input>
-        </b-form-group>
-      </b-col>
-      <b-col cols="3" style="float: right">
-        <b-form-group>
-          <button
-            class="btn btn-primary"
-            style="height: 50px; width: auto; font-size: 18px"
-            id="buttonAdd"
-            v-b-modal.modal-lightingfailures
-            type="submit"
-          >
-            <i class="bi bi-person-plus-fill"></i>
-            Agregar Falla
-          </button>
-        </b-form-group>
-      </b-col>
+    <b-row align-h="end" class="mb-3 mr-1">
+      <b-form-input
+        size="lg"
+        style="width: 350px"
+        v-model="searchValue"
+        type="search"
+        placeholder="Buscar Falla..."
+      ></b-form-input>
+      <b-button
+        variant="primary"
+        style="
+          height: 50px;
+          width: auto;
+          font-size: 18px;
+          margin-right: 15px;
+          margin-left: 20px;
+        "
+        v-b-modal.modal-lightingfailures
+        type="submit"
+      >
+        <i class="bi bi-person-plus-fill"></i>
+        Agregar Falla
+      </b-button>
     </b-row>
     <EasyDataTable
       rows-per-page-message="registros por pagina"
@@ -50,68 +48,142 @@
           variant="outline-danger"
           ><i class="bi bi-trash3"></i
         ></b-button>
-        <!-- <b-button
+        <b-button
           class="m-1"
           variant="outline-warning"
           :to="{
-            name: 'ExpedienteFallas-Edit',
-            params: { fallaId: items.fallaId },
+            name: 'FallasAlumbrado-Edit',
+            params: { FallaId: items.fallaId },
           }"
           ><i class="bi bi-pencil-square"></i
-        ></b-button> -->
+        ></b-button>
       </template>
     </EasyDataTable>
-
     <b-modal
       id="modal-lightingfailures"
-      @ok="addLightingFailures"
       title="Agregar Falla"
       size="xl"
+      hide-footer
       centered
-      hide-backdrop
       button-size="lg"
       lazy
-      ok-title="Registrar Falla"
-      cancel-title="Cancelar"
     >
-      <form ref="form">
-        <b-row cols="3">
+      <Form @submit="addLightingFailures">
+        <b-row cols="2">
           <b-col>
-            <b-form-group class="mt-3" label="NombreFalla">
-              <b-form-input
-                required
-                v-model="lightingFailuresFields.nombreFalla"
-              ></b-form-input>
+            <b-form-group class="mt-3" label="Tipo Falla">
+              <Field name="FaultTypeField" :rules="validateFaultType">
+                <b-form-input
+                  v-model="lightingFailuresFields.tipoFalla"
+                  :state="FaultTypeState"
+                ></b-form-input>
+              </Field>
+              <ErrorMessage name="FaultTypeField"
+                ><span>Este campo es requerido </span
+                ><i class="bi bi-exclamation-circle"></i>
+              </ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="Descripcion">
-              <b-form-input
-                required
-                v-model="lightingFailuresFields.descripcion"
-              ></b-form-input>
+            <b-form-group class="mt-3" label="Fecha Alta">
+              <Field name="HighDateField" :rules="validateHighDate">
+                <Datepicker
+                  locale="es"
+                  name="date"
+                  :enableTimePicker="false"
+                  autoApply
+                  v-model="lightingFailuresFields.fechaAlta"
+                  :state="HighDateState"
+                ></Datepicker>
+              </Field>
+              <ErrorMessage name="HighDateField"
+                ><span>Este campo es requerido llenarlo </span
+                ><i class="bi bi-exclamation-circle"></i>
+              </ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="Fecha">
-              <Datepicker
-                locale="es"
-                :enableTimePicker="false"
-                autoApply
-                v-model="lightingFailuresFields.fecha"
-              ></Datepicker>
+            <b-form-group class="mt-3" label="Domicilio">
+              <Field name="DomicileField" :rules="validateDomicile">
+                <b-form-input
+                  v-model="lightingFailuresFields.domicilio"
+                  :state="DomicileState"
+                ></b-form-input>
+              </Field>
+              <ErrorMessage name="DomicileField"
+                ><span>Este campo es requerido </span
+                ><i class="bi bi-exclamation-circle"></i>
+              </ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Descripcion Domicilio">
-              <b-form-input
-                required
-                v-model="lightingFailuresFields.descripcionDomicilio"
-              ></b-form-input>
+              <Field
+                name="addresdescriptionField"
+                :rules="validateAddresdescription"
+              >
+                <b-form-textarea
+                  v-model="lightingFailuresFields.descripcionDomicilio"
+                  :state="addresdescriptionState"
+                  rows="4"
+                ></b-form-textarea>
+              </Field>
+              <ErrorMessage name="addresdescriptionField"
+                ><span>Este campo es requerido llenarlo </span
+                ><i class="bi bi-exclamation-circle"></i>
+              </ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Descripcion Solucion">
+              <Field
+                name="DescriptionSolutionField"
+                :rules="validateDescriptionSolution"
+              >
+                <b-form-textarea
+                  v-model="lightingFailuresFields.descripcionSolucion"
+                  :state="DescriptionSolutionState"
+                  rows="4"
+                ></b-form-textarea>
+              </Field>
+              <ErrorMessage name="DescriptionSolutionField"
+                ><span>Este campo es requerido </span
+                ><i class="bi bi-exclamation-circle"></i>
+              </ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Fecha Baja">
+              <Field name="LowDateField" :rules="validateLowDate">
+                <Datepicker
+                  locale="es"
+                  name="date"
+                  :enableTimePicker="false"
+                  autoApply
+                  v-model="lightingFailuresFields.fechaBaja"
+                  :state="LowDateState"
+                ></Datepicker>
+              </Field>
+              <ErrorMessage name="LowDateField"
+                ><span>Este campo es requerido llenarlo </span
+                ><i class="bi bi-exclamation-circle"></i>
+              </ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
-      </form>
+        <b-row align-h="end">
+          <b-button
+            class="w-auto m-2 text-white"
+            variant="primary"
+            v-b-modal.modal-lightingfailures
+          >
+            Cancelar
+          </b-button>
+          <b-button class="w-auto m-2" variant="success" type="submit">
+            Guardar
+          </b-button>
+        </b-row>
+      </Form>
     </b-modal>
   </b-card>
 </template>
@@ -119,12 +191,16 @@
 <script>
 import LightingfailuresServices from '@/Services/lightingfailures.Services'
 import Datepicker from '@vuepic/vue-datepicker'
+import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref } from 'vue'
-// import { useToast } from 'vue-toast-notification'
+import { useToast } from 'vue-toast-notification'
 export default {
   components: {
     Datepicker,
-    EasyDataTable: window['vue3-easy-data-table']
+    EasyDataTable: window['vue3-easy-data-table'],
+    Form,
+    Field,
+    ErrorMessage
   },
   setup () {
     const {
@@ -132,7 +208,7 @@ export default {
       createLightingFailures,
       deleteLightingFailures
     } = LightingfailuresServices()
-    // const $toast = useToast([])
+    const $toast = useToast()
     const lightingFailures = ref([])
     const isOpen = ref(false)
     const perPage = ref(5)
@@ -143,25 +219,90 @@ export default {
     const isloading = ref(true)
     const searchValue = ref('')
     const searchField = ref('nombreFalla')
+    const FaultTypeState = ref(false)
+    const DescriptionSolutionState = ref(false)
+    const HighDateState = ref(false)
+    const addresdescriptionState = ref(false)
+    const DomicileState = ref(false)
+    const LowDateState = ref(false)
     const lightingFailuresFields = ref({
       fallaId: 0,
-      nombreFalla: null,
-      descripcion: null,
-      fecha: null,
+      tipoFalla: null,
+      descripcionSolucion: null,
+      fechaAlta: null,
+      fechaBaja: null,
+      domicilio: null,
       descripcionDomicilio: null,
       archivado: false
     })
 
+    const validateFaultType = () => {
+      if (!lightingFailuresFields.value.tipoFalla) {
+        FaultTypeState.value = false
+        return 'Este campo es requerido'
+      }
+      FaultTypeState.value = true
+      return true
+    }
+
+    const validateDescriptionSolution = () => {
+      if (!lightingFailuresFields.value.descripcionSolucion) {
+        DescriptionSolutionState.value = false
+        return 'Este campo es requerido'
+      }
+      DescriptionSolutionState.value = true
+      return true
+    }
+
+    const validateDomicile = () => {
+      if (!lightingFailuresFields.value.domicilio) {
+        DomicileState.value = false
+        return 'Este campo es requerido'
+      }
+      DomicileState.value = true
+      return true
+    }
+
+    const validateLowDate = () => {
+      if (!lightingFailuresFields.value.fechaBaja) {
+        LowDateState.value = false
+        return 'Este campo es requerido'
+      }
+      LowDateState.value = true
+      return true
+    }
+
+    const validateHighDate = () => {
+      if (!lightingFailuresFields.value.fechaAlta) {
+        HighDateState.value = false
+        return 'Este campo es requerido'
+      }
+      HighDateState.value = true
+      return true
+    }
+
+    const validateAddresdescription = () => {
+      if (!lightingFailuresFields.value.descripcionDomicilio) {
+        addresdescriptionState.value = false
+        return 'Este campo es requerido'
+      }
+      addresdescriptionState.value = true
+      return true
+    }
+
+    // pone mis cambios de mis campos vacios de nuevo
     const lightingFailuresFieldsBlank = ref(
       JSON.parse(JSON.stringify(lightingFailuresFields))
     )
 
     const fields = ref([
       { value: 'fallaId', text: 'ID', sortable: true },
-      { value: 'nombreFalla', text: 'NombreFalla' },
-      { value: 'descripcion', text: 'Descripción' },
-      { value: 'fecha', text: 'Fecha' },
+      { value: 'tipoFalla', text: 'Tipo Falla' },
+      { value: 'fechaAlta', text: 'Fecha Alta' },
+      { value: 'domicilio', text: 'Domicilio' },
       { value: 'descripcionDomicilio', text: 'Descripcion Domicilio' },
+      { value: 'descripcionSolucion', text: 'Descripcion Solucion' },
+      { value: 'fechaBaja', text: 'Fecha Baja' },
       { value: 'actions', text: 'Acciones' }
     ])
     getLightingFailures((data) => {
@@ -200,12 +341,14 @@ export default {
     const addLightingFailures = () => {
       createLightingFailures(lightingFailuresFields.value, (data) => {
         refreshTable()
-        // $toast.succes('La falla se registro correctamente', {
-        //   position: 'top-rigth',
-        //   duration: 2000
-        // })
+        $toast.success('Falla registrada correctamente.', {
+          position: 'top-right',
+          duration: 1500
+        })
       })
-      lightingFailuresFields.value = JSON.parse(JSON.stringify(lightingFailuresFieldsBlank))
+      lightingFailuresFields.value = JSON.parse(
+        JSON.stringify(lightingFailuresFieldsBlank)
+      )
     }
 
     const RemoveLightingFailures = (LightingFailuresId) => {
@@ -229,11 +372,23 @@ export default {
       lightingFailuresFieldsBlank,
       // lightingFailuresValues,
       fields,
+      FaultTypeState,
+      DescriptionSolutionState,
+      HighDateState,
+      addresdescriptionState,
+      DomicileState,
+      LowDateState,
 
       onFiltered,
       addLightingFailures,
       refreshTable,
-      RemoveLightingFailures
+      RemoveLightingFailures,
+      validateFaultType,
+      validateDescriptionSolution,
+      validateHighDate,
+      validateAddresdescription,
+      validateLowDate,
+      validateDomicile
     }
   }
 }
@@ -243,39 +398,32 @@ export default {
 .customize-table {
   /* --easy-table-border: 1px solid #445269;
   --easy-table-row-border: 1px solid #445269; */
-
-  --easy-table-header-font-size: 18px;
+  --easy-table-header-font-size: 16px;
   --easy-table-header-height: 50px;
-  --easy-table-header-font-color: #ffffff;
-  --easy-table-header-background-color: #42b883;
-
+  --easy-table-header-font-color: #fcf6f5ff;
+  --easy-table-header-background-color: #2bae66ff;
   --easy-table-header-item-padding: 10px 15px;
   --easy-table-header-item-align: center;
+  --easy-table-message-font-size: 17px;
   /* --easy-table-body-even-row-font-color: #fff;
   --easy-table-body-even-row-background-color: #4c5d7a; */
-
   /* --easy-table-body-row-font-color: #c0c7d2;
   --easy-table-body-row-background-color: #2d3a4f; */
   --easy-table-body-row-height: 50px;
-  --easy-table-body-row-font-size: 15px;
+  --easy-table-body-row-font-size: 17px;
   --easy-table-border-radius: 15px;
-  /*
-  --easy-table-body-row-hover-font-color: #2d3a4f;
-  --easy-table-body-row-hover-background-color: #eee; */
-
+  --easy-table-body-row-hover-font-color: rgb(0, 0, 0);
+  --easy-table-body-row-hover-background-color: rgb(212, 212, 212);
   --easy-table-body-item-padding: 10px 15px;
-
-  /* --easy-table-footer-background-color: #138BC2;
-  --easy-table-footer-font-color: #D1D1D1; */
-  --easy-table-footer-font-size: 15px;
+  --easy-table-footer-background-color: #2bae66ff;
+  --easy-table-footer-font-color: #fcf6f5ff;
+  --easy-table-footer-font-size: 17px;
   --easy-table-footer-padding: 0px 10px;
   --easy-table-footer-height: 50px;
-
   /* --easy-table-scrollbar-track-color: #2d3a4f;
   --easy-table-scrollbar-color: #2d3a4f;
   --easy-table-scrollbar-thumb-color: #4c5d7a;;
   --easy-table-scrollbar-corner-color: #2d3a4f;
-
   --easy-table-loading-mask-background-color: #2d3a4f; */
 }
 </style>
