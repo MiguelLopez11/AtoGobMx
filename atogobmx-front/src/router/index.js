@@ -60,6 +60,26 @@ const routes = [
     path: '/Roles/list',
     name: 'Roles',
     component: () => import('@/views/Roles/RoleList.vue')
+  },
+  {
+    path: '/Departamentos/list',
+    name: 'Departamentos',
+    component: () => import('@/views/RecursosHumanos/Departaments/DepartamentList.vue')
+  },
+  {
+    path: '/Departamentos/:DepartamentoId',
+    name: 'Departamentos-Edit',
+    component: () => import('@/views/RecursosHumanos/Departaments/DepartamentEdit.vue')
+  },
+  {
+    path: '/PuestosTrabajos/list',
+    name: 'PuestosTrabajos',
+    component: () => import('@/views/RecursosHumanos/WorkStation/WorkStationList.vue')
+  },
+  {
+    path: '/PuestosTrabajos/:puestoTrabajoId',
+    name: 'PuestoTrabajo-Edit',
+    component: () => import('@/views/RecursosHumanos/WorkStation/WorkStationEdit.vue')
   }
 ]
 

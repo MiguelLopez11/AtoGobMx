@@ -16,5 +16,6 @@ namespace AtoGobMx.Context
         public DbSet<ExpedienteDigital> ExpedienteDigital { get; set; }
         public DbSet<Archivos> Archivos { get; set; }
         public DbSet<Departamentos> Departamentos { get; set; }
+        public DbSet<PuestoTrabajo> PuestoTrabajo { get; set; }
     }
 }
