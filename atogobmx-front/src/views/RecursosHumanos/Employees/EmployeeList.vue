@@ -111,6 +111,28 @@
             </b-form-group>
           </b-col>
           <b-col>
+            <b-form-group class="mt-3" label="Departamento">
+              <Field
+                name="DepartamentField"
+                :rules="validateDepartament"
+              >
+                <b-form-select
+                  v-model="EmployeesFields.departamentoId"
+                  autofocus
+                  :options="departaments"
+                  value-field="departamentoId"
+                  text-field="nombre"
+                  :state="departamentState"
+                >
+                </b-form-select>
+              </Field>
+              <ErrorMessage name="DepartamentField"
+                ><span>Este campo es requerido </span
+                ><i class="bi bi-exclamation-circle"></i
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <b-col>
             <b-form-group class="mt-3" label="Area">
               <Field
                 name="AreaField"
@@ -153,10 +175,11 @@
 <script>
 import EmployeeServices from '@/Services/employee.Services'
 import AreaServices from '@/Services/area.Services'
+import DepartamentServices from '@/Services/departament.Services'
 import Datepicker from '@vuepic/vue-datepicker'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
@@ -170,8 +193,10 @@ export default {
   setup () {
     const { getEmployees, createEmployee, deleteEmployee } = EmployeeServices()
     const { getAreas } = AreaServices()
+    const { getDepartaments } = DepartamentServices()
     const $toast = useToast()
     const employees = ref([])
+    const departaments = ref([])
     const areas = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
@@ -183,6 +208,7 @@ export default {
     const nameState = ref(false)
     const dateState = ref(false)
     const areaState = ref(false)
+    const departamentState = ref(false)
     const EmployeesFields = ref({
       empleadoId: 0,
       nombreCompleto: null,
@@ -191,7 +217,31 @@ export default {
       fechaBaja: null,
       archivado: false,
       areaId: 0,
-      usuarioId: 0
+      usuarioId: 0,
+      departamentoId: 0
+    })
+    onMounted(() => {
+      if (departaments.value.length === 0) {
+        $toast.open({
+          message: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar',
+          position: 'top-left',
+          duration: 0,
+          dismissible: true,
+          type: 'error'
+        })
+      }
+      if (areas.value.length === 0) {
+        $toast.open({
+          message: 'No se encuentran areas registrados en el sistema, registre primero un departamento para continuar',
+          position: 'top-left',
+          duration: 0,
+          dismissible: true,
+          type: 'error'
+        })
+      }
+    })
+    getDepartaments(data => {
+      departaments.value = data
     })
     const validateName = () => {
       if (!EmployeesFields.value.nombreCompleto) {
@@ -199,6 +249,14 @@ export default {
         return 'Este campo es requerido'
       }
       nameState.value = true
+      return true
+    }
+    const validateDepartament = () => {
+      if (!EmployeesFields.value.departamentoId) {
+        departamentState.value = false
+        return 'Este campo es requerido'
+      }
+      departamentState.value = true
       return true
     }
     const validateDate = () => {
@@ -238,11 +296,6 @@ export default {
     })
     getAreas((data) => {
       areas.value = data
-      if (areas.value.length === 0) {
-        $toast.warning(
-          'No se encuentran registros de areas de trabajo, registre una primero para registrar un empleado'
-        )
-      }
     })
     const onFiltered = (filteredItems) => {
       currentPage.value = 1
@@ -279,6 +332,7 @@ export default {
     }
     return {
       employees,
+      departaments,
       fields,
       perPage,
       currentPage,
@@ -293,13 +347,16 @@ export default {
       nameState,
       dateState,
       areaState,
+      departamentState,
+
       onFiltered,
       addEmployee,
       refreshTable,
       RemoveEmployee,
       validateName,
       validateArea,
-      validateDate
+      validateDate,
+      validateDepartament
     }
   }
 }
