@@ -5,14 +5,14 @@
     </b-card>
     <b-card>
       <div>
-        <h3>Editar Area de trabajo</h3>
+        <h3>Editar Departamento</h3>
       </div>
-      <Form @submit="onUpdateArea()">
+      <Form @submit="onUpdateDepartamento()">
         <b-row cols="3">
           <b-col>
-            <b-form-group class="mt-3" label="Nombre de area">
+            <b-form-group class="mt-3" label="Nombre">
               <Field name="NameField" :rules="validateArea">
-                <b-form-input v-model="area.nombre" :state="nameState">
+                <b-form-input v-model="departament.nombre" :state="nameState">
                 </b-form-input>
               </Field>
               <ErrorMessage name="NameField">
@@ -23,31 +23,32 @@
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Descripción">
-              <b-form-input v-model="area.descripcion" />
+              <b-form-input v-model="departament.descripcion" />
             </b-form-group>
           </b-col>
         </b-row>
+        <b-row align-h="end">
+          <b-button
+            class="col-1 m-2 text-white"
+            variant="primary"
+            to="/Empleados/list"
+            type="reset"
+          >
+            Cancelar</b-button
+          >
+          <b-button type="success" class="col-1 m-2" variant="success">
+            Guardar
+          </b-button>
+        </b-row>
       </Form>
-      <b-row align-h="end">
-        <b-button
-          class="col-1 m-2 text-white"
-          variant="primary"
-          to="/Empleados/list"
-          type="reset"
-          >Cancelar</b-button
-        >
-        <b-button class="col-1 m-2" variant="success" @click="onUpdateArea()"
-          >Guardar</b-button
-        >
-      </b-row>
     </b-card>
   </b-card>
 </template>
 
 <script>
-import AreaServices from '@/Services/area.Services'
+import DepartamentServices from '@/Services/departament.Services'
 import { ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useToast } from 'vue-toast-notification'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -58,29 +59,33 @@ export default {
     ErrorMessage
   },
   setup () {
-    const { getArea, updateArea } = AreaServices()
+    const { getDepartament, updateDepartament } = DepartamentServices()
     const $toast = useToast()
-    const employee = ref([])
-    const area = ref([])
+    const departament = ref([])
     const router = useRoute()
+    const redirect = useRouter()
     const nameState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Areas', to: '/Areas/list' },
-      { text: 'Editar-Area' }
+      { text: 'Departamentos', to: '/Departamentos/list' },
+      { text: 'Editar-Departamento' }
     ])
-    const onUpdateArea = () => {
-      updateArea(area.value, data => {})
-      $toast.success('Empleado actualizado correctamente.', {
-        position: 'top-right',
-        duration: 1500
+    const onUpdateDepartamento = () => {
+      updateDepartament(departament.value, data => {})
+      $toast.open({
+        message: 'Departamento modificado correctamente',
+        position: 'top',
+        duration: 2000,
+        dismissible: true,
+        type: 'success',
+        onDismiss: () => redirect.push('/Departamentos/list')
       })
     }
-    getArea(router.params.AreaId, data => {
-      area.value = data
+    getDepartament(router.params.DepartamentoId, data => {
+      departament.value = data
     })
     const validateArea = () => {
-      if (!area.value.nombre) {
+      if (!departament.value.nombre) {
         validateState()
         return 'Este campo es requerido'
       }
@@ -89,16 +94,15 @@ export default {
     }
     const validateState = () => {
       // eslint-disable-next-line no-unneeded-ternary
-      nameState.value = employee.value.nombreCompleto === '' ? false : true
+      nameState.value = departament.value.nombre === '' ? false : true
       return 'HOli'
     }
     return {
-      employee,
-      area,
+      departament,
       breadcrumbItems,
       //   router
 
-      onUpdateArea,
+      onUpdateDepartamento,
       validateArea,
       validateState,
       nameState

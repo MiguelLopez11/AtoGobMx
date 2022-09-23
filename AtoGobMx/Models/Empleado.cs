@@ -30,6 +30,7 @@ namespace AtoGobMx.Models
         [ForeignKey("AreaId")]
         public Area? Area { get; set; }
 
+        [JsonIgnore]
         public virtual IEnumerable<Usuario>? Usuarios { get; set; }
         //[ForeignKey("UsuarioId")]
         //public Usuario? usuario { get; set; }

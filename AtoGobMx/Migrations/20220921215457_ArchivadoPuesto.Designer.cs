@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20220921215457_ArchivadoPuesto")]
+    partial class ArchivadoPuesto
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -177,25 +179,18 @@ namespace AtoGobMx.Migrations
                     b.Property<bool>("Archivado")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("DescripcionDomicilio")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("DescripcionSolucion")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Domicilio")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("FechaAlta")
+                    b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTime>("FechaBaja")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("TipoFalla")
+                    b.Property<string>("NombreFalla")
                         .IsRequired()
                         .HasColumnType("longtext");
 
