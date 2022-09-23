@@ -4,54 +4,73 @@
       <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
     </b-card>
     <b-card>
-      <div>
+      <b-tabs card>
+        <b-tab title="Datos Generales" active>
+          <div>
         <h3>Editar Fallas</h3>
       </div>
       <Form @submit="onUpdateLightingFailures">
-        <b-row cols="3">
+        <b-row cols="2">
           <b-col>
-            <b-form-group class="mt-3" label="Nombre">
-              <Field name="faultNameField" :rules="validateFaultName">
+            <b-form-group class="mt-3" label="Tipo Falla">
+              <Field name="FaultTypeField" :rules="validateFaultType">
                 <b-form-input
-                  v-model="lightingFailure.nombreFalla"
-                  :state="FaultNameState"
+                  v-model="lightingFailure.tipoFalla"
+                  :state="FaultTypeState"
                 ></b-form-input>
               </Field>
-              <ErrorMessage name="faultNameField"
+              <ErrorMessage name="FaultTypeField"
                 ><span>Este campo es requerido </span
                 ><i class="bi bi-exclamation-circle"></i>
               </ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="Fecha de falla">
-              <Field name="DateField" :rules="validateDate">
+            <b-form-group class="mt-3" label="Fecha Alta">
+              <Field name="HighDateField" :rules="validateHighDate">
                 <Datepicker
                   locale="es"
                   name="Date"
                   :enableTimePicker="false"
                   autoApply
-                  v-model="lightingFailure.fecha"
-                  :state="dateState"
+                  v-model="lightingFailure.fechaAlta"
+                  :state="HighDateState"
                 ></Datepicker>
               </Field>
-              <ErrorMessage name="DateField"
+              <ErrorMessage name="HighDateField"
                 ><span>Este campo es requerido </span
                 ><i class="bi bi-exclamation-circle"></i>
               </ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="Descripcion">
-              <Field name="descriptionField" :rules="validateDescription">
-                <b-form-textarea
-                  v-model="lightingFailure.descripcion"
-                  :state="descriptionState"
-                  rows="4"
-                ></b-form-textarea>
+            <b-form-group class="mt-3" label="Domicilio">
+              <Field name="DomicileField" :rules="validateDomicile">
+                <b-form-input
+                  v-model="lightingFailure.domicilio"
+                  :state="DomicileState"
+                ></b-form-input>
               </Field>
-              <ErrorMessage name="descriptionField"
+              <ErrorMessage name="DomicileField"
                 ><span>Este campo es requerido </span
+                ><i class="bi bi-exclamation-circle"></i>
+              </ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Fecha Baja">
+              <Field name="LowDateField" :rules="validateLowDate">
+                <Datepicker
+                  locale="es"
+                  name="date"
+                  :enableTimePicker="false"
+                  autoApply
+                  v-model="lightingFailure.fechaBaja"
+                  :state="LowDateState"
+                ></Datepicker>
+              </Field>
+              <ErrorMessage name="LowDateField"
+                ><span>Este campo es requerido llenarlo </span
                 ><i class="bi bi-exclamation-circle"></i>
               </ErrorMessage>
             </b-form-group>
@@ -69,6 +88,24 @@
                 ></b-form-textarea>
               </Field>
               <ErrorMessage name="addresdescriptionField"
+                ><span>Este campo es requerido llenarlo </span
+                ><i class="bi bi-exclamation-circle"></i>
+              </ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Solucion Del Problema">
+              <Field
+                name="DescriptionSolutionField"
+                :rules="validateDescriptionSolution"
+              >
+                <b-form-textarea
+                  v-model="lightingFailure.descripcionSolucion"
+                  :state="DescriptionSolutionState"
+                  rows="4"
+                ></b-form-textarea>
+              </Field>
+              <ErrorMessage name="DescriptionSolutionField"
                 ><span>Este campo es requerido </span
                 ><i class="bi bi-exclamation-circle"></i>
               </ErrorMessage>
@@ -88,6 +125,10 @@
           >
         </b-row>
       </Form>
+        </b-tab>
+        <b-tab title="Tab 2">
+        </b-tab>
+      </b-tabs>
     </b-card>
   </b-card>
 </template>
@@ -116,10 +157,12 @@ export default {
     const router = useRoute()
     const redirect = useRouter()
     // const route = useRouter()
-    const FaultNameState = ref(false)
-    const descriptionState = ref(false)
-    const dateState = ref(false)
+    const FaultTypeState = ref(false)
+    const DescriptionSolutionState = ref(false)
+    const HighDateState = ref(false)
     const addresdescriptionState = ref(false)
+    const DomicileState = ref(false)
+    const LowDateState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
       { text: 'FallasAlumbrado', to: '/FallasAlumbrado/list' },
@@ -128,7 +171,7 @@ export default {
     getLightingFailure(router.params.FallaId, (data) => {
       lightingFailure.value = data
       // eslint-disable-next-line no-unneeded-ternary
-      FaultNameState.value = data.nombreFalla === null ? false : true
+      FaultTypeState.value = data.tipoFalla === null ? false : true
     })
     const onUpdateLightingFailures = () => {
       updateLightingFailures(lightingFailure.value, (data) => {})
@@ -142,8 +185,8 @@ export default {
       })
     }
 
-    const validateFaultName = () => {
-      if (!lightingFailure.value.nombreFalla) {
+    const validateFaultType = () => {
+      if (!lightingFailure.value.tipoFalla) {
         validateState()
         return 'Este campo es requerido'
       }
@@ -151,8 +194,8 @@ export default {
       return true
     }
 
-    const validateDescription = () => {
-      if (!lightingFailure.value.descripcion) {
+    const validateDescriptionSolution = () => {
+      if (!lightingFailure.value.descripcionSolucion) {
         validateState()
         return 'Este campo es requerido'
       }
@@ -160,8 +203,26 @@ export default {
       return true
     }
 
-    const validateDate = () => {
-      if (!lightingFailure.value.fecha) {
+    const validateDomicile = () => {
+      if (!lightingFailure.value.domicilio) {
+        validateState()
+        return 'Este campo es requerido'
+      }
+      validateState()
+      return true
+    }
+
+    const validateLowDate = () => {
+      if (!lightingFailure.value.fechaBaja) {
+        validateState()
+        return 'Este campo es requerido'
+      }
+      validateState()
+      return true
+    }
+
+    const validateHighDate = () => {
+      if (!lightingFailure.value.fechaAlta) {
         validateState()
         return 'Este campo es requerido'
       }
@@ -180,13 +241,21 @@ export default {
 
     const validateState = () => {
       // eslint-disable-next-line no-unneeded-ternary
-      FaultNameState.value = lightingFailure.value.nombreFalla === '' ? false : true
+      FaultTypeState.value = lightingFailure.value.tipoFalla !== ''
       // eslint-disable-next-line no-unneeded-ternary
-      descriptionState.value = lightingFailure.value.descripcion === '' ? false : true
+      HighDateState.value =
+        lightingFailure.value.fechaAlta !== null
       // eslint-disable-next-line no-unneeded-ternary
-      dateState.value = lightingFailure.value.fecha === null ? false : true
+      DomicileState.value = lightingFailure.value.domicilio !== ''
       // eslint-disable-next-line no-unneeded-ternary
-      addresdescriptionState.value = lightingFailure.value.descripcionDomicilio === '' ? false : true
+      addresdescriptionState.value =
+        lightingFailure.value.descripcionDomicilio !== ''
+      // eslint-disable-next-line no-unneeded-ternary
+      DescriptionSolutionState.value =
+        lightingFailure.value.descripcionSolucion !== ''
+      // eslint-disable-next-line no-unneeded-ternary
+      LowDateState.value =
+        lightingFailure.value.fechaBaja !== null
     }
     // getAreas((data) => {
     //   areas.value = data
@@ -196,18 +265,20 @@ export default {
       lightingFailure,
       breadcrumbItems,
       router,
-      FaultNameState,
-      descriptionState,
-      dateState,
+      FaultTypeState,
+      DescriptionSolutionState,
+      HighDateState,
       addresdescriptionState,
-      redirect,
+      DomicileState,
+      LowDateState,
 
       onUpdateLightingFailures,
-      validateFaultName,
-      validateDescription,
-      validateDate,
+      validateFaultType,
+      validateDescriptionSolution,
+      validateHighDate,
       validateAddresdescription,
-      validateState
+      validateLowDate,
+      validateDomicile
     }
   }
 }

@@ -218,7 +218,7 @@ export default {
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('nombreFalla')
+    const searchField = ref('tipoFalla')
     const FaultTypeState = ref(false)
     const DescriptionSolutionState = ref(false)
     const HighDateState = ref(false)
