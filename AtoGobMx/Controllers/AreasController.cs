@@ -19,6 +19,7 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult> GetAreas()
         {
             var areas = await _context.Area
+                .Include(i => i.Departamentos)
                 .Where(w => !w.Archivado)
                 .ToListAsync();
             return Ok(areas);

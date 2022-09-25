@@ -163,6 +163,7 @@
         </b-row>
       </Form>
     </b-modal>
+    {{roles.length}}
   </b-card>
 </template>
 
@@ -171,7 +172,7 @@ import UsersServices from '@/Services/users.Services'
 import RoleServices from '@/Services/role.Services'
 import EmployeeServices from '@/Services/employee.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
@@ -237,6 +238,18 @@ export default {
         if (users.value.length <= 0) {
           isloading.value = false
         }
+      }
+    })
+    watch(roles, (value) => {
+      console.log(value)
+      if (value.length === 0) {
+        $toast.open({
+          message: 'No se encuentran roles registrados en el sistema, registre primero un departamento para continuar',
+          position: 'top-left',
+          duration: 0,
+          dismissible: true,
+          type: 'error'
+        })
       }
     })
     const onFiltered = filteredItems => {
