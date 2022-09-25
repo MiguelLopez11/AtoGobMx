@@ -179,7 +179,7 @@ import DepartamentServices from '@/Services/departament.Services'
 import Datepicker from '@vuepic/vue-datepicker'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
@@ -220,26 +220,27 @@ export default {
       usuarioId: 0,
       departamentoId: 0
     })
-    onMounted(() => {
-      if (departaments.value.length === 0) {
-        $toast.open({
-          message: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar',
-          position: 'top-left',
-          duration: 0,
-          dismissible: true,
-          type: 'error'
-        })
-      }
-      if (areas.value.length === 0) {
-        $toast.open({
-          message: 'No se encuentran areas registrados en el sistema, registre primero un departamento para continuar',
-          position: 'top-left',
-          duration: 0,
-          dismissible: true,
-          type: 'error'
-        })
-      }
-    })
+    // onMounted(() => {
+    //   console.log(areas.value)
+    // if (!departamentsValues) {
+    //   $toast.open({
+    //     message: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar',
+    //     position: 'top-left',
+    //     duration: 0,
+    //     dismissible: true,
+    //     type: 'error'
+    //   })
+    // }
+    // if (!areasValues) {
+    //   $toast.open({
+    //     message: 'No se encuentran areas registrados en el sistema, registre primero una area para continuar',
+    //     position: 'top-left',
+    //     duration: 0,
+    //     dismissible: true,
+    //     type: 'error'
+    //   })
+    // }
+    // })
     getDepartaments(data => {
       departaments.value = data
     })

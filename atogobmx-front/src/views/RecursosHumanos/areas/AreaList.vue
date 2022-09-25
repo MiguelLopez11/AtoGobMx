@@ -130,7 +130,7 @@
 import AreaServices from '@/Services/area.Services'
 import DepartamentServices from '@/Services/departament.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
-import { ref, onMounted } from 'vue'
+import { ref, watch } from 'vue'
 import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
@@ -164,8 +164,8 @@ export default {
       departamentoId: 0,
       archivado: false
     })
-    onMounted(() => {
-      if (departaments.value.length === 0) {
+    watch(departaments, (values) => {
+      if (values.length === 0) {
         $toast.open({
           message: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar',
           position: 'top-left',

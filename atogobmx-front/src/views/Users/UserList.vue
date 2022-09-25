@@ -241,7 +241,6 @@ export default {
       }
     })
     watch(roles, (value) => {
-      console.log(value)
       if (value.length === 0) {
         $toast.open({
           message: 'No se encuentran roles registrados en el sistema, registre primero un departamento para continuar',
