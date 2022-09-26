@@ -179,7 +179,7 @@ import DepartamentServices from '@/Services/departament.Services'
 import Datepicker from '@vuepic/vue-datepicker'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
@@ -220,8 +220,8 @@ export default {
       usuarioId: 0,
       departamentoId: 0
     })
-    // onMounted(() => {
-    //   console.log(areas.value)
+    watch([departaments, areas], ([value], [value1]) => {
+      console.log(value.length, value1.length)
     // if (!departamentsValues) {
     //   $toast.open({
     //     message: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar',
@@ -240,7 +240,7 @@ export default {
     //     type: 'error'
     //   })
     // }
-    // })
+    })
     getDepartaments(data => {
       departaments.value = data
     })
