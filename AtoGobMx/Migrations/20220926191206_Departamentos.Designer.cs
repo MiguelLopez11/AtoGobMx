@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20220926191206_Departamentos")]
+    partial class Departamentos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -120,9 +122,6 @@ namespace AtoGobMx.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("varchar(200)");
 
-                    b.Property<int?>("PuestoTrabajoId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("expedienteDigitalId")
                         .HasColumnType("int");
 
@@ -131,8 +130,6 @@ namespace AtoGobMx.Migrations
                     b.HasIndex("AreaId");
 
                     b.HasIndex("DepartamentoId");
-
-                    b.HasIndex("PuestoTrabajoId");
 
                     b.HasIndex("expedienteDigitalId");
 
@@ -329,10 +326,6 @@ namespace AtoGobMx.Migrations
                         .WithMany()
                         .HasForeignKey("DepartamentoId");
 
-                    b.HasOne("AtoGobMx.Models.PuestoTrabajo", "PuestoTrabajo")
-                        .WithMany()
-                        .HasForeignKey("PuestoTrabajoId");
-
                     b.HasOne("AtoGobMx.Models.ExpedienteDigital", "ExpedienteDigital")
                         .WithMany("Empleados")
                         .HasForeignKey("expedienteDigitalId");
@@ -342,8 +335,6 @@ namespace AtoGobMx.Migrations
                     b.Navigation("Departamentos");
 
                     b.Navigation("ExpedienteDigital");
-
-                    b.Navigation("PuestoTrabajo");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.PuestoTrabajo", b =>

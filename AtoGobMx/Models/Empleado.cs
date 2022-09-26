@@ -23,6 +23,7 @@ namespace AtoGobMx.Models
         public int? DepartamentoId { get; set; }
 
         public int? expedienteDigitalId { get; set; }
+        public int? PuestoTrabajoId { get; set; }
 
         [ForeignKey("expedienteDigitalId")]
         public ExpedienteDigital? ExpedienteDigital { get; set; }
@@ -31,6 +32,8 @@ namespace AtoGobMx.Models
         public Area? Area { get; set; }
         [ForeignKey("DepartamentoId")]
         public Departamentos? Departamentos { get; set; }
+        [ForeignKey("PuestoTrabajoId")]
+        public PuestoTrabajo? PuestoTrabajo { get; set; }
 
         [JsonIgnore]
         public virtual IEnumerable<Usuario>? Usuarios { get; set; }

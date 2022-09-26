@@ -19,11 +19,22 @@ namespace AtoGobMx.Controllers
             _mapper = mapper;
         }
         [HttpGet]
-        public async Task<ActionResult<PuestoTrabajo>> GetExpedientesDigitales()
+        public async Task<ActionResult<PuestoTrabajo>> GetPuestosTrabajo()
         {
             var puestosTrabajo = await _context.PuestoTrabajo
                 .Include(i => i.Area)
                 .Where(w => !w.Archivado)
+                .OrderBy(o => o.PuestoTrabajoId)
+                .ToListAsync();
+            return Ok(puestosTrabajo);
+        }
+        [HttpGet("Departamento/{DepartamentoId}")]
+        public async Task<ActionResult<PuestoTrabajo>> GetPuestosTrabajoDepartamento(int DepartamentoId)
+        {
+            var puestosTrabajo = await _context.PuestoTrabajo
+                .Include(i => i.Area)
+                .Where(w => !w.Archivado)
+                .Where(w => w.DepartamentoId == DepartamentoId)
                 .OrderBy(o => o.PuestoTrabajoId)
                 .ToListAsync();
             return Ok(puestosTrabajo);

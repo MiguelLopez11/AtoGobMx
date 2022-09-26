@@ -23,6 +23,8 @@ namespace AtoGobMx.Controllers
         {
             var empleados = await _context.Empleados
                 .Include(i => i.Area)
+                .Include(i => i.Departamentos)
+                .Include(i => i.PuestoTrabajo)
                 //.Include(i => i.usuario)
                 .Include(i => i.ExpedienteDigital)
                 .Where(w => !w.Archivado)
@@ -89,7 +91,7 @@ namespace AtoGobMx.Controllers
             {
                 return Ok("Los ID ingresados no coinciden");
             }
-            var emp = _context.Empleados.Find(EmpleadoId);
+            var emp = await _context.Empleados.FirstOrDefaultAsync(f => f.EmpleadoId == EmpleadoId);
             if (emp == null)
             {
                 return BadRequest("El empledo no existe");
@@ -97,11 +99,13 @@ namespace AtoGobMx.Controllers
             emp.EmpleadoId = empleado.EmpleadoId;
             emp.NombreCompleto = empleado.NombreCompleto;
             emp.FechaNacimiento = empleado.FechaNacimiento;
+            emp.FechaAlta = empleado.FechaAlta;
+            emp.FechaBaja = empleado.FechaBaja;
             emp.AreaId = empleado.AreaId;
             emp.DepartamentoId = empleado.DepartamentoId;
             emp.expedienteDigitalId = empleado.expedienteDigitalId;
+            emp.PuestoTrabajoId = empleado.PuestoTrabajoId;
             emp.Archivado = empleado.Archivado;
-            emp.FechaAlta = empleado.FechaAlta;
 
             _context.Empleados.Update(emp);
             await _context.SaveChangesAsync();

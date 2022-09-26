@@ -123,6 +123,7 @@
                   value-field="departamentoId"
                   text-field="nombre"
                   :state="departamentState"
+                  @input="getAreas(EmployeesFields.departamentoId)"
                 >
                 </b-form-select>
               </Field>
@@ -145,10 +146,55 @@
                   value-field="areaId"
                   text-field="nombre"
                   :state="areaState"
+                  @input="getWorkStation(EmployeesFields.areaId)"
                 >
                 </b-form-select>
               </Field>
               <ErrorMessage name="AreaField"
+                ><span class="text-danger">Este campo es requerido </span
+                ><i class="bi bi-exclamation-circle"></i
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Puesto de trabajo">
+              <Field
+                name="workStationField"
+                :rules="validateWorkSation"
+              >
+                <b-form-select
+                  v-model="EmployeesFields.puestoTrabajoId"
+                  autofocus
+                  :options="workStations"
+                  value-field="puestoTrabajoId"
+                  text-field="nombre"
+                  :state="workStationState"
+                  @input="getWorkStation(EmployeesFields.puestoTrabajoId)"
+                >
+                </b-form-select>
+              </Field>
+              <ErrorMessage name="workStationField"
+                ><span class="text-danger">Este campo es requerido </span
+                ><i class="bi bi-exclamation-circle"></i
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Fecha de Contratación">
+              <Field
+                name="DateWorkField"
+                :rules="validateWorkDate"
+              >
+                <Datepicker
+                  v-model="EmployeesFields.fechaAlta"
+                  locale="es"
+                  autoApply
+                  :enableTimePicker="false"
+                  :state="dateWorkState"
+                >
+                </Datepicker>
+              </Field>
+              <ErrorMessage name="DateWorkField"
                 ><span class="text-danger">Este campo es requerido </span
                 ><i class="bi bi-exclamation-circle"></i
               ></ErrorMessage>
@@ -160,6 +206,7 @@
             class="w-auto m-2 text-white"
             variant="primary"
             v-b-modal.modal-employee
+            @click="resetEmployeesFields"
           >
             Cancelar
           </b-button>
@@ -176,10 +223,11 @@
 import EmployeeServices from '@/Services/employee.Services'
 import AreaServices from '@/Services/area.Services'
 import DepartamentServices from '@/Services/departament.Services'
+import workStationServices from '@/Services/workStation.Services'
 import Datepicker from '@vuepic/vue-datepicker'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
@@ -192,12 +240,14 @@ export default {
   },
   setup () {
     const { getEmployees, createEmployee, deleteEmployee } = EmployeeServices()
-    const { getAreas } = AreaServices()
+    const { getAreasByDepartament } = AreaServices()
     const { getDepartaments } = DepartamentServices()
+    const { getWorkStationByArea } = workStationServices()
     const $toast = useToast()
     const employees = ref([])
     const departaments = ref([])
     const areas = ref([])
+    const workStations = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
     const filter = ref(null)
@@ -207,42 +257,62 @@ export default {
     const searchField = ref('nombreCompleto')
     const nameState = ref(false)
     const dateState = ref(false)
+    const dateWorkState = ref(false)
     const areaState = ref(false)
+    const workStationState = ref(false)
     const departamentState = ref(false)
     const EmployeesFields = ref({
       empleadoId: 0,
-      nombreCompleto: null,
-      fechaNacimiento: null,
+      nombreCompleto: '',
+      fechaNacimiento: '',
       fechaAlta: null,
       fechaBaja: null,
       archivado: false,
-      areaId: 0,
-      usuarioId: 0,
-      departamentoId: 0
+      areaId: null,
+      usuarioId: null,
+      departamentoId: null,
+      expedienteDigitalId: null,
+      puestoTrabajoId: null
     })
-    watch([departaments, areas], ([value], [value1]) => {
-      console.log(value.length, value1.length)
-    // if (!departamentsValues) {
-    //   $toast.open({
-    //     message: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar',
-    //     position: 'top-left',
-    //     duration: 0,
-    //     dismissible: true,
-    //     type: 'error'
-    //   })
-    // }
-    // if (!areasValues) {
-    //   $toast.open({
-    //     message: 'No se encuentran areas registrados en el sistema, registre primero una area para continuar',
-    //     position: 'top-left',
-    //     duration: 0,
-    //     dismissible: true,
-    //     type: 'error'
-    //   })
-    // }
-    })
+    const getAreas = (departamentoId) => {
+      getAreasByDepartament(departamentoId, data => {
+        areas.value = data
+        if (data.length === 0) {
+          $toast.open({
+            message: 'No se encuentran areas registrados en el departamento seleccionado, registre primero una area para continuar',
+            position: 'top-left',
+            duration: 0,
+            dismissible: true,
+            type: 'error'
+          })
+        }
+      })
+    }
+    const getWorkStation = (departamentoId) => {
+      getWorkStationByArea(departamentoId, data => {
+        workStations.value = data
+        if (data.length === 0) {
+          $toast.open({
+            message: 'No se encuentran puestos de trabajo registrados en el area seleccionado, registre primero un puesto de trabajo para continuar',
+            position: 'top-left',
+            duration: 0,
+            dismissible: true,
+            type: 'error'
+          })
+        }
+      })
+    }
     getDepartaments(data => {
       departaments.value = data
+      if (data.length === 0) {
+        $toast.open({
+          message: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar',
+          position: 'top-left',
+          duration: 0,
+          dismissible: true,
+          type: 'error'
+        })
+      }
     })
     const validateName = () => {
       if (!EmployeesFields.value.nombreCompleto) {
@@ -268,6 +338,14 @@ export default {
       dateState.value = true
       return true
     }
+    const validateWorkDate = () => {
+      if (!EmployeesFields.value.fechaAlta) {
+        dateWorkState.value = false
+        return 'Este campo es requerido'
+      }
+      dateWorkState.value = true
+      return true
+    }
     const validateArea = () => {
       if (!EmployeesFields.value.areaId) {
         areaState.value = false
@@ -276,15 +354,35 @@ export default {
       areaState.value = true
       return true
     }
+    const validateWorkSation = () => {
+      if (!EmployeesFields.value.puestoTrabajoId) {
+        workStationState.value = false
+        return 'Este campo es requerido'
+      }
+      workStationState.value = true
+      return true
+    }
     const EmployeesFieldsBlank = ref(
       JSON.parse(JSON.stringify(EmployeesFields))
     )
     const fields = ref([
       { value: 'empleadoId', text: 'ID', sortable: true },
       { value: 'nombreCompleto', text: 'Nombre' },
+      { value: 'departamentos.nombre', text: 'Departamento' },
+      { value: 'puestoTrabajo.nombre', text: 'Puesto de Trabajo' },
+      { value: 'fechaAlta', text: 'Fecha de contratación' },
       { value: 'area.nombre', text: 'Area de Trabajo' },
       { value: 'actions', text: 'Acciones' }
     ])
+    const resetEmployeesFields = () => {
+      EmployeesFields.value = JSON.parse(JSON.stringify(EmployeesFieldsBlank))
+      nameState.value = false
+      dateState.value = false
+      dateWorkState.value = false
+      areaState.value = false
+      departamentState.value = false
+      workStationState.value = false
+    }
     getEmployees((data) => {
       employees.value = data
       if (employees.value.length > 0) {
@@ -294,9 +392,6 @@ export default {
           isloading.value = false
         }
       }
-    })
-    getAreas((data) => {
-      areas.value = data
     })
     const onFiltered = (filteredItems) => {
       currentPage.value = 1
@@ -323,7 +418,7 @@ export default {
           duration: 1500
         })
       })
-      EmployeesFields.value = JSON.parse(JSON.stringify(EmployeesFieldsBlank))
+      resetEmployeesFields()
     }
     const RemoveEmployee = (employeeId) => {
       isloading.value = true
@@ -340,6 +435,7 @@ export default {
       filter,
       perPageSelect,
       areas,
+      workStations,
       EmployeesFieldsBlank,
       EmployeesFields,
       isloading,
@@ -347,7 +443,9 @@ export default {
       searchField,
       nameState,
       dateState,
+      dateWorkState,
       areaState,
+      workStationState,
       departamentState,
 
       onFiltered,
@@ -357,7 +455,12 @@ export default {
       validateName,
       validateArea,
       validateDate,
-      validateDepartament
+      validateWorkDate,
+      validateDepartament,
+      validateWorkSation,
+      getAreas,
+      getWorkStation,
+      resetEmployeesFields
     }
   }
 }

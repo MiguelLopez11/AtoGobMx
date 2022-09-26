@@ -24,6 +24,16 @@ namespace AtoGobMx.Controllers
                 .ToListAsync();
             return Ok(areas);
         }
+        [HttpGet("Departamento/{DepartamentoId}")]
+        public async Task<ActionResult> GetAreasbyDepartament(int DepartamentoId)
+        {
+            var areas = await _context.Area
+                .Include(i => i.Departamentos)
+                .Where(w => w.DepartamentoId == DepartamentoId)
+                .Where(w => !w.Archivado)
+                .ToListAsync();
+            return Ok(areas);
+        }
         [HttpGet("{AreaId}")]
         public async Task<ActionResult> GetAreasById(int AreaId)
         {

@@ -83,6 +83,29 @@
             </b-form-group>
           </b-col>
           <b-col>
+            <b-form-group class="mt-3" label="Departamento">
+              <Field
+                name="DepartamentField"
+                :rules="validateDepartament"
+              >
+                <b-form-select
+                  v-model="workStationFields.departamentoId"
+                  autofocus
+                  :options="departaments"
+                  value-field="departamentoId"
+                  text-field="nombre"
+                  :state="departamentState"
+                  @input="getAreas(workStationFields.departamentoId)"
+                >
+                </b-form-select>
+              </Field>
+              <ErrorMessage name="DepartamentField"
+                ><span>Este campo es requerido </span
+                ><i class="bi bi-exclamation-circle"></i
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <b-col>
             <b-form-group class="mt-3" label="Area">
               <Field
                 name="AreaField"
@@ -110,6 +133,7 @@
             class="w-auto m-2 text-white"
             variant="primary"
             v-b-modal.modal-puestoTrabajo
+            @click="resetWorkStationFields"
           >
             Cancelar
           </b-button>
@@ -125,6 +149,7 @@
 <script>
 import workStationServices from '@/Services/workStation.Services'
 import AreasServices from '@/Services/area.Services'
+import DepartamentServices from '@/Services/departament.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref } from 'vue'
 import { useToast } from 'vue-toast-notification'
@@ -138,10 +163,12 @@ export default {
   },
   setup () {
     const { getWorkStations, createWorkStation, deleteWorkStation } = workStationServices()
-    const { getAreas } = AreasServices()
+    const { getAreasByDepartament } = AreasServices()
+    const { getDepartaments } = DepartamentServices()
     const $toast = useToast()
     const workStations = ref([])
     const areas = ref([])
+    const departaments = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
     const rows = ref(null)
@@ -152,9 +179,11 @@ export default {
     const searchField = ref('nombre')
     const nameState = ref(false)
     const areaState = ref(false)
+    const departamentState = ref(false)
     const workStationFields = ref({
       puestoTrabajoId: 0,
       nombre: '',
+      departamentoId: 0,
       areaId: 0,
       archivado: false
     })
@@ -175,9 +204,32 @@ export default {
         }
       }
     })
-    getAreas(data => {
-      areas.value = data
+    getDepartaments(data => {
+      departaments.value = data
+      if (data.length === 0) {
+        $toast.open({
+          message: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar',
+          position: 'top-left',
+          duration: 0,
+          dismissible: true,
+          type: 'error'
+        })
+      }
     })
+    const getAreas = (departamentoId) => {
+      getAreasByDepartament(departamentoId, data => {
+        areas.value = data
+        if (data.length === 0) {
+          $toast.open({
+            message: 'No se encuentran areas registrados en el departamento seleccionado, registre primero una area para continuar',
+            position: 'top-left',
+            duration: 0,
+            dismissible: true,
+            type: 'error'
+          })
+        }
+      })
+    }
     const onFiltered = (filteredItems) => {
       rows.value = filteredItems.length
       currentPage.value = 1
@@ -188,6 +240,14 @@ export default {
         return 'Este campo es requerido'
       }
       nameState.value = true
+      return true
+    }
+    const validateDepartament = () => {
+      if (!workStationFields.value.departamentoId) {
+        departamentState.value = false
+        return 'Este campo es requerido'
+      }
+      departamentState.value = true
       return true
     }
     const validateArea = () => {
@@ -220,17 +280,22 @@ export default {
           duration: 2000
         })
       })
+      resetWorkStationFields()
+    }
+    const resetWorkStationFields = () => {
       workStationFields.value = JSON.parse(JSON.stringify(workStationFieldsBlank))
       nameState.value = false
+      areaState.value = false
+      departamentState.value = false
     }
     const RemoveWorkStation = (puestoTrabajoId) => {
       isloading.value = true
-      deleteWorkStation(puestoTrabajoId, (data) => {
-        refreshTable()
-      })
+      deleteWorkStation(puestoTrabajoId, (data) => {})
+      refreshTable()
     }
     return {
       workStations,
+      departaments,
       fields,
       perPage,
       currentPage,
@@ -249,9 +314,13 @@ export default {
       RemoveWorkStation,
       nameState,
       areaState,
+      departamentState,
 
       validateName,
-      validateArea
+      validateArea,
+      validateDepartament,
+      resetWorkStationFields,
+      getAreas
     }
   }
 }
