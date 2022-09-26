@@ -7,7 +7,7 @@
       <b-tabs card>
         <b-tab title="Datos Generales" active>
           <div>
-        <h3>Editar Fallas</h3>
+        <h3>Reporte de Falla</h3>
       </div>
       <Form @submit="onUpdateLightingFailures">
         <b-row cols="2">
@@ -31,8 +31,7 @@
                 <Datepicker
                   locale="es"
                   name="Date"
-                  :enableTimePicker="false"
-                  autoApply
+                  text-input
                   v-model="lightingFailure.fechaAlta"
                   :state="HighDateState"
                 ></Datepicker>
@@ -63,8 +62,7 @@
                 <Datepicker
                   locale="es"
                   name="date"
-                  :enableTimePicker="false"
-                  autoApply
+                  text-input
                   v-model="lightingFailure.fechaBaja"
                   :state="LowDateState"
                 ></Datepicker>
@@ -178,7 +176,7 @@ export default {
       $toast.open({
         message: 'La Falla se a modificado correcta mente',
         position: 'top',
-        duration: 2000,
+        duration: 1000,
         dismissible: true,
         type: 'success',
         onDismiss: () => redirect.push('/FallasAlumbrado/list')

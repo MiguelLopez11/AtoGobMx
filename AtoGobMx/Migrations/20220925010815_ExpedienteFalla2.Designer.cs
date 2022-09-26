@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20220925010815_ExpedienteFalla2")]
+    partial class ExpedienteFalla2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -219,9 +221,6 @@ namespace AtoGobMx.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("ExpedienteFallaId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("FechaAlta")
                         .HasColumnType("datetime(6)");
 
@@ -232,9 +231,12 @@ namespace AtoGobMx.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("expedienteFallaId")
+                        .HasColumnType("int");
+
                     b.HasKey("FallaId");
 
-                    b.HasIndex("ExpedienteFallaId");
+                    b.HasIndex("expedienteFallaId");
 
                     b.ToTable("FallasAlumbradoPublico");
                 });
@@ -359,7 +361,7 @@ namespace AtoGobMx.Migrations
                 {
                     b.HasOne("AtoGobMx.Models.ExpedienteFalla", "ExpedienteFalla")
                         .WithMany("FallasAlumbradoPublico")
-                        .HasForeignKey("ExpedienteFallaId");
+                        .HasForeignKey("expedienteFallaId");
 
                     b.Navigation("ExpedienteFalla");
                 });
