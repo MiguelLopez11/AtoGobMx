@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    [Migration("20220925013526_ExpedienteFallatres")]
-    partial class ExpedienteFallatres
+    [Migration("20220926234030_Alumbrado")]
+    partial class Alumbrado
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -170,7 +170,7 @@ namespace AtoGobMx.Migrations
                     b.ToTable("ExpedienteDigital");
                 });
 
-            modelBuilder.Entity("AtoGobMx.Models.ExpedienteFalla", b =>
+            modelBuilder.Entity("AtoGobMx.Models.ExpedienteFallas", b =>
                 {
                     b.Property<int>("ExpedienteFallaId")
                         .ValueGeneratedOnAdd()
@@ -198,47 +198,6 @@ namespace AtoGobMx.Migrations
                     b.HasKey("ExpedienteFallaId");
 
                     b.ToTable("ExpedienteFalla");
-                });
-
-            modelBuilder.Entity("AtoGobMx.Models.FallasAlumbradoPublico", b =>
-                {
-                    b.Property<int>("FallaId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Archivado")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("DescripcionDomicilio")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("DescripcionSolucion")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Domicilio")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int?>("ExpedienteFallaId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("FechaAlta")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("FechaBaja")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("TipoFalla")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("FallaId");
-
-                    b.HasIndex("ExpedienteFallaId");
-
-                    b.ToTable("FallasAlumbradoPublico");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.PuestoTrabajo", b =>
@@ -357,15 +316,6 @@ namespace AtoGobMx.Migrations
                     b.Navigation("ExpedienteDigital");
                 });
 
-            modelBuilder.Entity("AtoGobMx.Models.FallasAlumbradoPublico", b =>
-                {
-                    b.HasOne("AtoGobMx.Models.ExpedienteFalla", "ExpedienteFalla")
-                        .WithMany("FallasAlumbradoPublico")
-                        .HasForeignKey("ExpedienteFallaId");
-
-                    b.Navigation("ExpedienteFalla");
-                });
-
             modelBuilder.Entity("AtoGobMx.Models.PuestoTrabajo", b =>
                 {
                     b.HasOne("AtoGobMx.Models.Area", "Area")
@@ -409,11 +359,6 @@ namespace AtoGobMx.Migrations
                     b.Navigation("Archivos");
 
                     b.Navigation("Empleados");
-                });
-
-            modelBuilder.Entity("AtoGobMx.Models.ExpedienteFalla", b =>
-                {
-                    b.Navigation("FallasAlumbradoPublico");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Role", b =>
