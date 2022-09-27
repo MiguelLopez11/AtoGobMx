@@ -41,7 +41,7 @@
                       >
                         Empleados
                       </router-link>
-                      </a>
+                    </a>
                   </li>
                   <li>
                     <a class="dropdown-item">
@@ -89,13 +89,29 @@
                   </li>
                 </ul>
               </li>
-              <li class="nav-item">
-                <router-link
-                  class="nav-link active"
-                  aria-current="page"
-                  to="/FallasAlumbrado/list"
-                  >Servicios Publicos
-                </router-link>
+              <li class="nav-item dropdown">
+                <a
+                  class="nav-link dropdown-toggle"
+                  href="#"
+                  id="navbarDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Servicios publicos
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li>
+                    <a class="dropdown-item">
+                      <router-link
+                        class="nav-link active text-dark"
+                        aria-current="page"
+                        to="/FallasAlumbrado/list"
+                        >Reporte Fallas
+                      </router-link>
+                    </a>
+                  </li>
+                </ul>
               </li>
               <li class="nav-item dropdown">
                 <a
@@ -118,7 +134,7 @@
                       >
                         Usuarios
                       </router-link>
-                      </a>
+                    </a>
                   </li>
                   <li>
                     <a class="dropdown-item">

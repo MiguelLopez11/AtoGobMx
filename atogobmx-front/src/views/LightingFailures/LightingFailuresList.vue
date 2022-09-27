@@ -64,7 +64,6 @@
       title="Agregar Falla"
       size="xl"
       hide-footer
-      centered
       button-size="lg"
       lazy
     >
@@ -90,8 +89,7 @@
                 <Datepicker
                   locale="es"
                   name="date"
-                  :enableTimePicker="false"
-                  autoApply
+                  text-input
                   v-model="lightingFailuresFields.fechaAlta"
                   :state="HighDateState"
                 ></Datepicker>
@@ -112,6 +110,23 @@
               </Field>
               <ErrorMessage name="DomicileField"
                 ><span>Este campo es requerido </span
+                ><i class="bi bi-exclamation-circle"></i>
+              </ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Fecha Baja">
+              <Field name="LowDateField" :rules="validateLowDate">
+                <Datepicker
+                  locale="es"
+                  name="date"
+                  text-input
+                  v-model="lightingFailuresFields.fechaBaja"
+                  :state="LowDateState"
+                ></Datepicker>
+              </Field>
+              <ErrorMessage name="LowDateField"
+                ><span>Este campo es requerido llenarlo </span
                 ><i class="bi bi-exclamation-circle"></i>
               </ErrorMessage>
             </b-form-group>
@@ -148,24 +163,6 @@
               </Field>
               <ErrorMessage name="DescriptionSolutionField"
                 ><span>Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i>
-              </ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Fecha Baja">
-              <Field name="LowDateField" :rules="validateLowDate">
-                <Datepicker
-                  locale="es"
-                  name="date"
-                  :enableTimePicker="false"
-                  autoApply
-                  v-model="lightingFailuresFields.fechaBaja"
-                  :state="LowDateState"
-                ></Datepicker>
-              </Field>
-              <ErrorMessage name="LowDateField"
-                ><span>Este campo es requerido llenarlo </span
                 ><i class="bi bi-exclamation-circle"></i>
               </ErrorMessage>
             </b-form-group>
@@ -218,7 +215,7 @@ export default {
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('nombreFalla')
+    const searchField = ref('tipoFalla')
     const FaultTypeState = ref(false)
     const DescriptionSolutionState = ref(false)
     const HighDateState = ref(false)
