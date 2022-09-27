@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20220927144521_correcciones_Empleado2")]
+    partial class correcciones_Empleado2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -119,6 +121,9 @@ namespace AtoGobMx.Migrations
                     b.Property<int?>("PuestoTrabajoId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("expedienteDigitalId")
+                        .HasColumnType("int");
+
                     b.HasKey("EmpleadoId");
 
                     b.HasIndex("AreaId");
@@ -126,6 +131,8 @@ namespace AtoGobMx.Migrations
                     b.HasIndex("DepartamentoId");
 
                     b.HasIndex("PuestoTrabajoId");
+
+                    b.HasIndex("expedienteDigitalId");
 
                     b.ToTable("Empleados");
                 });
@@ -148,13 +155,11 @@ namespace AtoGobMx.Migrations
                     b.Property<string>("CorreoElectronico")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("EmpleadoId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Estado")
                         .HasColumnType("longtext");
 
                     b.Property<DateTime?>("FechaNacimiento")
+                        .IsRequired()
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Localidad")
@@ -170,8 +175,6 @@ namespace AtoGobMx.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ExpedienteDigitalId");
-
-                    b.HasIndex("EmpleadoId");
 
                     b.ToTable("ExpedienteDigital");
                 });
@@ -332,22 +335,17 @@ namespace AtoGobMx.Migrations
                         .WithMany()
                         .HasForeignKey("PuestoTrabajoId");
 
+                    b.HasOne("AtoGobMx.Models.ExpedienteDigital", "ExpedienteDigital")
+                        .WithMany("Empleados")
+                        .HasForeignKey("expedienteDigitalId");
+
                     b.Navigation("Area");
 
                     b.Navigation("Departamentos");
 
+                    b.Navigation("ExpedienteDigital");
+
                     b.Navigation("PuestoTrabajo");
-                });
-
-            modelBuilder.Entity("AtoGobMx.Models.ExpedienteDigital", b =>
-                {
-                    b.HasOne("AtoGobMx.Models.Empleado", "Empleados")
-                        .WithMany()
-                        .HasForeignKey("EmpleadoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Empleados");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.PuestoTrabajo", b =>
@@ -397,6 +395,8 @@ namespace AtoGobMx.Migrations
             modelBuilder.Entity("AtoGobMx.Models.ExpedienteDigital", b =>
                 {
                     b.Navigation("Archivos");
+
+                    b.Navigation("Empleados");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Role", b =>

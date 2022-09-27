@@ -1,33 +1,40 @@
 import axios from 'axios'
 
 export default function AreaServices () {
+  const BaseUrl = 'https://localhost:7065/api'
   const getAreas = (callback) => {
-    axios.get('https://localhost:7065/api/Areas').then((response) => {
+    axios.get(`${BaseUrl}/Areas`).then((response) => {
+      callback(response.data)
+    })
+  }
+  const getAreasByDepartament = (departamentId, callback) => {
+    axios.get(`${BaseUrl}/Areas/Departamento/${departamentId}`).then((response) => {
       callback(response.data)
     })
   }
   const getArea = (areaId, callback) => {
-    axios.get(`https://localhost:7065/api/Areas/${areaId}`).then((response) => {
+    axios.get(`${BaseUrl}/Areas/${areaId}`).then((response) => {
       callback(response.data)
     })
   }
   const createArea = (data, callback) => {
-    axios.post('https://localhost:7065/api/Areas', data).then((response) => {
+    axios.post(`${BaseUrl}/Areas`, data).then((response) => {
       callback(response.data)
     })
   }
   const updateArea = (data, callback) => {
-    axios.put(`https://localhost:7065/api/Areas/${data.areaId}`, data).then((response) => {
+    axios.put(`${BaseUrl}/Areas/${data.areaId}`, data).then((response) => {
       callback(response.data)
     })
   }
   const deleteArea = (areaId, callback) => {
-    axios.delete(`https://localhost:7065/api/Areas/${areaId}`).then((response) => {
+    axios.delete(`${BaseUrl}/Areas/${areaId}`).then((response) => {
       callback(response.data)
     })
   }
   return {
     getAreas,
+    getAreasByDepartament,
     getArea,
     createArea,
     updateArea,

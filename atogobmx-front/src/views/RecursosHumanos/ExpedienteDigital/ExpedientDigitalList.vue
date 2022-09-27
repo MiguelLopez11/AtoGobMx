@@ -95,7 +95,7 @@ export default {
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup () {
-    const { getEmployeeExpedients } = ExpedientDigitalServices()
+    const { getExpedients } = ExpedientDigitalServices()
     const { getEmployees } = EmployeeServices()
     const expedients = ref([])
     const employees = ref([])
@@ -107,8 +107,8 @@ export default {
     const searchValue = ref('')
     const searchField = ref('nombre')
     const fields = ref([
-      { value: 'expedienteDigitalId', text: 'No.Expediente', sortable: true, Animation },
-      { value: 'nombreCompleto', text: 'Nombre empleado', Animation },
+      { value: 'expedienteDigitalId', text: 'No.Expediente', sortable: true },
+      { value: 'empleados.nombreCompleto', text: 'Empleado', sortable: true },
       // { value: 'usuario.correoElectronico', text: 'Correo Electronico', Animation },
       // { value: 'usuario.nombreUsuario', text: 'Usuario', Animation },
       // { value: 'usuario.role.nombre', text: 'Role', Animation },
@@ -118,7 +118,7 @@ export default {
     getEmployees(data => {
       employees.value = data
     })
-    getEmployeeExpedients((data) => {
+    getExpedients((data) => {
       expedients.value = data
       if (expedients.value.length > 0) {
         isloading.value = false

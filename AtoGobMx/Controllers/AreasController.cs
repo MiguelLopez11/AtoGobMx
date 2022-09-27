@@ -19,6 +19,17 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult> GetAreas()
         {
             var areas = await _context.Area
+                .Include(i => i.Departamentos)
+                .Where(w => !w.Archivado)
+                .ToListAsync();
+            return Ok(areas);
+        }
+        [HttpGet("Departamento/{DepartamentoId}")]
+        public async Task<ActionResult> GetAreasbyDepartament(int DepartamentoId)
+        {
+            var areas = await _context.Area
+                .Include(i => i.Departamentos)
+                .Where(w => w.DepartamentoId == DepartamentoId)
                 .Where(w => !w.Archivado)
                 .ToListAsync();
             return Ok(areas);
@@ -55,6 +66,7 @@ namespace AtoGobMx.Controllers
             AreaValue.AreaId = area.AreaId;
             AreaValue.Nombre = area.Nombre;
             AreaValue.Descripcion = area.Descripcion;
+            AreaValue.DepartamentoId = area.DepartamentoId;
 
             _context.Area.Update(AreaValue);
             await _context.SaveChangesAsync();

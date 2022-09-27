@@ -119,7 +119,6 @@ export default {
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup () {
-    // const { getEmployees, createEmployee, deleteEmployee } = EmployeeServices()
     const { getDepartaments, createDepartament, deleteDepartament } = DepartamentServices()
     const $toast = useToast()
     const departaments = ref([])
@@ -145,11 +144,6 @@ export default {
       { value: 'descripcion', text: 'Descripcion' },
       { value: 'actions', text: 'Acciones' }
     ])
-    // getEmployees((data) => {
-    //   employees.value = data
-    //   rows.value = data.length
-    // })
-
     getDepartaments((data) => {
       departaments.value = data
       if (departaments.value.length > 0) {

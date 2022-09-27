@@ -9,6 +9,8 @@ namespace AtoGobMx.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ExpedienteDigitalId { get; set; }
+        public int EmpleadoId { get; set; }
+        public DateTime? FechaNacimiento { get; set; }
         public string? Estado { get; set; }
         public string? Municipio { get; set; }
         public string? Localidad { get; set; }
@@ -19,10 +21,13 @@ namespace AtoGobMx.Models
         public string? CorreoElectronico { get; set; }
         [Required]
         public bool Archivado { get; set; }
+
+        [ForeignKey("EmpleadoId")]
+        public Empleado? Empleados { get; set; }
         [JsonIgnore]
         public virtual IEnumerable<Archivos>? Archivos { get; set; }
-        [JsonIgnore]
-        public virtual IEnumerable<Empleado>? Empleados { get; set; }
+        //[JsonIgnore]
+        //public virtual IEnumerable<Empleado>? Empleados { get; set; }
 
     }
 }

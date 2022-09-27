@@ -21,7 +21,9 @@ namespace AtoGobMx.Controllers
         [HttpGet("FotoPerfil/{expedienteDigitalId}/")]
         public async Task<IActionResult> GetImagenPerfil(int expedienteDigitalId)
         {
-            var expediente = await _context.ExpedienteDigital.FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expedienteDigitalId);
+            var expediente = await _context.ExpedienteDigital
+                .Include(i => i.Empleados)
+                .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expedienteDigitalId);
             if (expediente == null)
             {
                 return NotFound("El ID del expediente no existe.");
@@ -31,16 +33,16 @@ namespace AtoGobMx.Controllers
             {
                 return NotFound("No se encuentra foto de perfil registrado a ese expediente.");
             }
-            var empleado = await _context.Empleados
-                //.Include(i => i.usuario)
-                .Include(i => i.ExpedienteDigital)
-                .FirstOrDefaultAsync(f => f.expedienteDigitalId == expedienteDigitalId);
-            if (empleado == null)
-            {
-                return BadRequest("El empleado no tiene registrado el expediente");
-            }
+            //var empleado = await _context.Empleados
+            //    //.Include(i => i.usuario)
+            //    .Include(i => i.ExpedienteDigital)
+            //    .FirstOrDefaultAsync(f => f.expedienteDigitalId == expedienteDigitalId);
+            //if (empleado == null)
+            //{
+            //    return BadRequest("El empleado no tiene registrado el expediente");
+            //}
             //{ empleado.usuario.NombreUsuario}
-            var image = System.IO.File.OpenRead($"Files/Images/{fotoPerfil.Nombre}");
+            var image = System.IO.File.OpenRead($"C:/Users/Miguel Lopez/Pictures/AtoGobMX/images/{expediente.Empleados.NombreCompleto}/{fotoPerfil.Nombre}");
             return File(image, "image/jpeg");
 
         }
@@ -81,21 +83,23 @@ namespace AtoGobMx.Controllers
                     .ToArrayAsync();
                 if (archivoExpediente.Length == 0)
                 {
-                    var empleado = await _context.Empleados
-                        //.Include(i => i.usuario)
-                        .FirstOrDefaultAsync(f => f.expedienteDigitalId == expedienteDigitalId);
-                    //if (empleado.usuario == null)
+                    //var usuario = await _context.Usuarios
+                    //    .Include(i => i.Empleado)
+                    //    .FirstOrDefaultAsync(f => f.EmpleadoId == expediente.Empleados.EmpleadoId);
+                    //var empleado = await _context.Empleados
+                    //    //.Include(i => i.usuario)
+                    //    .FirstOrDefaultAsync(f => f.expedienteDigitalId == expedienteDigitalId);
+                    //if (usuario == null)
                     //{
-                    //    return BadRequest("empleado no contiene un usuario asignado");
+                    //    return BadRequest("El empleado no contiene un usuario asignado");
                     //}
-                    var pathFolder = $@"Files/Images/";
+                    var pathFolder = $@"C:/Users/Miguel Lopez/Pictures/AtoGobMX/images/{expediente.Empleados.NombreCompleto}";
                     //{ empleado.usuario.NombreUsuario}
                     if (!Directory.Exists(pathFolder))
                     {
                         Directory.CreateDirectory(pathFolder);
                     }
                     var path = Path.Combine(Directory.GetCurrentDirectory(), pathFolder, file.FileName);
-                    //Directory.CreateDirectory(path);
                     var stream = new FileStream(path, FileMode.Create);
                     await file.CopyToAsync(stream);
                     stream.Close();
