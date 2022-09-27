@@ -29,13 +29,13 @@ namespace AtoGobMx.Controllers
                 .ToListAsync();
             return Ok(puestosTrabajo);
         }
-        [HttpGet("Departamento/{DepartamentoId}")]
-        public async Task<ActionResult<PuestoTrabajo>> GetPuestosTrabajoDepartamento(int DepartamentoId)
+        [HttpGet("Area/{AreaId}")]
+        public async Task<ActionResult<PuestoTrabajo>> GetPuestosTrabajoDepartamento(int AreaId)
         {
             var puestosTrabajo = await _context.PuestoTrabajo
                 .Include(i => i.Area)
                 .Where(w => !w.Archivado)
-                .Where(w => w.DepartamentoId == DepartamentoId)
+                .Where(w => w.AreaId == AreaId)
                 .OrderBy(o => o.PuestoTrabajoId)
                 .ToListAsync();
             return Ok(puestosTrabajo);

@@ -66,6 +66,7 @@ namespace AtoGobMx.Controllers
             AreaValue.AreaId = area.AreaId;
             AreaValue.Nombre = area.Nombre;
             AreaValue.Descripcion = area.Descripcion;
+            AreaValue.DepartamentoId = area.DepartamentoId;
 
             _context.Area.Update(AreaValue);
             await _context.SaveChangesAsync();

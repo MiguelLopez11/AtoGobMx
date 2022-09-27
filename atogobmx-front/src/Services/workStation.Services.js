@@ -7,8 +7,8 @@ export default function WorkStationServices () {
       callback(response.data)
     })
   }
-  const getWorkStationByArea = (departamentId, callback) => {
-    axios.get(`${BaseUrl}/PuestoTrabajo/Departamento/${departamentId}`).then((response) => {
+  const getWorkStationByArea = (AreaId, callback) => {
+    axios.get(`${BaseUrl}/PuestoTrabajo/Area/${AreaId}`).then((response) => {
       callback(response.data)
     })
   }

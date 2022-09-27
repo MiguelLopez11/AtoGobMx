@@ -127,7 +127,7 @@
                 </b-form-select>
               </Field>
               <ErrorMessage name="DepartamentField"
-                ><span>Este campo es requerido </span
+                ><span class="text-danger">Este campo es requerido </span
                 ><i class="bi bi-exclamation-circle"></i
               ></ErrorMessage>
             </b-form-group>
@@ -263,9 +263,6 @@ export default {
     const EmployeesFields = ref({
       empleadoId: 0,
       nombreCompleto: '',
-      // fechaNacimiento: '',
-      // fechaAlta: null,
-      // fechaBaja: null,
       archivado: false,
       areaId: null,
       usuarioId: null,
@@ -411,6 +408,7 @@ export default {
     }
     const addEmployee = () => {
       createEmployee(EmployeesFields.value, (data) => {
+        console.log(data)
         refreshTable()
         $toast.success('Empleado registrado correctamente.', {
           position: 'top-right',

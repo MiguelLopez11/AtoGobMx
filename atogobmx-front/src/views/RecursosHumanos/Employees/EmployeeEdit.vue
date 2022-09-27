@@ -39,7 +39,7 @@
                   value-field="departamentoId"
                   text-field="nombre"
                   :state="departamentState"
-                  @input="getAreas(EmployeesFields.departamentoId)"
+                  @input="getAreas(employee.departamentoId)"
                 >
                 </b-form-select>
               </Field>
@@ -179,8 +179,7 @@ export default {
       employee.value = data
       getAreas(data.departamentoId)
       getWorkStation(data.areaId)
-      // eslint-disable-next-line no-unneeded-ternary
-      nameState.value = data.nombreCompleto === null ? false : true
+      validateState()
     })
     getDepartaments(data => {
       departaments.value = data

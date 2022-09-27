@@ -22,6 +22,7 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<ExpedienteDigital>> GetExpedientesDigitales()
         {
             var expedientes = await _context.ExpedienteDigital
+                .Include(i => i.Empleados)
                 .Where(w => !w.Archivado)
                 .OrderBy(o => o.ExpedienteDigitalId)
                 .ToListAsync();
@@ -33,8 +34,6 @@ namespace AtoGobMx.Controllers
             var expedienteDigital = await _context.ExpedienteDigital
                 .Include(i => i.Archivos)
                 .Include(i => i.Empleados)
-                //.Include(i => i.empleado.usuario)
-                //.Include(i => i.empleado.usuario.Role)
                 .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == ExpedienteDigitalId);
             if (expedienteDigital == null)
             {
@@ -42,15 +41,12 @@ namespace AtoGobMx.Controllers
             }
             return Ok(expedienteDigital);
         }
-        [HttpPost("{EmpleadoId}")]
-        public async Task<ActionResult<ExpedienteDigital>> PostExpedienteEmpleado(ExpedienteDigital expedienteDigital, int EmpleadoId)
+        [HttpPost]
+        public async Task<ActionResult<ExpedienteDigital>> PostExpedienteEmpleado(ExpedienteDigital expedienteDigital)
         {
-            var empleado = await _context.Empleados.FirstOrDefaultAsync(f => f.EmpleadoId == EmpleadoId);
             _context.ExpedienteDigital.Add(expedienteDigital);
-            var expediente = CreatedAtAction("GetExpedienteById", new { ExpedienteDigitalId = expedienteDigital.ExpedienteDigitalId }, expedienteDigital);
-            empleado.expedienteDigitalId = expedienteDigital.ExpedienteDigitalId;
             await _context.SaveChangesAsync();
-            return Ok(expediente);
+            return Ok("Expediente creado correctamente");
         }
         [HttpPut("{ExpedienteDitalId}")]
         public async Task<ActionResult> PutExpediente(int ExpedienteDitalId, ExpedienteDigital expedienteDigital)
@@ -65,8 +61,6 @@ namespace AtoGobMx.Controllers
                 return BadRequest("El empledo no existe");
             }
             expediente.ExpedienteDigitalId = expedienteDigital.ExpedienteDigitalId;
-            //expediente.FechaAlta = expedienteDigital.FechaAlta;
-            //expediente.FechaBaja = expedienteDigital.FechaBaja;
             expediente.FechaNacimiento = expedienteDigital.FechaNacimiento;
             expediente.Estado = expedienteDigital.Estado;
             expediente.Municipio = expedienteDigital.Municipio;
