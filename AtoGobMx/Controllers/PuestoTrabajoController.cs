@@ -23,6 +23,7 @@ namespace AtoGobMx.Controllers
         {
             var puestosTrabajo = await _context.PuestoTrabajo
                 .Include(i => i.Area)
+                .Include(i => i.Departamentos)
                 .Where(w => !w.Archivado)
                 .OrderBy(o => o.PuestoTrabajoId)
                 .ToListAsync();
@@ -44,6 +45,7 @@ namespace AtoGobMx.Controllers
         {
             var puestoTrabajo = await _context.PuestoTrabajo
                 .Include(i => i.Area)
+                .Include(i => i.Departamentos)
                 .FirstOrDefaultAsync(f => f.PuestoTrabajoId == PuestoTrabajoId);
             if (puestoTrabajo == null)
             {
@@ -74,6 +76,7 @@ namespace AtoGobMx.Controllers
             puesto.PuestoTrabajoId = puestoTrabajo.PuestoTrabajoId;
             puesto.Nombre = puestoTrabajo.Nombre;
             puesto.AreaId = puestoTrabajo.AreaId;
+            puesto.DepartamentoId = puestoTrabajo.DepartamentoId;
 
             _context.PuestoTrabajo.Update(puesto);
             await _context.SaveChangesAsync();

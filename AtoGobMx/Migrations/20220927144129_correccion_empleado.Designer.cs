@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20220927144129_correccion_empleado")]
+    partial class correccion_empleado
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -105,12 +107,6 @@ namespace AtoGobMx.Migrations
                     b.Property<int?>("DepartamentoId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("FechaAlta")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime?>("FechaBaja")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<string>("NombreCompleto")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -155,6 +151,12 @@ namespace AtoGobMx.Migrations
 
                     b.Property<string>("Estado")
                         .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("FechaAlta")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("FechaBaja")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<DateTime?>("FechaNacimiento")
                         .IsRequired()

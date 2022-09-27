@@ -65,12 +65,14 @@ namespace AtoGobMx.Controllers
                 return BadRequest("El empledo no existe");
             }
             expediente.ExpedienteDigitalId = expedienteDigital.ExpedienteDigitalId;
-            //expediente.EmpleadoId = expedienteDigital.EmpleadoId;
+            //expediente.FechaAlta = expedienteDigital.FechaAlta;
+            //expediente.FechaBaja = expedienteDigital.FechaBaja;
+            expediente.FechaNacimiento = expedienteDigital.FechaNacimiento;
             expediente.Estado = expedienteDigital.Estado;
             expediente.Municipio = expedienteDigital.Municipio;
             expediente.Localidad = expedienteDigital.Localidad;
             expediente.Calle = expedienteDigital.Calle;
-            expediente.NumeroExterior = expedienteDigital.NumeroInterior;
+            expediente.NumeroExterior = expedienteDigital.NumeroExterior;
             expediente.NumeroInterior = expedienteDigital.NumeroInterior;
             expediente.CodigoPostal = expedienteDigital.CodigoPostal;
             expediente.CorreoElectronico = expedienteDigital.CorreoElectronico;

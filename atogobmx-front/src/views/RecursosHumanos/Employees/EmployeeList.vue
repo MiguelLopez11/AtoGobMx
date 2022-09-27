@@ -1,4 +1,3 @@
-<!-- eslint-disable no-unneeded-ternary -->
 <template>
   <b-card class="m-3">
     <b-row align-h="end" class="mb-3 mr-1">
@@ -89,7 +88,7 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <b-col>
+          <!-- <b-col>
             <b-form-group class="mt-3" label="Fecha de nacimiento">
               <Field
                 name="DateField"
@@ -109,7 +108,7 @@
                 ><i class="bi bi-exclamation-circle"></i
               ></ErrorMessage>
             </b-form-group>
-          </b-col>
+          </b-col> -->
           <b-col>
             <b-form-group class="mt-3" label="Departamento">
               <Field
@@ -264,9 +263,9 @@ export default {
     const EmployeesFields = ref({
       empleadoId: 0,
       nombreCompleto: '',
-      fechaNacimiento: '',
-      fechaAlta: null,
-      fechaBaja: null,
+      // fechaNacimiento: '',
+      // fechaAlta: null,
+      // fechaBaja: null,
       archivado: false,
       areaId: null,
       usuarioId: null,
@@ -281,7 +280,7 @@ export default {
           $toast.open({
             message: 'No se encuentran areas registrados en el departamento seleccionado, registre primero una area para continuar',
             position: 'top-left',
-            duration: 0,
+            duration: 2500,
             dismissible: true,
             type: 'error'
           })
@@ -295,7 +294,7 @@ export default {
           $toast.open({
             message: 'No se encuentran puestos de trabajo registrados en el area seleccionado, registre primero un puesto de trabajo para continuar',
             position: 'top-left',
-            duration: 0,
+            duration: 2500,
             dismissible: true,
             type: 'error'
           })
@@ -308,7 +307,7 @@ export default {
         $toast.open({
           message: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar',
           position: 'top-left',
-          duration: 0,
+          duration: 2500,
           dismissible: true,
           type: 'error'
         })
@@ -369,9 +368,9 @@ export default {
       { value: 'empleadoId', text: 'ID', sortable: true },
       { value: 'nombreCompleto', text: 'Nombre' },
       { value: 'departamentos.nombre', text: 'Departamento' },
+      { value: 'area.nombre', text: 'Area de Trabajo' },
       { value: 'puestoTrabajo.nombre', text: 'Puesto de Trabajo' },
       { value: 'fechaAlta', text: 'Fecha de contratación' },
-      { value: 'area.nombre', text: 'Area de Trabajo' },
       { value: 'actions', text: 'Acciones' }
     ])
     const resetEmployeesFields = () => {

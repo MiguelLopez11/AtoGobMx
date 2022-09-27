@@ -9,6 +9,8 @@ namespace AtoGobMx.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ExpedienteDigitalId { get; set; }
+        [Required]
+        public DateTime? FechaNacimiento { get; set; }
         public string? Estado { get; set; }
         public string? Municipio { get; set; }
         public string? Localidad { get; set; }

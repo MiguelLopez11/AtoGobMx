@@ -13,8 +13,6 @@ namespace AtoGobMx.Models
         [Required]
         [MaxLength(200)]
         public string? NombreCompleto { get; set; }
-        [Required]
-        public DateTime? FechaNacimiento { get; set; }
         public DateTime? FechaAlta { get; set; }
         public DateTime? FechaBaja { get; set; }
         [Required]

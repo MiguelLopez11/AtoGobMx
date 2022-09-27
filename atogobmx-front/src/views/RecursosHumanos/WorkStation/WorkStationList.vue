@@ -290,8 +290,9 @@ export default {
     }
     const RemoveWorkStation = (puestoTrabajoId) => {
       isloading.value = true
-      deleteWorkStation(puestoTrabajoId, (data) => {})
-      refreshTable()
+      deleteWorkStation(puestoTrabajoId, (data) => {
+        refreshTable()
+      })
     }
     return {
       workStations,

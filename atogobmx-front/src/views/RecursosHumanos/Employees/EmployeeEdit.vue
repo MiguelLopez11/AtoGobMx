@@ -27,27 +27,6 @@
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="Fecha de nacimiento">
-              <Field
-                name="DateField"
-                :rules="validateDate"
-              >
-                <Datepicker
-                  v-model="employee.fechaNacimiento"
-                  locale="es"
-                  autoApply
-                  :enableTimePicker="false"
-                  :state="dateState"
-                >
-                </Datepicker>
-              </Field>
-              <ErrorMessage name="DateField"
-                ><span class="text-danger">Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <b-col>
             <b-form-group class="mt-3" label="Departamento">
               <Field
                 name="DepartamentField"
@@ -187,7 +166,6 @@ export default {
     const router = useRoute()
     const redirect = useRouter()
     const nameState = ref(false)
-    const dateState = ref(false)
     const areaState = ref(false)
     const dateWorkState = ref(false)
     const workStationState = ref(false)
@@ -263,14 +241,6 @@ export default {
       validateState()
       return true
     }
-    const validateDate = () => {
-      if (!employee.value.fechaNacimiento) {
-        validateState()
-        return 'Este campo es requerido'
-      }
-      validateState()
-      return true
-    }
     const validateArea = () => {
       if (!employee.value.areaId) {
         validateState()
@@ -305,7 +275,6 @@ export default {
     }
     const validateState = () => {
       nameState.value = employee.value.nombreCompleto !== ''
-      dateState.value = employee.value.fechaNacimiento !== null
       areaState.value = employee.value.areaId !== 0
       departamentState.value = employee.value.departamentoId !== 0
       workStationState.value = employee.value.puestoTrabajoId !== 0
@@ -321,7 +290,6 @@ export default {
       breadcrumbItems,
       router,
       nameState,
-      dateState,
       areaState,
       departamentState,
       workStationState,
@@ -329,7 +297,6 @@ export default {
       redirect,
       onUpdateEmployee,
       validateName,
-      validateDate,
       validateArea,
       validateState,
       getAreas,
