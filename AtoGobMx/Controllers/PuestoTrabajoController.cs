@@ -19,11 +19,23 @@ namespace AtoGobMx.Controllers
             _mapper = mapper;
         }
         [HttpGet]
-        public async Task<ActionResult<PuestoTrabajo>> GetExpedientesDigitales()
+        public async Task<ActionResult<PuestoTrabajo>> GetPuestosTrabajo()
+        {
+            var puestosTrabajo = await _context.PuestoTrabajo
+                .Include(i => i.Area)
+                .Include(i => i.Departamentos)
+                .Where(w => !w.Archivado)
+                .OrderBy(o => o.PuestoTrabajoId)
+                .ToListAsync();
+            return Ok(puestosTrabajo);
+        }
+        [HttpGet("Area/{AreaId}")]
+        public async Task<ActionResult<PuestoTrabajo>> GetPuestosTrabajoDepartamento(int AreaId)
         {
             var puestosTrabajo = await _context.PuestoTrabajo
                 .Include(i => i.Area)
                 .Where(w => !w.Archivado)
+                .Where(w => w.AreaId == AreaId)
                 .OrderBy(o => o.PuestoTrabajoId)
                 .ToListAsync();
             return Ok(puestosTrabajo);
@@ -33,6 +45,7 @@ namespace AtoGobMx.Controllers
         {
             var puestoTrabajo = await _context.PuestoTrabajo
                 .Include(i => i.Area)
+                .Include(i => i.Departamentos)
                 .FirstOrDefaultAsync(f => f.PuestoTrabajoId == PuestoTrabajoId);
             if (puestoTrabajo == null)
             {
@@ -63,6 +76,7 @@ namespace AtoGobMx.Controllers
             puesto.PuestoTrabajoId = puestoTrabajo.PuestoTrabajoId;
             puesto.Nombre = puestoTrabajo.Nombre;
             puesto.AreaId = puestoTrabajo.AreaId;
+            puesto.DepartamentoId = puestoTrabajo.DepartamentoId;
 
             _context.PuestoTrabajo.Update(puesto);
             await _context.SaveChangesAsync();

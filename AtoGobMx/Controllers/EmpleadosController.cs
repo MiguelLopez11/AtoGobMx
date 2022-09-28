@@ -23,8 +23,9 @@ namespace AtoGobMx.Controllers
         {
             var empleados = await _context.Empleados
                 .Include(i => i.Area)
+                .Include(i => i.Departamentos)
+                .Include(i => i.PuestoTrabajo)
                 //.Include(i => i.usuario)
-                .Include(i => i.ExpedienteDigital)
                 .Where(w => !w.Archivado)
                 .OrderBy(o => o.EmpleadoId)
                 .ToListAsync();
@@ -36,9 +37,7 @@ namespace AtoGobMx.Controllers
         {
             var Empleado = await _context.Empleados
                 .Include(i => i.Area)
-                //.Include(i => i.usuario)
-                //.Include(i => i.usuario.Role)
-                .Include(i => i.ExpedienteDigital)
+                .Include(i => i.Departamentos)
                 .FirstOrDefaultAsync(f => f.EmpleadoId == EmpleadoId);
             if (Empleado == null)
             {
@@ -46,36 +45,33 @@ namespace AtoGobMx.Controllers
             }
             return Ok(Empleado);
         }
-        [HttpGet("EmpleadoExpedientes")]
-        public async Task<ActionResult> GetEmpleadoExpedientes()
-        {
-            var Empleado = await _context.Empleados
-                .Include(i => i.Area)
-                //.Include(i => i.usuario)
-                //.Include(i => i.usuario.Role)
-                .Include(i => i.ExpedienteDigital)
-                .Where(w => w.expedienteDigitalId != null)
-                .ToListAsync();
-            if (Empleado == null)
-            {
-                return BadRequest();
-            }
-            return Ok(Empleado);
-        }
-        [HttpGet("EmpleadosSinExpedientes")]
-        public async Task<ActionResult> GetEmpleadosSinExpediente()
-        {
-            var Empleado = await _context.Empleados
-                .Include(i => i.Area)
-                .Include(i => i.ExpedienteDigital)
-                .Where(w => w.expedienteDigitalId == null)
-                .ToListAsync();
-            if (Empleado == null)
-            {
-                return BadRequest();
-            }
-            return Ok(Empleado);
-        }
+        //[HttpGet("EmpleadoExpedientes")]
+        //public async Task<ActionResult> GetEmpleadoExpedientes()
+        //{
+        //    var Empleado = await _context.Empleados
+        //        .Include(i => i.Area)
+        //        .Include(i => i.Departamentos)
+        //        .Where(w => w.expedienteDigitalId != null)
+        //        .ToListAsync();
+        //    if (Empleado == null)
+        //    {
+        //        return BadRequest();
+        //    }
+        //    return Ok(Empleado);
+        //}
+        //[HttpGet("EmpleadosSinExpedientes")]
+        //public async Task<ActionResult> GetEmpleadosSinExpediente()
+        //{
+        //    var Empleado = await _context.Empleados
+        //        .Include(i => i.Area)
+        //        .Where(w => w.expedienteDigitalId == null)
+        //        .ToListAsync();
+        //    if (Empleado == null)
+        //    {
+        //        return BadRequest();
+        //    }
+        //    return Ok(Empleado);
+        //}
         [HttpPost]
         public async Task<ActionResult<Empleado>> PostEmpleados(Empleado Empleado)
         {
@@ -91,19 +87,20 @@ namespace AtoGobMx.Controllers
             {
                 return Ok("Los ID ingresados no coinciden");
             }
-            var emp = _context.Empleados.Find(EmpleadoId);
+            var emp = await _context.Empleados.FirstOrDefaultAsync(f => f.EmpleadoId == EmpleadoId);
             if (emp == null)
             {
                 return BadRequest("El empledo no existe");
             }
             emp.EmpleadoId = empleado.EmpleadoId;
             emp.NombreCompleto = empleado.NombreCompleto;
-            emp.FechaNacimiento = empleado.FechaNacimiento;
-            emp.AreaId = empleado.AreaId;
-            //emp.UsuarioId = empleado.UsuarioId;
-            emp.expedienteDigitalId = empleado.expedienteDigitalId;
-            emp.Archivado = empleado.Archivado;
+            //emp.FechaNacimiento = empleado.FechaNacimiento;
             emp.FechaAlta = empleado.FechaAlta;
+            emp.FechaBaja = empleado.FechaBaja;
+            emp.AreaId = empleado.AreaId;
+            emp.DepartamentoId = empleado.DepartamentoId;
+            emp.PuestoTrabajoId = empleado.PuestoTrabajoId;
+            emp.Archivado = empleado.Archivado;
 
             _context.Empleados.Update(emp);
             await _context.SaveChangesAsync();

@@ -110,6 +110,7 @@ namespace AtoGobMx.Controllers
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex);
                 return false;
             }
         }

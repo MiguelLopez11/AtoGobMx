@@ -54,7 +54,7 @@
           variant="outline-warning"
           :to="{
             name: 'Area-Edit',
-            params: { AreaId: items.areaId },
+            params: { AreaId: items.areaId }
           }"
         >
           <i class="bi bi-pencil-square" />
@@ -63,6 +63,7 @@
     </EasyDataTable>
     <b-modal
       id="modal-area"
+      ref="refAreaModal"
       title="Agregar areas"
       size="xl"
       centered
@@ -74,9 +75,29 @@
           <b-col>
             <b-form-group class="mt-3" label="Nombre">
               <Field name="NameField" :rules="validateArea">
-                <b-form-input v-model="areaFields.nombre" :state="nameState"> </b-form-input>
+                <b-form-input v-model="areaFields.nombre" :state="nameState">
+                </b-form-input>
               </Field>
               <ErrorMessage name="NameField">
+                <span>Este campo es requerido</span>
+                <i class="bi bi-exclamation-circle" />
+              </ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Departamento">
+              <Field name="DepartamentField" :rules="validateDepartament">
+                <b-form-select
+                  v-model="areaFields.departamentoId"
+                  autofocus
+                  :options="departaments"
+                  value-field="departamentoId"
+                  text-field="nombre"
+                  :state="departamentState"
+                >
+                </b-form-select>
+              </Field>
+              <ErrorMessage name="DepartamentField">
                 <span>Este campo es requerido</span>
                 <i class="bi bi-exclamation-circle" />
               </ErrorMessage>
@@ -107,8 +128,9 @@
 
 <script>
 import AreaServices from '@/Services/area.Services'
+import DepartamentServices from '@/Services/departament.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
@@ -119,10 +141,11 @@ export default {
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup () {
-    // const { getEmployees, createEmployee, deleteEmployee } = EmployeeServices()
     const { getAreas, createArea, deleteArea } = AreaServices()
+    const { getDepartaments } = DepartamentServices()
     const $toast = useToast()
-    const employees = ref([])
+    const refAreaModal = ref()
+    const departaments = ref([])
     const areas = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
@@ -133,25 +156,37 @@ export default {
     const searchValue = ref('')
     const searchField = ref('nombre')
     const nameState = ref(false)
+    const departamentState = ref(false)
     const areaFields = ref({
       areaId: 0,
       nombre: null,
       descripcion: null,
+      departamentoId: 0,
       archivado: false
+    })
+    watch(departaments, (values) => {
+      if (values.length === 0) {
+        $toast.open({
+          message: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar',
+          position: 'top-left',
+          duration: 0,
+          dismissible: true,
+          type: 'error'
+        })
+      }
     })
     const areasFieldsBlank = ref(JSON.parse(JSON.stringify(areaFields)))
     const fields = ref([
       { value: 'areaId', text: 'ID', sortable: true },
       { value: 'nombre', text: 'Nombre' },
       { value: 'descripcion', text: 'Descripcion' },
+      { value: 'departamentos.nombre', text: 'Departamento' },
       { value: 'actions', text: 'Acciones' }
     ])
-    // getEmployees((data) => {
-    //   employees.value = data
-    //   rows.value = data.length
-    // })
-
-    getAreas((data) => {
+    getDepartaments(data => {
+      departaments.value = data
+    })
+    getAreas(data => {
       areas.value = data
       if (areas.value.length > 0) {
         isloading.value = false
@@ -161,7 +196,7 @@ export default {
         }
       }
     })
-    const onFiltered = (filteredItems) => {
+    const onFiltered = filteredItems => {
       rows.value = filteredItems.length
       currentPage.value = 1
     }
@@ -173,10 +208,18 @@ export default {
       nameState.value = true
       return true
     }
+    const validateDepartament = () => {
+      if (!areaFields.value.departamentoId) {
+        departamentState.value = false
+        return 'Este campo es requerido'
+      }
+      departamentState.value = true
+      return true
+    }
     const refreshTable = () => {
       isloading.value = true
 
-      getAreas((data) => {
+      getAreas(data => {
         areas.value = data
         if (areas.value.length > 0) {
           isloading.value = false
@@ -189,24 +232,30 @@ export default {
       return 'datos recargados'
     }
     const addArea = () => {
-      createArea(areaFields.value, (data) => {
+      createArea(areaFields.value, data => {
         refreshTable()
-        $toast.success('Empleado registrado correctamente.', {
-          position: 'top-right',
-          duration: 2000
+        $toast.open({
+          message: 'Area modificado correctamente',
+          position: 'top',
+          duration: 1000,
+          dismissible: true,
+          type: 'success',
+          onDismiss: () => refAreaModal.value.hide()
         })
       })
       areaFields.value = JSON.parse(JSON.stringify(areasFieldsBlank))
       nameState.value = false
+      departamentState.value = false
     }
-    const RemoveArea = (areaId) => {
+    const RemoveArea = areaId => {
       isloading.value = true
-      deleteArea(areaId, (data) => {
+      deleteArea(areaId, data => {
         refreshTable()
       })
     }
     return {
-      employees,
+      departaments,
+      refAreaModal,
       fields,
       perPage,
       currentPage,
@@ -224,7 +273,9 @@ export default {
       refreshTable,
       RemoveArea,
       nameState,
+      departamentState,
 
+      validateDepartament,
       validateArea
     }
   }
