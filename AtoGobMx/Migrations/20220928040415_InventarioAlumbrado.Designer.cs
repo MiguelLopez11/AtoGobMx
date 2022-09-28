@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20220928040415_InventarioAlumbrado")]
+    partial class InventarioAlumbrado
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,9 +58,6 @@ namespace AtoGobMx.Migrations
                     b.Property<int?>("expedienteAlumbradoId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("inventarioAlumbradoId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("tareaTipoId")
                         .HasColumnType("int");
 
@@ -67,8 +66,6 @@ namespace AtoGobMx.Migrations
                     b.HasIndex("estatusId");
 
                     b.HasIndex("expedienteAlumbradoId");
-
-                    b.HasIndex("inventarioAlumbradoId");
 
                     b.HasIndex("tareaTipoId");
 
@@ -421,10 +418,6 @@ namespace AtoGobMx.Migrations
                         .WithMany("Alumbrado")
                         .HasForeignKey("expedienteAlumbradoId");
 
-                    b.HasOne("AtoGobMx.Models.InventarioAlumbrado", "InventarioAlumbrado")
-                        .WithMany("Alumbrado")
-                        .HasForeignKey("inventarioAlumbradoId");
-
                     b.HasOne("AtoGobMx.Models.TareaTipoAlumbrado", "TareaTipoAlumbrado")
                         .WithMany("Alumbrado")
                         .HasForeignKey("tareaTipoId");
@@ -432,8 +425,6 @@ namespace AtoGobMx.Migrations
                     b.Navigation("Estatus");
 
                     b.Navigation("ExpedienteAlumbrado");
-
-                    b.Navigation("InventarioAlumbrado");
 
                     b.Navigation("TareaTipoAlumbrado");
                 });
@@ -528,11 +519,6 @@ namespace AtoGobMx.Migrations
                     b.Navigation("Archivos");
 
                     b.Navigation("Empleados");
-                });
-
-            modelBuilder.Entity("AtoGobMx.Models.InventarioAlumbrado", b =>
-                {
-                    b.Navigation("Alumbrado");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Role", b =>

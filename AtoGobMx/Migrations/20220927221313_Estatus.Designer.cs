@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20220927221313_Estatus")]
+    partial class Estatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,27 +52,12 @@ namespace AtoGobMx.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("estatusId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("expedienteAlumbradoId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("inventarioAlumbradoId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("tareaTipoId")
                         .HasColumnType("int");
 
                     b.HasKey("AlumbradoId");
 
-                    b.HasIndex("estatusId");
-
                     b.HasIndex("expedienteAlumbradoId");
-
-                    b.HasIndex("inventarioAlumbradoId");
-
-                    b.HasIndex("tareaTipoId");
 
                     b.ToTable("Alumbrado");
                 });
@@ -282,34 +269,6 @@ namespace AtoGobMx.Migrations
                     b.ToTable("ExpedienteDigital");
                 });
 
-            modelBuilder.Entity("AtoGobMx.Models.InventarioAlumbrado", b =>
-                {
-                    b.Property<int>("InventarioAlumbradoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Archivado")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Domicilio")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("FechaAlta")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("FechaBaja")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Tarea")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("InventarioAlumbradoId");
-
-                    b.ToTable("InventarioAlumbrado");
-                });
-
             modelBuilder.Entity("AtoGobMx.Models.PuestoTrabajo", b =>
                 {
                     b.Property<int>("PuestoTrabajoId")
@@ -354,28 +313,6 @@ namespace AtoGobMx.Migrations
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("AtoGobMx.Models.TareaTipoAlumbrado", b =>
-                {
-                    b.Property<int>("TareaTipoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Archivado")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Descripcion")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("NombreTarea")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("TareaTipoId");
-
-                    b.ToTable("TareaTipoAlumbrado");
-                });
-
             modelBuilder.Entity("AtoGobMx.Models.Usuario", b =>
                 {
                     b.Property<int>("UsuarioId")
@@ -413,29 +350,11 @@ namespace AtoGobMx.Migrations
 
             modelBuilder.Entity("AtoGobMx.Models.Alumbrado", b =>
                 {
-                    b.HasOne("AtoGobMx.Models.Estatus", "Estatus")
-                        .WithMany("Alumbrado")
-                        .HasForeignKey("estatusId");
-
                     b.HasOne("AtoGobMx.Models.ExpedienteAlumbrado", "ExpedienteAlumbrado")
                         .WithMany("Alumbrado")
                         .HasForeignKey("expedienteAlumbradoId");
 
-                    b.HasOne("AtoGobMx.Models.InventarioAlumbrado", "InventarioAlumbrado")
-                        .WithMany("Alumbrado")
-                        .HasForeignKey("inventarioAlumbradoId");
-
-                    b.HasOne("AtoGobMx.Models.TareaTipoAlumbrado", "TareaTipoAlumbrado")
-                        .WithMany("Alumbrado")
-                        .HasForeignKey("tareaTipoId");
-
-                    b.Navigation("Estatus");
-
                     b.Navigation("ExpedienteAlumbrado");
-
-                    b.Navigation("InventarioAlumbrado");
-
-                    b.Navigation("TareaTipoAlumbrado");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Archivos", b =>
@@ -513,11 +432,6 @@ namespace AtoGobMx.Migrations
                     b.Navigation("Usuarios");
                 });
 
-            modelBuilder.Entity("AtoGobMx.Models.Estatus", b =>
-                {
-                    b.Navigation("Alumbrado");
-                });
-
             modelBuilder.Entity("AtoGobMx.Models.ExpedienteAlumbrado", b =>
                 {
                     b.Navigation("Alumbrado");
@@ -530,19 +444,9 @@ namespace AtoGobMx.Migrations
                     b.Navigation("Empleados");
                 });
 
-            modelBuilder.Entity("AtoGobMx.Models.InventarioAlumbrado", b =>
-                {
-                    b.Navigation("Alumbrado");
-                });
-
             modelBuilder.Entity("AtoGobMx.Models.Role", b =>
                 {
                     b.Navigation("Usuarios");
-                });
-
-            modelBuilder.Entity("AtoGobMx.Models.TareaTipoAlumbrado", b =>
-                {
-                    b.Navigation("Alumbrado");
                 });
 #pragma warning restore 612, 618
         }

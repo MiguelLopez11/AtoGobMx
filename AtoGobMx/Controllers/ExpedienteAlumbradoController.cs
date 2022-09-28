@@ -49,6 +49,7 @@ namespace AtoGobMx.Controllers
         {
             var alumbrado = await _context.Alumbrado.FirstOrDefaultAsync(f => f.AlumbradoId == AlumbradoId);
             _context.ExpedienteAlumbrado.Add(expedienteAlumbrado);
+
             var expedientealumbra = CreatedAtAction("GetExpedienteAlumbradoById", new { ExpedienteAlumbradoId = expedienteAlumbrado.ExpedienteAlumbradoId }, expedienteAlumbrado);
             alumbrado.expedienteAlumbradoId = expedienteAlumbrado.ExpedienteAlumbradoId;
             await _context.SaveChangesAsync();
@@ -67,7 +68,7 @@ namespace AtoGobMx.Controllers
             var expedientalumbra = _context.ExpedienteAlumbrado.Find(ExpedienteAlumbradoId);
             if (expedientalumbra == null)
             {
-                return BadRequest("El Registro de alumbrado no existe");
+                return BadRequest("El Registro del expediente alumbrado no existe");
             }
 
             expedienteAlumbrado.ExpedienteAlumbradoId = expedientalumbra.ExpedienteAlumbradoId;
@@ -80,7 +81,7 @@ namespace AtoGobMx.Controllers
 
             _context.ExpedienteAlumbrado.Update(expedienteAlumbrado);
             await _context.SaveChangesAsync();
-            return Ok("Expediente actualizado correctamente");
+            return Ok("Expediente alumbrado actualizado correctamente");
         }
 
         [HttpDelete("{ExpedienteAlumbradoId}")]
@@ -96,7 +97,7 @@ namespace AtoGobMx.Controllers
             expedientalumbrado.Archivado = true;
             _context.ExpedienteAlumbrado.Update(expedientalumbrado);
             await _context.SaveChangesAsync();
-            return Ok("ExpedienteFalla Archivado");
+            return Ok("Expediente alumbrado Archivado");
         }
 
     }

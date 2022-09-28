@@ -6,7 +6,7 @@
         style="width: 350px"
         v-model="searchValue"
         type="search"
-        placeholder="Buscar Falla..."
+        placeholder="Buscar Alumbrado..."
       ></b-form-input>
       <b-button
         variant="primary"
@@ -17,11 +17,11 @@
           margin-right: 15px;
           margin-left: 20px;
         "
-        v-b-modal.modal-lightingfailures
+        v-b-modal.modal-streetlighting
         type="submit"
       >
         <i class="bi bi-person-plus-fill"></i>
-        Agregar Falla
+        Agregar Alumbrado
       </b-button>
     </b-row>
     <EasyDataTable
@@ -32,7 +32,7 @@
       border-cell
       :loading="isloading"
       :headers="fields"
-      :items="lightingFailures"
+      :items="streetLighting"
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
@@ -43,7 +43,7 @@
       </template>
       <template #item-actions="items">
         <b-button
-          @click="RemoveLightingFailures(items.fallaId)"
+          @click="RemoveStreetLighting(items.alumbradoId)"
           class="m-1"
           variant="outline-danger"
           ><i class="bi bi-trash3"></i
@@ -52,28 +52,28 @@
           class="m-1"
           variant="outline-warning"
           :to="{
-            name: 'FallasAlumbrado-Edit',
-            params: { FallaId: items.fallaId },
+            name: 'Alumbrado-Edit',
+            params: { AlumbradoId: items.alumbradoId },
           }"
           ><i class="bi bi-pencil-square"></i
         ></b-button>
       </template>
     </EasyDataTable>
     <b-modal
-      id="modal-lightingfailures"
-      title="Agregar Falla"
+      id="modal-streetlighting"
+      title="Agregar Alumbrado"
       size="xl"
       hide-footer
       button-size="lg"
       lazy
     >
-      <Form @submit="addLightingFailures">
+      <Form @submit="addStreetLighting">
         <b-row cols="2">
           <b-col>
             <b-form-group class="mt-3" label="Tipo Falla">
               <Field name="FaultTypeField" :rules="validateFaultType">
                 <b-form-input
-                  v-model="lightingFailuresFields.tipoFalla"
+                  v-model="streetLightingFields.tipoFalla"
                   :state="FaultTypeState"
                 ></b-form-input>
               </Field>
@@ -90,7 +90,7 @@
                   locale="es"
                   name="date"
                   text-input
-                  v-model="lightingFailuresFields.fechaAlta"
+                  v-model="streetLightingFields.fechaAlta"
                   :state="HighDateState"
                 ></Datepicker>
               </Field>
@@ -104,7 +104,7 @@
             <b-form-group class="mt-3" label="Domicilio">
               <Field name="DomicileField" :rules="validateDomicile">
                 <b-form-input
-                  v-model="lightingFailuresFields.domicilio"
+                  v-model="streetLightingFields.domicilio"
                   :state="DomicileState"
                 ></b-form-input>
               </Field>
@@ -121,7 +121,7 @@
                   locale="es"
                   name="date"
                   text-input
-                  v-model="lightingFailuresFields.fechaBaja"
+                  v-model="streetLightingFields.fechaBaja"
                   :state="LowDateState"
                 ></Datepicker>
               </Field>
@@ -138,7 +138,7 @@
                 :rules="validateAddresdescription"
               >
                 <b-form-textarea
-                  v-model="lightingFailuresFields.descripcionDomicilio"
+                  v-model="streetLightingFields.descripcionDomicilio"
                   :state="addresdescriptionState"
                   rows="4"
                 ></b-form-textarea>
@@ -156,7 +156,7 @@
                 :rules="validateDescriptionSolution"
               >
                 <b-form-textarea
-                  v-model="lightingFailuresFields.descripcionSolucion"
+                  v-model="streetLightingFields.descripcionSolucion"
                   :state="DescriptionSolutionState"
                   rows="4"
                 ></b-form-textarea>
@@ -172,7 +172,7 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            v-b-modal.modal-lightingfailures
+            v-b-modal.modal-streetlighting
           >
             Cancelar
           </b-button>
@@ -186,7 +186,7 @@
 </template>
 
 <script>
-import LightingfailuresServices from '@/Services/lightingfailures.Services'
+import StreetlightingServices from '@/Services/streetlighting.Services'
 import Datepicker from '@vuepic/vue-datepicker'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref } from 'vue'
@@ -201,12 +201,12 @@ export default {
   },
   setup () {
     const {
-      getLightingFailures,
-      createLightingFailures,
-      deleteLightingFailures
-    } = LightingfailuresServices()
+      getStreetLighting,
+      createStreetLighting,
+      deleteStreetLighting
+    } = StreetlightingServices()
     const $toast = useToast()
-    const lightingFailures = ref([])
+    const streetLighting = ref([])
     const isOpen = ref(false)
     const perPage = ref(5)
     const currentPage = ref(1)
@@ -222,8 +222,8 @@ export default {
     const addresdescriptionState = ref(false)
     const DomicileState = ref(false)
     const LowDateState = ref(false)
-    const lightingFailuresFields = ref({
-      fallaId: 0,
+    const streetLightingFields = ref({
+      alumbradoId: 0,
       tipoFalla: null,
       descripcionSolucion: null,
       fechaAlta: null,
@@ -234,7 +234,7 @@ export default {
     })
 
     const validateFaultType = () => {
-      if (!lightingFailuresFields.value.tipoFalla) {
+      if (!streetLightingFields.value.tipoFalla) {
         FaultTypeState.value = false
         return 'Este campo es requerido'
       }
@@ -243,7 +243,7 @@ export default {
     }
 
     const validateDescriptionSolution = () => {
-      if (!lightingFailuresFields.value.descripcionSolucion) {
+      if (!streetLightingFields.value.descripcionSolucion) {
         DescriptionSolutionState.value = false
         return 'Este campo es requerido'
       }
@@ -252,7 +252,7 @@ export default {
     }
 
     const validateDomicile = () => {
-      if (!lightingFailuresFields.value.domicilio) {
+      if (!streetLightingFields.value.domicilio) {
         DomicileState.value = false
         return 'Este campo es requerido'
       }
@@ -261,7 +261,7 @@ export default {
     }
 
     const validateLowDate = () => {
-      if (!lightingFailuresFields.value.fechaBaja) {
+      if (!streetLightingFields.value.fechaBaja) {
         LowDateState.value = false
         return 'Este campo es requerido'
       }
@@ -270,7 +270,7 @@ export default {
     }
 
     const validateHighDate = () => {
-      if (!lightingFailuresFields.value.fechaAlta) {
+      if (!streetLightingFields.value.fechaAlta) {
         HighDateState.value = false
         return 'Este campo es requerido'
       }
@@ -279,7 +279,7 @@ export default {
     }
 
     const validateAddresdescription = () => {
-      if (!lightingFailuresFields.value.descripcionDomicilio) {
+      if (!streetLightingFields.value.descripcionDomicilio) {
         addresdescriptionState.value = false
         return 'Este campo es requerido'
       }
@@ -288,12 +288,12 @@ export default {
     }
 
     // pone mis cambios de mis campos vacios de nuevo
-    const lightingFailuresFieldsBlank = ref(
-      JSON.parse(JSON.stringify(lightingFailuresFields))
+    const streetLightingFieldsBlank = ref(
+      JSON.parse(JSON.stringify(streetLightingFields))
     )
 
     const fields = ref([
-      { value: 'fallaId', text: 'ID', sortable: true },
+      { value: 'alumbradoId', text: 'ID', sortable: true },
       { value: 'tipoFalla', text: 'Tipo Falla' },
       { value: 'fechaAlta', text: 'Fecha Alta' },
       { value: 'domicilio', text: 'Domicilio' },
@@ -302,13 +302,13 @@ export default {
       { value: 'fechaBaja', text: 'Fecha Baja' },
       { value: 'actions', text: 'Acciones' }
     ])
-    getLightingFailures((data) => {
-      lightingFailures.value = data
+    getStreetLighting((data) => {
+      streetLighting.value = data
       // rows.value = data.length
-      if (lightingFailures.value.length > 0) {
+      if (streetLighting.value.length > 0) {
         isloading.value = false
       } else {
-        if (lightingFailures.value.length <= 0) {
+        if (streetLighting.value.length <= 0) {
           isloading.value = false
         }
       }
@@ -321,13 +321,13 @@ export default {
 
     const refreshTable = () => {
       isloading.value = true
-      getLightingFailures((data) => {
-        lightingFailures.value = data
+      getStreetLighting((data) => {
+        streetLighting.value = data
         // rows.value = data.length
-        if (lightingFailures.value.length > 0) {
+        if (streetLighting.value.length > 0) {
           isloading.value = false
         } else {
-          if (lightingFailures.value.length <= 0) {
+          if (streetLighting.value.length <= 0) {
             isloading.value = false
           }
         }
@@ -335,28 +335,28 @@ export default {
       return 'datos recargados'
     }
 
-    const addLightingFailures = () => {
-      createLightingFailures(lightingFailuresFields.value, (data) => {
+    const addStreetLighting = () => {
+      createStreetLighting(streetLightingFields.value, (data) => {
         refreshTable()
-        $toast.success('Falla registrada correctamente.', {
+        $toast.success('Alumbrado registrado correctamente.', {
           position: 'top-right',
           duration: 1500
         })
       })
-      lightingFailuresFields.value = JSON.parse(
-        JSON.stringify(lightingFailuresFieldsBlank)
+      streetLightingFields.value = JSON.parse(
+        JSON.stringify(streetLightingFieldsBlank)
       )
     }
 
-    const RemoveLightingFailures = (LightingFailuresId) => {
+    const RemoveStreetLighting = (StreetLightingId) => {
       isloading.value = true
-      deleteLightingFailures(LightingFailuresId, (data) => {
+      deleteStreetLighting(StreetLightingId, (data) => {
         refreshTable()
       })
     }
     return {
-      lightingFailures,
-      lightingFailuresFields,
+      streetLighting,
+      streetLightingFields,
       isOpen,
       perPage,
       currentPage,
@@ -366,7 +366,7 @@ export default {
       isloading,
       searchValue,
       searchField,
-      lightingFailuresFieldsBlank,
+      streetLightingFieldsBlank,
       // lightingFailuresValues,
       fields,
       FaultTypeState,
@@ -377,9 +377,9 @@ export default {
       LowDateState,
 
       onFiltered,
-      addLightingFailures,
+      addStreetLighting,
       refreshTable,
-      RemoveLightingFailures,
+      RemoveStreetLighting,
       validateFaultType,
       validateDescriptionSolution,
       validateHighDate,

@@ -42,15 +42,15 @@ const routes = [
     component: () => import('@/views/RecursosHumanos/ExpedienteDigital/ExpedientDigitalEdit.vue')
   },
   {
-    path: '/FallasAlumbrado/list',
-    name: 'FallasAlumbrado',
-    component: () => import('@/views/LightingFailures/LightingFailuresList.vue')
+    path: '/Alumbrado/list',
+    name: 'Alumbrado',
+    component: () => import('@/views/streetlighting/StreetLightingList.vue')
   },
-  {
-    path: '/FallasAlumbrado/:FallaId',
-    name: 'FallasAlumbrado-Edit',
-    component: () => import('@/views/LightingFailures/EditGlitches.vue')
-  },
+  // {
+  //   path: '/Alumbrado/:AlumbradoId',
+  //   name: 'Alumbrado-Edit',
+  //   component: () => import('@/views/LightingFailures/EditGlitches.vue')
+  // },
   {
     path: '/Usuarios/list',
     name: 'Usuarios',

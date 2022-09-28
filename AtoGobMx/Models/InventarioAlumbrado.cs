@@ -4,14 +4,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AtoGobMx.Models
 {
-    public class Estatus
+    public class InventarioAlumbrado
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int EstatusId { get; set; }
-        public string NombreEstatus { get; set; }
-        public string Descripcion { get; set; }
-        public bool Archivado  { get; set; }
+        public int InventarioAlumbradoId { get; set; }
+        public string Tarea { get; set; }
+        public DateTime FechaAlta { get; set; }
+        public DateTime FechaBaja { get; set; }
+        public string Domicilio { get; set; }
+        public bool Archivado { get; set; }
 
         [JsonIgnore]
         public virtual IEnumerable<Alumbrado> Alumbrado { get; set; }
