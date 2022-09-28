@@ -50,7 +50,6 @@ namespace AtoGobMx.Controllers
         public async Task<IActionResult> UploadPhotoProfile(IFormFile file, int expedienteDigitalId)
         {
             try
-            {
                 #region Comprobar si el expediente existe
                 var expediente = await _context.ExpedienteDigital
                     .Include(i => i.Empleados)
@@ -93,7 +92,7 @@ namespace AtoGobMx.Controllers
                     //{
                     //    return BadRequest("El empleado no contiene un usuario asignado");
                     //}
-                    var pathFolder = $@"C:/Users/Miguel Lopez/Pictures/AtoGobMX/images/{expediente.Empleados.NombreCompleto}";
+                    var pathFolder = $@"C:/Users/miiki/Pictures/AtoGobMX/images/{expediente.Empleados.NombreCompleto}";
                     //{ empleado.usuario.NombreUsuario}
                     if (!Directory.Exists(pathFolder))
                     {

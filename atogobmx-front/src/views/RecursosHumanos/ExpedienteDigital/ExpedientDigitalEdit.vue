@@ -75,32 +75,70 @@
     title="Imagen de Perfil"
     size="xl"
     centered
-    hide-backdrop
     button-size="lg"
     lazy
     ok-title="Guardar"
     cancel-title="Cancelar"
   >
-    <form ref="form">
+    <Form ref="form">
       <div class="mb-3">
         <label for="formFile" class="form-label"> Selecciona una imagen </label>
-        <input class="form-control w-75" type="file" id="formFile" />
+        <Field
+          name="FileField"
+          :rules="validateFile"
+        >
+        <input
+          v-on:change="onChangeFile"
+          class="form-control w-75"
+          type="file"
+          id="formFile"
+        />
+        </Field>
+        <ErrorMessage name="FileField" />
       </div>
-    </form>
+    </Form>
   </b-modal>
 </template>
 
 <script>
 import { ref } from 'vue'
+import { Form, Field, ErrorMessage } from 'vee-validate'
 // import FileServices from '@/Services/file.Services'
 import { useRoute } from 'vue-router'
 export default {
+  components: {
+    Form,
+    Field,
+    ErrorMessage
+  },
   setup () {
     // const {} = FileServices()
     const router = useRoute()
     const expedienteDigitalId = ref(router.params.ExpedienteDigitalId)
+    const fileState = ref(false)
+    const PhotoPerfil = ref({
+      expedienteDigitalId: 0,
+      file: null
+    })
+    const onChangeFile = (e) => {
+      const files = e.dataTransfer.file
+      console.log(files)
+    }
+    const validateFile = () => {
+      if (!PhotoPerfil.value.file) {
+        fileState.value = false
+        return 'Este campo es requerido'
+      }
+      fileState.value = true
+      return true
+    }
     return {
-      expedienteDigitalId
+      expedienteDigitalId,
+      PhotoPerfil,
+      fileState,
+
+      validateFile,
+      onChangeFile
     }
   }
 }

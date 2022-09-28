@@ -223,6 +223,7 @@ import EmployeeServices from '@/Services/employee.Services'
 import AreaServices from '@/Services/area.Services'
 import DepartamentServices from '@/Services/departament.Services'
 import workStationServices from '@/Services/workStation.Services'
+import ExpedientdigitalServices from '@/Services/expedientdigital.Services'
 import Datepicker from '@vuepic/vue-datepicker'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 
@@ -242,6 +243,7 @@ export default {
     const { getAreasByDepartament } = AreaServices()
     const { getDepartaments } = DepartamentServices()
     const { getWorkStationByArea } = workStationServices()
+    const { createExpedient } = ExpedientdigitalServices()
     const $toast = useToast()
     const employees = ref([])
     const departaments = ref([])
@@ -260,6 +262,11 @@ export default {
     const areaState = ref(false)
     const workStationState = ref(false)
     const departamentState = ref(false)
+    const expedientFieldBlank = ref({
+      expedienteDigitalId: 0,
+      empleadoId: null,
+      archivado: false
+    })
     const EmployeesFields = ref({
       empleadoId: 0,
       nombreCompleto: '',
@@ -408,7 +415,10 @@ export default {
     }
     const addEmployee = () => {
       createEmployee(EmployeesFields.value, (data) => {
-        console.log(data)
+        expedientFieldBlank.value.empleadoId = data.empleadoId
+        createExpedient(expedientFieldBlank.value, data => {
+          console.log(data)
+        })
         refreshTable()
         $toast.success('Empleado registrado correctamente.', {
           position: 'top-right',
@@ -433,6 +443,7 @@ export default {
       perPageSelect,
       areas,
       workStations,
+      expedientFieldBlank,
       EmployeesFieldsBlank,
       EmployeesFields,
       isloading,
