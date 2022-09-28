@@ -50,6 +50,7 @@ namespace AtoGobMx.Controllers
         public async Task<IActionResult> UploadPhotoProfile(IFormFile file, int expedienteDigitalId)
         {
             try
+            {
                 #region Comprobar si el expediente existe
                 var expediente = await _context.ExpedienteDigital
                     .Include(i => i.Empleados)
