@@ -1,6 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace AtoGobMx.Models
 {
@@ -14,7 +15,7 @@ namespace AtoGobMx.Models
         public bool Archivado  { get; set; }
 
         [JsonIgnore]
-        public virtual IEnumerable<Alumbrado> Alumbrado { get; set; }
+        public virtual IEnumerable<Alumbrado> ? Alumbrado { get; set; }
 
     }
 }

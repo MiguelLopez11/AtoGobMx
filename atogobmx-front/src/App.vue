@@ -112,7 +112,7 @@
                     </a>
                   </li>
                 </ul>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <!-- <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                   <li>
                     <a class="dropdown-item">
                       <router-link
@@ -123,7 +123,7 @@
                       </router-link>
                     </a>
                   </li>
-                </ul>
+                </ul> -->
               </li>
               <li class="nav-item dropdown">
                 <a

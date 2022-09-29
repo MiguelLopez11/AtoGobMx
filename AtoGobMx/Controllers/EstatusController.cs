@@ -42,15 +42,12 @@ namespace AtoGobMx.Controllers
             return Ok(estatus);
         }
 
-        [HttpPost("{AlumbradoId}")]
-        public async Task<ActionResult<Estatus>> PostEstatus(Estatus estatus, int AlumbradoId)
+        [HttpPost]
+        public async Task<ActionResult<Estatus>> PostEstatus(Estatus estatus)
         {
-            var estatu = await _context.Alumbrado.FirstOrDefaultAsync(f => f.AlumbradoId == AlumbradoId);
             _context.Estatus.Add(estatus);
-            var Estatus= CreatedAtAction("GetEstatusById", new { EstatusId = estatus.EstatusId }, estatus);
-            estatu.estatusId = estatus.EstatusId;
             await _context.SaveChangesAsync();
-            return Ok(Estatus);
+            return Ok("Estatus creado correctamente");
         }
 
         [HttpPut("{EstatusId}")]

@@ -44,13 +44,13 @@ const routes = [
   {
     path: '/Alumbrado/list',
     name: 'Alumbrado',
-    component: () => import('@/views/streetlighting/StreetLightingList.vue')
+    component: () => import('@/views/ServiciosPublicos/publiclighting/PublicLightingList.vue')
   },
-  // {
-  //   path: '/Alumbrado/:AlumbradoId',
-  //   name: 'Alumbrado-Edit',
-  //   component: () => import('@/views/LightingFailures/EditGlitches.vue')
-  // },
+  {
+    path: '/Alumbrado/:AlumbradoId',
+    name: 'Alumbrado-Edit',
+    component: () => import('@/views/ServiciosPublicos/publiclighting/EditLighting.vue')
+  },
   {
     path: '/Usuarios/list',
     name: 'Usuarios',

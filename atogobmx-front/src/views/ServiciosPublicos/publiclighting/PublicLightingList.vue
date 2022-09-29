@@ -17,7 +17,7 @@
           margin-right: 15px;
           margin-left: 20px;
         "
-        v-b-modal.modal-streetlighting
+        v-b-modal.modal-publiclighting
         type="submit"
       >
         <i class="bi bi-person-plus-fill"></i>
@@ -32,7 +32,7 @@
       border-cell
       :loading="isloading"
       :headers="fields"
-      :items="streetLighting"
+      :items="publicLighting"
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
@@ -43,7 +43,7 @@
       </template>
       <template #item-actions="items">
         <b-button
-          @click="RemoveStreetLighting(items.alumbradoId)"
+          @click="RemovePublicLighting(items.alumbradoId)"
           class="m-1"
           variant="outline-danger"
           ><i class="bi bi-trash3"></i
@@ -60,24 +60,49 @@
       </template>
     </EasyDataTable>
     <b-modal
-      id="modal-streetlighting"
+      id="modal-publiclighting"
       title="Agregar Alumbrado"
       size="xl"
       hide-footer
       button-size="lg"
       lazy
     >
-      <Form @submit="addStreetLighting">
+      <Form @submit="addPublicLighting">
         <b-row cols="2">
           <b-col>
-            <b-form-group class="mt-3" label="Tipo Falla">
-              <Field name="FaultTypeField" :rules="validateFaultType">
-                <b-form-input
-                  v-model="streetLightingFields.tipoFalla"
-                  :state="FaultTypeState"
-                ></b-form-input>
+            <!-- <b-form-group class="mt-3" label="Tipo de tarea">
+              <Field
+                name="TaskField"
+                :rules="validateTask"
+              >
+                <b-form-select
+                  v-model="streetLightingFields.tareaTipoId"
+                  autofocus
+                  :options="departaments"
+                  value-field="departamentoId"
+                  text-field="nombre"
+                  :state="TaskState"
+                  @input="getAreas(EmployeesFields.departamentoId)"
+                >
+                </b-form-select>
               </Field>
-              <ErrorMessage name="FaultTypeField"
+              <ErrorMessage name="TaskField"
+                ><span class="text-danger">Este campo es requerido </span
+                ><i class="bi bi-exclamation-circle"></i
+              ></ErrorMessage>
+            </b-form-group> -->
+            <b-form-group class="mt-3" label="Tipo Tarea">
+              <Field name="TaskField" :rules="validateTask">
+                <b-form-select
+                  v-model="publicLightingFields.tarea"
+                  autofocus
+                  :state="TaskState"
+                  :options="statusPublicLighting"
+                  value-field="estatusId"
+                  text-field="nombreEstatus"
+                ></b-form-select>
+              </Field>
+              <ErrorMessage name="TaskField"
                 ><span>Este campo es requerido </span
                 ><i class="bi bi-exclamation-circle"></i>
               </ErrorMessage>
@@ -90,12 +115,12 @@
                   locale="es"
                   name="date"
                   text-input
-                  v-model="streetLightingFields.fechaAlta"
+                  v-model="publicLightingFields.fechaAlta"
                   :state="HighDateState"
                 ></Datepicker>
               </Field>
               <ErrorMessage name="HighDateField"
-                ><span>Este campo es requerido llenarlo </span
+                ><span>Este campo es requerido </span
                 ><i class="bi bi-exclamation-circle"></i>
               </ErrorMessage>
             </b-form-group>
@@ -104,7 +129,7 @@
             <b-form-group class="mt-3" label="Domicilio">
               <Field name="DomicileField" :rules="validateDomicile">
                 <b-form-input
-                  v-model="streetLightingFields.domicilio"
+                  v-model="publicLightingFields.domicilio"
                   :state="DomicileState"
                 ></b-form-input>
               </Field>
@@ -121,12 +146,12 @@
                   locale="es"
                   name="date"
                   text-input
-                  v-model="streetLightingFields.fechaBaja"
+                  v-model="publicLightingFields.fechaBaja"
                   :state="LowDateState"
                 ></Datepicker>
               </Field>
               <ErrorMessage name="LowDateField"
-                ><span>Este campo es requerido llenarlo </span
+                ><span>Este campo es requerido </span
                 ><i class="bi bi-exclamation-circle"></i>
               </ErrorMessage>
             </b-form-group>
@@ -138,13 +163,13 @@
                 :rules="validateAddresdescription"
               >
                 <b-form-textarea
-                  v-model="streetLightingFields.descripcionDomicilio"
+                  v-model="publicLightingFields.descripcionDomicilio"
                   :state="addresdescriptionState"
                   rows="4"
                 ></b-form-textarea>
               </Field>
               <ErrorMessage name="addresdescriptionField"
-                ><span>Este campo es requerido llenarlo </span
+                ><span>Este campo es requerido </span
                 ><i class="bi bi-exclamation-circle"></i>
               </ErrorMessage>
             </b-form-group>
@@ -156,7 +181,7 @@
                 :rules="validateDescriptionSolution"
               >
                 <b-form-textarea
-                  v-model="streetLightingFields.descripcionSolucion"
+                  v-model="publicLightingFields.descripcionSolucion"
                   :state="DescriptionSolutionState"
                   rows="4"
                 ></b-form-textarea>
@@ -172,7 +197,7 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            v-b-modal.modal-streetlighting
+            v-b-modal.modal-publiclighting
           >
             Cancelar
           </b-button>
@@ -186,11 +211,13 @@
 </template>
 
 <script>
-import StreetlightingServices from '@/Services/streetlighting.Services'
+import PubliclightingServices from '@/Services/publiclighting.Services'
+import StatusServices from '@/Services/status.Services'
 import Datepicker from '@vuepic/vue-datepicker'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref } from 'vue'
 import { useToast } from 'vue-toast-notification'
+import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
     Datepicker,
@@ -201,12 +228,17 @@ export default {
   },
   setup () {
     const {
-      getStreetLighting,
-      createStreetLighting,
-      deleteStreetLighting
-    } = StreetlightingServices()
+      getPublicLighting,
+      createPublicLighting,
+      deletePublicLighting
+    } = PubliclightingServices()
+    const {
+      getStatus
+    } = StatusServices()
     const $toast = useToast()
-    const streetLighting = ref([])
+    const publicLighting = ref([])
+    const statusPublicLighting = ref([])
+    // const option = ref()
     const isOpen = ref(false)
     const perPage = ref(5)
     const currentPage = ref(1)
@@ -215,16 +247,16 @@ export default {
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('tipoFalla')
-    const FaultTypeState = ref(false)
+    const searchField = ref('tarea')
+    const TaskState = ref(false)
     const DescriptionSolutionState = ref(false)
     const HighDateState = ref(false)
     const addresdescriptionState = ref(false)
     const DomicileState = ref(false)
     const LowDateState = ref(false)
-    const streetLightingFields = ref({
+    const publicLightingFields = ref({
       alumbradoId: 0,
-      tipoFalla: null,
+      tarea: null,
       descripcionSolucion: null,
       fechaAlta: null,
       fechaBaja: null,
@@ -233,17 +265,42 @@ export default {
       archivado: false
     })
 
-    const validateFaultType = () => {
-      if (!streetLightingFields.value.tipoFalla) {
-        FaultTypeState.value = false
+    getStatus((data) => {
+      statusPublicLighting.value = data
+    })
+
+    // const getAreas = (departamentoId) => {
+    //   getAreasByDepartament(departamentoId, data => {
+    //     areas.value = data
+    //     if (data.length === 0) {
+    //       $toast.open({
+    //         message: 'No se encuentran areas registrados en el departamento seleccionado, registre primero una area para continuar',
+    //         position: 'top-left',
+    //         duration: 2500,
+    //         dismissible: true,
+    //         type: 'error'
+    //       })
+    //     }
+    //   })
+    // }
+
+    // const option = ref([
+    //   { value: 'tarea', text: 'Mantenimiento' },
+    //   { value: 'tarea', text: 'Reparacion' },
+    //   { value: 'tarea', text: 'Instalacion', disabled: true }
+    // ])
+
+    const validateTask = () => {
+      if (!publicLightingFields.value.tarea) {
+        TaskState.value = false
         return 'Este campo es requerido'
       }
-      FaultTypeState.value = true
+      TaskState.value = true
       return true
     }
 
     const validateDescriptionSolution = () => {
-      if (!streetLightingFields.value.descripcionSolucion) {
+      if (!publicLightingFields.value.descripcionSolucion) {
         DescriptionSolutionState.value = false
         return 'Este campo es requerido'
       }
@@ -252,7 +309,7 @@ export default {
     }
 
     const validateDomicile = () => {
-      if (!streetLightingFields.value.domicilio) {
+      if (!publicLightingFields.value.domicilio) {
         DomicileState.value = false
         return 'Este campo es requerido'
       }
@@ -261,7 +318,7 @@ export default {
     }
 
     const validateLowDate = () => {
-      if (!streetLightingFields.value.fechaBaja) {
+      if (!publicLightingFields.value.fechaBaja) {
         LowDateState.value = false
         return 'Este campo es requerido'
       }
@@ -270,7 +327,7 @@ export default {
     }
 
     const validateHighDate = () => {
-      if (!streetLightingFields.value.fechaAlta) {
+      if (!publicLightingFields.value.fechaAlta) {
         HighDateState.value = false
         return 'Este campo es requerido'
       }
@@ -279,7 +336,7 @@ export default {
     }
 
     const validateAddresdescription = () => {
-      if (!streetLightingFields.value.descripcionDomicilio) {
+      if (!publicLightingFields.value.descripcionDomicilio) {
         addresdescriptionState.value = false
         return 'Este campo es requerido'
       }
@@ -289,12 +346,12 @@ export default {
 
     // pone mis cambios de mis campos vacios de nuevo
     const streetLightingFieldsBlank = ref(
-      JSON.parse(JSON.stringify(streetLightingFields))
+      JSON.parse(JSON.stringify(publicLightingFields))
     )
 
     const fields = ref([
       { value: 'alumbradoId', text: 'ID', sortable: true },
-      { value: 'tipoFalla', text: 'Tipo Falla' },
+      { value: 'tarea', text: 'Tarea' },
       { value: 'fechaAlta', text: 'Fecha Alta' },
       { value: 'domicilio', text: 'Domicilio' },
       { value: 'descripcionDomicilio', text: 'Descripcion Domicilio' },
@@ -302,13 +359,24 @@ export default {
       { value: 'fechaBaja', text: 'Fecha Baja' },
       { value: 'actions', text: 'Acciones' }
     ])
-    getStreetLighting((data) => {
-      streetLighting.value = data
+
+    // const resetStreetLightingFields = () => {
+    //   streetLightingFields.value = JSON.parse(JSON.stringify(streetLightingFieldsBlank))
+    //   TaskState.value = false
+    //   DescriptionSolutionState.value = false
+    //   HighDateState.value = false
+    //   addresdescriptionState.value = false
+    //   DomicileState.value = false
+    //   LowDateState.value = false
+    // }
+
+    getPublicLighting((data) => {
+      publicLighting.value = data
       // rows.value = data.length
-      if (streetLighting.value.length > 0) {
+      if (publicLighting.value.length > 0) {
         isloading.value = false
       } else {
-        if (streetLighting.value.length <= 0) {
+        if (publicLighting.value.length <= 0) {
           isloading.value = false
         }
       }
@@ -321,13 +389,13 @@ export default {
 
     const refreshTable = () => {
       isloading.value = true
-      getStreetLighting((data) => {
-        streetLighting.value = data
+      getPublicLighting((data) => {
+        publicLighting.value = data
         // rows.value = data.length
-        if (streetLighting.value.length > 0) {
+        if (publicLighting.value.length > 0) {
           isloading.value = false
         } else {
-          if (streetLighting.value.length <= 0) {
+          if (publicLighting.value.length <= 0) {
             isloading.value = false
           }
         }
@@ -335,28 +403,29 @@ export default {
       return 'datos recargados'
     }
 
-    const addStreetLighting = () => {
-      createStreetLighting(streetLightingFields.value, (data) => {
+    const addPublicLighting = () => {
+      createPublicLighting(publicLightingFields.value, (data) => {
         refreshTable()
         $toast.success('Alumbrado registrado correctamente.', {
           position: 'top-right',
           duration: 1500
         })
       })
-      streetLightingFields.value = JSON.parse(
-        JSON.stringify(streetLightingFieldsBlank)
-      )
+      // resetStreetLightingFields()
+      publicLightingFields.value = JSON.parse(
+        JSON.stringify(streetLightingFieldsBlank))
     }
 
-    const RemoveStreetLighting = (StreetLightingId) => {
+    const RemovePublicLighting = (StreetLightingId) => {
       isloading.value = true
-      deleteStreetLighting(StreetLightingId, (data) => {
+      deletePublicLighting(StreetLightingId, (data) => {
         refreshTable()
       })
     }
     return {
-      streetLighting,
-      streetLightingFields,
+      publicLighting,
+      statusPublicLighting,
+      publicLightingFields,
       isOpen,
       perPage,
       currentPage,
@@ -369,23 +438,25 @@ export default {
       streetLightingFieldsBlank,
       // lightingFailuresValues,
       fields,
-      FaultTypeState,
+      TaskState,
       DescriptionSolutionState,
       HighDateState,
       addresdescriptionState,
       DomicileState,
       LowDateState,
+      // option,
 
       onFiltered,
-      addStreetLighting,
+      addPublicLighting,
       refreshTable,
-      RemoveStreetLighting,
-      validateFaultType,
+      RemovePublicLighting,
+      validateTask,
       validateDescriptionSolution,
       validateHighDate,
       validateAddresdescription,
       validateLowDate,
       validateDomicile
+      // resetStreetLightingFields
     }
   }
 }
