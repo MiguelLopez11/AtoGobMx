@@ -2,11 +2,14 @@
   <b-card class="m-3">
     <abbr title="Cambiar Foto de perfil">
       <b-avatar
-        :src="`https://localhost:7065/api/Archivos/FotoPerfil/${expedienteDigitalId}`"
+        :src="
+          `https://localhost:7065/api/Archivos/FotoPerfil/${expedienteDigitalId}`
+        "
         size="200px"
         style="cursor: pointer; margin-bottom: 30px"
         v-b-modal.modal-profilePhoto
         badge-variant="light"
+        alt=""
       >
         <template #badge>
           <i class="bi bi-pencil-square" />
@@ -75,42 +78,23 @@
     title="Imagen de Perfil"
     size="xl"
     centered
-    button-size="lg"
-    lazy
-    ok-title="Guardar"
-    cancel-title="Cancelar"
+    hide-footer
   >
-    <Form ref="form">
+    <!-- <Form ref="form">
       <div class="mb-3">
         <label for="formFile" class="form-label"> Selecciona una imagen </label>
-        <Field
-          name="FileField"
-          :rules="validateFile"
-        >
-        <input
-          v-on:change="onChangeFile"
-          class="form-control w-75"
-          type="file"
-          id="formFile"
-        />
+        <Field name="FileField" :rules="validateFile">
         </Field>
         <ErrorMessage name="FileField" />
       </div>
-    </Form>
+    </Form> -->
   </b-modal>
 </template>
 
 <script>
 import { ref } from 'vue'
-import { Form, Field, ErrorMessage } from 'vee-validate'
-// import FileServices from '@/Services/file.Services'
 import { useRoute } from 'vue-router'
 export default {
-  components: {
-    Form,
-    Field,
-    ErrorMessage
-  },
   setup () {
     // const {} = FileServices()
     const router = useRoute()
@@ -120,7 +104,7 @@ export default {
       expedienteDigitalId: 0,
       file: null
     })
-    const onChangeFile = (e) => {
+    const onChangeFile = e => {
       const files = e.dataTransfer.file
       console.log(files)
     }
@@ -144,5 +128,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>
