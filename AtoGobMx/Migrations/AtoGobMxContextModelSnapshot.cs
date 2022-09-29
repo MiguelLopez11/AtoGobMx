@@ -72,7 +72,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasIndex("tareaTipoId");
 
-                    b.ToTable("Alumbrado");
+                    b.ToTable("Alumbrado", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Archivos", b =>
@@ -96,7 +96,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasIndex("ExpedienteDigitalId");
 
-                    b.ToTable("Archivos");
+                    b.ToTable("Archivos", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Area", b =>
@@ -122,7 +122,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasIndex("DepartamentoId");
 
-                    b.ToTable("Area");
+                    b.ToTable("Area", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Departamentos", b =>
@@ -135,6 +135,7 @@ namespace AtoGobMx.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Descripcion")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Nombre")
@@ -143,7 +144,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasKey("DepartamentoId");
 
-                    b.ToTable("Departamentos");
+                    b.ToTable("Departamentos", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Empleado", b =>
@@ -158,13 +159,14 @@ namespace AtoGobMx.Migrations
                     b.Property<int?>("AreaId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("DepartamentoId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("FechaAlta")
                         .HasColumnType("datetime(6)");
 
                     b.Property<DateTime?>("FechaBaja")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("FechaNacimiento")
+                        .IsRequired()
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("NombreCompleto")
@@ -172,18 +174,16 @@ namespace AtoGobMx.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("varchar(200)");
 
-                    b.Property<int?>("PuestoTrabajoId")
+                    b.Property<int?>("expedienteDigitalId")
                         .HasColumnType("int");
 
                     b.HasKey("EmpleadoId");
 
                     b.HasIndex("AreaId");
 
-                    b.HasIndex("DepartamentoId");
+                    b.HasIndex("expedienteDigitalId");
 
-                    b.HasIndex("PuestoTrabajoId");
-
-                    b.ToTable("Empleados");
+                    b.ToTable("Empleados", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Estatus", b =>
@@ -205,7 +205,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasKey("EstatusId");
 
-                    b.ToTable("Estatus");
+                    b.ToTable("Estatus", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.ExpedienteAlumbrado", b =>
@@ -241,7 +241,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasKey("ExpedienteAlumbradoId");
 
-                    b.ToTable("ExpedienteAlumbrado");
+                    b.ToTable("ExpedienteAlumbrado", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.ExpedienteDigital", b =>
@@ -262,14 +262,8 @@ namespace AtoGobMx.Migrations
                     b.Property<string>("CorreoElectronico")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("EmpleadoId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Estado")
                         .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("FechaNacimiento")
-                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Localidad")
                         .HasColumnType("longtext");
@@ -285,9 +279,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasKey("ExpedienteDigitalId");
 
-                    b.HasIndex("EmpleadoId");
-
-                    b.ToTable("ExpedienteDigital");
+                    b.ToTable("ExpedienteDigital", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.InventarioAlumbrado", b =>
@@ -315,7 +307,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasKey("InventarioAlumbradoId");
 
-                    b.ToTable("InventarioAlumbrado");
+                    b.ToTable("InventarioAlumbrado", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.PuestoTrabajo", b =>
@@ -330,9 +322,6 @@ namespace AtoGobMx.Migrations
                     b.Property<int?>("AreaId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("DepartamentoId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Nombre")
                         .HasColumnType("longtext");
 
@@ -340,9 +329,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasIndex("AreaId");
 
-                    b.HasIndex("DepartamentoId");
-
-                    b.ToTable("PuestoTrabajo");
+                    b.ToTable("PuestoTrabajo", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Role", b =>
@@ -364,7 +351,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasKey("RoleId");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.TareaTipoAlumbrado", b =>
@@ -386,7 +373,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasKey("TareaTipoId");
 
-                    b.ToTable("TareaTipoAlumbrado");
+                    b.ToTable("TareaTipoAlumbrado", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Usuario", b =>
@@ -421,7 +408,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Usuarios");
+                    b.ToTable("Usuarios", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Alumbrado", b =>
@@ -479,30 +466,13 @@ namespace AtoGobMx.Migrations
                         .WithMany("Empleados")
                         .HasForeignKey("AreaId");
 
-                    b.HasOne("AtoGobMx.Models.Departamentos", "Departamentos")
-                        .WithMany()
-                        .HasForeignKey("DepartamentoId");
-
-                    b.HasOne("AtoGobMx.Models.PuestoTrabajo", "PuestoTrabajo")
-                        .WithMany()
-                        .HasForeignKey("PuestoTrabajoId");
+                    b.HasOne("AtoGobMx.Models.ExpedienteDigital", "ExpedienteDigital")
+                        .WithMany("Empleados")
+                        .HasForeignKey("expedienteDigitalId");
 
                     b.Navigation("Area");
 
-                    b.Navigation("Departamentos");
-
-                    b.Navigation("PuestoTrabajo");
-                });
-
-            modelBuilder.Entity("AtoGobMx.Models.ExpedienteDigital", b =>
-                {
-                    b.HasOne("AtoGobMx.Models.Empleado", "Empleados")
-                        .WithMany()
-                        .HasForeignKey("EmpleadoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Empleados");
+                    b.Navigation("ExpedienteDigital");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.PuestoTrabajo", b =>
@@ -511,13 +481,7 @@ namespace AtoGobMx.Migrations
                         .WithMany()
                         .HasForeignKey("AreaId");
 
-                    b.HasOne("AtoGobMx.Models.Departamentos", "Departamentos")
-                        .WithMany()
-                        .HasForeignKey("DepartamentoId");
-
                     b.Navigation("Area");
-
-                    b.Navigation("Departamentos");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Usuario", b =>
@@ -562,6 +526,8 @@ namespace AtoGobMx.Migrations
             modelBuilder.Entity("AtoGobMx.Models.ExpedienteDigital", b =>
                 {
                     b.Navigation("Archivos");
+
+                    b.Navigation("Empleados");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.InventarioAlumbrado", b =>
