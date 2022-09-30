@@ -80,14 +80,10 @@
     centered
     hide-footer
   >
-    <!-- <Form ref="form">
-      <div class="mb-3">
-        <label for="formFile" class="form-label"> Selecciona una imagen </label>
-        <Field name="FileField" :rules="validateFile">
-        </Field>
-        <ErrorMessage name="FileField" />
-      </div>
-    </Form> -->
+    <div class="input-group mb-3">
+      <input type="file" class="form-control" list v-on:change="onChangeFile" :dropzone="true" :draggable="true" />
+      <b-button variant="outline-primary">Cargar imagen</b-button>
+    </div>
   </b-modal>
 </template>
 
@@ -105,7 +101,11 @@ export default {
       file: null
     })
     const onChangeFile = e => {
-      const files = e.dataTransfer.file
+      const files = e.target.files || e.dataTransfer.files
+      if (files[0].type !== 'image/jpeg' || files[0].type !== 'image/png') {
+        alert('Error, no ingresó una imagen')
+        e.target.files[0] = null
+      }
       console.log(files)
     }
     const validateFile = () => {
