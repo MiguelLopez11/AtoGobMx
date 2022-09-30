@@ -90,38 +90,23 @@
 <script>
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
+import FileServices from '@/Services/file.Services'
 export default {
   setup () {
-    // const {} = FileServices()
+    const { createExpedientPhotoProfile } = FileServices()
     const router = useRoute()
     const expedienteDigitalId = ref(router.params.ExpedienteDigitalId)
     const fileState = ref(false)
-    const PhotoPerfil = ref({
-      expedienteDigitalId: 0,
-      file: null
-    })
     const onChangeFile = e => {
       const files = e.target.files || e.dataTransfer.files
-      if (files[0].type !== 'image/jpeg' || files[0].type !== 'image/png') {
-        alert('Error, no ingresó una imagen')
-        e.target.files[0] = null
-      }
       console.log(files)
-    }
-    const validateFile = () => {
-      if (!PhotoPerfil.value.file) {
-        fileState.value = false
-        return 'Este campo es requerido'
-      }
-      fileState.value = true
-      return true
+      createExpedientPhotoProfile(router.params.ExpedienteDigitalId, files[0], data => {
+      })
     }
     return {
       expedienteDigitalId,
-      PhotoPerfil,
       fileState,
 
-      validateFile,
       onChangeFile
     }
   }

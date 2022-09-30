@@ -46,7 +46,7 @@ namespace AtoGobMx.Controllers
             return File(image, "image/jpeg");
 
         }
-        [HttpPost("FotoPerfil/{expedienteDigitalId}/")]
+        [HttpPost("Imagen/{expedienteDigitalId}/")]
         public async Task<IActionResult> UploadPhotoProfile(IFormFile file, int expedienteDigitalId)
         {
             try
