@@ -136,7 +136,7 @@
 
 <script>
 import StreetlightingServices from '@/Services/publiclighting.Services'
-import StatusServices from '@/Services/statuslighting.Services'
+// import StatusServices from '@/Services/statuslighting.Services'
 import { Field, Form, ErrorMessage } from 'vee-validate'
 // import AreaServices from '@/Services/area.Services'
 import { ref } from 'vue'
@@ -154,7 +154,7 @@ export default {
   setup () {
     const { getPublicLightingById, updatePublicLighting } =
       StreetlightingServices()
-    const { getStatusById } = StatusServices()
+    // const { getStatusById } = StatusServices()
     const $toast = useToast()
     const publicLighting = ref([])
     const statusPublicLighting = ref([])
@@ -173,9 +173,9 @@ export default {
       { text: 'Editar-Alumbrado' }
     ])
 
-    getStatusById((data) => {
-      statusPublicLighting.value = data
-    })
+    // getStatusById((data) => {
+    //   statusPublicLighting.value = data
+    // })
 
     getPublicLightingById(router.params.AlumbradoId, (data) => {
       // streetLighting.value = data
@@ -265,6 +265,7 @@ export default {
     return {
       publicLighting,
       breadcrumbItems,
+      statusPublicLighting,
       router,
       TaskState,
       DescriptionSolutionState,
