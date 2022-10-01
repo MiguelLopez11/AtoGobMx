@@ -2,6 +2,7 @@
   <b-card class="m-3">
     <abbr title="Cambiar Foto de perfil">
       <b-avatar
+        ref="refAvatar"
         :src="
           `https://localhost:7065/api/Archivos/FotoPerfil/${expedienteDigitalId}`
         "
@@ -78,11 +79,20 @@
     title="Imagen de Perfil"
     size="xl"
     centered
+    hide-backdrop
     hide-footer
   >
     <div class="input-group mb-3">
-      <input type="file" class="form-control" v-on:change="onChangeFile" ref="refFile" id="file" />
-      <b-button variant="outline-primary" @click="submitPhoto">Cargar imagen</b-button>
+      <input
+        type="file"
+        class="form-control"
+        v-on:change="onChangeFile"
+        ref="refFile"
+        id="file"
+      />
+      <b-button variant="outline-primary" @click="submitPhoto"
+        >Cargar imagen</b-button
+      >
     </div>
   </b-modal>
 </template>
@@ -90,32 +100,54 @@
 <script>
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { useToast } from 'vue-toast-notification'
 import FileServices from '@/Services/file.Services'
 export default {
   setup () {
     const { createExpedientPhotoProfile } = FileServices()
     const refFile = ref()
+    const refAvatar = ref()
     const router = useRoute()
+    const $toast = useToast()
     const expedienteDigitalId = ref(router.params.ExpedienteDigitalId)
     const fileState = ref(false)
     const file = ref('')
     const onChangeFile = e => {
       file.value = refFile.value.files[0]
-      // createExpedientPhotoProfile(router.params.ExpedienteDigitalId, files[0], data => {
-      // })
     }
     const submitPhoto = () => {
       const formData = new FormData()
       formData.append('file', file.value)
-      createExpedientPhotoProfile(router.params.ExpedienteDigitalId, formData, data => {
-        console.log(data)
-      })
+      if (!file.value) {
+        $toast.open({
+          message:
+            'No se ha seleccionado una imagen, por favor ingrese una imagen de perfil.',
+          position: 'top-left',
+          duration: 0,
+          dismissible: true,
+          type: 'error'
+        })
+      }
+      createExpedientPhotoProfile(
+        router.params.ExpedienteDigitalId,
+        formData,
+        data => {
+          $toast.open({
+            message: `${data.data}`,
+            position: 'top-left',
+            duration: 0,
+            dismissible: true,
+            type: 'error'
+          })
+        }
+      )
     }
     return {
       expedienteDigitalId,
       fileState,
       refFile,
       file,
+      refAvatar,
 
       onChangeFile,
       submitPhoto

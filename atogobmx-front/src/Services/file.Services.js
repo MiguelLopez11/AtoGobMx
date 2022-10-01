@@ -8,9 +8,10 @@ export default function FileServices () {
     })
   }
   const createExpedientPhotoProfile = (expedienteDigitalId, file, callback) => {
-    console.log(file)
     axios.post(`${BaseUrl}/Archivos/Imagen/${expedienteDigitalId}`, file).then((response) => {
       callback(response)
+    }).catch((exception) => {
+      callback(exception.response.data)
     })
   }
   return {
