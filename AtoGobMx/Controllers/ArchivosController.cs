@@ -42,7 +42,7 @@ namespace AtoGobMx.Controllers
             //    return BadRequest("El empleado no tiene registrado el expediente");
             //}
             //{ empleado.usuario.NombreUsuario}
-            var image = System.IO.File.OpenRead($"C:/Users/Miguel Lopez/Pictures/AtoGobMX/images/{expediente.Empleados.NombreCompleto}/{fotoPerfil.Nombre}");
+            var image = System.IO.File.OpenRead($"Files/images/{expediente.Empleados.NombreCompleto}/{fotoPerfil.Nombre}");
             return File(image, "image/jpeg");
 
         }
@@ -93,7 +93,7 @@ namespace AtoGobMx.Controllers
                     //{
                     //    return BadRequest("El empleado no contiene un usuario asignado");
                     //}
-                    var pathFolder = $@"C:/Users/miiki/Pictures/AtoGobMX/images/{expediente.Empleados.NombreCompleto}";
+                    var pathFolder = $@"Files/images/{expediente.Empleados.NombreCompleto}";
                     //{ empleado.usuario.NombreUsuario}
                     if (!Directory.Exists(pathFolder))
                     {

@@ -81,8 +81,8 @@
     hide-footer
   >
     <div class="input-group mb-3">
-      <input type="file" class="form-control" list v-on:change="onChangeFile" :dropzone="true" :draggable="true" />
-      <b-button variant="outline-primary">Cargar imagen</b-button>
+      <input type="file" class="form-control" v-on:change="onChangeFile" ref="refFile" id="file" />
+      <b-button variant="outline-primary" @click="submitPhoto">Cargar imagen</b-button>
     </div>
   </b-modal>
 </template>
@@ -94,20 +94,31 @@ import FileServices from '@/Services/file.Services'
 export default {
   setup () {
     const { createExpedientPhotoProfile } = FileServices()
+    const refFile = ref()
     const router = useRoute()
     const expedienteDigitalId = ref(router.params.ExpedienteDigitalId)
     const fileState = ref(false)
+    const file = ref('')
     const onChangeFile = e => {
-      const files = e.target.files || e.dataTransfer.files
-      console.log(files)
-      createExpedientPhotoProfile(router.params.ExpedienteDigitalId, files[0], data => {
+      file.value = refFile.value.files[0]
+      // createExpedientPhotoProfile(router.params.ExpedienteDigitalId, files[0], data => {
+      // })
+    }
+    const submitPhoto = () => {
+      const formData = new FormData()
+      formData.append('file', file.value)
+      createExpedientPhotoProfile(router.params.ExpedienteDigitalId, formData, data => {
+        console.log(data)
       })
     }
     return {
       expedienteDigitalId,
       fileState,
+      refFile,
+      file,
 
-      onChangeFile
+      onChangeFile,
+      submitPhoto
     }
   }
 }
