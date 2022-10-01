@@ -44,16 +44,12 @@ namespace AtoGobMx.Controllers
             return Ok(tareaTipo);
         }
 
-        [HttpPost("{AlumbradoId}")]
-        public async Task<ActionResult<TareaTipoAlumbrado>> PostTareaTipoAlumbrado(TareaTipoAlumbrado tareaTipoAlumbrado, int AlumbradoId)
+        [HttpPost]
+        public async Task<ActionResult<TareaTipoAlumbrado>> PostTareaTipoAlumbrado(TareaTipoAlumbrado tareaTipoAlumbrado)
         {
-            var alumbrado = await _context.Alumbrado.FirstOrDefaultAsync(f => f.AlumbradoId == AlumbradoId);
             _context.TareaTipoAlumbrado.Add(tareaTipoAlumbrado);
-
-            var tareatipo = CreatedAtAction("GetTareaTipoAlumbradoById", new { TareaTipoId = tareaTipoAlumbrado.TareaTipoId }, tareaTipoAlumbrado);
-            alumbrado.tareaTipoId = tareaTipoAlumbrado.TareaTipoId;
             await _context.SaveChangesAsync();
-            return Ok(tareaTipoAlumbrado);
+            return Ok("Tipo tarea creada correctamente");
         }
 
         [HttpPut("{TareaTipoId}")]

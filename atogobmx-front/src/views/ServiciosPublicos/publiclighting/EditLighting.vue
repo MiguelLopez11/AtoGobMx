@@ -9,15 +9,19 @@
           <div>
             <h3>Reporte Alumbrado</h3>
           </div>
-          <Form @submit="onUpdateStreetLighting">
+          <Form @submit="onUpdatePublicLighting">
             <b-row cols="2">
               <b-col>
-                <b-form-group class="mt-3" label="Tarea">
+                <b-form-group class="mt-3" label="Tipo Tarea">
                   <Field name="TaskField" :rules="validateTask">
-                    <b-form-input
-                      v-model="streetLighting.tarea"
+                    <b-form-select
+                      v-model="publicLighting.tarea"
+                      autofocus
                       :state="TaskState"
-                    ></b-form-input>
+                      :options="statusPublicLighting"
+                      value-field="estatusId"
+                      text-field="nombreEstatus"
+                    ></b-form-select>
                   </Field>
                   <ErrorMessage name="TaskField"
                     ><span>Este campo es requerido </span
@@ -32,7 +36,7 @@
                       locale="es"
                       name="Date"
                       text-input
-                      v-model="streetLighting.fechaAlta"
+                      v-model="publicLighting.fechaAlta"
                       :state="HighDateState"
                     ></Datepicker>
                   </Field>
@@ -46,7 +50,7 @@
                 <b-form-group class="mt-3" label="Domicilio">
                   <Field name="DomicileField" :rules="validateDomicile">
                     <b-form-input
-                      v-model="streetLighting.domicilio"
+                      v-model="publicLighting.domicilio"
                       :state="DomicileState"
                     ></b-form-input>
                   </Field>
@@ -63,7 +67,7 @@
                       locale="es"
                       name="date"
                       text-input
-                      v-model="streetLighting.fechaBaja"
+                      v-model="publicLighting.fechaBaja"
                       :state="LowDateState"
                     ></Datepicker>
                   </Field>
@@ -80,7 +84,7 @@
                     :rules="validateAddresdescription"
                   >
                     <b-form-textarea
-                      v-model="streetLighting.descripcionDomicilio"
+                      v-model="publicLighting.descripcionDomicilio"
                       :state="addresdescriptionState"
                       rows="4"
                     ></b-form-textarea>
@@ -98,7 +102,7 @@
                     :rules="validateDescriptionSolution"
                   >
                     <b-form-textarea
-                      v-model="streetLighting.descripcionSolucion"
+                      v-model="publicLighting.descripcionSolucion"
                       :state="DescriptionSolutionState"
                       rows="4"
                     ></b-form-textarea>
@@ -132,6 +136,7 @@
 
 <script>
 import StreetlightingServices from '@/Services/publiclighting.Services'
+import StatusServices from '@/Services/statuslighting.Services'
 import { Field, Form, ErrorMessage } from 'vee-validate'
 // import AreaServices from '@/Services/area.Services'
 import { ref } from 'vue'
@@ -147,10 +152,12 @@ export default {
     ErrorMessage
   },
   setup () {
-    const { getStreetLightingg, updateStreetLighting } =
-    StreetlightingServices()
+    const { getPublicLightingById, updatePublicLighting } =
+      StreetlightingServices()
+    const { getStatusById } = StatusServices()
     const $toast = useToast()
-    const streetLighting = ref([])
+    const publicLighting = ref([])
+    const statusPublicLighting = ref([])
     const router = useRoute()
     const redirect = useRouter()
     // const route = useRouter()
@@ -165,101 +172,98 @@ export default {
       { text: 'Alumbrado', to: '/Alumbrado/list' },
       { text: 'Editar-Alumbrado' }
     ])
-    getStreetLightingg(router.params.AlumbradoId, (data) => {
+
+    getStatusById((data) => {
+      statusPublicLighting.value = data
+    })
+
+    getPublicLightingById(router.params.AlumbradoId, (data) => {
       // streetLighting.value = data
       // validateState()
-      streetLighting.value = data
+      publicLighting.value = data
       // eslint-disable-next-line no-unneeded-ternary
       TaskState.value = data.tarea === null ? false : true
     })
-    const onUpdateStreetLighting = () => {
-      updateStreetLighting(streetLighting.value, (data) => {})
+    const onUpdatePublicLighting = () => {
+      updatePublicLighting(publicLighting.value, (data) => {})
       $toast.open({
-        message: 'La Falla se a modificado correcta mente',
+        message: 'El alumbrado se a modificado correcta mente',
         position: 'top',
         duration: 1000,
         dismissible: true,
         type: 'success',
-        onDismiss: () => redirect.push('/FallasAlumbrado/list')
+        onDismiss: () => redirect.push('/Alumbrado/list')
       })
     }
-
     const validateTask = () => {
-      if (!streetLighting.value.tarea) {
+      if (!publicLighting.value.tarea) {
         validateState()
         return 'Este campo es requerido'
       }
       validateState()
       return true
     }
-
     const validateDescriptionSolution = () => {
-      if (!streetLighting.value.descripcionSolucion) {
+      if (!publicLighting.value.descripcionSolucion) {
         validateState()
         return 'Este campo es requerido'
       }
       validateState()
       return true
     }
-
     const validateDomicile = () => {
-      if (!streetLighting.value.domicilio) {
+      if (!publicLighting.value.domicilio) {
         validateState()
         return 'Este campo es requerido'
       }
       validateState()
       return true
     }
-
     const validateLowDate = () => {
-      if (!streetLighting.value.fechaBaja) {
+      if (!publicLighting.value.fechaBaja) {
         validateState()
         return 'Este campo es requerido'
       }
       validateState()
       return true
     }
-
     const validateHighDate = () => {
-      if (!streetLighting.value.fechaAlta) {
+      if (!publicLighting.value.fechaAlta) {
         validateState()
         return 'Este campo es requerido'
       }
       validateState()
       return true
     }
-
     const validateAddresdescription = () => {
-      if (!streetLighting.value.descripcionDomicilio) {
+      if (!publicLighting.value.descripcionDomicilio) {
         validateState()
         return 'Este campo es requerido'
       }
       validateState()
       return true
     }
-
     const validateState = () => {
       // eslint-disable-next-line no-unneeded-ternary
-      TaskState.value = streetLighting.value.tarea !== ''
+      TaskState.value = publicLighting.value.tarea !== ''
       // eslint-disable-next-line no-unneeded-ternary
-      HighDateState.value = streetLighting.value.fechaAlta !== null
+      HighDateState.value = publicLighting.value.fechaAlta !== null
       // eslint-disable-next-line no-unneeded-ternary
-      DomicileState.value = streetLighting.value.domicilio !== ''
+      DomicileState.value = publicLighting.value.domicilio !== ''
       // eslint-disable-next-line no-unneeded-ternary
       addresdescriptionState.value =
-        streetLighting.value.descripcionDomicilio !== ''
+        publicLighting.value.descripcionDomicilio !== ''
       // eslint-disable-next-line no-unneeded-ternary
       DescriptionSolutionState.value =
-        streetLighting.value.descripcionSolucion !== ''
+        publicLighting.value.descripcionSolucion !== ''
       // eslint-disable-next-line no-unneeded-ternary
-      LowDateState.value = streetLighting.value.fechaBaja !== null
+      LowDateState.value = publicLighting.value.fechaBaja !== null
     }
     // getAreas((data) => {
     //   areas.value = data
     // })
-
     return {
-      streetLighting,
+      publicLighting,
       breadcrumbItems,
       router,
       TaskState,
@@ -268,8 +272,7 @@ export default {
       addresdescriptionState,
       DomicileState,
       LowDateState,
-
-      onUpdateStreetLighting,
+      onUpdatePublicLighting,
       validateTask,
       validateDescriptionSolution,
       validateHighDate,
@@ -281,5 +284,5 @@ export default {
 }
 </script>
 
-<style>
+  <style>
 </style>

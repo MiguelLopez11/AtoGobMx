@@ -26,7 +26,7 @@ namespace AtoGobMx.Models
         public ExpedienteAlumbrado? ExpedienteAlumbrado { get; set; }
 
         [ForeignKey("estatusId")]
-        public Estatus? Estatus { get; set; }
+        public EstatusAlumbrado? Estatus { get; set; }
 
         [ForeignKey("tareaTipoId")]
         public TareaTipoAlumbrado? TareaTipoAlumbrado { get; set; }

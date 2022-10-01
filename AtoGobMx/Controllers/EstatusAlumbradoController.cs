@@ -9,22 +9,22 @@ namespace AtoGobMx.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EstatusController : ControllerBase
+    public class EstatusAlumbradoController : ControllerBase
     {
         private readonly AtoGobMxContext _context;
         private readonly IMapper _mapper;
-        public EstatusController(AtoGobMxContext context, IMapper mapper)
+        public EstatusAlumbradoController(AtoGobMxContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
         [HttpGet]
-        public async Task<ActionResult<Estatus>> GetEstatus()
+        public async Task<ActionResult<EstatusAlumbrado>> GetEstatus()
         {
-            var estatus = await _context.Estatus
+            var estatus = await _context.EstatusAlumbrado
                 .OrderBy(o => o.NombreEstatus)
                 .Where(w => !w.Archivado)
-                .Select(s => _mapper.Map<Estatus>(s))
+                .Select(s => _mapper.Map<EstatusAlumbrado>(s))
                 .ToArrayAsync();
             return Ok(estatus);
         }
@@ -32,7 +32,7 @@ namespace AtoGobMx.Controllers
         [HttpGet("{EstatusId}")]
         public async Task<ActionResult> GetEstatusById(int EstatusId)
         {
-            var estatus = await _context.Estatus
+            var estatus = await _context.EstatusAlumbrado
                 .FirstOrDefaultAsync(f => f.EstatusId == EstatusId);
             if (estatus == null)
             {
@@ -43,22 +43,22 @@ namespace AtoGobMx.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Estatus>> PostEstatus(Estatus estatus)
+        public async Task<ActionResult<EstatusAlumbrado>> PostEstatus(EstatusAlumbrado estatus)
         {
-            _context.Estatus.Add(estatus);
+            object value = _context.EstatusAlumbrado.Add(estatus);
             await _context.SaveChangesAsync();
             return Ok("Estatus creado correctamente");
         }
 
         [HttpPut("{EstatusId}")]
-        public async Task<ActionResult> PutEstatus(int EstatusId, Estatus estatus)
+        public async Task<ActionResult> PutEstatus(int EstatusId, EstatusAlumbrado estatus)
         {
             if (estatus.EstatusId != EstatusId)
             {
                 return Ok("Los ID no ingresados no coinciden");
             }
 
-            var estatu = _context.Estatus.Find(EstatusId);
+            var estatu = _context.EstatusAlumbrado.Find(EstatusId);
             if (estatu == null)
             {
                 return BadRequest("El Registro del estatus no existe");
@@ -68,14 +68,14 @@ namespace AtoGobMx.Controllers
             estatus.NombreEstatus = estatu.NombreEstatus;
             estatus.Descripcion = estatu.Descripcion;
 
-            _context.Estatus.Update(estatus);
+            _context.EstatusAlumbrado.Update(estatus);
             await _context.SaveChangesAsync();
             return Ok("Estatus actualizado correctamente");
         }
         [HttpDelete("{EstatusId}")]
         public async Task<IActionResult> DeleteEstatus(int EstatusId)
         {
-            var estatus = _context.Estatus
+            var estatus = _context.EstatusAlumbrado
                 .FirstOrDefault(f => f.EstatusId == EstatusId);
             if (estatus == null)
             {
@@ -83,7 +83,7 @@ namespace AtoGobMx.Controllers
             }
 
             estatus.Archivado = true;
-            _context.Estatus.Update(estatus);
+            _context.EstatusAlumbrado.Update(estatus);
             await _context.SaveChangesAsync();
             return Ok("Estatus Archivado");
         }

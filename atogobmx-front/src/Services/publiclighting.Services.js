@@ -8,7 +8,7 @@ export default function publiclightingServices () {
         callback(response.data)
       })
   }
-  const getPublicLightingg = (AlumbradoId, callback) => {
+  const getPublicLightingById = (AlumbradoId, callback) => {
     axios.get(`https://localhost:7065/api/Alumbrado/${AlumbradoId}`).then((response) => {
       callback(response.data)
     })
@@ -32,7 +32,7 @@ export default function publiclightingServices () {
   }
   return {
     getPublicLighting,
-    getPublicLightingg,
+    getPublicLightingById,
     createPublicLighting,
     updatePublicLighting,
     deletePublicLighting

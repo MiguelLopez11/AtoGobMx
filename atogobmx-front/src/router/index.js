@@ -52,6 +52,16 @@ const routes = [
     component: () => import('@/views/ServiciosPublicos/publiclighting/EditLighting.vue')
   },
   {
+    path: '/EstatusAlumbrado/list',
+    name: 'EstatusAlumbradorado',
+    component: () => import('@/views/ServiciosPublicos/statuslighting/StatusLightingList.vue')
+  },
+  {
+    path: '/EstatusAlumbrado/:EstatusId',
+    name: 'EstatusAlumbrado-Edit',
+    component: () => import('@/views/ServiciosPublicos/statuslighting/EditStatusLighting.vue')
+  },
+  {
     path: '/Usuarios/list',
     name: 'Usuarios',
     component: () => import('@/views/Users/UserList.vue')

@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace AtoGobMx.Models
 {
-    public class Estatus
+    public class EstatusAlumbrado
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

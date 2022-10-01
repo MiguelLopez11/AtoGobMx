@@ -111,19 +111,17 @@
                       </router-link>
                     </a>
                   </li>
-                </ul>
-                <!-- <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                   <li>
                     <a class="dropdown-item">
                       <router-link
                         class="nav-link active text-dark"
                         aria-current="page"
-                        to="/Expedientealumbrado/list"
-                        >Expediente Alumbrado
+                        to="/EstatusAlumbrado/list"
+                        >Estatus Alumbrado
                       </router-link>
                     </a>
                   </li>
-                </ul> -->
+                </ul>
               </li>
               <li class="nav-item dropdown">
                 <a
