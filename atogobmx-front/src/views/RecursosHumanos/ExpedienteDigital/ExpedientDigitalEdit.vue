@@ -27,9 +27,8 @@
                   <Field
                     name="StateField"
                     :rules="validateField"
-                    type="text"
                   >
-                  <!-- <b-form-input  :state="fieldState" /> -->
+                  <b-form-input v-model="expedient.estado"  :state="fieldState" />
                   </Field>
                   <ErrorMessage name="StateField"/>
                 </b-form-group>
@@ -120,6 +119,7 @@ import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useToast } from 'vue-toast-notification'
 import FileServices from '@/Services/file.Services'
+import ExpedientdigitalServices from '@/Services/expedientdigital.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 export default {
   components: {
@@ -129,18 +129,23 @@ export default {
   },
   setup () {
     const { createExpedientPhotoProfile } = FileServices()
+    const { getExpedient } = ExpedientdigitalServices()
     const refFile = ref()
     const refAvatar = ref()
     const router = useRoute()
     const $toast = useToast()
+    const expedient = ref([])
     const expedienteDigitalId = ref(router.params.ExpedienteDigitalId)
     const fieldState = ref(false)
     const file = ref('')
+    getExpedient(expedienteDigitalId.value, data => {
+      expedient.value = data
+    })
     const onChangeFile = e => {
       file.value = refFile.value.files[0]
     }
-    const submitExpedient = (submitExpedient) => {
-      console.log(submitExpedient)
+    const submitExpedient = () => {
+      console.log('holi')
     }
     const validateField = (value) => {
       console.log(value)
@@ -191,6 +196,7 @@ export default {
       fieldState,
       refFile,
       file,
+      expedient,
       refAvatar,
 
       onChangeFile,
