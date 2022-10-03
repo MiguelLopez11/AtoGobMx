@@ -134,7 +134,7 @@ export default {
     //   statusPublicLighting.value = data
     // })
 
-    getInventoryLightingById(router.params.ExpedienteAlumbradoId, (data) => {
+    getInventoryLightingById(router.params.InventarioAlumbradoId, (data) => {
       // streetLighting.value = data
       // validateState()
       inventoryLighting.value = data
