@@ -93,7 +93,7 @@ namespace AtoGobMx.Controllers
                     };
                     _context.Archivos.Add(archivo);
                     await _context.SaveChangesAsync();
-                    return Ok(new { length = file.Length, name = file.FileName });
+                    return Ok("Foto de perfil registrada correctamente.");
                 }
                 else
                 {
@@ -110,12 +110,12 @@ namespace AtoGobMx.Controllers
                     await _context.SaveChangesAsync();
 
 
-                    return Ok("Imagen registrada correctamente.");
+                    return Ok("Foto de perfil registrada correctamente.");
                 }
             }
             catch
             {
-                return BadRequest();
+                return BadRequest("Ah ocurrido un error inesperado");
             }
         }
         #endregion 

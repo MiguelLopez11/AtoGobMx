@@ -44,32 +44,32 @@ const routes = [
   {
     path: '/Alumbrado/list',
     name: 'Alumbrado',
-    component: () => import('@/views/ServiciosPublicos/publiclighting/PublicLightingList.vue')
+    component: () => import('@/views/ServiciosPublicos/streetLighting/publiclighting/PublicLightingList.vue')
   },
   {
     path: '/Alumbrado/:AlumbradoId',
     name: 'Alumbrado-Edit',
-    component: () => import('@/views/ServiciosPublicos/publiclighting/EditLighting.vue')
+    component: () => import('@/views/ServiciosPublicos/streetLighting/publiclighting/EditLighting.vue')
   },
   {
     path: '/EstatusAlumbrado/list',
     name: 'EstatusAlumbradorado',
-    component: () => import('@/views/ServiciosPublicos/statuslighting/StatusLightingList.vue')
+    component: () => import('@/views/ServiciosPublicos/streetLighting/statuslighting/StatusLightingList.vue')
   },
   {
     path: '/EstatusAlumbrado/:EstatusId',
     name: 'EstatusAlumbrado-Edit',
-    component: () => import('@/views/ServiciosPublicos/statuslighting/EditStatusLighting.vue')
+    component: () => import('@/views/ServiciosPublicos/streetLighting/statuslighting/EditStatusLighting.vue')
   },
   {
     path: '/ExpedienteAlumbrado/list',
     name: 'ExpedienteAlumbradorado',
-    component: () => import('@/views/ServiciosPublicos/expedientlighting/ExpedientLightingList.vue')
+    component: () => import('@/views/ServiciosPublicos/streetLighting/expedientlighting/ExpedientLightingList.vue')
   },
   {
     path: '/ExpedienteAlumbrado/:ExpedienteAlumbradoId',
     name: 'ExpedienteAlumbrado-Edit',
-    component: () => import('@/views/ServiciosPublicos/expedientlighting/EditExpedientLighting.vue')
+    component: () => import('@/views/ServiciosPublicos/streetLighting/expedientlighting/EditExpedientLighting.vue')
   },
   {
     path: '/InventarioAlumbrado/list',
