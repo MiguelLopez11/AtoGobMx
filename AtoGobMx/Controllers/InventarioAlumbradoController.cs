@@ -43,7 +43,7 @@ namespace AtoGobMx.Controllers
             return Ok(inventarioalum);
         }
 
-        [HttpPost("{AlumbradoId}")]
+        [HttpPost()]
         public async Task<ActionResult<InventarioAlumbrado>> PostInventarioAlumbrado(InventarioAlumbrado inventarioAlumbrado, int AlumbradoId)
         {
             var alumbrado = await _context.Alumbrado.FirstOrDefaultAsync(f => f.AlumbradoId == AlumbradoId);
