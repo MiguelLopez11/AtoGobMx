@@ -248,7 +248,7 @@ export default {
     const fields = ref([
       { value: 'inventarioAlumbradoId', text: 'ID', sortable: true },
       { value: 'tarea', text: 'Nombre del tramite' },
-      { value: 'fechaAlta', text: 'Fecha Alta' },
+      { value: 'fechaAlta', text: 'Fecha de registro' },
       { value: 'domicilio', text: 'Domicilio' },
       { value: 'fechaBaja', text: 'Fecha Baja' },
       { value: 'actions', text: 'Acciones' }

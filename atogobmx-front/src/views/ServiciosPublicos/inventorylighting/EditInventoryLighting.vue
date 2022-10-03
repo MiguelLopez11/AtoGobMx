@@ -154,7 +154,7 @@ export default {
       })
     }
 
-    const validateTypeTask = () => {
+    const validateTask = () => {
       if (!inventoryLighting.value.tarea) {
         validateState()
         return 'Este campo es requerido'
@@ -213,7 +213,7 @@ export default {
       DomicileState,
       LowDateState,
       onUpdateInventoryLighting,
-      validateTypeTask,
+      validateTask,
       validateHighDate,
       validateLowDate,
       validateDomicile
