@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20221001192154_CorreccionTabla")]
+    partial class CorreccionTabla
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,9 +52,6 @@ namespace AtoGobMx.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("estatusId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("expedienteAlumbradoId")
                         .HasColumnType("int");
 
@@ -63,8 +62,6 @@ namespace AtoGobMx.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("AlumbradoId");
-
-                    b.HasIndex("estatusId");
 
                     b.HasIndex("expedienteAlumbradoId");
 
@@ -184,28 +181,6 @@ namespace AtoGobMx.Migrations
                     b.HasIndex("PuestoTrabajoId");
 
                     b.ToTable("Empleados");
-                });
-
-            modelBuilder.Entity("AtoGobMx.Models.EstatusAlumbrado", b =>
-                {
-                    b.Property<int>("EstatusAlumbradoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Archivado")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Descripcion")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("NombreEstatus")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("EstatusAlumbradoId");
-
-                    b.ToTable("EstatusAlumbrado");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.ExpedienteAlumbrado", b =>
@@ -426,10 +401,6 @@ namespace AtoGobMx.Migrations
 
             modelBuilder.Entity("AtoGobMx.Models.Alumbrado", b =>
                 {
-                    b.HasOne("AtoGobMx.Models.EstatusAlumbrado", "Estatus")
-                        .WithMany("Alumbrado")
-                        .HasForeignKey("estatusId");
-
                     b.HasOne("AtoGobMx.Models.ExpedienteAlumbrado", "ExpedienteAlumbrado")
                         .WithMany("Alumbrado")
                         .HasForeignKey("expedienteAlumbradoId");
@@ -441,8 +412,6 @@ namespace AtoGobMx.Migrations
                     b.HasOne("AtoGobMx.Models.TareaTipoAlumbrado", "TareaTipoAlumbrado")
                         .WithMany("Alumbrado")
                         .HasForeignKey("tareaTipoId");
-
-                    b.Navigation("Estatus");
 
                     b.Navigation("ExpedienteAlumbrado");
 
@@ -547,11 +516,6 @@ namespace AtoGobMx.Migrations
             modelBuilder.Entity("AtoGobMx.Models.Empleado", b =>
                 {
                     b.Navigation("Usuarios");
-                });
-
-            modelBuilder.Entity("AtoGobMx.Models.EstatusAlumbrado", b =>
-                {
-                    b.Navigation("Alumbrado");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.ExpedienteAlumbrado", b =>

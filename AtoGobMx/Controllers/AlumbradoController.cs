@@ -1,10 +1,10 @@
 ﻿using AtoGobMx.Context;
 using AtoGobMx.Models;
-//using AtoGobMx.Migrations;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace AtoGobMx.Controllers
 {
@@ -63,7 +63,7 @@ namespace AtoGobMx.Controllers
             var alum = _context.Alumbrado.Find(AlumbradoId);
             if (alum == null)
             {
-                return BadRequest("La falla no existe");
+                return BadRequest("El alumbrado no existe");
             }
 
             alum.AlumbradoId = alumbrado.AlumbradoId;
@@ -80,7 +80,7 @@ namespace AtoGobMx.Controllers
 
             _context.Alumbrado.Update(alum);
             await _context.SaveChangesAsync();
-            return Ok("Falla actualizada correctamente");
+            return Ok("Alumbrado actualizada correctamente");
         }
 
         [HttpDelete("{Id}")]
@@ -95,7 +95,7 @@ namespace AtoGobMx.Controllers
             alumbra.Archivado = true;
             _context.Alumbrado.Update(alumbra);
             await _context.SaveChangesAsync();
-            return Ok("Fallas archivadas");
+            return Ok("Alumbrado archivado");
         }
     }
 }

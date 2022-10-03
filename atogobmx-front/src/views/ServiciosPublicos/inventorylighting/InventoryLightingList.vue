@@ -6,7 +6,7 @@
         style="width: 350px"
         v-model="searchValue"
         type="search"
-        placeholder="Buscar Falla..."
+        placeholder="Buscar Inventario Alumbrado..."
       ></b-form-input>
       <b-button
         variant="primary"
@@ -17,11 +17,11 @@
           margin-right: 15px;
           margin-left: 20px;
         "
-        v-b-modal.modal-lightingfailures
+        v-b-modal.modal-inventorylighting
         type="submit"
       >
         <i class="bi bi-person-plus-fill"></i>
-        Agregar Falla
+        Agregar Inventario
       </b-button>
     </b-row>
     <EasyDataTable
@@ -32,7 +32,7 @@
       border-cell
       :loading="isloading"
       :headers="fields"
-      :items="lightingFailures"
+      :items="inventoryLighting"
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
@@ -43,7 +43,7 @@
       </template>
       <template #item-actions="items">
         <b-button
-          @click="RemoveLightingFailures(items.fallaId)"
+          @click="RemoveInventoryLighting(items.inventarioAlumbradoId)"
           class="m-1"
           variant="outline-danger"
           ><i class="bi bi-trash3"></i
@@ -52,32 +52,36 @@
           class="m-1"
           variant="outline-warning"
           :to="{
-            name: 'FallasAlumbrado-Edit',
-            params: { FallaId: items.fallaId },
+            name: 'InventarioAlumbrado-Edit',
+            params: { InventarioAlumbradoId: items.inventarioAlumbradoId },
           }"
           ><i class="bi bi-pencil-square"></i
         ></b-button>
       </template>
     </EasyDataTable>
     <b-modal
-      id="modal-lightingfailures"
-      title="Agregar Falla"
+      id="modal-inventorylighting"
+      title="Agregar Inventario Alumbrado"
       size="xl"
       hide-footer
       button-size="lg"
       lazy
     >
-      <Form @submit="addLightingFailures">
+      <Form @submit="addInventoryLighting">
         <b-row cols="2">
           <b-col>
-            <b-form-group class="mt-3" label="Tipo Falla">
-              <Field name="FaultTypeField" :rules="validateFaultType">
-                <b-form-input
-                  v-model="lightingFailuresFields.tipoFalla"
-                  :state="FaultTypeState"
-                ></b-form-input>
+            <b-form-group class="mt-3" label="Nombre del tramite">
+              <Field name="TypeTaskField" :rules="validateTypeTask">
+                <b-form-select
+                  v-model="inventoryLightingFields.tarea"
+                  autofocus
+                  :state="TypeTaskState"
+                  :options="statusPublicLighting"
+                  value-field="estatusId"
+                  text-field="nombreEstatus"
+                ></b-form-select>
               </Field>
-              <ErrorMessage name="FaultTypeField"
+              <ErrorMessage name="TypeTaskField"
                 ><span>Este campo es requerido </span
                 ><i class="bi bi-exclamation-circle"></i>
               </ErrorMessage>
@@ -90,12 +94,12 @@
                   locale="es"
                   name="date"
                   text-input
-                  v-model="lightingFailuresFields.fechaAlta"
+                  v-model="inventoryLightingFields.fechaAlta"
                   :state="HighDateState"
                 ></Datepicker>
               </Field>
               <ErrorMessage name="HighDateField"
-                ><span>Este campo es requerido llenarlo </span
+                ><span>Este campo es requerido </span
                 ><i class="bi bi-exclamation-circle"></i>
               </ErrorMessage>
             </b-form-group>
@@ -104,7 +108,7 @@
             <b-form-group class="mt-3" label="Domicilio">
               <Field name="DomicileField" :rules="validateDomicile">
                 <b-form-input
-                  v-model="lightingFailuresFields.domicilio"
+                  v-model="inventoryLightingFields.domicilio"
                   :state="DomicileState"
                 ></b-form-input>
               </Field>
@@ -121,47 +125,11 @@
                   locale="es"
                   name="date"
                   text-input
-                  v-model="lightingFailuresFields.fechaBaja"
+                  v-model="inventoryLightingFields.fechaBaja"
                   :state="LowDateState"
                 ></Datepicker>
               </Field>
               <ErrorMessage name="LowDateField"
-                ><span>Este campo es requerido llenarlo </span
-                ><i class="bi bi-exclamation-circle"></i>
-              </ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Descripcion Domicilio">
-              <Field
-                name="addresdescriptionField"
-                :rules="validateAddresdescription"
-              >
-                <b-form-textarea
-                  v-model="lightingFailuresFields.descripcionDomicilio"
-                  :state="addresdescriptionState"
-                  rows="4"
-                ></b-form-textarea>
-              </Field>
-              <ErrorMessage name="addresdescriptionField"
-                ><span>Este campo es requerido llenarlo </span
-                ><i class="bi bi-exclamation-circle"></i>
-              </ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Descripcion Solucion">
-              <Field
-                name="DescriptionSolutionField"
-                :rules="validateDescriptionSolution"
-              >
-                <b-form-textarea
-                  v-model="lightingFailuresFields.descripcionSolucion"
-                  :state="DescriptionSolutionState"
-                  rows="4"
-                ></b-form-textarea>
-              </Field>
-              <ErrorMessage name="DescriptionSolutionField"
                 ><span>Este campo es requerido </span
                 ><i class="bi bi-exclamation-circle"></i>
               </ErrorMessage>
@@ -172,7 +140,7 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            v-b-modal.modal-lightingfailures
+            v-b-modal.modal-inventorylighting
           >
             Cancelar
           </b-button>
@@ -186,11 +154,13 @@
 </template>
 
 <script>
-import LightingfailuresServices from '@/Services/lightingfailures.Services'
+import ExpedientlightingServices from '@/Services/inventorylighting.Services'
+import StatusLightingServices from '@/Services/statuslighting.Services'
 import Datepicker from '@vuepic/vue-datepicker'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref } from 'vue'
 import { useToast } from 'vue-toast-notification'
+import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
     Datepicker,
@@ -201,58 +171,50 @@ export default {
   },
   setup () {
     const {
-      getLightingFailures,
-      createLightingFailures,
-      deleteLightingFailures
-    } = LightingfailuresServices()
+      getInventoryLighting,
+      createInventoryLighting,
+      deleteInventoryLighting
+    } = ExpedientlightingServices()
+    const { getStatus } = StatusLightingServices()
     const $toast = useToast()
-    const lightingFailures = ref([])
+    const inventoryLighting = ref([])
+    const statusPublicLighting = ref([])
     const isOpen = ref(false)
     const perPage = ref(5)
     const currentPage = ref(1)
-    // const rows = ref(null)
     const filter = ref(null)
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('tipoFalla')
-    const FaultTypeState = ref(false)
-    const DescriptionSolutionState = ref(false)
+    const searchField = ref('tarea')
+    const TypeTaskState = ref(false)
     const HighDateState = ref(false)
-    const addresdescriptionState = ref(false)
     const DomicileState = ref(false)
     const LowDateState = ref(false)
-    const lightingFailuresFields = ref({
-      fallaId: 0,
-      tipoFalla: null,
-      descripcionSolucion: null,
+    const inventoryLightingFields = ref({
+      inventarioAlumbradoId: 0,
+      tarea: null,
       fechaAlta: null,
       fechaBaja: null,
       domicilio: null,
-      descripcionDomicilio: null,
       archivado: false
     })
 
-    const validateFaultType = () => {
-      if (!lightingFailuresFields.value.tipoFalla) {
-        FaultTypeState.value = false
-        return 'Este campo es requerido'
-      }
-      FaultTypeState.value = true
-      return true
-    }
+    getStatus((data) => {
+      statusPublicLighting.value = data
+    })
 
-    const validateDescriptionSolution = () => {
-      if (!lightingFailuresFields.value.descripcionSolucion) {
-        DescriptionSolutionState.value = false
+    const validateTypeTask = () => {
+      if (!inventoryLightingFields.value.tarea) {
+        TypeTaskState.value = false
         return 'Este campo es requerido'
       }
-      DescriptionSolutionState.value = true
+      TypeTaskState.value = true
       return true
     }
 
     const validateDomicile = () => {
-      if (!lightingFailuresFields.value.domicilio) {
+      if (!inventoryLightingFields.value.domicilio) {
         DomicileState.value = false
         return 'Este campo es requerido'
       }
@@ -261,7 +223,7 @@ export default {
     }
 
     const validateLowDate = () => {
-      if (!lightingFailuresFields.value.fechaBaja) {
+      if (!inventoryLightingFields.value.fechaBaja) {
         LowDateState.value = false
         return 'Este campo es requerido'
       }
@@ -270,7 +232,7 @@ export default {
     }
 
     const validateHighDate = () => {
-      if (!lightingFailuresFields.value.fechaAlta) {
+      if (!inventoryLightingFields.value.fechaAlta) {
         HighDateState.value = false
         return 'Este campo es requerido'
       }
@@ -278,37 +240,27 @@ export default {
       return true
     }
 
-    const validateAddresdescription = () => {
-      if (!lightingFailuresFields.value.descripcionDomicilio) {
-        addresdescriptionState.value = false
-        return 'Este campo es requerido'
-      }
-      addresdescriptionState.value = true
-      return true
-    }
-
     // pone mis cambios de mis campos vacios de nuevo
-    const lightingFailuresFieldsBlank = ref(
-      JSON.parse(JSON.stringify(lightingFailuresFields))
+    const inventoryLightingFieldsBlank = ref(
+      JSON.parse(JSON.stringify(inventoryLightingFields))
     )
 
     const fields = ref([
-      { value: 'fallaId', text: 'ID', sortable: true },
-      { value: 'tipoFalla', text: 'Tipo Falla' },
+      { value: 'inventarioAlumbradoId', text: 'ID', sortable: true },
+      { value: 'tarea', text: 'Nombre del tramite' },
       { value: 'fechaAlta', text: 'Fecha Alta' },
       { value: 'domicilio', text: 'Domicilio' },
-      { value: 'descripcionDomicilio', text: 'Descripcion Domicilio' },
-      { value: 'descripcionSolucion', text: 'Descripcion Solucion' },
       { value: 'fechaBaja', text: 'Fecha Baja' },
       { value: 'actions', text: 'Acciones' }
     ])
-    getLightingFailures((data) => {
-      lightingFailures.value = data
+
+    getInventoryLighting((data) => {
+      inventoryLighting.value = data
       // rows.value = data.length
-      if (lightingFailures.value.length > 0) {
+      if (inventoryLighting.value.length > 0) {
         isloading.value = false
       } else {
-        if (lightingFailures.value.length <= 0) {
+        if (inventoryLighting.value.length <= 0) {
           isloading.value = false
         }
       }
@@ -321,13 +273,13 @@ export default {
 
     const refreshTable = () => {
       isloading.value = true
-      getLightingFailures((data) => {
-        lightingFailures.value = data
+      getInventoryLighting((data) => {
+        inventoryLighting.value = data
         // rows.value = data.length
-        if (lightingFailures.value.length > 0) {
+        if (inventoryLighting.value.length > 0) {
           isloading.value = false
         } else {
-          if (lightingFailures.value.length <= 0) {
+          if (inventoryLighting.value.length <= 0) {
             isloading.value = false
           }
         }
@@ -335,55 +287,51 @@ export default {
       return 'datos recargados'
     }
 
-    const addLightingFailures = () => {
-      createLightingFailures(lightingFailuresFields.value, (data) => {
+    const addInventoryLighting = () => {
+      createInventoryLighting(inventoryLightingFields.value, (data) => {
         refreshTable()
-        $toast.success('Falla registrada correctamente.', {
+        $toast.success('Inventario registrado correctamente.', {
           position: 'top-right',
           duration: 1500
         })
       })
-      lightingFailuresFields.value = JSON.parse(
-        JSON.stringify(lightingFailuresFieldsBlank)
+      // resetStreetLightingFields()
+      inventoryLightingFields.value = JSON.parse(
+        JSON.stringify(inventoryLightingFieldsBlank)
       )
     }
 
-    const RemoveLightingFailures = (LightingFailuresId) => {
+    const RemoveInventoryLighting = (StreetLightingId) => {
       isloading.value = true
-      deleteLightingFailures(LightingFailuresId, (data) => {
+      deleteInventoryLighting(StreetLightingId, (data) => {
         refreshTable()
       })
     }
     return {
-      lightingFailures,
-      lightingFailuresFields,
+      inventoryLighting,
+      statusPublicLighting,
+      inventoryLightingFields,
       isOpen,
       perPage,
       currentPage,
-      // rows,
       filter,
       perPageSelect,
       isloading,
       searchValue,
       searchField,
-      lightingFailuresFieldsBlank,
-      // lightingFailuresValues,
+      inventoryLightingFieldsBlank,
       fields,
-      FaultTypeState,
-      DescriptionSolutionState,
+      TypeTaskState,
       HighDateState,
-      addresdescriptionState,
       DomicileState,
       LowDateState,
 
       onFiltered,
-      addLightingFailures,
+      addInventoryLighting,
       refreshTable,
-      RemoveLightingFailures,
-      validateFaultType,
-      validateDescriptionSolution,
+      RemoveInventoryLighting,
+      validateTypeTask,
       validateHighDate,
-      validateAddresdescription,
       validateLowDate,
       validateDomicile
     }
@@ -391,10 +339,10 @@ export default {
 }
 </script>
 
-<style>
+  <style>
 .customize-table {
   /* --easy-table-border: 1px solid #445269;
-  --easy-table-row-border: 1px solid #445269; */
+    --easy-table-row-border: 1px solid #445269; */
   --easy-table-header-font-size: 16px;
   --easy-table-header-height: 50px;
   --easy-table-header-font-color: #fcf6f5ff;
@@ -403,9 +351,9 @@ export default {
   --easy-table-header-item-align: center;
   --easy-table-message-font-size: 17px;
   /* --easy-table-body-even-row-font-color: #fff;
-  --easy-table-body-even-row-background-color: #4c5d7a; */
+    --easy-table-body-even-row-background-color: #4c5d7a; */
   /* --easy-table-body-row-font-color: #c0c7d2;
-  --easy-table-body-row-background-color: #2d3a4f; */
+    --easy-table-body-row-background-color: #2d3a4f; */
   --easy-table-body-row-height: 50px;
   --easy-table-body-row-font-size: 17px;
   --easy-table-border-radius: 15px;
@@ -418,9 +366,9 @@ export default {
   --easy-table-footer-padding: 0px 10px;
   --easy-table-footer-height: 50px;
   /* --easy-table-scrollbar-track-color: #2d3a4f;
-  --easy-table-scrollbar-color: #2d3a4f;
-  --easy-table-scrollbar-thumb-color: #4c5d7a;;
-  --easy-table-scrollbar-corner-color: #2d3a4f;
-  --easy-table-loading-mask-background-color: #2d3a4f; */
+    --easy-table-scrollbar-color: #2d3a4f;
+    --easy-table-scrollbar-thumb-color: #4c5d7a;;
+    --easy-table-scrollbar-corner-color: #2d3a4f;
+    --easy-table-loading-mask-background-color: #2d3a4f; */
 }
 </style>

@@ -4,22 +4,24 @@
       <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
     </b-card>
     <b-card>
-      <b-tabs card>
-        <b-tab title="Datos Generales" active>
-          <div>
-        <h3>Reporte de Falla</h3>
+      <div>
+        <h3>Inventario Alumbrado</h3>
       </div>
-      <Form @submit="onUpdateLightingFailures">
+      <Form @submit="onUpdateInventoryLighting">
         <b-row cols="2">
           <b-col>
-            <b-form-group class="mt-3" label="Tipo Falla">
-              <Field name="FaultTypeField" :rules="validateFaultType">
-                <b-form-input
-                  v-model="lightingFailure.tipoFalla"
-                  :state="FaultTypeState"
-                ></b-form-input>
+            <b-form-group class="mt-3" label="Nombre del tramite">
+              <Field name="TaskField" :rules="validateTask">
+                <b-form-select
+                  v-model="inventoryLighting.tarea"
+                  autofocus
+                  :state="TaskState"
+                  :options="statusPublicLighting"
+                  value-field="estatusId"
+                  text-field="nombreEstatus"
+                ></b-form-select>
               </Field>
-              <ErrorMessage name="FaultTypeField"
+              <ErrorMessage name="TaskField"
                 ><span>Este campo es requerido </span
                 ><i class="bi bi-exclamation-circle"></i>
               </ErrorMessage>
@@ -32,7 +34,7 @@
                   locale="es"
                   name="Date"
                   text-input
-                  v-model="lightingFailure.fechaAlta"
+                  v-model="inventoryLighting.fechaAlta"
                   :state="HighDateState"
                 ></Datepicker>
               </Field>
@@ -46,7 +48,7 @@
             <b-form-group class="mt-3" label="Domicilio">
               <Field name="DomicileField" :rules="validateDomicile">
                 <b-form-input
-                  v-model="lightingFailure.domicilio"
+                  v-model="inventoryLighting.domicilio"
                   :state="DomicileState"
                 ></b-form-input>
               </Field>
@@ -63,7 +65,7 @@
                   locale="es"
                   name="date"
                   text-input
-                  v-model="lightingFailure.fechaBaja"
+                  v-model="inventoryLighting.fechaBaja"
                   :state="LowDateState"
                 ></Datepicker>
               </Field>
@@ -73,48 +75,12 @@
               </ErrorMessage>
             </b-form-group>
           </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Descripcion Domicilio">
-              <Field
-                name="addresdescriptionField"
-                :rules="validateAddresdescription"
-              >
-                <b-form-textarea
-                  v-model="lightingFailure.descripcionDomicilio"
-                  :state="addresdescriptionState"
-                  rows="4"
-                ></b-form-textarea>
-              </Field>
-              <ErrorMessage name="addresdescriptionField"
-                ><span>Este campo es requerido llenarlo </span
-                ><i class="bi bi-exclamation-circle"></i>
-              </ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Solucion Del Problema">
-              <Field
-                name="DescriptionSolutionField"
-                :rules="validateDescriptionSolution"
-              >
-                <b-form-textarea
-                  v-model="lightingFailure.descripcionSolucion"
-                  :state="DescriptionSolutionState"
-                  rows="4"
-                ></b-form-textarea>
-              </Field>
-              <ErrorMessage name="DescriptionSolutionField"
-                ><span>Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i>
-              </ErrorMessage>
-            </b-form-group>
-          </b-col>
         </b-row>
         <b-row align-h="end">
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            to="/FallasAlumbrado/list"
+            to="/InventarioAlumbrado/list"
           >
             Cancelar
           </b-button>
@@ -123,16 +89,13 @@
           >
         </b-row>
       </Form>
-        </b-tab>
-        <b-tab title="Tab 2">
-        </b-tab>
-      </b-tabs>
     </b-card>
   </b-card>
 </template>
 
 <script>
-import LightingfailuresServices from '@/Services/lightingfailures.Services'
+import InventorylightingServices from '@/Services/inventorylighting.Services'
+// import StatusServices from '@/Services/statuslighting.Services'
 import { Field, Form, ErrorMessage } from 'vee-validate'
 // import AreaServices from '@/Services/area.Services'
 import { ref } from 'vue'
@@ -148,52 +111,51 @@ export default {
     ErrorMessage
   },
   setup () {
-    const { getLightingFailure, updateLightingFailures } =
-      LightingfailuresServices()
+    const { getInventoryLightingById, updatInventoryLighting } =
+      InventorylightingServices()
+    // const { getStatusById } = StatusServices()
     const $toast = useToast()
-    const lightingFailure = ref([])
+    const inventoryLighting = ref([])
+    const statusPublicLighting = ref([])
     const router = useRoute()
     const redirect = useRouter()
     // const route = useRouter()
-    const FaultTypeState = ref(false)
-    const DescriptionSolutionState = ref(false)
+    const TaskState = ref(false)
     const HighDateState = ref(false)
-    const addresdescriptionState = ref(false)
     const DomicileState = ref(false)
     const LowDateState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'FallasAlumbrado', to: '/FallasAlumbrado/list' },
-      { text: 'Editar-Fallas' }
+      { text: 'Alumbrado', to: '/InventarioAlumbrado/list' },
+      { text: 'Editar-InventarioAlumbrado' }
     ])
-    getLightingFailure(router.params.FallaId, (data) => {
-      lightingFailure.value = data
+
+    // getStatusById((data) => {
+    //   statusPublicLighting.value = data
+    // })
+
+    getInventoryLightingById(router.params.ExpedienteAlumbradoId, (data) => {
+      // streetLighting.value = data
+      // validateState()
+      inventoryLighting.value = data
       // eslint-disable-next-line no-unneeded-ternary
-      FaultTypeState.value = data.tipoFalla === null ? false : true
+      TaskState.value = data.tarea === null ? false : true
     })
-    const onUpdateLightingFailures = () => {
-      updateLightingFailures(lightingFailure.value, (data) => {})
+
+    const onUpdateInventoryLighting = () => {
+      updatInventoryLighting(inventoryLighting.value, (data) => {})
       $toast.open({
-        message: 'La Falla se a modificado correcta mente',
+        message: 'El inventario alumbrado se a modificado correcta mente',
         position: 'top',
         duration: 1000,
         dismissible: true,
         type: 'success',
-        onDismiss: () => redirect.push('/FallasAlumbrado/list')
+        onDismiss: () => redirect.push('/InventarioAlumbrado/list')
       })
     }
 
-    const validateFaultType = () => {
-      if (!lightingFailure.value.tipoFalla) {
-        validateState()
-        return 'Este campo es requerido'
-      }
-      validateState()
-      return true
-    }
-
-    const validateDescriptionSolution = () => {
-      if (!lightingFailure.value.descripcionSolucion) {
+    const validateTypeTask = () => {
+      if (!inventoryLighting.value.tarea) {
         validateState()
         return 'Este campo es requerido'
       }
@@ -202,7 +164,7 @@ export default {
     }
 
     const validateDomicile = () => {
-      if (!lightingFailure.value.domicilio) {
+      if (!inventoryLighting.value.domicilio) {
         validateState()
         return 'Este campo es requerido'
       }
@@ -211,7 +173,7 @@ export default {
     }
 
     const validateLowDate = () => {
-      if (!lightingFailure.value.fechaBaja) {
+      if (!inventoryLighting.value.fechaBaja) {
         validateState()
         return 'Este campo es requerido'
       }
@@ -220,16 +182,7 @@ export default {
     }
 
     const validateHighDate = () => {
-      if (!lightingFailure.value.fechaAlta) {
-        validateState()
-        return 'Este campo es requerido'
-      }
-      validateState()
-      return true
-    }
-
-    const validateAddresdescription = () => {
-      if (!lightingFailure.value.descripcionDomicilio) {
+      if (!inventoryLighting.value.fechaAlta) {
         validateState()
         return 'Este campo es requerido'
       }
@@ -239,42 +192,29 @@ export default {
 
     const validateState = () => {
       // eslint-disable-next-line no-unneeded-ternary
-      FaultTypeState.value = lightingFailure.value.tipoFalla !== ''
+      TaskState.value = inventoryLighting.value.tarea !== ''
       // eslint-disable-next-line no-unneeded-ternary
-      HighDateState.value =
-        lightingFailure.value.fechaAlta !== null
+      HighDateState.value = inventoryLighting.value.fechaAlta !== null
       // eslint-disable-next-line no-unneeded-ternary
-      DomicileState.value = lightingFailure.value.domicilio !== ''
+      DomicileState.value = inventoryLighting.value.domicilio !== ''
       // eslint-disable-next-line no-unneeded-ternary
-      addresdescriptionState.value =
-        lightingFailure.value.descripcionDomicilio !== ''
-      // eslint-disable-next-line no-unneeded-ternary
-      DescriptionSolutionState.value =
-        lightingFailure.value.descripcionSolucion !== ''
-      // eslint-disable-next-line no-unneeded-ternary
-      LowDateState.value =
-        lightingFailure.value.fechaBaja !== null
+      LowDateState.value = inventoryLighting.value.fechaBaja !== null
     }
     // getAreas((data) => {
     //   areas.value = data
     // })
-
     return {
-      lightingFailure,
+      inventoryLighting,
       breadcrumbItems,
+      statusPublicLighting,
       router,
-      FaultTypeState,
-      DescriptionSolutionState,
+      TaskState,
       HighDateState,
-      addresdescriptionState,
       DomicileState,
       LowDateState,
-
-      onUpdateLightingFailures,
-      validateFaultType,
-      validateDescriptionSolution,
+      onUpdateInventoryLighting,
+      validateTypeTask,
       validateHighDate,
-      validateAddresdescription,
       validateLowDate,
       validateDomicile
     }
@@ -282,5 +222,5 @@ export default {
 }
 </script>
 
-<style>
+      <style>
 </style>

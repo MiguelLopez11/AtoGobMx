@@ -106,8 +106,28 @@
                       <router-link
                         class="nav-link active text-dark"
                         aria-current="page"
-                        to="/FallasAlumbrado/list"
-                        >Reporte Fallas
+                        to="/Alumbrado/list"
+                        >Alumbrado Publico
+                      </router-link>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item">
+                      <router-link
+                        class="nav-link active text-dark"
+                        aria-current="page"
+                        to="/EstatusAlumbrado/list"
+                        >Estatus Alumbrado
+                      </router-link>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item">
+                      <router-link
+                        class="nav-link active text-dark"
+                        aria-current="page"
+                        to="/ExpedienteAlumbrado/list"
+                        >Expediente Alumbrado
                       </router-link>
                     </a>
                   </li>

@@ -31,28 +31,38 @@ namespace AtoGobMx.Controllers
             return Ok(expefalla);
         }
 
-        [HttpGet("ExpedienteAlumbradoId")]
+        //[HttpGet("ExpedienteAlumbradoId")]
+        //public async Task<ActionResult> GetExpedienteAlumbradoById(int ExpedienteAlumbradoId)
+        //{
+        //    var expedienteAlumbrado = await _context.ExpedienteAlumbrado
+        //        .Include(i => i.Alumbrado)
+        //        .FirstOrDefaultAsync(f => f.ExpedienteAlumbradoId == ExpedienteAlumbradoId);
+        //    if (expedienteAlumbrado == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return Ok(expedienteAlumbrado);
+        //}
+
+        [HttpGet("{ExpedienteAlumbradoId}")]
         public async Task<ActionResult> GetExpedienteAlumbradoById(int ExpedienteAlumbradoId)
         {
-            var expedienteAlumbrado = await _context.ExpedienteAlumbrado
-                .Include(i => i.Alumbrado)
+            var expediente = await _context.ExpedienteAlumbrado
                 .FirstOrDefaultAsync(f => f.ExpedienteAlumbradoId == ExpedienteAlumbradoId);
-            if (expedienteAlumbrado == null)
+            if (expediente == null)
             {
+                //Ok($"No se encuentra la falla con el ID: {FallasId}");
                 return NotFound();
             }
-            return Ok(expedienteAlumbrado);
+            return Ok(expediente);
         }
 
-        [HttpPost("{AlumbradoId}")]
-        public async Task<ActionResult<ExpedienteAlumbrado>> PostExpedienteAlumbrado(ExpedienteAlumbrado expedienteAlumbrado, int AlumbradoId)
+        [HttpPost()]
+        public async Task<ActionResult<ExpedienteAlumbrado>> PostExpedienteAlumbrado(ExpedienteAlumbrado expedienteAlumbrado)
         {
-            var alumbrado = await _context.Alumbrado.FirstOrDefaultAsync(f => f.AlumbradoId == AlumbradoId);
-            _context.ExpedienteAlumbrado.Add(expedienteAlumbrado);
-            var expedientealumbra = CreatedAtAction("GetExpedienteAlumbradoById", new { ExpedienteAlumbradoId = expedienteAlumbrado.ExpedienteAlumbradoId }, expedienteAlumbrado);
-            alumbrado.expedienteAlumbradoId = expedienteAlumbrado.ExpedienteAlumbradoId;
+            object value = _context.ExpedienteAlumbrado.Add(expedienteAlumbrado);
             await _context.SaveChangesAsync();
-            return Ok(expedientealumbra);
+            return Ok("Estatus creado correctamente");
 
         }
 
@@ -67,20 +77,20 @@ namespace AtoGobMx.Controllers
             var expedientalumbra = _context.ExpedienteAlumbrado.Find(ExpedienteAlumbradoId);
             if (expedientalumbra == null)
             {
-                return BadRequest("El Registro de alumbrado no existe");
+                return BadRequest("El Registro del expediente alumbrado no existe");
             }
 
-            expedienteAlumbrado.ExpedienteAlumbradoId = expedientalumbra.ExpedienteAlumbradoId;
-            expedienteAlumbrado.Tarea = expedientalumbra.Tarea;
-            expedienteAlumbrado.FechaAlta = expedientalumbra.FechaAlta;
-            expedienteAlumbrado.FechaBaja = expedientalumbra.FechaBaja;
-            expedienteAlumbrado.Domicilio = expedientalumbra.Domicilio;
-            expedienteAlumbrado.DescripcionDomicilio = expedientalumbra.DescripcionDomicilio;
+            expedientalumbra.ExpedienteAlumbradoId = ExpedienteAlumbradoId;
+            expedientalumbra.Tarea = expedienteAlumbrado.Tarea;
+            expedientalumbra.FechaAlta = expedienteAlumbrado.FechaAlta;
+            expedientalumbra.FechaBaja = expedienteAlumbrado.FechaBaja;
+            expedientalumbra.Domicilio = expedienteAlumbrado.Domicilio;
+            expedientalumbra.DescripcionDomicilio = expedienteAlumbrado.DescripcionDomicilio;
             expedienteAlumbrado.DescripcionSolucion = expedientalumbra.DescripcionSolucion;
 
-            _context.ExpedienteAlumbrado.Update(expedienteAlumbrado);
+            _context.ExpedienteAlumbrado.Update(expedientalumbra);
             await _context.SaveChangesAsync();
-            return Ok("Expediente actualizado correctamente");
+            return Ok("Expediente alumbrado actualizado correctamente");
         }
 
         [HttpDelete("{ExpedienteAlumbradoId}")]
@@ -96,7 +106,7 @@ namespace AtoGobMx.Controllers
             expedientalumbrado.Archivado = true;
             _context.ExpedienteAlumbrado.Update(expedientalumbrado);
             await _context.SaveChangesAsync();
-            return Ok("ExpedienteFalla Archivado");
+            return Ok("Expediente alumbrado Archivado");
         }
 
     }

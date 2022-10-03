@@ -42,14 +42,34 @@ const routes = [
     component: () => import('@/views/RecursosHumanos/ExpedienteDigital/ExpedientDigitalEdit.vue')
   },
   {
-    path: '/FallasAlumbrado/list',
-    name: 'FallasAlumbrado',
-    component: () => import('@/views/LightingFailures/LightingFailuresList.vue')
+    path: '/Alumbrado/list',
+    name: 'Alumbrado',
+    component: () => import('@/views/ServiciosPublicos/publiclighting/PublicLightingList.vue')
   },
   {
-    path: '/FallasAlumbrado/:FallaId',
-    name: 'FallasAlumbrado-Edit',
-    component: () => import('@/views/LightingFailures/EditGlitches.vue')
+    path: '/Alumbrado/:AlumbradoId',
+    name: 'Alumbrado-Edit',
+    component: () => import('@/views/ServiciosPublicos/publiclighting/EditLighting.vue')
+  },
+  {
+    path: '/EstatusAlumbrado/list',
+    name: 'EstatusAlumbradorado',
+    component: () => import('@/views/ServiciosPublicos/statuslighting/StatusLightingList.vue')
+  },
+  {
+    path: '/EstatusAlumbrado/:EstatusId',
+    name: 'EstatusAlumbrado-Edit',
+    component: () => import('@/views/ServiciosPublicos/statuslighting/EditStatusLighting.vue')
+  },
+  {
+    path: '/ExpedienteAlumbrado/list',
+    name: 'ExpedienteAlumbradorado',
+    component: () => import('@/views/ServiciosPublicos/expedientlighting/ExpedientLightingList.vue')
+  },
+  {
+    path: '/ExpedienteAlumbrado/:ExpedienteAlumbradoId',
+    name: 'ExpedienteAlumbrado-Edit',
+    component: () => import('@/views/ServiciosPublicos/expedientlighting/EditExpedientLighting.vue')
   },
   {
     path: '/Usuarios/list',

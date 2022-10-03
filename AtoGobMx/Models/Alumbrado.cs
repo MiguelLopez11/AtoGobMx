@@ -17,9 +17,21 @@ namespace AtoGobMx.Models
         public string DescripcionDomicilio { get; set; }
         public bool Archivado { get; set; }
         public int? expedienteAlumbradoId { get; set; }
+        public int? estatusId { get; set; }
+        public int? tareaTipoId { get; set; }
+        public int? inventarioAlumbradoId { get; set; }
 
 
         [ForeignKey("expedienteAlumbradoId")]
         public ExpedienteAlumbrado? ExpedienteAlumbrado { get; set; }
+
+        [ForeignKey("estatusId")]
+        public EstatusAlumbrado? Estatus { get; set; }
+
+        [ForeignKey("tareaTipoId")]
+        public TareaTipoAlumbrado? TareaTipoAlumbrado { get; set; }
+
+        [ForeignKey("inventarioAlumbradoId")]
+        public InventarioAlumbrado? InventarioAlumbrado { get; set; }
     }
 }
