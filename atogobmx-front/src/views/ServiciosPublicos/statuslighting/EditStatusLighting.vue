@@ -7,14 +7,14 @@
       <div>
         <h3>Editar Estatus Alumbrado</h3>
       </div>
-      <Form @submit="onUpdateStatusLighting()">
-        <b-row cols="3">
+      <Form @submit="onUpdateStatusLighting">
+        <b-row cols="2">
           <b-col>
             <b-form-group class="mt-3" label="Nombre">
-              <Field name="NameField" :rules="validatename">
+              <Field name="NameField" :rules="validateName">
                 <b-form-input
                   v-model="statusLighting.nombreEstatus"
-                  :state="nameState"
+                  :state="NameState"
                 >
                 </b-form-input>
               </Field>
@@ -24,25 +24,33 @@
               </ErrorMessage>
             </b-form-group>
           </b-col>
-          <!-- <b-col>
-            <b-form-group class="mt-3" label="Descripción">
-              <b-form-input v-model="departament.descripcion" />
-            </b-form-group>
-          </b-col> -->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion">
-              <Field name="descriptionField" :rules="validateDescription">
+              <Field name="DescriptionField" :rules="validateDescription">
+                <b-form-input
+                  v-model="statusLighting.descripcion"
+                  :state="DescriptionState"
+                ></b-form-input>
+              </Field>
+              <ErrorMessage name="DescriptionField"
+                ><span>Este campo es requerido </span
+                ><i class="bi bi-exclamation-circle"></i>
+              </ErrorMessage>
+            </b-form-group>
+
+            <!-- <b-form-group class="mt-3" label="Descripcion">
+              <Field name="DescriptionField" :rules="validateDescription">
                 <b-form-textarea
                   v-model="statusLighting.descripcion"
                   :state="DescriptionState"
                   rows="4"
                 ></b-form-textarea>
               </Field>
-              <ErrorMessage name="descriptionField"
+              <ErrorMessage name="DescriptionField"
                 ><span>Este campo es requerido </span
                 ><i class="bi bi-exclamation-circle"></i>
               </ErrorMessage>
-            </b-form-group>
+            </b-form-group> -->
           </b-col>
         </b-row>
         <b-row align-h="end">
@@ -77,19 +85,20 @@ export default {
     ErrorMessage
   },
   setup () {
-    const { getStatus, updateStatusLighting } = StatusLightinServices()
+    const { getStatusById, updateStatusLighting } = StatusLightinServices()
     const $toast = useToast()
-    const statuslighting = ref([])
+    const statusLighting = ref([])
     const router = useRoute()
     const redirect = useRouter()
-    const nameState = ref(false)
+    const NameState = ref(false)
+    const DescriptionState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Departamentos', to: '/EstatusAlumbrado/list' },
+      { text: 'Departamento estatus', to: '/EstatusAlumbrado/list' },
       { text: 'Editar-Estatus Alumbrado' }
     ])
     const onUpdateStatusLighting = () => {
-      updateStatusLighting(statuslighting.value, (data) => {})
+      updateStatusLighting(statusLighting.value, (data) => {})
       $toast.open({
         message: 'Estetus Alumbrado modificado correctamente',
         position: 'top',
@@ -99,31 +108,46 @@ export default {
         onDismiss: () => redirect.push('/EstatusAlumbrado/list')
       })
     }
-    getStatus(router.params.EstatusId, (data) => {
-      statuslighting.value = data
+    getStatusById(router.params.EstatusId, (data) => {
+      statusLighting.value = data
     })
+
     const validateName = () => {
-      if (!statuslighting.value.nombre) {
+      if (!statusLighting.value.nombreEstatus) {
         validateState()
         return 'Este campo es requerido'
       }
       validateState()
       return true
     }
+
+    const validateDescription = () => {
+      if (!statusLighting.value.descripcion) {
+        validateState()
+        return 'Este campo es requerido'
+      }
+      validateState()
+      return true
+    }
+
     const validateState = () => {
       // eslint-disable-next-line no-unneeded-ternary
-      nameState.value = statuslighting.value.nombre === '' ? false : true
-      return 'HOli'
+      NameState.value = statusLighting.value.nombre === '' ? false : true
+      // eslint-disable-next-line no-unneeded-ternary
+      DescriptionState.value = statusLighting.value.descripcion === '' ? false : true
     }
+
     return {
-      statuslighting,
+      statusLighting,
       breadcrumbItems,
+      NameState,
+      DescriptionState,
       //   router
 
       onUpdateStatusLighting,
       validateName,
       validateState,
-      nameState
+      validateDescription
     }
   }
 }

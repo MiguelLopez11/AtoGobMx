@@ -43,7 +43,7 @@
       </template>
       <template #item-actions="items">
         <b-button
-          @click="RemoveStatusLighting(items.estatusId)"
+          @click="RemoveStatusLighting(items.estatusAlumbradoId)"
           class="m-1"
           variant="outline-danger"
           ><i class="bi bi-trash3"></i
@@ -53,7 +53,7 @@
           variant="outline-warning"
           :to="{
             name: 'EstatusAlumbrado-Edit',
-            params: { EstatusId: items.estatusId },
+            params: { EstatusId: items.estatusAlumbradoId },
           }"
           ><i class="bi bi-pencil-square"></i
         ></b-button>
@@ -73,7 +73,7 @@
             <b-form-group class="mt-3" label="Nombre">
               <Field name="NameField" :rules="validateName">
                 <b-form-input
-                  v-model="statusLightingFields.nombre"
+                  v-model="statusLightingFields.nombreEstatus"
                   :state="NameState"
                 >
                 </b-form-input>
@@ -86,6 +86,19 @@
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Descripcion">
+              <Field name="DescriptionField" :rules="validateDescription">
+                <b-form-input
+                  v-model="statusLightingFields.descripcion"
+                  :state="DescriptionState"
+                ></b-form-input>
+              </Field>
+              <ErrorMessage name="DescriptionField"
+                ><span>Este campo es requerido </span
+                ><i class="bi bi-exclamation-circle"></i>
+              </ErrorMessage>
+            </b-form-group>
+
+            <!-- <b-form-group class="mt-3" label="Descripcion">
               <Field name="descriptionField" :rules="validateDescription">
                 <b-form-textarea
                   v-model="statusLightingFields.descripcion"
@@ -97,7 +110,7 @@
                 ><span>Este campo es requerido </span
                 ><i class="bi bi-exclamation-circle"></i>
               </ErrorMessage>
-            </b-form-group>
+            </b-form-group> -->
           </b-col>
         </b-row>
         <b-row align-h="end">
@@ -132,7 +145,7 @@ export default {
   },
   setup () {
     const { getStatus, createStatusLighting, deleteStatusLighting } =
-    StatusLightingServices()
+      StatusLightingServices()
     const $toast = useToast()
     const statusLighting = ref([])
     const perPage = ref(5)
@@ -146,7 +159,7 @@ export default {
     const DescriptionState = ref(false)
     const NameState = ref(false)
     const statusLightingFields = ref({
-      estatusId: 0,
+      estatusAlumbradoId: 0,
       nombreEstatus: null,
       descripcion: null,
       archivado: false
@@ -156,7 +169,7 @@ export default {
       JSON.parse(JSON.stringify(statusLightingFields))
     )
     const fields = ref([
-      { value: 'alumbradoId', text: 'ID', sortable: true },
+      { value: 'estatusAlumbradoId', text: 'ID', sortable: true },
       { value: 'nombreEstatus', text: 'Nombre' },
       { value: 'descripcion', text: 'Descripcion' },
       { value: 'actions', text: 'Acciones' }
@@ -180,7 +193,7 @@ export default {
     }
 
     const validateName = () => {
-      if (!statusLightingFields.value.tarea) {
+      if (!statusLightingFields.value.nombreEstatus) {
         NameState.value = false
         return 'Este campo es requerido'
       }
@@ -188,8 +201,17 @@ export default {
       return true
     }
 
+    // const validateDescription = () => {
+    //   if (!statusLightingFields.value.descripcionDomicilio) {
+    //     DescriptionState.value = false
+    //     return 'Este campo es requerido'
+    //   }
+    //   DescriptionState.value = true
+    //   return true
+    // }
+
     const validateDescription = () => {
-      if (!statusLightingFields.value.descripcionDomicilio) {
+      if (!statusLightingFields.value.descripcion) {
         DescriptionState.value = false
         return 'Este campo es requerido'
       }

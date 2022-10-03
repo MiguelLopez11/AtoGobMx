@@ -22,7 +22,7 @@ export default function statusServices () {
   }
 
   const updateStatusLighting = (data, callback) => {
-    axios.put(`https://localhost:7065/api/EstatusAlumbrado/${data.estatusId}`, data).then((response) => {
+    axios.put(`https://localhost:7065/api/EstatusAlumbrado/${data.estatusAlumbradoId}`, data).then((response) => {
       callback(response.data)
     })
   }

@@ -33,7 +33,7 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult> GetEstatusById(int EstatusId)
         {
             var estatus = await _context.EstatusAlumbrado
-                .FirstOrDefaultAsync(f => f.EstatusId == EstatusId);
+                .FirstOrDefaultAsync(f => f.EstatusAlumbradoId == EstatusId);
             if (estatus == null)
             {
                 //Ok($"No se encuentra la falla con el ID: {FallasId}");
@@ -50,33 +50,34 @@ namespace AtoGobMx.Controllers
             return Ok("Estatus creado correctamente");
         }
 
-        [HttpPut("{EstatusId}")]
-        public async Task<ActionResult> PutEstatus(int EstatusId, EstatusAlumbrado estatus)
+        [HttpPut("{EstatusAlumbradoId}")]
+        public async Task<ActionResult> PutEstatusAlumbrado(int EstatusAlumbradoId, EstatusAlumbrado estatus)
         {
-            if (estatus.EstatusId != EstatusId)
+            if (estatus.EstatusAlumbradoId != EstatusAlumbradoId)
             {
                 return Ok("Los ID no ingresados no coinciden");
             }
 
-            var estatu = _context.EstatusAlumbrado.Find(EstatusId);
+            var estatu = await _context.EstatusAlumbrado.FirstOrDefaultAsync(f => f.EstatusAlumbradoId == EstatusAlumbradoId);
             if (estatu == null)
             {
                 return BadRequest("El Registro del estatus no existe");
             }
 
-            estatus.EstatusId = estatu.EstatusId;
-            estatus.NombreEstatus = estatu.NombreEstatus;
-            estatus.Descripcion = estatu.Descripcion;
+            estatu.EstatusAlumbradoId = EstatusAlumbradoId;
+            estatu.NombreEstatus = estatus.NombreEstatus;
+            estatu.Descripcion = estatus.Descripcion;
 
-            _context.EstatusAlumbrado.Update(estatus);
+            _context.EstatusAlumbrado.Update(estatu);
             await _context.SaveChangesAsync();
             return Ok("Estatus actualizado correctamente");
         }
+
         [HttpDelete("{EstatusId}")]
-        public async Task<IActionResult> DeleteEstatus(int EstatusId)
+        public async Task<IActionResult> DeleteEstatusAlumbrado(int EstatusId)
         {
             var estatus = _context.EstatusAlumbrado
-                .FirstOrDefault(f => f.EstatusId == EstatusId);
+                .FirstOrDefault(f => f.EstatusAlumbradoId == EstatusId);
             if (estatus == null)
             {
                 return NotFound();

@@ -140,7 +140,7 @@
               </b-form-group>
             </b-col>
             <b-col>
-              <b-form-group class="mt-3" label="Fecha Baja">
+              <b-form-group class="mt-3" label="Fecha Alta">
                 <Field name="LowDateField" :rules="validateLowDate">
                   <Datepicker
                     locale="es"

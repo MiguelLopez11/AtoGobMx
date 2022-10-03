@@ -62,6 +62,16 @@ const routes = [
     component: () => import('@/views/ServiciosPublicos/statuslighting/EditStatusLighting.vue')
   },
   {
+    path: '/ExpedienteAlumbrado/list',
+    name: 'ExpedienteAlumbradorado',
+    component: () => import('@/views/ServiciosPublicos/expedientlighting/ExpedientLightingList.vue')
+  },
+  {
+    path: '/ExpedienteAlumbrado/:ExpedienteAlumbradoId',
+    name: 'ExpedienteAlumbrado-Edit',
+    component: () => import('@/views/ServiciosPublicos/expedientlighting/EditExpedientLighting.vue')
+  },
+  {
     path: '/Usuarios/list',
     name: 'Usuarios',
     component: () => import('@/views/Users/UserList.vue')
