@@ -23,6 +23,7 @@ namespace AtoGobMx.Controllers
         {
             var expediente = await _context.ExpedienteDigital
                 .Include(i => i.Empleados)
+                .Where(w => !w.Archivado)
                 .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expedienteDigitalId);
             if (expediente == null)
             {
@@ -33,26 +34,18 @@ namespace AtoGobMx.Controllers
             {
                 return NotFound("No se encuentra foto de perfil registrado a ese expediente.");
             }
-            //var empleado = await _context.Empleados
-            //    //.Include(i => i.usuario)
-            //    .Include(i => i.ExpedienteDigital)
-            //    .FirstOrDefaultAsync(f => f.expedienteDigitalId == expedienteDigitalId);
-            //if (empleado == null)
-            //{
-            //    return BadRequest("El empleado no tiene registrado el expediente");
-            //}
-            //{ empleado.usuario.NombreUsuario}
-            var image = System.IO.File.OpenRead($"C:/Users/Miguel Lopez/Pictures/AtoGobMX/images/{expediente.Empleados.NombreCompleto}/{fotoPerfil.Nombre}");
+            var image = System.IO.File.OpenRead($"Files/images/{expediente.Empleados.NombreCompleto}/{fotoPerfil.Nombre}");
             return File(image, "image/jpeg");
 
         }
-        [HttpPost("FotoPerfil/{expedienteDigitalId}/")]
+        [HttpPost("Imagen/{expedienteDigitalId}/")]
         public async Task<IActionResult> UploadPhotoProfile(IFormFile file, int expedienteDigitalId)
         {
             try
             {
                 #region Comprobar si el expediente existe
                 var expediente = await _context.ExpedienteDigital
+                    .Where(w => !w.Archivado)
                     .Include(i => i.Empleados)
                     .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expedienteDigitalId);
 
@@ -78,23 +71,11 @@ namespace AtoGobMx.Controllers
                 #endregion
                 #region Comprobar si ya existe una imagen registrada al expediente, crearlo
                 var archivoExpediente = await _context.Archivos
-                    .Where(w => w.ExpedienteDigitalId == expedienteDigitalId)
                     .Where(w => w.TipoArchivo.Contains(".png") || w.TipoArchivo.Contains(".jpg") || w.TipoArchivo.Contains(".jpeg"))
-                    .ToArrayAsync();
-                if (archivoExpediente.Length == 0)
+                    .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expedienteDigitalId);
+                if (archivoExpediente == null)
                 {
-                    //var usuario = await _context.Usuarios
-                    //    .Include(i => i.Empleado)
-                    //    .FirstOrDefaultAsync(f => f.EmpleadoId == expediente.Empleados.EmpleadoId);
-                    //var empleado = await _context.Empleados
-                    //    //.Include(i => i.usuario)
-                    //    .FirstOrDefaultAsync(f => f.expedienteDigitalId == expedienteDigitalId);
-                    //if (usuario == null)
-                    //{
-                    //    return BadRequest("El empleado no contiene un usuario asignado");
-                    //}
-                    var pathFolder = $@"C:/Users/Miguel Lopez/Pictures/AtoGobMX/images/{expediente.Empleados.NombreCompleto}";
-                    //{ empleado.usuario.NombreUsuario}
+                    var pathFolder = $@"Files/images/{expediente.Empleados.NombreCompleto}";
                     if (!Directory.Exists(pathFolder))
                     {
                         Directory.CreateDirectory(pathFolder);
@@ -116,14 +97,27 @@ namespace AtoGobMx.Controllers
                 }
                 else
                 {
-                    return BadRequest("Ya se encuentra una foto de perfil ");
+                    var path = $@"Files/images/{expediente.Empleados.NombreCompleto}/{archivoExpediente.Nombre}";
+
+                    System.IO.File.Delete(path);
+                    var pathFolder = $@"Files/images/{expediente.Empleados.NombreCompleto}";
+                    var newPath = Path.Combine(Directory.GetCurrentDirectory(), pathFolder, file.FileName);
+                    var stream = new FileStream(newPath, FileMode.Create);
+                    await file.CopyToAsync(stream);
+                    stream.Close();
+                    archivoExpediente.Nombre = file.FileName;
+                    _context.Archivos.Update(archivoExpediente);
+                    await _context.SaveChangesAsync();
+
+
+                    return Ok("Imagen registrada correctamente.");
                 }
-                #endregion
             }
             catch
             {
                 return BadRequest();
             }
         }
+        #endregion 
     }
 }

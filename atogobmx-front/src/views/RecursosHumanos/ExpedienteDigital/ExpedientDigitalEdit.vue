@@ -2,11 +2,15 @@
   <b-card class="m-3">
     <abbr title="Cambiar Foto de perfil">
       <b-avatar
-        :src="`https://localhost:7065/api/Archivos/FotoPerfil/${expedienteDigitalId}`"
+        ref="refAvatar"
+        :src="
+          `https://localhost:7065/api/Archivos/FotoPerfil/${expedienteDigitalId}`
+        "
         size="200px"
         style="cursor: pointer; margin-bottom: 30px"
         v-b-modal.modal-profilePhoto
         badge-variant="light"
+        alt=""
       >
         <template #badge>
           <i class="bi bi-pencil-square" />
@@ -76,35 +80,80 @@
     size="xl"
     centered
     hide-backdrop
-    button-size="lg"
-    lazy
-    ok-title="Guardar"
-    cancel-title="Cancelar"
+    hide-footer
   >
-    <form ref="form">
-      <div class="mb-3">
-        <label for="formFile" class="form-label"> Selecciona una imagen </label>
-        <input class="form-control w-75" type="file" id="formFile" />
-      </div>
-    </form>
+    <div class="input-group mb-3">
+      <input
+        type="file"
+        class="form-control"
+        v-on:change="onChangeFile"
+        ref="refFile"
+        id="file"
+      />
+      <b-button variant="outline-primary" @click="submitPhoto"
+        >Cargar imagen</b-button
+      >
+    </div>
   </b-modal>
 </template>
 
 <script>
 import { ref } from 'vue'
-// import FileServices from '@/Services/file.Services'
 import { useRoute } from 'vue-router'
+import { useToast } from 'vue-toast-notification'
+import FileServices from '@/Services/file.Services'
 export default {
   setup () {
-    // const {} = FileServices()
+    const { createExpedientPhotoProfile } = FileServices()
+    const refFile = ref()
+    const refAvatar = ref()
     const router = useRoute()
+    const $toast = useToast()
     const expedienteDigitalId = ref(router.params.ExpedienteDigitalId)
+    const fileState = ref(false)
+    const file = ref('')
+    const onChangeFile = e => {
+      file.value = refFile.value.files[0]
+    }
+    const submitPhoto = () => {
+      const formData = new FormData()
+      formData.append('file', file.value)
+      if (!file.value) {
+        $toast.open({
+          message:
+            'No se ha seleccionado una imagen, por favor ingrese una imagen de perfil.',
+          position: 'top-left',
+          duration: 0,
+          dismissible: true,
+          type: 'error'
+        })
+      }
+      createExpedientPhotoProfile(
+        router.params.ExpedienteDigitalId,
+        formData,
+        data => {
+          $toast.open({
+            message: `${data.data}`,
+            position: 'top-left',
+            duration: 0,
+            dismissible: true,
+            type: 'error'
+          })
+        }
+      )
+    }
     return {
-      expedienteDigitalId
+      expedienteDigitalId,
+      fileState,
+      refFile,
+      file,
+      refAvatar,
+
+      onChangeFile,
+      submitPhoto
     }
   }
 }
 </script>
 
-<style>
-</style>
+<style></style>
