@@ -6,7 +6,7 @@
         style="width: 350px"
         v-model="searchValue"
         type="search"
-        placeholder="Buscar Expediente Alumbrado..."
+        placeholder="Buscar Inventario Alumbrado..."
       ></b-form-input>
       <b-button
         variant="primary"
@@ -17,11 +17,11 @@
           margin-right: 15px;
           margin-left: 20px;
         "
-        v-b-modal.modal-expedientlighting
+        v-b-modal.modal-inventorylighting
         type="submit"
       >
         <i class="bi bi-person-plus-fill"></i>
-        Agregar Expediente
+        Agregar Inventario
       </b-button>
     </b-row>
     <EasyDataTable
@@ -32,7 +32,7 @@
       border-cell
       :loading="isloading"
       :headers="fields"
-      :items="expedientLighting"
+      :items="inventoryLighting"
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
@@ -43,7 +43,7 @@
       </template>
       <template #item-actions="items">
         <b-button
-          @click="RemoveExpedientLighting(items.expedienteAlumbradoId)"
+          @click="RemoveInventoryLighting(items.inventarioAlumbradoId)"
           class="m-1"
           variant="outline-danger"
           ><i class="bi bi-trash3"></i
@@ -52,28 +52,28 @@
           class="m-1"
           variant="outline-warning"
           :to="{
-            name: 'ExpedienteAlumbrado-Edit',
-            params: { ExpedienteAlumbradoId: items.expedienteAlumbradoId },
+            name: 'InventarioAlumbrado-Edit',
+            params: { InventarioAlumbradoId: items.inventarioAlumbradoId },
           }"
           ><i class="bi bi-pencil-square"></i
         ></b-button>
       </template>
     </EasyDataTable>
     <b-modal
-      id="modal-expedientlighting"
-      title="Agregar Expediente Alumbrado"
+      id="modal-inventorylighting"
+      title="Agregar Inventario Alumbrado"
       size="xl"
       hide-footer
       button-size="lg"
       lazy
     >
-      <Form @submit="addExpedientLighting">
+      <Form @submit="addInventoryLighting">
         <b-row cols="2">
           <b-col>
-            <b-form-group class="mt-3" label="Nombre del tipo Tarea">
+            <b-form-group class="mt-3" label="Nombre del tramite">
               <Field name="TypeTaskField" :rules="validateTypeTask">
                 <b-form-select
-                  v-model="expedientLightingFields.tarea"
+                  v-model="inventoryLightingFields.tarea"
                   autofocus
                   :state="TypeTaskState"
                   :options="statusPublicLighting"
@@ -94,7 +94,7 @@
                   locale="es"
                   name="date"
                   text-input
-                  v-model="expedientLightingFields.fechaAlta"
+                  v-model="inventoryLightingFields.fechaAlta"
                   :state="HighDateState"
                 ></Datepicker>
               </Field>
@@ -108,7 +108,7 @@
             <b-form-group class="mt-3" label="Domicilio">
               <Field name="DomicileField" :rules="validateDomicile">
                 <b-form-input
-                  v-model="expedientLightingFields.domicilio"
+                  v-model="inventoryLightingFields.domicilio"
                   :state="DomicileState"
                 ></b-form-input>
               </Field>
@@ -119,53 +119,17 @@
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="Fecha Alta">
+            <b-form-group class="mt-3" label="Fecha Baja">
               <Field name="LowDateField" :rules="validateLowDate">
                 <Datepicker
                   locale="es"
                   name="date"
                   text-input
-                  v-model="expedientLightingFields.fechaBaja"
+                  v-model="inventoryLightingFields.fechaBaja"
                   :state="LowDateState"
                 ></Datepicker>
               </Field>
               <ErrorMessage name="LowDateField"
-                ><span>Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i>
-              </ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Descripcion Domicilio">
-              <Field
-                name="addresdescriptionField"
-                :rules="validateAddresdescription"
-              >
-                <b-form-textarea
-                  v-model="expedientLightingFields.descripcionDomicilio"
-                  :state="addresdescriptionState"
-                  rows="4"
-                ></b-form-textarea>
-              </Field>
-              <ErrorMessage name="addresdescriptionField"
-                ><span>Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i>
-              </ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Descripcion Solucion">
-              <Field
-                name="DescriptionSolutionField"
-                :rules="validateDescriptionSolution"
-              >
-                <b-form-textarea
-                  v-model="expedientLightingFields.descripcionSolucion"
-                  :state="DescriptionSolutionState"
-                  rows="4"
-                ></b-form-textarea>
-              </Field>
-              <ErrorMessage name="DescriptionSolutionField"
                 ><span>Este campo es requerido </span
                 ><i class="bi bi-exclamation-circle"></i>
               </ErrorMessage>
@@ -176,7 +140,7 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            v-b-modal.modal-expedientlighting
+            v-b-modal.modal-inventorylighting
           >
             Cancelar
           </b-button>
@@ -190,7 +154,7 @@
 </template>
 
 <script>
-import ExpedientlightingServices from '@/Services/expedientlighting.Services'
+import ExpedientlightingServices from '@/Services/inventorylighting.Services'
 import StatusLightingServices from '@/Services/statuslighting.Services'
 import Datepicker from '@vuepic/vue-datepicker'
 import { Form, Field, ErrorMessage } from 'vee-validate'
@@ -207,15 +171,13 @@ export default {
   },
   setup () {
     const {
-      getExpedientLighting,
-      createExpedientLighting,
-      deleteExpedientLighting
+      getInventoryLighting,
+      createInventoryLighting,
+      deleteInventoryLighting
     } = ExpedientlightingServices()
-    const {
-      getStatus
-    } = StatusLightingServices()
+    const { getStatus } = StatusLightingServices()
     const $toast = useToast()
-    const expedientLighting = ref([])
+    const inventoryLighting = ref([])
     const statusPublicLighting = ref([])
     const isOpen = ref(false)
     const perPage = ref(5)
@@ -226,19 +188,15 @@ export default {
     const searchValue = ref('')
     const searchField = ref('tarea')
     const TypeTaskState = ref(false)
-    const DescriptionSolutionState = ref(false)
     const HighDateState = ref(false)
-    const addresdescriptionState = ref(false)
     const DomicileState = ref(false)
     const LowDateState = ref(false)
-    const expedientLightingFields = ref({
-      expedienteAlumbradoId: 0,
+    const inventoryLightingFields = ref({
+      inventarioAlumbradoId: 0,
       tarea: null,
-      descripcionSolucion: null,
       fechaAlta: null,
       fechaBaja: null,
       domicilio: null,
-      descripcionDomicilio: null,
       archivado: false
     })
 
@@ -247,7 +205,7 @@ export default {
     })
 
     const validateTypeTask = () => {
-      if (!expedientLightingFields.value.tarea) {
+      if (!inventoryLightingFields.value.tarea) {
         TypeTaskState.value = false
         return 'Este campo es requerido'
       }
@@ -255,17 +213,8 @@ export default {
       return true
     }
 
-    const validateDescriptionSolution = () => {
-      if (!expedientLightingFields.value.descripcionSolucion) {
-        DescriptionSolutionState.value = false
-        return 'Este campo es requerido'
-      }
-      DescriptionSolutionState.value = true
-      return true
-    }
-
     const validateDomicile = () => {
-      if (!expedientLightingFields.value.domicilio) {
+      if (!inventoryLightingFields.value.domicilio) {
         DomicileState.value = false
         return 'Este campo es requerido'
       }
@@ -274,7 +223,7 @@ export default {
     }
 
     const validateLowDate = () => {
-      if (!expedientLightingFields.value.fechaBaja) {
+      if (!inventoryLightingFields.value.fechaBaja) {
         LowDateState.value = false
         return 'Este campo es requerido'
       }
@@ -283,7 +232,7 @@ export default {
     }
 
     const validateHighDate = () => {
-      if (!expedientLightingFields.value.fechaAlta) {
+      if (!inventoryLightingFields.value.fechaAlta) {
         HighDateState.value = false
         return 'Este campo es requerido'
       }
@@ -291,57 +240,46 @@ export default {
       return true
     }
 
-    const validateAddresdescription = () => {
-      if (!expedientLightingFields.value.descripcionDomicilio) {
-        addresdescriptionState.value = false
-        return 'Este campo es requerido'
-      }
-      addresdescriptionState.value = true
-      return true
-    }
-
     // pone mis cambios de mis campos vacios de nuevo
-    const expedientLightingFieldsBlank = ref(
-      JSON.parse(JSON.stringify(expedientLightingFields))
+    const inventoryLightingFieldsBlank = ref(
+      JSON.parse(JSON.stringify(inventoryLightingFields))
     )
 
     const fields = ref([
-      { value: 'expedienteAlumbradoId', text: 'ID', sortable: true },
-      { value: 'tarea', text: 'Tarea' },
+      { value: 'inventarioAlumbradoId', text: 'ID', sortable: true },
+      { value: 'tarea', text: 'Nombre del tramite' },
       { value: 'fechaAlta', text: 'Fecha Alta' },
       { value: 'domicilio', text: 'Domicilio' },
-      { value: 'descripcionDomicilio', text: 'Descripcion Domicilio' },
-      { value: 'descripcionSolucion', text: 'Descripcion Solucion' },
       { value: 'fechaBaja', text: 'Fecha Baja' },
       { value: 'actions', text: 'Acciones' }
     ])
 
-    getExpedientLighting((data) => {
-      expedientLighting.value = data
+    getInventoryLighting((data) => {
+      inventoryLighting.value = data
       // rows.value = data.length
-      if (expedientLighting.value.length > 0) {
+      if (inventoryLighting.value.length > 0) {
         isloading.value = false
       } else {
-        if (expedientLighting.value.length <= 0) {
+        if (inventoryLighting.value.length <= 0) {
           isloading.value = false
         }
       }
     })
 
     const onFiltered = (filteredItems) => {
-    // rows.value = filteredItems.length
+      // rows.value = filteredItems.length
       currentPage.value = 1
     }
 
     const refreshTable = () => {
       isloading.value = true
-      getExpedientLighting((data) => {
-        expedientLighting.value = data
+      getInventoryLighting((data) => {
+        inventoryLighting.value = data
         // rows.value = data.length
-        if (expedientLighting.value.length > 0) {
+        if (inventoryLighting.value.length > 0) {
           isloading.value = false
         } else {
-          if (expedientLighting.value.length <= 0) {
+          if (inventoryLighting.value.length <= 0) {
             isloading.value = false
           }
         }
@@ -349,29 +287,30 @@ export default {
       return 'datos recargados'
     }
 
-    const addExpedientLighting = () => {
-      createExpedientLighting(expedientLightingFields.value, (data) => {
+    const addInventoryLighting = () => {
+      createInventoryLighting(inventoryLightingFields.value, (data) => {
         refreshTable()
-        $toast.success('Alumbrado registrado correctamente.', {
+        $toast.success('Inventario registrado correctamente.', {
           position: 'top-right',
           duration: 1500
         })
       })
       // resetStreetLightingFields()
-      expedientLightingFields.value = JSON.parse(
-        JSON.stringify(expedientLightingFieldsBlank))
+      inventoryLightingFields.value = JSON.parse(
+        JSON.stringify(inventoryLightingFieldsBlank)
+      )
     }
 
-    const RemoveExpedientLighting = (StreetLightingId) => {
+    const RemoveInventoryLighting = (StreetLightingId) => {
       isloading.value = true
-      deleteExpedientLighting(StreetLightingId, (data) => {
+      deleteInventoryLighting(StreetLightingId, (data) => {
         refreshTable()
       })
     }
     return {
-      expedientLighting,
+      inventoryLighting,
       statusPublicLighting,
-      expedientLightingFields,
+      inventoryLightingFields,
       isOpen,
       perPage,
       currentPage,
@@ -380,23 +319,19 @@ export default {
       isloading,
       searchValue,
       searchField,
-      expedientLightingFieldsBlank,
+      inventoryLightingFieldsBlank,
       fields,
       TypeTaskState,
-      DescriptionSolutionState,
       HighDateState,
-      addresdescriptionState,
       DomicileState,
       LowDateState,
 
       onFiltered,
-      addExpedientLighting,
+      addInventoryLighting,
       refreshTable,
-      RemoveExpedientLighting,
+      RemoveInventoryLighting,
       validateTypeTask,
-      validateDescriptionSolution,
       validateHighDate,
-      validateAddresdescription,
       validateLowDate,
       validateDomicile
     }
@@ -404,10 +339,10 @@ export default {
 }
 </script>
 
-<style>
+  <style>
 .customize-table {
   /* --easy-table-border: 1px solid #445269;
-  --easy-table-row-border: 1px solid #445269; */
+    --easy-table-row-border: 1px solid #445269; */
   --easy-table-header-font-size: 16px;
   --easy-table-header-height: 50px;
   --easy-table-header-font-color: #fcf6f5ff;
@@ -416,9 +351,9 @@ export default {
   --easy-table-header-item-align: center;
   --easy-table-message-font-size: 17px;
   /* --easy-table-body-even-row-font-color: #fff;
-  --easy-table-body-even-row-background-color: #4c5d7a; */
+    --easy-table-body-even-row-background-color: #4c5d7a; */
   /* --easy-table-body-row-font-color: #c0c7d2;
-  --easy-table-body-row-background-color: #2d3a4f; */
+    --easy-table-body-row-background-color: #2d3a4f; */
   --easy-table-body-row-height: 50px;
   --easy-table-body-row-font-size: 17px;
   --easy-table-border-radius: 15px;
@@ -431,9 +366,9 @@ export default {
   --easy-table-footer-padding: 0px 10px;
   --easy-table-footer-height: 50px;
   /* --easy-table-scrollbar-track-color: #2d3a4f;
-  --easy-table-scrollbar-color: #2d3a4f;
-  --easy-table-scrollbar-thumb-color: #4c5d7a;;
-  --easy-table-scrollbar-corner-color: #2d3a4f;
-  --easy-table-loading-mask-background-color: #2d3a4f; */
+    --easy-table-scrollbar-color: #2d3a4f;
+    --easy-table-scrollbar-thumb-color: #4c5d7a;;
+    --easy-table-scrollbar-corner-color: #2d3a4f;
+    --easy-table-loading-mask-background-color: #2d3a4f; */
 }
 </style>

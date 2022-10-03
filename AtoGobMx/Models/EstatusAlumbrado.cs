@@ -9,13 +9,13 @@ namespace AtoGobMx.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int EstatusId { get; set; }
+        public int EstatusAlumbradoId { get; set; }
         public string NombreEstatus { get; set; }
         public string Descripcion { get; set; }
-        public bool Archivado  { get; set; }
+        public bool Archivado { get; set; }
 
         [JsonIgnore]
-        public virtual IEnumerable<Alumbrado> ? Alumbrado { get; set; }
+        public virtual IEnumerable<Alumbrado>? Alumbrado { get; set; }
 
     }
 }
