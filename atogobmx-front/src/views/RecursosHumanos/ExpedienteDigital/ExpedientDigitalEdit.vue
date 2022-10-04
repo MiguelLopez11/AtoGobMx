@@ -28,7 +28,7 @@
                     name="StateField"
                     :rules="validateField"
                   >
-                  <b-form-input v-model="expedient.estado"  :state="fieldState" />
+                  <b-form-input v-model="expedient.estado"  :state="EstadoState" />
                   </Field>
                   <ErrorMessage name="StateField"/>
                 </b-form-group>
@@ -136,8 +136,9 @@ export default {
     const $toast = useToast()
     const expedient = ref([])
     const expedienteDigitalId = ref(router.params.ExpedienteDigitalId)
-    const fieldState = ref(false)
+    const EstadoState = ref(false)
     const file = ref('')
+    // Methods
     getExpedient(expedienteDigitalId.value, data => {
       expedient.value = data
     })
@@ -145,20 +146,24 @@ export default {
       file.value = refFile.value.files[0]
     }
     const submitExpedient = () => {
-      console.log('holi')
     }
-    const validateField = (value) => {
-      console.log(value)
-      if (!value) {
-        return 'This field is required'
+    // Validations
+    const validateField = () => {
+      if (!expedient.value.estado) {
+        validateState()
+        return 'Este campo es requerido'
       }
-      // console.log(value)
-      // if (!value) {
-      //   fieldState.value = false
-      //   return 'Este campo es requerido'
-      // }
-      // fieldState.value = true
-      // return true
+      validateState()
+      return true
+    }
+    const validateState = () => {
+      // eslint-disable-next-line no-unneeded-ternary
+      EstadoState.value = expedient.value.estado !== ''
+      // areaState.value = employee.value.areaId !== 0
+      // departamentState.value = employee.value.departamentoId !== 0
+      // workStationState.value = employee.value.puestoTrabajoId !== 0
+      // dateWorkState.value = employee.value.fechaAlta !== null
+      return 'HOli'
     }
     // Cargar Imagen
     const submitPhoto = () => {
@@ -178,9 +183,6 @@ export default {
         router.params.ExpedienteDigitalId,
         formData,
         data => {
-          // if (data.){
-
-          // }
           $toast.open({
             message: `${data.data}`,
             position: 'top-left',
@@ -193,7 +195,7 @@ export default {
     }
     return {
       expedienteDigitalId,
-      fieldState,
+      EstadoState,
       refFile,
       file,
       expedient,
@@ -202,7 +204,8 @@ export default {
       onChangeFile,
       submitPhoto,
       validateField,
-      submitExpedient
+      submitExpedient,
+      validateState
     }
   }
 }
