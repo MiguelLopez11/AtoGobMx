@@ -163,7 +163,6 @@
         </b-row>
       </Form>
     </b-modal>
-    {{roles.length}}
   </b-card>
 </template>
 
