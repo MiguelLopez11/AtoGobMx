@@ -48,14 +48,11 @@
           <i class="bi bi-trash3"></i>
         </b-button>
         <b-button
-          :to="{
-            name: 'ExpedienteDigital-edit',
-            params: { ExpedienteDigitalId: items.expedienteDigitalId },
-          }"
           class="m-1"
           variant="outline-warning"
+          :href="`https://localhost:7065/api/Archivos/Documentos/Descargar/${expedienteDigitalId}/${items.archivoId}`"
           >
-          <i class="bi bi-pencil-square"></i>
+         <i class="bi bi-download"></i>
         </b-button>
       </template>
     </EasyDataTable>
@@ -100,6 +97,7 @@ export default {
     const isloading = ref(true)
     const searchValue = ref('')
     const searchField = ref('nombre')
+    const expedienteDigitalId = ref(props.ExpedientDigitalId)
     const fields = ref([
       { value: 'nombre', text: 'Nombre Documento', sortable: true },
       { value: 'tipoArchivo', text: 'Tipo Documento', sortable: true },
@@ -128,6 +126,7 @@ export default {
       searchValue,
       searchField,
       documents,
+      expedienteDigitalId,
 
       onFiltered
     }

@@ -3,6 +3,7 @@ using AtoGobMx.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 
 namespace AtoGobMx.Controllers
@@ -38,7 +39,7 @@ namespace AtoGobMx.Controllers
             return File(image, "image/jpeg");
 
         }
-        [HttpGet("Documentos/Descargar/{ArchivoId}/{ExpedienteDigitalId}")]
+        [HttpGet("Documentos/Descargar/{ExpedienteDigitalId}/{ArchivoId}")]
         public async Task<IActionResult> DownloadFile(int ExpedienteDigitalId, int ArchivoId)
         {
             var expediente = await _context.ExpedienteDigital
@@ -49,13 +50,22 @@ namespace AtoGobMx.Controllers
             {
                 return NotFound("El ID del expediente no existe.");
             }
-            var documento = await _context.Archivos.FirstOrDefaultAsync(f => f.ArchivoId == ArchivoId);
+            var documento = await _context.Archivos
+                .Where(w => w.TipoArchivo == ".pdf" || w.TipoArchivo == ".docx")
+                .FirstOrDefaultAsync(f => f.ArchivoId == ArchivoId);
             if (documento == null)
             {
-                return NotFound("No se encuentra foto de perfil registrado a ese expediente.");
+                return NotFound("No se encuentra Archivo");
             }
-            byte[] file = System.IO.File.ReadAllBytes($"Files/Documentos/{expediente.Empleados.NombreCompleto}/{documento.Nombre}");
-            return File(file, "application/pdf");
+            var filePath = $"Files/Documentos/{expediente.Empleados.NombreCompleto}/{documento.Nombre}";
+            var provider = new FileExtensionContentTypeProvider();
+            if (!provider.TryGetContentType(filePath, out var contentType))
+            {
+                contentType = "application/octet-stream";
+            }
+
+            var bytes = await System.IO.File.ReadAllBytesAsync(filePath);
+            return File(bytes, contentType, Path.GetFileName(filePath));
 
         }
         [HttpGet("Documentos/{ExpedienteDigitalId}")]
