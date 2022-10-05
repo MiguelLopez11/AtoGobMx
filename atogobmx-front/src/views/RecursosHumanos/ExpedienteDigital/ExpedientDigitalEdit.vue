@@ -122,7 +122,7 @@
                       />
                     </Field>
                     <ErrorMessage name="emailField">
-                      <span>{{ emailMessage }} </span>
+                      <span class="text-danger">{{ emailMessage }} </span>
                       <i class="bi bi-exclamation-circle"></i
                     ></ErrorMessage>
                   </b-form-group>
@@ -144,7 +144,9 @@
           </b-card>
         </b-tab>
         <b-tab title="Documentos">
-          <ExpedientDocuments />
+          <ExpedientDocuments
+            :ExpedientDigitalId="expedienteDigitalId"
+          />
         </b-tab>
       </b-tabs>
     </b-card>
@@ -209,6 +211,7 @@ export default {
     getExpedient(expedienteDigitalId.value, data => {
       expedient.value = data
       emailState.value = data.correoElectronico !== null
+      emailMessage.value = 'Este campo es requerido '
       validateState()
     })
     const onChangeFile = e => {
