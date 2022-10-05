@@ -140,13 +140,16 @@ import Datepicker from '@vuepic/vue-datepicker'
 import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
+  props: {
+    expedientLightingId: Number
+  },
   components: {
     Datepicker,
     Field,
     Form,
     ErrorMessage
   },
-  setup () {
+  setup (props) {
     const { getExpedientLightingById, updatExpedientLighting } =
       ExpedientlightingServices()
     // const { getStatusById } = StatusServices()
@@ -172,7 +175,7 @@ export default {
     //   statusPublicLighting.value = data
     // })
 
-    getExpedientLightingById(router.params.ExpedienteAlumbradoId, (data) => {
+    getExpedientLightingById(router.params.ExpedienteAlumbradoId || props.expedientLightingId, (data) => {
       // streetLighting.value = data
       // validateState()
       expedientLighting.value = data

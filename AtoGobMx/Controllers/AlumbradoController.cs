@@ -50,7 +50,7 @@ namespace AtoGobMx.Controllers
         {
             _context.Alumbrado.Add(alumbrado);
             await _context.SaveChangesAsync();
-            return StatusCode(200, "Se ha credo exitosamente");
+            return CreatedAtAction("GetAlumbradoById", new { AlumbradoId = alumbrado.AlumbradoId }, alumbrado);
         }
 
         [HttpPut("{AlumbradoId}")]

@@ -74,12 +74,22 @@ const routes = [
   {
     path: '/InventarioAlumbrado/list',
     name: 'InventarioAlumbradorado',
-    component: () => import('@/views/ServiciosPublicos/inventorylighting/InventoryLightingList.vue')
+    component: () => import('@/views/ServiciosPublicos/streetLighting/inventorylighting/InventoryLightingList.vue')
   },
   {
     path: '/InventarioAlumbrado/:InventarioAlumbradoId',
     name: 'InventarioAlumbrado-Edit',
-    component: () => import('@/views/ServiciosPublicos/inventorylighting/EditInventoryLighting.vue')
+    component: () => import('@/views/ServiciosPublicos/streetLighting/inventorylighting/EditInventoryLighting.vue')
+  },
+  {
+    path: '/TareaTipoAlumbrado/list',
+    name: 'TareaTipoAlumbradorado',
+    component: () => import('@/views/ServiciosPublicos/streetLighting/typetasklighting/TaskTypeLightingList.vue')
+  },
+  {
+    path: '/TareaTipoAlumbrado/:TareaTipoAlumbradoId',
+    name: 'TareaTipoAlumbrado-Edit',
+    component: () => import('@/views/ServiciosPublicos/streetLighting/tasktypelighting/EditTaskTypeLighting.vue')
   },
   {
     path: '/Usuarios/list',
