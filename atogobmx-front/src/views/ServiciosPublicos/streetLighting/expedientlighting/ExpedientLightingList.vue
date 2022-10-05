@@ -405,35 +405,5 @@ export default {
 </script>
 
 <style>
-.customize-table {
-  /* --easy-table-border: 1px solid #445269;
-  --easy-table-row-border: 1px solid #445269; */
-  --easy-table-header-font-size: 16px;
-  --easy-table-header-height: 50px;
-  --easy-table-header-font-color: #fcf6f5ff;
-  --easy-table-header-background-color: #2bae66ff;
-  --easy-table-header-item-padding: 10px 15px;
-  --easy-table-header-item-align: center;
-  --easy-table-message-font-size: 17px;
-  /* --easy-table-body-even-row-font-color: #fff;
-  --easy-table-body-even-row-background-color: #4c5d7a; */
-  /* --easy-table-body-row-font-color: #c0c7d2;
-  --easy-table-body-row-background-color: #2d3a4f; */
-  --easy-table-body-row-height: 50px;
-  --easy-table-body-row-font-size: 17px;
-  --easy-table-border-radius: 15px;
-  --easy-table-body-row-hover-font-color: rgb(0, 0, 0);
-  --easy-table-body-row-hover-background-color: rgb(212, 212, 212);
-  --easy-table-body-item-padding: 10px 15px;
-  --easy-table-footer-background-color: #2bae66ff;
-  --easy-table-footer-font-color: #fcf6f5ff;
-  --easy-table-footer-font-size: 17px;
-  --easy-table-footer-padding: 0px 10px;
-  --easy-table-footer-height: 50px;
-  /* --easy-table-scrollbar-track-color: #2d3a4f;
-  --easy-table-scrollbar-color: #2d3a4f;
-  --easy-table-scrollbar-thumb-color: #4c5d7a;;
-  --easy-table-scrollbar-corner-color: #2d3a4f;
-  --easy-table-loading-mask-background-color: #2d3a4f; */
-}
+
 </style>

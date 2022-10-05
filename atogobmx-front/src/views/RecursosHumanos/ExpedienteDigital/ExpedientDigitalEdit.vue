@@ -6,7 +6,7 @@
         :src="
           `https://localhost:7065/api/Archivos/FotoPerfil/${expedienteDigitalId}`
         "
-        size="200px"
+        size="170px"
         style="cursor: pointer; margin-bottom: 30px"
         v-b-modal.modal-profilePhoto
         badge-variant="light"
@@ -198,7 +198,7 @@ export default {
     const $toast = useToast()
     const redirect = useRouter()
     const expedient = ref([])
-    const expedienteDigitalId = ref(router.params.ExpedienteDigitalId)
+    const expedienteDigitalId = ref(parseInt(router.params.ExpedienteDigitalId))
     const EstadoState = ref(false)
     const municipalityState = ref(false)
     const streetState = ref(false)
@@ -351,4 +351,5 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+</style>

@@ -232,6 +232,7 @@ export default {
 </script>
 
 <style>
+@import '@/css/table-easy.css';
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

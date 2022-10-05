@@ -38,6 +38,26 @@ namespace AtoGobMx.Controllers
             return File(image, "image/jpeg");
 
         }
+        [HttpGet("Documentos/Descargar/{ArchivoId}/{ExpedienteDigitalId}")]
+        public async Task<IActionResult> DownloadFile(int ExpedienteDigitalId, int ArchivoId)
+        {
+            var expediente = await _context.ExpedienteDigital
+                .Include(i => i.Empleados)
+                .Where(w => !w.Archivado)
+                .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == ExpedienteDigitalId);
+            if (expediente == null)
+            {
+                return NotFound("El ID del expediente no existe.");
+            }
+            var documento = await _context.Archivos.FirstOrDefaultAsync(f => f.ArchivoId == ArchivoId);
+            if (documento == null)
+            {
+                return NotFound("No se encuentra foto de perfil registrado a ese expediente.");
+            }
+            byte[] file = System.IO.File.ReadAllBytes($"Files/Documentos/{expediente.Empleados.NombreCompleto}/{documento.Nombre}");
+            return File(file, "application/pdf");
+
+        }
         [HttpGet("Documentos/{ExpedienteDigitalId}")]
         public async Task<IActionResult> GetDocumentos(int ExpedienteDigitalId)
         {
@@ -55,9 +75,9 @@ namespace AtoGobMx.Controllers
         [HttpPost("Imagen/{expedienteDigitalId}/")]
         public async Task<IActionResult> UploadPhotoProfile(IFormFile file, int expedienteDigitalId)
         {
+                #region Comprobar si el expediente existe
             try
             {
-                #region Comprobar si el expediente existe
                 var expediente = await _context.ExpedienteDigital
                     .Where(w => !w.Archivado)
                     .Include(i => i.Empleados)
@@ -125,11 +145,12 @@ namespace AtoGobMx.Controllers
             {
                 return BadRequest("Ah ocurrido un error inesperado");
             }
+        #endregion
         }
-        #endregion 
         [HttpPost("Documentos/{expedienteDigitalId}/")]
         public async Task<IActionResult> UploadDocuments(List<IFormFile> Files, int expedienteDigitalId)
         {
+            #region Cargar Archivos
             try
             {
                 #region Comprobar si el expediente existe
@@ -189,6 +210,7 @@ namespace AtoGobMx.Controllers
             {
                 return BadRequest("Ah ocurrido un error inesperado");
             }
+        #endregion
         }
     }
 }

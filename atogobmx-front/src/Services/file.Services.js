@@ -9,7 +9,7 @@ export default function FileServices () {
   }
   const getDocuments = (ExpedienteDigitalId, callback) => {
     axios.get(`${BaseUrl}/Archivos/Documentos/${ExpedienteDigitalId}`).then((response) => {
-      callback(response)
+      callback(response.data)
     })
   }
   const createExpedientPhotoProfile = (expedienteDigitalId, file, callback) => {
