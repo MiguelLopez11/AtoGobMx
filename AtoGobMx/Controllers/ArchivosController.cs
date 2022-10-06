@@ -75,6 +75,7 @@ namespace AtoGobMx.Controllers
                 .Include(i => i.expedienteDigital)
                 .Where(w => w.ExpedienteDigitalId == ExpedienteDigitalId)
                 .Where(w => w.TipoArchivo == ".pdf" || w.TipoArchivo == ".docx")
+                .Where(w => !w.Archivado)
                 .ToListAsync();
             if (Documentos == null)
             {
@@ -208,7 +209,7 @@ namespace AtoGobMx.Controllers
                         _context.Archivos.Add(archivo);
                         await _context.SaveChangesAsync();
                     }
-                    return Ok("Foto de perfil registrada correctamente.");
+                    return Ok("Documento registrado correctamente.");
                     #endregion
                 }
                 else
@@ -221,6 +222,37 @@ namespace AtoGobMx.Controllers
                 return BadRequest("Ah ocurrido un error inesperado");
             }
         #endregion
+        }
+        [HttpDelete("Documentos/Eliminar/{ExpedienteDigitalId}/{ArchivoId}")]
+        public async Task<IActionResult> DeleteDocuments(int ExpedienteDigitalId, int ArchivoId)
+        {
+            var Expediente = await _context.ExpedienteDigital
+                .Include(i => i.Empleados)
+                .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == ExpedienteDigitalId);
+            
+            if (Expediente == null)
+            {
+                return NotFound($"No se encuentra expediente con el ID {ExpedienteDigitalId}");
+            }
+            var Archivo = await _context.Archivos
+                .FirstOrDefaultAsync(f => f.ArchivoId == ArchivoId);
+
+            if (Archivo == null)
+            {
+                return NotFound($"No se encuentra el documento con el ID {ArchivoId}");
+            }
+            var path = $@"Files/Documentos/{Expediente.Empleados.NombreCompleto}/{Archivo.Nombre}";
+            FileInfo file = new FileInfo(path);
+            if (file.Exists)
+            {
+                file.Delete();
+                //System.IO.File.Delete(path);
+            Archivo.Archivado = true;
+            _context.Archivos.Update(Archivo);
+            await _context.SaveChangesAsync();
+            return Ok("Documento archivado correctamente.");
+            }
+            return BadRequest("Error inesperado, no se encuentra el documento");
         }
     }
 }

@@ -10,7 +10,7 @@
       >
       </b-form-input>
       <b-button
-        variant="primary"
+        variant="success"
         style="
           height: 50px;
           width: auto;

@@ -42,7 +42,7 @@
       </template>
       <template #item-actions="items">
         <b-button
-          @click="RemoveEmployee()"
+          @click="RemoveDocument()"
           class="m-1"
           variant="outline-danger">
           <i class="bi bi-trash3"></i>
@@ -99,6 +99,7 @@ export default {
     const searchField = ref('nombre')
     const expedienteDigitalId = ref(props.ExpedientDigitalId)
     const fields = ref([
+      { value: 'archivoId', text: 'ID' },
       { value: 'nombre', text: 'Nombre Documento', sortable: true },
       { value: 'tipoArchivo', text: 'Tipo Documento', sortable: true },
       { value: 'actions', text: 'Acciones' }
@@ -116,6 +117,24 @@ export default {
     const onFiltered = (filteredItems) => {
       currentPage.value = 1
     }
+    const RemoveDocument = () => {
+      this.$bvModal.msgBoxConfirm('¿Estas seguro de eliminar el documento?', {
+        title: 'Please Confirm',
+        size: 'sm',
+        buttonSize: 'sm',
+        okVariant: 'danger',
+        okTitle: 'YES',
+        cancelTitle: 'NO',
+        footerClass: 'p-2',
+        hideHeaderClose: false,
+        centered: true
+      })
+        .then(value => {
+          if (value) {
+            console.log('eliminado')
+          }
+        })
+    }
     return {
       fields,
       perPage,
@@ -128,7 +147,8 @@ export default {
       documents,
       expedienteDigitalId,
 
-      onFiltered
+      onFiltered,
+      RemoveDocument
     }
   }
 }

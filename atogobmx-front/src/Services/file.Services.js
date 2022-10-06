@@ -16,13 +16,22 @@ export default function FileServices () {
     axios.post(`${BaseUrl}/Archivos/Imagen/${expedienteDigitalId}`, file).then((response) => {
       callback(response)
     }).catch((exception) => {
-      console.log(exception)
       callback(exception.response.data)
     })
+  }
+  const deleteDocument = (ExpedienteDigitalId, ArchivoId, callback) => {
+    axios.delete(`${BaseUrl}/Archivos/Documentos/Eliminar/${ExpedienteDigitalId}/${ArchivoId}`)
+      .then((response) => {
+        callback(response.data)
+      })
+      .catch((exception) => {
+        callback(exception.response.data)
+      })
   }
   return {
     getExpedientPhotoProfile,
     getDocuments,
-    createExpedientPhotoProfile
+    createExpedientPhotoProfile,
+    deleteDocument
   }
 }

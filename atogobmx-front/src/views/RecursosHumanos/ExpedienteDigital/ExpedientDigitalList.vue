@@ -9,8 +9,8 @@
         placeholder="Buscar Expediente..."
       >
       </b-form-input>
-      <button
-        class="btn btn-primary"
+      <b-button
+        variant="success"
         style="
           height: 50px;
           width: auto;
@@ -23,7 +23,7 @@
       >
         <i class="bi bi-person-plus-fill"></i>
         Agregar Expediente Digital
-      </button>
+      </b-button>
     </b-row>
     <EasyDataTable
       rows-per-page-message="registros por pagina"

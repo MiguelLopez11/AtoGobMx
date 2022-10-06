@@ -13,6 +13,7 @@ namespace AtoGobMx.Models
         public string? Nombre { get; set; }
         [MaxLength(100)]
         public string? TipoArchivo { get; set; }
+        public bool Archivado { get; set; }
         public int ExpedienteDigitalId { get; set; }
 
         [ForeignKey("ExpedienteDigitalId")]
