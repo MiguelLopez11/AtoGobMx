@@ -89,7 +89,7 @@ const routes = [
   {
     path: '/TareaTipoAlumbrado/:TareaTipoAlumbradoId',
     name: 'TareaTipoAlumbrado-Edit',
-    component: () => import('@/views/ServiciosPublicos/streetLighting/tasktypelighting/EditTaskTypeLighting.vue')
+    component: () => import('@/views/ServiciosPublicos/streetLighting/typetasklighting/EditTaskTypeLighting.vue')
   },
   {
     path: '/Usuarios/list',
