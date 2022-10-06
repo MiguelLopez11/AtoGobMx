@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 import FileServices from '@/Services/file.Services'
 export default {
   props: {
@@ -89,6 +89,7 @@ export default {
   },
   setup (props) {
     const { getDocuments } = FileServices()
+    const swal = inject('$swal')
     const documents = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
@@ -118,22 +119,23 @@ export default {
       currentPage.value = 1
     }
     const RemoveDocument = () => {
-      this.$bvModal.msgBoxConfirm('¿Estas seguro de eliminar el documento?', {
-        title: 'Please Confirm',
-        size: 'sm',
-        buttonSize: 'sm',
-        okVariant: 'danger',
-        okTitle: 'YES',
-        cancelTitle: 'NO',
-        footerClass: 'p-2',
-        hideHeaderClose: false,
-        centered: true
+      swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          swal.fire(
+            'Deleted!',
+            'Your file has been deleted.',
+            'success'
+          )
+        }
       })
-        .then(value => {
-          if (value) {
-            console.log('eliminado')
-          }
-        })
     }
     return {
       fields,
