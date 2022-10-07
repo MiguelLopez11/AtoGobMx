@@ -42,7 +42,7 @@
       </template>
       <template #item-actions="items">
         <b-button
-          @click="RemoveDocument()"
+          @click="RemoveDocument(items.archivoId)"
           class="m-1"
           variant="outline-danger">
           <i class="bi bi-trash3"></i>
@@ -58,19 +58,26 @@
     </EasyDataTable>
   <b-modal
     id="modal-expedientDigital"
-    title="Imagen de Perfil"
+    title="Documentos"
     size="xl"
     centered
-    hide-backdrop
+    hide-footer
     button-size="lg"
     lazy
-    ok-title="Generar expediente"
-    cancel-title="Cancelar"
   >
-    <b-row>
-      <b-form-group class="mt-3" label="Empleado: ">
-      </b-form-group>
-    </b-row>
+  <div class="input-group mb-3">
+      <input
+        type="file"
+        class="form-control"
+        v-on:change="onChangeFile"
+        ref="refFile"
+        id="file"
+        multiple
+      />
+      <b-button variant="outline-primary" @click="submitPhoto"
+        >Cargar Archivo(s)</b-button
+      >
+    </div>
   </b-modal>
 </template>
 
@@ -88,7 +95,7 @@ export default {
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup (props) {
-    const { getDocuments } = FileServices()
+    const { getDocuments, deleteDocument } = FileServices()
     const swal = inject('$swal')
     const documents = ref([])
     const perPage = ref(5)
@@ -96,6 +103,7 @@ export default {
     const filter = ref(null)
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
+    // const files = ref([])
     const searchValue = ref('')
     const searchField = ref('nombre')
     const expedienteDigitalId = ref(props.ExpedientDigitalId)
@@ -105,6 +113,9 @@ export default {
       { value: 'tipoArchivo', text: 'Tipo Documento', sortable: true },
       { value: 'actions', text: 'Acciones' }
     ])
+    // const onChangeFile = e => {
+    //   files.value = refFile.value.files[0]
+    // }
     getDocuments(props.ExpedientDigitalId, data => {
       documents.value = data
       if (documents.value.length > 0) {
@@ -115,25 +126,46 @@ export default {
         }
       }
     })
+    const refreshTable = () => {
+      isloading.value = true
+      getDocuments(props.ExpedientDigitalId, data => {
+        documents.value = data
+        if (documents.value.length > 0) {
+          isloading.value = false
+        } else {
+          if (documents.value.length <= 0) {
+            isloading.value = false
+          }
+        }
+      })
+      return 'datos recargados'
+    }
     const onFiltered = (filteredItems) => {
       currentPage.value = 1
     }
-    const RemoveDocument = () => {
+    const RemoveDocument = (archivoId) => {
       swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
+        title: '¿Estas seguro?',
+        text: 'No podrás revertir esto!',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonText: 'Si, Eliminar Documento!',
+        cancelButtonText: 'Cancelar'
       }).then((result) => {
         if (result.isConfirmed) {
-          swal.fire(
-            'Deleted!',
-            'Your file has been deleted.',
-            'success'
-          )
+          swal.fire({
+            title: 'Documento Eliminado!',
+            text: 'Tu documento ha sido eliminado.',
+            icon: 'success'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              deleteDocument(props.ExpedientDigitalId, archivoId, data => {
+                refreshTable()
+              })
+            }
+          })
         }
       })
     }
@@ -150,7 +182,8 @@ export default {
       expedienteDigitalId,
 
       onFiltered,
-      RemoveDocument
+      RemoveDocument,
+      refreshTable
     }
   }
 }
