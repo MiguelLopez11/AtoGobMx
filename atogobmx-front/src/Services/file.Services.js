@@ -19,6 +19,13 @@ export default function FileServices () {
       callback(exception.response.data)
     })
   }
+  const createDocuments = (expedienteDigitalId, files, callback) => {
+    axios.post(`${BaseUrl}/Archivos/Documentos/${expedienteDigitalId}`, files).then((response) => {
+      callback(response)
+    }).catch((exception) => {
+      callback(exception.response.data)
+    })
+  }
   const deleteDocument = (ExpedienteDigitalId, ArchivoId, callback) => {
     axios.delete(`${BaseUrl}/Archivos/Documentos/Eliminar/${ExpedienteDigitalId}/${ArchivoId}`)
       .then((response) => {
@@ -32,6 +39,7 @@ export default function FileServices () {
     getExpedientPhotoProfile,
     getDocuments,
     createExpedientPhotoProfile,
+    createDocuments,
     deleteDocument
   }
 }

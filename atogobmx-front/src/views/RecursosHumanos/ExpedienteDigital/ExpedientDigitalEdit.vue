@@ -206,7 +206,7 @@ export default {
     const postalCodeState = ref(false)
     const emailState = ref(false)
     const emailMessage = ref('')
-    const file = ref('')
+    const file = ref()
     // Methods
     getExpedient(expedienteDigitalId.value, data => {
       expedient.value = data
@@ -214,7 +214,7 @@ export default {
       emailMessage.value = 'Este campo es requerido '
       validateState()
     })
-    const onChangeFile = e => {
+    const onChangeFile = () => {
       file.value = refFile.value.files[0]
     }
     const submitExpedient = () => {
@@ -306,21 +306,21 @@ export default {
           dismissible: true,
           type: 'error'
         })
-      } else {
-        createExpedientPhotoProfile(
-          router.params.ExpedienteDigitalId,
-          formData,
-          data => {
-            $toast.open({
-              message: `${data.data}`,
-              position: 'top-left',
-              duration: 2000,
-              dismissible: true,
-              type: 'success',
-              onDismiss: () => redirect.push('/ExpedientesDigitales/list')
-            })
-          })
+        return ''
       }
+      createExpedientPhotoProfile(
+        router.params.ExpedienteDigitalId,
+        formData,
+        data => {
+          $toast.open({
+            message: `${data.data}`,
+            position: 'top-left',
+            duration: 2000,
+            dismissible: true,
+            type: 'success',
+            onDismiss: () => redirect.push('/ExpedientesDigitales/list')
+          })
+        })
     }
     return {
       expedienteDigitalId,
