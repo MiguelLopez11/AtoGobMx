@@ -15,10 +15,9 @@
           width: auto;
           font-size: 15px;
           margin-right: 15px;
-          margin-left: 20px;
-        "
-      v-b-modal.modal-expedientDigital
+          margin-left: 20px;"
       type="submit"
+      v-b-modal.modal-expedientDigital
     >
       <i class="bi bi-person-plus-fill"></i>
       Agregar Documento
@@ -60,6 +59,7 @@
     </template>
   </EasyDataTable>
   <b-modal
+    ref="DocumentModal"
     id="modal-expedientDigital"
     title="Documentos"
     size="xl"
@@ -77,9 +77,7 @@
         id="file"
         multiple
       />
-      <b-button
-        variant="outline-primary"
-        @click="submitFiles()"
+      <b-button variant="outline-primary" @click="submitFiles()"
         >Cargar Archivo(s)</b-button
       >
     </div>
@@ -102,6 +100,7 @@ export default {
   setup (props) {
     const { getDocuments, deleteDocument, createDocuments } = FileServices()
     const refFile = ref()
+    const DocumentModal = ref()
     const swal = inject('$swal')
     const documents = ref([])
     const perPage = ref(5)
@@ -154,29 +153,27 @@ export default {
     }
     const submitFiles = () => {
       if (refFile.value.files.length === 0) {
-        swal
-          .fire({
-            title: 'Documento no seleccionado!',
-            text: 'No se ha seleccionado ningún documento.',
-            icon: 'error'
-          })
+        swal.fire({
+          title: 'Documento no seleccionado!',
+          text: 'No se ha seleccionado ningún documento.',
+          icon: 'error'
+        })
         return ''
       }
-      createDocuments(
-        props.ExpedientDigitalId,
-        formData,
-        data => {
-          swal
-            .fire({
-              title: 'Documento Guardado!',
-              text: 'Dpcumento(s) se ha(n) guardado correctamente.',
-              icon: 'success'
-            }).then(result => {
-              if (result.isConfirmed) {
-                refreshTable()
-              }
-            })
-        })
+      createDocuments(props.ExpedientDigitalId, formData, data => {
+        swal
+          .fire({
+            title: 'Documento(s) Guardado(s)!',
+            text: 'Documento(s) se ha(n) guardado correctamente.',
+            icon: 'success'
+          })
+          .then(result => {
+            if (result.isConfirmed) {
+              refreshTable()
+            }
+          })
+      })
+      refFile.value.files = []
     }
     const RemoveDocument = archivoId => {
       swal
@@ -210,6 +207,7 @@ export default {
     }
     return {
       fields,
+      DocumentModal,
       perPage,
       currentPage,
       filter,
@@ -231,5 +229,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
