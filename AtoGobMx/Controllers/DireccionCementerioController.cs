@@ -30,5 +30,19 @@ namespace AtoGobMx.Controllers
                 .ToArrayAsync();
             return Ok(direccion);
         }
+
+        [HttpGet("{DireccionId}")]
+        public async Task<ActionResult> GetDireccionCementeriosById(int DireccionId)
+        {
+            var direccion = await _context.DireccionCementerio
+                .FirstOrDefaultAsync(f => f.DireccionId == DireccionId);
+            if (direccion == null)
+            {
+                return NotFound();
+            }
+            return Ok(direccion);
+        }
+
+        [HttpPost()]
     }
 }
