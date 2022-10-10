@@ -3,6 +3,7 @@ using AtoGobMx.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 
 namespace AtoGobMx.Controllers
@@ -38,12 +39,63 @@ namespace AtoGobMx.Controllers
             return File(image, "image/jpeg");
 
         }
-        [HttpPost("Imagen/{expedienteDigitalId}/")]
-        public async Task<IActionResult> UploadPhotoProfile(IFormFile file, int expedienteDigitalId)
+        [HttpGet("Documentos/Descargar/{ExpedienteDigitalId}/{ArchivoId}")]
+        public async Task<IActionResult> DownloadFile(int ExpedienteDigitalId, int ArchivoId)
         {
             try
             {
+
+            var expediente = await _context.ExpedienteDigital
+                .Include(i => i.Empleados)
+                .Where(w => !w.Archivado)
+                .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == ExpedienteDigitalId);
+            if (expediente == null)
+            {
+                return NotFound("El ID del expediente no existe.");
+            }
+            var documento = await _context.Archivos
+                .Where(w => w.TipoArchivo == ".pdf" || w.TipoArchivo == ".docx")
+                .FirstOrDefaultAsync(f => f.ArchivoId == ArchivoId);
+            if (documento == null)
+            {
+                return NotFound("No se encuentra Archivo");
+            }
+            var filePath = $"Files/Documentos/{expediente.Empleados.NombreCompleto}/{documento.Nombre}";
+            var provider = new FileExtensionContentTypeProvider();
+            if (!provider.TryGetContentType(filePath, out var contentType))
+            {
+                contentType = "application/octet-stream";
+            }
+
+            var bytes = await System.IO.File.ReadAllBytesAsync(filePath);
+            return File(bytes, contentType, Path.GetFileName(filePath));
+            }catch(Exception e)
+            {
+                return NoContent();
+            }
+
+        }
+        [HttpGet("Documentos/{ExpedienteDigitalId}")]
+        public async Task<IActionResult> GetDocumentos(int ExpedienteDigitalId)
+        {
+            var Documentos = await _context.Archivos
+                .Include(i => i.expedienteDigital)
+                .Where(w => w.ExpedienteDigitalId == ExpedienteDigitalId)
+                .Where(w => w.TipoArchivo == ".pdf" || w.TipoArchivo == ".docx")
+                .Where(w => !w.Archivado)
+                .ToListAsync();
+            if (Documentos == null)
+            {
+                return BadRequest("No se encuentran documentos registrados, ");
+            }
+            return Ok(Documentos);
+        }
+        [HttpPost("Imagen/{expedienteDigitalId}/")]
+        public async Task<IActionResult> UploadPhotoProfile(IFormFile file, int expedienteDigitalId)
+        {
                 #region Comprobar si el expediente existe
+            try
+            {
                 var expediente = await _context.ExpedienteDigital
                     .Where(w => !w.Archivado)
                     .Include(i => i.Empleados)
@@ -58,15 +110,9 @@ namespace AtoGobMx.Controllers
                 var fileName = file.FileName;
                 var fileExtension = Path.GetExtension(fileName);
 
-                if (fileExtension != ".png")
+                if (fileExtension != ".png" && fileExtension != ".jpg" && fileExtension != ".jpeg")
                 {
-                    if (fileExtension != ".jpg")
-                    {
-                        if (fileExtension != ".jpeg")
-                        {
-                            return BadRequest("El tipo de archivo no es válido para foto de perfil");
-                        }
-                    }
+                    return BadRequest("El tipo de archivo no es válido para foto de perfil");
                 }
                 #endregion
                 #region Comprobar si ya existe una imagen registrada al expediente, crearlo
@@ -93,7 +139,7 @@ namespace AtoGobMx.Controllers
                     };
                     _context.Archivos.Add(archivo);
                     await _context.SaveChangesAsync();
-                    return Ok(new { length = file.Length, name = file.FileName });
+                    return Ok("Foto de perfil registrada correctamente.");
                 }
                 else
                 {
@@ -110,14 +156,110 @@ namespace AtoGobMx.Controllers
                     await _context.SaveChangesAsync();
 
 
-                    return Ok("Imagen registrada correctamente.");
+                    return Ok("Foto de perfil registrada correctamente.");
                 }
             }
             catch
             {
-                return BadRequest();
+                return BadRequest("Ah ocurrido un error inesperado");
             }
+        #endregion
         }
-        #endregion 
+        [HttpPost("Documentos/{expedienteDigitalId}/")]
+        public async Task<IActionResult> UploadDocuments(List<IFormFile> Files, int expedienteDigitalId)
+        {
+            #region Cargar Archivos
+            try
+            {
+                #region Comprobar si el expediente existe
+                var expediente = await _context.ExpedienteDigital
+                    .Where(w => !w.Archivado)
+                    .Include(i => i.Empleados)
+                    .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expedienteDigitalId);
+
+                if (expediente == null)
+                {
+                    return NotFound("No se encuentra el expediente digital");
+                }
+                #endregion
+                if (Files.Count > 0)
+                {
+                    foreach (var file in Files)
+                    {
+                        #region Comprobar que el archivo sea una imagen
+                        var fileName = file.FileName;
+                        var fileExtension = Path.GetExtension(fileName);
+                        if (fileExtension != ".pdf" && fileExtension != ".docx")
+                        {
+                            return BadRequest("El tipo de archivo no es válido para foto de perfil");
+                        }
+
+                        #endregion
+
+                        #region Comprobar si ya existe una imagen registrada al expediente, crearlo
+                        var pathFolder = $@"Files/Documentos/{expediente.Empleados.NombreCompleto}";
+                        if (!Directory.Exists(pathFolder))
+                        {
+                            Directory.CreateDirectory(pathFolder);
+                        }
+                        var path = Path.Combine(Directory.GetCurrentDirectory(), pathFolder, file.FileName);
+                        var stream = new FileStream(path, FileMode.Create);
+                        await file.CopyToAsync(stream);
+                        stream.Close();
+                        var archivo = new Archivos()
+                        {
+                            ArchivoId = 0,
+                            Nombre = file.FileName,
+                            TipoArchivo = fileExtension,
+                            ExpedienteDigitalId = expedienteDigitalId
+                        };
+                        _context.Archivos.Add(archivo);
+                        await _context.SaveChangesAsync();
+                    }
+                    return Ok("Documento registrado correctamente.");
+                    #endregion
+                }
+                else
+                {
+                    return BadRequest("No se ingresó ningun documento");
+                }
+            }
+            catch
+            {
+                return BadRequest("Ah ocurrido un error inesperado");
+            }
+        #endregion
+        }
+        [HttpDelete("Documentos/Eliminar/{ExpedienteDigitalId}/{ArchivoId}")]
+        public async Task<IActionResult> DeleteDocuments(int ExpedienteDigitalId, int ArchivoId)
+        {
+            var Expediente = await _context.ExpedienteDigital
+                .Include(i => i.Empleados)
+                .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == ExpedienteDigitalId);
+            
+            if (Expediente == null)
+            {
+                return NotFound($"No se encuentra expediente con el ID {ExpedienteDigitalId}");
+            }
+            var Archivo = await _context.Archivos
+                .FirstOrDefaultAsync(f => f.ArchivoId == ArchivoId);
+
+            if (Archivo == null)
+            {
+                return NotFound($"No se encuentra el documento con el ID {ArchivoId}");
+            }
+            var path = $@"Files/Documentos/{Expediente.Empleados.NombreCompleto}/{Archivo.Nombre}";
+            FileInfo file = new FileInfo(path);
+            if (file.Exists)
+            {
+                file.Delete();
+                //System.IO.File.Delete(path);
+            Archivo.Archivado = true;
+            _context.Archivos.Update(Archivo);
+            await _context.SaveChangesAsync();
+            return Ok("Documento archivado correctamente.");
+            }
+            return BadRequest("Error inesperado, no se encuentra el documento");
+        }
     }
 }

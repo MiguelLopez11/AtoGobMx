@@ -10,6 +10,7 @@
   "dependencies": {
     "@popperjs/core": "^2.11.6",
     "@upload-io/vue-uploader": "^1.5.7",
+    "@vee-validate/rules": "^4.6.10",
     "@vuepic/vue-datepicker": "^3.4.1",
     "axios": "^0.27.2",
     "bootstrap": "^5.2.1",
@@ -17,7 +18,7 @@
     "bootstrap-vue-3": "^0.2.14",
     "core-js": "^3.8.3",
     "uploader": "^1.48.0",
-    "vee-validate": "^4.6.9",
+    "vee-validate": "^4.6.10",
     "vue": "^3.2.37",
     "vue-file-agent": "^1.7.3",
     "vue-image-upload-resize": "^2.3.0",
@@ -25,6 +26,7 @@
     "vue-router": "^4.0.3",
     "vue-sidebar-menu": "^5.2.4",
     "vue-simple-uploader": "^0.7.6",
+    "vue-sweetalert2": "^5.0.5",
     "vue-toast-notification": "^3.0.4",
     "vue3-easy-data-table": "^1.4.12",
     "vue3-table-lite": "^1.2.4"

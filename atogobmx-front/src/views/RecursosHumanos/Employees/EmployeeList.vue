@@ -10,7 +10,7 @@
       >
       </b-form-input>
       <b-button
-        variant="primary"
+        variant="success"
         style="
           height: 50px;
           width: auto;
@@ -65,6 +65,7 @@
       title="Agregar empleados"
       size="xl"
       hide-footer
+      hide-backdrop
       centered
       button-size="lg"
       lazy
@@ -76,44 +77,22 @@
               <Field
                 name="nameField"
                 :rules="validateName"
+                as="text"
               >
                 <b-form-input
                   v-model="EmployeesFields.nombreCompleto"
                   :state="nameState"
                 />
               </Field>
-              <ErrorMessage name="nameField"
-                ><span class="text-danger">Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i
-              ></ErrorMessage>
+              <ErrorMessage class="text-danger" name="nameField"></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!-- <b-col>
-            <b-form-group class="mt-3" label="Fecha de nacimiento">
-              <Field
-                name="DateField"
-                :rules="validateDate"
-              >
-                <Datepicker
-                  v-model="EmployeesFields.fechaNacimiento"
-                  locale="es"
-                  autoApply
-                  :enableTimePicker="false"
-                  :state="dateState"
-                >
-                </Datepicker>
-              </Field>
-              <ErrorMessage name="DateField"
-                ><span class="text-danger">Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col> -->
           <b-col>
             <b-form-group class="mt-3" label="Departamento">
               <Field
                 name="DepartamentField"
                 :rules="validateDepartament"
+                as="number"
               >
                 <b-form-select
                   v-model="EmployeesFields.departamentoId"
@@ -126,10 +105,7 @@
                 >
                 </b-form-select>
               </Field>
-              <ErrorMessage name="DepartamentField"
-                ><span class="text-danger">Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i
-              ></ErrorMessage>
+              <ErrorMessage class="text-danger" name="nameField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -137,6 +113,7 @@
               <Field
                 name="AreaField"
                 :rules="validateArea"
+                as="number"
               >
                 <b-form-select
                   v-model="EmployeesFields.areaId"
@@ -149,10 +126,7 @@
                 >
                 </b-form-select>
               </Field>
-              <ErrorMessage name="AreaField"
-                ><span class="text-danger">Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i
-              ></ErrorMessage>
+              <ErrorMessage class="text-danger" name="nameField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -172,10 +146,7 @@
                 >
                 </b-form-select>
               </Field>
-              <ErrorMessage name="workStationField"
-                ><span class="text-danger">Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i
-              ></ErrorMessage>
+              <ErrorMessage class="text-danger" name="nameField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -183,6 +154,7 @@
               <Field
                 name="DateWorkField"
                 :rules="validateWorkDate"
+                as="number"
               >
                 <Datepicker
                   v-model="EmployeesFields.fechaAlta"
@@ -193,10 +165,7 @@
                 >
                 </Datepicker>
               </Field>
-              <ErrorMessage name="DateWorkField"
-                ><span class="text-danger">Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i
-              ></ErrorMessage>
+              <ErrorMessage class="text-danger" name="nameField"></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
@@ -321,6 +290,10 @@ export default {
       if (!EmployeesFields.value.nombreCompleto) {
         nameState.value = false
         return 'Este campo es requerido'
+      }
+      if (!/^([a-zA-ZñÑáéíóúÁÉÍÓÚ])+$/i.test(EmployeesFields.value.nombreCompleto)) {
+        nameState.value = false
+        return 'El nombre solo puede contener letras'
       }
       nameState.value = true
       return true
@@ -475,43 +448,4 @@ export default {
 </script>
 
 <style>
-.customize-table {
-  /* --easy-table-border: 1px solid #445269;
-  --easy-table-row-border: 1px solid #445269; */
-
-  --easy-table-header-font-size: 16px;
-  --easy-table-header-height: 50px;
-  --easy-table-header-font-color: #fcf6f5ff;
-  --easy-table-header-background-color: #2bae66ff;
-
-  --easy-table-header-item-padding: 10px 15px;
-  --easy-table-header-item-align: center;
-  --easy-table-message-font-size: 17px;
-  /* --easy-table-body-even-row-font-color: #fff;
-  --easy-table-body-even-row-background-color: #4c5d7a; */
-
-  /* --easy-table-body-row-font-color: #c0c7d2;
-  --easy-table-body-row-background-color: #2d3a4f; */
-  --easy-table-body-row-height: 50px;
-  --easy-table-body-row-font-size: 17px;
-  --easy-table-border-radius: 15px;
-
-  --easy-table-body-row-hover-font-color: rgb(0, 0, 0);
-  --easy-table-body-row-hover-background-color: rgb(212, 212, 212);
-
-  --easy-table-body-item-padding: 10px 15px;
-
-  --easy-table-footer-background-color: #2bae66ff;
-  --easy-table-footer-font-color: #fcf6f5ff;
-  --easy-table-footer-font-size: 17px;
-  --easy-table-footer-padding: 0px 10px;
-  --easy-table-footer-height: 50px;
-
-  /* --easy-table-scrollbar-track-color: #2d3a4f;
-  --easy-table-scrollbar-color: #2d3a4f;
-  --easy-table-scrollbar-thumb-color: #4c5d7a;;
-  --easy-table-scrollbar-corner-color: #2d3a4f;
-
-  --easy-table-loading-mask-background-color: #2d3a4f; */
-}
 </style>

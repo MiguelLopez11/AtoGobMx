@@ -7,6 +7,11 @@ export default function FileServices () {
       callback(response)
     })
   }
+  const getDocuments = (ExpedienteDigitalId, callback) => {
+    axios.get(`${BaseUrl}/Archivos/Documentos/${ExpedienteDigitalId}`).then((response) => {
+      callback(response.data)
+    })
+  }
   const createExpedientPhotoProfile = (expedienteDigitalId, file, callback) => {
     axios.post(`${BaseUrl}/Archivos/Imagen/${expedienteDigitalId}`, file).then((response) => {
       callback(response)
@@ -14,8 +19,27 @@ export default function FileServices () {
       callback(exception.response.data)
     })
   }
+  const createDocuments = (expedienteDigitalId, files, callback) => {
+    axios.post(`${BaseUrl}/Archivos/Documentos/${expedienteDigitalId}`, files).then((response) => {
+      callback(response)
+    }).catch((exception) => {
+      callback(exception.response.data)
+    })
+  }
+  const deleteDocument = (ExpedienteDigitalId, ArchivoId, callback) => {
+    axios.delete(`${BaseUrl}/Archivos/Documentos/Eliminar/${ExpedienteDigitalId}/${ArchivoId}`)
+      .then((response) => {
+        callback(response.data)
+      })
+      .catch((exception) => {
+        callback(exception.response.data)
+      })
+  }
   return {
     getExpedientPhotoProfile,
-    createExpedientPhotoProfile
+    getDocuments,
+    createExpedientPhotoProfile,
+    createDocuments,
+    deleteDocument
   }
 }

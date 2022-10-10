@@ -4,7 +4,7 @@
       <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
           <a class="navbar-brand" href="/">
-            <img src="@/Images/Logo2.jpg" width="50" height="50" />
+            <b-avatar :src="background" style="cursor: pointer" />
             AtoGobMx
           </a>
           <button
@@ -167,17 +167,6 @@
                       </router-link>
                     </a>
                   </li>
-                  <!-- <li>
-                    <a class="dropdown-item">
-                      <router-link
-                        class="nav-link active text-dark"
-                        aria-current="page"
-                        to="/Areas/list"
-                      >
-                        Areas de trabajo
-                      </router-link>
-                    </a>
-                  </li>-->
                 </ul>
               </li>
               <li class="nav-item dropdown">
@@ -219,7 +208,7 @@
 </template>
 <script>
 import { ref } from 'vue'
-import LogoAtogobMx from '@/Images/LogoAtogobMx.jpg'
+import LogoAtogobMx from '@/Images/Icon.png'
 
 export default {
   setup () {
@@ -232,6 +221,7 @@ export default {
 </script>
 
 <style>
+@import '@/css/table-easy-documents.css';
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

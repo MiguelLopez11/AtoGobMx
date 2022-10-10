@@ -18,12 +18,12 @@ export default function ExpedientDigitalServices () {
     })
   }
   const updateExpedient = (data, callback) => {
-    axios.put(`${BaseUrl}/Empleados/${data.digitalExpedientId}`, data).then((response) => {
+    axios.put(`${BaseUrl}/ExpedienteDigital/${data.expedienteDigitalId}`, data).then((response) => {
       callback(response.data)
     })
   }
   const deleteExpedient = (digitalExpedientId, callback) => {
-    axios.delete(`${BaseUrl}/Empleados/${digitalExpedientId}`).then((response) => {
+    axios.delete(`${BaseUrl}/ExpedienteDigital/${digitalExpedientId}`).then((response) => {
       callback(response.data)
     })
   }

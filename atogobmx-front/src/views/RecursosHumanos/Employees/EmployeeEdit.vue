@@ -222,14 +222,15 @@ export default {
       })
     }
     const onUpdateEmployee = () => {
-      updateEmployee(employee.value, (data) => {})
-      $toast.open({
-        message: 'Empleado modificado correctamente',
-        position: 'top',
-        duration: 2000,
-        dismissible: true,
-        type: 'success',
-        onDismiss: () => redirect.push('/Empleados/list')
+      updateEmployee(employee.value, (data) => {
+        $toast.open({
+          message: 'Empleado modificado correctamente',
+          position: 'top',
+          duration: 2000,
+          dismissible: true,
+          type: 'success',
+          onDismiss: () => redirect.push('/Empleados/list')
+        })
       })
     }
     const validateName = () => {
