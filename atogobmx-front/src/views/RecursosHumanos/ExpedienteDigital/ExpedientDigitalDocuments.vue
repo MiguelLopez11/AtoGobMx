@@ -23,6 +23,7 @@
       Agregar Documento
     </b-button>
   </b-row>
+  <b-alert variant="warning" show>Si el documento no se descarga, contacte a soporte para corregirlo.</b-alert>
   <EasyDataTable
     rows-per-page-message="registros por pagina"
     empty-message="No se encuentran registros"

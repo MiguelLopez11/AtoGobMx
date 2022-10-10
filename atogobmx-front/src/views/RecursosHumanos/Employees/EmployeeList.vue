@@ -65,6 +65,7 @@
       title="Agregar empleados"
       size="xl"
       hide-footer
+      hide-backdrop
       centered
       button-size="lg"
       lazy
@@ -76,16 +77,14 @@
               <Field
                 name="nameField"
                 :rules="validateName"
+                as="text"
               >
                 <b-form-input
                   v-model="EmployeesFields.nombreCompleto"
                   :state="nameState"
                 />
               </Field>
-              <ErrorMessage name="nameField"
-                ><span class="text-danger">Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i
-              ></ErrorMessage>
+              <ErrorMessage class="text-danger" name="nameField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -93,6 +92,7 @@
               <Field
                 name="DepartamentField"
                 :rules="validateDepartament"
+                as="number"
               >
                 <b-form-select
                   v-model="EmployeesFields.departamentoId"
@@ -105,10 +105,7 @@
                 >
                 </b-form-select>
               </Field>
-              <ErrorMessage name="DepartamentField"
-                ><span class="text-danger">Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i
-              ></ErrorMessage>
+              <ErrorMessage class="text-danger" name="nameField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -116,6 +113,7 @@
               <Field
                 name="AreaField"
                 :rules="validateArea"
+                as="number"
               >
                 <b-form-select
                   v-model="EmployeesFields.areaId"
@@ -128,10 +126,7 @@
                 >
                 </b-form-select>
               </Field>
-              <ErrorMessage name="AreaField"
-                ><span class="text-danger">Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i
-              ></ErrorMessage>
+              <ErrorMessage class="text-danger" name="nameField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -151,10 +146,7 @@
                 >
                 </b-form-select>
               </Field>
-              <ErrorMessage name="workStationField"
-                ><span class="text-danger">Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i
-              ></ErrorMessage>
+              <ErrorMessage class="text-danger" name="nameField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -162,6 +154,7 @@
               <Field
                 name="DateWorkField"
                 :rules="validateWorkDate"
+                as="number"
               >
                 <Datepicker
                   v-model="EmployeesFields.fechaAlta"
@@ -172,10 +165,7 @@
                 >
                 </Datepicker>
               </Field>
-              <ErrorMessage name="DateWorkField"
-                ><span class="text-danger">Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i
-              ></ErrorMessage>
+              <ErrorMessage class="text-danger" name="nameField"></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
@@ -300,6 +290,10 @@ export default {
       if (!EmployeesFields.value.nombreCompleto) {
         nameState.value = false
         return 'Este campo es requerido'
+      }
+      if (!/^([a-zA-ZñÑáéíóúÁÉÍÓÚ])+$/i.test(EmployeesFields.value.nombreCompleto)) {
+        nameState.value = false
+        return 'El nombre solo puede contener letras'
       }
       nameState.value = true
       return true

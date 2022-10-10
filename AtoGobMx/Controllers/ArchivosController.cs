@@ -42,6 +42,9 @@ namespace AtoGobMx.Controllers
         [HttpGet("Documentos/Descargar/{ExpedienteDigitalId}/{ArchivoId}")]
         public async Task<IActionResult> DownloadFile(int ExpedienteDigitalId, int ArchivoId)
         {
+            try
+            {
+
             var expediente = await _context.ExpedienteDigital
                 .Include(i => i.Empleados)
                 .Where(w => !w.Archivado)
@@ -66,6 +69,10 @@ namespace AtoGobMx.Controllers
 
             var bytes = await System.IO.File.ReadAllBytesAsync(filePath);
             return File(bytes, contentType, Path.GetFileName(filePath));
+            }catch(Exception e)
+            {
+                return NoContent();
+            }
 
         }
         [HttpGet("Documentos/{ExpedienteDigitalId}")]
