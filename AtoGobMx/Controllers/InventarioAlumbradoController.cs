@@ -34,25 +34,23 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult> GetInventarioAlumbradoById(int InventarioAlumbradoId)
         {
             var inventarioalum = await _context.InventarioAlumbrado
-                .Include(i => i.Alumbrado)
                 .FirstOrDefaultAsync(f => f.InventarioAlumbradoId == InventarioAlumbradoId);
             if (inventarioalum == null)
             {
                 return NotFound();
             }
             return Ok(inventarioalum);
+
         }
 
-        [HttpPost("{AlumbradoId}")]
-        public async Task<ActionResult<InventarioAlumbrado>> PostInventarioAlumbrado(InventarioAlumbrado inventarioAlumbrado, int AlumbradoId)
+        [HttpPost()]
+        public async Task<ActionResult<InventarioAlumbrado>> PostInventarioAlumbrado(InventarioAlumbrado inventarioAlumbrado)
         {
-            var alumbrado = await _context.Alumbrado.FirstOrDefaultAsync(f => f.AlumbradoId == AlumbradoId);
-            _context.InventarioAlumbrado.Add(inventarioAlumbrado);
 
-            var inventario = CreatedAtAction("GetInventarioAlumbradoById", new { InventarioAlumbradoId = inventarioAlumbrado.InventarioAlumbradoId }, inventarioAlumbrado);
-            alumbrado.inventarioAlumbradoId = inventarioAlumbrado.InventarioAlumbradoId;
+            object value = _context.InventarioAlumbrado.Add(inventarioAlumbrado);
             await _context.SaveChangesAsync();
-            return Ok(inventarioAlumbrado);
+            return Ok("Inventario creado correctamente");
+
         }
 
         [HttpPut("{InventarioAlumbradoId}")]
@@ -69,14 +67,14 @@ namespace AtoGobMx.Controllers
                 return BadRequest("El Registro del inventario alumbrado no existe");
             }
 
-            inventarioAlumbrado.InventarioAlumbradoId = inventarioalum.InventarioAlumbradoId;
-            inventarioAlumbrado.Tarea = inventarioalum.Tarea;
-            inventarioAlumbrado.FechaAlta = inventarioalum.FechaAlta;
-            inventarioAlumbrado.FechaBaja = inventarioalum.FechaBaja;
-            inventarioAlumbrado.Domicilio = inventarioalum.Domicilio;
+            inventarioalum.InventarioAlumbradoId = InventarioAlumbradoId;
+            inventarioalum.Tarea = inventarioAlumbrado.Tarea;
+            inventarioalum.FechaAlta = inventarioAlumbrado.FechaAlta;
+            inventarioalum.FechaBaja = inventarioAlumbrado.FechaBaja;
+            inventarioalum.Domicilio = inventarioAlumbrado.Domicilio;
 
 
-            _context.InventarioAlumbrado.Update(inventarioAlumbrado);
+            _context.InventarioAlumbrado.Update(inventarioalum);
             await _context.SaveChangesAsync();
             return Ok("Tipo de inventario alumbrado actualizado correctamente");
         }

@@ -111,8 +111,10 @@ export default {
     ErrorMessage
   },
   setup () {
-    const { getInventoryLightingById, updatInventoryLighting } =
-      InventorylightingServices()
+    const {
+      getInventoryLightingById,
+      updatInventoryLighting
+    } = InventorylightingServices()
     // const { getStatusById } = StatusServices()
     const $toast = useToast()
     const inventoryLighting = ref([])
@@ -134,7 +136,7 @@ export default {
     //   statusPublicLighting.value = data
     // })
 
-    getInventoryLightingById(router.params.ExpedienteAlumbradoId, (data) => {
+    getInventoryLightingById(router.params.InventarioAlumbradoId, data => {
       // streetLighting.value = data
       // validateState()
       inventoryLighting.value = data
@@ -143,7 +145,7 @@ export default {
     })
 
     const onUpdateInventoryLighting = () => {
-      updatInventoryLighting(inventoryLighting.value, (data) => {})
+      updatInventoryLighting(inventoryLighting.value, data => {})
       $toast.open({
         message: 'El inventario alumbrado se a modificado correcta mente',
         position: 'top',
@@ -154,7 +156,7 @@ export default {
       })
     }
 
-    const validateTypeTask = () => {
+    const validateTask = () => {
       if (!inventoryLighting.value.tarea) {
         validateState()
         return 'Este campo es requerido'
@@ -213,7 +215,7 @@ export default {
       DomicileState,
       LowDateState,
       onUpdateInventoryLighting,
-      validateTypeTask,
+      validateTask,
       validateHighDate,
       validateLowDate,
       validateDomicile
@@ -222,5 +224,4 @@ export default {
 }
 </script>
 
-      <style>
-</style>
+<style></style>

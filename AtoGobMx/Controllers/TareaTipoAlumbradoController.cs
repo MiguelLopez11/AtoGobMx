@@ -35,7 +35,6 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult> GetTareaTipoAlumbradoById(int TareaTipoId)
         {
             var tareaTipo = await _context.TareaTipoAlumbrado
-                .Include(i => i.Alumbrado)
                 .FirstOrDefaultAsync(f => f.TareaTipoId == TareaTipoId);
             if (tareaTipo == null)
             {
@@ -66,12 +65,12 @@ namespace AtoGobMx.Controllers
                 return BadRequest("El Registro del tipo de tarea alumbrado no existe");
             }
 
-            tareaTipoAlumbrado.TareaTipoId = tareatipo.TareaTipoId;
-            tareaTipoAlumbrado.NombreTarea = tareatipo.NombreTarea;
-            tareaTipoAlumbrado.Descripcion = tareatipo.Descripcion;
-            tareaTipoAlumbrado.Archivado = tareatipo.Archivado;
+            tareatipo.TareaTipoId = TareaTipoId;
+            tareatipo.NombreTarea = tareaTipoAlumbrado.NombreTarea;
+            tareatipo.Descripcion = tareaTipoAlumbrado.Descripcion;
+            tareatipo.Archivado = tareaTipoAlumbrado.Archivado;
 
-            _context.TareaTipoAlumbrado.Update(tareaTipoAlumbrado);
+            _context.TareaTipoAlumbrado.Update(tareatipo);
             await _context.SaveChangesAsync();
             return Ok("Tipo de tarea alumbrado actualizado correctamente");
         }

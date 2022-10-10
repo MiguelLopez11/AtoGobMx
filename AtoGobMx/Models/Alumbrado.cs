@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace AtoGobMx.Models
 {
@@ -16,22 +17,25 @@ namespace AtoGobMx.Models
         public string Domicilio { get; set; }
         public string DescripcionDomicilio { get; set; }
         public bool Archivado { get; set; }
-        public int? expedienteAlumbradoId { get; set; }
-        public int? estatusId { get; set; }
-        public int? tareaTipoId { get; set; }
-        public int? inventarioAlumbradoId { get; set; }
+        //public int? ExpedienteAlumbradoId { get; set; }
+        public int? EstatusId { get; set; }
+        public int? TareaTipoId { get; set; }
+        public int? InventarioAlumbradoId { get; set; }
 
 
-        [ForeignKey("expedienteAlumbradoId")]
-        public ExpedienteAlumbrado? ExpedienteAlumbrado { get; set; }
+        //[ForeignKey("ExpedienteAlumbradoId")]
+        //public ExpedienteAlumbrado? ExpedienteAlumbrado { get; set; }
 
-        [ForeignKey("estatusId")]
+        [ForeignKey("EstatusId")]
         public EstatusAlumbrado? Estatus { get; set; }
 
-        [ForeignKey("tareaTipoId")]
+        [ForeignKey("TareaTipoId")]
         public TareaTipoAlumbrado? TareaTipoAlumbrado { get; set; }
 
-        [ForeignKey("inventarioAlumbradoId")]
+        [ForeignKey("InventarioAlumbradoId")]
         public InventarioAlumbrado? InventarioAlumbrado { get; set; }
+
+        [JsonIgnore]
+        public virtual IEnumerable<ExpedienteAlumbrado>? ExpedienteAlumbrado { get; set; }
     }
 }

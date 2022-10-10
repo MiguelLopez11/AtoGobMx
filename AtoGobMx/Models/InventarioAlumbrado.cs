@@ -16,7 +16,7 @@ namespace AtoGobMx.Models
         public bool Archivado { get; set; }
 
         [JsonIgnore]
-        public virtual IEnumerable<Alumbrado> Alumbrado { get; set; }
+        public virtual IEnumerable<Alumbrado>? Alumbrado { get; set; }
 
     }
 }

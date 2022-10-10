@@ -16,8 +16,12 @@ namespace AtoGobMx.Models
         public string DescripcionDomicilio { get; set; }
         public string DescripcionSolucion { get; set; }
         public bool Archivado { get; set; }
+        public int? AlumbradoId { get; set; }
 
-        [JsonIgnore]
-        public virtual IEnumerable<Alumbrado>? Alumbrado { get; set; }
+        [ForeignKey("AlumbradoId")]
+        public Alumbrado? Alumbrado { get; set; }
+
+        //[JsonIgnore]
+        //public virtual IEnumerable<Alumbrado>? Alumbrado { get; set; }
     }
 }

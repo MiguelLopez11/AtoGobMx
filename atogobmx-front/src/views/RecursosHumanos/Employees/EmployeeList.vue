@@ -386,6 +386,7 @@ export default {
       })
       return 'datos recargados'
     }
+
     const addEmployee = () => {
       createEmployee(EmployeesFields.value, (data) => {
         expedientFieldBlank.value.empleadoId = data.empleadoId
@@ -400,6 +401,7 @@ export default {
       })
       resetEmployeesFields()
     }
+
     const RemoveEmployee = (employeeId) => {
       isloading.value = true
       deleteEmployee(employeeId, (data) => {

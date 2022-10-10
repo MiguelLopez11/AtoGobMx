@@ -31,18 +31,18 @@ namespace AtoGobMx.Controllers
             return Ok(expefalla);
         }
 
-        //[HttpGet("ExpedienteAlumbradoId")]
-        //public async Task<ActionResult> GetExpedienteAlumbradoById(int ExpedienteAlumbradoId)
-        //{
-        //    var expedienteAlumbrado = await _context.ExpedienteAlumbrado
-        //        .Include(i => i.Alumbrado)
-        //        .FirstOrDefaultAsync(f => f.ExpedienteAlumbradoId == ExpedienteAlumbradoId);
-        //    if (expedienteAlumbrado == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return Ok(expedienteAlumbrado);
-        //}
+        [HttpGet("Alumbrado/AlumbradoId")]
+        public async Task<ActionResult> GetExpedienteAlumbradoByAlumbrado(int AlumbradoId)
+        {
+            var expedienteAlumbrado = await _context.ExpedienteAlumbrado
+                .Include(i => i.Alumbrado)
+                .FirstOrDefaultAsync(f => f.AlumbradoId == AlumbradoId);
+            if (expedienteAlumbrado == null)
+            {
+                return NotFound();
+            }
+            return Ok(expedienteAlumbrado);
+        }
 
         [HttpGet("{ExpedienteAlumbradoId}")]
         public async Task<ActionResult> GetExpedienteAlumbradoById(int ExpedienteAlumbradoId)
@@ -60,10 +60,9 @@ namespace AtoGobMx.Controllers
         [HttpPost()]
         public async Task<ActionResult<ExpedienteAlumbrado>> PostExpedienteAlumbrado(ExpedienteAlumbrado expedienteAlumbrado)
         {
-            object value = _context.ExpedienteAlumbrado.Add(expedienteAlumbrado);
+            _context.ExpedienteAlumbrado.Add(expedienteAlumbrado);
             await _context.SaveChangesAsync();
-            return Ok("Estatus creado correctamente");
-
+            return Ok("Expediente creado correctamente");
         }
 
         [HttpPut("{ExpedienteAlumbradoId}")]
@@ -87,6 +86,7 @@ namespace AtoGobMx.Controllers
             expedientalumbra.Domicilio = expedienteAlumbrado.Domicilio;
             expedientalumbra.DescripcionDomicilio = expedienteAlumbrado.DescripcionDomicilio;
             expedienteAlumbrado.DescripcionSolucion = expedientalumbra.DescripcionSolucion;
+            expedientalumbra.AlumbradoId = expedienteAlumbrado.AlumbradoId;
 
             _context.ExpedienteAlumbrado.Update(expedientalumbra);
             await _context.SaveChangesAsync();

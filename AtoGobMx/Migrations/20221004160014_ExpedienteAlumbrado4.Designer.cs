@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20221004160014_ExpedienteAlumbrado4")]
+    partial class ExpedienteAlumbrado4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -76,9 +78,6 @@ namespace AtoGobMx.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<bool>("Archivado")
-                        .HasColumnType("tinyint(1)");
-
                     b.Property<int>("ExpedienteDigitalId")
                         .HasColumnType("int");
 
@@ -121,33 +120,6 @@ namespace AtoGobMx.Migrations
                     b.HasIndex("DepartamentoId");
 
                     b.ToTable("Area");
-                });
-
-            modelBuilder.Entity("AtoGobMx.Models.Cementerios", b =>
-                {
-                    b.Property<int>("CementeriosId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Archivado")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<int>("EspaciosDisponibles")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MetrosCorrespondientes")
-                        .HasColumnType("int");
-
-                    b.Property<string>("NombrePropietario")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("NumeroEspasios")
-                        .HasColumnType("int");
-
-                    b.HasKey("CementeriosId");
-
-                    b.ToTable("Cementerios");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Departamentos", b =>

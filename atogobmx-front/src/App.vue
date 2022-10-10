@@ -131,6 +131,26 @@
                       </router-link>
                     </a>
                   </li>
+                  <li>
+                    <a class="dropdown-item">
+                      <router-link
+                        class="nav-link active text-dark"
+                        aria-current="page"
+                        to="/InventarioAlumbrado/list"
+                        >Inventario Alumbrado
+                      </router-link>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item">
+                      <router-link
+                        class="nav-link active text-dark"
+                        aria-current="page"
+                        to="/TareaTipoAlumbrado/list"
+                        >Tarea Tipo Alumbrado
+                      </router-link>
+                    </a>
+                  </li>
                 </ul>
               </li>
               <li class="nav-item dropdown">
