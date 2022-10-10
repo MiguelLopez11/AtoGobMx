@@ -109,11 +109,7 @@ export default {
     const fields = ref([
       { value: 'expedienteDigitalId', text: 'No.Expediente', sortable: true },
       { value: 'empleados.nombreCompleto', text: 'Empleado', sortable: true },
-      // { value: 'usuario.correoElectronico', text: 'Correo Electronico', Animation },
-      // { value: 'usuario.nombreUsuario', text: 'Usuario', Animation },
-      // { value: 'usuario.role.nombre', text: 'Role', Animation },
-      // { value: 'expedienteDigitalId', text: 'ExpedienteID', Animation },
-      { value: 'actions', text: 'Acciones', Animation }
+      { value: 'actions', text: 'Acciones' }
     ])
     getEmployees(data => {
       employees.value = data

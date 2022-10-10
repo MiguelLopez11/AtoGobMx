@@ -109,6 +109,9 @@ namespace AtoGobMx.Controllers
         [HttpDelete("{empleadoId}")]
         public async Task<IActionResult> DeleteEmpleados(int empleadoId)
         {
+            try
+            {
+
             var empleado = _context.Empleados
                 .FirstOrDefault(f => f.EmpleadoId == empleadoId);
             if (empleado == null)
@@ -118,8 +121,15 @@ namespace AtoGobMx.Controllers
             empleado.Archivado = true;
             empleado.FechaBaja = DateTime.Today;
             _context.Empleados.Update(empleado);
+            var expediente = await _context.ExpedienteDigital
+                .FirstOrDefaultAsync(f => f.EmpleadoId == empleadoId);
+            expediente.Archivado = true;
             await _context.SaveChangesAsync();
             return Ok("Empleado archivado");
+            }catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

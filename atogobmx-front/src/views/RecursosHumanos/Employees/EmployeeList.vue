@@ -18,7 +18,7 @@
           margin-right: 15px;
           margin-left: 20px;
         "
-        v-b-modal.modal-employee
+        @click="showModal = !showModal"
         type="submit"
       >
         <i class="bi bi-person-plus-fill"></i>
@@ -62,10 +62,10 @@
     </EasyDataTable>
     <b-modal
       id="modal-employee"
+      v-model="showModal"
       title="Agregar empleados"
       size="xl"
       hide-footer
-      hide-backdrop
       centered
       button-size="lg"
       lazy
@@ -105,7 +105,7 @@
                 >
                 </b-form-select>
               </Field>
-              <ErrorMessage class="text-danger" name="nameField"></ErrorMessage>
+              <ErrorMessage class="text-danger" name="DepartamentField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -126,7 +126,7 @@
                 >
                 </b-form-select>
               </Field>
-              <ErrorMessage class="text-danger" name="nameField"></ErrorMessage>
+              <ErrorMessage class="text-danger" name="AreaField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -146,7 +146,7 @@
                 >
                 </b-form-select>
               </Field>
-              <ErrorMessage class="text-danger" name="nameField"></ErrorMessage>
+              <ErrorMessage class="text-danger" name="workStationField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -165,7 +165,7 @@
                 >
                 </Datepicker>
               </Field>
-              <ErrorMessage class="text-danger" name="nameField"></ErrorMessage>
+              <ErrorMessage class="text-danger" name="DateWorkField"></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
@@ -173,7 +173,6 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            v-b-modal.modal-employee
             @click="resetEmployeesFields"
           >
             Cancelar
@@ -214,6 +213,7 @@ export default {
     const { getWorkStationByArea } = workStationServices()
     const { createExpedient } = ExpedientdigitalServices()
     const $toast = useToast()
+    const showModal = ref(false)
     const employees = ref([])
     const departaments = ref([])
     const areas = ref([])
@@ -255,7 +255,7 @@ export default {
             position: 'top-left',
             duration: 2500,
             dismissible: true,
-            type: 'error'
+            type: 'warning'
           })
         }
       })
@@ -269,7 +269,7 @@ export default {
             position: 'top-left',
             duration: 2500,
             dismissible: true,
-            type: 'error'
+            type: 'warning'
           })
         }
       })
@@ -280,9 +280,9 @@ export default {
         $toast.open({
           message: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar',
           position: 'top-left',
-          duration: 2500,
+          duration: 0,
           dismissible: true,
-          type: 'error'
+          type: 'warning'
         })
       }
     })
@@ -351,6 +351,7 @@ export default {
       { value: 'actions', text: 'Acciones' }
     ])
     const resetEmployeesFields = () => {
+      showModal.value = false
       EmployeesFields.value = JSON.parse(JSON.stringify(EmployeesFieldsBlank))
       nameState.value = false
       dateState.value = false
@@ -399,6 +400,7 @@ export default {
           duration: 1500
         })
       })
+      showModal.value = false
       resetEmployeesFields()
     }
 
@@ -430,6 +432,7 @@ export default {
       areaState,
       workStationState,
       departamentState,
+      showModal,
 
       onFiltered,
       addEmployee,

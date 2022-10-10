@@ -11,14 +11,11 @@
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre">
-              <Field name="NameField" :rules="validateArea">
+              <Field name="NameField" :rules="validateArea" as="text">
                 <b-form-input v-model="departament.nombre" :state="nameState">
                 </b-form-input>
               </Field>
-              <ErrorMessage name="NameField">
-                <span>Este campo es requerido</span>
-                <i class="bi bi-exclamation-circle" />
-              </ErrorMessage>
+              <ErrorMessage class="text-danger" name="NameField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -31,7 +28,7 @@
           <b-button
             class="col-1 m-2 text-white"
             variant="primary"
-            to="/Empleados/list"
+            to="/Departamentos/list"
             type="reset"
           >
             Cancelar</b-button
@@ -88,6 +85,10 @@ export default {
       if (!departament.value.nombre) {
         validateState()
         return 'Este campo es requerido'
+      }
+      if (!/^([a-zA-ZñÑáéíóúÁÉÍÓÚ])+$/i.test(departament.value.nombre)) {
+        nameState.value = false
+        return 'El nombre del area solo puede contener letras'
       }
       validateState()
       return true

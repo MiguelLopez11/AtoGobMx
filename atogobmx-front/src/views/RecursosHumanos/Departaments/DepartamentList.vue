@@ -18,7 +18,7 @@
           margin-right: 15px;
           margin-left: 20px;
         "
-        v-b-modal.modal-departamento
+        @click="showModal = !showModal"
         type="submit"
       >
         <i class="bi bi-person-plus-fill"></i>
@@ -63,6 +63,7 @@
     </EasyDataTable>
     <b-modal
       id="modal-departamento"
+      v-model="showModal"
       title="Agregar Departamento"
       size="xl"
       centered
@@ -73,13 +74,14 @@
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre">
-              <Field name="NameField" :rules="validateArea">
+              <Field
+                name="NameField"
+                :rules="validateArea"
+                as="text"
+              >
                 <b-form-input v-model="departamentFields.nombre" :state="nameState"> </b-form-input>
               </Field>
-              <ErrorMessage name="NameField">
-                <span>Este campo es requerido</span>
-                <i class="bi bi-exclamation-circle" />
-              </ErrorMessage>
+              <ErrorMessage class="text-danger" name="NameField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -92,7 +94,7 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            v-b-modal.modal-departamento
+            @click="resetDepartamentFields()"
           >
             Cancelar
           </b-button>
@@ -131,6 +133,7 @@ export default {
     const searchValue = ref('')
     const searchField = ref('nombre')
     const nameState = ref(false)
+    const showModal = ref(false)
     const departamentFields = ref({
       departamentoId: 0,
       nombre: null,
@@ -163,6 +166,10 @@ export default {
         nameState.value = false
         return 'Este campo es requerido'
       }
+      if (!/^([a-zA-ZñÑáéíóúÁÉÍÓÚ])+$/i.test(departamentFields.value.nombre)) {
+        nameState.value = false
+        return 'El nombre del area solo puede contener letras'
+      }
       nameState.value = true
       return true
     }
@@ -188,6 +195,10 @@ export default {
           duration: 2000
         })
       })
+      resetDepartamentFields()
+    }
+    const resetDepartamentFields = () => {
+      showModal.value = false
       departamentFields.value = JSON.parse(JSON.stringify(departamentFieldsBlank))
       nameState.value = false
     }
@@ -215,8 +226,10 @@ export default {
       refreshTable,
       RemoveDepatamento,
       nameState,
+      showModal,
 
-      validateArea
+      validateArea,
+      resetDepartamentFields
     }
   }
 }
