@@ -129,9 +129,7 @@
           </Form>
         </b-tab>
         <b-tab title="Expediente Alumbrado">
-          <ExpedientPublic
-            :expedientLightingId="1"
-          />
+          <ExpedientPublic :expedientLightingId="1" />
         </b-tab>
       </b-tabs>
     </b-card>
@@ -158,8 +156,10 @@ export default {
     ExpedientPublic
   },
   setup () {
-    const { getPublicLightingById, updatePublicLighting } =
-      StreetlightingServices()
+    const {
+      getPublicLightingById,
+      updatePublicLighting
+    } = StreetlightingServices()
     // const { getStatusById } = StatusServices()
     const $toast = useToast()
     const publicLighting = ref([])
@@ -185,7 +185,7 @@ export default {
     //   statusPublicLighting.value = data
     // })
 
-    getPublicLightingById(router.params.AlumbradoId, (data) => {
+    getPublicLightingById(router.params.AlumbradoId, data => {
       // streetLighting.value = data
       // validateState()
       publicLighting.value = data
@@ -193,7 +193,7 @@ export default {
       TaskState.value = data.tarea === null ? false : true
     })
     const onUpdatePublicLighting = () => {
-      updatePublicLighting(publicLighting.value, (data) => {})
+      updatePublicLighting(publicLighting.value, data => {})
       $toast.open({
         message: 'El alumbrado se a modificado correcta mente',
         position: 'top',
@@ -294,5 +294,4 @@ export default {
 }
 </script>
 
-  <style>
-</style>
+<style></style>

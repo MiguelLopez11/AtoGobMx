@@ -53,7 +53,7 @@
           variant="outline-warning"
           :to="{
             name: 'EstatusAlumbrado-Edit',
-            params: { EstatusId: items.estatusAlumbradoId },
+            params: { EstatusId: items.estatusAlumbradoId }
           }"
           ><i class="bi bi-pencil-square"></i
         ></b-button>
@@ -144,8 +144,11 @@ export default {
     ErrorMessage
   },
   setup () {
-    const { getStatus, createStatusLighting, deleteStatusLighting } =
-      StatusLightingServices()
+    const {
+      getStatus,
+      createStatusLighting,
+      deleteStatusLighting
+    } = StatusLightingServices()
     const $toast = useToast()
     const statusLighting = ref([])
     const perPage = ref(5)
@@ -175,7 +178,7 @@ export default {
       { value: 'actions', text: 'Acciones' }
     ])
 
-    getStatus((data) => {
+    getStatus(data => {
       statusLighting.value = data
       // rows.value = data.length
       if (statusLighting.value.length > 0) {
@@ -187,7 +190,7 @@ export default {
       }
     })
 
-    const onFiltered = (filteredItems) => {
+    const onFiltered = filteredItems => {
       // rows.value = filteredItems.length
       currentPage.value = 1
     }
@@ -222,7 +225,7 @@ export default {
 
     const refreshTable = () => {
       isloading.value = true
-      getStatus((data) => {
+      getStatus(data => {
         statusLighting.value = data
         // rows.value = data.length
         if (statusLighting.value.length > 0) {
@@ -236,7 +239,7 @@ export default {
       return 'datos recargados'
     }
     const addStatusLighting = () => {
-      createStatusLighting(statusLightingFields.value, (data) => {
+      createStatusLighting(statusLightingFields.value, data => {
         refreshTable()
         $toast.success('Estatus alumbrado registrado correctamente.', {
           position: 'top-right',
@@ -248,9 +251,9 @@ export default {
         JSON.stringify(statusLightingFieldsBlank)
       )
     }
-    const RemoveStatusLighting = (StreetLightingId) => {
+    const RemoveStatusLighting = StreetLightingId => {
       isloading.value = true
-      deleteStatusLighting(StreetLightingId, (data) => {
+      deleteStatusLighting(StreetLightingId, data => {
         refreshTable()
       })
     }
@@ -283,7 +286,7 @@ export default {
 }
 </script>
 
-      <style>
+<style>
 .customize-table {
   /* --easy-table-border: 1px solid #445269;
         --easy-table-row-border: 1px solid #445269; */

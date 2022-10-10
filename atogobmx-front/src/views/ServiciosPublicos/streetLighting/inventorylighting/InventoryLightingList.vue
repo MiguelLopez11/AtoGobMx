@@ -53,7 +53,7 @@
           variant="outline-warning"
           :to="{
             name: 'InventarioAlumbrado-Edit',
-            params: { InventarioAlumbradoId: items.inventarioAlumbradoId },
+            params: { InventarioAlumbradoId: items.inventarioAlumbradoId }
           }"
           ><i class="bi bi-pencil-square"></i
         ></b-button>
@@ -200,7 +200,7 @@ export default {
       archivado: false
     })
 
-    getStatus((data) => {
+    getStatus(data => {
       statusPublicLighting.value = data
     })
 
@@ -254,7 +254,7 @@ export default {
       { value: 'actions', text: 'Acciones' }
     ])
 
-    getInventoryLighting((data) => {
+    getInventoryLighting(data => {
       inventoryLighting.value = data
       // rows.value = data.length
       if (inventoryLighting.value.length > 0) {
@@ -266,14 +266,14 @@ export default {
       }
     })
 
-    const onFiltered = (filteredItems) => {
+    const onFiltered = filteredItems => {
       // rows.value = filteredItems.length
       currentPage.value = 1
     }
 
     const refreshTable = () => {
       isloading.value = true
-      getInventoryLighting((data) => {
+      getInventoryLighting(data => {
         inventoryLighting.value = data
         // rows.value = data.length
         if (inventoryLighting.value.length > 0) {
@@ -288,7 +288,7 @@ export default {
     }
 
     const addInventoryLighting = () => {
-      createInventoryLighting(inventoryLightingFields.value, (data) => {
+      createInventoryLighting(inventoryLightingFields.value, data => {
         refreshTable()
         $toast.success('Inventario registrado correctamente.', {
           position: 'top-right',
@@ -301,9 +301,9 @@ export default {
       )
     }
 
-    const RemoveInventoryLighting = (StreetLightingId) => {
+    const RemoveInventoryLighting = StreetLightingId => {
       isloading.value = true
-      deleteInventoryLighting(StreetLightingId, (data) => {
+      deleteInventoryLighting(StreetLightingId, data => {
         refreshTable()
       })
     }
@@ -339,7 +339,7 @@ export default {
 }
 </script>
 
-  <style>
+<style>
 .customize-table {
   /* --easy-table-border: 1px solid #445269;
     --easy-table-row-border: 1px solid #445269; */

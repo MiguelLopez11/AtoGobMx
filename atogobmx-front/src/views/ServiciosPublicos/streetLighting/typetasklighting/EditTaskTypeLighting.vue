@@ -71,8 +71,10 @@ export default {
     ErrorMessage
   },
   setup () {
-    const { getTaskTypeLightingById, updateTaskTypeLighting } =
-      TaskTypeLightinServices()
+    const {
+      getTaskTypeLightingById,
+      updateTaskTypeLighting
+    } = TaskTypeLightinServices()
     const $toast = useToast()
     const taskTypeLighting = ref([])
     const router = useRoute()
@@ -85,7 +87,7 @@ export default {
       { text: 'Editar-TareaTipoAlumbrado' }
     ])
     const onUpdateTaskTypeLighting = () => {
-      updateTaskTypeLighting(taskTypeLighting.value, (data) => {})
+      updateTaskTypeLighting(taskTypeLighting.value, data => {})
       $toast.open({
         message: 'Tarea Tipo Alumbrado modificado correctamente',
         position: 'top',
@@ -95,7 +97,7 @@ export default {
         onDismiss: () => redirect.push('/TareaTipoAlumbrado/list')
       })
     }
-    getTaskTypeLightingById(router.params.TareaTipoAlumbradoId, (data) => {
+    getTaskTypeLightingById(router.params.TareaTipoAlumbradoId, data => {
       taskTypeLighting.value = data
     })
 
@@ -119,8 +121,7 @@ export default {
 
     const validateState = () => {
       // eslint-disable-next-line no-unneeded-ternary
-      NameState.value =
-        taskTypeLighting.value.nombreTarea !== ''
+      NameState.value = taskTypeLighting.value.nombreTarea !== ''
       // eslint-disable-next-line no-unneeded-ternary
       DescriptionState.value = taskTypeLighting.value.descripcion !== ''
     }
@@ -141,5 +142,4 @@ export default {
 }
 </script>
 
-  <style>
-</style>
+<style></style>

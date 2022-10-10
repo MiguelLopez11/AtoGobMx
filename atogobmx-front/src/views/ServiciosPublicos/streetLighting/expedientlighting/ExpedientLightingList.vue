@@ -53,7 +53,7 @@
           variant="outline-warning"
           :to="{
             name: 'ExpedienteAlumbrado-Edit',
-            params: { ExpedienteAlumbradoId: items.expedienteAlumbradoId },
+            params: { ExpedienteAlumbradoId: items.expedienteAlumbradoId }
           }"
           ><i class="bi bi-pencil-square"></i
         ></b-button>
@@ -211,9 +211,7 @@ export default {
       createExpedientLighting,
       deleteExpedientLighting
     } = ExpedientlightingServices()
-    const {
-      getStatus
-    } = StatusLightingServices()
+    const { getStatus } = StatusLightingServices()
     const $toast = useToast()
     const expedientLighting = ref([])
     const statusPublicLighting = ref([])
@@ -242,7 +240,7 @@ export default {
       archivado: false
     })
 
-    getStatus((data) => {
+    getStatus(data => {
       statusPublicLighting.value = data
     })
 
@@ -316,7 +314,7 @@ export default {
       { value: 'actions', text: 'Acciones' }
     ])
 
-    getExpedientLighting((data) => {
+    getExpedientLighting(data => {
       expedientLighting.value = data
       // rows.value = data.length
       if (expedientLighting.value.length > 0) {
@@ -328,14 +326,14 @@ export default {
       }
     })
 
-    const onFiltered = (filteredItems) => {
-    // rows.value = filteredItems.length
+    const onFiltered = filteredItems => {
+      // rows.value = filteredItems.length
       currentPage.value = 1
     }
 
     const refreshTable = () => {
       isloading.value = true
-      getExpedientLighting((data) => {
+      getExpedientLighting(data => {
         expedientLighting.value = data
         // rows.value = data.length
         if (expedientLighting.value.length > 0) {
@@ -350,7 +348,7 @@ export default {
     }
 
     const addExpedientLighting = () => {
-      createExpedientLighting(expedientLightingFields.value, (data) => {
+      createExpedientLighting(expedientLightingFields.value, data => {
         refreshTable()
         $toast.success('Alumbrado registrado correctamente.', {
           position: 'top-right',
@@ -359,12 +357,13 @@ export default {
       })
       // resetStreetLightingFields()
       expedientLightingFields.value = JSON.parse(
-        JSON.stringify(expedientLightingFieldsBlank))
+        JSON.stringify(expedientLightingFieldsBlank)
+      )
     }
 
-    const RemoveExpedientLighting = (StreetLightingId) => {
+    const RemoveExpedientLighting = StreetLightingId => {
       isloading.value = true
-      deleteExpedientLighting(StreetLightingId, (data) => {
+      deleteExpedientLighting(StreetLightingId, data => {
         refreshTable()
       })
     }

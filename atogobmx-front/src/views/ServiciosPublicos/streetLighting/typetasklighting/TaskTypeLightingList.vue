@@ -53,7 +53,7 @@
           variant="outline-warning"
           :to="{
             name: 'TareaTipoAlumbrado-Edit',
-            params: { TareaTipoAlumbradoId: items.tareaTipoId },
+            params: { TareaTipoAlumbradoId: items.tareaTipoId }
           }"
           ><i class="bi bi-pencil-square"></i
         ></b-button>
@@ -179,7 +179,7 @@ export default {
       { value: 'actions', text: 'Acciones' }
     ])
 
-    getTaskTypeLighting((data) => {
+    getTaskTypeLighting(data => {
       taskTypeLighting.value = data
       // rows.value = data.length
       if (taskTypeLighting.value.length > 0) {
@@ -191,7 +191,7 @@ export default {
       }
     })
 
-    const onFiltered = (filteredItems) => {
+    const onFiltered = filteredItems => {
       // rows.value = filteredItems.length
       currentPage.value = 1
     }
@@ -236,7 +236,7 @@ export default {
     // pone mis cambios de mis campos vacios de nuevo
     const refreshTable = () => {
       isloading.value = true
-      getTaskTypeLighting((data) => {
+      getTaskTypeLighting(data => {
         taskTypeLighting.value = data
         // rows.value = data.length
         if (taskTypeLighting.value.length > 0) {
@@ -250,7 +250,7 @@ export default {
       return 'datos recargados'
     }
     const addTaskTypeLighting = () => {
-      createTaskTypeLighting(taskTypeLightingFields.value, (data) => {
+      createTaskTypeLighting(taskTypeLightingFields.value, data => {
         refreshTable()
         $toast.success('Tarea tipo alumbrado registrado correctamente.', {
           position: 'top-right',
@@ -262,9 +262,9 @@ export default {
         JSON.stringify(taskTypeLightingFieldsBlank)
       )
     }
-    const RemoveTaskTypeLighting = (TaskTypeLightingId) => {
+    const RemoveTaskTypeLighting = TaskTypeLightingId => {
       isloading.value = true
-      deleteTaskTypeLighting(TaskTypeLightingId, (data) => {
+      deleteTaskTypeLighting(TaskTypeLightingId, data => {
         refreshTable()
       })
     }
@@ -297,7 +297,7 @@ export default {
 }
 </script>
 
-        <style>
+<style>
 .customize-table {
   /* --easy-table-border: 1px solid #445269;
           --easy-table-row-border: 1px solid #445269; */

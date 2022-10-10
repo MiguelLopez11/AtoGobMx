@@ -150,8 +150,10 @@ export default {
     ErrorMessage
   },
   setup (props) {
-    const { getExpedientLightingById, updatExpedientLighting } =
-      ExpedientlightingServices()
+    const {
+      getExpedientLightingById,
+      updatExpedientLighting
+    } = ExpedientlightingServices()
     // const { getStatusById } = StatusServices()
     const $toast = useToast()
     const expedientLighting = ref([])
@@ -175,15 +177,18 @@ export default {
     //   statusPublicLighting.value = data
     // })
 
-    getExpedientLightingById(router.params.ExpedienteAlumbradoId || props.expedientLightingId, (data) => {
-      // streetLighting.value = data
-      // validateState()
-      expedientLighting.value = data
-      // eslint-disable-next-line no-unneeded-ternary
-      TypeTaskState.value = data.tarea === null ? false : true
-    })
+    getExpedientLightingById(
+      router.params.ExpedienteAlumbradoId || props.expedientLightingId,
+      data => {
+        // streetLighting.value = data
+        // validateState()
+        expedientLighting.value = data
+        // eslint-disable-next-line no-unneeded-ternary
+        TypeTaskState.value = data.tarea === null ? false : true
+      }
+    )
     const onUpdateExpedientLighting = () => {
-      updatExpedientLighting(expedientLighting.value, (data) => {})
+      updatExpedientLighting(expedientLighting.value, data => {})
       $toast.open({
         message: 'El expediente alumbrado se a modificado correcta mente',
         position: 'top',
@@ -283,5 +288,4 @@ export default {
 }
 </script>
 
-    <style>
-</style>
+<style></style>
