@@ -1,7 +1,11 @@
 <template>
   <b-card class="m-3">
     <b-card class="mb-4">
-      <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+      <b-breadcrumb
+        class="p-0"
+        :items="breadcrumbItems"
+      >
+      </b-breadcrumb>
     </b-card>
     <b-card>
       <div>
@@ -15,12 +19,16 @@
                 <b-form-input v-model="area.nombre" :state="nameState">
                 </b-form-input>
               </Field>
-             <ErrorMessage class="text-danger" name="NameField"></ErrorMessage>
+              <ErrorMessage class="text-danger" name="NameField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Departamento">
-              <Field name="DepartamentField" :rules="validateDepartament" as="number">
+              <Field
+                name="DepartamentField"
+                :rules="validateDepartament"
+                as="number"
+              >
                 <b-form-select
                   v-model="area.departamentoId"
                   autofocus
@@ -31,7 +39,10 @@
                 >
                 </b-form-select>
               </Field>
-              <ErrorMessage class="text-danger" name="DepartamentField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="DepartamentField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -48,7 +59,9 @@
             type="reset"
             >Cancelar</b-button
           >
-          <b-button class="col-1 m-2" type="suceess" variant="success">Guardar</b-button>
+          <b-button class="col-1 m-2" type="suceess" variant="success"
+            >Guardar</b-button
+          >
         </b-row>
       </Form>
     </b-card>
@@ -57,12 +70,10 @@
 
 <script>
 import AreaServices from '@/Services/area.Services'
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useToast } from 'vue-toast-notification'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import DepartamentServices from '@/Services/departament.Services'
-
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
@@ -71,9 +82,9 @@ export default {
     ErrorMessage
   },
   setup () {
+    const swal = inject('$swal')
     const { getArea, updateArea } = AreaServices()
     const { getDepartaments } = DepartamentServices()
-    const $toast = useToast()
     const redirect = useRouter()
     const departaments = ref([])
     const area = ref([])
@@ -86,14 +97,16 @@ export default {
       { text: 'Editar-Area' }
     ])
     const onUpdateArea = () => {
-      updateArea(area.value, data => {})
-      $toast.open({
-        message: 'Area modificado correctamente',
-        position: 'top',
-        duration: 1000,
-        dismissible: true,
-        type: 'success',
-        onDismiss: () => redirect.push('/areas/list')
+      updateArea(area.value, data => {
+        swal.fire({
+          title: '¡Area de trabajo modificada correctamente!',
+          text: 'El area de trabajo se ha modificado  satisfactoriamente.',
+          icon: 'success'
+        }).then(result => {
+          if (result.isConfirmed) {
+            redirect.push('/Areas/list')
+          }
+        })
       })
     }
     getDepartaments(data => {
@@ -123,10 +136,8 @@ export default {
       return true
     }
     const validateState = () => {
-      // eslint-disable-next-line no-unneeded-ternary
-      nameState.value = area.value.nombre === '' ? false : true
-      // eslint-disable-next-line no-unneeded-ternary
-      departamentState.value = area.value.departamentoId === 0 ? false : true
+      nameState.value = area.value.nombre !== ''
+      departamentState.value = area.value.departamentoId !== 0
       return ''
     }
     return {
@@ -146,6 +157,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

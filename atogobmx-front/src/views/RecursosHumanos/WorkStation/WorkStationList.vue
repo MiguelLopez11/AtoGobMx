@@ -18,7 +18,7 @@
           margin-right: 15px;
           margin-left: 20px;
         "
-        v-b-modal.modal-puestoTrabajo
+        @click="showModal = !showModal"
         type="submit"
       >
         <i class="bi bi-person-plus-fill"></i>
@@ -62,7 +62,7 @@
       </template>
     </EasyDataTable>
     <b-modal
-      id="modal-puestoTrabajo"
+      v-model="showModal"
       title="Agregar puesto trabajo"
       size="xl"
       centered
@@ -165,6 +165,7 @@ export default {
     } = workStationServices()
     const { getAreasByDepartament } = AreasServices()
     const { getDepartaments } = DepartamentServices()
+    const showModal = ref(false)
     const workStations = ref([])
     const areas = ref([])
     const departaments = ref([])
@@ -265,6 +266,7 @@ export default {
     }
     const refreshTable = () => {
       isloading.value = true
+      showModal.value = false
       getWorkStations(data => {
         workStations.value = data
         if (workStations.value.length > 0) {
@@ -279,17 +281,18 @@ export default {
     }
     const addWorkStation = () => {
       createWorkStation(workStationFields.value, data => {
-        refreshTable()
         swal.fire({
           title: '¡Puesto de trabajo registrado correctamente!',
           text:
             'El puesto de trabajo se ha registrado al sistema satisfactoriamente.',
           icon: 'success'
         })
+        refreshTable()
+        resetWorkStationFields()
       })
-      resetWorkStationFields()
     }
     const resetWorkStationFields = () => {
+      showModal.value = false
       workStationFields.value = JSON.parse(
         JSON.stringify(workStationFieldsBlank)
       )
@@ -333,6 +336,7 @@ export default {
     return {
       workStations,
       departaments,
+      showModal,
       fields,
       perPage,
       currentPage,

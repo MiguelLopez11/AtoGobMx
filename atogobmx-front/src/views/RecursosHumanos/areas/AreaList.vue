@@ -18,7 +18,7 @@
           margin-right: 15px;
           margin-left: 20px;
         "
-        v-b-modal.modal-area
+        @click="showModal = !showModal"
         type="submit"
       >
         <i class="bi bi-person-plus-fill"></i>
@@ -62,7 +62,7 @@
       </template>
     </EasyDataTable>
     <b-modal
-      id="modal-area"
+      v-model="showModal"
       ref="refAreaModal"
       title="Agregar areas"
       size="xl"
@@ -111,7 +111,7 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            v-b-modal.modal-area
+            @click="resetForm()"
           >
             Cancelar
           </b-button>
@@ -129,7 +129,6 @@ import AreaServices from '@/Services/area.Services'
 import DepartamentServices from '@/Services/departament.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, watch, inject } from 'vue'
-import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
@@ -142,7 +141,7 @@ export default {
     const swal = inject('$swal')
     const { getAreas, createArea, deleteArea } = AreaServices()
     const { getDepartaments } = DepartamentServices()
-    const $toast = useToast()
+    const showModal = ref(false)
     const refAreaModal = ref()
     const departaments = ref([])
     const areas = ref([])
@@ -165,12 +164,10 @@ export default {
     })
     watch(departaments, (values) => {
       if (values.length === 0) {
-        $toast.open({
-          message: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar',
-          position: 'top-left',
-          duration: 0,
-          dismissible: true,
-          type: 'error'
+        swal.fire({
+          title: 'No se encuentran departamentos registrados!',
+          text: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
+          icon: 'warning'
         })
       }
     })
@@ -221,7 +218,6 @@ export default {
     }
     const refreshTable = () => {
       isloading.value = true
-
       getAreas(data => {
         areas.value = data
         if (areas.value.length > 0) {
@@ -236,13 +232,17 @@ export default {
     }
     const addArea = () => {
       createArea(areaFields.value, data => {
-        refreshTable()
         swal.fire({
           title: '¡Area de trabajo registrado correctamente!',
           text: 'El Area de trabajo se ha registrado al sistema satisfactoriamente.',
           icon: 'success'
         })
+        refreshTable()
+        resetForm()
       })
+    }
+    const resetForm = () => {
+      showModal.value = false
       areaFields.value = JSON.parse(JSON.stringify(areasFieldsBlank))
       nameState.value = false
       departamentState.value = false
@@ -301,9 +301,11 @@ export default {
       RemoveArea,
       nameState,
       departamentState,
+      showModal,
 
       validateDepartament,
-      validateArea
+      validateArea,
+      resetForm
     }
   }
 }

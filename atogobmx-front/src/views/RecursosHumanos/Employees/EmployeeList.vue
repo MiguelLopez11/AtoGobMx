@@ -255,7 +255,7 @@ export default {
           swal.fire({
             title: 'No se encuentran areas registradas!',
             text: 'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
-            icon: 'error'
+            icon: 'warning'
           })
           // $toast.open({
           //   message: '',
@@ -274,7 +274,7 @@ export default {
           swal.fire({
             title: 'No se encuentran puestos de trabajo registrados!',
             text: 'No se encuentran puestos de trabajo registrados en el area seleccionado, registre primero un puesto de trabajo para continuar.',
-            icon: 'error'
+            icon: 'warning'
           })
           // $toast.open({
           //   message: '',
@@ -292,7 +292,7 @@ export default {
         swal.fire({
           title: 'No se encuentran departamentos registrados!',
           text: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
-          icon: 'error'
+          icon: 'warning'
         })
         // $toast.open({
         //   message: '',

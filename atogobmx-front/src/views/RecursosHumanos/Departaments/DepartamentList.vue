@@ -207,9 +207,36 @@ export default {
     }
     const RemoveDepatamento = (departamentoId) => {
       isloading.value = true
-      deleteDepartament(departamentoId, (data) => {
-        refreshTable()
-      })
+      swal
+        .fire({
+          title: '¿Estas seguro?',
+          text: 'No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, archivar departamento!',
+          cancelButtonText: 'Cancelar'
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            swal
+              .fire({
+                title: 'Departamento archivado!',
+                text: 'El departamento ha sido archivado satisfactoriamente .',
+                icon: 'success'
+              })
+              .then(result => {
+                if (result.isConfirmed) {
+                  deleteDepartament(departamentoId, (data) => {
+                    refreshTable()
+                  })
+                }
+              })
+          } else {
+            isloading.value = false
+          }
+        })
     }
     return {
       departaments,
