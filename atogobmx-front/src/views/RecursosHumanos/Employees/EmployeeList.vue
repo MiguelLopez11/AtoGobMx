@@ -143,7 +143,6 @@
                   value-field="puestoTrabajoId"
                   text-field="nombre"
                   :state="workStationState"
-                  @input="getWorkStation(EmployeesFields.puestoTrabajoId)"
                 >
                 </b-form-select>
               </Field>
@@ -233,6 +232,9 @@ export default {
     const areaState = ref(false)
     const workStationState = ref(false)
     const departamentState = ref(false)
+    const headerDepartament = ref()
+    const headerArea = ref()
+    const headerWorkStation = ref()
     const expedientFieldBlank = ref({
       expedienteDigitalId: 0,
       empleadoId: null,
@@ -257,14 +259,11 @@ export default {
             text: 'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
             icon: 'warning'
           })
-          // $toast.open({
-          //   message: '',
-          //   position: 'top-left',
-          //   duration: 2500,
-          //   dismissible: true,
-          //   type: 'warning'
-          // })
         }
+        if (!data.area == null) {
+          headerArea.value = 'area.nombre'
+        }
+        headerArea.value = ''
       })
     }
     const getWorkStation = (departamentoId) => {
@@ -276,14 +275,11 @@ export default {
             text: 'No se encuentran puestos de trabajo registrados en el area seleccionado, registre primero un puesto de trabajo para continuar.',
             icon: 'warning'
           })
-          // $toast.open({
-          //   message: '',
-          //   position: 'top-left',
-          //   duration: 2500,
-          //   dismissible: true,
-          //   type: 'warning'
-          // })
         }
+        if (!data.puestoTrabajo == null) {
+          headerWorkStation.value = 'puestoTrabajo.nombre'
+        }
+        headerWorkStation.value = ''
       })
     }
     getDepartaments(data => {
@@ -294,14 +290,11 @@ export default {
           text: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
           icon: 'warning'
         })
-        // $toast.open({
-        //   message: '',
-        //   position: 'top-left',
-        //   duration: 0,
-        //   dismissible: true,
-        //   type: 'warning'
-        // })
       }
+      if (!data.departamentos == null) {
+        headerDepartament.value = 'departamentos.nombre'
+      }
+      headerDepartament.value = ''
     })
     const validateName = () => {
       if (!EmployeesFields.value.nombreCompleto) {
@@ -361,9 +354,9 @@ export default {
     const fields = ref([
       { value: 'empleadoId', text: 'ID', sortable: true },
       { value: 'nombreCompleto', text: 'Nombre' },
-      { value: 'departamentos.nombre', text: 'Departamento' },
-      { value: 'area.nombre', text: 'Area de Trabajo' },
-      { value: 'puestoTrabajo.nombre', text: 'Puesto de Trabajo' },
+      { value: `${headerDepartament.value}`, text: 'Departamento' },
+      { value: `${headerArea.value}`, text: 'Area de Trabajo' },
+      { value: `${headerWorkStation.value}`, text: 'Puesto de Trabajo' },
       { value: 'fechaAlta', text: 'Fecha de contratación' },
       { value: 'actions', text: 'Acciones' }
     ])
@@ -478,6 +471,9 @@ export default {
       workStationState,
       departamentState,
       showModal,
+      headerDepartament,
+      headerArea,
+      headerWorkStation,
 
       onFiltered,
       addEmployee,

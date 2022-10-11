@@ -80,7 +80,6 @@
                   value-field="puestoTrabajoId"
                   text-field="nombre"
                   :state="workStationState"
-                  @input="getWorkStation(employee.puestoTrabajoId)"
                 >
                 </b-form-select>
               </Field>
@@ -182,29 +181,34 @@ export default {
         })
       }
     })
+
     const getAreas = (departamentoId) => {
-      getAreasByDepartament(departamentoId, data => {
-        areas.value = data
-        if (data.length === 0) {
-          swal.fire({
-            title: 'No se encuentran areas registradas!',
-            text: 'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
-            icon: 'error'
-          })
-        }
-      })
+      if (departamentoId) {
+        getAreasByDepartament(departamentoId, data => {
+          areas.value = data
+          if (data.length === 0) {
+            swal.fire({
+              title: 'No se encuentran areas registradas!',
+              text: 'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
+              icon: 'error'
+            })
+          }
+        })
+      }
     }
     const getWorkStation = (departamentoId) => {
-      getWorkStationByArea(departamentoId, data => {
-        workStations.value = data
-        if (data.length === 0) {
-          swal.fire({
-            title: 'No se encuentran puestos de trabajo registrados!',
-            text: 'No se encuentran puestos de trabajo registrados en el area seleccionado, registre primero un puesto de trabajo para continuar.',
-            icon: 'error'
-          })
-        }
-      })
+      if (departamentoId) {
+        getWorkStationByArea(departamentoId, data => {
+          workStations.value = data
+          if (data.length === 0) {
+            swal.fire({
+              title: 'No se encuentran puestos de trabajo registrados!',
+              text: 'No se encuentran puestos de trabajo registrados en el area seleccionado, registre primero un puesto de trabajo para continuar.',
+              icon: 'error'
+            })
+          }
+        })
+      }
     }
     const onUpdateEmployee = () => {
       updateEmployee(employee.value, (data) => {
@@ -265,9 +269,9 @@ export default {
     }
     const validateState = () => {
       nameState.value = employee.value.nombreCompleto !== ''
-      areaState.value = employee.value.areaId !== 0
-      departamentState.value = employee.value.departamentoId !== 0
-      workStationState.value = employee.value.puestoTrabajoId !== 0
+      areaState.value = employee.value.areaId !== null
+      departamentState.value = employee.value.departamentoId !== null
+      workStationState.value = employee.value.puestoTrabajoId !== null
       dateWorkState.value = employee.value.fechaAlta !== null
       return ''
     }
