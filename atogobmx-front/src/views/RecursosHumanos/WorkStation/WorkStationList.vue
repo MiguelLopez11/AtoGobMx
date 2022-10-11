@@ -54,7 +54,7 @@
           variant="outline-warning"
           :to="{
             name: 'PuestoTrabajo-Edit',
-            params: { puestoTrabajoId: items.puestoTrabajoId },
+            params: { puestoTrabajoId: items.puestoTrabajoId }
           }"
         >
           <i class="bi bi-pencil-square" />
@@ -73,13 +73,14 @@
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre">
-              <Field name="NameField" :rules="validateName">
-                <b-form-input v-model="workStationFields.nombre" :state="nameState"> </b-form-input>
+              <Field name="NameField" :rules="validateName" as="text">
+                <b-form-input
+                  v-model="workStationFields.nombre"
+                  :state="nameState"
+                >
+                </b-form-input>
               </Field>
-              <ErrorMessage name="NameField">
-                <span>Este campo es requerido</span>
-                <i class="bi bi-exclamation-circle" />
-              </ErrorMessage>
+              <ErrorMessage class="text-danger" name="NameField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -87,6 +88,7 @@
               <Field
                 name="DepartamentField"
                 :rules="validateDepartament"
+                as="number"
               >
                 <b-form-select
                   v-model="workStationFields.departamentoId"
@@ -99,18 +101,15 @@
                 >
                 </b-form-select>
               </Field>
-              <ErrorMessage name="DepartamentField"
-                ><span>Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i
+              <ErrorMessage
+                class="text-danger"
+                name="DepartamentField"
               ></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Area">
-              <Field
-                name="AreaField"
-                :rules="validateArea"
-              >
+              <Field name="AreaField" :rules="validateArea" as="number">
                 <b-form-select
                   v-model="workStationFields.areaId"
                   autofocus
@@ -121,10 +120,7 @@
                 >
                 </b-form-select>
               </Field>
-              <ErrorMessage name="AreaField"
-                ><span>Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i
-              ></ErrorMessage>
+              <ErrorMessage class="text-danger" name="AreaField"></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
@@ -151,8 +147,7 @@ import workStationServices from '@/Services/workStation.Services'
 import AreasServices from '@/Services/area.Services'
 import DepartamentServices from '@/Services/departament.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
-import { ref } from 'vue'
-import { useToast } from 'vue-toast-notification'
+import { ref, inject } from 'vue'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
@@ -162,10 +157,14 @@ export default {
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup () {
-    const { getWorkStations, createWorkStation, deleteWorkStation } = workStationServices()
+    const swal = inject('$swal')
+    const {
+      getWorkStations,
+      createWorkStation,
+      deleteWorkStation
+    } = workStationServices()
     const { getAreasByDepartament } = AreasServices()
     const { getDepartaments } = DepartamentServices()
-    const $toast = useToast()
     const workStations = ref([])
     const areas = ref([])
     const departaments = ref([])
@@ -187,14 +186,16 @@ export default {
       areaId: 0,
       archivado: false
     })
-    const workStationFieldsBlank = ref(JSON.parse(JSON.stringify(workStationFields)))
+    const workStationFieldsBlank = ref(
+      JSON.parse(JSON.stringify(workStationFields))
+    )
     const fields = ref([
       { value: 'puestoTrabajoId', text: 'ID', sortable: true },
       { value: 'nombre', text: 'Nombre' },
       { value: 'area.nombre', text: 'Area' },
       { value: 'actions', text: 'Acciones' }
     ])
-    getWorkStations((data) => {
+    getWorkStations(data => {
       workStations.value = data
       if (workStations.value.length > 0) {
         isloading.value = false
@@ -207,30 +208,30 @@ export default {
     getDepartaments(data => {
       departaments.value = data
       if (data.length === 0) {
-        $toast.open({
-          message: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar',
-          position: 'top-left',
-          duration: 0,
-          dismissible: true,
-          type: 'error'
+        swal.fire({
+          title: 'No se encuentran departamentos registrados!',
+          text:
+            'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
+          icon: 'error'
         })
       }
     })
-    const getAreas = (departamentoId) => {
+    const getAreas = departamentoId => {
       getAreasByDepartament(departamentoId, data => {
         areas.value = data
         if (data.length === 0) {
-          $toast.open({
-            message: 'No se encuentran areas registrados en el departamento seleccionado, registre primero una area para continuar',
-            position: 'top-left',
-            duration: 0,
-            dismissible: true,
-            type: 'error'
-          })
+          if (data.length === 0) {
+            swal.fire({
+              title: 'No se encuentran areas registradas!',
+              text:
+                'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
+              icon: 'error'
+            })
+          }
         }
       })
     }
-    const onFiltered = (filteredItems) => {
+    const onFiltered = filteredItems => {
       rows.value = filteredItems.length
       currentPage.value = 1
     }
@@ -238,6 +239,10 @@ export default {
       if (!workStationFields.value.nombre) {
         nameState.value = false
         return 'Este campo es requerido'
+      }
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(workStationFields.value.nombre)) {
+        nameState.value = false
+        return 'El nombre solo puede contener letras'
       }
       nameState.value = true
       return true
@@ -260,7 +265,7 @@ export default {
     }
     const refreshTable = () => {
       isloading.value = true
-      getWorkStations((data) => {
+      getWorkStations(data => {
         workStations.value = data
         if (workStations.value.length > 0) {
           isloading.value = false
@@ -273,26 +278,57 @@ export default {
       return 'datos recargados'
     }
     const addWorkStation = () => {
-      createWorkStation(workStationFields.value, (data) => {
+      createWorkStation(workStationFields.value, data => {
         refreshTable()
-        $toast.success('Puesto de trabajo registrado correctamente.', {
-          position: 'top-right',
-          duration: 2000
+        swal.fire({
+          title: '¡Puesto de trabajo registrado correctamente!',
+          text:
+            'El puesto de trabajo se ha registrado al sistema satisfactoriamente.',
+          icon: 'success'
         })
       })
       resetWorkStationFields()
     }
     const resetWorkStationFields = () => {
-      workStationFields.value = JSON.parse(JSON.stringify(workStationFieldsBlank))
+      workStationFields.value = JSON.parse(
+        JSON.stringify(workStationFieldsBlank)
+      )
       nameState.value = false
       areaState.value = false
       departamentState.value = false
     }
-    const RemoveWorkStation = (puestoTrabajoId) => {
+    const RemoveWorkStation = puestoTrabajoId => {
       isloading.value = true
-      deleteWorkStation(puestoTrabajoId, (data) => {
-        refreshTable()
-      })
+      swal
+        .fire({
+          title: '¿Estas seguro?',
+          text: 'No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, Archivar Puesto de trabajo!',
+          cancelButtonText: 'Cancelar'
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            swal
+              .fire({
+                title: 'Puesto de trabajo archivado!',
+                text: 'El Puesto de trabajo ha sido archivado satisfactoriamente .',
+                icon: 'success'
+              })
+              .then(result => {
+                if (result.isConfirmed) {
+                  deleteWorkStation(puestoTrabajoId, data => {
+                    refreshTable()
+                  })
+                }
+              })
+          } else {
+            isloading.value = false
+          }
+        })
     }
     return {
       workStations,
@@ -327,6 +363,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

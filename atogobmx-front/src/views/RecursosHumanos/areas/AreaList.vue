@@ -74,19 +74,20 @@
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre">
-              <Field name="NameField" :rules="validateArea">
+              <Field
+                name="NameField"
+                :rules="validateArea"
+                as="text"
+              >
                 <b-form-input v-model="areaFields.nombre" :state="nameState">
                 </b-form-input>
               </Field>
-              <ErrorMessage name="NameField">
-                <span>Este campo es requerido</span>
-                <i class="bi bi-exclamation-circle" />
-              </ErrorMessage>
+              <ErrorMessage class="text-danger" name="NameField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Departamento">
-              <Field name="DepartamentField" :rules="validateDepartament">
+              <Field name="DepartamentField" :rules="validateDepartament" as="number">
                 <b-form-select
                   v-model="areaFields.departamentoId"
                   autofocus
@@ -97,10 +98,7 @@
                 >
                 </b-form-select>
               </Field>
-              <ErrorMessage name="DepartamentField">
-                <span>Este campo es requerido</span>
-                <i class="bi bi-exclamation-circle" />
-              </ErrorMessage>
+              <ErrorMessage class="text-danger" name="DepartamentField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -130,7 +128,7 @@
 import AreaServices from '@/Services/area.Services'
 import DepartamentServices from '@/Services/departament.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
-import { ref, watch } from 'vue'
+import { ref, watch, inject } from 'vue'
 import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
@@ -141,6 +139,7 @@ export default {
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup () {
+    const swal = inject('$swal')
     const { getAreas, createArea, deleteArea } = AreaServices()
     const { getDepartaments } = DepartamentServices()
     const $toast = useToast()
@@ -205,6 +204,10 @@ export default {
         nameState.value = false
         return 'Este campo es requerido'
       }
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(areaFields.value.nombre)) {
+        nameState.value = false
+        return 'El nombre solo puede contener letras'
+      }
       nameState.value = true
       return true
     }
@@ -234,13 +237,10 @@ export default {
     const addArea = () => {
       createArea(areaFields.value, data => {
         refreshTable()
-        $toast.open({
-          message: 'Area modificado correctamente',
-          position: 'top',
-          duration: 1000,
-          dismissible: true,
-          type: 'success',
-          onDismiss: () => refAreaModal.value.hide()
+        swal.fire({
+          title: '¡Area de trabajo registrado correctamente!',
+          text: 'El Area de trabajo se ha registrado al sistema satisfactoriamente.',
+          icon: 'success'
         })
       })
       areaFields.value = JSON.parse(JSON.stringify(areasFieldsBlank))
@@ -249,9 +249,36 @@ export default {
     }
     const RemoveArea = areaId => {
       isloading.value = true
-      deleteArea(areaId, data => {
-        refreshTable()
-      })
+      swal
+        .fire({
+          title: '¿Estas seguro?',
+          text: 'No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, Archivar Puesto de trabajo!',
+          cancelButtonText: 'Cancelar'
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            swal
+              .fire({
+                title: 'Area de trabajo archivado!',
+                text: 'El Area de trabajo ha sido archivado satisfactoriamente .',
+                icon: 'success'
+              })
+              .then(result => {
+                if (result.isConfirmed) {
+                  deleteArea(areaId, data => {
+                    refreshTable()
+                  })
+                }
+              })
+          } else {
+            isloading.value = false
+          }
+        })
     }
     return {
       departaments,

@@ -134,6 +134,7 @@
               <Field
                 name="workStationField"
                 :rules="validateWorkSation"
+                as="number"
               >
                 <b-form-select
                   v-model="EmployeesFields.puestoTrabajoId"
@@ -154,7 +155,7 @@
               <Field
                 name="DateWorkField"
                 :rules="validateWorkDate"
-                as="number"
+                as="text"
               >
                 <Datepicker
                   v-model="EmployeesFields.fechaAlta"
@@ -195,8 +196,8 @@ import ExpedientdigitalServices from '@/Services/expedientdigital.Services'
 import Datepicker from '@vuepic/vue-datepicker'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 
-import { ref } from 'vue'
-import { useToast } from 'vue-toast-notification'
+import { ref, inject } from 'vue'
+// import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
@@ -208,11 +209,12 @@ export default {
   },
   setup () {
     const { getEmployees, createEmployee, deleteEmployee } = EmployeeServices()
+    const swal = inject('$swal')
     const { getAreasByDepartament } = AreaServices()
     const { getDepartaments } = DepartamentServices()
     const { getWorkStationByArea } = workStationServices()
     const { createExpedient } = ExpedientdigitalServices()
-    const $toast = useToast()
+    // const $toast = useToast()
     const showModal = ref(false)
     const employees = ref([])
     const departaments = ref([])
@@ -250,13 +252,18 @@ export default {
       getAreasByDepartament(departamentoId, data => {
         areas.value = data
         if (data.length === 0) {
-          $toast.open({
-            message: 'No se encuentran areas registrados en el departamento seleccionado, registre primero una area para continuar',
-            position: 'top-left',
-            duration: 2500,
-            dismissible: true,
-            type: 'warning'
+          swal.fire({
+            title: 'No se encuentran areas registradas!',
+            text: 'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
+            icon: 'error'
           })
+          // $toast.open({
+          //   message: '',
+          //   position: 'top-left',
+          //   duration: 2500,
+          //   dismissible: true,
+          //   type: 'warning'
+          // })
         }
       })
     }
@@ -264,26 +271,36 @@ export default {
       getWorkStationByArea(departamentoId, data => {
         workStations.value = data
         if (data.length === 0) {
-          $toast.open({
-            message: 'No se encuentran puestos de trabajo registrados en el area seleccionado, registre primero un puesto de trabajo para continuar',
-            position: 'top-left',
-            duration: 2500,
-            dismissible: true,
-            type: 'warning'
+          swal.fire({
+            title: 'No se encuentran puestos de trabajo registrados!',
+            text: 'No se encuentran puestos de trabajo registrados en el area seleccionado, registre primero un puesto de trabajo para continuar.',
+            icon: 'error'
           })
+          // $toast.open({
+          //   message: '',
+          //   position: 'top-left',
+          //   duration: 2500,
+          //   dismissible: true,
+          //   type: 'warning'
+          // })
         }
       })
     }
     getDepartaments(data => {
       departaments.value = data
       if (data.length === 0) {
-        $toast.open({
-          message: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar',
-          position: 'top-left',
-          duration: 0,
-          dismissible: true,
-          type: 'warning'
+        swal.fire({
+          title: 'No se encuentran departamentos registrados!',
+          text: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
+          icon: 'error'
         })
+        // $toast.open({
+        //   message: '',
+        //   position: 'top-left',
+        //   duration: 0,
+        //   dismissible: true,
+        //   type: 'warning'
+        // })
       }
     })
     const validateName = () => {
@@ -291,7 +308,7 @@ export default {
         nameState.value = false
         return 'Este campo es requerido'
       }
-      if (!/^([a-zA-ZñÑáéíóúÁÉÍÓÚ])+$/i.test(EmployeesFields.value.nombreCompleto)) {
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(EmployeesFields.value.nombreCompleto)) {
         nameState.value = false
         return 'El nombre solo puede contener letras'
       }
@@ -395,9 +412,10 @@ export default {
           console.log(data)
         })
         refreshTable()
-        $toast.success('Empleado registrado correctamente.', {
-          position: 'top-right',
-          duration: 1500
+        swal.fire({
+          title: '¡Empleado registrado correctamente!',
+          text: 'El empleado se ha registrado al sistema satisfactoriamente.',
+          icon: 'success'
         })
       })
       showModal.value = false
@@ -406,9 +424,36 @@ export default {
 
     const RemoveEmployee = (employeeId) => {
       isloading.value = true
-      deleteEmployee(employeeId, (data) => {
-        refreshTable()
-      })
+      swal
+        .fire({
+          title: '¿Estas seguro?',
+          text: 'No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, Archivar empleado!',
+          cancelButtonText: 'Cancelar'
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            swal
+              .fire({
+                title: '¡Empleado archivado!',
+                text: 'El empleado ha sido archivado satisfactoriamente .',
+                icon: 'success'
+              })
+              .then(result => {
+                if (result.isConfirmed) {
+                  deleteEmployee(employeeId, (data) => {
+                    refreshTable()
+                  })
+                }
+              })
+          } else {
+            isloading.value = false
+          }
+        })
     }
     return {
       employees,

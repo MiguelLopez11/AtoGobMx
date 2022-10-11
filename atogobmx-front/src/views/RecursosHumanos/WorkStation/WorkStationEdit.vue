@@ -11,14 +11,15 @@
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre">
-              <Field name="NameField" :rules="validateName">
+              <Field
+                name="NameField"
+                :rules="validateName"
+                as="text"
+              >
                 <b-form-input v-model="workStation.nombre" :state="nameState">
                 </b-form-input>
               </Field>
-              <ErrorMessage name="NameField">
-                <span>Este campo es requerido</span>
-                <i class="bi bi-exclamation-circle" />
-              </ErrorMessage>
+              <ErrorMessage class="text-danger" name="NameField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -26,6 +27,7 @@
               <Field
                 name="DepartamentField"
                 :rules="validateDepartament"
+                as="number"
               >
                 <b-form-select
                   v-model="workStation.departamentoId"
@@ -38,10 +40,7 @@
                 >
                 </b-form-select>
               </Field>
-              <ErrorMessage name="DepartamentField"
-                ><span>Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i
-              ></ErrorMessage>
+              <ErrorMessage class="text-danger" name="DepartamentField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -49,6 +48,7 @@
               <Field
                 name="AreaField"
                 :rules="validateArea"
+                as="number"
               >
                 <b-form-select
                   v-model="workStation.areaId"
@@ -60,10 +60,7 @@
                 >
                 </b-form-select>
               </Field>
-              <ErrorMessage name="AreaField"
-                ><span>Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i
-              ></ErrorMessage>
+              <ErrorMessage class="text-danger" name="AreaField"></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
@@ -89,9 +86,9 @@
 import workStationServices from '@/Services/workStation.Services'
 import AreasServices from '@/Services/area.Services'
 import DepartamentServices from '@/Services/departament.Services'
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useToast } from 'vue-toast-notification'
+// import { useToast } from 'vue-toast-notification'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
@@ -101,10 +98,11 @@ export default {
     ErrorMessage
   },
   setup () {
+    const swal = inject('$swal')
     const { getWorkStation, updateWorkStation } = workStationServices()
     const { getAreasByDepartament } = AreasServices()
     const { getDepartaments } = DepartamentServices()
-    const $toast = useToast()
+    // const $toast = useToast()
     const workStation = ref([])
     const areas = ref([])
     const departaments = ref([])
@@ -119,25 +117,25 @@ export default {
       { text: 'Editar-Puesto de trabajo' }
     ])
     const onUpdateWorkStation = () => {
-      updateWorkStation(workStation.value, data => {})
-      $toast.open({
-        message: 'Puesto de trabajo modificado correctamente',
-        position: 'top',
-        duration: 2000,
-        dismissible: true,
-        type: 'success',
-        onDismiss: () => redirect.push('/PuestosTrabajos/list')
+      updateWorkStation(workStation.value, data => {
+        swal.fire({
+          title: 'Puesto de trabajo modificado correctamente!',
+          text: 'El Puesto de trabajo se ha modificado  satisfactoriamente.',
+          icon: 'success'
+        }).then(result => {
+          if (result.isConfirmed) {
+            redirect.push('/PuestosTrabajos/list')
+          }
+        })
       })
     }
     getDepartaments(data => {
       departaments.value = data
       if (data.length === 0) {
-        $toast.open({
-          message: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar',
-          position: 'top-left',
-          duration: 0,
-          dismissible: true,
-          type: 'error'
+        swal.fire({
+          title: 'No se encuentran departamentos registrados!',
+          text: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
+          icon: 'error'
         })
       }
     })
@@ -145,28 +143,31 @@ export default {
       getAreasByDepartament(departamentoId, data => {
         areas.value = data
         if (data.length === 0) {
-          $toast.open({
-            message: 'No se encuentran areas registrados en el departamento seleccionado, registre primero una area para continuar',
-            position: 'top-left',
-            duration: 0,
-            dismissible: true,
-            type: 'error'
+          swal.fire({
+            title: 'No se encuentran areas registradas!',
+            text: 'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
+            icon: 'error'
           })
         }
       })
     }
     getWorkStation(router.params.puestoTrabajoId, data => {
       workStation.value = data
+      nameState.value = data.nombre !== null
       departamentState.value = data.departamentoId !== null
       areaState.value = data.areaId !== null
       getAreas(data.departamentoId)
     })
     const validateName = () => {
       if (!workStation.value.nombre) {
-        validateState()
+        nameState.value = false
         return 'Este campo es requerido'
       }
-      validateState()
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(workStation.value.nombre)) {
+        nameState.value = false
+        return 'El nombre solo puede contener letras'
+      }
+      nameState.value = true
       return true
     }
     const validateDepartament = () => {
@@ -186,12 +187,12 @@ export default {
       return true
     }
     const validateState = () => {
-      nameState.value = workStation.value.nombre !== ''
+      // nameState.value = workStation.value.nombre !== ''
       // eslint-disable-next-line no-unneeded-ternary
       departamentState.value = workStation.value.departamentoId === null ? false : true
       // eslint-disable-next-line no-unneeded-ternary
       areaState.value = workStation.value.areaId === null ? false : true
-      return 'HOli'
+      return ''
     }
     return {
       workStation,

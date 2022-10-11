@@ -11,19 +11,16 @@
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre de area">
-              <Field name="NameField" :rules="validateArea">
+              <Field name="NameField" :rules="validateArea" as="text">
                 <b-form-input v-model="area.nombre" :state="nameState">
                 </b-form-input>
               </Field>
-              <ErrorMessage name="NameField">
-                <span>Este campo es requerido</span>
-                <i class="bi bi-exclamation-circle" />
-              </ErrorMessage>
+             <ErrorMessage class="text-danger" name="NameField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Departamento">
-              <Field name="DepartamentField" :rules="validateDepartament">
+              <Field name="DepartamentField" :rules="validateDepartament" as="number">
                 <b-form-select
                   v-model="area.departamentoId"
                   autofocus
@@ -34,10 +31,7 @@
                 >
                 </b-form-select>
               </Field>
-              <ErrorMessage name="DepartamentField">
-                <span>Este campo es requerido</span>
-                <i class="bi bi-exclamation-circle" />
-              </ErrorMessage>
+              <ErrorMessage class="text-danger" name="DepartamentField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -113,6 +107,10 @@ export default {
         validateState()
         return 'Este campo es requerido'
       }
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(area.value.nombre)) {
+        nameState.value = false
+        return 'El nombre solo puede contener letras'
+      }
       validateState()
       return true
     }
@@ -129,7 +127,7 @@ export default {
       nameState.value = area.value.nombre === '' ? false : true
       // eslint-disable-next-line no-unneeded-ternary
       departamentState.value = area.value.departamentoId === 0 ? false : true
-      return 'HOli'
+      return ''
     }
     return {
       departaments,

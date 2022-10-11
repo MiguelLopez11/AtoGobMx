@@ -113,7 +113,6 @@ export default {
     const searchField = ref('nombre')
     const expedienteDigitalId = ref(props.ExpedientDigitalId)
     const formData = new FormData()
-    // const files = ref([])
     const fields = ref([
       { value: 'archivoId', text: 'ID' },
       { value: 'nombre', text: 'Nombre Documento', sortable: true },

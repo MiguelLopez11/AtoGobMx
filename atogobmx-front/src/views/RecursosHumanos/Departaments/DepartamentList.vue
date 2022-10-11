@@ -110,8 +110,8 @@
 <script>
 import DepartamentServices from '@/Services/departament.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
-import { ref } from 'vue'
-import { useToast } from 'vue-toast-notification'
+import { ref, inject } from 'vue'
+// import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
@@ -121,8 +121,9 @@ export default {
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup () {
+    const swal = inject('$swal')
     const { getDepartaments, createDepartament, deleteDepartament } = DepartamentServices()
-    const $toast = useToast()
+    // const $toast = useToast()
     const departaments = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
@@ -166,7 +167,8 @@ export default {
         nameState.value = false
         return 'Este campo es requerido'
       }
-      if (!/^([a-zA-ZñÑáéíóúÁÉÍÓÚ])+$/i.test(departamentFields.value.nombre)) {
+      // eslint-disable-next-line no-useless-escape
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(departamentFields.value.nombre)) {
         nameState.value = false
         return 'El nombre del area solo puede contener letras'
       }
@@ -190,9 +192,10 @@ export default {
     const addDepartamento = () => {
       createDepartament(departamentFields.value, (data) => {
         refreshTable()
-        $toast.success('Departamento registrado correctamente.', {
-          position: 'top-right',
-          duration: 2000
+        swal.fire({
+          title: 'Departamento registrado correctamente!',
+          text: 'El departamento se ha registrado al sistema satisfactoriamente.',
+          icon: 'success'
         })
       })
       resetDepartamentFields()

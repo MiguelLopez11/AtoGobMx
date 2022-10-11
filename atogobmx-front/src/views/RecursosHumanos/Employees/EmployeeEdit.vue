@@ -14,16 +14,14 @@
               <Field
                 name="nameField"
                 :rules="validateName"
+                as="text"
               >
                 <b-form-input
                   v-model="employee.nombreCompleto"
                   :state="nameState"
                 />
               </Field>
-              <ErrorMessage name="nameField"
-                ><span class="text-danger">Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i
-              ></ErrorMessage>
+              <ErrorMessage class="text-danger" name="nameField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -31,6 +29,7 @@
               <Field
                 name="DepartamentField"
                 :rules="validateDepartament"
+                as="number"
               >
                 <b-form-select
                   v-model="employee.departamentoId"
@@ -43,10 +42,7 @@
                 >
                 </b-form-select>
               </Field>
-              <ErrorMessage name="DepartamentField"
-                ><span>Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i
-              ></ErrorMessage>
+              <ErrorMessage class="text-danger" name="DepartamentField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -54,6 +50,7 @@
               <Field
                 name="AreaField"
                 :rules="validateArea"
+                as="number"
               >
                 <b-form-select
                   v-model="employee.areaId"
@@ -66,10 +63,7 @@
                 >
                 </b-form-select>
               </Field>
-              <ErrorMessage name="AreaField"
-                ><span class="text-danger">Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i
-              ></ErrorMessage>
+              <ErrorMessage class="text-danger" name="AreaField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -77,6 +71,7 @@
               <Field
                 name="workStationField"
                 :rules="validateWorkSation"
+                as="number"
               >
                 <b-form-select
                   v-model="employee.puestoTrabajoId"
@@ -89,10 +84,7 @@
                 >
                 </b-form-select>
               </Field>
-              <ErrorMessage name="workStationField"
-                ><span class="text-danger">Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i
-              ></ErrorMessage>
+              <ErrorMessage class="text-danger" name="workStationField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -100,6 +92,7 @@
               <Field
                 name="DateWorkField"
                 :rules="validateWorkDate"
+                as="date"
               >
                 <Datepicker
                   v-model="employee.fechaAlta"
@@ -110,10 +103,7 @@
                 >
                 </Datepicker>
               </Field>
-              <ErrorMessage name="DateWorkField"
-                ><span class="text-danger">Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i
-              ></ErrorMessage>
+              <ErrorMessage class="text-danger" name="DateWorkField"></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
@@ -141,10 +131,10 @@ import AreaServices from '@/Services/area.Services'
 import DepartamentServices from '@/Services/departament.Services'
 import workStationServices from '@/Services/workStation.Services'
 import { Field, Form, ErrorMessage } from 'vee-validate'
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Datepicker from '@vuepic/vue-datepicker'
-import { useToast } from 'vue-toast-notification'
+// import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
@@ -154,11 +144,12 @@ export default {
     ErrorMessage
   },
   setup () {
+    const swal = inject('$swal')
     const { getEmployee, updateEmployee } = EmployeeServices()
     const { getAreasByDepartament } = AreaServices()
     const { getDepartaments } = DepartamentServices()
     const { getWorkStationByArea } = workStationServices()
-    const $toast = useToast()
+    // const $toast = useToast()
     const employee = ref([])
     const areas = ref([])
     const departaments = ref([])
@@ -184,12 +175,10 @@ export default {
     getDepartaments(data => {
       departaments.value = data
       if (data.length === 0) {
-        $toast.open({
-          message: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar',
-          position: 'top-left',
-          duration: 0,
-          dismissible: true,
-          type: 'error'
+        swal.fire({
+          title: 'No se encuentran departamentos registrados!',
+          text: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
+          icon: 'error'
         })
       }
     })
@@ -197,12 +186,10 @@ export default {
       getAreasByDepartament(departamentoId, data => {
         areas.value = data
         if (data.length === 0) {
-          $toast.open({
-            message: 'No se encuentran areas registrados en el departamento seleccionado, registre primero una area para continuar',
-            position: 'top-left',
-            duration: 0,
-            dismissible: true,
-            type: 'error'
+          swal.fire({
+            title: 'No se encuentran areas registradas!',
+            text: 'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
+            icon: 'error'
           })
         }
       })
@@ -211,25 +198,24 @@ export default {
       getWorkStationByArea(departamentoId, data => {
         workStations.value = data
         if (data.length === 0) {
-          $toast.open({
-            message: 'No se encuentran puestos de trabajo registrados en el area seleccionado, registre primero un puesto de trabajo para continuar',
-            position: 'top-left',
-            duration: 0,
-            dismissible: true,
-            type: 'error'
+          swal.fire({
+            title: 'No se encuentran puestos de trabajo registrados!',
+            text: 'No se encuentran puestos de trabajo registrados en el area seleccionado, registre primero un puesto de trabajo para continuar.',
+            icon: 'error'
           })
         }
       })
     }
     const onUpdateEmployee = () => {
       updateEmployee(employee.value, (data) => {
-        $toast.open({
-          message: 'Empleado modificado correctamente',
-          position: 'top',
-          duration: 2000,
-          dismissible: true,
-          type: 'success',
-          onDismiss: () => redirect.push('/Empleados/list')
+        swal.fire({
+          title: '¡Empleado modificado correctamente!',
+          text: 'El empleado se ha modificado  satisfactoriamente.',
+          icon: 'success'
+        }).then(result => {
+          if (result.isConfirmed) {
+            redirect.push('/Empleados/list')
+          }
         })
       })
     }
@@ -237,6 +223,10 @@ export default {
       if (!employee.value.nombreCompleto) {
         validateState()
         return 'Este campo es requerido'
+      }
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(employee.value.nombreCompleto)) {
+        nameState.value = false
+        return 'El nombre solo puede contener letras'
       }
       validateState()
       return true
@@ -279,7 +269,7 @@ export default {
       departamentState.value = employee.value.departamentoId !== 0
       workStationState.value = employee.value.puestoTrabajoId !== 0
       dateWorkState.value = employee.value.fechaAlta !== null
-      return 'HOli'
+      return ''
     }
 
     return {
