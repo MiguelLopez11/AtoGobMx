@@ -42,6 +42,21 @@
       <template #header-actions="header">
         {{ header.text }}
       </template>
+      <!-- <template #item-departaments="items">
+        <div>
+          {{items.departamentos.nombre || items}}
+        </div>
+      </template>
+      <template #item-areas="items">
+        <div>
+          {{items.area.nombre || items}}
+        </div>
+      </template>
+      <template #item-workStations="items">
+        <div>
+
+        </div>
+      </template> -->
       <template #item-actions="items">
         <b-button
           @click="RemoveEmployee(items.empleadoId)"
@@ -260,10 +275,6 @@ export default {
             icon: 'warning'
           })
         }
-        if (!data.area == null) {
-          headerArea.value = 'area.nombre'
-        }
-        headerArea.value = ''
       })
     }
     const getWorkStation = (departamentoId) => {
@@ -276,10 +287,6 @@ export default {
             icon: 'warning'
           })
         }
-        if (!data.puestoTrabajo == null) {
-          headerWorkStation.value = 'puestoTrabajo.nombre'
-        }
-        headerWorkStation.value = ''
       })
     }
     getDepartaments(data => {
@@ -291,10 +298,6 @@ export default {
           icon: 'warning'
         })
       }
-      if (!data.departamentos == null) {
-        headerDepartament.value = 'departamentos.nombre'
-      }
-      headerDepartament.value = ''
     })
     const validateName = () => {
       if (!EmployeesFields.value.nombreCompleto) {
@@ -354,9 +357,9 @@ export default {
     const fields = ref([
       { value: 'empleadoId', text: 'ID', sortable: true },
       { value: 'nombreCompleto', text: 'Nombre' },
-      { value: `${headerDepartament.value}`, text: 'Departamento' },
-      { value: `${headerArea.value}`, text: 'Area de Trabajo' },
-      { value: `${headerWorkStation.value}`, text: 'Puesto de Trabajo' },
+      { value: 'departamentos.nombre', text: 'Departamento' },
+      { value: 'area.nombre', text: 'Area de Trabajo' },
+      { value: 'puestoTrabajo.nombre', text: 'Puesto de Trabajo' },
       { value: 'fechaAlta', text: 'Fecha de contratación' },
       { value: 'actions', text: 'Acciones' }
     ])

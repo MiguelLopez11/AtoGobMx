@@ -84,15 +84,6 @@ namespace AtoGobMx.Controllers
             {
                 puesto.Archivado = true;
             }
-            //var empleados = await _context.Empleados
-            //    .Where(w => w.DepartamentoId == DepartamentoId)
-            //    .ToListAsync();
-            //foreach (var empleado in empleados)
-            //{
-            //    empleado.DepartamentoId = null;
-            //    empleado.AreaId = null;
-            //    empleado.PuestoTrabajoId = null;
-            //}
             departamento.Archivado = true;
             _context.Departamentos.Update(departamento);
             await _context.SaveChangesAsync();
