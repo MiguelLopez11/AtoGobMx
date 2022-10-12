@@ -17,10 +17,26 @@
           margin-right: 15px;
           margin-left: 20px;"
       type="submit"
-      v-b-modal.modal-expedientDigital
+      @click="showModal = !showModal"
     >
-      <i class="bi bi-person-plus-fill"></i>
+      <i class="bi bi-file-earmark-plus"></i>
       Agregar Documento
+    </b-button>
+    <b-button
+      v-if="documents.length > 0"
+      variant="primary"
+      style="
+          height: 50px;
+          width: auto;
+          font-size: 16px;
+          margin-right: 15px;
+          margin-left: 20px;
+          text-align: center;"
+      type="submit"
+      :href="`https://localhost:7065/api/Archivos/Documentos/${expedienteDigitalId}/Zip`"
+    >
+    <i class="bi bi-download"></i>
+    Descargar Documentos
     </b-button>
   </b-row>
   <b-alert
@@ -67,7 +83,7 @@
   </EasyDataTable>
   <b-modal
     ref="DocumentModal"
-    id="modal-expedientDigital"
+    v-model="showModal"
     title="Documentos"
     size="xl"
     centered
@@ -106,6 +122,7 @@ export default {
   },
   setup (props) {
     const { getDocuments, deleteDocument, createDocuments } = FileServices()
+    const showModal = ref(false)
     const refFile = ref()
     const DocumentModal = ref()
     const swal = inject('$swal')
@@ -167,6 +184,7 @@ export default {
         return ''
       }
       createDocuments(props.ExpedientDigitalId, formData, data => {
+        showModal.value = false
         swal
           .fire({
             title: 'Documento(s) Guardado(s)!',
@@ -204,6 +222,7 @@ export default {
               .then(result => {
                 if (result.isConfirmed) {
                   deleteDocument(props.ExpedientDigitalId, archivoId, data => {
+                    showModal.value = false
                     refreshTable()
                   })
                 }
@@ -224,6 +243,7 @@ export default {
       searchField,
       documents,
       expedienteDigitalId,
+      showModal,
 
       onFiltered,
       RemoveDocument,

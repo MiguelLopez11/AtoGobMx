@@ -405,7 +405,6 @@ export default {
       createEmployee(EmployeesFields.value, (data) => {
         expedientFieldBlank.value.empleadoId = data.empleadoId
         createExpedient(expedientFieldBlank.value, data => {
-          console.log(data)
         })
         refreshTable()
         swal.fire({
@@ -433,18 +432,14 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
+            deleteEmployee(employeeId, (data) => {
+              refreshTable()
+            })
             swal
               .fire({
                 title: '¡Empleado archivado!',
                 text: 'El empleado ha sido archivado satisfactoriamente .',
                 icon: 'success'
-              })
-              .then(result => {
-                if (result.isConfirmed) {
-                  deleteEmployee(employeeId, (data) => {
-                    refreshTable()
-                  })
-                }
               })
           } else {
             isloading.value = false

@@ -415,7 +415,6 @@ export default {
       createPublicLighting(publicLightingFields.value, (data) => {
         expedientPublicFieldBlank.value.alumbradoId = data.alumbradoId
         createExpedientLighting(expedientPublicFieldBlank.value, data => {
-          console.log(data)
         })
         refreshTable()
         $toast.success('Alumbrado registrado correctamente.', {

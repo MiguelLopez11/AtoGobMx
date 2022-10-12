@@ -7,7 +7,6 @@
           `https://localhost:7065/api/Archivos/FotoPerfil/${expedienteDigitalId}`
         "
         size="170px"
-        @click="showModal = !showModal"
         style="cursor: pointer; margin-bottom: 30px"
         badge-variant="light"
         alt=""
@@ -152,6 +151,7 @@
     </b-card>
   </b-card>
   <b-modal
+    id="modal-expedient"
     v-model="showModal"
     title="Imagen de Perfil"
     size="xl"
@@ -176,7 +176,7 @@
 <script>
 import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useToast } from 'vue-toast-notification'
+// import { useToast } from 'vue-toast-notification'
 import FileServices from '@/Services/file.Services'
 import ExpedientDocuments from '@/views/RecursosHumanos/ExpedienteDigital/ExpedientDigitalDocuments.vue'
 import ExpedientdigitalServices from '@/Services/expedientdigital.Services'
@@ -195,7 +195,7 @@ export default {
     const refFile = ref()
     const refAvatar = ref()
     const router = useRoute()
-    const $toast = useToast()
+    // const $toast = useToast()
     const redirect = useRouter()
     const showModal = ref(false)
     const expedient = ref([])
@@ -220,14 +220,21 @@ export default {
     }
     const submitExpedient = () => {
       updateExpedient(expedient.value, data => {
-        $toast.open({
-          message: 'Expediente modificado correctamente',
-          position: 'top',
-          duration: 2000,
-          dismissible: true,
-          type: 'success',
-          onDismiss: () => redirect.push('/ExpedientesDigitales/list')
+        swal.fire({
+          title: '¡Expediente modificado correctamente!',
+          text: 'El expediente se ha modificado correctamente.',
+          icon: 'success'
+        }).then(result => {
+          redirect.push('/ExpedientesDigitales/list')
         })
+        // $toast.open({
+        //   message: 'Expediente modificado correctamente',
+        //   position: 'top',
+        //   duration: 2000,
+        //   dismissible: true,
+        //   type: 'success',
+        //   onDismiss: () => redirect.push('/ExpedientesDigitales/list')
+        // })
       })
     }
     // Validations
