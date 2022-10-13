@@ -9,7 +9,7 @@
         placeholder="Buscar Alumbrado..."
       ></b-form-input>
       <b-button
-        variant="primary"
+        variant="success"
         style="
           height: 50px;
           width: auto;
@@ -17,9 +17,10 @@
           margin-right: 15px;
           margin-left: 20px;
         "
-        v-b-modal.modal-publiclighting
+        @click="showModal = !showModal"
         type="submit"
       >
+        <!-- v-b-modal.modal-publiclighting -->
         <i class="bi bi-person-plus-fill"></i>
         Agregar Alumbrado
       </b-button>
@@ -62,8 +63,10 @@
     <b-modal
       id="modal-publiclighting"
       title="Agregar Alumbrado"
+      v-model="showModal"
       size="xl"
       hide-footer
+      centered
       button-size="lg"
       lazy
     >
@@ -92,7 +95,7 @@
                 ></ErrorMessage>
               </b-form-group> -->
             <b-form-group class="mt-3" label="Tipo Tarea">
-              <Field name="TaskField" :rules="validateTask">
+              <Field name="TaskField" :rules="validateTask" as="text">
                 <b-form-select
                   v-model="publicLightingFields.tarea"
                   autofocus
@@ -127,15 +130,16 @@
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Domicilio">
-              <Field name="DomicileField" :rules="validateDomicile">
+              <Field name="DomicileField" :rules="validateDomicile" as="text">
                 <b-form-input
                   v-model="publicLightingFields.domicilio"
                   :state="DomicileState"
                 ></b-form-input>
               </Field>
               <ErrorMessage name="DomicileField"
-                ><span>Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i>
+                >
+                <!-- <span>Este campo es requerido </span
+                ><i class="bi bi-exclamation-circle"></i> -->
               </ErrorMessage>
             </b-form-group>
           </b-col>
@@ -161,6 +165,7 @@
               <Field
                 name="addresdescriptionField"
                 :rules="validateAddresdescription"
+                as="text"
               >
                 <b-form-textarea
                   v-model="publicLightingFields.descripcionDomicilio"
@@ -169,8 +174,9 @@
                 ></b-form-textarea>
               </Field>
               <ErrorMessage name="addresdescriptionField"
-                ><span>Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i>
+                >
+                <!-- <span>Este campo es requerido </span
+                ><i class="bi bi-exclamation-circle"></i> -->
               </ErrorMessage>
             </b-form-group>
           </b-col>
@@ -179,6 +185,7 @@
               <Field
                 name="DescriptionSolutionField"
                 :rules="validateDescriptionSolution"
+                as="text"
               >
                 <b-form-textarea
                   v-model="publicLightingFields.descripcionSolucion"
@@ -186,9 +193,9 @@
                   rows="4"
                 ></b-form-textarea>
               </Field>
-              <ErrorMessage name="DescriptionSolutionField"
-                ><span>Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i>
+              <ErrorMessage class="text-danger" name="DescriptionSolutionField">
+                <!-- <span>Este campo es requerido </span
+                ><i class="bi bi-exclamation-circle"></i> -->
               </ErrorMessage>
             </b-form-group>
           </b-col>
@@ -197,8 +204,9 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            v-b-modal.modal-publiclighting
+            @click="resetpublicLightingFields"
           >
+            <!-- v-b-modal.modal-publiclighting -->
             Cancelar
           </b-button>
           <b-button class="w-auto m-2" variant="success" type="submit">
@@ -217,8 +225,8 @@ import StatusLightingServices from '@/Services/statuslighting.Services'
 import EditExpedientLighting from '@/Services/expedientlighting.Services'
 import Datepicker from '@vuepic/vue-datepicker'
 import { Form, Field, ErrorMessage } from 'vee-validate'
-import { ref } from 'vue'
-import { useToast } from 'vue-toast-notification'
+import { ref, inject } from 'vue'
+// import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
@@ -229,6 +237,7 @@ export default {
     ErrorMessage
   },
   setup () {
+    const swal = inject('$swal')
     const {
       getPublicLighting,
       createPublicLighting,
@@ -238,7 +247,8 @@ export default {
       getStatus
     } = StatusLightingServices()
     const { createExpedientLighting } = EditExpedientLighting()
-    const $toast = useToast()
+    const showModal = ref(false)
+    // const $toast = useToast()
     const publicLighting = ref([])
     const statusPublicLighting = ref([])
     // const option = ref()
@@ -259,16 +269,16 @@ export default {
     const LowDateState = ref(false)
     const expedientPublicFieldBlank = ref({
       expedienteAlumbradoId: 0,
-      alumbradoId: 0,
+      alumbradoId: null,
       archivado: false
     })
     const publicLightingFields = ref({
       alumbradoId: 0,
       tarea: null,
-      descripcionSolucion: null,
+      descripcionSolucion: '',
       fechaAlta: null,
       fechaBaja: null,
-      domicilio: null,
+      domicilio: '',
       descripcionDomicilio: null,
       archivado: false
     })
@@ -312,6 +322,10 @@ export default {
         DescriptionSolutionState.value = false
         return 'Este campo es requerido'
       }
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(publicLightingFields.value.descripcionSolucion)) {
+        DescriptionSolutionState.value = false
+        return 'La descripcion solucion solopuede contener letras'
+      }
       DescriptionSolutionState.value = true
       return true
     }
@@ -320,6 +334,10 @@ export default {
       if (!publicLightingFields.value.domicilio) {
         DomicileState.value = false
         return 'Este campo es requerido'
+      }
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(publicLightingFields.value.domicilio)) {
+        DomicileState.value = false
+        return 'Este campo domicilio solopuede contener letras'
       }
       DomicileState.value = true
       return true
@@ -368,15 +386,16 @@ export default {
       { value: 'actions', text: 'Acciones' }
     ])
 
-    // const resetStreetLightingFields = () => {
-    //   streetLightingFields.value = JSON.parse(JSON.stringify(streetLightingFieldsBlank))
-    //   TaskState.value = false
-    //   DescriptionSolutionState.value = false
-    //   HighDateState.value = false
-    //   addresdescriptionState.value = false
-    //   DomicileState.value = false
-    //   LowDateState.value = false
-    // }
+    const resetpublicLightingFields = () => {
+      showModal.value = false
+      publicLightingFields.value = JSON.parse(JSON.stringify(publicLightingFieldsBlank))
+      TaskState.value = false
+      DescriptionSolutionState.value = false
+      HighDateState.value = false
+      addresdescriptionState.value = false
+      DomicileState.value = false
+      LowDateState.value = false
+    }
 
     getPublicLighting((data) => {
       publicLighting.value = data
@@ -418,21 +437,49 @@ export default {
           console.log(data)
         })
         refreshTable()
-        $toast.success('Alumbrado registrado correctamente.', {
-          position: 'top-right',
-          duration: 1500
+        swal.fire({
+          title: '¡Alumbrado publico agregado correctamente!',
+          text: 'Alumbrado registrado satisfactoriamente',
+          icon: 'success'
         })
+        // $toast.success('Alumbrado registrado correctamente.', {
+        //   position: 'top-right',
+        //   duration: 1500
+        // })
       })
       // resetStreetLightingFields()
-      publicLightingFields.value = JSON.parse(
-        JSON.stringify(publicLightingFieldsBlank))
+      // publicLightingFields.value = JSON.parse(
+      //   JSON.stringify(publicLightingFieldsBlank))
+      showModal.value = false
+      resetpublicLightingFields()
     }
 
     const RemovePublicLighting = (StreetLightingId) => {
       isloading.value = true
-      deletePublicLighting(StreetLightingId, (data) => {
-        refreshTable()
+      swal.fire({
+        title: '¿Estas seguro',
+        text: 'No podras revertir esto',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, Archivar alumbrado!',
+        cancelButtonText: 'Cancelar'
       })
+        .then(result => {
+          if (result.isConfirmed) {
+            deletePublicLighting(StreetLightingId, (data) => {
+              refreshTable()
+            })
+            swal.fire({
+              title: '¡Alumbrado archivado!',
+              text: 'El alumbrado publico ha sido archivado satisfactoriamente.',
+              icon: 'success'
+            })
+          } else {
+            isloading.value = false
+          }
+        })
     }
 
     return {
@@ -457,6 +504,7 @@ export default {
       addresdescriptionState,
       DomicileState,
       LowDateState,
+      showModal,
       // option,
 
       onFiltered,
@@ -468,7 +516,8 @@ export default {
       validateHighDate,
       validateAddresdescription,
       validateLowDate,
-      validateDomicile
+      validateDomicile,
+      resetpublicLightingFields
       // resetStreetLightingFields
     }
   }

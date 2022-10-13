@@ -92,6 +92,16 @@ const routes = [
     component: () => import('@/views/ServiciosPublicos/streetLighting/typetasklighting/EditTaskTypeLighting.vue')
   },
   {
+    path: '/Cementerios/list',
+    name: 'Cementerios',
+    component: () => import('@/views/ServiciosPublicos/cementery/Cementery/CementeryList.vue')
+  },
+  {
+    path: '/Cementerios/:CementeriosId',
+    name: 'Cementerios-Edit',
+    component: () => import('@/views/ServiciosPublicos/cementery/Cementery/EditCementery.vue')
+  },
+  {
     path: '/Usuarios/list',
     name: 'Usuarios',
     component: () => import('@/views/Users/UserList.vue')
