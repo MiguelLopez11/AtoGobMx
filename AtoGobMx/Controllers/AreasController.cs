@@ -81,6 +81,13 @@ namespace AtoGobMx.Controllers
             {
                 return NotFound();
             }
+            var puestosTrabajo = await _context.PuestoTrabajo
+                .Where(f => f.AreaId == areaId)
+                .ToListAsync();
+            foreach (var puesto in puestosTrabajo)
+            {
+                puesto.Archivado = true;
+            }
             area.Archivado = true;
             _context.Area.Update(area);
             await _context.SaveChangesAsync();

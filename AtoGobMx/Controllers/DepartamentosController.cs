@@ -55,6 +55,7 @@ namespace AtoGobMx.Controllers
             DepartamentoValue.DepartamentoId = departamentos.DepartamentoId;
             DepartamentoValue.Nombre = departamentos.Nombre;
             DepartamentoValue.Descripcion = departamentos.Descripcion;
+            DepartamentoValue.Archivado = departamentos.Archivado;
 
             _context.Departamentos.Update(DepartamentoValue);
             await _context.SaveChangesAsync();
@@ -68,6 +69,20 @@ namespace AtoGobMx.Controllers
             if (departamento == null)
             {
                 return NotFound();
+            }
+            var areas = await _context.Area
+                .Where(w => w.DepartamentoId == DepartamentoId)
+                .ToListAsync();
+            foreach (var area in areas)
+            {
+                area.Archivado = true;
+            }
+            var puestos = await _context.PuestoTrabajo
+                .Where(w => w.DepartamentoId == DepartamentoId)
+                .ToListAsync();
+            foreach (var puesto in puestos)
+            {
+                puesto.Archivado = true;
             }
             departamento.Archivado = true;
             _context.Departamentos.Update(departamento);

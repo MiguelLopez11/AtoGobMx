@@ -18,7 +18,7 @@
           margin-right: 15px;
           margin-left: 20px;
         "
-        v-b-modal.modal-employee
+        @click="showModal = !showModal"
         type="submit"
       >
         <i class="bi bi-person-plus-fill"></i>
@@ -42,6 +42,21 @@
       <template #header-actions="header">
         {{ header.text }}
       </template>
+      <!-- <template #item-departaments="items">
+        <div>
+          {{items.departamentos.nombre || items}}
+        </div>
+      </template>
+      <template #item-areas="items">
+        <div>
+          {{items.area.nombre || items}}
+        </div>
+      </template>
+      <template #item-workStations="items">
+        <div>
+
+        </div>
+      </template> -->
       <template #item-actions="items">
         <b-button
           @click="RemoveEmployee(items.empleadoId)"
@@ -62,10 +77,10 @@
     </EasyDataTable>
     <b-modal
       id="modal-employee"
+      v-model="showModal"
       title="Agregar empleados"
       size="xl"
       hide-footer
-      hide-backdrop
       centered
       button-size="lg"
       lazy
@@ -105,7 +120,7 @@
                 >
                 </b-form-select>
               </Field>
-              <ErrorMessage class="text-danger" name="nameField"></ErrorMessage>
+              <ErrorMessage class="text-danger" name="DepartamentField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -126,7 +141,7 @@
                 >
                 </b-form-select>
               </Field>
-              <ErrorMessage class="text-danger" name="nameField"></ErrorMessage>
+              <ErrorMessage class="text-danger" name="AreaField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -134,6 +149,7 @@
               <Field
                 name="workStationField"
                 :rules="validateWorkSation"
+                as="number"
               >
                 <b-form-select
                   v-model="EmployeesFields.puestoTrabajoId"
@@ -142,11 +158,10 @@
                   value-field="puestoTrabajoId"
                   text-field="nombre"
                   :state="workStationState"
-                  @input="getWorkStation(EmployeesFields.puestoTrabajoId)"
                 >
                 </b-form-select>
               </Field>
-              <ErrorMessage class="text-danger" name="nameField"></ErrorMessage>
+              <ErrorMessage class="text-danger" name="workStationField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -154,7 +169,7 @@
               <Field
                 name="DateWorkField"
                 :rules="validateWorkDate"
-                as="number"
+                as="text"
               >
                 <Datepicker
                   v-model="EmployeesFields.fechaAlta"
@@ -165,7 +180,7 @@
                 >
                 </Datepicker>
               </Field>
-              <ErrorMessage class="text-danger" name="nameField"></ErrorMessage>
+              <ErrorMessage class="text-danger" name="DateWorkField"></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
@@ -173,7 +188,6 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            v-b-modal.modal-employee
             @click="resetEmployeesFields"
           >
             Cancelar
@@ -196,8 +210,8 @@ import ExpedientdigitalServices from '@/Services/expedientdigital.Services'
 import Datepicker from '@vuepic/vue-datepicker'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 
-import { ref } from 'vue'
-import { useToast } from 'vue-toast-notification'
+import { ref, inject } from 'vue'
+// import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
@@ -209,11 +223,13 @@ export default {
   },
   setup () {
     const { getEmployees, createEmployee, deleteEmployee } = EmployeeServices()
+    const swal = inject('$swal')
     const { getAreasByDepartament } = AreaServices()
     const { getDepartaments } = DepartamentServices()
     const { getWorkStationByArea } = workStationServices()
     const { createExpedient } = ExpedientdigitalServices()
-    const $toast = useToast()
+    // const $toast = useToast()
+    const showModal = ref(false)
     const employees = ref([])
     const departaments = ref([])
     const areas = ref([])
@@ -231,6 +247,9 @@ export default {
     const areaState = ref(false)
     const workStationState = ref(false)
     const departamentState = ref(false)
+    const headerDepartament = ref()
+    const headerArea = ref()
+    const headerWorkStation = ref()
     const expedientFieldBlank = ref({
       expedienteDigitalId: 0,
       empleadoId: null,
@@ -240,22 +259,24 @@ export default {
       empleadoId: 0,
       nombreCompleto: '',
       archivado: false,
+      tieneExpediente: true,
       areaId: null,
       usuarioId: null,
       departamentoId: null,
       expedienteDigitalId: null,
       puestoTrabajoId: null
     })
+    const EmployeesFieldsBlank = ref(
+      JSON.parse(JSON.stringify(EmployeesFields))
+    )
     const getAreas = (departamentoId) => {
       getAreasByDepartament(departamentoId, data => {
         areas.value = data
         if (data.length === 0) {
-          $toast.open({
-            message: 'No se encuentran areas registrados en el departamento seleccionado, registre primero una area para continuar',
-            position: 'top-left',
-            duration: 2500,
-            dismissible: true,
-            type: 'error'
+          swal.fire({
+            title: 'No se encuentran areas registradas!',
+            text: 'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
+            icon: 'warning'
           })
         }
       })
@@ -264,12 +285,10 @@ export default {
       getWorkStationByArea(departamentoId, data => {
         workStations.value = data
         if (data.length === 0) {
-          $toast.open({
-            message: 'No se encuentran puestos de trabajo registrados en el area seleccionado, registre primero un puesto de trabajo para continuar',
-            position: 'top-left',
-            duration: 2500,
-            dismissible: true,
-            type: 'error'
+          swal.fire({
+            title: 'No se encuentran puestos de trabajo registrados!',
+            text: 'No se encuentran puestos de trabajo registrados en el area seleccionado, registre primero un puesto de trabajo para continuar.',
+            icon: 'warning'
           })
         }
       })
@@ -277,12 +296,10 @@ export default {
     getDepartaments(data => {
       departaments.value = data
       if (data.length === 0) {
-        $toast.open({
-          message: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar',
-          position: 'top-left',
-          duration: 2500,
-          dismissible: true,
-          type: 'error'
+        swal.fire({
+          title: 'No se encuentran departamentos registrados!',
+          text: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
+          icon: 'warning'
         })
       }
     })
@@ -291,7 +308,7 @@ export default {
         nameState.value = false
         return 'Este campo es requerido'
       }
-      if (!/^([a-zA-ZñÑáéíóúÁÉÍÓÚ])+$/i.test(EmployeesFields.value.nombreCompleto)) {
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(EmployeesFields.value.nombreCompleto)) {
         nameState.value = false
         return 'El nombre solo puede contener letras'
       }
@@ -338,9 +355,6 @@ export default {
       workStationState.value = true
       return true
     }
-    const EmployeesFieldsBlank = ref(
-      JSON.parse(JSON.stringify(EmployeesFields))
-    )
     const fields = ref([
       { value: 'empleadoId', text: 'ID', sortable: true },
       { value: 'nombreCompleto', text: 'Nombre' },
@@ -351,6 +365,7 @@ export default {
       { value: 'actions', text: 'Acciones' }
     ])
     const resetEmployeesFields = () => {
+      showModal.value = false
       EmployeesFields.value = JSON.parse(JSON.stringify(EmployeesFieldsBlank))
       nameState.value = false
       dateState.value = false
@@ -394,19 +409,44 @@ export default {
           console.log(data)
         })
         refreshTable()
-        $toast.success('Empleado registrado correctamente.', {
-          position: 'top-right',
-          duration: 1500
+        swal.fire({
+          title: '¡Empleado registrado correctamente!',
+          text: 'El empleado se ha registrado al sistema satisfactoriamente.',
+          icon: 'success'
         })
       })
+      showModal.value = false
       resetEmployeesFields()
     }
 
     const RemoveEmployee = (employeeId) => {
       isloading.value = true
-      deleteEmployee(employeeId, (data) => {
-        refreshTable()
-      })
+      swal
+        .fire({
+          title: '¿Estas seguro?',
+          text: 'No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, Archivar empleado!',
+          cancelButtonText: 'Cancelar'
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            deleteEmployee(employeeId, (data) => {
+              refreshTable()
+            })
+            swal
+              .fire({
+                title: '¡Empleado archivado!',
+                text: 'El empleado ha sido archivado satisfactoriamente .',
+                icon: 'success'
+              })
+          } else {
+            isloading.value = false
+          }
+        })
     }
     return {
       employees,
@@ -430,6 +470,10 @@ export default {
       areaState,
       workStationState,
       departamentState,
+      showModal,
+      headerDepartament,
+      headerArea,
+      headerWorkStation,
 
       onFiltered,
       addEmployee,

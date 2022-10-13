@@ -18,10 +18,10 @@
           margin-right: 15px;
           margin-left: 20px;
         "
-        v-b-modal.modal-area
+        @click="showModal = !showModal"
         type="submit"
       >
-        <i class="bi bi-person-plus-fill"></i>
+        <i class="bi bi-person-workspace m-1" />
         Agregar Area
       </b-button>
     </b-row>
@@ -62,7 +62,7 @@
       </template>
     </EasyDataTable>
     <b-modal
-      id="modal-area"
+      v-model="showModal"
       ref="refAreaModal"
       title="Agregar areas"
       size="xl"
@@ -74,19 +74,20 @@
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre">
-              <Field name="NameField" :rules="validateArea">
+              <Field
+                name="NameField"
+                :rules="validateArea"
+                as="text"
+              >
                 <b-form-input v-model="areaFields.nombre" :state="nameState">
                 </b-form-input>
               </Field>
-              <ErrorMessage name="NameField">
-                <span>Este campo es requerido</span>
-                <i class="bi bi-exclamation-circle" />
-              </ErrorMessage>
+              <ErrorMessage class="text-danger" name="NameField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Departamento">
-              <Field name="DepartamentField" :rules="validateDepartament">
+              <Field name="DepartamentField" :rules="validateDepartament" as="number">
                 <b-form-select
                   v-model="areaFields.departamentoId"
                   autofocus
@@ -97,10 +98,7 @@
                 >
                 </b-form-select>
               </Field>
-              <ErrorMessage name="DepartamentField">
-                <span>Este campo es requerido</span>
-                <i class="bi bi-exclamation-circle" />
-              </ErrorMessage>
+              <ErrorMessage class="text-danger" name="DepartamentField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -113,7 +111,7 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            v-b-modal.modal-area
+            @click="resetForm()"
           >
             Cancelar
           </b-button>
@@ -130,8 +128,7 @@
 import AreaServices from '@/Services/area.Services'
 import DepartamentServices from '@/Services/departament.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
-import { ref, watch } from 'vue'
-import { useToast } from 'vue-toast-notification'
+import { ref, watch, inject } from 'vue'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
@@ -141,9 +138,10 @@ export default {
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup () {
+    const swal = inject('$swal')
     const { getAreas, createArea, deleteArea } = AreaServices()
     const { getDepartaments } = DepartamentServices()
-    const $toast = useToast()
+    const showModal = ref(false)
     const refAreaModal = ref()
     const departaments = ref([])
     const areas = ref([])
@@ -166,12 +164,10 @@ export default {
     })
     watch(departaments, (values) => {
       if (values.length === 0) {
-        $toast.open({
-          message: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar',
-          position: 'top-left',
-          duration: 0,
-          dismissible: true,
-          type: 'error'
+        swal.fire({
+          title: 'No se encuentran departamentos registrados!',
+          text: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
+          icon: 'warning'
         })
       }
     })
@@ -205,6 +201,10 @@ export default {
         nameState.value = false
         return 'Este campo es requerido'
       }
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(areaFields.value.nombre)) {
+        nameState.value = false
+        return 'El nombre solo puede contener letras'
+      }
       nameState.value = true
       return true
     }
@@ -218,7 +218,6 @@ export default {
     }
     const refreshTable = () => {
       isloading.value = true
-
       getAreas(data => {
         areas.value = data
         if (areas.value.length > 0) {
@@ -233,25 +232,53 @@ export default {
     }
     const addArea = () => {
       createArea(areaFields.value, data => {
-        refreshTable()
-        $toast.open({
-          message: 'Area modificado correctamente',
-          position: 'top',
-          duration: 1000,
-          dismissible: true,
-          type: 'success',
-          onDismiss: () => refAreaModal.value.hide()
+        swal.fire({
+          title: '¡Area de trabajo registrado correctamente!',
+          text: 'El Area de trabajo se ha registrado al sistema satisfactoriamente.',
+          icon: 'success'
         })
+        refreshTable()
+        resetForm()
       })
+    }
+    const resetForm = () => {
+      showModal.value = false
       areaFields.value = JSON.parse(JSON.stringify(areasFieldsBlank))
       nameState.value = false
       departamentState.value = false
     }
     const RemoveArea = areaId => {
       isloading.value = true
-      deleteArea(areaId, data => {
-        refreshTable()
-      })
+      swal
+        .fire({
+          title: '¿Estas seguro?',
+          text: 'No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, Archivar Puesto de trabajo!',
+          cancelButtonText: 'Cancelar'
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            swal
+              .fire({
+                title: 'Area de trabajo archivado!',
+                text: 'El Area de trabajo ha sido archivado satisfactoriamente .',
+                icon: 'success'
+              })
+              .then(result => {
+                if (result.isConfirmed) {
+                  deleteArea(areaId, data => {
+                    refreshTable()
+                  })
+                }
+              })
+          } else {
+            isloading.value = false
+          }
+        })
     }
     return {
       departaments,
@@ -274,9 +301,11 @@ export default {
       RemoveArea,
       nameState,
       departamentState,
+      showModal,
 
       validateDepartament,
-      validateArea
+      validateArea,
+      resetForm
     }
   }
 }

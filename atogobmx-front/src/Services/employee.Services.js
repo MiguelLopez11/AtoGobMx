@@ -7,6 +7,11 @@ export default function EmployeeServices () {
       callback(response.data)
     })
   }
+  const getEmployeesWithoutExpedient = (callback) => {
+    axios.get(`${BaseUrl}/Empleados/SinExpedientes`).then((response) => {
+      callback(response.data)
+    })
+  }
   const getEmployee = (EmployeeId, callback) => {
     axios.get(`${BaseUrl}/Empleados/${EmployeeId}`).then((response) => {
       callback(response.data)
@@ -32,6 +37,7 @@ export default function EmployeeServices () {
     getEmployee,
     createEmployee,
     updateEmployee,
-    deleteEmployee
+    deleteEmployee,
+    getEmployeesWithoutExpedient
   }
 }

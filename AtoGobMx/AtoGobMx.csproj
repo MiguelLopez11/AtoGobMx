@@ -25,6 +25,7 @@
 
 	<ItemGroup>
 		<!--<Folder Include="Files\Images\" />-->
+		<Folder Include="Files\" />
 		<Folder Include="Migrations\" />
 	</ItemGroup>
 
@@ -33,9 +34,7 @@
 	</ItemGroup>
 
 	<ProjectExtensions>
-		<VisualStudio>
-			<UserProperties appsettings_1json__JsonSchema="" />
-		</VisualStudio>
+		<VisualStudio><UserProperties appsettings_1json__JsonSchema="https://appliedengdesign.github.io/cnccodes-json-schema/draft/2022-07/schema" /></VisualStudio>
 	</ProjectExtensions>
 
 </Project>

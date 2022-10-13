@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
+using System.IO.Compression;
 
 namespace AtoGobMx.Controllers
 {
@@ -90,6 +91,34 @@ namespace AtoGobMx.Controllers
             }
             return Ok(Documentos);
         }
+        [HttpGet("Documentos/{ExpedienteDigitalId}/Zip")]
+        public async Task<IActionResult> DownloadFilesZip(int ExpedienteDigitalId)
+        {
+            var expediente = await _context.ExpedienteDigital
+                .Include(i => i.Empleados)
+                .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == ExpedienteDigitalId);
+
+            var FolderPath = Path.Combine(Directory.GetCurrentDirectory(), $"Files/Documentos/{expediente.Empleados.NombreCompleto}");
+            var FilePaths = Directory.GetFiles(FolderPath);
+            var zipFileMemoryStream = new MemoryStream();
+            using (ZipArchive archive = new ZipArchive(zipFileMemoryStream, ZipArchiveMode.Update, leaveOpen: true))
+            {
+                foreach (var FilePath in FilePaths)
+                {
+                    var FileName = Path.GetFileName(FilePath);
+                    var entry = archive.CreateEntry(FileName);
+                    using (var entryStream = entry.Open())
+                    using (var fileStream = System.IO.File.OpenRead(FilePath))
+                    {
+                        await fileStream.CopyToAsync(entryStream);
+                    }
+                }
+            }
+
+            zipFileMemoryStream.Seek(0, SeekOrigin.Begin);
+            return File(zipFileMemoryStream, "application/octet-stream", $"Documentos_{DateOnly.FromDateTime(DateTime.Now)}_{expediente.Empleados.NombreCompleto}.zip");
+        
+    }
         [HttpPost("Imagen/{expedienteDigitalId}/")]
         public async Task<IActionResult> UploadPhotoProfile(IFormFile file, int expedienteDigitalId)
         {

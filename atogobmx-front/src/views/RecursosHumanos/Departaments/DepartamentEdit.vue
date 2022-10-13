@@ -11,19 +11,28 @@
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre">
-              <Field name="NameField" :rules="validateArea">
-                <b-form-input v-model="departament.nombre" :state="nameState">
+              <Field
+                name="NameField"
+                :rules="validateArea"
+                as="text"
+              >
+                <b-form-input
+                  v-model="departament.nombre"
+                  :state="nameState"
+                >
                 </b-form-input>
               </Field>
-              <ErrorMessage name="NameField">
-                <span>Este campo es requerido</span>
-                <i class="bi bi-exclamation-circle" />
-              </ErrorMessage>
+              <ErrorMessage class="text-danger" name="NameField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="Descripción">
-              <b-form-input v-model="departament.descripcion" />
+            <b-form-group
+              class="mt-3"
+              label="Descripción"
+            >
+              <b-form-input
+                v-model="departament.descripcion"
+              />
             </b-form-group>
           </b-col>
         </b-row>
@@ -31,7 +40,7 @@
           <b-button
             class="col-1 m-2 text-white"
             variant="primary"
-            to="/Empleados/list"
+            to="/Departamentos/list"
             type="reset"
           >
             Cancelar</b-button
@@ -47,9 +56,9 @@
 
 <script>
 import DepartamentServices from '@/Services/departament.Services'
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useToast } from 'vue-toast-notification'
+// import { useToast } from 'vue-toast-notification'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
@@ -60,7 +69,8 @@ export default {
   },
   setup () {
     const { getDepartament, updateDepartament } = DepartamentServices()
-    const $toast = useToast()
+    const swal = inject('$swal')
+    // const $toast = useToast()
     const departament = ref([])
     const router = useRoute()
     const redirect = useRouter()
@@ -71,15 +81,25 @@ export default {
       { text: 'Editar-Departamento' }
     ])
     const onUpdateDepartamento = () => {
-      updateDepartament(departament.value, data => {})
-      $toast.open({
-        message: 'Departamento modificado correctamente',
-        position: 'top',
-        duration: 2000,
-        dismissible: true,
-        type: 'success',
-        onDismiss: () => redirect.push('/Departamentos/list')
+      updateDepartament(departament.value, data => {
+        swal.fire({
+          title: 'Departamento modificado correctamente!',
+          text: 'El departamento se ha modificado  satisfactoriamente.',
+          icon: 'success'
+        }).then(result => {
+          if (result.isConfirmed) {
+            redirect.push('/Departamentos/list')
+          }
+        })
       })
+      // $toast.open({
+      //   message: 'Departamento modificado correctamente',
+      //   position: 'top',
+      //   duration: 2000,
+      //   dismissible: true,
+      //   type: 'success',
+      //   onDismiss: () => redirect.push('')
+      // })
     }
     getDepartament(router.params.DepartamentoId, data => {
       departament.value = data
@@ -88,6 +108,11 @@ export default {
       if (!departament.value.nombre) {
         validateState()
         return 'Este campo es requerido'
+      }
+      // eslint-disable-next-line no-useless-escape
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(departament.value.nombre)) {
+        nameState.value = false
+        return 'El nombre del area solo puede contener letras'
       }
       validateState()
       return true

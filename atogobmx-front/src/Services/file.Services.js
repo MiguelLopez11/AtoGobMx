@@ -16,7 +16,8 @@ export default function FileServices () {
     axios.post(`${BaseUrl}/Archivos/Imagen/${expedienteDigitalId}`, file).then((response) => {
       callback(response)
     }).catch((exception) => {
-      callback(exception.response.data)
+      // eslint-disable-next-line node/no-callback-literal
+      callback({ message: exception.response, type: exception.response.status })
     })
   }
   const createDocuments = (expedienteDigitalId, files, callback) => {
@@ -32,7 +33,7 @@ export default function FileServices () {
         callback(response.data)
       })
       .catch((exception) => {
-        callback(exception.response.data)
+        callback(exception.response)
       })
   }
   return {

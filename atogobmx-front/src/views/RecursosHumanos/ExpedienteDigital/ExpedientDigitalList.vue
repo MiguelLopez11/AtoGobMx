@@ -11,6 +11,7 @@
       </b-form-input>
       <b-button
         variant="success"
+        :disabled="employees.length < 1"
         style="
           height: 50px;
           width: auto;
@@ -18,11 +19,11 @@
           margin-right: 15px;
           margin-left: 20px;
         "
-        v-b-modal.modal-expedientDigital
+        @click="showModal = !showModal"
         type="submit"
       >
-        <i class="bi bi-person-plus-fill"></i>
-        Agregar Expediente Digital
+        <i class="bi bi-folder-fill m-1" />
+        Crear Expediente
       </b-button>
     </b-row>
     <EasyDataTable
@@ -43,7 +44,7 @@
       </template>
       <template #item-actions="items">
         <b-button
-          @click="RemoveEmployee()"
+          @click="RemoveExpedient(items.expedienteDigitalId)"
           class="m-1"
           variant="outline-danger">
           <i class="bi bi-trash3"></i>
@@ -62,15 +63,11 @@
     </EasyDataTable>
   </b-card>
   <b-modal
-    id="modal-expedientDigital"
+    v-model="showModal"
     title="Imagen de Perfil"
     size="xl"
     centered
-    hide-backdrop
-    button-size="lg"
-    lazy
-    ok-title="Generar expediente"
-    cancel-title="Cancelar"
+    hide-footer
   >
     <b-row>
       <b-form-group class="mt-3" label="Empleado: ">
@@ -79,15 +76,31 @@
           :options="employees"
           value-field="empleadoId"
           text-field="nombreCompleto"
+          v-model="expedientFields.empleadoId"
         />
-          <!-- v-model="EmployeesFields.areaId" -->
       </b-form-group>
     </b-row>
+    <b-row align-h="end">
+          <b-button
+            class="w-auto m-2 text-white"
+            variant="primary"
+            @click="showModal = !showModal"
+          >
+            Cancelar
+          </b-button>
+          <b-button
+            class="w-auto m-2"
+            variant="success"
+            @click="onAddExpedient()"
+          >
+            Guardar
+          </b-button>
+        </b-row>
   </b-modal>
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 import ExpedientDigitalServices from '@/Services/expedientdigital.Services'
 import EmployeeServices from '@/Services/employee.Services'
 export default {
@@ -95,8 +108,10 @@ export default {
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup () {
-    const { getExpedients } = ExpedientDigitalServices()
-    const { getEmployees } = EmployeeServices()
+    const showModal = ref(false)
+    const swal = inject('$swal')
+    const { getExpedients, deleteExpedient, createExpedient } = ExpedientDigitalServices()
+    const { getEmployeesWithoutExpedient } = EmployeeServices()
     const expedients = ref([])
     const employees = ref([])
     const perPage = ref(5)
@@ -106,18 +121,23 @@ export default {
     const isloading = ref(true)
     const searchValue = ref('')
     const searchField = ref('nombre')
+    const expedientFields = ref({
+      expedienteDigitalId: 0,
+      empleadoId: null,
+      archivado: false
+    })
+    const expedientFieldsBlank = ref(JSON.parse(JSON.stringify(expedientFields)))
     const fields = ref([
       { value: 'expedienteDigitalId', text: 'No.Expediente', sortable: true },
       { value: 'empleados.nombreCompleto', text: 'Empleado', sortable: true },
-      // { value: 'usuario.correoElectronico', text: 'Correo Electronico', Animation },
-      // { value: 'usuario.nombreUsuario', text: 'Usuario', Animation },
-      // { value: 'usuario.role.nombre', text: 'Role', Animation },
-      // { value: 'expedienteDigitalId', text: 'ExpedienteID', Animation },
-      { value: 'actions', text: 'Acciones', Animation }
+      { value: 'actions', text: 'Acciones' }
     ])
-    getEmployees(data => {
-      employees.value = data
-    })
+    const getEmployees = () => {
+      getEmployeesWithoutExpedient(data => {
+        employees.value = data
+      })
+      return ''
+    }
     getExpedients((data) => {
       expedients.value = data
       if (expedients.value.length > 0) {
@@ -127,9 +147,67 @@ export default {
           isloading.value = false
         }
       }
+      getEmployees()
     })
+    const refreshTable = () => {
+      isloading.value = true
+      getExpedients((data) => {
+        expedients.value = data
+        if (expedients.value.length > 0) {
+          isloading.value = false
+        } else {
+          if (expedients.value.length <= 0) {
+            isloading.value = false
+          }
+        }
+      })
+    }
     const onFiltered = (filteredItems) => {
       currentPage.value = 1
+    }
+    const onAddExpedient = () => {
+      createExpedient(expedientFields.value, data => {
+        showModal.value = false
+        expedientFields.value = JSON.parse(JSON.stringify(expedientFieldsBlank))
+        refreshTable()
+        getEmployees()
+        swal
+          .fire({
+            title: '¡Expediente Registrado!',
+            text: 'El expediente ha sido registrado al sistema satisfactoriamente .',
+            icon: 'success'
+          })
+      })
+    }
+    const RemoveExpedient = (expedienteDigitalId) => {
+      isloading.value = true
+      swal
+        .fire({
+          title: '¿Estas seguro?',
+          text: 'No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, Archivar Expediente!',
+          cancelButtonText: 'Cancelar'
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            deleteExpedient(expedienteDigitalId, (data) => {
+              refreshTable()
+              getEmployees()
+            })
+            swal
+              .fire({
+                title: '¡Empleado archivado!',
+                text: 'El empleado ha sido archivado satisfactoriamente .',
+                icon: 'success'
+              })
+          } else {
+            isloading.value = false
+          }
+        })
     }
     return {
       fields,
@@ -142,8 +220,13 @@ export default {
       searchField,
       expedients,
       employees,
+      showModal,
+      expedientFields,
 
-      onFiltered
+      onFiltered,
+      RemoveExpedient,
+      refreshTable,
+      onAddExpedient
     }
   }
 }

@@ -17,6 +17,7 @@ namespace AtoGobMx.Models
         public DateTime? FechaBaja { get; set; }
         [Required]
         public bool Archivado { get; set; }
+        public bool TieneExpediente { get; set; }
         public int? AreaId { get; set; }
         public int? DepartamentoId { get; set; }
         public int? PuestoTrabajoId { get; set; }

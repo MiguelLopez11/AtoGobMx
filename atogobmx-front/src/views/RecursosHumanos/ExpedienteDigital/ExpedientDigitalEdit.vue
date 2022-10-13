@@ -8,12 +8,11 @@
         "
         size="170px"
         style="cursor: pointer; margin-bottom: 30px"
-        v-b-modal.modal-profilePhoto
         badge-variant="light"
         alt=""
       >
         <template #badge>
-          <i class="bi bi-pencil-square" />
+          <i @click="showModal = !showModal" class="bi bi-pencil-square" />
         </template>
       </b-avatar>
     </abbr>
@@ -152,11 +151,11 @@
     </b-card>
   </b-card>
   <b-modal
-    id="modal-profilePhoto"
+    id="modal-expedient"
+    v-model="showModal"
     title="Imagen de Perfil"
     size="xl"
     centered
-    hide-backdrop
     hide-footer
   >
     <div class="input-group mb-3">
@@ -175,9 +174,9 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useToast } from 'vue-toast-notification'
+// import { useToast } from 'vue-toast-notification'
 import FileServices from '@/Services/file.Services'
 import ExpedientDocuments from '@/views/RecursosHumanos/ExpedienteDigital/ExpedientDigitalDocuments.vue'
 import ExpedientdigitalServices from '@/Services/expedientdigital.Services'
@@ -190,13 +189,15 @@ export default {
     ExpedientDocuments
   },
   setup () {
+    const swal = inject('$swal')
     const { createExpedientPhotoProfile } = FileServices()
     const { getExpedient, updateExpedient } = ExpedientdigitalServices()
     const refFile = ref()
     const refAvatar = ref()
     const router = useRoute()
-    const $toast = useToast()
+    // const $toast = useToast()
     const redirect = useRouter()
+    const showModal = ref(false)
     const expedient = ref([])
     const expedienteDigitalId = ref(parseInt(router.params.ExpedienteDigitalId))
     const EstadoState = ref(false)
@@ -219,14 +220,21 @@ export default {
     }
     const submitExpedient = () => {
       updateExpedient(expedient.value, data => {
-        $toast.open({
-          message: 'Expediente modificado correctamente',
-          position: 'top',
-          duration: 2000,
-          dismissible: true,
-          type: 'success',
-          onDismiss: () => redirect.push('/ExpedientesDigitales/list')
+        swal.fire({
+          title: '¡Expediente modificado correctamente!',
+          text: 'El expediente se ha modificado correctamente.',
+          icon: 'success'
+        }).then(result => {
+          redirect.push('/ExpedientesDigitales/list')
         })
+        // $toast.open({
+        //   message: 'Expediente modificado correctamente',
+        //   position: 'top',
+        //   duration: 2000,
+        //   dismissible: true,
+        //   type: 'success',
+        //   onDismiss: () => redirect.push('/ExpedientesDigitales/list')
+        // })
       })
     }
     // Validations
@@ -298,13 +306,11 @@ export default {
       const formData = new FormData()
       formData.append('file', file.value)
       if (!file.value) {
-        $toast.open({
-          message:
-            'No se ha seleccionado una imagen, por favor ingrese una imagen de perfil.',
-          position: 'top-left',
-          duration: 2000,
-          dismissible: true,
-          type: 'error'
+        showModal.value = false
+        swal.fire({
+          title: 'No se ha seleccionado una imagen!',
+          text: 'No se ha seleccionado una imagen, por favor ingrese una imagen de perfil.',
+          icon: 'warning'
         })
         return ''
       }
@@ -312,14 +318,34 @@ export default {
         router.params.ExpedienteDigitalId,
         formData,
         data => {
-          $toast.open({
-            message: `${data.data}`,
-            position: 'top-left',
-            duration: 2000,
-            dismissible: true,
-            type: 'success',
-            onDismiss: () => redirect.push('/ExpedientesDigitales/list')
-          })
+          // const icon = ref('success')
+          if (data.type) {
+            showModal.value = false
+            swal.fire({
+              title: '¡El archivo no es válido!',
+              text: 'El archivo ingresado no es válido, por favor ingresa un archivo valido.',
+              icon: 'error'
+            }).then(result => {
+              redirect.push('/ExpedientesDigitales/list')
+            })
+          } else {
+            showModal.value = false
+            swal.fire({
+              title: 'Imagen de perfil registrado correctamente!',
+              text: 'La imagen de perfil se ha registrado al sistema satisfactoriamente.',
+              icon: 'success'
+            }).then(result => {
+              redirect.push('/ExpedientesDigitales/list')
+            })
+          }
+          // $toast.open({
+          //   message: `${data.data}`,
+          //   position: 'top-left',
+          //   duration: 2000,
+          //   dismissible: true,
+          //   type: 'success',
+          //   onDismiss: () => redirect.push('/ExpedientesDigitales/list')
+          // })
         })
     }
     return {
@@ -332,6 +358,7 @@ export default {
       emailState,
       refFile,
       file,
+      showModal,
       emailMessage,
       expedient,
       refAvatar,

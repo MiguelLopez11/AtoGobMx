@@ -18,10 +18,10 @@
           margin-right: 15px;
           margin-left: 20px;
         "
-        v-b-modal.modal-departamento
+        @click="showModal = !showModal"
         type="submit"
       >
-        <i class="bi bi-person-plus-fill"></i>
+        <i class="bi bi-building m-1" />
         Agregar Departamento
       </b-button>
     </b-row>
@@ -63,6 +63,7 @@
     </EasyDataTable>
     <b-modal
       id="modal-departamento"
+      v-model="showModal"
       title="Agregar Departamento"
       size="xl"
       centered
@@ -73,13 +74,14 @@
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre">
-              <Field name="NameField" :rules="validateArea">
+              <Field
+                name="NameField"
+                :rules="validateArea"
+                as="text"
+              >
                 <b-form-input v-model="departamentFields.nombre" :state="nameState"> </b-form-input>
               </Field>
-              <ErrorMessage name="NameField">
-                <span>Este campo es requerido</span>
-                <i class="bi bi-exclamation-circle" />
-              </ErrorMessage>
+              <ErrorMessage class="text-danger" name="NameField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -92,7 +94,7 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            v-b-modal.modal-departamento
+            @click="resetDepartamentFields()"
           >
             Cancelar
           </b-button>
@@ -108,8 +110,8 @@
 <script>
 import DepartamentServices from '@/Services/departament.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
-import { ref } from 'vue'
-import { useToast } from 'vue-toast-notification'
+import { ref, inject } from 'vue'
+// import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
@@ -119,8 +121,9 @@ export default {
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup () {
+    const swal = inject('$swal')
     const { getDepartaments, createDepartament, deleteDepartament } = DepartamentServices()
-    const $toast = useToast()
+    // const $toast = useToast()
     const departaments = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
@@ -131,6 +134,7 @@ export default {
     const searchValue = ref('')
     const searchField = ref('nombre')
     const nameState = ref(false)
+    const showModal = ref(false)
     const departamentFields = ref({
       departamentoId: 0,
       nombre: null,
@@ -163,6 +167,11 @@ export default {
         nameState.value = false
         return 'Este campo es requerido'
       }
+      // eslint-disable-next-line no-useless-escape
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(departamentFields.value.nombre)) {
+        nameState.value = false
+        return 'El nombre del area solo puede contener letras'
+      }
       nameState.value = true
       return true
     }
@@ -183,19 +192,51 @@ export default {
     const addDepartamento = () => {
       createDepartament(departamentFields.value, (data) => {
         refreshTable()
-        $toast.success('Departamento registrado correctamente.', {
-          position: 'top-right',
-          duration: 2000
+        swal.fire({
+          title: 'Departamento registrado correctamente!',
+          text: 'El departamento se ha registrado al sistema satisfactoriamente.',
+          icon: 'success'
         })
       })
+      resetDepartamentFields()
+    }
+    const resetDepartamentFields = () => {
+      showModal.value = false
       departamentFields.value = JSON.parse(JSON.stringify(departamentFieldsBlank))
       nameState.value = false
     }
     const RemoveDepatamento = (departamentoId) => {
       isloading.value = true
-      deleteDepartament(departamentoId, (data) => {
-        refreshTable()
-      })
+      swal
+        .fire({
+          title: '¿Estas seguro?',
+          text: 'No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, archivar departamento!',
+          cancelButtonText: 'Cancelar'
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            swal
+              .fire({
+                title: 'Departamento archivado!',
+                text: 'El departamento ha sido archivado satisfactoriamente .',
+                icon: 'success'
+              })
+              .then(result => {
+                if (result.isConfirmed) {
+                  deleteDepartament(departamentoId, (data) => {
+                    refreshTable()
+                  })
+                }
+              })
+          } else {
+            isloading.value = false
+          }
+        })
     }
     return {
       departaments,
@@ -215,8 +256,10 @@ export default {
       refreshTable,
       RemoveDepatamento,
       nameState,
+      showModal,
 
-      validateArea
+      validateArea,
+      resetDepartamentFields
     }
   }
 }
