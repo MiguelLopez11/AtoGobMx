@@ -193,6 +193,7 @@ export default {
     const fields = ref([
       { value: 'puestoTrabajoId', text: 'ID', sortable: true },
       { value: 'nombre', text: 'Nombre' },
+      { value: 'departamentos.nombre', text: 'Departamento' },
       { value: 'area.nombre', text: 'Area' },
       { value: 'actions', text: 'Acciones' }
     ])

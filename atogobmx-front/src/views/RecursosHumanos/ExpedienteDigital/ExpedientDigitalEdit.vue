@@ -21,7 +21,7 @@
         <b-tab title="Datos personales" active>
           <b-card>
             <Form @submit="submitExpedient">
-              <b-row cols="3">
+              <b-row cols="2">
                 <b-col>
                   <b-form-group class="mt-3" label="Estado">
                     <Field name="StateField" :rules="validateStateField">

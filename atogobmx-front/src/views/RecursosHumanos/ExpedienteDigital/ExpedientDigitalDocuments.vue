@@ -99,6 +99,7 @@
         ref="refFile"
         id="file"
         multiple
+        accept=".doc, .docx,.pdf"
       />
       <b-button variant="outline-primary" @click="submitFiles()"
         >Cargar Archivo(s)</b-button
