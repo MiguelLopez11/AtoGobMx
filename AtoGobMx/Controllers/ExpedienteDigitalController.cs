@@ -44,9 +44,17 @@ namespace AtoGobMx.Controllers
         [HttpPost]
         public async Task<ActionResult<ExpedienteDigital>> PostExpedienteEmpleado(ExpedienteDigital expedienteDigital)
         {
+            var empleado = await _context.Empleados
+                .FirstOrDefaultAsync(f => f.EmpleadoId == expedienteDigital.EmpleadoId);
+            if (empleado == null)
+            {
+                return BadRequest("Error inesperado");
+            }
+            empleado.TieneExpediente = true;
+            _context.Empleados.Update(empleado);
             _context.ExpedienteDigital.Add(expedienteDigital);
             await _context.SaveChangesAsync();
-            return Ok("Expediente creado correctamente");
+            return CreatedAtAction("GetExpedienteById", new { ExpedienteDigitalId = expedienteDigital.ExpedienteDigitalId }, expedienteDigital);
         }
         [HttpPut("{ExpedienteDitalId}")]
         public async Task<ActionResult> PutExpediente(int ExpedienteDitalId, ExpedienteDigital expedienteDigital)
@@ -85,6 +93,9 @@ namespace AtoGobMx.Controllers
             {
                 return NotFound();
             }
+            var empleado = await _context.Empleados
+                .FirstOrDefaultAsync(f => f.EmpleadoId == expedienteDigital.EmpleadoId);
+            empleado.TieneExpediente = false;
             expedienteDigital.Archivado = true;
             _context.ExpedienteDigital.Update(expedienteDigital);
             await _context.SaveChangesAsync();

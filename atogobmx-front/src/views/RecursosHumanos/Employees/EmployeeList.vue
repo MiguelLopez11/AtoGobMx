@@ -259,12 +259,16 @@ export default {
       empleadoId: 0,
       nombreCompleto: '',
       archivado: false,
+      tieneExpediente: true,
       areaId: null,
       usuarioId: null,
       departamentoId: null,
       expedienteDigitalId: null,
       puestoTrabajoId: null
     })
+    const EmployeesFieldsBlank = ref(
+      JSON.parse(JSON.stringify(EmployeesFields))
+    )
     const getAreas = (departamentoId) => {
       getAreasByDepartament(departamentoId, data => {
         areas.value = data
@@ -351,9 +355,6 @@ export default {
       workStationState.value = true
       return true
     }
-    const EmployeesFieldsBlank = ref(
-      JSON.parse(JSON.stringify(EmployeesFields))
-    )
     const fields = ref([
       { value: 'empleadoId', text: 'ID', sortable: true },
       { value: 'nombreCompleto', text: 'Nombre' },
@@ -405,6 +406,7 @@ export default {
       createEmployee(EmployeesFields.value, (data) => {
         expedientFieldBlank.value.empleadoId = data.empleadoId
         createExpedient(expedientFieldBlank.value, data => {
+          console.log(data)
         })
         refreshTable()
         swal.fire({

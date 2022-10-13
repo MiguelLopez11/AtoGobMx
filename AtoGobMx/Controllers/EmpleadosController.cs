@@ -31,6 +31,18 @@ namespace AtoGobMx.Controllers
                 .ToListAsync();
             return Ok(empleados);
         }
+        [HttpGet("SinExpedientes")]
+        public async Task<ActionResult<Empleado>> GetEmpleadosSinExpedientes()
+        {
+            var empleados = await _context.Empleados
+                .Include(i => i.Area)
+                .Include(i => i.Departamentos)
+                .Include(i => i.PuestoTrabajo)
+                .Where(w => w.TieneExpediente == false)
+                .Where(w => !w.Archivado)
+                .ToListAsync();
+            return Ok(empleados);
+        }
 
         [HttpGet("{EmpleadoId}")]
         public async Task<ActionResult> GetEmpleadosById(int EmpleadoId)
@@ -119,11 +131,14 @@ namespace AtoGobMx.Controllers
                 return NotFound();
             }
             empleado.Archivado = true;
+            empleado.TieneExpediente = false;
             empleado.FechaBaja = DateTime.Today;
-            _context.Empleados.Update(empleado);
+
             var expediente = await _context.ExpedienteDigital
                 .FirstOrDefaultAsync(f => f.EmpleadoId == empleadoId);
+
             expediente.Archivado = true;
+            _context.Empleados.Update(empleado);
             await _context.SaveChangesAsync();
             return Ok("Empleado archivado");
             }catch (Exception ex)

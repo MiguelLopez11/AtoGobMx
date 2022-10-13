@@ -21,7 +21,7 @@
         @click="showModal = !showModal"
         type="submit"
       >
-        <i class="bi bi-person-plus-fill"></i>
+        <i class="bi bi-building m-1" />
         Agregar Departamento
       </b-button>
     </b-row>

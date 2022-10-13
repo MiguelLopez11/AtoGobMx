@@ -116,7 +116,7 @@ namespace AtoGobMx.Controllers
             }
 
             zipFileMemoryStream.Seek(0, SeekOrigin.Begin);
-            return File(zipFileMemoryStream, "application/octet-stream", $"Documentos_{DateOnly.FromDateTime}_{expediente.Empleados.NombreCompleto}.zip");
+            return File(zipFileMemoryStream, "application/octet-stream", $"Documentos_{DateOnly.FromDateTime(DateTime.Now)}_{expediente.Empleados.NombreCompleto}.zip");
         
     }
         [HttpPost("Imagen/{expedienteDigitalId}/")]
