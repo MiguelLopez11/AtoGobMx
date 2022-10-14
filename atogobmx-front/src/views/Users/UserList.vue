@@ -18,7 +18,7 @@
           margin-right: 15px;
           margin-left: 20px;
         "
-        v-b-modal.modal-users
+        @click="showModal = !showModal"
         type="submit"
       >
         <i class="bi bi-person-plus-fill"></i>
@@ -62,7 +62,7 @@
       </template>
     </EasyDataTable>
     <b-modal
-      id="modal-users"
+      v-model="showModal"
       title="Agregar Usuario"
       size="xl"
       centered
@@ -74,8 +74,12 @@
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre de Usuario">
-              <Field name="userNameField" :rules="validateUserName">
-                <b-form-input type="text" v-model="userFields.nombreUsuario" :state="userNameState">
+              <Field name="userNameField" :rules="validateUserName" as="text">
+                <b-form-input
+                  type="text"
+                  v-model="userFields.nombreUsuario"
+                  :state="userNameState"
+                >
                 </b-form-input>
               </Field>
               <ErrorMessage name="userNameField">
@@ -86,18 +90,26 @@
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Contraseña">
-              <Field name="passwordField" :rules="validatePassword">
-                <b-form-input type="password" v-model="userFields.contraseña" :state="passwordState"/>
+              <Field name="passwordField" :rules="validatePassword" as="text">
+                <b-form-input
+                  type="password"
+                  v-model="userFields.contraseña"
+                  :state="passwordState"
+                />
               </Field>
               <ErrorMessage name="passwordField">
-                <span>{{errorMessage}} </span>
+                <span>{{ errorMessage }} </span>
                 <i class="bi bi-exclamation-circle"></i>
               </ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Confirmar Contraseña">
-              <Field name="ConfirmPasswordField" :rules="validateConfirmPassword">
+              <Field
+                name="ConfirmPasswordField"
+                :rules="validateConfirmPassword"
+                as="text"
+              >
                 <b-form-input
                   type="password"
                   v-model="userFields.confirmarContraseña"
@@ -106,14 +118,14 @@
                 </b-form-input>
               </Field>
               <ErrorMessage name="ConfirmPasswordField">
-                <span>{{confirmErrorMessage}}</span>
+                <span>{{ confirmErrorMessage }}</span>
                 <i class="bi bi-exclamation-circle"></i>
               </ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Role">
-              <Field name="roleField" :rules="validateRole">
+              <Field name="roleField" :rules="validateRole" as="text">
                 <b-form-select
                   autofocus
                   :options="roles"
@@ -121,7 +133,6 @@
                   text-field="nombre"
                   v-model="userFields.roleId"
                   :state="roleState"
-
                 ></b-form-select>
               </Field>
               <ErrorMessage name="roleField">
@@ -132,7 +143,7 @@
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Empleado">
-              <Field name="employeeField" :rules="validateEmployee">
+              <Field name="employeeField" :rules="validateEmployee" as="text">
                 <b-form-select
                   autofocus
                   :options="employees"
@@ -153,7 +164,7 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            v-b-modal.modal-users
+            @click="resetRoleFields"
           >
             Cancelar
           </b-button>
@@ -171,8 +182,7 @@ import UsersServices from '@/Services/users.Services'
 import RoleServices from '@/Services/role.Services'
 import EmployeeServices from '@/Services/employee.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
-import { ref, watch } from 'vue'
-import { useToast } from 'vue-toast-notification'
+import { ref, watch, inject } from 'vue'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
@@ -182,12 +192,13 @@ export default {
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup () {
+    const swal = inject('$swal')
     // Services
     const { getEmployees } = EmployeeServices()
     const { getUsers, deleteUser, createUser } = UsersServices()
     const { getRoles } = RoleServices()
     // Data
-    const $toast = useToast()
+    const showModal = ref(false)
     const users = ref([])
     const roles = ref([])
     const employees = ref([])
@@ -239,22 +250,31 @@ export default {
         }
       }
     })
-    watch(roles, (value) => {
+    watch(roles, value => {
       if (value.length === 0) {
-        $toast.open({
-          message: 'No se encuentran roles registrados en el sistema, registre primero un departamento para continuar',
-          position: 'top-left',
-          duration: 0,
-          dismissible: true,
-          type: 'error'
+        swal.fire({
+          title: 'No se encuentran roles registrados en el sistema!',
+          text:
+            'No se encuentran roles registrados en el sistema, registre primero un departamento para continuar.',
+          icon: 'warning'
         })
       }
     })
     const onFiltered = filteredItems => {
       currentPage.value = 1
     }
+    const resetRoleFields = () => {
+      showModal.value = false
+      userFields.value = JSON.parse(JSON.stringify(areasFieldsBlank))
+      userNameState.value = false
+      passwordState.value = false
+      confirmPasswordState.value = false
+      roleState.value = false
+      employeeState.value = false
+    }
     const refreshTable = () => {
       isloading.value = true
+      showModal.value = false
       getUsers(data => {
         users.value = data
         if (users.value.length > 0) {
@@ -270,18 +290,47 @@ export default {
     const addUser = () => {
       createUser(userFields.value, data => {
         refreshTable()
-        $toast.success('Usuario registrado correctamente.', {
-          position: 'top-right',
-          duration: 2000
+        resetRoleFields()
+        swal.fire({
+          title: 'Usuario registrado correctamente!',
+          text: 'El Usuario se ha registrado al sistema satisfactoriamente.',
+          icon: 'success'
         })
       })
-      userFields.value = JSON.parse(JSON.stringify(areasFieldsBlank))
     }
     const RemoveUser = areaId => {
       isloading.value = true
-      deleteUser(areaId, data => {
-        refreshTable()
-      })
+      swal
+        .fire({
+          title: '¿Estas seguro?',
+          text: 'No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, archivar departamento!',
+          cancelButtonText: 'Cancelar'
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            swal
+              .fire({
+                title: 'Departamento archivado!',
+                text: 'El departamento ha sido archivado satisfactoriamente .',
+                icon: 'success'
+              })
+              .then(result => {
+                if (result.isConfirmed) {
+                  deleteUser(areaId, data => {
+                    refreshTable()
+                    resetRoleFields()
+                  })
+                }
+              })
+          } else {
+            isloading.value = false
+          }
+        })
     }
     // Validations
     const validateUserName = () => {
@@ -317,7 +366,8 @@ export default {
       const regex = /^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{8,}$/
       if (!regex.test(userFields.value.contraseña)) {
         passwordState.value = false
-        errorMessage.value = 'La contraseña debe de contener minimo 8 Caracteres, minusculas y mayusculas '
+        errorMessage.value =
+          'La contraseña debe de contener minimo 8 Caracteres, minusculas y mayusculas '
         return errorMessage.value
       }
       passwordState.value = true
@@ -329,7 +379,9 @@ export default {
         confirmErrorMessage.value = 'Este campo es requerido '
         return confirmErrorMessage.value
       }
-      if (userFields.value.contraseña !== userFields.value.confirmarContraseña) {
+      if (
+        userFields.value.contraseña !== userFields.value.confirmarContraseña
+      ) {
         confirmPasswordState.value = false
         confirmErrorMessage.value = 'Las contraseñas no coinciden '
         return confirmErrorMessage.value
@@ -337,7 +389,8 @@ export default {
       const regex = /^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{8,}$/
       if (!regex.test(userFields.value.contraseña)) {
         passwordState.value = false
-        confirmErrorMessage.value = 'La contraseña debe de contener minimo 8 Caracteres, minusculas y mayusculas '
+        confirmErrorMessage.value =
+          'La contraseña debe de contener minimo 8 Caracteres, minusculas y mayusculas '
         return confirmErrorMessage.value
       }
       confirmPasswordState.value = true
@@ -376,10 +429,13 @@ export default {
       searchField,
       errorMessage,
       confirmErrorMessage,
+      showModal,
+
       onFiltered,
       addUser,
       refreshTable,
       RemoveUser,
+      resetRoleFields,
       validateUserName,
       validateRole,
       validateEmployee,
@@ -391,6 +447,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style scoped></style>

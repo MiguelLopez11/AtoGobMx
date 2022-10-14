@@ -30,16 +30,16 @@ namespace AtoGobMx.Controllers
         }
 
         [HttpGet("{RoleId}")]
-        public async Task<ActionResult<Role>> GetRoleById(int id)
+        public async Task<ActionResult<Role>> GetRoleById(int RoleId)
         {
-            var roles = await _context.Roles.FindAsync(id);
+            var role = await _context.Roles.FirstOrDefaultAsync(f => f.RoleId == RoleId);
 
-            if (roles == null)
+            if (role == null)
             {
                 return NotFound();
             }
 
-            return roles;
+            return Ok(role);
         }
         [HttpPost]
         public async Task<ActionResult<Role>> PostRole(Role role)
@@ -69,11 +69,11 @@ namespace AtoGobMx.Controllers
             await _context.SaveChangesAsync();
             return Ok("Role actualizado correctamente");
         }
-        [HttpDelete]
-        public async Task<IActionResult> DeleteRole(int Id)
+        [HttpDelete("{RoleId}")]
+        public async Task<IActionResult> DeleteRole(int RoleId)
         {
-            var role = _context.Roles
-                .FirstOrDefault(f => f.RoleId == Id);
+            var role = await _context.Roles
+                .FirstOrDefaultAsync(f => f.RoleId == RoleId);
             if (role == null)
             {
                 return NotFound();

@@ -1,36 +1,37 @@
 import axios from 'axios'
 
 export default function roleServices () {
+  const BaseUrl = 'https://localhost:7065/api'
   const getRoles = (callback) => {
-    axios.get('https://localhost:7065/api/Role').then((response) => {
+    axios.get(`${BaseUrl}/Role`).then((response) => {
       callback(response.data)
     })
   }
-  const getUser = (usuarioId, callback) => {
-    axios.get(`https://localhost:7065/api/Usuarios/${usuarioId}`).then((response) => {
+  const getRole = (roleId, callback) => {
+    axios.get(`${BaseUrl}/Role/${roleId}`).then((response) => {
       callback(response.data)
     })
   }
-  const createUser = (data, callback) => {
-    axios.post('https://localhost:7065/api/Usuarios', data).then((response) => {
+  const createRole = (data, callback) => {
+    axios.post(`${BaseUrl}/Role`, data).then((response) => {
       callback(response.data)
     })
   }
-  const updateUser = (data, callback) => {
-    axios.put(`https://localhost:7065/api/Usuarios/${data.usuarioId}`, data).then((response) => {
+  const updateRole = (data, callback) => {
+    axios.put(`${BaseUrl}/Role/${data.roleId}`, data).then((response) => {
       callback(response.data)
     })
   }
-  const deleteUser = (usuarioId, callback) => {
-    axios.delete(`https://localhost:7065/api/Usuarios/${usuarioId}`).then((response) => {
+  const deleteRole = (roleId, callback) => {
+    axios.delete(`${BaseUrl}/Role/${roleId}`).then((response) => {
       callback(response.data)
     })
   }
   return {
     getRoles,
-    getUser,
-    createUser,
-    updateUser,
-    deleteUser
+    getRole,
+    createRole,
+    updateRole,
+    deleteRole
   }
 }
