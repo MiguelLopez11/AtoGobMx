@@ -68,10 +68,10 @@ namespace AtoGobMx.Controllers
             }
 
             inventarioalum.InventarioAlumbradoId = InventarioAlumbradoId;
-            inventarioalum.Tarea = inventarioAlumbrado.Tarea;
-            inventarioalum.FechaAlta = inventarioAlumbrado.FechaAlta;
-            inventarioalum.FechaBaja = inventarioAlumbrado.FechaBaja;
-            inventarioalum.Domicilio = inventarioAlumbrado.Domicilio;
+            //inventarioalum.Tarea = inventarioAlumbrado.Tarea;
+            //inventarioalum.FechaAlta = inventarioAlumbrado.FechaAlta;
+            //inventarioalum.FechaBaja = inventarioAlumbrado.FechaBaja;
+            //inventarioalum.Domicilio = inventarioAlumbrado.Domicilio;
 
 
             _context.InventarioAlumbrado.Update(inventarioalum);

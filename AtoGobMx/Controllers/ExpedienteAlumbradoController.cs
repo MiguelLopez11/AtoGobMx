@@ -61,6 +61,7 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<ExpedienteAlumbrado>> PostExpedienteAlumbrado(ExpedienteAlumbrado expedienteAlumbrado)
         {
             _context.ExpedienteAlumbrado.Add(expedienteAlumbrado);
+            expedienteAlumbrado.FechaAlta = DateTime.Now;
             await _context.SaveChangesAsync();
             return Ok("Expediente creado correctamente");
         }
@@ -80,11 +81,11 @@ namespace AtoGobMx.Controllers
             }
 
             expedientalumbra.ExpedienteAlumbradoId = ExpedienteAlumbradoId;
-            expedientalumbra.Tarea = expedienteAlumbrado.Tarea;
-            expedientalumbra.FechaAlta = expedienteAlumbrado.FechaAlta;
-            expedientalumbra.FechaBaja = expedienteAlumbrado.FechaBaja;
-            expedientalumbra.Domicilio = expedienteAlumbrado.Domicilio;
-            expedientalumbra.DescripcionDomicilio = expedienteAlumbrado.DescripcionDomicilio;
+            //expedientalumbra.Tarea = expedienteAlumbrado.Tarea;
+            //expedientalumbra.FechaAlta = expedienteAlumbrado.FechaAlta;
+            //expedientalumbra.FechaBaja = expedienteAlumbrado.FechaBaja;
+            //expedientalumbra.Domicilio = expedienteAlumbrado.Domicilio;
+            //expedientalumbra.DescripcionDomicilio = expedienteAlumbrado.DescripcionDomicilio;
             expedienteAlumbrado.DescripcionSolucion = expedientalumbra.DescripcionSolucion;
             expedientalumbra.AlumbradoId = expedienteAlumbrado.AlumbradoId;
 

@@ -10,21 +10,13 @@ namespace AtoGobMx.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 
         public int AlumbradoId { get; set; }
-        public string Tarea { get; set; }
-        public string DescripcionSolucion { get; set; }
-        public DateTime FechaAlta { get; set; }
-        public DateTime FechaBaja { get; set; }
+        public string DescripcionProblema { get; set; }
         public string Domicilio { get; set; }
-        public string DescripcionDomicilio { get; set; }
+        public string? DescripcionDomicilio { get; set; }
         public bool Archivado { get; set; }
-        //public int? ExpedienteAlumbradoId { get; set; }
         public int? EstatusId { get; set; }
-        public int? TareaTipoId { get; set; }
         public int? InventarioAlumbradoId { get; set; }
-
-
-        //[ForeignKey("ExpedienteAlumbradoId")]
-        //public ExpedienteAlumbrado? ExpedienteAlumbrado { get; set; }
+        public int? TareaTipoId { get; set; }
 
         [ForeignKey("EstatusId")]
         public EstatusAlumbrado? Estatus { get; set; }
@@ -37,5 +29,16 @@ namespace AtoGobMx.Models
 
         [JsonIgnore]
         public virtual IEnumerable<ExpedienteAlumbrado>? ExpedienteAlumbrado { get; set; }
+
+
+        //public string Tarea { get; set; }
+        //public string DescripcionSolucion { get; set; }
+        //public DateTime FechaAlta { get; set; }
+        //public DateTime FechaBaja { get; set; }
+
+        //public int? ExpedienteAlumbradoId { get; set; }
+        //public int? TareaTipoId { get; set; }
+        //[ForeignKey("ExpedienteAlumbradoId")]
+        //public ExpedienteAlumbrado? ExpedienteAlumbrado { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20221014144648_AlumbradoPublico20")]
+    partial class AlumbradoPublico20
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,6 +47,9 @@ namespace AtoGobMx.Migrations
                     b.Property<int?>("InventarioAlumbradoId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("TareaTipoAlumbradoTareaTipoId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("TareaTipoId")
                         .HasColumnType("int");
 
@@ -54,7 +59,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasIndex("InventarioAlumbradoId");
 
-                    b.HasIndex("TareaTipoId");
+                    b.HasIndex("TareaTipoAlumbradoTareaTipoId");
 
                     b.ToTable("Alumbrado");
                 });
@@ -475,15 +480,13 @@ namespace AtoGobMx.Migrations
                         .WithMany("Alumbrado")
                         .HasForeignKey("InventarioAlumbradoId");
 
-                    b.HasOne("AtoGobMx.Models.TareaTipoAlumbrado", "TareaTipoAlumbrado")
+                    b.HasOne("AtoGobMx.Models.TareaTipoAlumbrado", null)
                         .WithMany("Alumbrado")
-                        .HasForeignKey("TareaTipoId");
+                        .HasForeignKey("TareaTipoAlumbradoTareaTipoId");
 
                     b.Navigation("Estatus");
 
                     b.Navigation("InventarioAlumbrado");
-
-                    b.Navigation("TareaTipoAlumbrado");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Archivos", b =>
