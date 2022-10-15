@@ -1,74 +1,103 @@
 <template>
-  <section class="vh-auto">
-    <div class="container py-5 h-auto">
-      <div class="row d-flex align-items-center justify-content-center h-auto">
-        <div class="col-md-6 col-lg-5 col-xl-4">
-          <img
-            src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"
-            class="img-fluid"
-          />
-        </div>
-        <div class="col-md-5 col-lg-5 col-xl-5 offset-xl-1">
-          <b-img
-            thumbnail
-            fluid
-            src="https://www.atotonilco.gob.mx/templates/it_headlines/custom/images/logo_h.png"
-            alt="Image 1"
-            width="600"
-            height="800"
-            class="m-5"
-            center
-          ></b-img>
-          <form>
-            <!-- Email input -->
-            <div class="form-outline mb-4">
-              <input
-                placeholder="Nombre de Usuario"
-                class="form-control form-control-lg"
-              />
-              <!-- <label class="form-label" for="form1Example13">Email address</label> -->
-            </div>
-
-            <!-- Password input -->
-            <div class="form-outline mb-4">
-              <input
-                type="password"
-                placeholder="Contraseña"
-                class="form-control form-control-lg"
-              />
-            </div>
-
-            <div class="d-flex justify-content-around align-items-center mb-4">
-              <!-- Checkbox -->
-              <div class="form-check">
+  <b-card class="m-3">
+    <section class="vh-auto">
+      <div class="container-fluid h-custom">
+        <div class="row d-flex justify-content-center align-items-center h-80">
+          <div class="col-md-9 col-lg-6 col-xl-5">
+            <img
+              src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+              class="img-fluid"
+              alt="Sample image"
+            />
+          </div>
+          <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+            <form>
+              <div class="form-outline mb-4">
+                <label class="form-label" for="form3Example3"
+                  >Nombre de usuario</label
+                >
                 <input
-                  class="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="form1Example3"
-                  checked
+                  type="email"
+                  id="form3Example3"
+                  class="form-control form-control-lg"
+                  placeholder="Ingresa un usuario válido"
                 />
-                <label class="form-check-label" for="form1Example3">
-                  Remember me
-                </label>
               </div>
-              <a href="#!">Forgot password?</a>
-            </div>
-
-            <!-- Submit button -->
-            <button type="submit" class="btn btn-primary btn-lg btn-block">
-              Sign in
-            </button>
-          </form>
+              <div class="form-outline mb-3">
+                <label class="form-label" for="form3Example4">Contraseña</label>
+                <input
+                  type="password"
+                  id="form3Example4"
+                  class="form-control form-control-lg"
+                  placeholder="Ingresa tu contreseña"
+                />
+              </div>
+              <div class="text-center text-lg-start mt-4 pt-2">
+                <button
+                  type="button"
+                  class="btn btn-lg"
+                  style="padding-left: 2.5rem; background-color: rgb(94,80,238); color:white; padding-right: 2.5rem;"
+                >
+                  Iniciar Sesión
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
+      <!-- <div
+    class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 bg-primary">
+    <div class="text-white mb-3 mb-md-0">
+      Copyright © 2020. All rights reserved.
     </div>
-  </section>
+    <div>
+      <a href="#!" class="text-white me-4">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+      <a href="#!" class="text-white me-4">
+        <i class="fab fa-twitter"></i>
+      </a>
+      <a href="#!" class="text-white me-4">
+        <i class="fab fa-google"></i>
+      </a>
+      <a href="#!" class="text-white">
+        <i class="fab fa-linkedin-in"></i>
+      </a>
+    </div>
+  </div> -->
+    </section>
+  </b-card>
 </template>
 
 <script>
-export default {}
+import { ref } from 'vue'
+export default {
+  setup () {
+    const user = ref({
+      userName: '',
+      password: ''
+    })
+    return {
+      user
+    }
+  }
+}
 </script>
 
 <style scoped>
+.divider:after,
+.divider:before {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #eee;
+}
+.h-custom {
+  height: calc(100% - 73px);
+}
+@media (max-width: 450px) {
+  .h-custom {
+    height: 100%;
+  }
+}
 </style>

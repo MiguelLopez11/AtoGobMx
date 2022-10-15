@@ -1,18 +1,17 @@
 <template>
   <div>
     <b-card class="m-3">
-      <b-navbar>
+      <b-navbar sticky>
         <b-navbar-nav>
           <b-nav-item>
             <template v-slot:button-content>
               <b-avatar :src="background" />
             </template>
           </b-nav-item>
-          <b-navbar-brand href="/" class="mt-1">
+          <div>
             <b-avatar :src="background" />
-            AtoGobMx
-          </b-navbar-brand>
-          <b-navbar-brand>
+            <label class="m-2">AtogobMx</label>
+          </div>
             <b-nav-item-dropdown
               text="Recursos Humanos"
               dropright
@@ -42,8 +41,6 @@
                 Puestos de trabajo
               </b-dropdown-item>
             </b-nav-item-dropdown>
-          </b-navbar-brand>
-          <b-navbar-brand>
             <b-nav-item-dropdown
               text="Servicios Publicos"
               right auto-close
@@ -64,8 +61,6 @@
                 Tarea tipo
               </b-dropdown-item>
             </b-nav-item-dropdown>
-          </b-navbar-brand>
-          <b-navbar-brand>
             <b-nav-item-dropdown
               text="Administrador"
               right
@@ -83,16 +78,13 @@
                 Roles
               </b-dropdown-item>
             </b-nav-item-dropdown>
-          </b-navbar-brand>
         </b-navbar-nav>
         <b-row align-h="end">
           <b-navbar-nav>
-            <b-navbar-brand>
               <b-button size="lg" to="/Login" style="background-color: #7367f0">
                 <i class="bi bi-box-arrow-right"></i>
                 Login
               </b-button>
-            </b-navbar-brand>
           </b-navbar-nav>
         </b-row>
       </b-navbar>
