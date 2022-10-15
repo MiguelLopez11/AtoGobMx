@@ -71,15 +71,11 @@
       lazy
     >
       <Form @submit="addPublicLighting">
-        <b-row cols="2">
+        <b-row cols="3">
           <!--1-->
           <b-col>
             <b-form-group class="mt-3" label="Tipo de Tarea">
-              <Field
-                name="TaskField"
-                :rules="validateTask"
-                as="text"
-              >
+              <Field name="TaskField" :rules="validateTask" as="text">
                 <b-form-select
                   v-model="publicLightingFields.tareaTipoId"
                   autofocus
@@ -87,7 +83,6 @@
                   :options="typeTaskLighting"
                   value-field="tareaTipoId"
                   text-field="nombreTarea"
-                  @input="getPublicLighting(publicLightingFields.tareaTipoId)"
                 ></b-form-select>
               </Field>
               <ErrorMessage class="text-danger" name="TaskField"></ErrorMessage>
@@ -104,7 +99,7 @@
                   :options="statusPublicLighting"
                   value-field="estatusId"
                   text-field="nombreEstatus"
-                  @input="getPublicLighting(publicLightingFields.estatusId)"
+                  @input="getStatus(publicLightingFields.estatusId)"
                 ></b-form-select>
               </Field>
               <ErrorMessage class="text-danger" name="StatusField"></ErrorMessage>
@@ -119,7 +114,10 @@
                   :state="DomicileState"
                 ></b-form-input>
               </Field>
-              <ErrorMessage class="text-danger" name="DomicileField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="DomicileField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <!--4-->
@@ -136,7 +134,10 @@
                   rows="4"
                 ></b-form-textarea>
               </Field>
-              <ErrorMessage class="text-danger" name="addresdescriptionField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="addresdescriptionField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <!--5-->
@@ -149,7 +150,10 @@
                   rows="4"
                 ></b-form-textarea>
               </Field>
-              <ErrorMessage class="text-danger" name="ProblemField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="ProblemField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
@@ -216,6 +220,7 @@ export default {
     const addresdescriptionState = ref(false)
     const DomicileState = ref(false)
     const TaskState = ref(false)
+    const StatusState = ref(false)
     const expedientPublicFieldBlank = ref({
       expedienteAlumbradoId: 0,
       alumbradoId: null,
@@ -227,7 +232,7 @@ export default {
       domicilio: '',
       descripcionDomicilio: null,
       tareaTipoId: null,
-      estaatusId: null,
+      estatusId: null,
       archivado: false
     })
     // tarea: null,
@@ -239,17 +244,6 @@ export default {
     // getTaskTypeLighting(data => {
     //   typeTaskLighting.value = data
     // })
-
-    const getPublicLighting = (tareaTipoId) => {
-      typeTaskLighting.valu = data
-      if (data.length === 0) {
-        swal.fire({
-          title: 'No se encuentra un tipo de tare registrada!',
-          taxt: 'No se encuentra tipo de tarea registradas en el departamento seleccionado, registre primero un tipo de tarea para continuar',
-          icon: 'warning'
-        })
-      }
-    }
 
     // const getAreas = (departamentoId) => {
     //   getAreasByDepartament(departamentoId, data => {
@@ -265,9 +259,54 @@ export default {
     //     }
     //   })
     // }
+    //  getTaskTypeLighting = (tareaTipoId) => {
+    //   typeTaskLighting.valu = data
+    //   if (data.length === 0) {
+    //     swal.fire({
+    //       title: 'No se encuentra un tipo de tare registrada!',
+    //       taxt: 'No se encuentra tipo de tarea registradas en el departamento seleccionado, registre primero un tipo de tarea para continuar',
+    //       icon: 'warning'
+    //     })
+    //   }
+    // }
+
+    // getTaskTypeLighting(data => {
+    //   typeTaskLighting.value = data
+    //   if (data.length === 0) {
+    //     swal.fire({
+    //       title: 'No se encuentra un tipo de tare registrada!',
+    //       taxt:
+    //         'No se encuentra tipo de tarea registradas en el departamento seleccionado, registre primero un tipo de tarea para continuar',
+    //       icon: 'warning'
+    //     })
+    //   }
+    // })
+    const getTaskTypeLightingById = (tareaTipoId) => {
+      getTaskTypeLighting(tareaTipoId, data => {
+        typeTaskLighting.value = data
+        if (data.length === 0) {
+          swal.fire({
+            title: 'No se encuentra un tipo de tare registrada!',
+            text: 'No se encuentra tipo de tarea registradas en el departamento seleccionado, registre primero un tipo de tarea para continuar',
+            icon: 'warning'
+          })
+        }
+      })
+    }
+
+    getStatus(data => {
+      statusPublicLighting.value = data
+      if (data.length === 0) {
+        swal.fire({
+          title: 'No se encuentra un estatus registrado!',
+          text: 'No se encuentra estatus registrado en el departamento seleccionado, registre primero un tipo de estatus para continuar',
+          icon: 'warning'
+        })
+      }
+    })
 
     const validateTask = () => {
-      if (!publicLightingFields.value.tarea) {
+      if (!publicLightingFields.value.tareaTipoId) {
         TaskState.value = false
         return 'Este campo es requerido'
       }
@@ -275,29 +314,25 @@ export default {
       return true
     }
 
-    // const validateDescriptionSolution = () => {
-    //   if (!publicLightingFields.value.descripcionSolucion) {
-    //     DescriptionSolutionState.value = false
-    //     return 'Este campo es requerido'
-    //   }
-    //   if (
-    //     !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
-    //       publicLightingFields.value.descripcionSolucion
-    //     )
-    //   ) {
-    //     DescriptionSolutionState.value = false
-    //     return 'Este campo solo puede contener letras'
-    //   }
-    //   DescriptionSolutionState.value = true
-    //   return true
-    // }
+    const validateStatus = () => {
+      if (!publicLightingFields.value.estaatusId) {
+        StatusState.value = false
+        return 'Este campo es requerido'
+      }
+      StatusState.value = true
+      return true
+    }
 
     const validateProblem = () => {
       if (!publicLightingFields.value.descripcionProblema) {
         ProblemState.value = false
         return 'Este campo es requerido'
       }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(publicLightingFields.value.descripcionProblema)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+          publicLightingFields.value.descripcionProblema
+        )
+      ) {
         ProblemState.value = false
         return 'Este campo solo puede contener letras'
       }
@@ -351,6 +386,7 @@ export default {
       ProblemState.value = false
       addresdescriptionState.value = false
       DomicileState.value = false
+      StatusState.value = false
     }
 
     getPublicLighting(data => {
@@ -456,6 +492,7 @@ export default {
       TaskState,
       addresdescriptionState,
       DomicileState,
+      StatusState,
       showModal,
       ProblemState,
 
@@ -467,7 +504,9 @@ export default {
       validateAddresdescription,
       validateDomicile,
       resetPublicLightingFields,
-      validateProblem
+      validateProblem,
+      validateStatus,
+      getTaskTypeLightingById
     }
   }
 }
@@ -481,6 +520,4 @@ export default {
 // const option = ref()
 </script>
 
-<style>
-
-</style>
+<style></style>
