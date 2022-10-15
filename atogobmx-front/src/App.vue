@@ -1,7 +1,7 @@
 <template>
   <div>
-    <b-card align="center" class="m-3">
-      <b-navbar container="fluid" toggleable="lg">
+    <b-card class="m-3">
+      <b-navbar>
         <b-navbar-nav>
           <b-nav-item>
             <template v-slot:button-content>
@@ -13,11 +13,15 @@
             AtoGobMx
           </b-navbar-brand>
           <b-navbar-brand>
-            <b-nav-item-dropdown text="Recursos Humanos" dropright auto-close>
+            <b-nav-item-dropdown
+              text="Recursos Humanos"
+              dropright
+              auto-close="outside"
+            >
               <template v-slot:button-content>
                 <i class="bi bi-people-fill"></i>
               </template>
-              <b-dropdown-item to="/Empleados/list">
+              <b-dropdown-item to="/Empleados/list" >
                 <i class="bi bi-person-fill"></i>
                 Empleados
               </b-dropdown-item>
@@ -28,8 +32,7 @@
               <b-dropdown-item to="/Departamentos/list">
                 <i class="bi bi-map-fill"></i>
                 Departamentos
-              </b-dropdown-item
-              >
+              </b-dropdown-item>
               <b-dropdown-item to="/Areas/list">
                 <i class="bi bi-bricks"></i>
                 Areas
@@ -41,29 +44,33 @@
             </b-nav-item-dropdown>
           </b-navbar-brand>
           <b-navbar-brand>
-            <b-nav-item-dropdown text="Servicios Publicos" right auto-close>
+            <b-nav-item-dropdown
+              text="Servicios Publicos"
+              right auto-close
+            >
               <template v-slot:button-content>
                 <i class="bi bi-globe2"></i>
               </template>
               <b-dropdown-item to="/Alumbrado/list">
                 <i class="bi bi-lightning-charge-fill"></i>
                 Alumbrado Público
-              </b-dropdown-item
-              >
+              </b-dropdown-item>
               <b-dropdown-item to="/EstatusAlumbrado/list">
                 <i class="bi bi-layers-fill"></i>
                 Estatus Alumbrado
-              </b-dropdown-item
-              >
+              </b-dropdown-item>
               <b-dropdown-item v-if="1 < 0" to="/TareaTipoAlumbrado/list">
                 <i class="bi bi-layers-fill"></i>
                 Tarea tipo
-              </b-dropdown-item
-              >
+              </b-dropdown-item>
             </b-nav-item-dropdown>
           </b-navbar-brand>
           <b-navbar-brand>
-            <b-nav-item-dropdown text="Administrador" right auto-close>
+            <b-nav-item-dropdown
+              text="Administrador"
+              right
+              auto-close
+            >
               <template v-slot:button-content>
                 <i class="bi bi-clipboard2-pulse-fill"></i>
               </template>
@@ -81,10 +88,10 @@
         <b-row align-h="end">
           <b-navbar-nav>
             <b-navbar-brand>
-              <b-nav-item to="/Login">
+              <b-button size="lg" to="/Login" style="background-color: #7367f0">
                 <i class="bi bi-box-arrow-right"></i>
                 Login
-              </b-nav-item>
+              </b-button>
             </b-navbar-brand>
           </b-navbar-nav>
         </b-row>
@@ -116,10 +123,24 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
-.nav-pills .nav-link {
-  color: black;
+.navbar-nav .nav-link
+{
+      border-width: 2px;
 }
 body {
-  background-color: #e5e8e8 !important;
+  background-color: rgb(236,237,238) !important;
+}
+.card-body {
+  background-color: #f8f9fa;
+  border-radius: 5px;
+}
+.btn-link:hover {
+  background-color: #7367f0 !important;
+  color: rgb(255, 255, 255) !important;
+}
+.dropdown-item.active {
+  background-color: #7367f0 !important
+  /* --bs-btn-hover-color: #7367f0;
+  --bs-btn-active-color: #7367f0; */
 }
 </style>
