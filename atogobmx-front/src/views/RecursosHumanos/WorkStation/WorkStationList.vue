@@ -10,8 +10,8 @@
       >
       </b-form-input>
       <b-button
-        variant="success"
         style="
+          background-color: rgb(94,80,238);
           height: 50px;
           width: auto;
           font-size: 18px;
@@ -193,6 +193,7 @@ export default {
     const fields = ref([
       { value: 'puestoTrabajoId', text: 'ID', sortable: true },
       { value: 'nombre', text: 'Nombre' },
+      { value: 'departamentos.nombre', text: 'Departamento' },
       { value: 'area.nombre', text: 'Area' },
       { value: 'actions', text: 'Acciones' }
     ])

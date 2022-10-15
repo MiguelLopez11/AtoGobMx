@@ -1,227 +1,93 @@
 <template>
   <div>
-    <b-card align="center" class="m-3">
-      <nav class="navbar navbar-expand-lg">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="/">
-            <b-avatar :src="background" style="cursor: pointer" />
-            AtoGobMx
-          </a>
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle"
-                  href="#"
-                  id="navbarDropdown"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Recursos Humanos
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li>
-                    <a class="dropdown-item">
-                      <router-link
-                        class="nav-link active text-dark"
-                        aria-current="page"
-                        to="/Empleados/list"
-                      >
-                        Empleados
-                      </router-link>
-                    </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item">
-                      <router-link
-                        class="nav-link active text-dark"
-                        aria-current="page"
-                        to="/ExpedientesDigitales/list"
-                      >
-                        Expedientes Digitales
-                      </router-link>
-                    </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item">
-                      <router-link
-                        class="nav-link active text-dark"
-                        aria-current="page"
-                        to="/Areas/list"
-                      >
-                        Areas de trabajo
-                      </router-link>
-                    </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item">
-                      <router-link
-                        class="nav-link active text-dark"
-                        aria-current="page"
-                        to="/Departamentos/list"
-                      >
-                        Departamentos
-                      </router-link>
-                    </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item">
-                      <router-link
-                        class="nav-link active text-dark"
-                        aria-current="page"
-                        to="/PuestosTrabajos/list"
-                      >
-                        Puestos de trabajo
-                      </router-link>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle"
-                  href="#"
-                  id="navbarDropdown"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Servicios publicos
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li>
-                    <a class="dropdown-item">
-                      <router-link
-                        class="nav-link active text-dark"
-                        aria-current="page"
-                        to="/Alumbrado/list"
-                        >Alumbrado Publico
-                      </router-link>
-                    </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item">
-                      <router-link
-                        class="nav-link active text-dark"
-                        aria-current="page"
-                        to="/EstatusAlumbrado/list"
-                        >Estatus Alumbrado
-                      </router-link>
-                    </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item">
-                      <router-link
-                        class="nav-link active text-dark"
-                        aria-current="page"
-                        to="/ExpedienteAlumbrado/list"
-                        >Expediente Alumbrado
-                      </router-link>
-                    </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item">
-                      <router-link
-                        class="nav-link active text-dark"
-                        aria-current="page"
-                        to="/InventarioAlumbrado/list"
-                        >Inventario Alumbrado
-                      </router-link>
-                    </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item">
-                      <router-link
-                        class="nav-link active text-dark"
-                        aria-current="page"
-                        to="/TareaTipoAlumbrado/list"
-                        >Tarea Tipo Alumbrado
-                      </router-link>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle"
-                  href="#"
-                  id="navbarDropdown"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Administrador
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li>
-                    <a class="dropdown-item">
-                      <router-link
-                        class="nav-link active text-dark"
-                        aria-current="page"
-                        to="/Usuarios/list"
-                      >
-                        Usuarios
-                      </router-link>
-                    </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item">
-                      <router-link
-                        class="nav-link active text-dark"
-                        aria-current="page"
-                        to="/Roles/list"
-                      >
-                        Roles
-                      </router-link>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle"
-                  href="#"
-                  id="navbarDropdown"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Dropdown
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="#">Action</a></li>
-                  <li><a class="dropdown-item" href="#">Another action</a></li>
-                  <li><hr class="dropdown-divider" /></li>
-                  <li>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link disabled">Disabled</a>
-              </li>
-            </ul>
-            <div class="d-flex">
-              <b-button pressed variant="success" to="/Login" size="lg">
-                <i class="bi bi-box-arrow-in-right"></i>
-                Iniciar Sesion
-              </b-button>
-            </div>
+    <b-card class="m-3">
+      <b-navbar sticky>
+        <b-navbar-nav>
+          <b-nav-item>
+            <template v-slot:button-content>
+              <b-avatar :src="background" />
+            </template>
+          </b-nav-item>
+          <div>
+            <b-avatar :src="background" />
+            <label class="m-2">AtogobMx</label>
           </div>
-        </div>
-      </nav>
+            <b-nav-item-dropdown
+              text="Recursos Humanos"
+              dropright
+              auto-close="outside"
+            >
+              <template v-slot:button-content>
+                <i class="bi bi-people-fill"></i>
+              </template>
+              <b-dropdown-item to="/Empleados/list" >
+                <i class="bi bi-person-fill"></i>
+                Empleados
+              </b-dropdown-item>
+              <b-dropdown-item to="/ExpedientesDigitales/list">
+                <i class="bi bi-folder-fill"></i>
+                ExpedienteDigital
+              </b-dropdown-item>
+              <b-dropdown-item to="/Departamentos/list">
+                <i class="bi bi-map-fill"></i>
+                Departamentos
+              </b-dropdown-item>
+              <b-dropdown-item to="/Areas/list">
+                <i class="bi bi-bricks"></i>
+                Areas
+              </b-dropdown-item>
+              <b-dropdown-item to="/PuestosTrabajos/list">
+                <i class="bi bi-laptop-fill"></i>
+                Puestos de trabajo
+              </b-dropdown-item>
+            </b-nav-item-dropdown>
+            <b-nav-item-dropdown
+              text="Servicios Publicos"
+              right auto-close
+            >
+              <template v-slot:button-content>
+                <i class="bi bi-globe2"></i>
+              </template>
+              <b-dropdown-item to="/Alumbrado/list">
+                <i class="bi bi-lightning-charge-fill"></i>
+                Alumbrado Público
+              </b-dropdown-item>
+              <b-dropdown-item to="/EstatusAlumbrado/list">
+                <i class="bi bi-layers-fill"></i>
+                Estatus Alumbrado
+              </b-dropdown-item>
+              <b-dropdown-item v-if="1 < 0" to="/TareaTipoAlumbrado/list">
+                <i class="bi bi-layers-fill"></i>
+                Tarea tipo
+              </b-dropdown-item>
+            </b-nav-item-dropdown>
+            <b-nav-item-dropdown
+              text="Administrador"
+              right
+              auto-close
+            >
+              <template v-slot:button-content>
+                <i class="bi bi-clipboard2-pulse-fill"></i>
+              </template>
+              <b-dropdown-item to="/Usuarios/list">
+                <i class="bi bi-person-bounding-box"></i>
+                Usuarios
+              </b-dropdown-item>
+              <b-dropdown-item to="/Roles/list">
+                <i class="bi bi-person-rolodex"></i>
+                Roles
+              </b-dropdown-item>
+            </b-nav-item-dropdown>
+        </b-navbar-nav>
+        <b-row align-h="end">
+          <b-navbar-nav>
+              <b-button size="lg" to="/Login" style="background-color: #7367f0">
+                <i class="bi bi-box-arrow-right"></i>
+                Login
+              </b-button>
+          </b-navbar-nav>
+        </b-row>
+      </b-navbar>
     </b-card>
   </div>
   <router-view></router-view>
@@ -249,19 +115,24 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
+.navbar-nav .nav-link
+{
+      border-width: 2px;
+}
 body {
-  background-color: #e5e8e8 !important;
+  background-color: rgb(236,237,238) !important;
 }
-nav {
-  padding: 30px;
+.card-body {
+  background-color: #f8f9fa;
+  border-radius: 5px;
 }
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
+.btn-link:hover {
+  background-color: #7367f0 !important;
+  color: rgb(255, 255, 255) !important;
 }
-
-nav a.router-link-exact-active {
-  color: #42b983;
+.dropdown-item.active {
+  background-color: #7367f0 !important
+  /* --bs-btn-hover-color: #7367f0;
+  --bs-btn-active-color: #7367f0; */
 }
 </style>

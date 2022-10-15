@@ -10,8 +10,8 @@
       >
       </b-form-input>
       <b-button
-        variant="success"
         style="
+          background-color: rgb(94,80,238);
           height: 50px;
           width: auto;
           font-size: 18px;
