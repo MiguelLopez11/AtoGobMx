@@ -9,7 +9,7 @@
         placeholder="Buscar Alumbrado..."
       ></b-form-input>
       <b-button
-        variant="primary"
+        variant="success"
         style="
           height: 50px;
           width: auto;
@@ -17,9 +17,10 @@
           margin-right: 15px;
           margin-left: 20px;
         "
-        v-b-modal.modal-publiclighting
+        @click="showModal = !showModal"
         type="submit"
       >
+        <!-- v-b-modal.modal-publiclighting -->
         <i class="bi bi-person-plus-fill"></i>
         Agregar Alumbrado
       </b-button>
@@ -53,7 +54,7 @@
           variant="outline-warning"
           :to="{
             name: 'Alumbrado-Edit',
-            params: { AlumbradoId: items.alumbradoId },
+            params: { AlumbradoId: items.alumbradoId }
           }"
           ><i class="bi bi-pencil-square"></i
         ></b-button>
@@ -62,105 +63,70 @@
     <b-modal
       id="modal-publiclighting"
       title="Agregar Alumbrado"
+      v-model="showModal"
       size="xl"
       hide-footer
+      centered
       button-size="lg"
       lazy
     >
       <Form @submit="addPublicLighting">
-        <b-row cols="2">
+        <b-row cols="3">
+          <!--1-->
           <b-col>
-            <!-- <b-form-group class="mt-3" label="Tipo de tarea">
-                <Field
-                  name="TaskField"
-                  :rules="validateTask"
-                >
-                  <b-form-select
-                    v-model="streetLightingFields.tareaTipoId"
-                    autofocus
-                    :options="departaments"
-                    value-field="departamentoId"
-                    text-field="nombre"
-                    :state="TaskState"
-                    @input="getAreas(EmployeesFields.departamentoId)"
-                  >
-                  </b-form-select>
-                </Field>
-                <ErrorMessage name="TaskField"
-                  ><span class="text-danger">Este campo es requerido </span
-                  ><i class="bi bi-exclamation-circle"></i
-                ></ErrorMessage>
-              </b-form-group> -->
-            <b-form-group class="mt-3" label="Tipo Tarea">
-              <Field name="TaskField" :rules="validateTask">
+            <b-form-group class="mt-3" label="Tipo de Tarea">
+              <Field name="TaskField" :rules="validateTask" as="text">
                 <b-form-select
-                  v-model="publicLightingFields.tarea"
+                  v-model="publicLightingFields.tareaTipoId"
                   autofocus
                   :state="TaskState"
+                  :options="typeTaskLighting"
+                  value-field="tareaTipoId"
+                  text-field="nombreTarea"
+                ></b-form-select>
+              </Field>
+              <ErrorMessage class="text-danger" name="TaskField"></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <!--2-->
+          <b-col>
+            <b-form-group class="mt-3" label="Estatus">
+              <Field name="StatusField" :rules="validateStatus" as="text">
+                <b-form-select
+                  v-model="publicLightingFields.tareaTipoId"
+                  autofocus
+                  :state="StatusState"
                   :options="statusPublicLighting"
                   value-field="estatusId"
                   text-field="nombreEstatus"
+                  @input="getStatus(publicLightingFields.estatusId)"
                 ></b-form-select>
               </Field>
-              <ErrorMessage name="TaskField"
-                ><span>Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i>
-              </ErrorMessage>
+              <ErrorMessage class="text-danger" name="StatusField"></ErrorMessage>
             </b-form-group>
           </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Fecha Alta">
-              <Field name="HighDateField" :rules="validateHighDate">
-                <Datepicker
-                  locale="es"
-                  name="date"
-                  text-input
-                  v-model="publicLightingFields.fechaAlta"
-                  :state="HighDateState"
-                ></Datepicker>
-              </Field>
-              <ErrorMessage name="HighDateField"
-                ><span>Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i>
-              </ErrorMessage>
-            </b-form-group>
-          </b-col>
+          <!--3-->
           <b-col>
             <b-form-group class="mt-3" label="Domicilio">
-              <Field name="DomicileField" :rules="validateDomicile">
+              <Field name="DomicileField" :rules="validateDomicile" as="text">
                 <b-form-input
                   v-model="publicLightingFields.domicilio"
                   :state="DomicileState"
                 ></b-form-input>
               </Field>
-              <ErrorMessage name="DomicileField"
-                ><span>Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i>
-              </ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="DomicileField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Fecha Alta">
-              <Field name="LowDateField" :rules="validateLowDate">
-                <Datepicker
-                  locale="es"
-                  name="date"
-                  text-input
-                  v-model="publicLightingFields.fechaBaja"
-                  :state="LowDateState"
-                ></Datepicker>
-              </Field>
-              <ErrorMessage name="LowDateField"
-                ><span>Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i>
-              </ErrorMessage>
-            </b-form-group>
-          </b-col>
+          <!--4-->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion Domicilio">
               <Field
                 name="addresdescriptionField"
                 :rules="validateAddresdescription"
+                as="text"
               >
                 <b-form-textarea
                   v-model="publicLightingFields.descripcionDomicilio"
@@ -168,37 +134,37 @@
                   rows="4"
                 ></b-form-textarea>
               </Field>
-              <ErrorMessage name="addresdescriptionField"
-                ><span>Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i>
-              </ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="addresdescriptionField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
+          <!--5-->
           <b-col>
-            <b-form-group class="mt-3" label="Descripcion Solucion">
-              <Field
-                name="DescriptionSolutionField"
-                :rules="validateDescriptionSolution"
-              >
+            <b-form-group class="mt-3" label="Descripcion del problema">
+              <Field name="ProblemField" :rules="validateProblem" as="text">
                 <b-form-textarea
-                  v-model="publicLightingFields.descripcionSolucion"
-                  :state="DescriptionSolutionState"
+                  v-model="publicLightingFields.descripcionProblema"
+                  :state="ProblemState"
                   rows="4"
                 ></b-form-textarea>
               </Field>
-              <ErrorMessage name="DescriptionSolutionField"
-                ><span>Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i>
-              </ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="ProblemField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
+
         <b-row align-h="end">
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            v-b-modal.modal-publiclighting
+            @click="resetPublicLightingFields"
           >
+            <!-- v-b-modal.modal-publiclighting -->
             Cancelar
           </b-button>
           <b-button class="w-auto m-2" variant="success" type="submit">
@@ -211,71 +177,73 @@
 </template>
 
 <script>
-//  publiclightingServices
 import PubliclightingServices from '@/Services/publiclighting.Services'
 import StatusLightingServices from '@/Services/statuslighting.Services'
+import TypeTaskLightingServices from '@/Services/tasktypelighting.Services'
 import EditExpedientLighting from '@/Services/expedientlighting.Services'
-import Datepicker from '@vuepic/vue-datepicker'
+// import Datepicker from '@vuepic/vue-datepicker'
 import { Form, Field, ErrorMessage } from 'vee-validate'
-import { ref } from 'vue'
-import { useToast } from 'vue-toast-notification'
+import { ref, inject } from 'vue'
+// import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
-    Datepicker,
+    // Datepicker,
     EasyDataTable: window['vue3-easy-data-table'],
     Form,
     Field,
     ErrorMessage
   },
   setup () {
+    const swal = inject('$swal')
     const {
       getPublicLighting,
       createPublicLighting,
       deletePublicLighting
     } = PubliclightingServices()
-    const {
-      getStatus
-    } = StatusLightingServices()
+    const { getStatus } = StatusLightingServices()
+    const { getTaskTypeLighting } = TypeTaskLightingServices()
     const { createExpedientLighting } = EditExpedientLighting()
-    const $toast = useToast()
+    const showModal = ref(false)
     const publicLighting = ref([])
     const statusPublicLighting = ref([])
-    // const option = ref()
+    const typeTaskLighting = ref([])
     const isOpen = ref(false)
     const perPage = ref(5)
     const currentPage = ref(1)
-    // const rows = ref(null)
     const filter = ref(null)
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('tarea')
-    const TaskState = ref(false)
-    const DescriptionSolutionState = ref(false)
-    const HighDateState = ref(false)
+    const searchField = ref('domicilio')
+    const ProblemState = ref(false)
     const addresdescriptionState = ref(false)
     const DomicileState = ref(false)
-    const LowDateState = ref(false)
+    const TaskState = ref(false)
+    const StatusState = ref(false)
     const expedientPublicFieldBlank = ref({
       expedienteAlumbradoId: 0,
-      alumbradoId: 0,
+      alumbradoId: null,
       archivado: false
     })
     const publicLightingFields = ref({
       alumbradoId: 0,
-      tarea: null,
-      descripcionSolucion: null,
-      fechaAlta: null,
-      fechaBaja: null,
-      domicilio: null,
+      descripcionProblema: '',
+      domicilio: '',
       descripcionDomicilio: null,
+      tareaTipoId: null,
+      estatusId: null,
       archivado: false
     })
+    // tarea: null,
 
-    getStatus((data) => {
-      statusPublicLighting.value = data
-    })
+    // getStatus(data => {
+    //   statusPublicLighting.value = data
+    // })
+
+    // getTaskTypeLighting(data => {
+    //   typeTaskLighting.value = data
+    // })
 
     // const getAreas = (departamentoId) => {
     //   getAreasByDepartament(departamentoId, data => {
@@ -291,15 +259,54 @@ export default {
     //     }
     //   })
     // }
+    //  getTaskTypeLighting = (tareaTipoId) => {
+    //   typeTaskLighting.valu = data
+    //   if (data.length === 0) {
+    //     swal.fire({
+    //       title: 'No se encuentra un tipo de tare registrada!',
+    //       taxt: 'No se encuentra tipo de tarea registradas en el departamento seleccionado, registre primero un tipo de tarea para continuar',
+    //       icon: 'warning'
+    //     })
+    //   }
+    // }
 
-    // const option = ref([
-    //   { value: 'tarea', text: 'Mantenimiento' },
-    //   { value: 'tarea', text: 'Reparacion' },
-    //   { value: 'tarea', text: 'Instalacion', disabled: true }
-    // ])
+    // getTaskTypeLighting(data => {
+    //   typeTaskLighting.value = data
+    //   if (data.length === 0) {
+    //     swal.fire({
+    //       title: 'No se encuentra un tipo de tare registrada!',
+    //       taxt:
+    //         'No se encuentra tipo de tarea registradas en el departamento seleccionado, registre primero un tipo de tarea para continuar',
+    //       icon: 'warning'
+    //     })
+    //   }
+    // })
+    const getTaskTypeLightingById = (tareaTipoId) => {
+      getTaskTypeLighting(tareaTipoId, data => {
+        typeTaskLighting.value = data
+        if (data.length === 0) {
+          swal.fire({
+            title: 'No se encuentra un tipo de tare registrada!',
+            text: 'No se encuentra tipo de tarea registradas en el departamento seleccionado, registre primero un tipo de tarea para continuar',
+            icon: 'warning'
+          })
+        }
+      })
+    }
+
+    getStatus(data => {
+      statusPublicLighting.value = data
+      if (data.length === 0) {
+        swal.fire({
+          title: 'No se encuentra un estatus registrado!',
+          text: 'No se encuentra estatus registrado en el departamento seleccionado, registre primero un tipo de estatus para continuar',
+          icon: 'warning'
+        })
+      }
+    })
 
     const validateTask = () => {
-      if (!publicLightingFields.value.tarea) {
+      if (!publicLightingFields.value.tareaTipoId) {
         TaskState.value = false
         return 'Este campo es requerido'
       }
@@ -307,12 +314,29 @@ export default {
       return true
     }
 
-    const validateDescriptionSolution = () => {
-      if (!publicLightingFields.value.descripcionSolucion) {
-        DescriptionSolutionState.value = false
+    const validateStatus = () => {
+      if (!publicLightingFields.value.estaatusId) {
+        StatusState.value = false
         return 'Este campo es requerido'
       }
-      DescriptionSolutionState.value = true
+      StatusState.value = true
+      return true
+    }
+
+    const validateProblem = () => {
+      if (!publicLightingFields.value.descripcionProblema) {
+        ProblemState.value = false
+        return 'Este campo es requerido'
+      }
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+          publicLightingFields.value.descripcionProblema
+        )
+      ) {
+        ProblemState.value = false
+        return 'Este campo solo puede contener letras'
+      }
+      ProblemState.value = true
       return true
     }
 
@@ -321,25 +345,13 @@ export default {
         DomicileState.value = false
         return 'Este campo es requerido'
       }
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(publicLightingFields.value.domicilio)
+      ) {
+        DomicileState.value = false
+        return 'Este campo solo puede contener letras'
+      }
       DomicileState.value = true
-      return true
-    }
-
-    const validateLowDate = () => {
-      if (!publicLightingFields.value.fechaBaja) {
-        LowDateState.value = false
-        return 'Este campo es requerido'
-      }
-      LowDateState.value = true
-      return true
-    }
-
-    const validateHighDate = () => {
-      if (!publicLightingFields.value.fechaAlta) {
-        HighDateState.value = false
-        return 'Este campo es requerido'
-      }
-      HighDateState.value = true
       return true
     }
 
@@ -359,26 +371,25 @@ export default {
 
     const fields = ref([
       { value: 'alumbradoId', text: 'ID', sortable: true },
-      { value: 'tarea', text: 'Tarea' },
-      { value: 'fechaAlta', text: 'Fecha Alta' },
+      { value: 'descripcionProblema', text: 'Descripcion del problema' },
       { value: 'domicilio', text: 'Domicilio' },
       { value: 'descripcionDomicilio', text: 'Descripcion Domicilio' },
-      { value: 'descripcionSolucion', text: 'Descripcion Solucion' },
-      { value: 'fechaBaja', text: 'Fecha Baja' },
       { value: 'actions', text: 'Acciones' }
     ])
 
-    // const resetStreetLightingFields = () => {
-    //   streetLightingFields.value = JSON.parse(JSON.stringify(streetLightingFieldsBlank))
-    //   TaskState.value = false
-    //   DescriptionSolutionState.value = false
-    //   HighDateState.value = false
-    //   addresdescriptionState.value = false
-    //   DomicileState.value = false
-    //   LowDateState.value = false
-    // }
+    const resetPublicLightingFields = () => {
+      showModal.value = false
+      publicLightingFields.value = JSON.parse(
+        JSON.stringify(publicLightingFieldsBlank)
+      )
+      TaskState.value = false
+      ProblemState.value = false
+      addresdescriptionState.value = false
+      DomicileState.value = false
+      StatusState.value = false
+    }
 
-    getPublicLighting((data) => {
+    getPublicLighting(data => {
       publicLighting.value = data
       // rows.value = data.length
       if (publicLighting.value.length > 0) {
@@ -390,14 +401,14 @@ export default {
       }
     })
 
-    const onFiltered = (filteredItems) => {
+    const onFiltered = filteredItems => {
       // rows.value = filteredItems.length
       currentPage.value = 1
     }
 
     const refreshTable = () => {
       isloading.value = true
-      getPublicLighting((data) => {
+      getPublicLighting(data => {
         publicLighting.value = data
         // rows.value = data.length
         if (publicLighting.value.length > 0) {
@@ -412,98 +423,101 @@ export default {
     }
 
     const addPublicLighting = () => {
-      createPublicLighting(publicLightingFields.value, (data) => {
+      createPublicLighting(publicLightingFields.value, data => {
         expedientPublicFieldBlank.value.alumbradoId = data.alumbradoId
-        createExpedientLighting(expedientPublicFieldBlank.value, data => {
-        })
+        createExpedientLighting(expedientPublicFieldBlank.value, data => {})
         refreshTable()
-        $toast.success('Alumbrado registrado correctamente.', {
-          position: 'top-right',
-          duration: 1500
+        swal.fire({
+          title: '¡Alumbrado publico agregado correctamente!',
+          text: 'Alumbrado registrado satisfactoriamente',
+          icon: 'success'
         })
+        // $toast.success('Alumbrado registrado correctamente.', {
+        //   position: 'top-right',
+        //   duration: 1500
+        // })
       })
       // resetStreetLightingFields()
-      publicLightingFields.value = JSON.parse(
-        JSON.stringify(publicLightingFieldsBlank))
+      // publicLightingFields.value = JSON.parse(
+      //   JSON.stringify(publicLightingFieldsBlank))
+      showModal.value = false
+      resetPublicLightingFields()
     }
 
-    const RemovePublicLighting = (StreetLightingId) => {
+    const RemovePublicLighting = StreetLightingId => {
       isloading.value = true
-      deletePublicLighting(StreetLightingId, (data) => {
-        refreshTable()
-      })
+      swal
+        .fire({
+          title: '¿Estas seguro',
+          text: 'No podras revertir esto',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, Archivar alumbrado!',
+          cancelButtonText: 'Cancelar'
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            deletePublicLighting(StreetLightingId, data => {
+              refreshTable()
+            })
+            swal.fire({
+              title: '¡Alumbrado archivado!',
+              text:
+                'El alumbrado publico ha sido archivado satisfactoriamente.',
+              icon: 'success'
+            })
+          } else {
+            isloading.value = false
+          }
+        })
     }
 
     return {
       publicLighting,
       statusPublicLighting,
+      typeTaskLighting,
       publicLightingFields,
       isOpen,
       perPage,
       currentPage,
-      // rows,
       filter,
       perPageSelect,
       isloading,
       searchValue,
       searchField,
       publicLightingFieldsBlank,
-      // lightingFailuresValues,
       fields,
       TaskState,
-      DescriptionSolutionState,
-      HighDateState,
       addresdescriptionState,
       DomicileState,
-      LowDateState,
-      // option,
+      StatusState,
+      showModal,
+      ProblemState,
 
       onFiltered,
       addPublicLighting,
       refreshTable,
       RemovePublicLighting,
       validateTask,
-      validateDescriptionSolution,
-      validateHighDate,
       validateAddresdescription,
-      validateLowDate,
-      validateDomicile
-      // resetStreetLightingFields
+      validateDomicile,
+      resetPublicLightingFields,
+      validateProblem,
+      validateStatus,
+      getTaskTypeLightingById
     }
   }
 }
+
+// resetStreetLightingFields
+// option,
+// lightingFailuresValues,
+// rows,
+// const rows = ref(null)
+// const $toast = useToast()
+// const option = ref()
 </script>
 
-  <style>
-.customize-table {
-  /* --easy-table-border: 1px solid #445269;
-    --easy-table-row-border: 1px solid #445269; */
-  --easy-table-header-font-size: 16px;
-  --easy-table-header-height: 50px;
-  --easy-table-header-font-color: #fcf6f5ff;
-  --easy-table-header-background-color: #2bae66ff;
-  --easy-table-header-item-padding: 10px 15px;
-  --easy-table-header-item-align: center;
-  --easy-table-message-font-size: 17px;
-  /* --easy-table-body-even-row-font-color: #fff;
-    --easy-table-body-even-row-background-color: #4c5d7a; */
-  /* --easy-table-body-row-font-color: #c0c7d2;
-    --easy-table-body-row-background-color: #2d3a4f; */
-  --easy-table-body-row-height: 50px;
-  --easy-table-body-row-font-size: 17px;
-  --easy-table-border-radius: 15px;
-  --easy-table-body-row-hover-font-color: rgb(0, 0, 0);
-  --easy-table-body-row-hover-background-color: rgb(212, 212, 212);
-  --easy-table-body-item-padding: 10px 15px;
-  --easy-table-footer-background-color: #2bae66ff;
-  --easy-table-footer-font-color: #fcf6f5ff;
-  --easy-table-footer-font-size: 17px;
-  --easy-table-footer-padding: 0px 10px;
-  --easy-table-footer-height: 50px;
-  /* --easy-table-scrollbar-track-color: #2d3a4f;
-    --easy-table-scrollbar-color: #2d3a4f;
-    --easy-table-scrollbar-thumb-color: #4c5d7a;;
-    --easy-table-scrollbar-corner-color: #2d3a4f;
-    --easy-table-loading-mask-background-color: #2d3a4f; */
-}
-</style>
+<style></style>

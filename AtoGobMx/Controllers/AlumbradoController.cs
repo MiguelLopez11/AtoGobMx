@@ -25,7 +25,6 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<Alumbrado>> GetAlumbrado()
         {
             var alumbrado = await _context.Alumbrado
-                .OrderBy(o => o.Tarea)
                 .Where(w => !w.Archivado)
                 .Select(s => _mapper.Map<Alumbrado>(s))
                 .ToArrayAsync();
@@ -67,10 +66,7 @@ namespace AtoGobMx.Controllers
             }
 
             alum.AlumbradoId = alumbrado.AlumbradoId;
-            alum.Tarea = alumbrado.Tarea;
-            alum.DescripcionSolucion = alumbrado.DescripcionSolucion;
-            alum.FechaAlta = alumbrado.FechaAlta;
-            alum.FechaBaja = alumbrado.FechaBaja;
+            alum.DescripcionProblema = alumbrado.DescripcionProblema;
             alum.Domicilio = alumbrado.Domicilio;
             alum.DescripcionDomicilio = alumbrado.DescripcionDomicilio;
             alum.Archivado = alumbrado.Archivado;
@@ -99,3 +95,10 @@ namespace AtoGobMx.Controllers
         }
     }
 }
+
+
+             //.OrderBy(o => o.Tarea)
+            //alum.Tarea = alumbrado.Tarea;
+            //alum.DescripcionSolucion = alumbrado.DescripcionSolucion;
+            //alum.FechaAlta = alumbrado.FechaAlta;
+            //alum.FechaBaja = alumbrado.FechaBaja;

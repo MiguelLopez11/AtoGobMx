@@ -9,10 +9,10 @@ namespace AtoGobMx.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int InventarioAlumbradoId { get; set; }
-        public string Tarea { get; set; }
-        public DateTime FechaAlta { get; set; }
-        public DateTime FechaBaja { get; set; }
-        public string Domicilio { get; set; }
+        //public string Tarea { get; set; }
+        //public DateTime FechaAlta { get; set; }
+        //public DateTime FechaBaja { get; set; }
+        //public string Domicilio { get; set; }
         public bool Archivado { get; set; }
 
         [JsonIgnore]

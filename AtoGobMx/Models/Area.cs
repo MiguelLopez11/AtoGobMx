@@ -20,5 +20,8 @@ namespace AtoGobMx.Models
         public Departamentos? Departamentos { get; set; }
         [JsonIgnore]
         public virtual IEnumerable<Empleado>? Empleados { get; set; }
+
+        [JsonIgnore]
+        public virtual IEnumerable<ExpedienteAlumbrado>? ExpedienteAlumbrado { get; set; }
     }
 }
