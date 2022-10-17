@@ -11,6 +11,7 @@
       <b-button
         variant="primary"
         style="
+          background-color: rgb(94,80,238);
           height: 50px;
           width: auto;
           font-size: 18px;
@@ -69,48 +70,30 @@
     >
       <Form @submit="addStatusLighting">
         <b-row cols="2">
+          <!--1-->
           <b-col>
             <b-form-group class="mt-3" label="Nombre">
-              <Field name="NameField" :rules="validateName">
+              <Field name="NameField" :rules="validateName" as="text">
                 <b-form-input
                   v-model="statusLightingFields.nombreEstatus"
                   :state="NameState"
                 >
                 </b-form-input>
               </Field>
-              <ErrorMessage name="NameField">
-                <span>Este campo es requerido</span>
-                <i class="bi bi-exclamation-circle" />
-              </ErrorMessage>
+              <ErrorMessage class="text-danger" name="NameField"></ErrorMessage>
             </b-form-group>
           </b-col>
+          <!--2-->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion">
-              <Field name="DescriptionField" :rules="validateDescription">
+              <Field name="DescriptionField" :rules="validateDescription" as="text">
                 <b-form-input
                   v-model="statusLightingFields.descripcion"
                   :state="DescriptionState"
                 ></b-form-input>
               </Field>
-              <ErrorMessage name="DescriptionField"
-                ><span>Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i>
-              </ErrorMessage>
+              <ErrorMessage class="text-danger" name="DescriptionField"></ErrorMessage>
             </b-form-group>
-
-            <!-- <b-form-group class="mt-3" label="Descripcion">
-              <Field name="descriptionField" :rules="validateDescription">
-                <b-form-textarea
-                  v-model="statusLightingFields.descripcion"
-                  :state="DescriptionState"
-                  rows="4"
-                ></b-form-textarea>
-              </Field>
-              <ErrorMessage name="descriptionField"
-                ><span>Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i>
-              </ErrorMessage>
-            </b-form-group> -->
           </b-col>
         </b-row>
         <b-row align-h="end">
@@ -133,8 +116,8 @@
 <script>
 import StatusLightingServices from '@/Services/statuslighting.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
-import { ref } from 'vue'
-import { useToast } from 'vue-toast-notification'
+import { ref, inject } from 'vue'
+// import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
@@ -144,12 +127,10 @@ export default {
     ErrorMessage
   },
   setup () {
-    const {
-      getStatus,
-      createStatusLighting,
-      deleteStatusLighting
-    } = StatusLightingServices()
-    const $toast = useToast()
+    const swal = inject('$swal')
+    const showModal = ref(false)
+    const { getStatus, createStatusLighting, deleteStatusLighting } = StatusLightingServices()
+    // const $toast = useToast()
     const statusLighting = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
@@ -178,6 +159,15 @@ export default {
       { value: 'actions', text: 'Acciones' }
     ])
 
+    const resetPublicLightingFields = () => {
+      showModal.value = false
+      statusLightingFields.value = JSON.parse(
+        JSON.stringify(statusLightingFieldsBlank)
+      )
+      NameState.value = false
+      DescriptionState.value = false
+    }
+
     getStatus(data => {
       statusLighting.value = data
       // rows.value = data.length
@@ -200,23 +190,22 @@ export default {
         NameState.value = false
         return 'Este campo es requerido'
       }
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(statusLightingFields.value.nombreEstatus)) {
+        NameState.value = false
+        return 'El nombre de estatus solo puede contener letras'
+      }
       NameState.value = true
       return true
     }
-
-    // const validateDescription = () => {
-    //   if (!statusLightingFields.value.descripcionDomicilio) {
-    //     DescriptionState.value = false
-    //     return 'Este campo es requerido'
-    //   }
-    //   DescriptionState.value = true
-    //   return true
-    // }
 
     const validateDescription = () => {
       if (!statusLightingFields.value.descripcion) {
         DescriptionState.value = false
         return 'Este campo es requerido'
+      }
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(statusLightingFields.value.descripcion)) {
+        DescriptionState.value = false
+        return 'La descripcion solo puede contener letras'
       }
       DescriptionState.value = true
       return true
@@ -241,25 +230,58 @@ export default {
     const addStatusLighting = () => {
       createStatusLighting(statusLightingFields.value, data => {
         refreshTable()
-        $toast.success('Estatus alumbrado registrado correctamente.', {
-          position: 'top-right',
-          duration: 1500
+        swal.fire({
+          title: '¡Estatus registrado correctamente!',
+          text: 'El estatus se ha registrado al sistema satisfactoriamente.',
+          icon: 'success'
         })
+        // $toast.success('Estatus alumbrado registrado correctamente.', {
+        //   position: 'top-right',
+        //   duration: 1500
+        // })
       })
       // resetStreetLightingFields()
-      statusLightingFields.value = JSON.parse(
-        JSON.stringify(statusLightingFieldsBlank)
-      )
+      // statusLightingFields.value = JSON.parse(
+      //   JSON.stringify(statusLightingFieldsBlank)
+      // )
+      showModal.value = false
+      resetPublicLightingFields()
     }
     const RemoveStatusLighting = StreetLightingId => {
       isloading.value = true
-      deleteStatusLighting(StreetLightingId, data => {
-        refreshTable()
+      swal.fire({
+        title: '¿Estas seguro?',
+        text: 'No podrás revertir esto!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, Archivar empleado!',
+        cancelButtonText: 'Cancelar'
       })
+        .then(result => {
+          if (result.isConfirmed) {
+            deleteStatusLighting(StreetLightingId, (data) => {
+              refreshTable()
+            })
+            swal
+              .fire({
+                title: '¡Estatus archivado!',
+                text: 'El estatus ha sido archivado satisfactoriamente .',
+                icon: 'success'
+              })
+          } else {
+            isloading.value = false
+          }
+        })
+      // deleteStatusLighting(StreetLightingId, data => {
+      //   refreshTable()
+      // })
     }
     return {
       statusLighting,
       statusLightingFields,
+      showModal,
       perPage,
       currentPage,
       // rows,
@@ -279,7 +301,8 @@ export default {
       refreshTable,
       RemoveStatusLighting,
       validateName,
-      validateDescription
+      validateDescription,
+      resetPublicLightingFields
       // resetStreetLightingFields
     }
   }
@@ -287,35 +310,5 @@ export default {
 </script>
 
 <style>
-.customize-table {
-  /* --easy-table-border: 1px solid #445269;
-        --easy-table-row-border: 1px solid #445269; */
-  --easy-table-header-font-size: 16px;
-  --easy-table-header-height: 50px;
-  --easy-table-header-font-color: #fcf6f5ff;
-  --easy-table-header-background-color: #2bae66ff;
-  --easy-table-header-item-padding: 10px 15px;
-  --easy-table-header-item-align: center;
-  --easy-table-message-font-size: 17px;
-  /* --easy-table-body-even-row-font-color: #fff;
-        --easy-table-body-even-row-background-color: #4c5d7a; */
-  /* --easy-table-body-row-font-color: #c0c7d2;
-        --easy-table-body-row-background-color: #2d3a4f; */
-  --easy-table-body-row-height: 50px;
-  --easy-table-body-row-font-size: 17px;
-  --easy-table-border-radius: 15px;
-  --easy-table-body-row-hover-font-color: rgb(0, 0, 0);
-  --easy-table-body-row-hover-background-color: rgb(212, 212, 212);
-  --easy-table-body-item-padding: 10px 15px;
-  --easy-table-footer-background-color: #2bae66ff;
-  --easy-table-footer-font-color: #fcf6f5ff;
-  --easy-table-footer-font-size: 17px;
-  --easy-table-footer-padding: 0px 10px;
-  --easy-table-footer-height: 50px;
-  /* --easy-table-scrollbar-track-color: #2d3a4f;
-        --easy-table-scrollbar-color: #2d3a4f;
-        --easy-table-scrollbar-thumb-color: #4c5d7a;;
-        --easy-table-scrollbar-corner-color: #2d3a4f;
-        --easy-table-loading-mask-background-color: #2d3a4f; */
-}
+
 </style>

@@ -11,7 +11,7 @@
         <b-row cols="2">
           <b-col>
             <!-- 1 -->
-            <b-form-group class="mt-3" label="Nombre del propietario">
+            <b-form-group class="mt-3" label="Nombre del propietario" as="text">
               <Field name="PropietaryField" :rules="validatePropietary">
                 <b-form-input
                   v-modal="cementeryService.nombrePropietario"
