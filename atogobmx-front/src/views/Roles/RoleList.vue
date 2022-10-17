@@ -21,7 +21,7 @@
         @click="showModal = !showModal"
         type="submit"
       >
-        <i class="bi bi-building m-1" />
+        <i class="bi bi-person-video2"></i>
         Agregar Role
       </b-button>
     </b-row>

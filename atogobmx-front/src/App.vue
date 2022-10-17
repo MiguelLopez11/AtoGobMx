@@ -10,7 +10,7 @@
           </b-nav-item>
           <div>
             <b-avatar :src="background" />
-            <label class="m-2">AtogobMx</label>
+            <label  class="m-2">AtogobMx</label>
           </div>
             <b-nav-item-dropdown
               text="Recursos Humanos"

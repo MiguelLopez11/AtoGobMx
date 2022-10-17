@@ -11,17 +11,25 @@
             />
           </div>
           <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-            <form>
+            <Form @submit="onLogIn">
               <div class="form-outline mb-4">
                 <label class="form-label" for="form3Example3"
                   >Nombre de usuario</label
                 >
-                <input
-                  type="email"
-                  id="form3Example3"
-                  class="form-control form-control-lg"
+                 <Field
+                name="userNameField"
+                :rules="validateUserName"
+                as="text"
+              >
+                <b-form-input
+                  v-model="user.userName"
+                  :state="userNameState"
                   placeholder="Ingresa un usuario válido"
-                />
+                  size="lg"
+                >
+                </b-form-input>
+              </Field>
+              <ErrorMessage class="text-danger" name="userNameField" />
               </div>
               <div class="form-outline mb-3">
                 <label class="form-label" for="form3Example4">Contraseña</label>
@@ -34,51 +42,89 @@
               </div>
               <div class="text-center text-lg-start mt-4 pt-2">
                 <button
-                  type="button"
+                  type="success"
                   class="btn btn-lg"
                   style="padding-left: 2.5rem; background-color: rgb(94,80,238); color:white; padding-right: 2.5rem;"
                 >
                   Iniciar Sesión
                 </button>
               </div>
-            </form>
+            </Form>
           </div>
         </div>
       </div>
-      <!-- <div
-    class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 bg-primary">
-    <div class="text-white mb-3 mb-md-0">
-      Copyright © 2020. All rights reserved.
-    </div>
-    <div>
-      <a href="#!" class="text-white me-4">
-        <i class="fab fa-facebook-f"></i>
-      </a>
-      <a href="#!" class="text-white me-4">
-        <i class="fab fa-twitter"></i>
-      </a>
-      <a href="#!" class="text-white me-4">
-        <i class="fab fa-google"></i>
-      </a>
-      <a href="#!" class="text-white">
-        <i class="fab fa-linkedin-in"></i>
-      </a>
-    </div>
-  </div> -->
     </section>
   </b-card>
 </template>
 
 <script>
-import { ref } from 'vue'
+import LogInServices from '@/Services/logIn.Services'
+import { ref, inject } from 'vue'
+import { useRouter } from 'vue-router'
+import { Form, Field, ErrorMessage } from 'vee-validate'
 export default {
+  components: {
+    Form,
+    Field,
+    ErrorMessage
+  },
   setup () {
+    const swal = inject('$swal')
+    const redirect = useRouter()
+    const { LogIn } = LogInServices()
+    const userNameState = ref(false)
     const user = ref({
       userName: '',
       password: ''
     })
+    const onLogIn = () => {
+      LogIn(user, data => {
+        if (data) {
+          swal.fire({
+            title: 'Inicio de sesión correcto.!',
+            text: 'Se ha iniciado sesion correctamente.',
+            icon: 'success'
+          }).then(result => {
+            if (result.isConfirmed) {
+              redirect.push('/')
+            }
+          })
+        }
+        swal.fire({
+          title: 'Inicio de sesión Fallido.!',
+          text: 'Usuario o contraseña ingresado no es correcto.',
+          icon: 'error'
+        })
+      })
+    }
+    const validateUserName = () => {
+      if (!user.value.userName) {
+        validateState()
+        return 'Este campo es requerido'
+      }
+      // eslint-disable-next-line no-useless-escape
+      if (!user.value.userName.trim().length > 0) {
+        validateState()
+        return 'el campo no puede tener solo espacios'
+      }
+      if (!/^[a-zA]+[A-Z0-9.-]+$/i.test(user.value.userName)) {
+        validateState()
+        return 'El nombre de usuario no puede contener espacios'
+      }
+      validateState()
+      return true
+    }
+    const validateState = () => {
+      userNameState.value = user.value.userName !== '' && user.value.userName !== null && user.value.userName.trim().length > 0 && /^[a-zA]+[A-Z0-9.-]+$/i.test(user.value.userName)
+      return ''
+    }
     return {
-      user
+      user,
+      userNameState,
+
+      validateUserName,
+      validateState,
+      onLogIn
     }
   }
 }
