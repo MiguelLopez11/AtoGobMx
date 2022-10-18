@@ -7,6 +7,7 @@
       no-body
       style="max-width: 200rem"
     >
+    {{ userData }}
     </b-card>
   </b-card>
 </template>
@@ -14,18 +15,16 @@
 <script>
 import { ref } from 'vue'
 import LogoAtogobMx from '@/Images/LogoAtogobMx.jpg'
+import { useRoute } from 'vue-router'
 export default {
   setup () {
-    const clicked = ref(false)
+    const router = useRoute()
     const background = ref(LogoAtogobMx)
-    const method = () => {
-      clicked.value = true
-    }
+    const userData = router.params.Rol
+    console.log(router.params.Rol)
     return {
-      clicked,
       background,
-
-      method
+      userData
     }
   }
 }

@@ -5,6 +5,9 @@ export default function AreaServices () {
   const LogIn = (user, callback) => {
     axios.get(`${BaseUrl}/Usuarios/${user.userName}/${user.password}`).then((response) => {
       callback(response.data)
+    }).catch((exception) => {
+      // eslint-disable-next-line node/no-callback-literal
+      callback({ message: exception.response, type: exception.response.status })
     })
   }
   return {

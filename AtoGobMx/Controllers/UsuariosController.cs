@@ -109,7 +109,7 @@ namespace AtoGobMx.Controllers
 
                     if (usuario == null)
                     {
-                        return BadRequest();
+                        return BadRequest("El usuario ingresado no existe.");
                     }
                     return Ok(usuario);
                 }
