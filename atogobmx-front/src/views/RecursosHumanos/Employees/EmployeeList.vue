@@ -308,6 +308,10 @@ export default {
         nameState.value = false
         return 'Este campo es requerido'
       }
+      if (!EmployeesFields.value.nombreCompleto.trim().length > 0) {
+        nameState.value = false
+        return 'Este campo no puede contener solo espacios'
+      }
       if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(EmployeesFields.value.nombreCompleto)) {
         nameState.value = false
         return 'El nombre solo puede contener letras'

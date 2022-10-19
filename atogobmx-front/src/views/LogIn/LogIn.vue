@@ -88,8 +88,8 @@ export default {
     })
     const onLogIn = () => {
       LogIn(user.value, data => {
-        console.log(data)
         if (data.usuarioId) {
+          window.localStorage.setItem('User', JSON.stringify(data))
           swal.fire({
             title: 'Inicio de sesión correcto.!',
             text: 'Se ha iniciado sesion correctamente.',

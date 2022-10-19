@@ -15,13 +15,13 @@
 <script>
 import { ref } from 'vue'
 import LogoAtogobMx from '@/Images/LogoAtogobMx.jpg'
-import { useRoute } from 'vue-router'
+// import { useRoute } from 'vue-router'
 export default {
   setup () {
-    const router = useRoute()
+    // const router = useRoute()
     const background = ref(LogoAtogobMx)
-    const userData = router.params.Rol
-    console.log(router.params.Rol)
+    const userData = window.localStorage.getItem('User')
+    // console.log(userData.value)
     return {
       background,
       userData

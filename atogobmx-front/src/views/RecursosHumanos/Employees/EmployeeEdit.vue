@@ -273,12 +273,6 @@ export default {
       departamentState.value = employee.value.departamentoId !== null
       workStationState.value = employee.value.puestoTrabajoId !== null
       dateWorkState.value = employee.value.fechaAlta !== null
-      // // eslint-disable-next-line no-unneeded-ternary
-      // areaState.value = areas.value.length > 0 ? false : true
-      // // eslint-disable-next-line no-unneeded-ternary
-      // departamentState.value = departaments.value.length > 0 ? false : true
-      // // eslint-disable-next-line no-unneeded-ternary
-      // workStationState.value = workStations.value === null
       return ''
     }
 

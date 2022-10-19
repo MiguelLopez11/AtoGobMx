@@ -13,7 +13,7 @@
             <label  class="m-2">AtogobMx</label>
           </div>
             <b-nav-item-dropdown
-              v-if="DepartamentUser === 'Recursos Humanos'"
+              v-if="userData"
               text="Recursos Humanos"
               dropright
               auto-close="outside"
@@ -82,9 +82,13 @@
         </b-navbar-nav>
         <b-row align-h="end">
           <b-navbar-nav>
-              <b-button size="lg" to="/Login" style="background-color: #7367f0">
+              <b-button v-if="!userData" size="lg" to="/Login" style="background-color: #7367f0">
                 <i class="bi bi-box-arrow-right"></i>
                 Login
+              </b-button>
+              <b-button v-if="userData" size="lg" @click="removeLocalStorgare()" style="background-color: #7367f0">
+                <i class="bi bi-box-arrow-right"></i>
+                Cerrar Sesión
               </b-button>
           </b-navbar-nav>
         </b-row>
@@ -94,21 +98,29 @@
   <router-view></router-view>
 </template>
 <script>
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 import LogoAtogobMx from '@/Images/Icon.png'
-import { useRoute } from 'vue-router'
 
 export default {
   setup () {
-    const router = useRoute()
-    const roleUser = ref(router.params.Role)
-    const DepartamentUser = ref(router.params.userDepartament)
+    const swal = inject('$swal')
     const background = ref(LogoAtogobMx)
-    console.log(roleUser.value)
+    const userData = window.localStorage.getItem('User')
+    const removeLocalStorgare = () => {
+      window.localStorage.clear()
+      swal.fire({
+        title: 'Cerrar Sesión!',
+        text: 'Se ha cerrado sesion correctamente',
+        icon: 'success'
+      })
+    }
     return {
       background,
-      roleUser,
-      DepartamentUser
+      userData,
+
+      removeLocalStorgare
+      // roleUser,
+      // DepartamentUser
     }
   }
 }
