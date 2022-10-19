@@ -41,7 +41,12 @@
               Puestos de trabajo
             </b-dropdown-item>
           </b-nav-item-dropdown>
-          <b-nav-item-dropdown text="Servicios Publicos" right auto-close>
+          <!--Alumbrado Publico-->
+          <b-nav-item-dropdown
+            text="Servicios Publicos"
+            dropright
+            auto-close="outside"
+          >
             <template v-slot:button-content>
               <i class="bi bi-globe2"></i>
             </template>
@@ -61,6 +66,20 @@
             <b-dropdown-item to="/ExpedienteAlumbrado/list">
               <i class="bi bi-folder-fill"></i>
               Expediente
+            </b-dropdown-item>
+          </b-nav-item-dropdown>
+          <!--Cementerios-->
+          <b-nav-item-dropdown
+            text="Cementerios"
+            dropright
+            auto-close="outside"
+          >
+            <template v-slot:button-content>
+              <!-- <i class="bi bi-globe2"></i> -->
+            </template>
+            <b-dropdown-item to="/Cementerios/list">
+              <!-- <i class="bi bi-lightning-charge-fill"></i> -->
+              Cementerios
             </b-dropdown-item>
           </b-nav-item-dropdown>
           <b-nav-item-dropdown text="Administrador" right auto-close>

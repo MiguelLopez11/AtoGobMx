@@ -4,7 +4,7 @@
       <b-form-input
         size="lg"
         style="width: 350px"
-        v-model="searchvalue"
+        v-model="searchValue"
         type="search"
         placeholder="Buscar Cementerios..."
       ></b-form-input>
@@ -18,15 +18,16 @@
             margin-right: 15px;
             margin-left: 20px;
         "
-        v-b-modal.modal-cementery
+        @click="showModal = !showModal"
         type="submit"
       >
+        <!-- v-b-modal.modal-cementery -->
         <i class="bi bi-person-plus-fill"></i>
-        Cementerios
+        Agregar Cementerios
       </b-button>
     </b-row>
     <EasyDataTable
-      rows-per-page-message="registro por pagina"
+      rows-per-page-message="registros por pagina"
       empty-message="No se encontro ningun registro"
       table-class-name="customize-table"
       buttons-pagination
@@ -37,7 +38,7 @@
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
-      :tbale-height="330"
+      :table-height="330"
     >
       <template #header-actions="header">
         {{ header.text }}
@@ -63,7 +64,8 @@
 
     <b-modal
       id="modal-cementery"
-      tittle="Agregar Cementerio"
+      tittle="Agregar Cementerios"
+      v-model="showModal"
       size="xl"
       hide-footer
       button-size="lg"
@@ -74,14 +76,21 @@
           <b-col>
             <!-- 1 -->
             <b-form-group class="mt-3" label="Nombre del propietario">
-              <Field name="PropietaryField" :rules="validatePropietary" as="text">
+              <Field
+                name="PropietaryField"
+                :rules="validatePropietary"
+                as="text"
+              >
                 <b-form-input
-                  v-modal="cementeryServiceFields.nombrePropietario"
+                  v-model="cementeryServiceFields.nombrePropietario"
                   :state="PropietaryState"
                 >
                 </b-form-input>
               </Field>
-              <ErrorMessage class="text-danger" name="PropietaryField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="PropietaryField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <!-- 2 -->
@@ -89,41 +98,53 @@
             <b-form-group class="mt-3" label="Numero de espacios">
               <Field name="SpacesField" :rules="validateSpaces" as="number">
                 <b-form-input
-                  v-modal="cementeryServiceFields.numeroEspacios"
+                  v-model="cementeryServiceFields.numeroEspacios"
                   :state="SpacesState"
                 >
+                  <!-- type="number" -->
                 </b-form-input>
               </Field>
-              <ErrorMessage class="text-danger" name="SpacesField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="SpacesField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <!-- 3 -->
           <b-col>
-            <b-form-group class="mt-3" label="Metros que le corresponden">
+            <b-form-group class="mt-3" label="Metros correspondientes">
               <Field name="MeterField" :rules="validateMeter" as="number">
                 <b-form-input
-                  v-modal="cementeryServiceFields.metrosCorrespondientes"
+                  v-model="cementeryServiceFields.metrosCorrespondientes"
                   :state="MeterState"
                 >
                 </b-form-input>
               </Field>
-              <ErrorMessage class="text-danger" name="MeterField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="MeterField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <!-- 4 -->
           <b-col>
             <b-form-group class="mt-3" label="Espacios Disponibles">
-              <Field name="AvailableField" :rules="validateAvailable">
+              <Field
+                name="AvailableField"
+                :rules="validateAvailable"
+                as="number"
+              >
                 <b-form-input
-                  v-modal="cementeryServiceFields.espaciosDisponibles"
+                  v-model="cementeryServiceFields.espaciosDisponibles"
                   :state="AvailableState"
+                  type="number"
                 >
                 </b-form-input>
               </Field>
-              <ErrorMessage name="AvailableField">
-                <span>Este campo es requerido</span>
-                <i class="bi bi-exclamation-circle" />
-              </ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="AvailableField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
@@ -132,8 +153,9 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            v-b-modal.modal-cementery
+            @click="resetCementeryServiceFields"
           >
+            <!-- v-b-modal.modal-cementery -->
             Cancelar
           </b-button>
           <b-button class="w-auto m-2" variant="success" type="submit">
@@ -148,8 +170,8 @@
 <script>
 import CementeryService from '@/Services/cementery.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
-import { ref } from 'vue'
-import { useToast } from 'vue-toast-notification'
+import { ref, inject } from 'vue'
+// import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
@@ -159,14 +181,16 @@ export default {
     ErrorMessage
   },
   setup () {
+    const swal = inject('$swal')
+    const showModal = ref(false)
     const {
       getCementery,
       createCementery,
       deleteCementery
     } = CementeryService()
-    const $toast = useToast()
+    // const $toast = useToast()
     const cementeryService = ref([])
-    const perPage = ref(6)
+    const perPage = ref(5)
     const currentPage = ref(1)
     const filter = ref(null)
     const perPageSelect = ref([5, 10, 25, 50, 100])
@@ -179,7 +203,7 @@ export default {
     const AvailableState = ref(false)
     const cementeryServiceFields = ref({
       cementeriosId: 0,
-      nombrePropietario: null,
+      nombrePropietario: '',
       numeroEspasios: null,
       metrosCorrespondientes: null,
       espaciosDisponibles: null,
@@ -191,13 +215,24 @@ export default {
     )
 
     const fields = ref([
-      { value: 'cementeriosID', Text: 'ID', sortable: true },
-      { value: 'nombrePropietario', Text: 'Nombre de propietario' },
-      { value: 'numeroEspasios', Text: 'Espacios' },
-      { value: 'metrosCorrespondientes', Text: 'Metros' },
-      { value: 'espaciosDisponibles', Text: 'Espacios Disponibles' },
-      { value: 'actions', Text: 'Acciones' }
+      { value: 'cementeriosId', text: 'ID', sortable: true },
+      { value: 'nombrePropietario', text: 'Nombre de propietario' },
+      { value: 'numeroEspasios', text: 'Espacios' },
+      { value: 'metrosCorrespondientes', text: 'Metros' },
+      { value: 'espaciosDisponibles', text: 'Espacios Disponibles' },
+      { value: 'actions', text: 'Acciones' }
     ])
+
+    const resetCementeryServiceFields = () => {
+      showModal.value = false
+      cementeryServiceFields.value = JSON.parse(
+        JSON.stringify(CementeryServiceFieldsBlank)
+      )
+      PropietaryState.value = false
+      SpacesState.value = false
+      MeterState.value = false
+      AvailableState.value = false
+    }
 
     getCementery(data => {
       cementeryService.value = data
@@ -205,7 +240,7 @@ export default {
       if (cementeryService.value.length > 0) {
         isloading.value = false
       } else {
-        if (CementeryService.VALUE.length <= 0) {
+        if (cementeryService.value.length <= 0) {
           isloading.value = false
         }
       }
@@ -220,6 +255,14 @@ export default {
         PropietaryState.value = false
         return 'Este campo es requerido'
       }
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+          cementeryServiceFields.value.nombrePropietario
+        )
+      ) {
+        PropietaryState.value = false
+        return 'Este campo solo puede contener letras'
+      }
       PropietaryState.value = true
       return true
     }
@@ -228,6 +271,10 @@ export default {
       if (!cementeryServiceFields.value.numeroEspasios) {
         SpacesState.value = false
         return 'Este campo es requerido'
+      }
+      if (!/^[0-9]+$/i.test(cementeryServiceFields.value.numeroEspasios)) {
+        SpacesState.value = false
+        return 'Este campo solo puede contener numeros'
       }
       SpacesState.value = true
       return true
@@ -238,6 +285,12 @@ export default {
         MeterState.value = false
         return 'Este campo es requerido'
       }
+      if (
+        !/^[0-9]+$/i.test(cementeryServiceFields.value.metrosCorrespondientes)
+      ) {
+        MeterState.value = false
+        return 'Este campo solo puede contener numeros'
+      }
       MeterState.value = true
       return true
     }
@@ -246,6 +299,12 @@ export default {
       if (!cementeryServiceFields.value.espaciosDisponibles) {
         AvailableState.value = false
         return 'Este campo es requerido'
+      }
+      if (
+        !/^[0-9]+$/i.test(cementeryServiceFields.value.espaciosDisponibles)
+      ) {
+        AvailableState.value = false
+        return 'Este campo solo puede contener numeros'
       }
       AvailableState.value = true
       return true
@@ -270,21 +329,52 @@ export default {
     const addCementeryService = () => {
       createCementery(cementeryServiceFields.value, data => {
         refreshTable()
-        $toast.success('Cementerios registradoo correctamente.', {
-          position: 'top-right',
-          duration: 1500
+        swal.fire({
+          title: '¡Cementerios agregado correctamente!',
+          text: 'Cementerios registrado satisfactoriamente',
+          icon: 'success'
         })
+        // $toast.success('Cementerios registradoo correctamente.', {
+        //   position: 'top-right',
+        //   duration: 1500
+        // })
       })
-      cementeryServiceFields.value = JSON.parse(
-        JSON.stringify(CementeryServiceFieldsBlank)
-      )
+      showModal.value = false
+      resetCementeryServiceFields()
+      // cementeryServiceFields.value = JSON.parse(
+      //   JSON.stringify(CementeryServiceFieldsBlank)
+      // )
     }
 
     const RemoveCementeryService = cementeryId => {
       isloading.value = true
-      deleteCementery(cementeryId, data => {
-        refreshTable()
+      swal.fire({
+        title: '¿Estas seguro',
+        text: 'No podras revertir esto',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, Archivar Cementerios!',
+        cancelButtonText: 'Cancelar'
+      }).then(result => {
+        if (result.isConfirmed) {
+          deleteCementery(cementeryId, (data) => {
+            refreshTable()
+          })
+          swal.fire({
+            title: '¡Cementerio archivado!',
+            text:
+                'El cementerio ha sido archivado satisfactoriamente.',
+            icon: 'success'
+          })
+        } else {
+          isloading.value = false
+        }
       })
+      // deleteCementery(cementeryId, data => {
+      //   refreshTable()
+      // })
     }
 
     return {
@@ -293,6 +383,7 @@ export default {
       perPage,
       currentPage,
       filter,
+      showModal,
       perPageSelect,
       isloading,
       searchValue,
@@ -311,12 +402,11 @@ export default {
       validateAvailable,
       addCementeryService,
       RemoveCementeryService,
-      refreshTable
+      refreshTable,
+      resetCementeryServiceFields
     }
   }
 }
 </script>
 
-<style>
-
-</style>
+<style></style>
