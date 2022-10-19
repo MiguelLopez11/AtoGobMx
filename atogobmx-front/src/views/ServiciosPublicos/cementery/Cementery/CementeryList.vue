@@ -98,10 +98,10 @@
             <b-form-group class="mt-3" label="Numero de espacios">
               <Field name="SpacesField" :rules="validateSpaces" as="number">
                 <b-form-input
-                  v-model="cementeryServiceFields.numeroEspacios"
+                  v-model="cementeryServiceFields.numeroEspasios"
                   :state="SpacesState"
+                  type="number"
                 >
-                  <!-- type="number" -->
                 </b-form-input>
               </Field>
               <ErrorMessage
@@ -263,6 +263,10 @@ export default {
         PropietaryState.value = false
         return 'Este campo solo puede contener letras'
       }
+      if (!cementeryServiceFields.value.nombrePropietario.trim().length > 0) {
+        PropietaryState.value = false
+        return 'Este campo no puede contener espacios'
+      }
       PropietaryState.value = true
       return true
     }
@@ -286,7 +290,7 @@ export default {
         return 'Este campo es requerido'
       }
       if (
-        !/^[0-9]+$/i.test(cementeryServiceFields.value.metrosCorrespondientes)
+        !/^\d*\.\d+$/i.test(cementeryServiceFields.value.metrosCorrespondientes)
       ) {
         MeterState.value = false
         return 'Este campo solo puede contener numeros'

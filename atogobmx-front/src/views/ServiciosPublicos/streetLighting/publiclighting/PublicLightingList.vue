@@ -72,10 +72,10 @@
       lazy
     >
       <Form @submit="addPublicLighting">
-        <b-row cols="3">
+        <b-row cols="2">
           <!--1-->
           <b-col>
-            <b-form-group class="mt-3" label="Tipo de Tarea">
+            <b-form-group class="mt-3" label="Tipo de cervicio">
               <Field name="TaskField" :rules="validateTask" as="text">
                 <b-form-select
                   v-model="publicLightingFields.tareaTipoId"
@@ -90,7 +90,7 @@
             </b-form-group>
           </b-col>
           <!--2-->
-          <b-col>
+          <!-- <b-col>
             <b-form-group class="mt-3" label="Estatus">
               <Field name="StatusField" :rules="validateStatus" as="text">
                 <b-form-select
@@ -104,7 +104,7 @@
               </Field>
               <ErrorMessage class="text-danger" name="StatusField"/>
             </b-form-group>
-          </b-col>
+          </b-col> -->
           <!--3-->
           <b-col>
             <b-form-group class="mt-3" label="Domicilio">
@@ -165,7 +165,7 @@
 
 <script>
 import PubliclightingServices from '@/Services/publiclighting.Services'
-import StatusLightingServices from '@/Services/statuslighting.Services'
+// import StatusLightingServices from '@/Services/statuslighting.Services'
 import TypeTaskLightingServices from '@/Services/tasktypelighting.Services'
 import EditExpedientLighting from '@/Services/expedientlighting.Services'
 // import Datepicker from '@vuepic/vue-datepicker'
@@ -184,7 +184,7 @@ export default {
   setup () {
     const swal = inject('$swal')
     const { getPublicLighting, createPublicLighting, deletePublicLighting } = PubliclightingServices()
-    const { getStatus } = StatusLightingServices()
+    // const { getStatus } = StatusLightingServices()
     const { getTaskTypeLighting } = TypeTaskLightingServices()
     const { createExpedientLighting } = EditExpedientLighting()
     const showModal = ref(false)
@@ -215,7 +215,7 @@ export default {
       domicilio: null,
       descripcionDomicilio: null,
       tareaTipoId: null,
-      estatusAlumbradoId: null,
+      // estatusAlumbradoId: null,
       archivado: false
     })
     // tarea: null,
@@ -232,17 +232,17 @@ export default {
       }
     })
 
-    getStatus(data => {
-      statusPublicLighting.value = data
-      if (data.length === 0) {
-        swal.fire({
-          title: 'No se encuentra un estatus registrado!',
-          text:
-            'No se encuentra estatus registrado en el departamento seleccionado, registre primero un tipo de estatus para continuar',
-          icon: 'warning'
-        })
-      }
-    })
+    // getStatus(data => {
+    //   statusPublicLighting.value = data
+    //   if (data.length === 0) {
+    //     swal.fire({
+    //       title: 'No se encuentra un estatus registrado!',
+    //       text:
+    //         'No se encuentra estatus registrado en el departamento seleccionado, registre primero un tipo de estatus para continuar',
+    //       icon: 'warning'
+    //     })
+    //   }
+    // })
 
     const validateTask = () => {
       if (!publicLightingFields.value.tareaTipoId) {
@@ -253,14 +253,14 @@ export default {
       return true
     }
 
-    const validateStatus = () => {
-      if (!publicLightingFields.value.estatusAlumbradoId) {
-        StatusState.value = false
-        return 'Este campo es requerido'
-      }
-      StatusState.value = true
-      return true
-    }
+    // const validateStatus = () => {
+    //   if (!publicLightingFields.value.estatusAlumbradoId) {
+    //     StatusState.value = false
+    //     return 'Este campo es requerido'
+    //   }
+    //   StatusState.value = true
+    //   return true
+    // }
 
     const validateProblem = () => {
       if (!publicLightingFields.value.descripcionProblema) {
@@ -270,6 +270,10 @@ export default {
       if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(publicLightingFields.value.descripcionProblema)) {
         ProblemState.value = false
         return 'Este campo solo puede contener letras'
+      }
+      if (!publicLightingFields.value.descripcionProblema.trim().length > 0) {
+        ProblemState.value = false
+        return 'Este campo no puede contener espacios'
       }
       ProblemState.value = true
       return true
@@ -284,6 +288,10 @@ export default {
         DomicileState.value = false
         return 'Este campo solo puede contener letras'
       }
+      if (!publicLightingFields.value.domicilio.trim().length > 0) {
+        DomicileState.value = false
+        return 'Este campo no puede contener espacios'
+      }
       DomicileState.value = true
       return true
     }
@@ -296,6 +304,10 @@ export default {
       if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(publicLightingFields.value.descripcionDomicilio)) {
         addresdescriptionState.value = false
         return 'Este campo solo puede contener letras'
+      }
+      if (!publicLightingFields.value.descripcionDomicilio.trim().length > 0) {
+        addresdescriptionState.value = false
+        return 'Este campo no puede contener espacios'
       }
       addresdescriptionState.value = true
       return true
@@ -450,8 +462,8 @@ export default {
       validateAddresdescription,
       validateDomicile,
       resetPublicLightingFields,
-      validateProblem,
-      validateStatus
+      validateProblem
+      // validateStatus
       // getTaskTypeLightingById
     }
   }

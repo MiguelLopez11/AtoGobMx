@@ -18,9 +18,10 @@
           margin-right: 15px;
           margin-left: 20px;
         "
-        v-b-modal.modal-statuslighting
+        @click="showModal = !showModal"
         type="submit"
       >
+        <!-- v-b-modal.modal-statuslighting -->
         <i class="bi bi-person-plus-fill"></i>
         Estatus Alumbrado
       </b-button>
@@ -63,6 +64,7 @@
     <b-modal
       id="modal-statuslighting"
       title="Agregar Estatus Alumbrado"
+      v-model="showModal"
       size="xl"
       hide-footer
       button-size="lg"
@@ -100,8 +102,9 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            v-b-modal.modal-statuslighting
+            @click="resetPublicLightingFields"
           >
+            <!-- v-b-modal.modal-statuslighting -->
             Cancelar
           </b-button>
           <b-button class="w-auto m-2" variant="success" type="submit">
@@ -194,6 +197,10 @@ export default {
         NameState.value = false
         return 'El nombre de estatus solo puede contener letras'
       }
+      if (!statusLightingFields.value.nombreEstatus.trim().length > 0) {
+        NameState.value = false
+        return 'Este campo no puede contener espacios'
+      }
       NameState.value = true
       return true
     }
@@ -206,6 +213,10 @@ export default {
       if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(statusLightingFields.value.descripcion)) {
         DescriptionState.value = false
         return 'La descripcion solo puede contener letras'
+      }
+      if (!statusLightingFields.value.descripcion.trim().length > 0) {
+        DescriptionState.value = false
+        return 'Este campo no puede contener espacios'
       }
       DescriptionState.value = true
       return true

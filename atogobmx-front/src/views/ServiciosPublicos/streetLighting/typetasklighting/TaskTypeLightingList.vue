@@ -18,9 +18,10 @@
           margin-right: 15px;
           margin-left: 20px;
         "
-        v-b-modal.modal-tasktypelighting
+        @click="showModal = !showModal"
         type="submit"
       >
+        <!-- v-b-modal.modal-tasktypelighting -->
         <i class="bi bi-person-plus-fill"></i>
         Tare Tipo Alumbrado
       </b-button>
@@ -64,6 +65,7 @@
       id="modal-tasktypelighting"
       title="Agregar Tipo de Tarea Alumbrado"
       size="xl"
+      v-model="showModal"
       hide-footer
       button-size="lg"
       lazy
@@ -99,8 +101,9 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            v-b-modal.modal-tasktypelighting
+            @click="resetPublicLightingFields"
           >
+            <!-- v-b-modal.modal-tasktypelighting -->
             Cancelar
           </b-button>
           <b-button class="w-auto m-2" variant="success" type="submit">
@@ -193,6 +196,10 @@ export default {
         NameState.value = false
         return 'El nombre del tipo de tarea solo puede contener letras'
       }
+      if (!taskTypeLightingFields.value.nombreTarea.trim().length > 0) {
+        NameState.value = false
+        return 'Este campo no puede contener espacios'
+      }
       NameState.value = true
       return true
     }
@@ -218,6 +225,10 @@ export default {
       if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(taskTypeLightingFields.value.descripcion)) {
         DescriptionState.value = false
         return 'la descripcion del tipo de tarea solo puede contener letras'
+      }
+      if (!taskTypeLightingFields.value.descripcion.trim().length > 0) {
+        DescriptionState.value = false
+        return 'Este campo no puede contener espacios'
       }
       DescriptionState.value = true
       return true
