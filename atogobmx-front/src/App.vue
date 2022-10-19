@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-card class="m-3">
+    <b-card class="m-3" v-if="userData">
       <b-navbar sticky>
         <b-navbar-nav>
           <b-nav-item>
@@ -13,7 +13,6 @@
             <label  class="m-2">AtogobMx</label>
           </div>
             <b-nav-item-dropdown
-              v-if="userData"
               text="Recursos Humanos"
               dropright
               auto-close="outside"
@@ -100,18 +99,22 @@
 <script>
 import { ref, inject } from 'vue'
 import LogoAtogobMx from '@/Images/Icon.png'
+import { useRouter } from 'vue-router'
 
 export default {
   setup () {
+    const router = useRouter()
     const swal = inject('$swal')
     const background = ref(LogoAtogobMx)
     const userData = window.localStorage.getItem('User')
     const removeLocalStorgare = () => {
-      window.localStorage.clear()
+      window.localStorage.removeItem('User')
       swal.fire({
         title: 'Cerrar Sesión!',
         text: 'Se ha cerrado sesion correctamente',
         icon: 'success'
+      }).then(result => {
+        router.push({ name: '/Login' })
       })
     }
     return {

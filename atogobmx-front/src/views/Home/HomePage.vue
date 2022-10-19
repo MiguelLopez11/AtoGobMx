@@ -7,7 +7,6 @@
       no-body
       style="max-width: 200rem"
     >
-    {{ userData }}
     </b-card>
   </b-card>
 </template>
