@@ -102,7 +102,8 @@ namespace AtoGobMx.Controllers
                 {
                     var usuario = await _context.Usuarios
                     .Include(i => i.Role)
-                    .Include(i => i.Empleado)
+                    .Include(i => i.Empleado.Departamentos)
+                    .Include(i => i.Empleado.Area)
                     .Where(w => w.NombreUsuario == NombreUsuario)
                     .Where(w => w.Contraseña == Contraseña)
                     .FirstOrDefaultAsync();

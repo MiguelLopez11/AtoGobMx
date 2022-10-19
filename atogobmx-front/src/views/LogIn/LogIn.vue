@@ -96,7 +96,7 @@ export default {
             icon: 'success'
           }).then(result => {
             if (result.isConfirmed) {
-              redirect.push({ name: 'Home', params: { User: data.nombreUsuario, Rol: data.role.nombre } })
+              redirect.push({ name: 'Home', params: { User: data.nombreUsuario, Rol: data.role.nombre, userDepartament: data.empleado.departamentos.nombre } })
             }
           })
         } else {

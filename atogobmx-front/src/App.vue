@@ -13,6 +13,7 @@
             <label  class="m-2">AtogobMx</label>
           </div>
             <b-nav-item-dropdown
+              v-if="DepartamentUser === 'Recursos Humanos'"
               text="Recursos Humanos"
               dropright
               auto-close="outside"
@@ -95,12 +96,19 @@
 <script>
 import { ref } from 'vue'
 import LogoAtogobMx from '@/Images/Icon.png'
+import { useRoute } from 'vue-router'
 
 export default {
   setup () {
+    const router = useRoute()
+    const roleUser = ref(router.params.Role)
+    const DepartamentUser = ref(router.params.userDepartament)
     const background = ref(LogoAtogobMx)
+    console.log(roleUser.value)
     return {
-      background
+      background,
+      roleUser,
+      DepartamentUser
     }
   }
 }
