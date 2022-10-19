@@ -1,25 +1,95 @@
 <template>
-    <section>
-      <div class="container-fluid h-custom">
-        <div class="row d-flex justify-content-center align-items-center h-80">
-          <div class="col-md-9 col-lg-6 col-xl-5">
+  <section class="">
+    <div
+      class="px-4 py-5 px-md-5 text-center text-lg-start"
+      style="background-color: rgb(236,237,238); margin-top:100px"
+    >
+      <div class="container">
+        <div class="row gx-lg-5 align-items-center">
+          <div class="col-lg-6 mb-5 mb-lg-0">
             <img
-              src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+              src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"
               class="img-fluid"
               alt="Sample image"
             />
           </div>
-          <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-            <Form @submit="onLogIn">
-              <div class="form-outline mb-4">
-                <label class="form-label" for="form3Example3"
-                  >Nombre de usuario</label
-                >
-                <Field
-                  name="userNameField"
-                  :rules="validateUserName"
-                  as="text"
-                >
+
+          <div class="col-lg-6 mb-5 mb-lg-0">
+            <div class="card">
+              <div class="card-body py-5 px-md-5">
+                  <Form @submit="onLogIn">
+                    <div class="form-outline mb-4">
+                      <label class="form-label" for="form3Example3"
+                        >Nombre de usuario</label
+                      >
+                      <Field
+                        name="userNameField"
+                        :rules="validateUserName"
+                        as="text"
+                      >
+                        <b-form-input
+                          v-model="user.userName"
+                          :state="userNameState"
+                          placeholder="Ingresa un usuario válido"
+                          size="lg"
+                        >
+                        </b-form-input>
+                      </Field>
+                      <ErrorMessage class="text-danger" name="userNameField" />
+                    </div>
+                    <div class="form-outline mb-3">
+                      <label class="form-label" for="form3Example4"
+                        >Contraseña</label
+                      >
+                      <Field
+                        name="PasswordField"
+                        :rules="validatePassword"
+                        as="text"
+                      >
+                        <b-form-input
+                          v-model="user.password"
+                          :state="passwordState"
+                          placeholder="Ingresa una contraseña válida"
+                          size="lg"
+                        >
+                        </b-form-input>
+                      </Field>
+                      <ErrorMessage class="text-danger" name="PasswordField" />
+                    </div>
+                    <div class="text-center text-lg-start mt-4 pt-2">
+                      <button
+                        type="success"
+                        class="btn btn-lg"
+                        style="padding-left: 2.5rem; background-color: rgb(94,80,238); color:white; padding-right: 2.5rem;"
+                      >
+                        Iniciar Sesión
+                      </button>
+                    </div>
+                  </Form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- <section>
+    <div class="container-fluid h-custom">
+      <div class="row d-flex justify-content-center align-items-center h-80">
+        <div class="col-md-9 col-lg-6 col-xl-5">
+          <img
+            src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+            class="img-fluid"
+            alt="Sample image"
+          />
+        </div>
+        <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+          <Form @submit="onLogIn">
+            <div class="form-outline mb-4">
+              <label class="form-label" for="form3Example3"
+                >Nombre de usuario</label
+              >
+              <Field name="userNameField" :rules="validateUserName" as="text">
                 <b-form-input
                   v-model="user.userName"
                   :state="userNameState"
@@ -29,14 +99,10 @@
                 </b-form-input>
               </Field>
               <ErrorMessage class="text-danger" name="userNameField" />
-              </div>
-              <div class="form-outline mb-3">
-                <label class="form-label" for="form3Example4">Contraseña</label>
-                <Field
-                  name="PasswordField"
-                  :rules="validatePassword"
-                  as="text"
-                >
+            </div>
+            <div class="form-outline mb-3">
+              <label class="form-label" for="form3Example4">Contraseña</label>
+              <Field name="PasswordField" :rules="validatePassword" as="text">
                 <b-form-input
                   v-model="user.password"
                   :state="passwordState"
@@ -46,21 +112,21 @@
                 </b-form-input>
               </Field>
               <ErrorMessage class="text-danger" name="PasswordField" />
-              </div>
-              <div class="text-center text-lg-start mt-4 pt-2">
-                <button
-                  type="success"
-                  class="btn btn-lg"
-                  style="padding-left: 2.5rem; background-color: rgb(94,80,238); color:white; padding-right: 2.5rem;"
-                >
-                  Iniciar Sesión
-                </button>
-              </div>
-            </Form>
-          </div>
+            </div>
+            <div class="text-center text-lg-start mt-4 pt-2">
+              <button
+                type="success"
+                class="btn btn-lg"
+                style="padding-left: 2.5rem; background-color: rgb(94,80,238); color:white; padding-right: 2.5rem;"
+              >
+                Iniciar Sesión
+              </button>
+            </div>
+          </Form>
         </div>
       </div>
-    </section>
+    </div>
+  </section> -->
 </template>
 
 <script>
@@ -88,15 +154,17 @@ export default {
       LogIn(user.value, data => {
         if (data.usuarioId) {
           window.localStorage.setItem('User', JSON.stringify(data))
-          swal.fire({
-            title: 'Inicio de sesión correcto.!',
-            text: 'Se ha iniciado sesion correctamente.',
-            icon: 'success'
-          }).then(result => {
-            if (result.isConfirmed) {
-              redirect.push({ name: 'Home', params: { User: data.nombreUsuario, Rol: data.role.nombre, userDepartament: data.empleado.departamentos.nombre } })
-            }
-          })
+          swal
+            .fire({
+              title: 'Inicio de sesión correcto.!',
+              text: 'Se ha iniciado sesion correctamente.',
+              icon: 'success'
+            })
+            .then(result => {
+              if (result.isConfirmed) {
+                redirect.go('/')
+              }
+            })
         } else {
           swal.fire({
             title: 'Inicio de sesión Fallido.!',
@@ -135,8 +203,15 @@ export default {
       return true
     }
     const validateState = () => {
-      userNameState.value = user.value.userName !== '' && user.value.userName !== null && user.value.userName.trim().length > 0 && /^[a-zA]+[A-Z0-9.-]+$/i.test(user.value.userName)
-      passwordState.value = user.value.password !== '' && user.value.password !== null && user.value.password.trim().length > 0
+      userNameState.value =
+        user.value.userName !== '' &&
+        user.value.userName !== null &&
+        user.value.userName.trim().length > 0 &&
+        /^[a-zA]+[A-Z0-9.-]+$/i.test(user.value.userName)
+      passwordState.value =
+        user.value.password !== '' &&
+        user.value.password !== null &&
+        user.value.password.trim().length > 0
       return ''
     }
     return {

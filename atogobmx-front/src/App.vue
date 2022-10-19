@@ -114,7 +114,8 @@ export default {
         text: 'Se ha cerrado sesion correctamente',
         icon: 'success'
       }).then(result => {
-        router.push({ name: '/Login' })
+        router.go('/Login')
+        // router.push({ name: 'Login' })
       })
     }
     return {
