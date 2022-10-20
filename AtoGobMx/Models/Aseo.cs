@@ -9,8 +9,10 @@ namespace AtoGobMx.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int AseoId { get; set; }
         public string NombreServicio { get; set; }
+        public string EstablecimientoPublico { get; set; }
         public string Domicilio { get; set; }
         public string Objetivo { get; set; }
         public bool Archivado { get; set; }
+        public int? RutaId { get; set; }
     }
 }
