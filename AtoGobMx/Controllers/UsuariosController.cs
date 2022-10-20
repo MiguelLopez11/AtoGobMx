@@ -94,24 +94,31 @@ namespace AtoGobMx.Controllers
         #endregion
         #region login
         [HttpGet("{NombreUsuario}/{Contraseña}")]
-        public bool LogInUser(string NombreUsuario, string Contraseña)
+        public async Task<ActionResult> LogInUser(string NombreUsuario, string Contraseña)
         {
             try
             {
-                var usuario = _context.Usuarios
-                .Where(w => w.NombreUsuario == NombreUsuario)
-                .Where(w => w.Contraseña == Contraseña)
-                .FirstOrDefaultAsync();
-                if (usuario.Result == null)
+                if (NombreUsuario != null && !string.IsNullOrWhiteSpace(NombreUsuario) && !string.IsNullOrWhiteSpace(Contraseña))
                 {
-                    return false;
+                    var usuario = await _context.Usuarios
+                    .Include(i => i.Role)
+                    .Include(i => i.Empleado.Departamentos)
+                    .Include(i => i.Empleado.Area)
+                    .Where(w => w.NombreUsuario == NombreUsuario)
+                    .Where(w => w.Contraseña == Contraseña)
+                    .FirstOrDefaultAsync();
+
+                    if (usuario == null)
+                    {
+                        return BadRequest("El usuario ingresado no existe.");
+                    }
+                    return Ok(usuario);
                 }
-                return true;
+                return NotFound();
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
-                return false;
+                return Ok(ex.Message);
             }
         }
         #endregion

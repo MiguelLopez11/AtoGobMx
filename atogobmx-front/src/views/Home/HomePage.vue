@@ -1,11 +1,10 @@
 <template>
-  <b-card class="m-3">
+  <b-card class="m-2 w-auto">
     <b-card
-      align="center"
-      class="m-3"
       :img-src="background"
       no-body
-      style="max-width: 200rem"
+      overlay
+      style="width: auto;"
     >
     </b-card>
   </b-card>
@@ -14,21 +13,18 @@
 <script>
 import { ref } from 'vue'
 import LogoAtogobMx from '@/Images/LogoAtogobMx.jpg'
+// import { useRoute } from 'vue-router'
 export default {
   setup () {
-    const clicked = ref(false)
     const background = ref(LogoAtogobMx)
-    const method = () => {
-      clicked.value = true
-    }
+    const userData = window.sessionStorage.getItem('User')
     return {
-      clicked,
       background,
-
-      method
+      userData
     }
   }
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped>
+</style>

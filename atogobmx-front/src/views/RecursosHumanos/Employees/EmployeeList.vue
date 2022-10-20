@@ -1,5 +1,5 @@
 <template>
-  <b-card class="m-3">
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
@@ -307,6 +307,10 @@ export default {
       if (!EmployeesFields.value.nombreCompleto) {
         nameState.value = false
         return 'Este campo es requerido'
+      }
+      if (!EmployeesFields.value.nombreCompleto.trim().length > 0) {
+        nameState.value = false
+        return 'Este campo no puede contener solo espacios'
       }
       if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(EmployeesFields.value.nombreCompleto)) {
         nameState.value = false
