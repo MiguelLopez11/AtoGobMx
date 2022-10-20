@@ -83,7 +83,7 @@
 <script>
 import LogInServices from '@/Services/logIn.Services'
 import { ref, inject } from 'vue'
-// import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 export default {
   components: {
@@ -93,7 +93,7 @@ export default {
   },
   setup () {
     const swal = inject('$swal')
-    // const redirect = useRouter()
+    const redirect = useRouter()
     const { LogIn } = LogInServices()
     const userNameState = ref(false)
     const passwordState = ref(false)
@@ -114,11 +114,11 @@ export default {
               text: 'Se ha iniciado sesion correctamente.',
               icon: 'success'
             })
-            // .then(result => {
-            //   if (result.isConfirmed) {
-            //     redirect.go('/')
-            //   }
-            // })
+            .then(result => {
+              if (result.isConfirmed) {
+                redirect.go('/')
+              }
+            })
         } else {
           swal.fire({
             title: 'Inicio de sesión Fallido.!',

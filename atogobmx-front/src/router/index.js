@@ -10,6 +10,14 @@ const routes = [
     }
   },
   {
+    path: '/PageNotAllowed',
+    name: 'PageNotPermission',
+    component: () => import('../views/PageNotPermission/PageNotPermission.vue'),
+    meta: {
+      requiresAuth: false
+    }
+  },
+  {
     path: '/',
     name: 'Home',
     component: () => import('../views/Home/HomePage.vue'),
@@ -238,7 +246,6 @@ router.beforeEach(async (to, from, next) => {
   const isLoggedIn = window.sessionStorage.getItem('isLogged')
   const role = window.sessionStorage.getItem('Role')
   const departamento = window.sessionStorage.getItem('Departamento')
-  console.log(role, departamento)
   if (['Login'].includes(to.name) && isLoggedIn) {
     next({ name: 'Home' })
   } else if (to.meta.requiresAuth && !isLoggedIn) {
@@ -246,16 +253,18 @@ router.beforeEach(async (to, from, next) => {
       path: '/Login',
       query: { redirect: to.fullPath }
     })
+  } else if (to.meta.departamento && departamento !== to.meta.departamento && role !== 'Administrador') {
+    next({ name: 'PageNotPermission' })
   } else {
     next()
   }
-  if (to.meta.departamento && role !== 'Administrador' && departamento !== to.meta.departamento) {
-    next({
-      path: '/',
-      query: { redirect: to.fullPath }
-    })
-  } else {
-    next()
-  }
+  // if (to.meta.departamento) {
+  //   next({
+  //     path: '/',
+  //     query: { redirect: to.fullPath }
+  //   })
+  // } else {
+  //   next()
+  // }
 })
 export default router
