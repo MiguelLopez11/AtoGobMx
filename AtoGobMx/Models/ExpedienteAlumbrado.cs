@@ -32,7 +32,7 @@ namespace AtoGobMx.Models
         [ForeignKey("AreaId")]
         public Area? Area { get; set; }
 
-        //[JsonIgnore]
-        //public virtual IEnumerable<Alumbrado>? Alumbrado { get; set; }
+        [JsonIgnore]
+        public virtual IEnumerable<EmpleadosAlumbrado>? EmpleadosAlumbrado { get; set; }
     }
 }
