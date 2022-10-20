@@ -102,6 +102,9 @@ import LogoAtogobMx from '@/Images/Icon.png'
 import { useRouter } from 'vue-router'
 
 export default {
+  beforeUnmount () {
+    window.localStorage.clear()
+  },
   setup () {
     const router = useRouter()
     const swal = inject('$swal')
