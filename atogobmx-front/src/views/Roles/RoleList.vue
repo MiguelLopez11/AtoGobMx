@@ -1,5 +1,5 @@
 <template>
-  <b-card class="m-3">
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
@@ -21,7 +21,7 @@
         @click="showModal = !showModal"
         type="submit"
       >
-        <i class="bi bi-building m-1" />
+        <i class="bi bi-person-video2"></i>
         Agregar Role
       </b-button>
     </b-row>

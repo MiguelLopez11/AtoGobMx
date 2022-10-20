@@ -1,5 +1,5 @@
 <template>
-  <b-card class="m-3">
+  <b-card class="m-2">
     <b-card class="mb-4">
       <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
     </b-card>

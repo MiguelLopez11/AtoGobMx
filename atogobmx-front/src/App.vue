@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-card class="m-3">
+    <b-card class="m-2" v-if="userData">
       <b-navbar sticky>
         <b-navbar-nav>
           <b-nav-item>
@@ -10,7 +10,7 @@
           </b-nav-item>
           <div>
             <b-avatar :src="background" />
-            <label class="m-2">AtogobMx</label>
+            <label  class="m-2">AtogobMx</label>
           </div>
           <b-nav-item-dropdown
             text="Recursos Humanos"
@@ -98,10 +98,10 @@
         </b-navbar-nav>
         <b-row align-h="end">
           <b-navbar-nav>
-            <b-button size="lg" to="/Login" style="background-color: #7367f0">
-              <i class="bi bi-box-arrow-right"></i>
-              Login
-            </b-button>
+              <b-button size="lg" to="/Login" style="background-color: #7367f0">
+                <i class="bi bi-box-arrow-right"></i>
+                Login
+              </b-button>
           </b-navbar-nav>
         </b-row>
       </b-navbar>
@@ -110,14 +110,34 @@
   <router-view></router-view>
 </template>
 <script>
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 import LogoAtogobMx from '@/Images/Icon.png'
+import { useRouter } from 'vue-router'
 
 export default {
   setup () {
+    const router = useRouter()
+    const swal = inject('$swal')
     const background = ref(LogoAtogobMx)
+    const userData = window.sessionStorage.getItem('User')
+    const removeLocalStorgare = () => {
+      window.sessionStorage.removeItem('User')
+      swal.fire({
+        title: 'Cerrar Sesión!',
+        text: 'Se ha cerrado sesion correctamente',
+        icon: 'success'
+      }).then(result => {
+        router.go('/Login')
+        // router.push({ name: 'Login' })
+      })
+    }
     return {
-      background
+      background,
+      userData,
+
+      removeLocalStorgare
+      // roleUser,
+      // DepartamentUser
     }
   }
 }

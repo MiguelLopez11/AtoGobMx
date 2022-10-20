@@ -1,5 +1,5 @@
 <template>
-  <b-card class="m-3">
+  <b-card class="m-2">
     <b-card class="mb-4">
       <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
     </b-card>
@@ -103,7 +103,7 @@ export default {
       }
       // eslint-disable-next-line no-useless-escape
       if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(role.value.nombre)) {
-        nameState.value = false
+        validateState()
         return 'El nombre del area solo puede contener letras'
       }
       validateState()
@@ -111,7 +111,7 @@ export default {
     }
     const validateState = () => {
       nameState.value = role.value.nombre !== ''
-      return 'HOli'
+      return ''
     }
     return {
       role,
