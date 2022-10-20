@@ -30,5 +30,11 @@ namespace AtoGobMx.Models
 
         [JsonIgnore]
         public virtual IEnumerable<Usuario>? Usuarios { get; set; }
+
+        //[JsonIgnore]
+        //public virtual IEnumerable<Empleado>? Empleados { get; set; }
+
+        [JsonIgnore]
+        public virtual IEnumerable<EmpleadosAlumbrado>? EmpleadosAlumbrado { get; set; }
     }
 }

@@ -67,6 +67,7 @@ namespace AtoGobMx.Controllers
             estatu.EstatusAlumbradoId = EstatusAlumbradoId;
             estatu.NombreEstatus = estatus.NombreEstatus;
             estatu.Descripcion = estatus.Descripcion;
+            estatu.Archivado = estatus.Archivado;
 
             _context.EstatusAlumbrado.Update(estatu);
             await _context.SaveChangesAsync();
