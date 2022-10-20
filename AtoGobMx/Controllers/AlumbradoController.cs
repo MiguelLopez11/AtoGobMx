@@ -25,16 +25,33 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<Alumbrado>> GetAlumbrado()
         {
             var alumbrado = await _context.Alumbrado
+                .Include(i => i.TareaTipoAlumbrado)
+                .Include(i => i.Estatus)
                 .Where(w => !w.Archivado)
                 .Select(s => _mapper.Map<Alumbrado>(s))
                 .ToArrayAsync();
             return Ok(alumbrado);
         }
 
+        //[HttpGet("SinExpedientes")]
+        //public async Task<ActionResult<Empleado>> GetEmpleadosSinExpedientes()
+        //{
+        //    var alum = await _context.Alumbrado
+        //        .Include(i => i.TareaTipoAlumbrado)
+        //        .Include(i => i.Estatus)
+        //        .Include(i => i.InventarioAlumbrado)
+        //        .Where(w => w.TieneExpediente == false)
+        //        .Where(w => !w.Archivado)
+        //        .ToListAsync();
+        //    return Ok(alum);
+        //}
+
         [HttpGet("{AlumbradoId}")]
         public async Task<ActionResult> GetAlumbradoById(int AlumbradoId)
         {
             var alumbrado = await _context.Alumbrado
+                .Include(i => i.TareaTipoAlumbrado)
+                .Include(i => i.Estatus)
                 .FirstOrDefaultAsync(f => f.AlumbradoId == AlumbradoId);
             if (alumbrado == null)
             {
@@ -69,6 +86,8 @@ namespace AtoGobMx.Controllers
             alum.DescripcionProblema = alumbrado.DescripcionProblema;
             alum.Domicilio = alumbrado.Domicilio;
             alum.DescripcionDomicilio = alumbrado.DescripcionDomicilio;
+            alum.EstatusId = alumbrado.EstatusId;
+            alum.TareaTipoId = alumbrado.TareaTipoId;
             alum.Archivado = alumbrado.Archivado;
 
 

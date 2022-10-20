@@ -11,6 +11,7 @@
       <b-button
         variant="success"
         style="
+          background-color: rgb(94,80,238);
           height: 50px;
           width: auto;
           font-size: 18px;
@@ -71,10 +72,10 @@
       lazy
     >
       <Form @submit="addPublicLighting">
-        <b-row cols="3">
+        <b-row cols="2">
           <!--1-->
           <b-col>
-            <b-form-group class="mt-3" label="Tipo de Tarea">
+            <b-form-group class="mt-3" label="Tipo de cervicio">
               <Field name="TaskField" :rules="validateTask" as="text">
                 <b-form-select
                   v-model="publicLightingFields.tareaTipoId"
@@ -85,26 +86,25 @@
                   text-field="nombreTarea"
                 ></b-form-select>
               </Field>
-              <ErrorMessage class="text-danger" name="TaskField"></ErrorMessage>
+              <ErrorMessage class="text-danger" name="TaskField"/>
             </b-form-group>
           </b-col>
           <!--2-->
-          <b-col>
+          <!-- <b-col>
             <b-form-group class="mt-3" label="Estatus">
               <Field name="StatusField" :rules="validateStatus" as="text">
                 <b-form-select
-                  v-model="publicLightingFields.tareaTipoId"
+                  v-model="publicLightingFields.estatusAlumbradoId"
                   autofocus
                   :state="StatusState"
                   :options="statusPublicLighting"
-                  value-field="estatusId"
+                  value-field="estatusAlumbradoId"
                   text-field="nombreEstatus"
-                  @input="getStatus(publicLightingFields.estatusId)"
                 ></b-form-select>
               </Field>
-              <ErrorMessage class="text-danger" name="StatusField"></ErrorMessage>
+              <ErrorMessage class="text-danger" name="StatusField"/>
             </b-form-group>
-          </b-col>
+          </b-col> -->
           <!--3-->
           <b-col>
             <b-form-group class="mt-3" label="Domicilio">
@@ -114,30 +114,20 @@
                   :state="DomicileState"
                 ></b-form-input>
               </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="DomicileField"
-              ></ErrorMessage>
+              <ErrorMessage class="text-danger" name="DomicileField"/>
             </b-form-group>
           </b-col>
           <!--4-->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion Domicilio">
-              <Field
-                name="addresdescriptionField"
-                :rules="validateAddresdescription"
-                as="text"
-              >
+              <Field name="addresdescriptionField" :rules="validateAddresdescription" as="text">
                 <b-form-textarea
                   v-model="publicLightingFields.descripcionDomicilio"
                   :state="addresdescriptionState"
                   rows="4"
                 ></b-form-textarea>
               </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="addresdescriptionField"
-              ></ErrorMessage>
+              <ErrorMessage class="text-danger" name="addresdescriptionField"/>
             </b-form-group>
           </b-col>
           <!--5-->
@@ -150,10 +140,7 @@
                   rows="4"
                 ></b-form-textarea>
               </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="ProblemField"
-              ></ErrorMessage>
+              <ErrorMessage class="text-danger" name="ProblemField"/>
             </b-form-group>
           </b-col>
         </b-row>
@@ -178,7 +165,7 @@
 
 <script>
 import PubliclightingServices from '@/Services/publiclighting.Services'
-import StatusLightingServices from '@/Services/statuslighting.Services'
+// import StatusLightingServices from '@/Services/statuslighting.Services'
 import TypeTaskLightingServices from '@/Services/tasktypelighting.Services'
 import EditExpedientLighting from '@/Services/expedientlighting.Services'
 // import Datepicker from '@vuepic/vue-datepicker'
@@ -196,12 +183,8 @@ export default {
   },
   setup () {
     const swal = inject('$swal')
-    const {
-      getPublicLighting,
-      createPublicLighting,
-      deletePublicLighting
-    } = PubliclightingServices()
-    const { getStatus } = StatusLightingServices()
+    const { getPublicLighting, createPublicLighting, deletePublicLighting } = PubliclightingServices()
+    // const { getStatus } = StatusLightingServices()
     const { getTaskTypeLighting } = TypeTaskLightingServices()
     const { createExpedientLighting } = EditExpedientLighting()
     const showModal = ref(false)
@@ -209,7 +192,7 @@ export default {
     const statusPublicLighting = ref([])
     const typeTaskLighting = ref([])
     const isOpen = ref(false)
-    const perPage = ref(5)
+    const perPage = ref(7)
     const currentPage = ref(1)
     const filter = ref(null)
     const perPageSelect = ref([5, 10, 25, 50, 100])
@@ -228,82 +211,38 @@ export default {
     })
     const publicLightingFields = ref({
       alumbradoId: 0,
-      descripcionProblema: '',
-      domicilio: '',
+      descripcionProblema: null,
+      domicilio: null,
       descripcionDomicilio: null,
       tareaTipoId: null,
-      estatusId: null,
+      // estatusAlumbradoId: null,
       archivado: false
     })
     // tarea: null,
 
-    // getStatus(data => {
-    //   statusPublicLighting.value = data
-    // })
-
-    // getTaskTypeLighting(data => {
-    //   typeTaskLighting.value = data
-    // })
-
-    // const getAreas = (departamentoId) => {
-    //   getAreasByDepartament(departamentoId, data => {
-    //     areas.value = data
-    //     if (data.length === 0) {
-    //       $toast.open({
-    //         message: 'No se encuentran areas registrados en el departamento seleccionado, registre primero una area para continuar',
-    //         position: 'top-left',
-    //         duration: 2500,
-    //         dismissible: true,
-    //         type: 'error'
-    //       })
-    //     }
-    //   })
-    // }
-    //  getTaskTypeLighting = (tareaTipoId) => {
-    //   typeTaskLighting.valu = data
-    //   if (data.length === 0) {
-    //     swal.fire({
-    //       title: 'No se encuentra un tipo de tare registrada!',
-    //       taxt: 'No se encuentra tipo de tarea registradas en el departamento seleccionado, registre primero un tipo de tarea para continuar',
-    //       icon: 'warning'
-    //     })
-    //   }
-    // }
-
-    // getTaskTypeLighting(data => {
-    //   typeTaskLighting.value = data
-    //   if (data.length === 0) {
-    //     swal.fire({
-    //       title: 'No se encuentra un tipo de tare registrada!',
-    //       taxt:
-    //         'No se encuentra tipo de tarea registradas en el departamento seleccionado, registre primero un tipo de tarea para continuar',
-    //       icon: 'warning'
-    //     })
-    //   }
-    // })
-    const getTaskTypeLightingById = (tareaTipoId) => {
-      getTaskTypeLighting(tareaTipoId, data => {
-        typeTaskLighting.value = data
-        if (data.length === 0) {
-          swal.fire({
-            title: 'No se encuentra un tipo de tare registrada!',
-            text: 'No se encuentra tipo de tarea registradas en el departamento seleccionado, registre primero un tipo de tarea para continuar',
-            icon: 'warning'
-          })
-        }
-      })
-    }
-
-    getStatus(data => {
-      statusPublicLighting.value = data
+    getTaskTypeLighting(data => {
+      typeTaskLighting.value = data
       if (data.length === 0) {
         swal.fire({
-          title: 'No se encuentra un estatus registrado!',
-          text: 'No se encuentra estatus registrado en el departamento seleccionado, registre primero un tipo de estatus para continuar',
+          title: 'No se encuentra un tipo de tare registrada!',
+          text:
+            'No se encuentra tipo de tarea registradas en el departamento seleccionado, registre primero un tipo de tarea para continuar',
           icon: 'warning'
         })
       }
     })
+
+    // getStatus(data => {
+    //   statusPublicLighting.value = data
+    //   if (data.length === 0) {
+    //     swal.fire({
+    //       title: 'No se encuentra un estatus registrado!',
+    //       text:
+    //         'No se encuentra estatus registrado en el departamento seleccionado, registre primero un tipo de estatus para continuar',
+    //       icon: 'warning'
+    //     })
+    //   }
+    // })
 
     const validateTask = () => {
       if (!publicLightingFields.value.tareaTipoId) {
@@ -314,27 +253,27 @@ export default {
       return true
     }
 
-    const validateStatus = () => {
-      if (!publicLightingFields.value.estaatusId) {
-        StatusState.value = false
-        return 'Este campo es requerido'
-      }
-      StatusState.value = true
-      return true
-    }
+    // const validateStatus = () => {
+    //   if (!publicLightingFields.value.estatusAlumbradoId) {
+    //     StatusState.value = false
+    //     return 'Este campo es requerido'
+    //   }
+    //   StatusState.value = true
+    //   return true
+    // }
 
     const validateProblem = () => {
       if (!publicLightingFields.value.descripcionProblema) {
         ProblemState.value = false
         return 'Este campo es requerido'
       }
-      if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
-          publicLightingFields.value.descripcionProblema
-        )
-      ) {
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(publicLightingFields.value.descripcionProblema)) {
         ProblemState.value = false
         return 'Este campo solo puede contener letras'
+      }
+      if (!publicLightingFields.value.descripcionProblema.trim().length > 0) {
+        ProblemState.value = false
+        return 'Este campo no puede contener espacios'
       }
       ProblemState.value = true
       return true
@@ -345,11 +284,13 @@ export default {
         DomicileState.value = false
         return 'Este campo es requerido'
       }
-      if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(publicLightingFields.value.domicilio)
-      ) {
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(publicLightingFields.value.domicilio)) {
         DomicileState.value = false
         return 'Este campo solo puede contener letras'
+      }
+      if (!publicLightingFields.value.domicilio.trim().length > 0) {
+        DomicileState.value = false
+        return 'Este campo no puede contener espacios'
       }
       DomicileState.value = true
       return true
@@ -359,6 +300,14 @@ export default {
       if (!publicLightingFields.value.descripcionDomicilio) {
         addresdescriptionState.value = false
         return 'Este campo es requerido'
+      }
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(publicLightingFields.value.descripcionDomicilio)) {
+        addresdescriptionState.value = false
+        return 'Este campo solo puede contener letras'
+      }
+      if (!publicLightingFields.value.descripcionDomicilio.trim().length > 0) {
+        addresdescriptionState.value = false
+        return 'Este campo no puede contener espacios'
       }
       addresdescriptionState.value = true
       return true
@@ -371,6 +320,8 @@ export default {
 
     const fields = ref([
       { value: 'alumbradoId', text: 'ID', sortable: true },
+      { value: 'tareaTipoAlumbrado.nombreTarea', text: 'Tipo de tarea' },
+      { value: 'estatus.nombreEstatus', text: 'Estatus' },
       { value: 'descripcionProblema', text: 'Descripcion del problema' },
       { value: 'domicilio', text: 'Domicilio' },
       { value: 'descripcionDomicilio', text: 'Descripcion Domicilio' },
@@ -425,13 +376,20 @@ export default {
     const addPublicLighting = () => {
       createPublicLighting(publicLightingFields.value, data => {
         expedientPublicFieldBlank.value.alumbradoId = data.alumbradoId
-        createExpedientLighting(expedientPublicFieldBlank.value, data => {})
-        refreshTable()
-        swal.fire({
-          title: '¡Alumbrado publico agregado correctamente!',
-          text: 'Alumbrado registrado satisfactoriamente',
-          icon: 'success'
+        createExpedientLighting(expedientPublicFieldBlank.value, data => {
+          refreshTable()
+          swal.fire({
+            title: '¡Alumbrado publico agregado correctamente!',
+            text: 'Alumbrado registrado satisfactoriamente',
+            icon: 'success'
+          })
         })
+        // refreshTable()
+        // swal.fire({
+        //   title: '¡Alumbrado publico agregado correctamente!',
+        //   text: 'Alumbrado registrado satisfactoriamente',
+        //   icon: 'success'
+        // })
         // $toast.success('Alumbrado registrado correctamente.', {
         //   position: 'top-right',
         //   duration: 1500
@@ -504,9 +462,9 @@ export default {
       validateAddresdescription,
       validateDomicile,
       resetPublicLightingFields,
-      validateProblem,
-      validateStatus,
-      getTaskTypeLightingById
+      validateProblem
+      // validateStatus
+      // getTaskTypeLightingById
     }
   }
 }

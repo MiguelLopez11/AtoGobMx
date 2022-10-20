@@ -9,48 +9,30 @@
       </div>
       <Form @submit="onUpdateStatusLighting">
         <b-row cols="2">
+          <!--1-->
           <b-col>
             <b-form-group class="mt-3" label="Nombre">
-              <Field name="NameField" :rules="validateName">
+              <Field name="NameField" :rules="validateName" as="text">
                 <b-form-input
                   v-model="statusLighting.nombreEstatus"
                   :state="NameState"
                 >
                 </b-form-input>
               </Field>
-              <ErrorMessage name="NameField">
-                <span>Este campo es requerido</span>
-                <i class="bi bi-exclamation-circle" />
-              </ErrorMessage>
+              <ErrorMessage class="text-danger" name="NameField"></ErrorMessage>
             </b-form-group>
           </b-col>
+          <!--2-->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion">
-              <Field name="DescriptionField" :rules="validateDescription">
+              <Field name="DescriptionField" :rules="validateDescription" as="text">
                 <b-form-input
                   v-model="statusLighting.descripcion"
                   :state="DescriptionState"
                 ></b-form-input>
               </Field>
-              <ErrorMessage name="DescriptionField"
-                ><span>Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i>
-              </ErrorMessage>
+              <ErrorMessage class="text-danger" name="DescriptionField"></ErrorMessage>
             </b-form-group>
-
-            <!-- <b-form-group class="mt-3" label="Descripcion">
-              <Field name="DescriptionField" :rules="validateDescription">
-                <b-form-textarea
-                  v-model="statusLighting.descripcion"
-                  :state="DescriptionState"
-                  rows="4"
-                ></b-form-textarea>
-              </Field>
-              <ErrorMessage name="DescriptionField"
-                ><span>Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i>
-              </ErrorMessage>
-            </b-form-group> -->
           </b-col>
         </b-row>
         <b-row align-h="end">
@@ -73,9 +55,9 @@
 
 <script>
 import StatusLightinServices from '@/Services/statuslighting.Services'
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useToast } from 'vue-toast-notification'
+// import { useToast } from 'vue-toast-notification'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
@@ -85,8 +67,9 @@ export default {
     ErrorMessage
   },
   setup () {
+    const swal = inject('$swal')
     const { getStatusById, updateStatusLighting } = StatusLightinServices()
-    const $toast = useToast()
+    // const $toast = useToast()
     const statusLighting = ref([])
     const router = useRoute()
     const redirect = useRouter()
@@ -99,14 +82,23 @@ export default {
     ])
     const onUpdateStatusLighting = () => {
       updateStatusLighting(statusLighting.value, (data) => {})
-      $toast.open({
-        message: 'Estetus Alumbrado modificado correctamente',
-        position: 'top',
-        duration: 2000,
-        dismissible: true,
-        type: 'success',
-        onDismiss: () => redirect.push('/EstatusAlumbrado/list')
+      swal.fire({
+        title: '¡Estatus modificado correctamente!',
+        text: 'El estatus se ha modificado  satisfactoriamente.',
+        icon: 'success'
+      }).then(result => {
+        if (result.isConfirmed) {
+          redirect.push('/EstatusAlumbrado/list')
+        }
       })
+      // $toast.open({
+      //   message: 'Estetus Alumbrado modificado correctamente',
+      //   position: 'top',
+      //   duration: 2000,
+      //   dismissible: true,
+      //   type: 'success',
+      //   onDismiss: () => redirect.push('/EstatusAlumbrado/list')
+      // })
     }
     getStatusById(router.params.EstatusId, (data) => {
       statusLighting.value = data
@@ -117,6 +109,10 @@ export default {
         validateState()
         return 'Este campo es requerido'
       }
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(statusLighting.value.nombreEstatus)) {
+        NameState.value = false
+        return 'El nombre de estatus solo puede contener letras'
+      }
       validateState()
       return true
     }
@@ -126,13 +122,17 @@ export default {
         validateState()
         return 'Este campo es requerido'
       }
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(statusLighting.value.descripcion)) {
+        DescriptionState.value = false
+        return 'La descripcion solo puede contener letras'
+      }
       validateState()
       return true
     }
 
     const validateState = () => {
       // eslint-disable-next-line no-unneeded-ternary
-      NameState.value = statusLighting.value.nombre === '' ? false : true
+      NameState.value = statusLighting.value.nombreEstatus === '' ? false : true
       // eslint-disable-next-line no-unneeded-ternary
       DescriptionState.value = statusLighting.value.descripcion === '' ? false : true
     }

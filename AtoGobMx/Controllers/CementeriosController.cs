@@ -23,12 +23,12 @@ namespace AtoGobMx.Controllers
         [HttpGet]
         public async Task<ActionResult<Cementerios>> GetCementerios()
         {
-            var cementerios = await _context.Cementerios
+            var Cementerios = await _context.Cementerios
                 .OrderBy(o => o.NombrePropietario)
-                .Where(w => w.Archivado)
+                .Where(w => !w.Archivado)
                 .Select(s => _mapper.Map<Cementerios>(s))
                 .ToArrayAsync();
-            return Ok(cementerios);
+            return Ok(Cementerios);
         }
 
         [HttpGet("{CementeriosId}")]

@@ -11,31 +11,25 @@
         <b-row cols="2">
           <b-col>
             <b-form-group class="mt-3" label="Nombre">
-              <Field name="NameField" :rules="validateName">
+              <Field name="NameField" :rules="validateName" as="text">
                 <b-form-input
                   v-model="taskTypeLighting.nombreTarea"
                   :state="NameState"
                 >
                 </b-form-input>
               </Field>
-              <ErrorMessage name="NameField">
-                <span>Este campo es requerido</span>
-                <i class="bi bi-exclamation-circle" />
-              </ErrorMessage>
+              <ErrorMessage class="text-danger" name="NameField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Descripcion">
-              <Field name="DescriptionField" :rules="validateDescription">
+              <Field name="DescriptionField" :rules="validateDescription" as="text">
                 <b-form-input
                   v-model="taskTypeLighting.descripcion"
                   :state="DescriptionState"
                 ></b-form-input>
               </Field>
-              <ErrorMessage name="DescriptionField"
-                ><span>Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i>
-              </ErrorMessage>
+              <ErrorMessage class="text-danger" name="DescriptionField"></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
@@ -59,9 +53,9 @@
 
 <script>
 import TaskTypeLightinServices from '@/Services/tasktypelighting.Services'
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useToast } from 'vue-toast-notification'
+// import { useToast } from 'vue-toast-notification'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
@@ -71,11 +65,9 @@ export default {
     ErrorMessage
   },
   setup () {
-    const {
-      getTaskTypeLightingById,
-      updateTaskTypeLighting
-    } = TaskTypeLightinServices()
-    const $toast = useToast()
+    const swal = inject('$swal')
+    const { getTaskTypeLightingById, updateTaskTypeLighting } = TaskTypeLightinServices()
+    // const $toast = useToast()
     const taskTypeLighting = ref([])
     const router = useRoute()
     const redirect = useRouter()
@@ -86,17 +78,28 @@ export default {
       { text: 'Departamento Tipo Tarea', to: '/TareaTipoAlumbrado/list' },
       { text: 'Editar-TareaTipoAlumbrado' }
     ])
+
     const onUpdateTaskTypeLighting = () => {
       updateTaskTypeLighting(taskTypeLighting.value, data => {})
-      $toast.open({
-        message: 'Tarea Tipo Alumbrado modificado correctamente',
-        position: 'top',
-        duration: 2000,
-        dismissible: true,
-        type: 'success',
-        onDismiss: () => redirect.push('/TareaTipoAlumbrado/list')
+      swal.fire({
+        title: '¡Tipo tarea modificado correctamente!',
+        text: 'El tipo de tarea se ha modificado  satisfactoriamente.',
+        icon: 'success'
+      }).then(result => {
+        if (result.isConfirmed) {
+          redirect.push('/TareaTipoAlumbrado/list')
+        }
       })
+      // $toast.open({
+      //   message: 'Tarea Tipo Alumbrado modificado correctamente',
+      //   position: 'top',
+      //   duration: 2000,
+      //   dismissible: true,
+      //   type: 'success',
+      //   onDismiss: () => redirect.push('/TareaTipoAlumbrado/list')
+      // })
     }
+
     getTaskTypeLightingById(router.params.TareaTipoAlumbradoId, data => {
       taskTypeLighting.value = data
     })
@@ -106,6 +109,10 @@ export default {
         validateState()
         return 'Este campo es requerido'
       }
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(taskTypeLighting.value.nombreTarea)) {
+        NameState.value = false
+        return 'El tipo de tarea solo puede contener letras'
+      }
       validateState()
       return true
     }
@@ -114,6 +121,10 @@ export default {
       if (!taskTypeLighting.value.descripcion) {
         validateState()
         return 'Este campo es requerido'
+      }
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(taskTypeLighting.value.descripcion)) {
+        DescriptionState.value = false
+        return 'El tipo de tarea solo puede contener letras'
       }
       validateState()
       return true
