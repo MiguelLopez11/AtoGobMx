@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-card class="m-3" v-if="userData">
+    <b-card class="m-2" v-if="userData">
       <b-navbar sticky>
         <b-navbar-nav>
           <b-nav-item>
@@ -102,16 +102,13 @@ import LogoAtogobMx from '@/Images/Icon.png'
 import { useRouter } from 'vue-router'
 
 export default {
-  beforeUnmount () {
-    window.localStorage.clear()
-  },
   setup () {
     const router = useRouter()
     const swal = inject('$swal')
     const background = ref(LogoAtogobMx)
-    const userData = window.localStorage.getItem('User')
+    const userData = window.sessionStorage.getItem('User')
     const removeLocalStorgare = () => {
-      window.localStorage.removeItem('User')
+      window.sessionStorage.removeItem('User')
       swal.fire({
         title: 'Cerrar Sesión!',
         text: 'Se ha cerrado sesion correctamente',

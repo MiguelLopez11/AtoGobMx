@@ -1,8 +1,7 @@
 <template>
-  <section class="">
+  <section class="mt-5">
     <div
       class="px-4 py-5 px-md-5 text-center text-lg-start"
-      style="background-color: rgb(236,237,238); margin-top:100px"
     >
       <div class="container">
         <div class="row gx-lg-5 align-items-center">
@@ -15,58 +14,63 @@
           </div>
 
           <div class="col-lg-6 mb-5 mb-lg-0">
+              <!-- <img
+                src="https://www.atotonilco.gob.mx/templates/it_headlines/custom/images/logo_h.png"
+                class="img-fluid"
+              /> -->
             <div class="card">
-              <div class="card-body py-5 px-md-5">
-                  Iniciar sesión
-                  <Form @submit="onLogIn">
-                    <div class="form-outline mb-4">
-                      <label class="form-label" for="form3Example3"
-                        >Nombre de usuario</label
+              <span align="center" class="display-6 mb-2 mt-3 p-0">Inicio de Sesion</span>
+              <div class="card-body py-3 px-md-5">
+                <Form @submit="onLogIn">
+                  <div class="form-outline mb-4">
+                    <label class="form-label" for="form3Example3"
+                      >Nombre de usuario</label
+                    >
+                    <Field
+                      name="userNameField"
+                      :rules="validateUserName"
+                      as="text"
+                    >
+                      <b-form-input
+                        v-model="user.userName"
+                        :state="userNameState"
+                        placeholder="Ingresa un usuario válido"
+                        size="lg"
                       >
-                      <Field
-                        name="userNameField"
-                        :rules="validateUserName"
-                        as="text"
+                      </b-form-input>
+                    </Field>
+                    <ErrorMessage class="text-danger" name="userNameField" />
+                  </div>
+                  <div class="form-outline mb-3">
+                    <label class="form-label" for="form3Example4"
+                      >Contraseña</label
+                    >
+                    <Field
+                      name="PasswordField"
+                      :rules="validatePassword"
+                      as="text"
+                    >
+                      <b-form-input
+                        v-model="user.password"
+                        :state="passwordState"
+                        placeholder="Ingresa una contraseña válida"
+                        size="lg"
+                        type="password"
                       >
-                        <b-form-input
-                          v-model="user.userName"
-                          :state="userNameState"
-                          placeholder="Ingresa un usuario válido"
-                          size="lg"
-                        >
-                        </b-form-input>
-                      </Field>
-                      <ErrorMessage class="text-danger" name="userNameField" />
-                    </div>
-                    <div class="form-outline mb-3">
-                      <label class="form-label" for="form3Example4"
-                        >Contraseña</label
-                      >
-                      <Field
-                        name="PasswordField"
-                        :rules="validatePassword"
-                        as="text"
-                      >
-                        <b-form-input
-                          v-model="user.password"
-                          :state="passwordState"
-                          placeholder="Ingresa una contraseña válida"
-                          size="lg"
-                        >
-                        </b-form-input>
-                      </Field>
-                      <ErrorMessage class="text-danger" name="PasswordField" />
-                    </div>
-                    <div class="text-center text-lg-start mt-4 pt-2">
-                      <button
-                        type="success"
-                        class="btn btn-lg"
-                        style="padding-left: 2.5rem; background-color: rgb(94,80,238); color:white; padding-right: 2.5rem;"
-                      >
-                        Iniciar Sesión
-                      </button>
-                    </div>
-                  </Form>
+                      </b-form-input>
+                    </Field>
+                    <ErrorMessage class="text-danger" name="PasswordField" />
+                  </div>
+                  <div class="text-center text-lg-start mt-4 pt-2">
+                    <button
+                      type="success"
+                      class="btn btn-lg"
+                      style="padding-left: 2.5rem; background-color: rgb(94,80,238); color:white; padding-right: 2.5rem;"
+                    >
+                      Iniciar Sesión
+                    </button>
+                  </div>
+                </Form>
               </div>
             </div>
           </div>
@@ -97,14 +101,10 @@ export default {
       userName: '',
       password: ''
     })
-    // window.onbeforeunload = function () {
-    //   window.localStorage.clear()
-    //   return ''
-    // }
     const onLogIn = () => {
       LogIn(user.value, data => {
         if (data.usuarioId) {
-          window.localStorage.setItem('User', JSON.stringify(data))
+          window.sessionStorage.setItem('User', JSON.stringify(data))
           swal
             .fire({
               title: 'Inicio de sesión correcto.!',
@@ -195,7 +195,7 @@ export default {
     height: 100%;
   }
 }
-body{
+body {
   background-color: #ffff !important;
 }
 </style>

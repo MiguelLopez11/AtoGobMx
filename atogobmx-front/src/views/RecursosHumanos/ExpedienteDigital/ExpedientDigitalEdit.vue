@@ -1,5 +1,5 @@
 <template>
-  <b-card class="m-3">
+  <b-card class="m-2">
     <abbr title="Cambiar Foto de perfil">
       <b-avatar
         ref="refAvatar"

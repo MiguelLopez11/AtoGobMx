@@ -22,7 +22,10 @@ const routes = [
     name: 'Areas',
     component: () => import('../views/RecursosHumanos/areas/AreaList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Recursos Humanos'
+
     }
   },
   {
@@ -232,7 +235,7 @@ const router = createRouter({
   routes
 })
 router.beforeEach(async (to, from, next) => {
-  const isLoggedIn = window.localStorage.getItem('User') !== null
+  const isLoggedIn = window.sessionStorage.getItem('User') !== null
   if (['Login'].includes(to.name) && isLoggedIn) {
     next({ name: 'Home' })
   } else if (to.meta.requiresAuth && !isLoggedIn) {
