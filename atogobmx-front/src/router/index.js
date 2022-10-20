@@ -235,12 +235,23 @@ const router = createRouter({
   routes
 })
 router.beforeEach(async (to, from, next) => {
-  const isLoggedIn = window.sessionStorage.getItem('User') !== null
+  const isLoggedIn = window.sessionStorage.getItem('isLogged')
+  const role = window.sessionStorage.getItem('Role')
+  const departamento = window.sessionStorage.getItem('Departamento')
+  console.log(role, departamento)
   if (['Login'].includes(to.name) && isLoggedIn) {
     next({ name: 'Home' })
   } else if (to.meta.requiresAuth && !isLoggedIn) {
     next({
       path: '/Login',
+      query: { redirect: to.fullPath }
+    })
+  } else {
+    next()
+  }
+  if (to.meta.departamento && role !== 'Administrador' && departamento !== to.meta.departamento) {
+    next({
+      path: '/',
       query: { redirect: to.fullPath }
     })
   } else {

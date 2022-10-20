@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-card class="m-2" v-if="userData">
+    <b-card class="m-2" v-if="isLogged">
       <b-navbar sticky>
         <b-navbar-nav>
           <b-nav-item>
@@ -98,11 +98,11 @@
         </b-navbar-nav>
         <b-row align-h="end">
           <b-navbar-nav>
-              <b-button v-if="!userData" size="lg" to="/Login" style="background-color: #7367f0">
+              <b-button v-if="!isLogged" size="lg" to="/Login" style="background-color: #7367f0">
                 <i class="bi bi-box-arrow-right"></i>
                 Login
               </b-button>
-              <b-button v-if="userData" size="lg" @click="removeLocalStorgare()" style="background-color: #7367f0">
+              <b-button v-if="isLogged" size="lg" @click="removeLocalStorgare()" style="background-color: #7367f0">
                 <i class="bi bi-box-arrow-right"></i>
                 Cerrar Sesión
               </b-button>
@@ -123,9 +123,9 @@ export default {
     const router = useRouter()
     const swal = inject('$swal')
     const background = ref(LogoAtogobMx)
-    const userData = window.sessionStorage.getItem('User')
+    const isLogged = window.sessionStorage.getItem('isLogged')
     const removeLocalStorgare = () => {
-      window.sessionStorage.removeItem('User')
+      window.sessionStorage.removeItem('isLogged')
       swal.fire({
         title: 'Cerrar Sesión!',
         text: 'Se ha cerrado sesion correctamente',
@@ -137,7 +137,7 @@ export default {
     }
     return {
       background,
-      userData,
+      isLogged,
 
       removeLocalStorgare
       // roleUser,
