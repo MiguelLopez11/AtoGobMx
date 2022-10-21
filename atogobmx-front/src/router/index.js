@@ -165,6 +165,22 @@ const routes = [
     }
   },
   {
+    path: '/DireccionCementerios/list',
+    name: 'DireccionCementerios',
+    component: () => import('@/views/ServiciosPublicos/cementery/addresscementery/AddressCementeryList.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/DireccionCementerios/ :DireccionId',
+    name: 'DireccionCementerios-Edit',
+    component: () => import('@/views/ServiciosPublicos/cementery/addresscementery/AddressCementeryList.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: '/Usuarios/list',
     name: 'Usuarios',
     component: () => import('@/views/Users/UserList.vue'),

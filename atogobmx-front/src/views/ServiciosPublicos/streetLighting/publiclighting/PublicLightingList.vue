@@ -90,22 +90,6 @@
             </b-form-group>
           </b-col>
           <!--2-->
-          <!-- <b-col>
-            <b-form-group class="mt-3" label="Estatus">
-              <Field name="StatusField" :rules="validateStatus" as="text">
-                <b-form-select
-                  v-model="publicLightingFields.estatusAlumbradoId"
-                  autofocus
-                  :state="StatusState"
-                  :options="statusPublicLighting"
-                  value-field="estatusAlumbradoId"
-                  text-field="nombreEstatus"
-                ></b-form-select>
-              </Field>
-              <ErrorMessage class="text-danger" name="StatusField"/>
-            </b-form-group>
-          </b-col> -->
-          <!--3-->
           <b-col>
             <b-form-group class="mt-3" label="Domicilio">
               <Field name="DomicileField" :rules="validateDomicile" as="text">
@@ -117,7 +101,7 @@
               <ErrorMessage class="text-danger" name="DomicileField"/>
             </b-form-group>
           </b-col>
-          <!--4-->
+          <!--3-->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion Domicilio">
               <Field name="addresdescriptionField" :rules="validateAddresdescription" as="text">
@@ -130,7 +114,7 @@
               <ErrorMessage class="text-danger" name="addresdescriptionField"/>
             </b-form-group>
           </b-col>
-          <!--5-->
+          <!--4-->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion del problema">
               <Field name="ProblemField" :rules="validateProblem" as="text">
@@ -422,8 +406,7 @@ export default {
             })
             swal.fire({
               title: '¡Alumbrado archivado!',
-              text:
-                'El alumbrado publico ha sido archivado satisfactoriamente.',
+              text: 'El alumbrado publico ha sido archivado satisfactoriamente.',
               icon: 'success'
             })
           } else {

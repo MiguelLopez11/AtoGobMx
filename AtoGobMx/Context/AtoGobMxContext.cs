@@ -20,6 +20,7 @@ namespace AtoGobMx.Context
         public DbSet<EmpleadosAlumbrado> EmpleadosAlumbrado { get; set; }
         public DbSet<Aseo> Aseo { get; set; }
         public DbSet<Ruta> Ruta { get; set; }
+        public DbSet<Zona> Zona { get; set; }
         public DbSet<Cementerios> Cementerios { get; set; }
         public DbSet<DireccionCementerio> DireccionCementerio { get; set; }
         public DbSet<ExpedienteDigital> ExpedienteDigital { get; set; }

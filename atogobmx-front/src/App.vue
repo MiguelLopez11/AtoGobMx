@@ -81,6 +81,10 @@
               <!-- <i class="bi bi-lightning-charge-fill"></i> -->
               Cementerios
             </b-dropdown-item>
+            <b-dropdown-item to="/DireccionCementerios/list">
+              <!-- <i class="bi bi-lightning-charge-fill"></i> -->
+              Direccion cementerios
+            </b-dropdown-item>
           </b-nav-item-dropdown>
           <b-nav-item-dropdown text="Administrador" right auto-close>
             <template v-slot:button-content>

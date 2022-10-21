@@ -5,81 +5,19 @@
     </b-card>
     <b-car>
       <div>
-        <h3>Editar Cementerios</h3>
+        <h3>Editar Direccion Cementerios</h3>
       </div>
-      <Form @submit="onUpdateCementeryService">
+      <Form @submit="onUpdateAddressCementeryService">
         <b-row cols="2">
           <b-col>
-            <!-- 1 -->
-            <b-form-group class="mt-3" label="Nombre del propietario" as="text">
-              <Field name="PropietaryField" :rules="validatePropietary">
-                <b-form-input
-                  v-modal="cementeryService.nombrePropietario"
-                  :state="PropietaryState"
-                >
-                </b-form-input>
-              </Field>
-              <ErrorMessage name="PropietaryField">
-                <span>Este campo es requerido</span>
-                <i class="bi bi-exclamation-circle" />
-              </ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!-- 2 -->
-          <b-col>
-            <b-form-group class="mt-3" label="Numero de espacios">
-              <Field name="SpacesField" :rules="validateSpaces">
-                <b-form-input
-                  v-modal="cementeryService.numeroEspacios"
-                  :state="SpacesState"
-                >
-                </b-form-input>
-              </Field>
-              <ErrorMessage name="SpacesField">
-                <span>Este campo es requerido</span>
-                <i class="bi bi-exclamation-circle" />
-              </ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!-- 3 -->
-          <b-col>
-            <b-form-group class="mt-3" label="Metros que le corresponden">
-              <Field name="MeterField" :rules="validateMeter">
-                <b-form-input
-                  v-modal="cementeryService.metrosCorrespondientes"
-                  :state="MeterState"
-                >
-                </b-form-input>
-              </Field>
-              <ErrorMessage name="MeterField">
-                <span>Este campo es requerido</span>
-                <i class="bi bi-exclamation-circle" />
-              </ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!-- 4 -->
-          <b-col>
-            <b-form-group class="mt-3" label="Espacios Disponibles">
-              <Field name="AvailableField" :rules="validateAvailable">
-                <b-form-input
-                  v-modal="cementeryService.espaciosDisponibles"
-                  :state="AvailableState"
-                >
-                </b-form-input>
-              </Field>
-              <ErrorMessage name="AvailableField">
-                <span>Este campo es requerido</span>
-                <i class="bi bi-exclamation-circle" />
-              </ErrorMessage>
-            </b-form-group>
-          </b-col>
+            
         </b-row>
 
         <b-row align-h="end">
           <b-button
             class="col-1 m-2 text-white"
             variant="primary"
-            to="/Cementerios/list"
+            to=""
             type="reset"
           >
             Cancelar</b-button

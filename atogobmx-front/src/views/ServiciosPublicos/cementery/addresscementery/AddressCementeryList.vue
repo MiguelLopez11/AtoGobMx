@@ -1,0 +1,350 @@
+<template>
+  <b-card class="m-2">
+    <b-row align-h="end" class="mb-3 mr-1">
+      <b-form-input
+        size="lg"
+        style="width: 350px"
+        v-model="searchValue"
+        type="search"
+        placeholder="Buscar Direccin Cementerios..."
+      ></b-form-input>
+      <b-button
+        variant="primary"
+        style="
+            background-color: rgb(94,80,238);
+            height: 50px;
+            width: auto;
+            font-size: 18px;
+            margin-right: 15px;
+            margin-left: 20px;
+        "
+        @click="showModal = !showModal"
+        type="submit"
+      >
+        <!-- v-b-modal.modal-cementery -->
+        <i class="bi bi-person-plus-fill"></i>
+        Agregar Direccion cementerio
+      </b-button>
+    </b-row>
+    <EasyDataTable
+      rows-per-page-message="registros por pagina"
+      empty-message="No se encontro ningun registro"
+      table-class-name="customize-table"
+      buttons-pagination
+      border-cell
+      :loading="isloading"
+      :headers="fields"
+      :items="AddresscementeryService"
+      :rows-per-page="5"
+      :search-field="searchField"
+      :search-value="searchValue"
+      :table-height="330"
+    >
+      <template #header-actions="header">
+        {{ header.text }}
+      </template>
+      <template #item-actions="items">
+        <b-button
+          @click="RemoveAddressCementeryService(items.direccionId)"
+          class="m-1"
+          variant="outline-danger"
+          ><i class="bi bi-trash3"></i
+        ></b-button>
+        <b-button
+          class="m-1"
+          variant="outline-warning"
+          :to="{
+            name: 'DireccionCementerios-Edit',
+            params: { DireccionId: items.direccionId }
+          }"
+          ><i class="bi bi-pencil-square"></i
+        ></b-button>
+      </template>
+    </EasyDataTable>
+
+    <b-modal
+      id="modal-cementery"
+      tittle="Agregar Cementerios"
+      v-model="showModal"
+      size="xl"
+      hide-footer
+      button-size="lg"
+      lazy
+    >
+      <Form @submit="addressCementeryService">
+        <b-row cols="2">
+          <b-col>
+            <!-- 1 -->
+            <b-form-group class="mt-3" label="Nombre del cementerio">
+              <Field
+                name="NameCementeryField"
+                :rules="validateNameCementery"
+                as="text"
+              >
+                <b-form-input
+                  v-model="addressCementeryServiceFields.nombreCementerio"
+                  :state="PropietaryState"
+                >
+                </b-form-input>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="NameCementeryField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <!-- 2 -->
+          <b-col>
+            <b-form-group class="mt-3" label="Municipio">
+              <Field
+                name="MunicipalityField"
+                :rules="validateMunicipality"
+                as="text"
+              >
+                <b-form-input
+                  v-model="addressCementeryServiceFields.municipio"
+                  :state="MunicipalityState"
+                >
+                </b-form-input>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="MunicipalityField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <!-- 3 -->
+          <b-col>
+            <b-form-group class="mt-3" label="Localidad">
+              <Field name="LocationField" :rules="validateLocation" as="text">
+                <b-form-input
+                  v-model="addressCementeryServiceFields.localidad"
+                  :state="LocationState"
+                >
+                </b-form-input>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="LocationField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <!-- 4 -->
+          <b-col>
+            <b-form-group class="mt-3" label="Calle">
+              <Field name="StreetField" :rules="validateStreet" as="text">
+                <b-form-input
+                  v-model="addressCementeryServiceFields.calle"
+                  :state="StreetState"
+                  type="text"
+                >
+                </b-form-input>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="StreetField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <!-- 5 -->
+          <b-col>
+            <b-form-group class="mt-3" label="Numero exterior">
+              <Field
+                name="NumberOutsideField"
+                :rules="validateStreet"
+                as="text"
+              >
+                <b-form-input
+                  v-model="addressCementeryServiceFields.numeroExterior"
+                  :state="NumberOutsideState"
+                  type="number"
+                >
+                </b-form-input>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="NumberOutsideField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+        </b-row>
+
+        <b-row align-h="end">
+          <b-button
+            class="w-auto m-2 text-white"
+            variant="primary"
+            @click="resetAddressCementeryServiceFields"
+          >
+            <!-- v-b-modal.modal-cementery -->
+            Cancelar
+          </b-button>
+          <b-button class="w-auto m-2" variant="success" type="submit">
+            Guardar
+          </b-button>
+        </b-row>
+      </Form>
+    </b-modal>
+  </b-card>
+</template>
+
+<script>
+import AddressCementeryService from '@/Services/addresscementery.Services'
+import { Form, Field, ErrorMessage } from 'vee-validate'
+import { ref, inject } from 'vue'
+import '@vuepic/vue-datepicker/dist/main.css'
+export default {
+  components: {
+    EasyDataTable: window['vue3-easy-data-table'],
+    Form,
+    Field,
+    ErrorMessage
+  },
+  setup () {
+    const swal = inject('$swal')
+    const showModal = ref(false)
+    const { getAddressCementery, createAddressCementery, deleteAddressCementery } = AddressCementeryService()
+    const addressCementeryService = ref([])
+    const perPage = ref(5)
+    const currentPage = ref(1)
+    const filter = ref(null)
+    const perPageSelect = ref([5, 10, 25, 50, 100])
+    const isloading = ref(true)
+    const searchValue = ref('')
+    const searchField = ref('nombreCementerio')
+    const PropietaryState = ref(false)
+    const MunicipalityState = ref(false)
+    const LocationState = ref(false)
+    const StreetState = ref(false)
+    const NumberOutsideState = ref(false)
+    const addressCementeryServiceFields = ref({
+      direccionId: 0,
+      nombreCementerio: null,
+      municipio: null,
+      localidad: null,
+      calle: null,
+      numeroExterior: null,
+      archivado: false
+    })
+
+    const AddressCementeryServiceFieldsBlank = ref(
+      JSON.parse(JSON.stringify(addressCementeryServiceFields))
+    )
+
+    const fields = ref([
+      { value: 'direccionId', text: 'ID', sortable: true },
+      { value: 'nombreCementerio', text: 'Nombre Cementerio' },
+      { value: 'municipio', text: 'Municipio' },
+      { value: 'localidad', text: 'Localidad' },
+      { value: 'calle', text: 'Calle' },
+      { value: 'numeroExterior', text: 'Numero exterior' },
+      { value: 'actions', text: 'Acciones' }
+    ])
+
+    const resetAddressCementeryServiceFields = () => {
+      showModal.value = false
+      addressCementeryServiceFields.value = JSON.parse(
+        JSON.stringify(AddressCementeryServiceFieldsBlank)
+      )
+      PropietaryState.value = false
+      MunicipalityState.value = false
+      LocationState.value = false
+      StreetState.value = false
+      NumberOutsideState.value = false
+    }
+
+    getAddressCementery(data => {
+      addressCementeryService.value = data
+
+      if (addressCementeryService.value.length > 0) {
+        isloading.value = false
+      } else {
+        if (addressCementeryService.value.length <= 0) {
+          isloading.value = false
+        }
+      }
+    })
+
+    const onFiltered = filteredItems => {
+      currentPage.value = 1
+    }
+
+    const refreshTable = () => {
+      isloading.value = true
+      getAddressCementery(data => {
+        addressCementeryService.value = data
+
+        if (addressCementeryService.value.length > 0) {
+          isloading.value = false
+        } else {
+          if (addressCementeryService.value.length <= 0) {
+            isloading.value = false
+          }
+        }
+      })
+      return 'datos recargados'
+    }
+
+    const addCementeryService = () => {
+      createAddressCementery(addressCementeryServiceFields.value, data => {
+        refreshTable()
+        swal.fire({
+          title: '¡Direccion cementerios agregado correctamente!',
+          text: 'Direccion cementerios registrado satisfactoriamente',
+          icon: 'success'
+        })
+      })
+      showModal.value = false
+      resetAddressCementeryServiceFields()
+    }
+
+    const RemoveExpedientLighting = AddressCementeryId => {
+      isloading.value = true
+      swal
+        .fire({
+          title: '¿Estas seguro',
+          text: 'No podras revertir esto',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, Archivar Direccion Cementerios!',
+          cancelButtonText: 'Cancelar'
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            deleteAddressCementery(AddressCementeryId, data => {
+              refreshTable()
+            })
+            swal.fire({
+              title: '¡Direccion cementerios archivado!',
+              text: 'El direccion de cementerios ha sido archivado satisfactoriamente.',
+              icon: 'success'
+            })
+          } else {
+            isloading.value = false
+          }
+        })
+    }
+
+    return {
+      showModal,
+      addressCementeryService,
+      perPage,
+      currentPage,
+      filter,
+      perPageSelect,
+      isloading,
+      searchValue,
+      searchField,
+      fields,
+
+      resetAddressCementeryServiceFields,
+      onFiltered,
+      refreshTable,
+      addCementeryService,
+      RemoveExpedientLighting
+
+    }
+  }
+}
+</script>
