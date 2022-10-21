@@ -9,6 +9,7 @@ namespace AtoGobMx.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CategoriaInventarioId { get; set; }
         public string NombreCategoria { get; set; }
-        public string Descripcion { get; set; }
+        public string? Descripcion { get; set; }
+        public bool Archivado { get; set; }
     }
 }

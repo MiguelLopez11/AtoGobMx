@@ -26,5 +26,8 @@ namespace AtoGobMx.Context
         public DbSet<Archivos> Archivos { get; set; }
         public DbSet<Departamentos> Departamentos { get; set; }
         public DbSet<PuestoTrabajo> PuestoTrabajo { get; set; }
+        public DbSet<Inventario> Inventario { get; set; }
+        public DbSet<CategoriaInventario> CategoriaInventario { get; set; }
+        public DbSet<InventarioEstatus> InventarioEstatus { get; set; }
     }
 }
