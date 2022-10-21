@@ -1,94 +1,94 @@
 <template>
-  <div class="text-wrapper">
-    <div class="title" data-content="404">
-        403 - ACCESS DENIED
-    </div>
+  <b-card class="m-2">
+    <b-avatar variant="light" size="250" src="https://media.istockphoto.com/vectors/shield-with-hand-block-icon-in-flat-style-with-shadow-vector-id867726980?k=20&m=867726980&s=612x612&w=0&h=ge5fg-rTBLy_OVAyhCiawo4Ou9bHcIQ9WtVORH20N8U=" />
+    <div class="text-wrapper">
+      <div class="title" data-content="404">
+        Acceso denegado
+      </div>
 
-    <div class="subtitle">
-        Oops, You don't have permission to access this page.
-    </div>
-    <div class="isi">
-         A web server may return a 403 Forbidden HTTP status code in response to a request from a client for a web page or resource to indicate that the server can be reached and understood the request, but refuses to take any further action. Status code 403 responses are the result of the web server being configured to deny access, for some reason, to the requested resource by the client.
-         </div>
+      <div class="subtitle">
+        No tiene permiso para acceder a esta ruta.
+      </div>
 
-    <div class="buttons">
-        <a class="button" href="https://www.brodroid.com">Go to homepage</a>
+      <div class="buttons" style="cursor: pointer;">
+        <a href="/">Regresar a inicio</a>
+      </div>
     </div>
-</div>
+  </b-card>
 </template>
 
 <script>
-export default {
-
-}
+export default {}
 </script>
 
 <style scoped>
 @import url(https://fonts.googleapis.com/css?family=Raleway:700);
 
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: border-box;
 }
 html {
-    height: 100%;
+  height: 100%;
 }
 body {
-    font-family: 'Raleway', sans-serif;
-    background-color: #342643;
-    height: 100%;
-    padding: 10px;
+  font-family: 'Raleway', sans-serif;
+  background-color: #342643;
+  height: 100%;
+  padding: 10px;
 }
 
 a {
-  color: #EE4B5E !important;
-  text-decoration:none;
+  color: #ee4b5e !important;
+  text-decoration: none;
 }
 a:hover {
-  color: #FFFFFF !important;
-  text-decoration:none;
+  color: #ffffff !important;
+  text-decoration: none;
 }
 
 .text-wrapper {
-    height: 100%;
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-   justify-content: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .title {
-    font-size: 5em;
-    font-weight: 700;
-    color: #EE4B5E;
+  font-size: 5em;
+  font-weight: 700;
+  color: #ee4b5e;
 }
 
 .subtitle {
-    font-size: 40px;
-    font-weight: 700;
-    color: #1FA9D6;
+  font-size: 40px;
+  font-weight: 700;
+  color: #1fa9d6;
 }
 .isi {
-    font-size: 18px;
-    text-align: center;
-    margin:30px;
-    padding:20px;
-    color: white;
+  font-size: 18px;
+  text-align: center;
+  margin: 30px;
+  padding: 20px;
+  color: white;
 }
 .buttons {
-    margin: 30px;
-        font-weight: 700;
-        border: 2px solid #EE4B5E;
-        text-decoration: none;
-        padding: 15px;
-        text-transform: uppercase;
-        color: #EE4B5E;
-        border-radius: 26px;
-        transition: all 0.2s ease-in-out;
-        display: inline-block;
+  margin: 30px;
+  font-weight: 700;
+  border: 2px solid #ee4b5e;
+  text-decoration: none;
+  padding: 15px;
+  text-transform: uppercase;
+  color: #ee4b5e;
+  border-radius: 26px;
+  transition: all 0.2s ease-in-out;
+  display: inline-block;
 }
-        .buttons:hover {
-            background-color: #EE4B5E;
-            color: white;
-            transition: all 0.2s ease-in-out;
-        }
+.buttons:hover {
+  background-color: #ee4b5e;
+  color: white;
+  transition: all 0.2s ease-in-out;
+}
 </style>

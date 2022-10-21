@@ -41,7 +41,9 @@ const routes = [
     name: 'Area-Edit',
     component: () => import('../views/RecursosHumanos/areas/AreaEdit.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Recursos Humanos'
     }
   },
   {
@@ -49,7 +51,9 @@ const routes = [
     name: 'Empleados',
     component: () => import('@/views/RecursosHumanos/Employees/EmployeeList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Recursos Humanos'
     }
   },
   {
@@ -57,7 +61,9 @@ const routes = [
     name: 'Empleados-Edit',
     component: () => import('@/views/RecursosHumanos/Employees/EmployeeEdit.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Recursos Humanos'
     }
   },
   {
@@ -65,7 +71,9 @@ const routes = [
     name: 'ExpedientesDigitales',
     component: () => import('@/views/RecursosHumanos/ExpedienteDigital/ExpedientDigitalList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Recursos Humanos'
     }
   },
   {
@@ -73,7 +81,9 @@ const routes = [
     name: 'ExpedienteDigital-edit',
     component: () => import('@/views/RecursosHumanos/ExpedienteDigital/ExpedientDigitalEdit.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Recursos Humanos'
     }
   },
   {
@@ -177,7 +187,9 @@ const routes = [
     name: 'Usuarios',
     component: () => import('@/views/Users/UserList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Dirección de sistemas'
     }
   },
   {
@@ -185,7 +197,9 @@ const routes = [
     name: 'Usuarios-Edit',
     component: () => import('@/views/Users/UserEdit.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Dirección de sistemas'
     }
   },
   {
@@ -193,7 +207,9 @@ const routes = [
     name: 'Roles',
     component: () => import('@/views/Roles/RoleList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Dirección de sistemas'
     }
   },
   {
@@ -201,7 +217,9 @@ const routes = [
     name: 'Roles-Edit',
     component: () => import('@/views/Roles/RoleEdit.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Dirección de sistemas'
     }
   },
   {
@@ -209,7 +227,9 @@ const routes = [
     name: 'Departamentos',
     component: () => import('@/views/RecursosHumanos/Departaments/DepartamentList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Recursos Humanos'
     }
   },
   {
@@ -217,7 +237,9 @@ const routes = [
     name: 'Departamentos-Edit',
     component: () => import('@/views/RecursosHumanos/Departaments/DepartamentEdit.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Recursos Humanos'
     }
   },
   {
@@ -225,7 +247,9 @@ const routes = [
     name: 'PuestosTrabajos',
     component: () => import('@/views/RecursosHumanos/WorkStation/WorkStationList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Recursos Humanos'
     }
   },
   {
@@ -233,7 +257,9 @@ const routes = [
     name: 'PuestoTrabajo-Edit',
     component: () => import('@/views/RecursosHumanos/WorkStation/WorkStationEdit.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Recursos Humanos'
     }
   }
 ]
@@ -253,18 +279,10 @@ router.beforeEach(async (to, from, next) => {
       path: '/Login',
       query: { redirect: to.fullPath }
     })
-  } else if (to.meta.departamento && departamento !== to.meta.departamento && role !== 'Administrador') {
+  } else if (to.meta.rol && to.meta.departamento && departamento !== to.meta.departamento && role !== 'Administrador') {
     next({ name: 'PageNotPermission' })
   } else {
     next()
   }
-  // if (to.meta.departamento) {
-  //   next({
-  //     path: '/',
-  //     query: { redirect: to.fullPath }
-  //   })
-  // } else {
-  //   next()
-  // }
 })
 export default router
