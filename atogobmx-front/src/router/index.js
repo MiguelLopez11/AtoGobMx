@@ -261,6 +261,16 @@ const routes = [
       rol: 'Empleado',
       departamento: 'Recursos Humanos'
     }
+  },
+  {
+    path: '/CategoriasInventario/list',
+    name: 'CategoriasInventario',
+    component: () => import('@/views/Patrimony/CategoryInventory/CategoryInventoryList.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Patrimonio'
+    }
   }
 ]
 

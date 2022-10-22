@@ -82,6 +82,15 @@
               Cementerios
             </b-dropdown-item>
           </b-nav-item-dropdown>
+          <b-nav-item-dropdown text="Patriminio" right auto-close>
+             <template v-slot:button-content>
+              <i class="bi bi-bookmark-check-fill"></i>
+            </template>
+            <b-dropdown-item to="/CategoriasInventario/list">
+              <i class="bi bi-dropbox"></i>
+              Inventario
+            </b-dropdown-item>
+          </b-nav-item-dropdown>
           <b-nav-item-dropdown text="Administrador" right auto-close>
             <template v-slot:button-content>
               <i class="bi bi-clipboard2-pulse-fill"></i>

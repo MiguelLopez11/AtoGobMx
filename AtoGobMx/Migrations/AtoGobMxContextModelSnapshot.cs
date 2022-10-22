@@ -56,7 +56,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasIndex("TareaTipoId");
 
-                    b.ToTable("Alumbrado");
+                    b.ToTable("Alumbrado", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Archivos", b =>
@@ -83,7 +83,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasIndex("ExpedienteDigitalId");
 
-                    b.ToTable("Archivos");
+                    b.ToTable("Archivos", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Area", b =>
@@ -109,7 +109,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasIndex("DepartamentoId");
 
-                    b.ToTable("Area");
+                    b.ToTable("Area", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Aseo", b =>
@@ -142,7 +142,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasKey("AseoId");
 
-                    b.ToTable("Aseo");
+                    b.ToTable("Aseo", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.CategoriaInventario", b =>
@@ -163,7 +163,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasKey("CategoriaInventarioId");
 
-                    b.ToTable("CategoriaInventario");
+                    b.ToTable("CategoriaInventario", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Cementerios", b =>
@@ -190,7 +190,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasKey("CementeriosId");
 
-                    b.ToTable("Cementerios");
+                    b.ToTable("Cementerios", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Departamentos", b =>
@@ -211,7 +211,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasKey("DepartamentoId");
 
-                    b.ToTable("Departamentos");
+                    b.ToTable("Departamentos", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.DireccionCementerio", b =>
@@ -244,7 +244,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasKey("DireccionId");
 
-                    b.ToTable("DireccionCementerio");
+                    b.ToTable("DireccionCementerio", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Empleado", b =>
@@ -287,7 +287,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasIndex("PuestoTrabajoId");
 
-                    b.ToTable("Empleados");
+                    b.ToTable("Empleados", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.EmpleadosAlumbrado", b =>
@@ -311,7 +311,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasIndex("ExpedienteAlumbradoId");
 
-                    b.ToTable("EmpleadosAlumbrado");
+                    b.ToTable("EmpleadosAlumbrado", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.EstatusAlumbrado", b =>
@@ -333,7 +333,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasKey("EstatusAlumbradoId");
 
-                    b.ToTable("EstatusAlumbrado");
+                    b.ToTable("EstatusAlumbrado", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.ExpedienteAlumbrado", b =>
@@ -375,7 +375,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasIndex("DepartamentoId");
 
-                    b.ToTable("ExpedienteAlumbrado");
+                    b.ToTable("ExpedienteAlumbrado", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.ExpedienteDigital", b =>
@@ -421,7 +421,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasIndex("EmpleadoId");
 
-                    b.ToTable("ExpedienteDigital");
+                    b.ToTable("ExpedienteDigital", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Inventario", b =>
@@ -464,7 +464,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasIndex("InventarioEstatusId");
 
-                    b.ToTable("Inventario");
+                    b.ToTable("Inventario", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.InventarioAlumbrado", b =>
@@ -478,7 +478,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasKey("InventarioAlumbradoId");
 
-                    b.ToTable("InventarioAlumbrado");
+                    b.ToTable("InventarioAlumbrado", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.InventarioEstatus", b =>
@@ -499,7 +499,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasKey("InventarioEstatusId");
 
-                    b.ToTable("InventarioEstatus");
+                    b.ToTable("InventarioEstatus", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.PuestoTrabajo", b =>
@@ -526,7 +526,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasIndex("DepartamentoId");
 
-                    b.ToTable("PuestoTrabajo");
+                    b.ToTable("PuestoTrabajo", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Role", b =>
@@ -547,7 +547,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasKey("RoleId");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Ruta", b =>
@@ -573,7 +573,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasKey("RutaId");
 
-                    b.ToTable("Ruta");
+                    b.ToTable("Ruta", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.TareaTipoAlumbrado", b =>
@@ -595,7 +595,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasKey("TareaTipoId");
 
-                    b.ToTable("TareaTipoAlumbrado");
+                    b.ToTable("TareaTipoAlumbrado", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Usuario", b =>
@@ -630,7 +630,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Usuarios");
+                    b.ToTable("Usuarios", (string)null);
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Alumbrado", b =>
