@@ -255,18 +255,17 @@ export default {
         PropietaryState.value = false
         return 'Este campo es requerido'
       }
-      if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
-          cementeryServiceFields.value.nombrePropietario
-        )
-      ) {
+
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(cementeryServiceFields.value.nombrePropietario)) {
         PropietaryState.value = false
         return 'Este campo solo puede contener letras'
       }
+
       if (!cementeryServiceFields.value.nombrePropietario.trim().length > 0) {
         PropietaryState.value = false
         return 'Este campo no puede contener espacios'
       }
+
       PropietaryState.value = true
       return true
     }
@@ -276,10 +275,17 @@ export default {
         SpacesState.value = false
         return 'Este campo es requerido'
       }
+
       if (!/^[0-9]+$/i.test(cementeryServiceFields.value.numeroEspasios)) {
         SpacesState.value = false
         return 'Este campo solo puede contener numeros'
       }
+
+      if (!cementeryServiceFields.value.numeroEspasios.trim().length > 0) {
+        SpacesState.value = false
+        return 'Este campo no puede contener espacios'
+      }
+
       SpacesState.value = true
       return true
     }
@@ -289,12 +295,17 @@ export default {
         MeterState.value = false
         return 'Este campo es requerido'
       }
-      if (
-        !/^\d*\.\d+$/i.test(cementeryServiceFields.value.metrosCorrespondientes)
-      ) {
+
+      if (!/^\d*\.\d+$/i.test(cementeryServiceFields.value.metrosCorrespondientes)) {
         MeterState.value = false
         return 'Este campo solo puede contener numeros'
       }
+
+      if (!cementeryServiceFields.value.metrosCorrespondientes.trim().length > 0) {
+        MeterState.value = false
+        return 'Este campo no puede contener espacios'
+      }
+
       MeterState.value = true
       return true
     }
@@ -304,12 +315,17 @@ export default {
         AvailableState.value = false
         return 'Este campo es requerido'
       }
-      if (
-        !/^[0-9]+$/i.test(cementeryServiceFields.value.espaciosDisponibles)
-      ) {
+
+      if (!/^[0-9]+$/i.test(cementeryServiceFields.value.espaciosDisponibles)) {
         AvailableState.value = false
         return 'Este campo solo puede contener numeros'
       }
+
+      if (!cementeryServiceFields.value.espaciosDisponibles.trim().length > 0) {
+        AvailableState.value = false
+        return 'Este campo no puede contener espacios'
+      }
+
       AvailableState.value = true
       return true
     }
@@ -338,16 +354,9 @@ export default {
           text: 'Cementerios registrado satisfactoriamente',
           icon: 'success'
         })
-        // $toast.success('Cementerios registradoo correctamente.', {
-        //   position: 'top-right',
-        //   duration: 1500
-        // })
       })
       showModal.value = false
       resetCementeryServiceFields()
-      // cementeryServiceFields.value = JSON.parse(
-      //   JSON.stringify(CementeryServiceFieldsBlank)
-      // )
     }
 
     const RemoveCementeryService = cementeryId => {
@@ -376,9 +385,6 @@ export default {
           isloading.value = false
         }
       })
-      // deleteCementery(cementeryId, data => {
-      //   refreshTable()
-      // })
     }
 
     return {

@@ -9,15 +9,107 @@
       </div>
       <Form @submit="onUpdateAddressCementeryService">
         <b-row cols="2">
+          <!-- 1 -->
           <b-col>
-            
+            <b-form-group class="mt-3" label="Nombre del cementerio">
+              <Field
+                name="NameCementeryField"
+                :rules="validateNameCementery"
+                as="text"
+              >
+                <b-form-input
+                  v-model="addressCementeryService.nombreCementerio"
+                  :state="PropietaryState"
+                >
+                </b-form-input>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="NameCementeryField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <!-- 2 -->
+          <b-col>
+            <b-form-group class="mt-3" label="Municipio">
+              <Field
+                name="MunicipalityField"
+                :rules="validateMunicipality"
+                as="text"
+              >
+                <b-form-input
+                  v-model="addressCementeryService.municipio"
+                  :state="MunicipalityState"
+                >
+                </b-form-input>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="MunicipalityField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <!-- 3 -->
+          <b-col>
+            <b-form-group class="mt-3" label="Localidad">
+              <Field name="LocationField" :rules="validateLocation" as="text">
+                <b-form-input
+                  v-model="addressCementeryService.localidad"
+                  :state="LocationState"
+                >
+                </b-form-input>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="LocationField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <!-- 4 -->
+          <b-col>
+            <b-form-group class="mt-3" label="Calle">
+              <Field name="StreetField" :rules="validateStreet" as="text">
+                <b-form-input
+                  v-model="addressCementeryService.calle"
+                  :state="StreetState"
+                  type="text"
+                >
+                </b-form-input>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="StreetField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <!-- 5 -->
+          <b-col>
+            <b-form-group class="mt-3" label="Numero exterior">
+              <Field
+                name="NumberOutsideField"
+                :rules="validateStreet"
+                as="text"
+              >
+                <b-form-input
+                  v-model="addressCementeryService.numeroExterior"
+                  :state="NumberOutsideState"
+                  type="number"
+                >
+                </b-form-input>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="NumberOutsideField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
         </b-row>
 
         <b-row align-h="end">
           <b-button
             class="col-1 m-2 text-white"
             variant="primary"
-            to=""
+            to="/DireccionCementerios/list"
             type="reset"
           >
             Cancelar</b-button
@@ -32,11 +124,10 @@
 </template>
 
 <script>
-import CementeryService from '@/Services/cementery.Services'
+import AddressCementeryService from '@/Services/cementery.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
@@ -45,38 +136,38 @@ export default {
     ErrorMessage
   },
   setup () {
-    const { getCementeryById, updateCementery } = CementeryService()
-    const $toast = useToast()
-    const cementeryService = ref([])
+    const swal = inject('$swal')
+    const { getAddressCementeryById, updateAddressCementery } = AddressCementeryService()
+    const addressCementeryService = ref([])
     const router = useRoute()
     const redirect = useRouter()
-    const PropietaryState = ref(false)
-    const SpacesState = ref(false)
-    const MeterState = ref(false)
-    const AvailableState = ref(false)
     const breadcrumbItems = ref([
       { Text: 'Inicio', to: '/' },
-      { Text: 'Inventario cementerio', to: '/Cementerios/list' },
-      { Text: 'Editar-Cementerios' }
+      { Text: 'Inventario cementerio', to: '/DireccionCementerios/list' },
+      { Text: 'Editar-Direccion Cementerios' }
     ])
 
-    const onUpdateCementeryService = () => {
-      updateCementery(CementeryService.value, data => {})
-      $toast.open({
-        message: 'Cementerio modificado correctamente',
-        position: 'top',
-        duration: 2000,
-        dismissible: true,
-        type: 'success',
-        onDismiss: () => redirect.push('/Cementerios/list')
-      })
+    const onUpdateAddressCementeryService = () => {
+      updateAddressCementery(addressCementeryService.value, data => {})
+      swal
+        .fire({
+          title: '¡Direccion cementerio modificado correctamente!',
+          text: 'La direccion cementerio se ha modificado  satisfactoriamente.',
+          icon: 'success'
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            redirect.push('/DireccionCementerios/list')
+          }
+        })
     }
-    getCementeryById(router.params.CementeriosId, data => {
-      CementeryService.value = data
+
+    getAddressCementeryById(router.params.CementeriosId, data => {
+      addressCementeryService.value = data
     })
 
     const validatePropietary = () => {
-      if (!cementeryService.value.nombrePropietario) {
+      if (!addressCementeryService.value.nombrePropietario) {
         validateState()
         return 'Este campo es requerido'
       }
@@ -85,7 +176,7 @@ export default {
     }
 
     const validateSpaces = () => {
-      if (!cementeryService.value.numeroEspasios) {
+      if (!addressCementeryService.value.numeroEspasios) {
         validateState()
         return 'Este campo es requerido'
       }
@@ -94,7 +185,7 @@ export default {
     }
 
     const validateMeter = () => {
-      if (!cementeryService.value.metrosCorrespondientes) {
+      if (!addressCementeryService.value.metrosCorrespondientes) {
         validateState()
         return 'Este campo es requerido'
       }
@@ -103,7 +194,7 @@ export default {
     }
 
     const validateAvailable = () => {
-      if (!cementeryService.value.espaciosDisponibles) {
+      if (!addressCementeryService.value.espaciosDisponibles) {
         validateState()
         return 'Este campo es requerido'
       }
@@ -113,28 +204,20 @@ export default {
 
     const validateState = () => {
       // eslint-disable-next-line no-unneeded-ternary
-      PropietaryState.value = cementeryService.value.nombrePropietario === '' ? false : true
+      PropietaryState.value = addressCementeryService.value.nombrePropietario !== ''
       // eslint-disable-next-line no-unneeded-ternary
-      SpacesState.value = cementeryService.value.numeroEspasios === '' ? false : true
+      SpacesState.value = addressCementeryService.value.numeroEspasios !== ''
       // eslint-disable-next-line no-unneeded-ternary
-      MeterState.value = cementeryService.value.metrosCorrespondientes === '' ? false : true
+      MeterState.value = addressCementeryService.value.metrosCorrespondientes !== ''
       // eslint-disable-next-line no-unneeded-ternary
-      AvailableState.value = cementeryService.value.espaciosDisponibles === '' ? false : true
+      AvailableState.value = addressCementeryService.value.espaciosDisponibles !== ''
     }
 
     return {
-      cementeryService,
-      PropietaryState,
-      SpacesState,
-      MeterState,
-      AvailableState,
+      addressCementeryService,
       breadcrumbItems,
 
-      onUpdateCementeryService,
-      validatePropietary,
-      validateSpaces,
-      validateMeter,
-      validateAvailable
+      onUpdateAddressCementeryService
     }
   }
 }

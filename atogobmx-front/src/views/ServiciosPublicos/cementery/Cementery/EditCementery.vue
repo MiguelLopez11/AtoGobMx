@@ -11,66 +11,54 @@
         <b-row cols="2">
           <b-col>
             <!-- 1 -->
-            <b-form-group class="mt-3" label="Nombre del propietario" as="text">
-              <Field name="PropietaryField" :rules="validatePropietary">
+            <b-form-group class="mt-3" label="Nombre del propietario">
+              <Field name="PropietaryField" :rules="validatePropietary" as="text">
                 <b-form-input
                   v-modal="cementeryService.nombrePropietario"
                   :state="PropietaryState"
                 >
                 </b-form-input>
               </Field>
-              <ErrorMessage name="PropietaryField">
-                <span>Este campo es requerido</span>
-                <i class="bi bi-exclamation-circle" />
-              </ErrorMessage>
+              <ErrorMessage class="text-danger" name="PropietaryField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <!-- 2 -->
           <b-col>
             <b-form-group class="mt-3" label="Numero de espacios">
-              <Field name="SpacesField" :rules="validateSpaces">
+              <Field name="SpacesField" :rules="validateSpaces" as="number">
                 <b-form-input
                   v-modal="cementeryService.numeroEspacios"
                   :state="SpacesState"
                 >
                 </b-form-input>
               </Field>
-              <ErrorMessage name="SpacesField">
-                <span>Este campo es requerido</span>
-                <i class="bi bi-exclamation-circle" />
-              </ErrorMessage>
+              <ErrorMessage class="text-danger" name="SpacesField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <!-- 3 -->
           <b-col>
             <b-form-group class="mt-3" label="Metros que le corresponden">
-              <Field name="MeterField" :rules="validateMeter">
+              <Field name="MeterField" :rules="validateMeter" as="number">
                 <b-form-input
                   v-modal="cementeryService.metrosCorrespondientes"
                   :state="MeterState"
                 >
                 </b-form-input>
               </Field>
-              <ErrorMessage name="MeterField">
-                <span>Este campo es requerido</span>
-                <i class="bi bi-exclamation-circle" />
-              </ErrorMessage>
+              <ErrorMessage class="text-danger" name="MeterField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <!-- 4 -->
           <b-col>
             <b-form-group class="mt-3" label="Espacios Disponibles">
-              <Field name="AvailableField" :rules="validateAvailable">
+              <Field name="AvailableField" :rules="validateAvailable" as="number">
                 <b-form-input
                   v-modal="cementeryService.espaciosDisponibles"
                   :state="AvailableState"
                 >
                 </b-form-input>
               </Field>
-              <ErrorMessage name="AvailableField">
-                <span>Este campo es requerido</span>
-                <i class="bi bi-exclamation-circle" />
-              </ErrorMessage>
+              <ErrorMessage class="text-danger" name="AvailableField"></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
@@ -96,9 +84,8 @@
 <script>
 import CementeryService from '@/Services/cementery.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
@@ -107,8 +94,8 @@ export default {
     ErrorMessage
   },
   setup () {
+    const swal = inject('$swal')
     const { getCementeryById, updateCementery } = CementeryService()
-    const $toast = useToast()
     const cementeryService = ref([])
     const router = useRoute()
     const redirect = useRouter()
@@ -124,14 +111,17 @@ export default {
 
     const onUpdateCementeryService = () => {
       updateCementery(CementeryService.value, data => {})
-      $toast.open({
-        message: 'Cementerio modificado correctamente',
-        position: 'top',
-        duration: 2000,
-        dismissible: true,
-        type: 'success',
-        onDismiss: () => redirect.push('/Cementerios/list')
-      })
+      swal
+        .fire({
+          title: '¡Cementerio modificado correctamente!',
+          text: 'El cementerio se ha modificado  satisfactoriamente.',
+          icon: 'success'
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            redirect.push('/Cementerios/list')
+          }
+        })
     }
     getCementeryById(router.params.CementeriosId, data => {
       CementeryService.value = data
@@ -142,6 +132,16 @@ export default {
         validateState()
         return 'Este campo es requerido'
       }
+
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(cementeryService.value.nombrePropietario)) {
+        PropietaryState.value = false
+        return 'Este campo solo puede contener letras'
+      }
+      // if (!cementeryServiceFields.value.nombrePropietario.trim().length > 0) {
+      //   PropietaryState.value = false
+      //   return 'Este campo no puede contener espacios'
+      // }
+
       validateState()
       return true
     }
@@ -151,6 +151,12 @@ export default {
         validateState()
         return 'Este campo es requerido'
       }
+
+      if (!/^[0-9]+$/i.test(cementeryService.value.numeroEspasios)) {
+        SpacesState.value = false
+        return 'Este campo solo puede contener numeros'
+      }
+
       validateState()
       return true
     }
@@ -160,6 +166,12 @@ export default {
         validateState()
         return 'Este campo es requerido'
       }
+
+      if (!/^\d*\.\d+$/i.test(cementeryService.value.metrosCorrespondientes)) {
+        MeterState.value = false
+        return 'Este campo solo puede contener numeros'
+      }
+
       validateState()
       return true
     }
@@ -169,19 +181,29 @@ export default {
         validateState()
         return 'Este campo es requerido'
       }
+
+      if (!/^[0-9]+$/i.test(cementeryService.value.espaciosDisponibles)) {
+        AvailableState.value = false
+        return 'Este campo solo puede contener numeros'
+      }
+
       validateState()
       return true
     }
 
     const validateState = () => {
       // eslint-disable-next-line no-unneeded-ternary
-      PropietaryState.value = cementeryService.value.nombrePropietario === '' ? false : true
+      PropietaryState.value =
+        cementeryService.value.nombrePropietario !== ''
       // eslint-disable-next-line no-unneeded-ternary
-      SpacesState.value = cementeryService.value.numeroEspasios === '' ? false : true
+      SpacesState.value =
+        cementeryService.value.numeroEspasios !== ''
       // eslint-disable-next-line no-unneeded-ternary
-      MeterState.value = cementeryService.value.metrosCorrespondientes === '' ? false : true
+      MeterState.value =
+        cementeryService.value.metrosCorrespondientes !== ''
       // eslint-disable-next-line no-unneeded-ternary
-      AvailableState.value = cementeryService.value.espaciosDisponibles === '' ? false : true
+      AvailableState.value =
+        cementeryService.value.espaciosDisponibles !== ''
     }
 
     return {
