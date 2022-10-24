@@ -10,6 +10,14 @@ const routes = [
     }
   },
   {
+    path: '/PageNotAllowed',
+    name: 'PageNotPermission',
+    component: () => import('../views/PageNotPermission/PageNotPermission.vue'),
+    meta: {
+      requiresAuth: false
+    }
+  },
+  {
     path: '/',
     name: 'Home',
     component: () => import('../views/Home/HomePage.vue'),
@@ -33,7 +41,9 @@ const routes = [
     name: 'Area-Edit',
     component: () => import('../views/RecursosHumanos/areas/AreaEdit.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Recursos Humanos'
     }
   },
   {
@@ -41,7 +51,9 @@ const routes = [
     name: 'Empleados',
     component: () => import('@/views/RecursosHumanos/Employees/EmployeeList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Recursos Humanos'
     }
   },
   {
@@ -49,7 +61,9 @@ const routes = [
     name: 'Empleados-Edit',
     component: () => import('@/views/RecursosHumanos/Employees/EmployeeEdit.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Recursos Humanos'
     }
   },
   {
@@ -57,7 +71,9 @@ const routes = [
     name: 'ExpedientesDigitales',
     component: () => import('@/views/RecursosHumanos/ExpedienteDigital/ExpedientDigitalList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Recursos Humanos'
     }
   },
   {
@@ -65,7 +81,9 @@ const routes = [
     name: 'ExpedienteDigital-edit',
     component: () => import('@/views/RecursosHumanos/ExpedienteDigital/ExpedientDigitalEdit.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Recursos Humanos'
     }
   },
   {
@@ -217,7 +235,9 @@ const routes = [
     name: 'Usuarios',
     component: () => import('@/views/Users/UserList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Dirección de sistemas'
     }
   },
   {
@@ -225,7 +245,9 @@ const routes = [
     name: 'Usuarios-Edit',
     component: () => import('@/views/Users/UserEdit.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Dirección de sistemas'
     }
   },
   {
@@ -233,7 +255,9 @@ const routes = [
     name: 'Roles',
     component: () => import('@/views/Roles/RoleList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Dirección de sistemas'
     }
   },
   {
@@ -241,7 +265,9 @@ const routes = [
     name: 'Roles-Edit',
     component: () => import('@/views/Roles/RoleEdit.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Dirección de sistemas'
     }
   },
   {
@@ -249,7 +275,9 @@ const routes = [
     name: 'Departamentos',
     component: () => import('@/views/RecursosHumanos/Departaments/DepartamentList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Recursos Humanos'
     }
   },
   {
@@ -257,7 +285,9 @@ const routes = [
     name: 'Departamentos-Edit',
     component: () => import('@/views/RecursosHumanos/Departaments/DepartamentEdit.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Recursos Humanos'
     }
   },
   {
@@ -265,7 +295,9 @@ const routes = [
     name: 'PuestosTrabajos',
     component: () => import('@/views/RecursosHumanos/WorkStation/WorkStationList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Recursos Humanos'
     }
   },
   {
@@ -273,7 +305,19 @@ const routes = [
     name: 'PuestoTrabajo-Edit',
     component: () => import('@/views/RecursosHumanos/WorkStation/WorkStationEdit.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Recursos Humanos'
+    }
+  },
+  {
+    path: '/CategoriasInventario/list',
+    name: 'CategoriasInventario',
+    component: () => import('@/views/Patrimony/CategoryInventory/CategoryInventoryList.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Patrimonio'
     }
   }
 ]
@@ -283,7 +327,9 @@ const router = createRouter({
   routes
 })
 router.beforeEach(async (to, from, next) => {
-  const isLoggedIn = window.sessionStorage.getItem('User') !== null
+  const isLoggedIn = window.sessionStorage.getItem('isLogged')
+  const role = window.sessionStorage.getItem('Role')
+  const departamento = window.sessionStorage.getItem('Departamento')
   if (['Login'].includes(to.name) && isLoggedIn) {
     next({ name: 'Home' })
   } else if (to.meta.requiresAuth && !isLoggedIn) {
@@ -291,6 +337,8 @@ router.beforeEach(async (to, from, next) => {
       path: '/Login',
       query: { redirect: to.fullPath }
     })
+  } else if (to.meta.rol && to.meta.departamento && departamento !== to.meta.departamento && role !== 'Administrador') {
+    next({ name: 'PageNotPermission' })
   } else {
     next()
   }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-card class="m-2" v-if="userData">
+    <b-card class="m-2" v-if="isLogged">
       <b-navbar sticky>
         <b-navbar-nav>
           <b-nav-item>
@@ -86,6 +86,15 @@
               Direccion cementerios
             </b-dropdown-item>
           </b-nav-item-dropdown>
+          <b-nav-item-dropdown text="Patriminio" right auto-close>
+             <template v-slot:button-content>
+              <i class="bi bi-bookmark-check-fill"></i>
+            </template>
+            <b-dropdown-item to="/CategoriasInventario/list">
+              <i class="bi bi-dropbox"></i>
+              Inventario
+            </b-dropdown-item>
+          </b-nav-item-dropdown>
           <b-nav-item-dropdown text="Administrador" right auto-close>
             <template v-slot:button-content>
               <i class="bi bi-clipboard2-pulse-fill"></i>
@@ -102,9 +111,13 @@
         </b-navbar-nav>
         <b-row align-h="end">
           <b-navbar-nav>
-              <b-button size="lg" to="/Login" style="background-color: #7367f0">
+              <b-button v-if="!isLogged" size="lg" to="/Login" style="background-color: #7367f0">
                 <i class="bi bi-box-arrow-right"></i>
                 Login
+              </b-button>
+              <b-button v-if="isLogged" size="lg" @click="removeLocalStorgare()" style="background-color: #7367f0">
+                <i class="bi bi-box-arrow-right"></i>
+                Cerrar Sesión
               </b-button>
           </b-navbar-nav>
         </b-row>
@@ -123,9 +136,9 @@ export default {
     const router = useRouter()
     const swal = inject('$swal')
     const background = ref(LogoAtogobMx)
-    const userData = window.sessionStorage.getItem('User')
+    const isLogged = window.sessionStorage.getItem('isLogged')
     const removeLocalStorgare = () => {
-      window.sessionStorage.removeItem('User')
+      window.sessionStorage.removeItem('isLogged')
       swal.fire({
         title: 'Cerrar Sesión!',
         text: 'Se ha cerrado sesion correctamente',
@@ -137,7 +150,7 @@ export default {
     }
     return {
       background,
-      userData,
+      isLogged,
 
       removeLocalStorgare
       // roleUser,
