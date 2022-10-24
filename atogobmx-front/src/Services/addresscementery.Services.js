@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export default function AddressCementery () {
+export default function AddressCementeryService () {
   const getAddressCementery = (callback) => {
     axios.get('https://localhost:7065/api/DireccionCementerio').then((response) => {
       callback(response.data)

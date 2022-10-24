@@ -34,7 +34,7 @@
       border-cell
       :loading="isloading"
       :headers="fields"
-      :items="routeService"
+      :items="roadService"
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
@@ -45,7 +45,7 @@
       </template>
       <template #item-actions="items">
         <b-button
-          @click="RemoveRouteService(items.rutaId)"
+          @click="RemoveRoadService(items.rutaId)"
           class="m-1"
           variant="outline-danger"
           ><i class="bi bi-trash3"></i
@@ -71,7 +71,7 @@
       button-size="lg"
       lazy
     >
-      <Form @submit="addRouteService">
+      <Form @submit="addRoadService">
         <b-row cols="2">
           <b-col>
             <!-- 1 -->
@@ -82,7 +82,7 @@
                 as="text"
               >
                 <b-form-input
-                  v-model="RouteServiceFields.origen"
+                  v-model="RoadServiceFields.origen"
                   :state="OriginState"
                 >
                 </b-form-input>
@@ -98,7 +98,7 @@
             <b-form-group class="mt-3" label="Destino">
               <Field name="DestinationField" :rules="validateDestination" as="text">
                 <b-form-input
-                  v-model="RouteServiceFields.destino"
+                  v-model="RoadServiceFields.destino"
                   :state="DestinationState"
                 >
                 </b-form-input>
@@ -114,7 +114,7 @@
             <b-form-group class="mt-3" label="Observacion">
               <Field name="ObservationField" :rules="validateObservation" as="text">
                 <b-form-input
-                  v-model="RouteServiceFields.obsevacion"
+                  v-model="RoadServiceFields.obsevacion"
                   :state="ObservationState"
                 >
                 </b-form-input>
@@ -131,7 +131,7 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            @click="resetRouteServiceFields"
+            @click="resetRoadServiceFields"
           >
             <!-- v-b-modal.modal-cementery -->
             Cancelar
@@ -146,7 +146,7 @@
 </template>
 
 <script>
-import RouteService from '@/Services/route.Services'
+import RoadService from '@/Services/road.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
 // import { useToast } from 'vue-toast-notification'
@@ -161,9 +161,9 @@ export default {
   setup () {
     const swal = inject('$swal')
     const showModal = ref(false)
-    const { getRoute, createRoute, deleteRoute } = RouteService()
+    const { getRoad, createRoad, deleteRoad } = RoadService()
     // const $toast = useToast()
-    const routeService = ref([])
+    const roadService = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
     const filter = ref(null)
@@ -174,7 +174,7 @@ export default {
     const OriginState = ref(false)
     const DestinationState = ref(false)
     const ObservationState = ref(false)
-    const RouteServiceFields = ref({
+    const RoadServiceFields = ref({
       rutaId: 0,
       origen: null,
       destino: null,
@@ -182,8 +182,8 @@ export default {
       archivado: false
     })
 
-    const RouteServiceFieldsBlank = ref(
-      JSON.parse(JSON.stringify(RouteServiceFields))
+    const RoadServiceFieldsBlank = ref(
+      JSON.parse(JSON.stringify(RoadServiceFields))
     )
 
     const fields = ref([
@@ -194,23 +194,23 @@ export default {
       { value: 'actions', text: 'Acciones' }
     ])
 
-    const resetRouteServiceFields = () => {
+    const resetRoadServiceFields = () => {
       showModal.value = false
-      RouteServiceFields.value = JSON.parse(
-        JSON.stringify(RouteServiceFieldsBlank)
+      RoadServiceFields.value = JSON.parse(
+        JSON.stringify(RoadServiceFieldsBlank)
       )
       OriginState.value = false
       DestinationState.value = false
       ObservationState.value = false
     }
 
-    getRoute(data => {
-      routeService.value = data
+    getRoad(data => {
+      roadService.value = data
 
-      if (routeService.value.length > 0) {
+      if (roadService.value.length > 0) {
         isloading.value = false
       } else {
-        if (routeService.value.length <= 0) {
+        if (roadService.value.length <= 0) {
           isloading.value = false
         }
       }
@@ -221,17 +221,17 @@ export default {
     }
 
     const validateOrigin = () => {
-      if (!RouteServiceFields.value.origen) {
+      if (!RoadServiceFields.value.origen) {
         OriginState.value = false
         return 'Este campo es requerido'
       }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(RouteServiceFields.value.origen)) {
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(RoadServiceFields.value.origen)) {
         OriginState.value = false
         return 'Este campo solo puede contener letras'
       }
 
-      if (!RouteServiceFields.value.origen.trim().length > 0) {
+      if (!RoadServiceFields.value.origen.trim().length > 0) {
         OriginState.value = false
         return 'Este campo no puede contener espacios'
       }
@@ -241,17 +241,17 @@ export default {
     }
 
     const validateDestination = () => {
-      if (!RouteServiceFields.value.destino) {
+      if (!RoadServiceFields.value.destino) {
         DestinationState.value = false
         return 'Este campo es requerido'
       }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(RouteServiceFields.value.destino)) {
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(RoadServiceFields.value.destino)) {
         DestinationState.value = false
         return 'Este campo solo puede contener numeros'
       }
 
-      if (!RouteServiceFields.value.destino.trim().length > 0) {
+      if (!RoadServiceFields.value.destino.trim().length > 0) {
         DestinationState.value = false
         return 'Este campo no puede contener espacios'
       }
@@ -261,17 +261,17 @@ export default {
     }
 
     const validateObservation = () => {
-      if (!RouteServiceFields.value.obsevacion) {
+      if (!RoadServiceFields.value.obsevacion) {
         ObservationState.value = false
         return 'Este campo es requerido'
       }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(RouteServiceFields.value.obsevacion)) {
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(RoadServiceFields.value.obsevacion)) {
         ObservationState.value = false
         return 'Este campo solo puede contener numeros'
       }
 
-      if (!RouteServiceFields.value.obsevacion.trim().length > 0) {
+      if (!RoadServiceFields.value.obsevacion.trim().length > 0) {
         ObservationState.value = false
         return 'Este campo no puede contener espacios'
       }
@@ -282,13 +282,13 @@ export default {
 
     const refreshTable = () => {
       isloading.value = true
-      getRoute(data => {
-        routeService.value = data
+      getRoad(data => {
+        roadService.value = data
 
-        if (routeService.value.length > 0) {
+        if (roadService.value.length > 0) {
           isloading.value = false
         } else {
-          if (routeService.value.length <= 0) {
+          if (roadService.value.length <= 0) {
             isloading.value = false
           }
         }
@@ -296,8 +296,8 @@ export default {
       return 'datos recargados'
     }
 
-    const addRouteService = () => {
-      createRoute(RouteServiceFields.value, data => {
+    const addRoadService = () => {
+      createRoad(RoadServiceFields.value, data => {
         refreshTable()
         swal.fire({
           title: '¡Ruta agregada correctamente!',
@@ -306,10 +306,10 @@ export default {
         })
       })
       showModal.value = false
-      resetRouteServiceFields()
+      resetRoadServiceFields()
     }
 
-    const RemoveRouteService = routeId => {
+    const RemoveRoadService = routeId => {
       isloading.value = true
       swal.fire({
         title: '¿Estas seguro',
@@ -322,7 +322,7 @@ export default {
         cancelButtonText: 'Cancelar'
       }).then(result => {
         if (result.isConfirmed) {
-          deleteRoute(routeId, (data) => {
+          deleteRoad(routeId, (data) => {
             refreshTable()
           })
           swal.fire({
@@ -338,8 +338,8 @@ export default {
     }
 
     return {
-      routeService,
-      RouteServiceFields,
+      roadService,
+      RoadServiceFields,
       perPage,
       currentPage,
       filter,
@@ -348,20 +348,20 @@ export default {
       isloading,
       searchValue,
       searchField,
-      RouteServiceFieldsBlank,
+      RoadServiceFieldsBlank,
       fields,
       OriginState,
       DestinationState,
       ObservationState,
 
       onFiltered,
-      addRouteService,
-      RemoveRouteService,
+      addRoadService,
+      RemoveRoadService,
       refreshTable,
       validateOrigin,
       validateDestination,
       validateObservation,
-      resetRouteServiceFields
+      resetRoadServiceFields
     }
   }
 }

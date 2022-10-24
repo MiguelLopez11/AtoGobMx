@@ -14,7 +14,7 @@
             <b-form-group class="mt-3" label="Nombre del propietario">
               <Field name="PropietaryField" :rules="validatePropietary" as="text">
                 <b-form-input
-                  v-modal="cementeryService.nombrePropietario"
+                  v-model="cementeryService.nombrePropietario"
                   :state="PropietaryState"
                 >
                 </b-form-input>
@@ -27,7 +27,7 @@
             <b-form-group class="mt-3" label="Numero de espacios">
               <Field name="SpacesField" :rules="validateSpaces" as="number">
                 <b-form-input
-                  v-modal="cementeryService.numeroEspacios"
+                  v-model="cementeryService.numeroEspacios"
                   :state="SpacesState"
                 >
                 </b-form-input>
@@ -40,7 +40,7 @@
             <b-form-group class="mt-3" label="Metros que le corresponden">
               <Field name="MeterField" :rules="validateMeter" as="number">
                 <b-form-input
-                  v-modal="cementeryService.metrosCorrespondientes"
+                  v-model="cementeryService.metrosCorrespondientes"
                   :state="MeterState"
                 >
                 </b-form-input>
@@ -53,7 +53,7 @@
             <b-form-group class="mt-3" label="Espacios Disponibles">
               <Field name="AvailableField" :rules="validateAvailable" as="number">
                 <b-form-input
-                  v-modal="cementeryService.espaciosDisponibles"
+                  v-model="cementeryService.espaciosDisponibles"
                   :state="AvailableState"
                 >
                 </b-form-input>

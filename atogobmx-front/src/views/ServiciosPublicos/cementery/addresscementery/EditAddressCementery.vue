@@ -124,7 +124,7 @@
 </template>
 
 <script>
-import AddressCementeryService from '@/Services/cementery.Services'
+import AddressCementeryService from '@/Services/addresscementery.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -148,8 +148,8 @@ export default {
     const NumberOutsideState = ref(false)
     const breadcrumbItems = ref([
       { Text: 'Inicio', to: '/' },
-      { Text: 'Inventario cementerio', to: '/DireccionCementerios/list' },
-      { Text: 'Editar-Direccion Cementerios' }
+      { Text: 'Inventario direccionCementerio', to: '/DireccionCementerios/list' },
+      { Text: 'Editar-DireccionCementerios' }
     ])
 
     const onUpdateAddressCementeryService = () => {

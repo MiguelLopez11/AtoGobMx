@@ -16,10 +16,8 @@ namespace AtoGobMx.Models
         [MinLength(8)]
         [Compare("Contraseña")]
         public string? ConfirmarContraseña { get; set; }
-        [Required]
-        public int RoleId { get; set; }
-        [Required]
-        public int EmpleadoId { get; set; }
+        public int? RoleId { get; set; }
+        public int? EmpleadoId { get; set; }
         [Required]
         public bool Archivado { get; set; }
         [ForeignKey("RoleId")]

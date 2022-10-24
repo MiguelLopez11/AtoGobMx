@@ -82,7 +82,7 @@
               Cementerios
             </b-dropdown-item>
             <b-dropdown-item to="/DireccionCementerios/list">
-              <!-- <i class="bi bi-lightning-charge-fill"></i> -->
+              <i class="bi bi-lightning-charge-fill"></i>
               Direccion cementerios
             </b-dropdown-item>
           </b-nav-item-dropdown>

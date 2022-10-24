@@ -34,7 +34,7 @@
       border-cell
       :loading="isloading"
       :headers="fields"
-      :items="AddresscementeryService"
+      :items="addressCementeryService"
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
@@ -63,7 +63,7 @@
     </EasyDataTable>
 
     <b-modal
-      id="modal-cementery"
+      id="modal-addressCementery"
       tittle="Agregar Cementerios"
       v-model="showModal"
       size="xl"
@@ -71,7 +71,7 @@
       button-size="lg"
       lazy
     >
-      <Form @submit="addressCementeryService">
+      <Form @submit="addCementeryService">
         <b-row cols="2">
           <!-- 1 -->
           <b-col>
@@ -429,6 +429,7 @@ export default {
     return {
       showModal,
       addressCementeryService,
+      addressCementeryServiceFields,
       perPage,
       currentPage,
       filter,

@@ -1,41 +1,41 @@
 import axios from 'axios'
 
-export default function Route () {
-  const getRoute = (callback) => {
+export default function RoadService () {
+  const getRoad = (callback) => {
     axios.get('https://localhost:7065/api/Aseo').then((response) => {
       callback(response.data)
     })
   }
 
-  const getRouteById = (rutaId, callback) => {
+  const getRoadById = (rutaId, callback) => {
     axios.get(`https://localhost:7065/api/Aseo/${rutaId}`).then((response) => {
       callback(response.data)
     })
   }
 
-  const createRoute = (data, callback) => {
+  const createRoad = (data, callback) => {
     axios.post('https://localhost:7065/api/Aseo', data).then((response) => {
       callback(response.data)
     })
   }
 
-  const updateRoute = (data, callback) => {
+  const updateRoad = (data, callback) => {
     axios.put(`https://localhost:7065/api/Aseo/${data.rutaId}`, data).then((response) => {
       callback(response.data)
     })
   }
 
-  const deleteRoute = (rutaId, callback) => {
+  const deleteRoad = (rutaId, callback) => {
     axios.delete(`https://localhost:7065/api/Aseo/${rutaId}`).then((response) => {
       callback(response.data)
     })
   }
 
   return {
-    getRoute,
-    getRouteById,
-    createRoute,
-    updateRoute,
-    deleteRoute
+    getRoad,
+    getRoadById,
+    createRoad,
+    updateRoad,
+    deleteRoad
   }
 }

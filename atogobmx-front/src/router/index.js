@@ -193,7 +193,7 @@ const routes = [
   {
     path: '/DireccionCementerios/ :DireccionId',
     name: 'DireccionCementerios-Edit',
-    component: () => import('@/views/ServiciosPublicos/cementery/addresscementery/EditAddressCementeryList.vue'),
+    component: () => import('@/views/ServiciosPublicos/cementery/addresscementery/EditAddressCementery.vue'),
     meta: {
       requiresAuth: true
     }
@@ -217,7 +217,7 @@ const routes = [
   {
     path: '/Ruta/list',
     name: 'Ruta',
-    component: () => import('@/views/ServiciosPublicos/cleanness/Road/RouteList.vue'),
+    component: () => import('@/views/ServiciosPublicos/cleanness/Road/RoadList.vue'),
     meta: {
       requiresAuth: true
     }
@@ -225,7 +225,7 @@ const routes = [
   {
     path: '/Ruta/ :RutaId',
     name: 'Ruta-Edit',
-    component: () => import('@/views/ServiciosPublicos/cleanness/Road/EditRoute.vue'),
+    component: () => import('@/views/ServiciosPublicos/cleanness/Road/EditRoad.vue'),
     meta: {
       requiresAuth: true
     }
@@ -337,6 +337,7 @@ router.beforeEach(async (to, from, next) => {
       path: '/Login',
       query: { redirect: to.fullPath }
     })
+  // eslint-disable-next-line no-mixed-operators
   } else if (to.meta.rol && to.meta.departamento && departamento !== to.meta.departamento && role !== 'Administrador') {
     next({ name: 'PageNotPermission' })
   } else {

@@ -9,12 +9,12 @@ namespace AtoGobMx.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "EstablecimientoPublico",
-                table: "Aseo",
-                type: "longtext",
-                nullable: false)
-                .Annotation("MySql:CharSet", "utf8mb4");
+            //migrationBuilder.AddColumn<string>(
+            //    name: "EstablecimientoPublico",
+            //    table: "Aseo",
+            //    type: "longtext",
+            //    nullable: false)
+            //    .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.AddColumn<int>(
                 name: "RutaId",
