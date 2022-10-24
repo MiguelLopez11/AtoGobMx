@@ -23,11 +23,11 @@ namespace AtoGobMx.Controllers
         [HttpGet]
         public async Task<ActionResult<Aseo>> GetAseo()
         {
-            var aseo = await _context.Aseo
+            var ase = await _context.Aseo
                 .Where(w => !w.Archivado)
                 .Select(s => _mapper.Map<Aseo>(s))
                 .ToArrayAsync();
-            return Ok(aseo);
+            return Ok(ase);
         }
 
         [HttpGet("AseoId")]
@@ -61,19 +61,20 @@ namespace AtoGobMx.Controllers
                 return Ok("Los ID no ingresados no coinciden");
             }
 
-            var ase = await _context.Aseo.FirstOrDefaultAsync(f => f.AseoId == AseoId);
-            if (ase == null)
+            var aseopublico = await _context.Aseo.FirstOrDefaultAsync(f => f.AseoId == AseoId);
+            if (aseopublico == null)
             {
                 return BadRequest("El Registro del aseo no existe");
             }
 
-            ase.AseoId = AseoId;
-            ase.NombreServicio = aseo.NombreServicio;
-            ase.Domicilio = aseo.Domicilio;
-            ase.Objetivo = aseo.Objetivo;
-            ase.Archivado = aseo.Archivado;
+            aseopublico.AseoId = AseoId;
+            aseopublico.NombreServicio = aseo.NombreServicio;
+            aseopublico.EstablecimientoPublico = aseo.EstablecimientoPublico;
+            aseopublico.Domicilio = aseo.Domicilio;
+            aseopublico.Objetivo = aseo.Objetivo;
+            aseopublico.Archivado = aseo.Archivado;
 
-            _context.Aseo.Update(ase);
+            _context.Aseo.Update(aseopublico);
             await _context.SaveChangesAsync();
             return Ok("Servicio publico aseo actualizado correctamente");
         }

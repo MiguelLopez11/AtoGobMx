@@ -175,7 +175,39 @@ const routes = [
   {
     path: '/DireccionCementerios/ :DireccionId',
     name: 'DireccionCementerios-Edit',
-    component: () => import('@/views/ServiciosPublicos/cementery/addresscementery/AddressCementeryList.vue'),
+    component: () => import('@/views/ServiciosPublicos/cementery/addresscementery/EditAddressCementeryList.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/Aseo/list',
+    name: 'Aseo',
+    component: () => import('@/views/ServiciosPublicos/cleanness/Cleanness/CleannessList.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/Aseo/ :AseoId',
+    name: 'Aseo-Edit',
+    component: () => import('@/views/ServiciosPublicos/cleanness/Cleanness/EditCleanness.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/Ruta/list',
+    name: 'Ruta',
+    component: () => import('@/views/ServiciosPublicos/cleanness/Road/RouteList.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/Ruta/ :RutaId',
+    name: 'Ruta-Edit',
+    component: () => import('@/views/ServiciosPublicos/cleanness/Road/EditRoute.vue'),
     meta: {
       requiresAuth: true
     }

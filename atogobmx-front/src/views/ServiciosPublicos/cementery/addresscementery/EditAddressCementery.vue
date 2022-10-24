@@ -19,7 +19,7 @@
               >
                 <b-form-input
                   v-model="addressCementeryService.nombreCementerio"
-                  :state="PropietaryState"
+                  :state="NameCementeryState"
                 >
                 </b-form-input>
               </Field>
@@ -141,6 +141,11 @@ export default {
     const addressCementeryService = ref([])
     const router = useRoute()
     const redirect = useRouter()
+    const NameCementeryState = ref(false)
+    const MunicipalityState = ref(false)
+    const LocationState = ref(false)
+    const StreetState = ref(false)
+    const NumberOutsideState = ref(false)
     const breadcrumbItems = ref([
       { Text: 'Inicio', to: '/' },
       { Text: 'Inventario cementerio', to: '/DireccionCementerios/list' },
@@ -166,58 +171,111 @@ export default {
       addressCementeryService.value = data
     })
 
-    const validatePropietary = () => {
-      if (!addressCementeryService.value.nombrePropietario) {
+    const validateNameCementery = () => {
+      if (!addressCementeryService.value.nombreCementerio) {
         validateState()
         return 'Este campo es requerido'
       }
+
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(addressCementeryService.value.nombreCementerio)) {
+        NameCementeryState.value = false
+        return 'Este campo solo puede contener letras'
+      }
+
       validateState()
       return true
     }
 
-    const validateSpaces = () => {
-      if (!addressCementeryService.value.numeroEspasios) {
+    const validateMunicipality = () => {
+      if (!addressCementeryService.value.municipio) {
         validateState()
         return 'Este campo es requerido'
       }
+
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(addressCementeryService.value.municipio)) {
+        MunicipalityState.value = false
+        return 'Este campo solo puede contener letras'
+      }
+
       validateState()
       return true
     }
 
-    const validateMeter = () => {
-      if (!addressCementeryService.value.metrosCorrespondientes) {
+    const validateLocation = () => {
+      if (!addressCementeryService.value.localidad) {
         validateState()
         return 'Este campo es requerido'
       }
+
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(addressCementeryService.value.localidad)) {
+        LocationState.value = false
+        return 'Este campo solo puede contener letras'
+      }
+
       validateState()
       return true
     }
 
-    const validateAvailable = () => {
-      if (!addressCementeryService.value.espaciosDisponibles) {
+    const validateStreet = () => {
+      if (!addressCementeryService.value.calle) {
         validateState()
         return 'Este campo es requerido'
       }
+
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(addressCementeryService.value.calle)) {
+        StreetState.value = false
+        return 'Este campo solo puede contener letras'
+      }
+
+      validateState()
+      return true
+    }
+
+    const validateNumberOutside = () => {
+      if (!addressCementeryService.value.numeroExterior) {
+        validateState()
+        return 'Este campo es requerido'
+      }
+
+      if (!/^[0-9]+$/i.test(addressCementeryService.value.numeroExterior)) {
+        NumberOutsideState.value = false
+        return 'Este campo solo puede contener numeros'
+      }
+
       validateState()
       return true
     }
 
     const validateState = () => {
       // eslint-disable-next-line no-unneeded-ternary
-      PropietaryState.value = addressCementeryService.value.nombrePropietario !== ''
+      NameCementeryState.value = addressCementeryService.value.nombreCementerio !== ''
       // eslint-disable-next-line no-unneeded-ternary
-      SpacesState.value = addressCementeryService.value.numeroEspasios !== ''
+      MunicipalityState.value = addressCementeryService.value.municipio !== ''
       // eslint-disable-next-line no-unneeded-ternary
-      MeterState.value = addressCementeryService.value.metrosCorrespondientes !== ''
+      LocationState.value = addressCementeryService.value.localidad !== ''
       // eslint-disable-next-line no-unneeded-ternary
-      AvailableState.value = addressCementeryService.value.espaciosDisponibles !== ''
+      StreetState.value = addressCementeryService.value.calle !== ''
+      // eslint-disable-next-line no-unneeded-ternary
+      NumberOutsideState.value = addressCementeryService.value.numeroExterior !== ''
     }
 
     return {
       addressCementeryService,
       breadcrumbItems,
+      NameCementeryState,
+      MunicipalityState,
+      LocationState,
+      StreetState,
+      NumberOutsideState,
 
-      onUpdateAddressCementeryService
+      onUpdateAddressCementeryService,
+      validateNameCementery,
+      validateMunicipality,
+      validateLocation,
+      validateStreet,
+      validateNumberOutside,
+      validateState
+
     }
   }
 }
