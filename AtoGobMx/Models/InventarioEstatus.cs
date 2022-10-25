@@ -15,6 +15,6 @@ namespace AtoGobMx.Models
         public bool Archivado { get; set; }
 
         [JsonIgnore]
-        public virtual IEnumerable<Inventario>? Inventario { get; set; }
+        public virtual IEnumerable<PAT_EquipoComputo>? EquipoComputo { get; set; }
     }
 }

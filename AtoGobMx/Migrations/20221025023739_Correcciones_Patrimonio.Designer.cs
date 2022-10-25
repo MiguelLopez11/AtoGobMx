@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20221025023739_Correcciones_Patrimonio")]
+    partial class Correcciones_Patrimonio
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -554,50 +556,6 @@ namespace AtoGobMx.Migrations
                     b.HasIndex("EquipoComputoId");
 
                     b.ToTable("PAT_Teclado");
-                });
-
-            modelBuilder.Entity("AtoGobMx.Models.PAT_Vehiculo", b =>
-                {
-                    b.Property<int>("VehiculoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Archivado")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<int>("AñoLanzamiento")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Color")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Marca")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Modelo")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("NumeroSerie")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Placa")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("Puertas")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Transmisión")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("VehiculoId");
-
-                    b.ToTable("PAT_Vehiculo");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.PuestoTrabajo", b =>
