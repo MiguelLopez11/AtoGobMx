@@ -263,9 +263,9 @@ const routes = [
     }
   },
   {
-    path: '/CategoriasInventario/list',
-    name: 'CategoriasInventario',
-    component: () => import('@/views/Patrimony/CategoryInventory/CategoryInventoryList.vue'),
+    path: '/EquiposComputo/list',
+    name: 'EquiposComputo',
+    component: () => import('@/views/Patrimony/Computers/Computer/ComputerList.vue'),
     meta: {
       requiresAuth: true,
       rol: 'Empleado',

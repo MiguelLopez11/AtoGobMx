@@ -86,9 +86,9 @@
              <template v-slot:button-content>
               <i class="bi bi-bookmark-check-fill"></i>
             </template>
-            <b-dropdown-item to="/CategoriasInventario/list">
-              <i class="bi bi-dropbox"></i>
-              Inventario
+            <b-dropdown-item to="/EquiposComputo/list">
+              <i class="bi bi-pc-display"></i>
+              Equipos de computo
             </b-dropdown-item>
           </b-nav-item-dropdown>
           <b-nav-item-dropdown text="Administrador" right auto-close>

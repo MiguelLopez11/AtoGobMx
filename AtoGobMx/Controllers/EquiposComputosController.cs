@@ -21,6 +21,7 @@ namespace AtoGobMx.Controllers
         {
             var Equipos = await _context.EquipoComputo
                 .Include(i => i.InventarioEstatus)
+                .Include(i => i.Area)
                 .Where(w => !w.Archivado)
                 .ToListAsync();
             return Ok(Equipos);
@@ -29,7 +30,10 @@ namespace AtoGobMx.Controllers
         [HttpGet("{EquipoComputoId}")]
         public async Task<ActionResult<PAT_EquipoComputo>> GetEquipoById(int EquipoComputoId)
         {
-            var equipo = await _context.EquipoComputo.FirstOrDefaultAsync(f => f.EquipoComputoId == EquipoComputoId);
+            var equipo = await _context.EquipoComputo
+                .Include(i => i.InventarioEstatus)
+                .Include(i => i.Area)
+                .FirstOrDefaultAsync(f => f.EquipoComputoId == EquipoComputoId);
 
             if (equipo == null)
             {
@@ -90,6 +94,7 @@ namespace AtoGobMx.Controllers
             equipo.Almacenamiento = equipoComputo.Almacenamiento;
             equipo.Procesador = equipoComputo.Procesador;
             equipo.EstatusId = equipoComputo.EstatusId;
+            equipo.AreaId = equipoComputo.AreaId;
             equipo.Archivado = equipoComputo.Archivado;
 
             _context.EquipoComputo.Update(equipo);

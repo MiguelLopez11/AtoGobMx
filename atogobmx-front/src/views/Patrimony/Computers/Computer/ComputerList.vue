@@ -6,7 +6,7 @@
         style="width: 350px"
         v-model="searchValue"
         type="search"
-        placeholder="Buscar Role..."
+        placeholder="Buscar Equipo..."
       >
       </b-form-input>
       <b-button
@@ -22,7 +22,7 @@
         type="submit"
       >
         <i class="bi bi-person-video2"></i>
-        Agregar Role
+        Agregar Computadora
       </b-button>
     </b-row>
     <EasyDataTable
@@ -33,7 +33,7 @@
       border-cell
       :loading="isloading"
       :headers="fields"
-      :items="roles"
+      :items="Computers"
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
@@ -69,7 +69,7 @@
       button-size="lg"
       hide-footer
     >
-      <Form @submit="addRole">
+      <Form @submit="addComputer">
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre">
@@ -78,14 +78,14 @@
                 :rules="validateName"
                 as="text"
               >
-                <b-form-input v-model="roleFields.nombre" :state="nameState"> </b-form-input>
+                <b-form-input v-model="computerFields.nombre" :state="nameState"> </b-form-input>
               </Field>
               <ErrorMessage class="text-danger" name="NameField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Descripción">
-              <b-form-input v-model="roleFields.descripcion"> </b-form-input>
+              <b-form-input v-model="computerFields.descripcion"> </b-form-input>
             </b-form-group>
           </b-col>
         </b-row>
@@ -107,7 +107,7 @@
 </template>
 
 <script>
-import RoleServices from '@/Services/role.Services'
+import ComputerServices from '@/Services/computer.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
 // import { useToast } from 'vue-toast-notification'
@@ -121,53 +121,58 @@ export default {
   },
   setup () {
     const swal = inject('$swal')
-    const { getRoles, createRole, deleteRole } = RoleServices()
+    const { getComputers, createComputer, deleteComputer } = ComputerServices()
     // const $toast = useToast()
-    const roles = ref([])
+    const Computers = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
-    const rows = ref(null)
     const filter = ref(null)
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('nombre')
+    const searchField = ref('area.nombre')
     const nameState = ref(false)
     const showModal = ref(false)
-    const roleFields = ref({
-      departamentoId: 0,
-      nombre: null,
-      descripcion: null,
+    const computerFields = ref({
+      equipoComputoId: 0,
+      marca: '',
+      memoriaRAM: 0,
+      almacenamiento: '',
+      procesador: '',
+      areaId: 0,
+      estatusId: 0,
       archivado: false
     })
-    const roleFieldsBlank = ref(JSON.parse(JSON.stringify(roleFields)))
+    const computerFieldsBlank = ref(JSON.parse(JSON.stringify(computerFields)))
     const fields = ref([
-      { value: 'roleId', text: 'ID', sortable: true },
-      { value: 'nombre', text: 'Nombre' },
-      { value: 'descripcion', text: 'Descripcion' },
+      { value: 'equipoComputoId', text: 'ID', sortable: true },
+      { value: 'marca', text: 'Marca' },
+      { value: 'memoriaRAM', text: 'Memoria RAM' },
+      { value: 'almacenamiento', text: 'Almacenamiento' },
+      { value: 'procesador', text: 'Procesador' },
+      { value: 'area.nombre', text: 'Area' },
       { value: 'actions', text: 'Acciones' }
     ])
-    getRoles((data) => {
-      roles.value = data
-      if (roles.value.length > 0) {
+    getComputers((data) => {
+      Computers.value = data
+      if (Computers.value.length > 0) {
         isloading.value = false
       } else {
-        if (roles.value.length <= 0) {
+        if (Computers.value.length <= 0) {
           isloading.value = false
         }
       }
     })
     const onFiltered = (filteredItems) => {
-      rows.value = filteredItems.length
       currentPage.value = 1
     }
     const validateName = () => {
-      if (!roleFields.value.nombre) {
+      if (!computerFields.value.nombre) {
         nameState.value = false
         return 'Este campo es requerido'
       }
       // eslint-disable-next-line no-useless-escape
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(roleFields.value.nombre)) {
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(computerFields.value.nombre)) {
         nameState.value = false
         return 'El nombre del area solo puede contener letras'
       }
@@ -176,20 +181,20 @@ export default {
     }
     const refreshTable = () => {
       isloading.value = true
-      getRoles((data) => {
-        roles.value = data
-        if (roles.value.length > 0) {
+      getComputers((data) => {
+        Computers.value = data
+        if (Computers.value.length > 0) {
           isloading.value = false
         } else {
-          if (roles.value.length <= 0) {
+          if (Computers.value.length <= 0) {
             isloading.value = false
           }
         }
       })
       return 'datos recargados'
     }
-    const addRole = () => {
-      createRole(roleFields.value, (data) => {
+    const addComputer = () => {
+      createComputer(computerFields.value, (data) => {
         refreshTable()
         swal.fire({
           title: 'Role registrado correctamente!',
@@ -201,7 +206,7 @@ export default {
     }
     const resetRoleFields = () => {
       showModal.value = false
-      roleFields.value = JSON.parse(JSON.stringify(roleFieldsBlank))
+      computerFields.value = JSON.parse(JSON.stringify(computerFieldsBlank))
       nameState.value = false
     }
     const RemoveRole = (roleId) => {
@@ -227,7 +232,7 @@ export default {
               })
               .then(result => {
                 if (result.isConfirmed) {
-                  deleteRole(roleId, (data) => {
+                  deleteComputer(roleId, (data) => {
                     refreshTable()
                   })
                 }
@@ -238,20 +243,19 @@ export default {
         })
     }
     return {
-      roles,
+      Computers,
       fields,
       perPage,
       currentPage,
-      rows,
       filter,
       perPageSelect,
-      roleFieldsBlank,
-      roleFields,
+      computerFieldsBlank,
+      computerFields,
       isloading,
       searchValue,
       searchField,
       onFiltered,
-      addRole,
+      addComputer,
       refreshTable,
       RemoveRole,
       nameState,

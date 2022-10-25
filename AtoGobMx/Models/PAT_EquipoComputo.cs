@@ -13,11 +13,13 @@ namespace AtoGobMx.Models
         public int MemoriaRAM { get; set; }
         public string Almacenamiento { get; set; }
         public string Procesador { get; set; }
-
+        public int AreaId { get; set; }
         public int EstatusId { get; set; }
         public bool Archivado { get; set; }
 
 
+        [ForeignKey("AreaId")]
+        public Area? Area { get; set; }
 
         [ForeignKey("EstatusId")]
         public InventarioEstatus? InventarioEstatus { get; set; }

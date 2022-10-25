@@ -23,5 +23,9 @@ namespace AtoGobMx.Models
 
         [JsonIgnore]
         public virtual IEnumerable<ExpedienteAlumbrado>? ExpedienteAlumbrado { get; set; }
+        [JsonIgnore]
+        public virtual IEnumerable<PAT_Mobiliario>? Mobiliario { get; set; }
+        [JsonIgnore]
+        public virtual IEnumerable<PAT_EquipoComputo>? EquiposComputo { get; set; }
     }
 }
