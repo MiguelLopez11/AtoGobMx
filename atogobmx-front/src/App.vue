@@ -105,17 +105,17 @@
             </b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>
-        <b-row align-h="end">
-          <b-navbar-nav>
-              <b-button v-if="!isLogged" size="lg" to="/Login" style="background-color: #7367f0">
+        <b-row align-h="end" cols="1">
+          <div>
+              <b-button v-if="!isLogged" size="lg" to="/Login" style="background-color: #7367f0" class="mr-3">
                 <i class="bi bi-box-arrow-right"></i>
                 Login
               </b-button>
-              <b-button v-if="isLogged" size="lg" @click="removeLocalStorgare()" style="background-color: #7367f0">
+              <b-button v-if="isLogged" size="lg" @click="removeLocalStorgare()" style="background-color: #7367f0" class="mr-3">
                 <i class="bi bi-box-arrow-right"></i>
                 Cerrar Sesión
               </b-button>
-          </b-navbar-nav>
+          </div>
         </b-row>
       </b-navbar>
     </b-card>

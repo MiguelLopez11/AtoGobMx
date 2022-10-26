@@ -46,33 +46,33 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<PAT_EquipoComputo>> PostEquipoComputo(PAT_EquipoComputo equipoComputo)
         {
             _context.EquipoComputo.Add(equipoComputo);
-            var Monitor = new PAT_Monitor()
-            {
-                MonitorId = 0,
-                Marca = null,
-                Pulgadas = null,
-                EquipoComputoId = equipoComputo.EquipoComputoId,
-                Archivado = false
-            };
-            var Teclado = new PAT_Teclado()
-            {
-                TecladoId = 0,
-                Marca = null,
-                TipoConexion = null,
-                EquipoComputoId = equipoComputo.EquipoComputoId,
-                Archivado = false
-            };
-            var Mouse = new PAT_Mouse()
-            {
-                MouseId = 0,
-                Marca = null,
-                TipoConexion = null,
-                EquipoComputoId = equipoComputo.EquipoComputoId,
-                Archivado = false
-            };
-            _context.PAT_Monitor.Add(Monitor);
-            _context.PAT_Teclado.Add(Teclado);
-            _context.PAT_Mouse.Add(Mouse);
+            //var Monitor = new PAT_Monitor()
+            //{
+            //    MonitorId = 0,
+            //    Marca = null,
+            //    Pulgadas = null,
+            //    EquipoComputoId = equipoComputo.EquipoComputoId,
+            //    Archivado = false
+            //};
+            //var Teclado = new PAT_Teclado()
+            //{
+            //    TecladoId = 0,
+            //    Marca = null,
+            //    TipoConexion = null,
+            //    EquipoComputoId = equipoComputo.EquipoComputoId,
+            //    Archivado = false
+            //};
+            //var Mouse = new PAT_Mouse()
+            //{
+            //    MouseId = 0,
+            //    Marca = null,
+            //    TipoConexion = null,
+            //    EquipoComputoId = equipoComputo.EquipoComputoId,
+            //    Archivado = false
+            //};
+            //_context.PAT_Monitor.Add(Monitor);
+            //_context.PAT_Teclado.Add(Teclado);
+            //_context.PAT_Mouse.Add(Mouse);
             await _context.SaveChangesAsync();
             return StatusCode(200, "Se ha credo exitosamente");
         }

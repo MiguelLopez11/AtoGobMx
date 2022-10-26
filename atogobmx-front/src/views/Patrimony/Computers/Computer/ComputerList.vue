@@ -37,28 +37,30 @@
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
-      :table-height="330"
     >
       <template #header-actions="header">
         {{ header.text }}
       </template>
       <template #item-actions="items">
         <b-button
-          @click="RemoveRole(items.roleId)"
+          @click="RemoveRole(items.equipoComputoId)"
           class="m-1"
           variant="outline-danger"
           ><i class="bi bi-trash3"></i
         ></b-button>
-        <b-button
-          class="m-1"
-          variant="outline-warning"
-          :to="{
+        <b-button class="m-1" variant="outline-warning">
+          <!-- :to="{
             name: 'Roles-Edit',
             params: { RoleId: items.roleId },
-          }"
-        >
+          }" -->
           <i class="bi bi-pencil-square" />
         </b-button>
+      </template>
+      <template #item-inventarioEstatus="items">
+        <span class="bg-success text-white rounded">
+        {{items.inventarioEstatus.nombre}}
+
+        </span>
       </template>
     </EasyDataTable>
     <b-modal
@@ -70,22 +72,109 @@
       hide-footer
     >
       <Form @submit="addComputer">
-        <b-row cols="3">
+        <b-row cols="2">
           <b-col>
-            <b-form-group class="mt-3" label="Nombre">
-              <Field
-                name="NameField"
-                :rules="validateName"
-                as="text"
-              >
-                <b-form-input v-model="computerFields.nombre" :state="nameState"> </b-form-input>
+            <b-form-group class="mt-3" label="Marca">
+              <Field name="BrandField" :rules="validateBrand" as="text">
+                <b-form-input
+                  placeholder="Ingresa la marca y/o modelo del equipo"
+                  v-model="computerFields.marca"
+                  :state="brandState"
+                >
+                </b-form-input>
               </Field>
-              <ErrorMessage class="text-danger" name="NameField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="BrandField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="Descripción">
-              <b-form-input v-model="computerFields.descripcion"> </b-form-input>
+            <b-form-group class="mt-3" label="Memoria RAM">
+              <Field name="memoryField" :rules="validateMemory" as="text">
+                <b-form-input
+                  placeholder="Ingresa la cantidad de memoria que contiene el equipo"
+                  v-model="computerFields.memoriaRAM"
+                  :state="memoryState"
+                >
+                </b-form-input>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="memoryField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Almacenamiento">
+              <Field name="StorageField" :rules="validateStorage" as="text">
+                <b-form-input
+                  placeholder="Describe brevemente el almacenamiento que tiene el equipo"
+                  v-model="computerFields.almacenamiento"
+                  :state="storageState"
+                >
+                </b-form-input>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="StorageField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Procesador">
+              <Field name="ProcessorField" :rules="validateProcessor" as="text">
+                <b-form-input
+                  placeholder="Ingresa los datos del procesador que tiene el equipo"
+                  v-model="computerFields.procesador"
+                  :state="processorState"
+                >
+                </b-form-input>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="ProcessorField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Departamento">
+              <Field
+                name="DepartamentField"
+                :rules="validateDepartament"
+                as="text"
+              >
+                <b-form-select
+                  v-model="departament"
+                  autofocus
+                  :options="departaments"
+                  value-field="departamentoId"
+                  text-field="nombre"
+                  :state="departamentState"
+                  @input="getAreas(departament)"
+                >
+                </b-form-select>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="DepartamentField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Area">
+              <Field name="AreaField" :rules="validateArea" as="number">
+                <b-form-select
+                  v-model="computerFields.areaId"
+                  autofocus
+                  :options="areas"
+                  value-field="areaId"
+                  text-field="nombre"
+                  :state="areaState"
+                >
+                </b-form-select>
+              </Field>
+              <ErrorMessage class="text-danger" name="AreaField"></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
@@ -108,6 +197,8 @@
 
 <script>
 import ComputerServices from '@/Services/computer.Services'
+import AreaServices from '@/Services/area.Services'
+import DepartamentServices from '@/Services/departament.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
 // import { useToast } from 'vue-toast-notification'
@@ -122,8 +213,12 @@ export default {
   setup () {
     const swal = inject('$swal')
     const { getComputers, createComputer, deleteComputer } = ComputerServices()
+    const { getAreasByDepartament } = AreaServices()
+    const { getDepartaments } = DepartamentServices()
     // const $toast = useToast()
     const Computers = ref([])
+    const areas = ref([])
+    const departaments = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
     const filter = ref(null)
@@ -131,16 +226,22 @@ export default {
     const isloading = ref(true)
     const searchValue = ref('')
     const searchField = ref('area.nombre')
-    const nameState = ref(false)
+    const brandState = ref(false)
+    const memoryState = ref(false)
+    const storageState = ref(false)
+    const processorState = ref(false)
+    const departamentState = ref(false)
+    const areaState = ref(false)
+    const departament = ref()
     const showModal = ref(false)
     const computerFields = ref({
       equipoComputoId: 0,
       marca: '',
-      memoriaRAM: 0,
+      memoriaRAM: '',
       almacenamiento: '',
       procesador: '',
       areaId: 0,
-      estatusId: 0,
+      estatusId: 1,
       archivado: false
     })
     const computerFieldsBlank = ref(JSON.parse(JSON.stringify(computerFields)))
@@ -151,9 +252,10 @@ export default {
       { value: 'almacenamiento', text: 'Almacenamiento' },
       { value: 'procesador', text: 'Procesador' },
       { value: 'area.nombre', text: 'Area' },
+      { value: 'inventarioEstatus', text: 'Estatus' },
       { value: 'actions', text: 'Acciones' }
     ])
-    getComputers((data) => {
+    getComputers(data => {
       Computers.value = data
       if (Computers.value.length > 0) {
         isloading.value = false
@@ -163,25 +265,103 @@ export default {
         }
       }
     })
-    const onFiltered = (filteredItems) => {
+    const onFiltered = filteredItems => {
       currentPage.value = 1
     }
-    const validateName = () => {
-      if (!computerFields.value.nombre) {
-        nameState.value = false
+    getDepartaments(data => {
+      departaments.value = data
+      if (data.length === 0) {
+        swal.fire({
+          title: 'No se encuentran departamentos registrados!',
+          text:
+            'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
+          icon: 'warning'
+        })
+      }
+    })
+    const getAreas = departamentoId => {
+      getAreasByDepartament(departamentoId, data => {
+        areas.value = data
+        if (data.length === 0) {
+          swal.fire({
+            title: 'No se encuentran areas registradas!',
+            text:
+              'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
+            icon: 'warning'
+          })
+        }
+      })
+    }
+    const validateBrand = () => {
+      if (!computerFields.value.marca) {
+        brandState.value = false
         return 'Este campo es requerido'
       }
       // eslint-disable-next-line no-useless-escape
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(computerFields.value.nombre)) {
-        nameState.value = false
-        return 'El nombre del area solo puede contener letras'
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(computerFields.value.marca)) {
+        brandState.value = false
+        return 'El campo no puede contener solo espacios'
       }
-      nameState.value = true
+      brandState.value = true
+      return true
+    }
+    const validateMemory = () => {
+      if (!computerFields.value.memoriaRAM) {
+        memoryState.value = false
+        return 'Este campo es requerido'
+      }
+      // eslint-disable-next-line no-useless-escape
+      if (!computerFields.value.memoriaRAM.trim() > 0) {
+        processorState.value = false
+        return 'El campo no puede contener solo espacios'
+      }
+      memoryState.value = true
+      return true
+    }
+    const validateStorage = () => {
+      if (!computerFields.value.almacenamiento) {
+        storageState.value = false
+        return 'Este campo es requerido'
+      }
+      // eslint-disable-next-line no-useless-escape
+      if (!computerFields.value.almacenamiento.trim() > 0) {
+        processorState.value = false
+        return 'El campo no puede contener solo espacios'
+      }
+      storageState.value = true
+      return true
+    }
+    const validateProcessor = () => {
+      if (!computerFields.value.procesador) {
+        processorState.value = false
+        return 'Este campo es requerido'
+      }
+      if (!computerFields.value.procesador.trim() > 0) {
+        processorState.value = false
+        return 'El campo no puede contener solo espacios'
+      }
+      processorState.value = true
+      return true
+    }
+    const validateDepartament = () => {
+      if (!departament.value) {
+        departamentState.value = false
+        return 'Este campo es requerido'
+      }
+      departamentState.value = true
+      return true
+    }
+    const validateArea = () => {
+      if (!computerFields.value.areaId) {
+        areaState.value = false
+        return 'Este campo es requerido'
+      }
+      areaState.value = true
       return true
     }
     const refreshTable = () => {
       isloading.value = true
-      getComputers((data) => {
+      getComputers(data => {
         Computers.value = data
         if (Computers.value.length > 0) {
           isloading.value = false
@@ -194,11 +374,12 @@ export default {
       return 'datos recargados'
     }
     const addComputer = () => {
-      createComputer(computerFields.value, (data) => {
+      createComputer(computerFields.value, data => {
         refreshTable()
         swal.fire({
-          title: 'Role registrado correctamente!',
-          text: 'El role se ha registrado al sistema satisfactoriamente.',
+          title: 'Equipo registrado correctamente!',
+          text:
+            'El equipo de computo se ha registrado al sistema satisfactoriamente.',
           icon: 'success'
         })
       })
@@ -207,9 +388,9 @@ export default {
     const resetRoleFields = () => {
       showModal.value = false
       computerFields.value = JSON.parse(JSON.stringify(computerFieldsBlank))
-      nameState.value = false
+      brandState.value = false
     }
-    const RemoveRole = (roleId) => {
+    const RemoveRole = equipoComputoId => {
       isloading.value = true
       swal
         .fire({
@@ -219,20 +400,21 @@ export default {
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
           cancelButtonColor: '#d33',
-          confirmButtonText: 'Si, archivar departamento!',
+          confirmButtonText: 'Si, archivar Equipo!',
           cancelButtonText: 'Cancelar'
         })
         .then(result => {
           if (result.isConfirmed) {
             swal
               .fire({
-                title: 'Departamento archivado!',
-                text: 'El departamento ha sido archivado satisfactoriamente .',
+                title: 'Equipo archivado!',
+                text:
+                  'El Equipo de computo ha sido archivado satisfactoriamente .',
                 icon: 'success'
               })
               .then(result => {
                 if (result.isConfirmed) {
-                  deleteComputer(roleId, (data) => {
+                  deleteComputer(equipoComputoId, data => {
                     refreshTable()
                   })
                 }
@@ -258,16 +440,28 @@ export default {
       addComputer,
       refreshTable,
       RemoveRole,
-      nameState,
+      brandState,
+      memoryState,
+      storageState,
+      processorState,
+      departamentState,
+      areaState,
       showModal,
+      areas,
+      departaments,
+      departament,
 
-      validateName,
-      resetRoleFields
+      validateBrand,
+      validateMemory,
+      validateStorage,
+      validateProcessor,
+      resetRoleFields,
+      validateDepartament,
+      validateArea,
+      getAreas
     }
   }
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

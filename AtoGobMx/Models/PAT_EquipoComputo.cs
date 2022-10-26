@@ -10,7 +10,7 @@ namespace AtoGobMx.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int EquipoComputoId { get; set; }
         public string Marca { get; set; }
-        public int MemoriaRAM { get; set; }
+        public string MemoriaRAM { get; set; }
         public string Almacenamiento { get; set; }
         public string Procesador { get; set; }
         public int AreaId { get; set; }

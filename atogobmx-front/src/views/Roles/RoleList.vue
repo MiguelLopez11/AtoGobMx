@@ -214,15 +214,15 @@ export default {
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
           cancelButtonColor: '#d33',
-          confirmButtonText: 'Si, archivar departamento!',
+          confirmButtonText: 'Si, archivar Role!',
           cancelButtonText: 'Cancelar'
         })
         .then(result => {
           if (result.isConfirmed) {
             swal
               .fire({
-                title: 'Departamento archivado!',
-                text: 'El departamento ha sido archivado satisfactoriamente .',
+                title: 'Role archivado!',
+                text: 'El Role ha sido archivado satisfactoriamente .',
                 icon: 'success'
               })
               .then(result => {
