@@ -1,14 +1,6 @@
 <template>
   <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
-      <b-form-input
-        size="lg"
-        style="width: 350px"
-        v-model="searchValue"
-        type="search"
-        placeholder="Buscar Role..."
-      >
-      </b-form-input>
       <b-button
         style="
           background-color: rgb(94,80,238);
@@ -22,7 +14,7 @@
         type="submit"
       >
         <i class="bi bi-person-video2"></i>
-        Agregar Role
+        Agregar Monitor
       </b-button>
     </b-row>
     <EasyDataTable
@@ -33,43 +25,32 @@
       border-cell
       :loading="isloading"
       :headers="fields"
-      :items="roles"
+      :items="displays"
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
-      :table-height="330"
     >
       <template #header-actions="header">
         {{ header.text }}
       </template>
       <template #item-actions="items">
         <b-button
-          @click="RemoveRole(items.roleId)"
+          @click="RemoveDisplay(items.monitorId)"
           class="m-1"
           variant="outline-danger"
           ><i class="bi bi-trash3"></i
         ></b-button>
-        <b-button
-          class="m-1"
-          variant="outline-warning"
-          :to="{
-            name: 'Roles-Edit',
-            params: { RoleId: items.roleId },
-          }"
-        >
-          <i class="bi bi-pencil-square" />
-        </b-button>
       </template>
     </EasyDataTable>
     <b-modal
       v-model="showModal"
-      title="Agregar Departamento"
+      title="Agregar Monitor"
       size="xl"
       centered
       button-size="lg"
       hide-footer
     >
-      <Form @submit="addRole">
+      <Form @submit="addDisplay">
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre">
@@ -78,14 +59,14 @@
                 :rules="validateName"
                 as="text"
               >
-                <b-form-input v-model="roleFields.nombre" :state="nameState"> </b-form-input>
+                <b-form-input v-model="displayFields.nombre" :state="nameState"> </b-form-input>
               </Field>
               <ErrorMessage class="text-danger" name="NameField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Descripción">
-              <b-form-input v-model="roleFields.descripcion"> </b-form-input>
+              <b-form-input v-model="displayFields.descripcion"> </b-form-input>
             </b-form-group>
           </b-col>
         </b-row>
@@ -107,7 +88,7 @@
 </template>
 
 <script>
-import RoleServices from '@/Services/role.Services'
+import ComputerServices from '@/Services/computer.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
 // import { useToast } from 'vue-toast-notification'
@@ -119,14 +100,19 @@ export default {
     ErrorMessage,
     EasyDataTable: window['vue3-easy-data-table']
   },
-  setup () {
+  props: {
+    EquipoComputoId: {
+      type: Number,
+      required: true
+    }
+  },
+  setup (props) {
     const swal = inject('$swal')
-    const { getRoles, createRole, deleteRole } = RoleServices()
+    const { getDisplays, createRole, deleteRole } = ComputerServices()
     // const $toast = useToast()
-    const roles = ref([])
+    const displays = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
-    const rows = ref(null)
     const filter = ref(null)
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
@@ -134,40 +120,41 @@ export default {
     const searchField = ref('nombre')
     const nameState = ref(false)
     const showModal = ref(false)
-    const roleFields = ref({
-      departamentoId: 0,
-      nombre: null,
-      descripcion: null,
+    const displayFields = ref({
+      monitorId: 0,
+      codigoInventario: null,
+      marca: null,
+      pulgadas: null,
+      equipoComputoId: props.EquipoComputoId,
       archivado: false
     })
-    const roleFieldsBlank = ref(JSON.parse(JSON.stringify(roleFields)))
+    const displayFieldsBlank = ref(JSON.parse(JSON.stringify(displayFields)))
     const fields = ref([
-      { value: 'roleId', text: 'ID', sortable: true },
-      { value: 'nombre', text: 'Nombre' },
-      { value: 'descripcion', text: 'Descripcion' },
+      { value: 'monitorId', text: 'ID', sortable: true },
+      { value: 'marca', text: 'Marca' },
+      { value: 'pulgadas', text: 'Pulgadas' },
       { value: 'actions', text: 'Acciones' }
     ])
-    getRoles((data) => {
-      roles.value = data
-      if (roles.value.length > 0) {
+    getDisplays((data) => {
+      displays.value = data
+      if (displays.value.length > 0) {
         isloading.value = false
       } else {
-        if (roles.value.length <= 0) {
+        if (displays.value.length <= 0) {
           isloading.value = false
         }
       }
     })
     const onFiltered = (filteredItems) => {
-      rows.value = filteredItems.length
       currentPage.value = 1
     }
     const validateName = () => {
-      if (!roleFields.value.nombre) {
+      if (!displayFields.value.nombre) {
         nameState.value = false
         return 'Este campo es requerido'
       }
       // eslint-disable-next-line no-useless-escape
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(roleFields.value.nombre)) {
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(displayFields.value.nombre)) {
         nameState.value = false
         return 'El nombre del area solo puede contener letras'
       }
@@ -176,20 +163,20 @@ export default {
     }
     const refreshTable = () => {
       isloading.value = true
-      getRoles((data) => {
-        roles.value = data
-        if (roles.value.length > 0) {
+      getDisplays((data) => {
+        displays.value = data
+        if (displays.value.length > 0) {
           isloading.value = false
         } else {
-          if (roles.value.length <= 0) {
+          if (displays.value.length <= 0) {
             isloading.value = false
           }
         }
       })
       return 'datos recargados'
     }
-    const addRole = () => {
-      createRole(roleFields.value, (data) => {
+    const addDisplay = () => {
+      createRole(displayFields.value, (data) => {
         refreshTable()
         swal.fire({
           title: 'Role registrado correctamente!',
@@ -201,10 +188,10 @@ export default {
     }
     const resetRoleFields = () => {
       showModal.value = false
-      roleFields.value = JSON.parse(JSON.stringify(roleFieldsBlank))
+      displayFields.value = JSON.parse(JSON.stringify(displayFieldsBlank))
       nameState.value = false
     }
-    const RemoveRole = (roleId) => {
+    const RemoveDisplay = (monitorId) => {
       isloading.value = true
       swal
         .fire({
@@ -214,20 +201,20 @@ export default {
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
           cancelButtonColor: '#d33',
-          confirmButtonText: 'Si, archivar Role!',
+          confirmButtonText: 'Si, archivar monitor!',
           cancelButtonText: 'Cancelar'
         })
         .then(result => {
           if (result.isConfirmed) {
             swal
               .fire({
-                title: 'Role archivado!',
-                text: 'El Role ha sido archivado satisfactoriamente .',
+                title: 'Monitor archivado!',
+                text: 'El monitor ha sido archivado satisfactoriamente .',
                 icon: 'success'
               })
               .then(result => {
                 if (result.isConfirmed) {
-                  deleteRole(roleId, (data) => {
+                  deleteRole(monitorId, (data) => {
                     refreshTable()
                   })
                 }
@@ -238,22 +225,21 @@ export default {
         })
     }
     return {
-      roles,
+      displays,
       fields,
       perPage,
       currentPage,
-      rows,
       filter,
       perPageSelect,
-      roleFieldsBlank,
-      roleFields,
+      displayFieldsBlank,
+      displayFields,
       isloading,
       searchValue,
       searchField,
       onFiltered,
-      addRole,
+      addDisplay,
       refreshTable,
-      RemoveRole,
+      RemoveDisplay,
       nameState,
       showModal,
 

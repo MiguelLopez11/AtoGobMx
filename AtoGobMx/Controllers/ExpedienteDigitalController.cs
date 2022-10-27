@@ -95,6 +95,13 @@ namespace AtoGobMx.Controllers
             }
             var empleado = await _context.Empleados
                 .FirstOrDefaultAsync(f => f.EmpleadoId == expedienteDigital.EmpleadoId);
+            if (empleado == null)
+            {
+                expedienteDigital.Archivado = true;
+                _context.ExpedienteDigital.Update(expedienteDigital);
+                await _context.SaveChangesAsync();
+                return Ok("Expediente Digital archivado");
+            }
             empleado.TieneExpediente = false;
             expedienteDigital.Archivado = true;
             _context.ExpedienteDigital.Update(expedienteDigital);

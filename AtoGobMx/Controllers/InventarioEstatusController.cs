@@ -26,7 +26,7 @@ namespace AtoGobMx.Controllers
         }
 
         [HttpGet("{InventarioEstatusId}")]
-        public async Task<ActionResult<CategoriaInventario>> GetCategoriaById(int InventarioEstatusId)
+        public async Task<ActionResult<InventarioEstatus>> GetEstatusById(int InventarioEstatusId)
         {
             var estatus = await _context.InventarioEstatus.FirstOrDefaultAsync(f => f.InventarioEstatusId == InventarioEstatusId);
 
