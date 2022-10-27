@@ -67,6 +67,10 @@
               <i class="bi bi-folder-fill"></i>
               Expediente
             </b-dropdown-item>
+            <b-dropdown-item to="/AlumbradoEmpleado/list">
+              <!-- <i class="bi bi-folder-fill"></i> -->
+              Empleado Alumbrado
+            </b-dropdown-item>
           </b-nav-item-dropdown>
           <!--Cementerios-->
           <b-nav-item-dropdown
@@ -82,8 +86,30 @@
               Cementerios
             </b-dropdown-item>
             <b-dropdown-item to="/DireccionCementerios/list">
-              <i class="bi bi-lightning-charge-fill"></i>
+              <!-- <i class="bi bi-lightning-charge-fill"></i> -->
               Direccion cementerios
+            </b-dropdown-item>
+          </b-nav-item-dropdown>
+          <!--Aseo-->
+          <b-nav-item-dropdown
+            text="Aseo"
+            dropright
+            auto-close="outside"
+          >
+            <template v-slot:button-content>
+              <!-- <i class="bi bi-globe2"></i> -->
+            </template>
+            <b-dropdown-item to="/Aseo/list">
+              <!-- <i class="bi bi-lightning-charge-fill"></i> -->
+              Aseo
+            </b-dropdown-item>
+            <b-dropdown-item to="/Ruta/list">
+              <!-- <i class="bi bi-lightning-charge-fill"></i> -->
+              Ruta
+            </b-dropdown-item>
+            <b-dropdown-item to="/Zona/list">
+              <!-- <i class="bi bi-lightning-charge-fill"></i> -->
+              Zona
             </b-dropdown-item>
           </b-nav-item-dropdown>
           <b-nav-item-dropdown text="Patriminio" right auto-close>

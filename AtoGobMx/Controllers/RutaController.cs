@@ -29,7 +29,7 @@ namespace AtoGobMx.Controllers
             return Ok(Ruta);
         }
 
-        [HttpGet("RutaId")]
+        [HttpGet("{RutaId}")]
         public async Task<ActionResult> GetRutaById(int RutaId)
         {
             var rutaaseo = await _context.Ruta

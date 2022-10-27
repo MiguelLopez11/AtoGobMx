@@ -30,7 +30,7 @@ namespace AtoGobMx.Controllers
             return Ok(ase);
         }
 
-        [HttpGet("AseoId")]
+        [HttpGet("{AseoId}")]
         public async Task<ActionResult> GetAseoById(int AseoId)
         {
             var aseo = await _context.Aseo

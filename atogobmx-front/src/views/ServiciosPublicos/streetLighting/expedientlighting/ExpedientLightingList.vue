@@ -69,10 +69,9 @@
       centered
       button-size="lg"
       lazy
-    >
-      <Form @submit="addExpedientLighting">
+     >
+      <!-- <Form @submit="addExpedientLighting">
         <b-row cols="2">
-          <!--1-->
           <b-col>
             <b-form-group class="mt-3" label="Lugar publico">
               <Field
@@ -91,7 +90,6 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!--2-->
           <b-col>
             <b-form-group class="mt-3" label="Localidad">
               <Field name="LocationField" :rules="validateLocation" as="text">
@@ -106,7 +104,6 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!--3-->
           <b-col>
             <b-form-group class="mt-3" label="Fecha Alta">
               <Field name="HighDateField" :rules="validateHighDate" as="">
@@ -121,7 +118,6 @@
               <ErrorMessage name="HighDateField"></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!--4-->
           <b-col>
             <b-form-group class="mt-3" label="Departamento">
               <Field
@@ -146,7 +142,6 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!--5-->
           <b-col>
             <b-form-group class="mt-3" label="Area">
               <Field name="AreaField" :rules="validateArea" as="number">
@@ -164,7 +159,6 @@
               <ErrorMessage class="text-danger" name="AreaField"></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!--6-->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion Solucion">
               <Field
@@ -191,14 +185,13 @@
             variant="primary"
             @click="resetexpedientLightingFields"
           >
-            <!-- v-b-modal.modal-expedientlighting -->
             Cancelar
           </b-button>
           <b-button class="w-auto m-2" variant="success" type="submit">
             Guardar
           </b-button>
         </b-row>
-      </Form>
+      </Form>-->
     </b-modal>
   </b-card>
 </template>
@@ -208,18 +201,18 @@ import ExpedientlightingServices from '@/Services/expedientlighting.Services'
 // import StatusLightingServices from '@/Services/statuslighting.Services'
 import AreaServices from '@/Services/area.Services'
 import DepartamentServices from '@/Services/departament.Services'
-import Datepicker from '@vuepic/vue-datepicker'
-import { Form, Field, ErrorMessage } from 'vee-validate'
+// import Datepicker from '@vuepic/vue-datepicker'
+// import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
 // import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
-    Datepicker,
-    EasyDataTable: window['vue3-easy-data-table'],
-    Form,
-    Field,
-    ErrorMessage
+    // Datepicker,
+    EasyDataTable: window['vue3-easy-data-table']
+    // Form,
+    // Field,
+    // ErrorMessage
   },
   setup () {
     const swal = inject('$swal')

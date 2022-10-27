@@ -106,7 +106,6 @@ namespace AtoGobMx.Controllers
             }
             emp.EmpleadoId = empleado.EmpleadoId;
             emp.NombreCompleto = empleado.NombreCompleto;
-            //emp.FechaNacimiento = empleado.FechaNacimiento;
             emp.FechaAlta = empleado.FechaAlta;
             emp.FechaBaja = empleado.FechaBaja;
             emp.AreaId = empleado.AreaId;

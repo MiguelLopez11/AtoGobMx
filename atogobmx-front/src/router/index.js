@@ -191,7 +191,7 @@ const routes = [
     }
   },
   {
-    path: '/DireccionCementerios/ :DireccionId',
+    path: '/DireccionCementerios/:DireccionId',
     name: 'DireccionCementerios-Edit',
     component: () => import('@/views/ServiciosPublicos/cementery/addresscementery/EditAddressCementery.vue'),
     meta: {
@@ -207,7 +207,7 @@ const routes = [
     }
   },
   {
-    path: '/Aseo/ :AseoId',
+    path: '/Aseo/:AseoId',
     name: 'Aseo-Edit',
     component: () => import('@/views/ServiciosPublicos/cleanness/Cleanness/EditCleanness.vue'),
     meta: {
@@ -223,9 +223,41 @@ const routes = [
     }
   },
   {
-    path: '/Ruta/ :RutaId',
+    path: '/Ruta/:RutaId',
     name: 'Ruta-Edit',
     component: () => import('@/views/ServiciosPublicos/cleanness/Road/EditRoad.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/Zona/list',
+    name: 'Zona',
+    component: () => import('@/views/ServiciosPublicos/cleanness/Zone/ZoneList.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/Zona/:ZonaId',
+    name: 'Zona-Edit',
+    component: () => import('@/views/ServiciosPublicos/cleanness/Zone/EditZone.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/AlumbradoEmpleado/list',
+    name: 'AlumbradoEmpleado',
+    component: () => import('@/views/ServiciosPublicos/streetLighting/lightingEmployee/LightingEmployeeList.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/AlumbradoEmpleado/:AlumbradoEmpleadoId',
+    name: 'AlumbradoEmpleado-Edit',
+    component: () => import('@/views/ServiciosPublicos/streetLighting/lightingEmployee/EditLightingEmployee.vue'),
     meta: {
       requiresAuth: true
     }

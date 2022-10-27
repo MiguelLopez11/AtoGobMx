@@ -6,7 +6,7 @@
         style="width: 350px"
         v-model="searchValue"
         type="search"
-        placeholder="Buscar Zona..."
+        placeholder="Buscar Alumbrado empleado..."
       ></b-form-input>
       <b-button
         variant="primary"
@@ -23,7 +23,7 @@
       >
         <!-- v-b-modal.modal-cementery -->
         <i class="bi bi-person-plus-fill"></i>
-        Agregar Zona
+        Agregar Alumbrado empleado
       </b-button>
     </b-row>
     <EasyDataTable
@@ -34,7 +34,7 @@
       border-cell
       :loading="isloading"
       :headers="fields"
-      :items="zoneService"
+      :items="lightingEmployeeService"
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
@@ -45,7 +45,7 @@
       </template>
       <template #item-actions="items">
         <b-button
-          @click="RemoveZoneService(items.zonaId)"
+          @click="RemoveLightingEmployeeService(items.alumbradoempleadoId)"
           class="m-1"
           variant="outline-danger"
           ><i class="bi bi-trash3"></i
@@ -54,37 +54,41 @@
           class="m-1"
           variant="outline-warning"
           :to="{
-            name: 'Zona-Edit',
-            params: { ZonaId: items.zonaId }
+            name: 'AlumbradoEmpleado-Edit',
+            params: { AlumbradoEmpleadoId: items.alumbradoempleadoId }
           }"
           ><i class="bi bi-pencil-square"></i
         ></b-button>
       </template>
     </EasyDataTable>
     <b-modal
-      id="modal-zone"
-      tittle="Agregar Zona"
+      id="modal-lightingemployee"
+      tittle="Agregar Alumbrado Empleado"
       v-model="showModal"
       size="xl"
       hide-footer
       button-size="lg"
       lazy
     >
-      <Form @submit="addZoneService">
+      <Form @submit="addLightingEmployeeService">
         <b-row cols="2">
           <!-- 1 -->
           <b-col>
-            <b-form-group class="mt-3" label="Nombre">
+            <b-form-group class="mt-3" label="Nombre empleado">
               <Field
                 name="NameField"
                 :rules="validateName"
                 as="text"
               >
-                <b-form-input
-                  v-model="zoneServiceFields.nombre"
+                <b-form-select
+                  v-model="lightingEmployeeServiceFields.empleadoId"
                   :state="NameState"
+                  autofocus
+                  :options="employees"
+                  value-field="empleadoId"
+                  text-field="nombreCompleto"
                 >
-                </b-form-input>
+                </b-form-select>
               </Field>
               <ErrorMessage
                 class="text-danger"
@@ -93,7 +97,7 @@
             </b-form-group>
           </b-col>
           <!-- 2 -->
-          <b-col>
+          <!-- <b-col>
             <b-form-group class="mt-3" label="Description">
               <Field name="DescriptionField" :rules="validateDescription" as="text">
                 <b-form-input
@@ -107,14 +111,14 @@
                 name="DescriptionField"
               ></ErrorMessage>
             </b-form-group>
-          </b-col>
+          </b-col> -->
         </b-row>
 
         <b-row align-h="end">
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            @click="resetZoneServiceFields"
+            @click="resetLightingEmployeeServiceFields"
           >
             <!-- v-b-modal.modal-cementery -->
             Cancelar
@@ -129,7 +133,8 @@
 </template>
 
 <script>
-import ZoneService from '@/Services/zone.Services'
+import LightingEmployeeService from '@/Services/lightingemployee.Services'
+import EmployeeServices from '@/Services/employee.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
 // import { useToast } from 'vue-toast-notification'
@@ -144,52 +149,61 @@ export default {
   setup () {
     const swal = inject('$swal')
     const showModal = ref(false)
-    const { getZone, createZone, deleteZone } = ZoneService()
+    const { getAddressLightingEmployee, createAddressLightingEmployee, deleteAddressLightingEmployee } = LightingEmployeeService()
+    const { getEmployees } = EmployeeServices()
     // const $toast = useToast()
-    const zoneService = ref([])
+    const lightingEmployeeService = ref([])
+    const employees = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
     const filter = ref(null)
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('nombre')
+    const searchField = ref('empleadoId')
     const NameState = ref(false)
-    const DescriptionState = ref(false)
-    const zoneServiceFields = ref({
-      zonaId: 0,
-      nombre: null,
-      descripcion: null,
+    const lightingEmployeeServiceFields = ref({
+      alumbradoEmpleadoId: 0,
+      empleadoId: null,
       archivado: false
     })
 
-    const ZoneServiceFieldsBlank = ref(
-      JSON.parse(JSON.stringify(zoneServiceFields))
+    getEmployees(data => {
+      employees.value = data
+      if (data.length === 0) {
+        swal.fire({
+          title: 'No se encuentra un tipo de Empleado alumbrado',
+          text: 'No se encuentra tipo de empleado alumbrado registrado en el departamento seleccionado, registre primero un tipo de empleado para continuar',
+          icon: 'warning'
+        })
+      }
+    })
+
+    const LightingEmployeeServiceFieldsBlank = ref(
+      JSON.parse(JSON.stringify(lightingEmployeeServiceFields))
     )
 
     const fields = ref([
-      { value: 'zonaId', text: 'ID', sortable: true },
-      { value: 'nombre', text: 'Nombre' },
-      { value: 'descripcion', text: 'Descripcion' },
+      { value: 'alumbradoEmpleadoId', text: 'ID', sortable: true },
+      { value: 'empleadoId', text: 'Nombre empleado' },
       { value: 'actions', text: 'Acciones' }
     ])
 
-    const resetZoneServiceFields = () => {
+    const resetLightingEmployeeServiceFields = () => {
       showModal.value = false
-      zoneServiceFields.value = JSON.parse(
-        JSON.stringify(ZoneServiceFieldsBlank)
+      lightingEmployeeServiceFields.value = JSON.parse(
+        JSON.stringify(LightingEmployeeServiceFieldsBlank)
       )
       NameState.value = false
-      DescriptionState.value = false
     }
 
-    getZone(data => {
-      zoneService.value = data
+    getAddressLightingEmployee(data => {
+      lightingEmployeeService.value = data
 
-      if (zoneService.value.length > 0) {
+      if (lightingEmployeeService.value.length > 0) {
         isloading.value = false
       } else {
-        if (zoneService.value.length <= 0) {
+        if (lightingEmployeeService.value.length <= 0) {
           isloading.value = false
         }
       }
@@ -200,17 +214,17 @@ export default {
     }
 
     const validateName = () => {
-      if (!zoneServiceFields.value.nombre) {
+      if (!lightingEmployeeServiceFields.value.empleadoId) {
         NameState.value = false
         return 'Este campo es requerido'
       }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(zoneServiceFields.value.nombre)) {
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(lightingEmployeeServiceFields.value.empleadoId)) {
         NameState.value = false
         return 'Este campo solo puede contener letras'
       }
 
-      if (!zoneServiceFields.value.nombre.trim().length > 0) {
+      if (!lightingEmployeeServiceFields.value.empleadoId.trim().length > 0) {
         NameState.value = false
         return 'Este campo no puede contener espacios'
       }
@@ -219,35 +233,35 @@ export default {
       return true
     }
 
-    const validateDescription = () => {
-      if (!zoneServiceFields.value.descripcion) {
-        DescriptionState.value = false
-        return 'Este campo es requerido'
-      }
+    // const validateDescription = () => {
+    //   if (!zoneServiceFields.value.descripcion) {
+    //     DescriptionState.value = false
+    //     return 'Este campo es requerido'
+    //   }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(zoneServiceFields.value.descripcion)) {
-        DescriptionState.value = false
-        return 'Este campo solo puede contener numeros'
-      }
+    //   if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(zoneServiceFields.value.descripcion)) {
+    //     DescriptionState.value = false
+    //     return 'Este campo solo puede contener numeros'
+    //   }
 
-      if (!zoneServiceFields.value.descripcion.trim().length > 0) {
-        DescriptionState.value = false
-        return 'Este campo no puede contener espacios'
-      }
+    //   if (!zoneServiceFields.value.descripcion.trim().length > 0) {
+    //     DescriptionState.value = false
+    //     return 'Este campo no puede contener espacios'
+    //   }
 
-      DescriptionState.value = true
-      return true
-    }
+    //   DescriptionState.value = true
+    //   return true
+    // }
 
     const refreshTable = () => {
       isloading.value = true
-      getZone(data => {
-        zoneService.value = data
+      getAddressLightingEmployee(data => {
+        lightingEmployeeService.value = data
 
-        if (zoneService.value.length > 0) {
+        if (lightingEmployeeService.value.length > 0) {
           isloading.value = false
         } else {
-          if (zoneService.value.length <= 0) {
+          if (lightingEmployeeService.value.length <= 0) {
             isloading.value = false
           }
         }
@@ -255,20 +269,20 @@ export default {
       return 'datos recargados'
     }
 
-    const addZoneService = () => {
-      createZone(zoneServiceFields.value, data => {
+    const addLightingEmployeeService = () => {
+      createAddressLightingEmployee(lightingEmployeeServiceFields.value, data => {
         refreshTable()
         swal.fire({
-          title: '¡Zona agregado correctamente!',
-          text: 'Zona registrado satisfactoriamente',
+          title: '¡Empleado alumbrado agregado correctamente!',
+          text: 'Empleado alumbrado registrado satisfactoriamente',
           icon: 'success'
         })
       })
       showModal.value = false
-      resetZoneServiceFields()
+      resetLightingEmployeeServiceFields()
     }
 
-    const RemoveZoneService = zoneId => {
+    const RemoveLightingEmployeeService = lightingemployeeId => {
       isloading.value = true
       swal.fire({
         title: '¿Estas seguro',
@@ -277,17 +291,17 @@ export default {
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, Archivar Zona!',
+        confirmButtonText: 'Si, Archivar Empleado alumbrado!',
         cancelButtonText: 'Cancelar'
       }).then(result => {
         if (result.isConfirmed) {
-          deleteZone(zoneId, (data) => {
+          deleteAddressLightingEmployee(lightingemployeeId, (data) => {
             refreshTable()
           })
           swal.fire({
-            title: '¡Zona archivado!',
+            title: '¡Empleado alumbrado archivado!',
             text:
-                'La Zona ha sido archivado satisfactoriamente.',
+                'El empleado alumbrado ha sido archivado satisfactoriamente.',
             icon: 'success'
           })
         } else {
@@ -297,8 +311,8 @@ export default {
     }
 
     return {
-      zoneService,
-      zoneServiceFields,
+      lightingEmployeeService,
+      lightingEmployeeServiceFields,
       perPage,
       currentPage,
       filter,
@@ -307,18 +321,17 @@ export default {
       isloading,
       searchValue,
       searchField,
-      ZoneServiceFieldsBlank,
+      LightingEmployeeServiceFieldsBlank,
       fields,
       NameState,
-      DescriptionState,
+      employees,
 
       onFiltered,
-      addZoneService,
-      RemoveZoneService,
+      addLightingEmployeeService,
+      RemoveLightingEmployeeService,
       refreshTable,
       validateName,
-      validateDescription,
-      resetZoneServiceFields
+      resetLightingEmployeeServiceFields
     }
   }
 }

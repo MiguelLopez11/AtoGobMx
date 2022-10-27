@@ -81,11 +81,6 @@ namespace AtoGobMx.Controllers
             }
 
             expedientalumbra.ExpedienteAlumbradoId = ExpedienteAlumbradoId;
-            //expedientalumbra.Tarea = expedienteAlumbrado.Tarea;
-            //expedientalumbra.FechaAlta = expedienteAlumbrado.FechaAlta;
-            //expedientalumbra.FechaBaja = expedienteAlumbrado.FechaBaja;
-            //expedientalumbra.Domicilio = expedienteAlumbrado.Domicilio;
-            //expedientalumbra.DescripcionDomicilio = expedienteAlumbrado.DescripcionDomicilio;
             expedienteAlumbrado.DescripcionSolucion = expedientalumbra.DescripcionSolucion;
             expedientalumbra.AlumbradoId = expedienteAlumbrado.AlumbradoId;
 
@@ -103,8 +98,17 @@ namespace AtoGobMx.Controllers
             {
                 return NotFound();
             }
-
+            var servicioAlumbrado = await _context.Alumbrado
+                .FirstOrDefaultAsync(f => f.AlumbradoId == expedientalumbrado.AlumbradoId);
+            if (servicioAlumbrado == null)
+            {
+                expedientalumbrado.Archivado = true;
+                _context.ExpedienteAlumbrado.Update(expedientalumbrado);
+                await _context.SaveChangesAsync();
+                return Ok("Expediente alumbrado Archivado");
+            }
             expedientalumbrado.Archivado = true;
+            servicioAlumbrado.TieneExpediente = false;
             _context.ExpedienteAlumbrado.Update(expedientalumbrado);
             await _context.SaveChangesAsync();
             return Ok("Expediente alumbrado Archivado");

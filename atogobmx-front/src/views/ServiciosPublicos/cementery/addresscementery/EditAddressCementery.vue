@@ -3,9 +3,9 @@
     <b-card class="mb-4">
       <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
     </b-card>
-    <b-car>
+    <b-card>
       <div>
-        <h3>Editar Direccion Cementerios</h3>
+        <h3>Editar Direccion Cementerio</h3>
       </div>
       <Form @submit="onUpdateAddressCementeryService">
         <b-row cols="2">
@@ -87,7 +87,7 @@
             <b-form-group class="mt-3" label="Numero exterior">
               <Field
                 name="NumberOutsideField"
-                :rules="validateStreet"
+                :rules="validateNumberOutside"
                 as="text"
               >
                 <b-form-input
@@ -103,8 +103,8 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-        </b-row>
 
+        </b-row>
         <b-row align-h="end">
           <b-button
             class="col-1 m-2 text-white"
@@ -119,15 +119,16 @@
           </b-button>
         </b-row>
       </Form>
-    </b-car>
+    </b-card>
   </b-card>
 </template>
 
 <script>
 import AddressCementeryService from '@/Services/addresscementery.Services'
-import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+// import { useToast } from 'vue-toast-notification'
+import { Form, Field, ErrorMessage } from 'vee-validate'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
@@ -138,6 +139,7 @@ export default {
   setup () {
     const swal = inject('$swal')
     const { getAddressCementeryById, updateAddressCementery } = AddressCementeryService()
+    // const $toast = useToast()
     const addressCementeryService = ref([])
     const router = useRoute()
     const redirect = useRouter()
@@ -147,27 +149,23 @@ export default {
     const StreetState = ref(false)
     const NumberOutsideState = ref(false)
     const breadcrumbItems = ref([
-      { Text: 'Inicio', to: '/' },
-      { Text: 'Inventario direccionCementerio', to: '/DireccionCementerios/list' },
-      { Text: 'Editar-DireccionCementerios' }
+      { text: 'Inicio', to: '/' },
+      { text: 'Departamento direccion cementerio', to: '/DireccionCementerios/list' },
+      { text: 'Editar-Estatus Alumbrado' }
     ])
-
     const onUpdateAddressCementeryService = () => {
-      updateAddressCementery(addressCementeryService.value, data => {})
-      swal
-        .fire({
-          title: '¡Direccion cementerio modificado correctamente!',
-          text: 'La direccion cementerio se ha modificado  satisfactoriamente.',
-          icon: 'success'
-        })
-        .then(result => {
-          if (result.isConfirmed) {
-            redirect.push('/DireccionCementerios/list')
-          }
-        })
+      updateAddressCementery(addressCementeryService.value, (data) => {})
+      swal.fire({
+        title: '¡Direccion cementerio modificado correctamente!',
+        text: 'La direccion cementerio se ha modificado  satisfactoriamente.',
+        icon: 'success'
+      }).then(result => {
+        if (result.isConfirmed) {
+          redirect.push('/DireccionCementerios/list')
+        }
+      })
     }
-
-    getAddressCementeryById(router.params.CementeriosId, data => {
+    getAddressCementeryById(router.params.DireccionId, (data) => {
       addressCementeryService.value = data
     })
 
@@ -181,6 +179,11 @@ export default {
         NameCementeryState.value = false
         return 'Este campo solo puede contener letras'
       }
+
+      // if (!addressCementeryService.value.nombreCementerio.trim().length > 0) {
+      //   NameCementeryState.value = false
+      //   return 'Este campo no puede contener espacios'
+      // }
 
       validateState()
       return true
@@ -197,6 +200,11 @@ export default {
         return 'Este campo solo puede contener letras'
       }
 
+      // if (!addressCementeryService.value.municipio.trim().length > 0) {
+      //   MunicipalityState.value = false
+      //   return 'Este campo no puede contener espacios'
+      // }
+
       validateState()
       return true
     }
@@ -211,6 +219,11 @@ export default {
         LocationState.value = false
         return 'Este campo solo puede contener letras'
       }
+
+      // if (!addressCementeryService.value.localidad.trim().length > 0) {
+      //   LocationState.value = false
+      //   return 'Este campo no puede contener espacios'
+      // }
 
       validateState()
       return true
@@ -227,6 +240,11 @@ export default {
         return 'Este campo solo puede contener letras'
       }
 
+      // if (!addressCementeryService.value.calle.trim().length > 0) {
+      //   StreetState.value = false
+      //   return 'Este campo no puede contener espacios'
+      // }
+
       validateState()
       return true
     }
@@ -242,21 +260,26 @@ export default {
         return 'Este campo solo puede contener numeros'
       }
 
+      // if (!addressCementeryService.value.numeroExterior.trim().length > 0) {
+      //   NumberOutsideState.value = false
+      //   return 'Este campo no puede contener espacios'
+      // }
+
       validateState()
       return true
     }
 
     const validateState = () => {
       // eslint-disable-next-line no-unneeded-ternary
-      NameCementeryState.value = addressCementeryService.value.nombreCementerio !== ''
+      NameCementeryState.value = addressCementeryService.value.nombreCementerio === '' ? false : true
       // eslint-disable-next-line no-unneeded-ternary
-      MunicipalityState.value = addressCementeryService.value.municipio !== ''
+      MunicipalityState.value = addressCementeryService.value.municipio === '' ? false : true
       // eslint-disable-next-line no-unneeded-ternary
-      LocationState.value = addressCementeryService.value.localidad !== ''
+      LocationState.value = addressCementeryService.value.localidad === '' ? false : true
       // eslint-disable-next-line no-unneeded-ternary
-      StreetState.value = addressCementeryService.value.calle !== ''
+      StreetState.value = addressCementeryService.value.calle === '' ? false : true
       // eslint-disable-next-line no-unneeded-ternary
-      NumberOutsideState.value = addressCementeryService.value.numeroExterior !== ''
+      NumberOutsideState.value = addressCementeryService.value.numeroExterior === '' ? false : true
     }
 
     return {
@@ -267,18 +290,20 @@ export default {
       LocationState,
       StreetState,
       NumberOutsideState,
+      //   router
 
       onUpdateAddressCementeryService,
+      validateState,
       validateNameCementery,
       validateMunicipality,
       validateLocation,
       validateStreet,
-      validateNumberOutside,
-      validateState
-
+      validateNumberOutside
     }
   }
 }
 </script>
 
-<style></style>
+<style>
+
+</style>

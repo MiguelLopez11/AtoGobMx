@@ -4,12 +4,17 @@
       <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
     </b-card>
     <b-card>
-      <div>
-        <h3>Expediente Alumbrado</h3>
-      </div>
-      <Form @submit="onUpdateExpedientLighting">
-        <b-row cols="2">
-          <!-- <b-col>
+        <div>
+          <h3>Expediente Alumbrado</h3>
+        </div>
+      <b-tabs>
+        <b-tab
+          title="Datos generales"
+        >
+
+        <Form @submit="onUpdateExpedientLighting">
+          <b-row cols="2">
+            <!-- <b-col>
             <b-form-group class="mt-3" label="Nombre del Tipo Tarea">
               <Field name="TypeTaskField" :rules="validateTypeTask">
                 <b-form-select
@@ -27,132 +32,147 @@
               </ErrorMessage>
             </b-form-group>
           </b-col> -->
-          <!--1-->
-          <b-col>
-            <b-form-group class="mt-3" label="Lugar publico">
-              <Field
-                name="PublicPlaceField"
-                :rules="validatePublicPlace"
-                as="text"
-              >
-                <b-form-input
-                  v-model="expedientLighting.lugarPublico"
-                  :state="PublicPlaceState"
-                ></b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="PublicPlaceField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!--2-->
-          <b-col>
-            <b-form-group class="mt-3" label="Localidad">
-              <Field name="LocationField" :rules="validateLocation" as="text">
-                <b-form-input
-                  v-model="expedientLighting.localidad"
-                  :state="LocationState"
-                ></b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="LocationField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!--3-->
-          <b-col>
-            <b-form-group class="mt-3" label="Fecha Alta">
-              <Field name="HighDateField" :rules="validateHighDate" as="">
-                <Datepicker
-                  locale="es"
-                  name="date"
-                  text-input
-                  v-model="expedientLighting.fechaAlta"
-                  :state="HighDateState"
-                ></Datepicker>
-              </Field>
-              <ErrorMessage name="HighDateField"></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!--4-->
-          <b-col>
-            <b-form-group class="mt-3" label="Departamento">
-              <Field
-                name="DepartamentField"
-                :rules="validateDepartament"
-                as="number"
-              >
-                <b-form-select
-                  v-model="expedientLighting.departamentoId"
-                  autofocus
-                  :options="departaments"
-                  value-field="departamentoId"
-                  text-field="nombre"
-                  :state="departamentState"
-                  @input="getAreas(EmployeesFields.departamentoId)"
+            <!--1-->
+            <b-col>
+              <b-form-group class="mt-3" label="Lugar publico">
+                <Field
+                  name="PublicPlaceField"
+                  :rules="validatePublicPlace"
+                  as="text"
                 >
-                </b-form-select>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="DepartamentField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!--5-->
-          <b-col>
-            <b-form-group class="mt-3" label="Area">
-              <Field name="AreaField" :rules="validateArea" as="number">
-                <b-form-select
-                  v-model="expedientLighting.areaId"
-                  autofocus
-                  :options="areas"
-                  value-field="areaId"
-                  text-field="nombre"
-                  :state="areaState"
-                  @input="getWorkStation(EmployeesFields.areaId)"
+                  <b-form-input
+                    v-model="expedientLighting.lugarPublico"
+                    :state="PublicPlaceState"
+                  ></b-form-input>
+                </Field>
+                <ErrorMessage
+                  class="text-danger"
+                  name="PublicPlaceField"
+                ></ErrorMessage>
+              </b-form-group>
+            </b-col>
+            <!--2-->
+            <b-col>
+              <b-form-group class="mt-3" label="Localidad">
+                <Field name="LocationField" :rules="validateLocation" as="text">
+                  <b-form-input
+                    v-model="expedientLighting.localidad"
+                    :state="LocationState"
+                  ></b-form-input>
+                </Field>
+                <ErrorMessage
+                  class="text-danger"
+                  name="LocationField"
+                ></ErrorMessage>
+              </b-form-group>
+            </b-col>
+            <!--3-->
+            <b-col>
+              <b-form-group class="mt-3" label="Fecha Alta">
+                <Field name="HighDateField" :rules="validateHighDate" as="">
+                  <Datepicker
+                    locale="es"
+                    name="date"
+                    text-input
+                    v-model="expedientLighting.fechaAlta"
+                    :state="HighDateState"
+                  ></Datepicker>
+                </Field>
+                <ErrorMessage name="HighDateField"></ErrorMessage>
+              </b-form-group>
+            </b-col>
+            <!--4-->
+            <b-col>
+              <b-form-group class="mt-3" label="Departamento">
+                <Field
+                  name="DepartamentField"
+                  :rules="validateDepartament"
+                  as="number"
                 >
-                </b-form-select>
-              </Field>
-              <ErrorMessage class="text-danger" name="AreaField"></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!--6-->
-          <b-col>
-            <b-form-group class="mt-3" label="Descripcion Solucion">
-              <Field
-                name="DescriptionSolutionField"
-                :rules="validateDescriptionSolution"
-                as="text"
-              >
-                <b-form-textarea
-                  v-model="expedientLighting.descripcionSolucion"
-                  :state="DescriptionSolutionState"
-                  rows="4"
-                ></b-form-textarea>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="DescriptionSolutionField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-        </b-row>
-        <b-row align-h="end">
-          <b-button
-            class="w-auto m-2 text-white"
-            variant="primary"
-            to="/ExpedienteAlumbrado/list"
-          >
-            Cancelar
-          </b-button>
-          <b-button class="w-auto m-2" variant="success" type="submit"
-            >Guardar</b-button
-          >
-        </b-row>
-      </Form>
+                  <b-form-select
+                    v-model="expedientLighting.departamentoId"
+                    autofocus
+                    :options="departaments"
+                    value-field="departamentoId"
+                    text-field="nombre"
+                    :state="departamentState"
+                    @input="getAreas(EmployeesFields.departamentoId)"
+                  >
+                  </b-form-select>
+                </Field>
+                <ErrorMessage
+                  class="text-danger"
+                  name="DepartamentField"
+                ></ErrorMessage>
+              </b-form-group>
+            </b-col>
+            <!--5-->
+            <b-col>
+              <b-form-group class="mt-3" label="Area">
+                <Field name="AreaField" :rules="validateArea" as="number">
+                  <b-form-select
+                    v-model="expedientLighting.areaId"
+                    autofocus
+                    :options="areas"
+                    value-field="areaId"
+                    text-field="nombre"
+                    :state="areaState"
+                    @input="getWorkStation(EmployeesFields.areaId)"
+                  >
+                  </b-form-select>
+                </Field>
+                <ErrorMessage
+                  class="text-danger"
+                  name="AreaField"
+                ></ErrorMessage>
+              </b-form-group>
+            </b-col>
+            <!--6-->
+            <b-col>
+              <b-form-group class="mt-3" label="Descripcion Solucion">
+                <Field
+                  name="DescriptionSolutionField"
+                  :rules="validateDescriptionSolution"
+                  as="text"
+                >
+                  <b-form-textarea
+                    v-model="expedientLighting.descripcionSolucion"
+                    :state="DescriptionSolutionState"
+                    rows="4"
+                  ></b-form-textarea>
+                </Field>
+                <ErrorMessage
+                  class="text-danger"
+                  name="DescriptionSolutionField"
+                ></ErrorMessage>
+              </b-form-group>
+            </b-col>
+          </b-row>
+          <b-row align-h="end">
+            <b-button
+              class="w-auto m-2 text-white"
+              variant="primary"
+              to="/ExpedienteAlumbrado/list"
+            >
+              Cancelar
+            </b-button>
+            <b-button class="w-auto m-2" variant="success" type="submit"
+              >Guardar</b-button
+            >
+          </b-row>
+        </Form>
+        </b-tab>
+        <b-tab
+          title="Empleados"
+        >
+          <employee-lighting />
+        </b-tab>
+        <b-tab
+          title="Vehiculos"
+        >
+
+        </b-tab>
+      </b-tabs>
     </b-card>
   </b-card>
 </template>
@@ -161,6 +181,7 @@
 import ExpedientlightingServices from '@/Services/expedientlighting.Services'
 import AreaServices from '@/Services/area.Services'
 import DepartamentServices from '@/Services/departament.Services'
+import EmployeeLighting from '@/views/ServiciosPublicos/streetLighting/lightingEmployee/LightingEmployeeList.vue'
 // import StatusServices from '@/Services/statuslighting.Services'
 import { Field, Form, ErrorMessage } from 'vee-validate'
 // import AreaServices from '@/Services/area.Services'
@@ -177,7 +198,8 @@ export default {
     Datepicker,
     Field,
     Form,
-    ErrorMessage
+    ErrorMessage,
+    EmployeeLighting
   },
   setup (props) {
     const swal = inject('$swal')
@@ -252,20 +274,22 @@ export default {
       if (data.length === 0) {
         swal.fire({
           title: 'No se encuentran departamentos registrados!',
-          text: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
+          text:
+            'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
           icon: 'error'
         })
       }
     })
 
-    const getAreas = (departamentoId) => {
+    const getAreas = departamentoId => {
       if (departamentoId) {
         getAreasByDepartament(departamentoId, data => {
           areas.value = data
           if (data.length === 0) {
             swal.fire({
               title: 'No se encuentran areas registradas!',
-              text: 'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
+              text:
+                'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
               icon: 'error'
             })
           }
@@ -329,17 +353,27 @@ export default {
 
     const validateState = () => {
       // eslint-disable-next-line no-unneeded-ternary
-      PublicPlaceState.value = expedientLighting.value.lugarPublico !== ''
+      PublicPlaceState.value =
+        expedientLighting.value.lugarPublico !== '' ||
+        expedientLighting.value.lugarPublico !== null
       // eslint-disable-next-line no-unneeded-ternary
       HighDateState.value = expedientLighting.value.fechaAlta !== null
       // eslint-disable-next-line no-unneeded-ternary
-      LocationState.value = expedientLighting.value.localidad !== ''
+      LocationState.value =
+        expedientLighting.value.localidad !== '' ||
+        expedientLighting.value.localidad !== null
       // eslint-disable-next-line no-unneeded-ternary
-      departamentState.value = expedientLighting.value.departamentoId !== ''
+      departamentState.value =
+        expedientLighting.value.departamentoId !== 0 ||
+        expedientLighting.value.departamentoId !== null
       // eslint-disable-next-line no-unneeded-ternary
-      DescriptionSolutionState.value = expedientLighting.value.descripcionSolucion !== ''
+      DescriptionSolutionState.value =
+        expedientLighting.value.descripcionSolucion !== '' ||
+        expedientLighting.value.descripcionSolucion !== null
       // eslint-disable-next-line no-unneeded-ternary
-      areaState.value = expedientLighting.value.areaId !== null
+      areaState.value =
+        expedientLighting.value.areaId !== 0 ||
+        expedientLighting.value.descripcionSolucion !== null
     }
     // getAreas((data) => {
     //   areas.value = data

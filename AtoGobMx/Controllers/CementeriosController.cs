@@ -24,7 +24,7 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<Cementerios>> GetCementerios()
         {
             var Cementerios = await _context.Cementerios
-                .OrderBy(o => o.NombrePropietario)
+                //.OrderBy(o => o.NombrePropietario)
                 .Where(w => !w.Archivado)
                 .Select(s => _mapper.Map<Cementerios>(s))
                 .ToArrayAsync();
@@ -32,15 +32,18 @@ namespace AtoGobMx.Controllers
         }
 
         [HttpGet("{CementeriosId}")]
-        public async Task<ActionResult> GetCementeriosById(int CemeneteriosId)
+        public async Task<ActionResult> GetCementeriosById(int CementeriosId)
         {
-            var cementerio = await _context.Cementerios
-                .FirstOrDefaultAsync(f => f.CementeriosId == CemeneteriosId);
-            if (cementerio == null)
+            var cementerios = await _context.Cementerios
+            //.Include(i => i.TareaTipoAlumbrado)
+            //.Include(i => i.Estatus)
+                .FirstOrDefaultAsync(f => f.CementeriosId == CementeriosId);
+            if (cementerios == null)
             {
+                //Ok($"No se encuentra la falla con el ID: {FallasId}");
                 return NotFound();
             }
-            return Ok(cementerio);
+            return Ok(cementerios);
         }
 
         [HttpPost]

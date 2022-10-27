@@ -73,8 +73,8 @@
     >
       <Form @submit="addCementeryService">
         <b-row cols="2">
+          <!-- 1 -->
           <b-col>
-            <!-- 1 -->
             <b-form-group class="mt-3" label="Nombre del propietario">
               <Field
                 name="PropietaryField"

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export default function Cleanness () {
+export default function CleannessService () {
   const getCleanness = (callback) => {
     axios.get('https://localhost:7065/api/Aseo').then((response) => {
       callback(response.data)

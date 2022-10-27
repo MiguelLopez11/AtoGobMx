@@ -32,30 +32,27 @@ namespace AtoGobMx.Controllers
                 .ToArrayAsync();
             return Ok(alumbrado);
         }
-
-        //[HttpGet("SinExpedientes")]
-        //public async Task<ActionResult<Empleado>> GetEmpleadosSinExpedientes()
-        //{
-        //    var alum = await _context.Alumbrado
-        //        .Include(i => i.TareaTipoAlumbrado)
-        //        .Include(i => i.Estatus)
-        //        .Include(i => i.InventarioAlumbrado)
-        //        .Where(w => w.TieneExpediente == false)
-        //        .Where(w => !w.Archivado)
-        //        .ToListAsync();
-        //    return Ok(alum);
-        //}
-
+        [HttpGet("ServiciosSinExpediente")]
+        public async Task<ActionResult> GetServiciosSinExpedientes()
+        {
+            var expedientes = await _context.Alumbrado
+                .Include(i => i.TareaTipoAlumbrado)
+                .Include(i => i.Estatus)
+                .Where(w => !w.TieneExpediente)
+                .Where(w => !w.Archivado)
+                .ToListAsync();
+            return Ok(expedientes);
+        }
         [HttpGet("{AlumbradoId}")]
         public async Task<ActionResult> GetAlumbradoById(int AlumbradoId)
         {
             var alumbrado = await _context.Alumbrado
                 .Include(i => i.TareaTipoAlumbrado)
                 .Include(i => i.Estatus)
+                .Where(w => !w.Archivado)
                 .FirstOrDefaultAsync(f => f.AlumbradoId == AlumbradoId);
             if (alumbrado == null)
             {
-                //Ok($"No se encuentra la falla con el ID: {FallasId}");
                 return NotFound();
             }
             return Ok(alumbrado);
@@ -107,7 +104,19 @@ namespace AtoGobMx.Controllers
             {
                 return NotFound();
             }
+            var expediente = await _context.ExpedienteAlumbrado
+                .FirstOrDefaultAsync(f => f.AlumbradoId == Id);
+            if (expediente == null)
+            {
+                alumbra.TieneExpediente = false;
+                alumbra.Archivado = true;
+                _context.Alumbrado.Update(alumbra);
+                await _context.SaveChangesAsync();
+                return Ok("No existe el expediente de la tarea, se archivo la tarea");
+            }
+            alumbra.TieneExpediente = false;
             alumbra.Archivado = true;
+            expediente.Archivado = true;
             _context.Alumbrado.Update(alumbra);
             await _context.SaveChangesAsync();
             return Ok("Alumbrado archivado");

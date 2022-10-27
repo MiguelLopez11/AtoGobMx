@@ -30,7 +30,7 @@ namespace AtoGobMx.Controllers
             return Ok(zona);
         }
 
-        [HttpGet("ZonaId")]
+        [HttpGet("{ZonaId}")]
         public async Task<ActionResult> GetZonaById(int ZonaId)
         {
             var zona = await _context.Zona

@@ -199,7 +199,7 @@ export default {
       domicilio: null,
       descripcionDomicilio: null,
       tareaTipoId: null,
-      // estatusAlumbradoId: null,
+      tieneExpediente: true,
       archivado: false
     })
     // tarea: null,
@@ -215,18 +215,6 @@ export default {
         })
       }
     })
-
-    // getStatus(data => {
-    //   statusPublicLighting.value = data
-    //   if (data.length === 0) {
-    //     swal.fire({
-    //       title: 'No se encuentra un estatus registrado!',
-    //       text:
-    //         'No se encuentra estatus registrado en el departamento seleccionado, registre primero un tipo de estatus para continuar',
-    //       icon: 'warning'
-    //     })
-    //   }
-    // })
 
     const validateTask = () => {
       if (!publicLightingFields.value.tareaTipoId) {
@@ -305,7 +293,7 @@ export default {
     const fields = ref([
       { value: 'alumbradoId', text: 'ID', sortable: true },
       { value: 'tareaTipoAlumbrado.nombreTarea', text: 'Tipo de tarea' },
-      { value: 'estatus.nombreEstatus', text: 'Estatus' },
+      // { value: 'estatus.nombreEstatus', text: 'Estatus' },
       { value: 'descripcionProblema', text: 'Descripcion del problema' },
       { value: 'domicilio', text: 'Domicilio' },
       { value: 'descripcionDomicilio', text: 'Descripcion Domicilio' },
@@ -368,20 +356,7 @@ export default {
             icon: 'success'
           })
         })
-        // refreshTable()
-        // swal.fire({
-        //   title: '¡Alumbrado publico agregado correctamente!',
-        //   text: 'Alumbrado registrado satisfactoriamente',
-        //   icon: 'success'
-        // })
-        // $toast.success('Alumbrado registrado correctamente.', {
-        //   position: 'top-right',
-        //   duration: 1500
-        // })
       })
-      // resetStreetLightingFields()
-      // publicLightingFields.value = JSON.parse(
-      //   JSON.stringify(publicLightingFieldsBlank))
       showModal.value = false
       resetPublicLightingFields()
     }
