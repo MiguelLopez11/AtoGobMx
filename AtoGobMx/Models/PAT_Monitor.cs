@@ -8,7 +8,6 @@ namespace AtoGobMx.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int MonitorId { get; set; }
-        public string? CodigoInventario { get; set; }
         public string? Marca { get; set; }
         public int? Pulgadas { get; set; }
         public int? EquipoComputoId { get; set; }

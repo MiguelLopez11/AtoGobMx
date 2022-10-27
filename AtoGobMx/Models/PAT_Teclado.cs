@@ -8,7 +8,6 @@ namespace AtoGobMx.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int TecladoId { get; set; }
-        public string? CodigoInventario { get; set; }
         public string? Marca { get; set; }
         public string? TipoConexion { get; set; }
         public int? EquipoComputoId { get; set; }

@@ -48,18 +48,18 @@
           variant="outline-danger"
           ><i class="bi bi-trash3"></i
         ></b-button>
-        <b-button class="m-1" variant="outline-warning">
-          <!-- :to="{
-            name: 'Roles-Edit',
-            params: { RoleId: items.roleId },
-          }" -->
+        <b-button class="m-1" variant="outline-warning"
+          :to="{
+            name: 'EquiposComputo-Edit',
+            params: { EquipoComputoId: items.equipoComputoId},
+          }"
+        >
           <i class="bi bi-pencil-square" />
         </b-button>
       </template>
       <template #item-inventarioEstatus="items">
         <span class="bg-success text-white rounded">
         {{items.inventarioEstatus.nombre}}
-
         </span>
       </template>
     </EasyDataTable>
@@ -72,7 +72,7 @@
       hide-footer
     >
       <Form @submit="addComputer">
-        <b-row cols="2">
+        <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Marca">
               <Field name="BrandField" :rules="validateBrand" as="text">
@@ -145,13 +145,13 @@
                 as="text"
               >
                 <b-form-select
-                  v-model="departament"
+                  v-model="computerFields.departamentoId"
                   autofocus
                   :options="departaments"
                   value-field="departamentoId"
                   text-field="nombre"
                   :state="departamentState"
-                  @input="getAreas(departament)"
+                  @input="getAreas(computerFields.departamentoId)"
                 >
                 </b-form-select>
               </Field>
@@ -175,6 +175,22 @@
                 </b-form-select>
               </Field>
               <ErrorMessage class="text-danger" name="AreaField"></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Estatus">
+              <Field name="StatusField" :rules="validateArea" as="number">
+                <b-form-select
+                  v-model="computerFields.estatusId"
+                  autofocus
+                  :options="statusComputers"
+                  value-field="inventarioEstatusId"
+                  text-field="nombre"
+                  :state="areaState"
+                >
+                </b-form-select>
+              </Field>
+              <ErrorMessage class="text-danger" name="StatusField"></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
@@ -212,13 +228,14 @@ export default {
   },
   setup () {
     const swal = inject('$swal')
-    const { getComputers, createComputer, deleteComputer } = ComputerServices()
+    const { getComputers, createComputer, deleteComputer, getStatus } = ComputerServices()
     const { getAreasByDepartament } = AreaServices()
     const { getDepartaments } = DepartamentServices()
     // const $toast = useToast()
     const Computers = ref([])
     const areas = ref([])
     const departaments = ref([])
+    const statusComputers = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
     const filter = ref(null)
@@ -232,7 +249,6 @@ export default {
     const processorState = ref(false)
     const departamentState = ref(false)
     const areaState = ref(false)
-    const departament = ref()
     const showModal = ref(false)
     const computerFields = ref({
       equipoComputoId: 0,
@@ -240,8 +256,9 @@ export default {
       memoriaRAM: '',
       almacenamiento: '',
       procesador: '',
-      areaId: 0,
-      estatusId: 1,
+      departamentoId: null,
+      areaId: null,
+      estatusId: null,
       archivado: false
     })
     const computerFieldsBlank = ref(JSON.parse(JSON.stringify(computerFields)))
@@ -275,6 +292,17 @@ export default {
           title: 'No se encuentran departamentos registrados!',
           text:
             'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
+          icon: 'warning'
+        })
+      }
+    })
+    getStatus(data => {
+      statusComputers.value = data
+      if (data.length === 0) {
+        swal.fire({
+          title: 'No se encuentran estatus registrados!',
+          text:
+            'No se encuentran estatus registrados en el sistema, registre primero un estatus para continuar.',
           icon: 'warning'
         })
       }
@@ -344,7 +372,7 @@ export default {
       return true
     }
     const validateDepartament = () => {
-      if (!departament.value) {
+      if (!computerFields.value.departamentoId) {
         departamentState.value = false
         return 'Este campo es requerido'
       }
@@ -449,7 +477,7 @@ export default {
       showModal,
       areas,
       departaments,
-      departament,
+      statusComputers,
 
       validateBrand,
       validateMemory,

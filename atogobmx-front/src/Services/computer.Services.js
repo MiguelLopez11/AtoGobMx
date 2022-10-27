@@ -27,11 +27,27 @@ export default function ComputerServices () {
       callback(response.data)
     })
   }
+  // ESTATUS
+  const getStatus = (callback) => {
+    axios.get(`${BaseUrl}/InventarioEstatus`).then((response) => {
+      callback(response.data)
+    })
+  }
+  // DISPLAY
+  const getDisplays = (callback) => {
+    axios.get(`${BaseUrl}/PAT_Monitor`).then((response) => {
+      callback(response.data)
+    })
+  }
   return {
     getComputers,
     getComputer,
     createComputer,
     updateComputer,
-    deleteComputer
+    deleteComputer,
+    // ESTATUS
+    getStatus,
+    // Displays
+    getDisplays
   }
 }

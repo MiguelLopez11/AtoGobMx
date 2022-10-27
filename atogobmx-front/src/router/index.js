@@ -271,6 +271,16 @@ const routes = [
       rol: 'Empleado',
       departamento: 'Patrimonio'
     }
+  },
+  {
+    path: '/EquiposComputo/:EquipoComputoId',
+    name: 'EquiposComputo-Edit',
+    component: () => import('@/views/Patrimony/Computers/Computer/ComputerEdit.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Patrimonio'
+    }
   }
 ]
 

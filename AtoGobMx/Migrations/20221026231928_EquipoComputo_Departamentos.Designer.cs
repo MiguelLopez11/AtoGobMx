@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20221026231928_EquipoComputo_Departamentos")]
+    partial class EquipoComputo_Departamentos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -454,9 +456,6 @@ namespace AtoGobMx.Migrations
                     b.Property<int>("AreaId")
                         .HasColumnType("int");
 
-                    b.Property<string>("CodigoInventario")
-                        .HasColumnType("longtext");
-
                     b.Property<int>("DepartamentoId")
                         .HasColumnType("int");
 
@@ -522,6 +521,9 @@ namespace AtoGobMx.Migrations
                     b.Property<bool>("Archivado")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<string>("CodigoInventario")
+                        .HasColumnType("longtext");
+
                     b.Property<int?>("EquipoComputoId")
                         .HasColumnType("int");
 
@@ -547,6 +549,9 @@ namespace AtoGobMx.Migrations
                     b.Property<bool>("Archivado")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<string>("CodigoInventario")
+                        .HasColumnType("longtext");
+
                     b.Property<int?>("EquipoComputoId")
                         .HasColumnType("int");
 
@@ -571,6 +576,9 @@ namespace AtoGobMx.Migrations
 
                     b.Property<bool>("Archivado")
                         .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("CodigoInventario")
+                        .HasColumnType("longtext");
 
                     b.Property<int?>("EquipoComputoId")
                         .HasColumnType("int");
