@@ -22,8 +22,8 @@
         type="submit"
       >
         <!-- v-b-modal.modal-expedientlighting -->
-        <i class="bi bi-person-plus-fill"></i>
-        Agregar Expediente
+        <i class="bi bi-folder-fill m-1"></i>
+        crear Expediente
       </b-button>
     </b-row>
     <EasyDataTable
@@ -61,171 +61,66 @@
         ></b-button>
       </template>
     </EasyDataTable>
-    <b-modal
-      id="modal-expedientlighting"
-      title="Agregar Expediente Alumbrado"
-      size="xl"
-      hide-footer
-      centered
-      button-size="lg"
-      lazy
-     >
-      <!-- <Form @submit="addExpedientLighting">
-        <b-row cols="2">
-          <b-col>
-            <b-form-group class="mt-3" label="Lugar publico">
-              <Field
-                name="PublicPlaceField"
-                :rules="validatePublicPlace"
-                as="text"
-              >
-                <b-form-input
-                  v-model="expedientLightingFields.lugarPublico"
-                  :state="PublicPlaceState"
-                ></b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="PublicPlaceField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Localidad">
-              <Field name="LocationField" :rules="validateLocation" as="text">
-                <b-form-input
-                  v-model="expedientLightingFields.localidad"
-                  :state="LocationState"
-                ></b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="LocationField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Fecha Alta">
-              <Field name="HighDateField" :rules="validateHighDate" as="">
-                <Datepicker
-                  locale="es"
-                  name="date"
-                  text-input
-                  v-model="expedientLightingFields.fechaAlta"
-                  :state="HighDateState"
-                ></Datepicker>
-              </Field>
-              <ErrorMessage name="HighDateField"></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Departamento">
-              <Field
-                name="DepartamentField"
-                :rules="validateDepartament"
-                as="number"
-              >
-                <b-form-select
-                  v-model="expedientLightingFields.departamentoId"
-                  autofocus
-                  :options="departaments"
-                  value-field="departamentoId"
-                  text-field="nombre"
-                  :state="departamentState"
-                  @input="getAreas(EmployeesFields.departamentoId)"
-                >
-                </b-form-select>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="DepartamentField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Area">
-              <Field name="AreaField" :rules="validateArea" as="number">
-                <b-form-select
-                  v-model="expedientLightingFields.areaId"
-                  autofocus
-                  :options="areas"
-                  value-field="areaId"
-                  text-field="nombre"
-                  :state="areaState"
-                  @input="getWorkStation(EmployeesFields.areaId)"
-                >
-                </b-form-select>
-              </Field>
-              <ErrorMessage class="text-danger" name="AreaField"></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Descripcion Solucion">
-              <Field
-                name="DescriptionSolutionField"
-                :rules="validateDescriptionSolution"
-                as="text"
-              >
-                <b-form-textarea
-                  v-model="expedientLightingFields.descripcionSolucion"
-                  :state="DescriptionSolutionState"
-                  rows="4"
-                ></b-form-textarea>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="DescriptionSolutionField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-        </b-row>
-        <b-row align-h="end">
-          <b-button
-            class="w-auto m-2 text-white"
-            variant="primary"
-            @click="resetexpedientLightingFields"
-          >
-            Cancelar
-          </b-button>
-          <b-button class="w-auto m-2" variant="success" type="submit">
-            Guardar
-          </b-button>
-        </b-row>
-      </Form>-->
-    </b-modal>
   </b-card>
+  <b-modal
+    id="modal-expedientlighting"
+    title="Agregar Expediente Alumbrado"
+    v-model="showModal"
+    size="xl"
+    hide-footer
+    centered
+    button-size="lg"
+    lazy
+  >
+  <b-row>
+      <b-form-group class="mt-3" label=": ">
+        <b-form-select
+          autofocus
+          :options="employees"
+          value-field=""
+          text-field=""
+          v-model="expedientLightingFields."
+        />
+      </b-form-group>
+    </b-row>
+    <b-row align-h="end">
+      <b-button
+        class="w-auto m-2 text-white"
+        variant="primary"
+        @click="showModal = !showModal"
+      >
+        Cancelar
+      </b-button>
+      <b-button class="w-auto m-2" variant="success" @click="onAddExpedient()">
+        Guardar
+      </b-button>
+    </b-row>
+  </b-modal>
 </template>
 
 <script>
 import ExpedientlightingServices from '@/Services/expedientlighting.Services'
-// import StatusLightingServices from '@/Services/statuslighting.Services'
 import AreaServices from '@/Services/area.Services'
 import DepartamentServices from '@/Services/departament.Services'
-// import Datepicker from '@vuepic/vue-datepicker'
-// import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
-// import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
-    // Datepicker,
     EasyDataTable: window['vue3-easy-data-table']
-    // Form,
-    // Field,
-    // ErrorMessage
   },
   setup () {
     const swal = inject('$swal')
     const showModal = ref(false)
     const { getAreasByDepartament } = AreaServices()
     const { getDepartaments } = DepartamentServices()
-    const { getExpedientLighting, createExpedientLighting, deleteExpedientLighting } = ExpedientlightingServices()
-    // const { getStatus } = StatusLightingServices()
-    // const $toast = useToast()
+    const {
+      getExpedientLighting,
+      createExpedientLighting,
+      deleteExpedientLighting
+    } = ExpedientlightingServices()
     const expedientLighting = ref([])
     const departaments = ref([])
     const areas = ref([])
-    // const statusPublicLighting = ref([])
     const isOpen = ref(false)
     const perPage = ref(5)
     const currentPage = ref(1)
@@ -233,13 +128,7 @@ export default {
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('tarea')
-    const PublicPlaceState = ref(false)
-    const LocationState = ref(false)
-    const HighDateState = ref(false)
-    const departamentState = ref(false)
-    const areaState = ref(false)
-    const DescriptionSolutionState = ref(false)
+    const searchField = ref('lugarPublico')
     const expedientLightingFields = ref({
       expedienteAlumbradoId: 0,
       descripcionSolucion: null,
@@ -260,77 +149,25 @@ export default {
       if (data.length === 0) {
         swal.fire({
           title: 'No se encuentran departamentos registrados!',
-          text: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
+          text:
+            'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
           icon: 'warning'
         })
       }
     })
 
-    const getAreas = (departamentoId) => {
+    const getAreas = departamentoId => {
       getAreasByDepartament(departamentoId, data => {
         areas.value = data
         if (data.length === 0) {
           swal.fire({
             title: 'No se encuentran areas registradas!',
-            text: 'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
+            text:
+              'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
             icon: 'warning'
           })
         }
       })
-    }
-
-    const validatePublicPlace = () => {
-      if (!expedientLightingFields.value.lugarPublico) {
-        PublicPlaceState.value = false
-        return 'Este campo es requerido'
-      }
-      PublicPlaceState.value = true
-      return true
-    }
-
-    const validateLocation = () => {
-      if (!expedientLightingFields.value.localidad) {
-        LocationState.value = false
-        return 'Este campo es requerido'
-      }
-      LocationState.value = true
-      return true
-    }
-
-    const validateDepartament = () => {
-      if (!expedientLightingFields.value.departamentoId) {
-        departamentState.value = false
-        return 'Este campo es requerido'
-      }
-      departamentState.value = true
-      return true
-    }
-
-    const validateArea = () => {
-      if (!expedientLightingFields.value.areaId) {
-        areaState.value = false
-        return 'Este campo es requerido'
-      }
-      areaState.value = true
-      return true
-    }
-
-    const validateDescriptionSolution = () => {
-      if (!expedientLightingFields.value.descripcionSolucion) {
-        DescriptionSolutionState.value = false
-        return 'Este campo es requerido'
-      }
-      DescriptionSolutionState.value = true
-      return true
-    }
-
-    const validateHighDate = () => {
-      if (!expedientLightingFields.value.fechaAlta) {
-        HighDateState.value = false
-        return 'Este campo es requerido'
-      }
-      HighDateState.value = true
-      return true
     }
 
     // pone mis cambios de mis campos vacios de nuevo
@@ -340,26 +177,26 @@ export default {
 
     const fields = ref([
       { value: 'expedienteAlumbradoId', text: 'ID', sortable: true },
-      { value: 'lugarPublico', text: 'Tarea' },
-      { value: 'localidad', text: 'Fecha Alta' },
-      { value: 'fechaAlta', text: 'Domicilio' },
-      { value: 'departamentoId', text: 'Descripcion Domicilio' },
-      { value: 'areaId', text: 'Descripcion Solucion' },
+      { value: 'lugarPublico', text: 'Lugar publico' },
+      { value: 'localidad', text: 'Localidad' },
+      { value: 'fechaAlta', text: 'Fecha alta' },
+      { value: 'departamentoId', text: 'Departamento' },
+      { value: 'areaId', text: 'Area' },
       { value: 'actions', text: 'Acciones' }
     ])
 
-    const resetexpedientLightingFields = () => {
-      showModal.value = false
-      expedientLightingFields.value = JSON.parse(
-        JSON.stringify(expedientLightingFieldsBlank)
-      )
-      PublicPlaceState.value = false
-      LocationState.value = false
-      HighDateState.value = false
-      departamentState.value = false
-      areaState.value = false
-      DescriptionSolutionState.value = false
-    }
+    // const resetexpedientLightingFields = () => {
+    //   showModal.value = false
+    //   expedientLightingFields.value = JSON.parse(
+    //     JSON.stringify(expedientLightingFieldsBlank)
+    //   )
+    //   PublicPlaceState.value = false
+    //   LocationState.value = false
+    //   HighDateState.value = false
+    //   departamentState.value = false
+    //   areaState.value = false
+    //   DescriptionSolutionState.value = false
+    // }
 
     getExpedientLighting(data => {
       expedientLighting.value = data
@@ -402,13 +239,9 @@ export default {
           text: 'Expediente registrado satisfactoriamente',
           icon: 'success'
         })
-        // $toast.success('Alumbrado registrado correctamente.', {
-        //   position: 'top-right',
-        //   duration: 1500
-        // })
       })
       showModal.value = false
-      resetexpedientLightingFields()
+      // resetexpedientLightingFields()
       // resetStreetLightingFields()
       // expedientLightingFields.value = JSON.parse(
       //   JSON.stringify(expedientLightingFieldsBlank)
@@ -446,7 +279,6 @@ export default {
 
     return {
       expedientLighting,
-      // statusPublicLighting,
       expedientLightingFields,
       showModal,
       isOpen,
@@ -459,26 +291,13 @@ export default {
       searchField,
       expedientLightingFieldsBlank,
       fields,
-      DescriptionSolutionState,
-      HighDateState,
-      PublicPlaceState,
-      LocationState,
-      departamentState,
-      areaState,
       areas,
 
       onFiltered,
       getAreas,
       addExpedientLighting,
       refreshTable,
-      RemoveExpedientLighting,
-      validateDescriptionSolution,
-      validateHighDate,
-      resetexpedientLightingFields,
-      validatePublicPlace,
-      validateLocation,
-      validateDepartament,
-      validateArea
+      RemoveExpedientLighting
     }
   }
 }

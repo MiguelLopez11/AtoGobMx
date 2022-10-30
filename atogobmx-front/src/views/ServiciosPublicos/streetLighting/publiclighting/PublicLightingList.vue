@@ -75,7 +75,7 @@
         <b-row cols="2">
           <!--1-->
           <b-col>
-            <b-form-group class="mt-3" label="Tipo de cervicio">
+            <b-form-group class="mt-3" label="Tipo de tarea">
               <Field name="TaskField" :rules="validateTask" as="text">
                 <b-form-select
                   v-model="publicLightingFields.tareaTipoId"
@@ -149,17 +149,13 @@
 
 <script>
 import PubliclightingServices from '@/Services/publiclighting.Services'
-// import StatusLightingServices from '@/Services/statuslighting.Services'
 import TypeTaskLightingServices from '@/Services/tasktypelighting.Services'
 import EditExpedientLighting from '@/Services/expedientlighting.Services'
-// import Datepicker from '@vuepic/vue-datepicker'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
-// import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
-    // Datepicker,
     EasyDataTable: window['vue3-easy-data-table'],
     Form,
     Field,
@@ -168,7 +164,6 @@ export default {
   setup () {
     const swal = inject('$swal')
     const { getPublicLighting, createPublicLighting, deletePublicLighting } = PubliclightingServices()
-    // const { getStatus } = StatusLightingServices()
     const { getTaskTypeLighting } = TypeTaskLightingServices()
     const { createExpedientLighting } = EditExpedientLighting()
     const showModal = ref(false)
@@ -224,15 +219,6 @@ export default {
       TaskState.value = true
       return true
     }
-
-    // const validateStatus = () => {
-    //   if (!publicLightingFields.value.estatusAlumbradoId) {
-    //     StatusState.value = false
-    //     return 'Este campo es requerido'
-    //   }
-    //   StatusState.value = true
-    //   return true
-    // }
 
     const validateProblem = () => {
       if (!publicLightingFields.value.descripcionProblema) {
@@ -293,7 +279,6 @@ export default {
     const fields = ref([
       { value: 'alumbradoId', text: 'ID', sortable: true },
       { value: 'tareaTipoAlumbrado.nombreTarea', text: 'Tipo de tarea' },
-      // { value: 'estatus.nombreEstatus', text: 'Estatus' },
       { value: 'descripcionProblema', text: 'Descripcion del problema' },
       { value: 'domicilio', text: 'Domicilio' },
       { value: 'descripcionDomicilio', text: 'Descripcion Domicilio' },
@@ -314,7 +299,6 @@ export default {
 
     getPublicLighting(data => {
       publicLighting.value = data
-      // rows.value = data.length
       if (publicLighting.value.length > 0) {
         isloading.value = false
       } else {
@@ -325,7 +309,6 @@ export default {
     })
 
     const onFiltered = filteredItems => {
-      // rows.value = filteredItems.length
       currentPage.value = 1
     }
 
@@ -421,19 +404,9 @@ export default {
       validateDomicile,
       resetPublicLightingFields,
       validateProblem
-      // validateStatus
-      // getTaskTypeLightingById
     }
   }
 }
-
-// resetStreetLightingFields
-// option,
-// lightingFailuresValues,
-// rows,
-// const rows = ref(null)
-// const $toast = useToast()
-// const option = ref()
 </script>
 
 <style></style>

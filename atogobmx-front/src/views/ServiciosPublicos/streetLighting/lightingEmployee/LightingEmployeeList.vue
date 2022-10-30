@@ -96,22 +96,6 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!-- 2 -->
-          <!-- <b-col>
-            <b-form-group class="mt-3" label="Description">
-              <Field name="DescriptionField" :rules="validateDescription" as="text">
-                <b-form-input
-                  v-model="zoneServiceFields.descripcion"
-                  :state="DescriptionState"
-                >
-                </b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="DescriptionField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col> -->
         </b-row>
 
         <b-row align-h="end">
@@ -219,39 +203,19 @@ export default {
         return 'Este campo es requerido'
       }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(lightingEmployeeServiceFields.value.empleadoId)) {
-        NameState.value = false
-        return 'Este campo solo puede contener letras'
-      }
+      // if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(lightingEmployeeServiceFields.value.empleadoId)) {
+      //   NameState.value = false
+      //   return 'Este campo solo puede contener letras'
+      // }
 
-      if (!lightingEmployeeServiceFields.value.empleadoId.trim().length > 0) {
-        NameState.value = false
-        return 'Este campo no puede contener espacios'
-      }
+      // if (!lightingEmployeeServiceFields.value.empleadoId.trim().length > 0) {
+      //   NameState.value = false
+      //   return 'Este campo no puede contener espacios'
+      // }
 
       NameState.value = true
       return true
     }
-
-    // const validateDescription = () => {
-    //   if (!zoneServiceFields.value.descripcion) {
-    //     DescriptionState.value = false
-    //     return 'Este campo es requerido'
-    //   }
-
-    //   if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(zoneServiceFields.value.descripcion)) {
-    //     DescriptionState.value = false
-    //     return 'Este campo solo puede contener numeros'
-    //   }
-
-    //   if (!zoneServiceFields.value.descripcion.trim().length > 0) {
-    //     DescriptionState.value = false
-    //     return 'Este campo no puede contener espacios'
-    //   }
-
-    //   DescriptionState.value = true
-    //   return true
-    // }
 
     const refreshTable = () => {
       isloading.value = true
