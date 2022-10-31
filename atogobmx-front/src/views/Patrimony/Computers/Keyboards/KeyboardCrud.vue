@@ -1,14 +1,6 @@
 <template>
   <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
-      <b-form-input
-        size="lg"
-        style="width: 350px"
-        v-model="searchValue"
-        type="search"
-        placeholder="Buscar Departamento..."
-      >
-      </b-form-input>
       <b-button
         style="
           background-color: rgb(94,80,238);
@@ -21,8 +13,8 @@
         @click="showModal = !showModal"
         type="submit"
       >
-        <i class="bi bi-building m-1" />
-        Agregar Departamento
+        <i class="bi bi-keyboard-fill"></i>
+        Agregar teclado
       </b-button>
     </b-row>
     <EasyDataTable
@@ -33,59 +25,60 @@
       border-cell
       :loading="isloading"
       :headers="fields"
-      :items="departaments"
+      :items="keyboards"
       :rows-per-page="5"
-      :search-field="searchField"
-      :search-value="searchValue"
     >
       <template #header-actions="header">
         {{ header.text }}
       </template>
       <template #item-actions="items">
         <b-button
-          @click="RemoveDepatamento(items.departamentoId)"
+          @click="RemoveKeyboard(items.tecladoId)"
           class="m-1"
           variant="outline-danger"
           ><i class="bi bi-trash3"></i
         ></b-button>
-        <b-button
-          class="m-1"
-          variant="outline-warning"
-          :to="{
-            name: 'Departamentos-Edit',
-            params: { DepartamentoId: items.departamentoId },
-          }"
-        >
-          <i class="bi bi-pencil-square" />
-        </b-button>
       </template>
     </EasyDataTable>
     <b-modal
-      id="modal-departamento"
       v-model="showModal"
-      title="Agregar Departamento"
+      title="Agregar Teclado"
       size="xl"
       centered
       button-size="lg"
       hide-footer
     >
-      <Form @submit="addDepartamento">
+      <Form @submit="addKeyboard">
         <b-row cols="3">
           <b-col>
-            <b-form-group class="mt-3" label="Nombre">
+            <b-form-group class="mt-3" label="Marca">
               <Field
-                name="NameField"
-                :rules="validateArea"
+                name="BrandField"
+                :rules="validateBrand"
                 as="text"
               >
-                <b-form-input v-model="departamentFields.nombre" :state="nameState"> </b-form-input>
+                <b-form-input v-model="keyboardFields.marca" :state="brandState"> </b-form-input>
               </Field>
-              <ErrorMessage class="text-danger" name="NameField"></ErrorMessage>
+              <ErrorMessage class="text-danger" name="BrandField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="Descripción">
-              <b-form-input v-model="departamentFields.descripcion"> </b-form-input>
+            <b-form-group class="mt-3" label="Tipo de conexión">
+              <Field
+                name="typeConnectionField"
+                :rules="validateTypeConnection"
+                as="text"
+              >
+                <b-form-select
+                    v-model="keyboardFields.tipoConexion"
+                    autofocus
+                    :options="typeConnections"
+                    :state="typeConnectionState"
+                >
+                </b-form-select>
+                <!-- <b-form-input type="number" v-model="keyboardFields.tipoConexion" :state="typeConnectionState"> </b-form-input> -->
+              </Field>
+              <ErrorMessage class="text-danger" name="typeConnectionField"></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
@@ -93,7 +86,7 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            @click="resetDepartamentFields()"
+            @click="resetRoleFields()"
           >
             Cancelar
           </b-button>
@@ -107,7 +100,7 @@
 </template>
 
 <script>
-import DepartamentServices from '@/Services/departament.Services'
+import ComputerServices from '@/Services/computer.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
 // import { useToast } from 'vue-toast-notification'
@@ -119,92 +112,99 @@ export default {
     ErrorMessage,
     EasyDataTable: window['vue3-easy-data-table']
   },
-  setup () {
+  props: {
+    EquipoComputoId: {
+      type: Number,
+      required: true
+    }
+  },
+  setup (props) {
     const swal = inject('$swal')
-    const { getDepartaments, createDepartament, deleteDepartament } = DepartamentServices()
+    const { getKeyboard, createKeyboard, deleteKeyboard } = ComputerServices()
     // const $toast = useToast()
-    const departaments = ref([])
+    const keyboards = ref([])
+    const typeConnections = ref(['Alambrica', 'Inhalambrica'])
     const perPage = ref(5)
     const currentPage = ref(1)
-    const rows = ref(null)
-    const filter = ref(null)
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
-    const searchValue = ref('')
-    const searchField = ref('nombre')
-    const nameState = ref(false)
+    const brandState = ref(false)
+    const typeConnectionState = ref(false)
     const showModal = ref(false)
-    const departamentFields = ref({
-      departamentoId: 0,
-      nombre: null,
-      descripcion: null,
+    const keyboardFields = ref({
+      tecladoId: 0,
+      marca: null,
+      tipoConexion: null,
+      equipoComputoId: props.EquipoComputoId,
       archivado: false
     })
-    const departamentFieldsBlank = ref(JSON.parse(JSON.stringify(departamentFields)))
+    const displayFieldsBlank = ref(JSON.parse(JSON.stringify(keyboardFields)))
     const fields = ref([
-      { value: 'departamentoId', text: 'ID', sortable: true },
-      { value: 'nombre', text: 'Nombre' },
-      { value: 'descripcion', text: 'Descripcion' },
+      { value: 'marca', text: 'Marca' },
+      { value: 'tipoConexion', text: 'Tipo de conexion' },
       { value: 'actions', text: 'Acciones' }
     ])
-    getDepartaments((data) => {
-      departaments.value = data
-      if (departaments.value.length > 0) {
+    getKeyboard((data) => {
+      keyboards.value = data
+      if (keyboards.value.length > 0) {
         isloading.value = false
       } else {
-        if (departaments.value.length <= 0) {
+        if (keyboards.value.length <= 0) {
           isloading.value = false
         }
       }
     })
     const onFiltered = (filteredItems) => {
-      rows.value = filteredItems.length
       currentPage.value = 1
     }
-    const validateArea = () => {
-      if (!departamentFields.value.nombre) {
-        nameState.value = false
+    const validateBrand = () => {
+      if (!keyboardFields.value.marca) {
+        brandState.value = false
         return 'Este campo es requerido'
       }
-      // eslint-disable-next-line no-useless-escape
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(departamentFields.value.nombre)) {
-        nameState.value = false
-        return 'El nombre del area solo puede contener letras'
+      brandState.value = true
+      return true
+    }
+    const validateTypeConnection = () => {
+      if (!keyboardFields.value.tipoConexion) {
+        typeConnectionState.value = false
+        return 'Este campo es requerido'
       }
-      nameState.value = true
+      typeConnectionState.value = true
       return true
     }
     const refreshTable = () => {
       isloading.value = true
-      getDepartaments((data) => {
-        departaments.value = data
-        if (departaments.value.length > 0) {
+      getKeyboard((data) => {
+        keyboards.value = data
+        if (keyboards.value.length > 0) {
           isloading.value = false
         } else {
-          if (departaments.value.length <= 0) {
+          if (keyboards.value.length <= 0) {
             isloading.value = false
           }
         }
       })
       return 'datos recargados'
     }
-    const addDepartamento = () => {
-      createDepartament(departamentFields.value, (data) => {
+    const addKeyboard = () => {
+      createKeyboard(keyboardFields.value, (data) => {
         refreshTable()
         swal.fire({
-          title: 'Departamento registrado correctamente!',
-          text: 'El departamento se ha registrado al sistema satisfactoriamente.',
+          title: 'Teclado registrado correctamente!',
+          text: 'El teclado se ha registrado al sistema satisfactoriamente.',
           icon: 'success'
         })
       })
-      resetDepartamentFields()
+      resetRoleFields()
     }
-    const resetDepartamentFields = () => {
+    const resetRoleFields = () => {
       showModal.value = false
-      departamentFields.value = JSON.parse(JSON.stringify(departamentFieldsBlank))
-      nameState.value = false
+      keyboardFields.value = JSON.parse(JSON.stringify(displayFieldsBlank))
+      brandState.value = false
+      typeConnectionState.value = false
     }
-    const RemoveDepatamento = (departamentoId) => {
+    const RemoveKeyboard = (tecladoId) => {
       isloading.value = true
       swal
         .fire({
@@ -214,20 +214,20 @@ export default {
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
           cancelButtonColor: '#d33',
-          confirmButtonText: 'Si, archivar departamento!',
+          confirmButtonText: 'Si, archivar teclado!',
           cancelButtonText: 'Cancelar'
         })
         .then(result => {
           if (result.isConfirmed) {
             swal
               .fire({
-                title: 'Departamento archivado!',
-                text: 'El departamento ha sido archivado satisfactoriamente .',
+                title: 'Teclado archivado!',
+                text: 'El teclado ha sido archivado satisfactoriamente .',
                 icon: 'success'
               })
               .then(result => {
                 if (result.isConfirmed) {
-                  deleteDepartament(departamentoId, (data) => {
+                  deleteKeyboard(tecladoId, (data) => {
                     refreshTable()
                   })
                 }
@@ -238,27 +238,26 @@ export default {
         })
     }
     return {
-      departaments,
+      keyboards,
+      typeConnections,
       fields,
       perPage,
       currentPage,
-      rows,
-      filter,
       perPageSelect,
-      departamentFieldsBlank,
-      departamentFields,
+      displayFieldsBlank,
+      keyboardFields,
       isloading,
-      searchValue,
-      searchField,
       onFiltered,
-      addDepartamento,
+      addKeyboard,
       refreshTable,
-      RemoveDepatamento,
-      nameState,
+      RemoveKeyboard,
+      brandState,
+      typeConnectionState,
       showModal,
 
-      validateArea,
-      resetDepartamentFields
+      validateBrand,
+      validateTypeConnection,
+      resetRoleFields
     }
   }
 }

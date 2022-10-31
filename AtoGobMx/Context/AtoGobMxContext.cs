@@ -32,6 +32,6 @@ namespace AtoGobMx.Context
         public DbSet<PAT_Teclado> PAT_Teclado { get; set; }
         public DbSet<PAT_Vehiculo> PAT_Vehiculo { get; set; }
         public DbSet<PAT_Mobiliario> PAT_Mobiliario { get; set; }
-        public DbSet<InventarioEstatus> InventarioEstatus { get; set; }
+        public DbSet<PAT_EstatusEquipo> InventarioEstatus { get; set; }
     }
 }

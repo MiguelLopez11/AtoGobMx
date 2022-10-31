@@ -6,7 +6,7 @@
         style="width: 350px"
         v-model="searchValue"
         type="search"
-        placeholder="Buscar Area..."
+        placeholder="Buscar estatus..."
       >
       </b-form-input>
       <b-button
@@ -21,8 +21,8 @@
         @click="showModal = !showModal"
         type="submit"
       >
-        <i class="bi bi-person-workspace m-1" />
-        Agregar Area
+        <i class="bi bi-bezier2" />
+        Agregar estatus
       </b-button>
     </b-row>
     <EasyDataTable
@@ -33,7 +33,7 @@
       border-cell
       :loading="isloading"
       :headers="fields"
-      :items="areas"
+      :items="statusComputers"
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
@@ -43,7 +43,7 @@
       </template>
       <template #item-actions="items">
         <b-button
-          @click="RemoveArea(items.areaId)"
+          @click="RemoveRole(items.estatusEquipoId)"
           class="m-1"
           variant="outline-danger"
           ><i class="bi bi-trash3"></i
@@ -52,8 +52,8 @@
           class="m-1"
           variant="outline-warning"
           :to="{
-            name: 'Area-Edit',
-            params: { AreaId: items.areaId }
+            name: 'EstatusEquipo-edit',
+            params: { EstatusEquipoId: items.estatusEquipoId },
           }"
         >
           <i class="bi bi-pencil-square" />
@@ -62,47 +62,29 @@
     </EasyDataTable>
     <b-modal
       v-model="showModal"
-      ref="refAreaModal"
-      title="Agregar areas"
+      title="Agregar Estatus"
       size="xl"
       centered
       button-size="lg"
       hide-footer
     >
-      <Form @submit="addArea">
+      <Form @submit="addStatusComputer">
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre">
               <Field
                 name="NameField"
-                :rules="validateArea"
+                :rules="validateName"
                 as="text"
               >
-                <b-form-input v-model="areaFields.nombre" :state="nameState">
-                </b-form-input>
+                <b-form-input v-model="statusComputerFields.nombre" :state="nameState"> </b-form-input>
               </Field>
               <ErrorMessage class="text-danger" name="NameField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="Departamento">
-              <Field name="DepartamentField" :rules="validateDepartament" as="number">
-                <b-form-select
-                  v-model="areaFields.departamentoId"
-                  autofocus
-                  :options="departaments"
-                  value-field="departamentoId"
-                  text-field="nombre"
-                  :state="departamentState"
-                >
-                </b-form-select>
-              </Field>
-              <ErrorMessage class="text-danger" name="DepartamentField"></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <b-col>
             <b-form-group class="mt-3" label="Descripción">
-              <b-form-input v-model="areaFields.descripcion"> </b-form-input>
+              <b-form-input v-model="statusComputerFields.descripcion"> </b-form-input>
             </b-form-group>
           </b-col>
         </b-row>
@@ -110,7 +92,7 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            @click="resetForm()"
+            @click="resetStatusComputerFields()"
           >
             Cancelar
           </b-button>
@@ -124,10 +106,10 @@
 </template>
 
 <script>
-import AreaServices from '@/Services/area.Services'
-import DepartamentServices from '@/Services/departament.Services'
+import ComputerServices from '@/Services/computer.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
-import { ref, watch, inject } from 'vue'
+import { ref, inject } from 'vue'
+// import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
@@ -138,12 +120,9 @@ export default {
   },
   setup () {
     const swal = inject('$swal')
-    const { getAreas, createArea, deleteArea } = AreaServices()
-    const { getDepartaments } = DepartamentServices()
-    const showModal = ref(false)
-    const refAreaModal = ref()
-    const departaments = ref([])
-    const areas = ref([])
+    const { getStatus, createStatusComputer, deleteStatusComputer } = ComputerServices()
+    // const $toast = useToast()
+    const statusComputers = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
     const rows = ref(null)
@@ -153,100 +132,78 @@ export default {
     const searchValue = ref('')
     const searchField = ref('nombre')
     const nameState = ref(false)
-    const departamentState = ref(false)
-    const areaFields = ref({
-      areaId: 0,
+    const showModal = ref(false)
+    const statusComputerFields = ref({
+      estatusEquipoId: 0,
       nombre: null,
       descripcion: null,
-      departamentoId: 0,
       archivado: false
     })
-    watch(departaments, (values) => {
-      if (values.length === 0) {
-        swal.fire({
-          title: 'No se encuentran departamentos registrados!',
-          text: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
-          icon: 'warning'
-        })
-      }
-    })
-    const areasFieldsBlank = ref(JSON.parse(JSON.stringify(areaFields)))
+    const roleFieldsBlank = ref(JSON.parse(JSON.stringify(statusComputerFields)))
     const fields = ref([
-      { value: 'areaId', text: 'ID', sortable: true },
+      { value: 'roleId', text: 'ID', sortable: true },
       { value: 'nombre', text: 'Nombre' },
       { value: 'descripcion', text: 'Descripcion' },
-      { value: 'departamentos.nombre', text: 'Departamento' },
       { value: 'actions', text: 'Acciones' }
     ])
-    getDepartaments(data => {
-      departaments.value = data
-    })
-    getAreas(data => {
-      areas.value = data
-      if (areas.value.length > 0) {
+    getStatus((data) => {
+      statusComputers.value = data
+      if (statusComputers.value.length > 0) {
         isloading.value = false
       } else {
-        if (areas.value.length <= 0) {
+        if (statusComputers.value.length <= 0) {
           isloading.value = false
         }
       }
     })
-    const onFiltered = filteredItems => {
+    const onFiltered = (filteredItems) => {
       rows.value = filteredItems.length
       currentPage.value = 1
     }
-    const validateArea = () => {
-      if (!areaFields.value.nombre) {
+    const validateName = () => {
+      if (!statusComputerFields.value.nombre) {
         nameState.value = false
         return 'Este campo es requerido'
       }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(areaFields.value.nombre)) {
+      // eslint-disable-next-line no-useless-escape
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(statusComputerFields.value.nombre)) {
         nameState.value = false
-        return 'El nombre solo puede contener letras'
+        return 'El nombre del area solo puede contener letras'
       }
       nameState.value = true
       return true
     }
-    const validateDepartament = () => {
-      if (!areaFields.value.departamentoId) {
-        departamentState.value = false
-        return 'Este campo es requerido'
-      }
-      departamentState.value = true
-      return true
-    }
     const refreshTable = () => {
       isloading.value = true
-      getAreas(data => {
-        areas.value = data
-        if (areas.value.length > 0) {
+      getStatus((data) => {
+        statusComputers.value = data
+        if (statusComputers.value.length > 0) {
           isloading.value = false
         } else {
-          if (areas.value.length <= 0) {
+          if (statusComputers.value.length <= 0) {
             isloading.value = false
           }
         }
       })
       return 'datos recargados'
     }
-    const addArea = () => {
-      createArea(areaFields.value, data => {
+    const addStatusComputer = () => {
+      createStatusComputer(statusComputerFields.value, (data) => {
+        refreshTable()
         swal.fire({
-          title: '¡Area de trabajo registrado correctamente!',
-          text: 'El Area de trabajo se ha registrado al sistema satisfactoriamente.',
+          title: 'Estatus registrado correctamente!',
+          text: 'El estatus se ha registrado al sistema satisfactoriamente.',
           icon: 'success'
         })
-        refreshTable()
-        resetForm()
       })
+      resetStatusComputerFields()
     }
-    const resetForm = () => {
+    const resetStatusComputerFields = () => {
       showModal.value = false
-      areaFields.value = JSON.parse(JSON.stringify(areasFieldsBlank))
+      statusComputerFields.value = JSON.parse(JSON.stringify(roleFieldsBlank))
       nameState.value = false
-      departamentState.value = false
     }
-    const RemoveArea = areaId => {
+    const RemoveRole = (estatusEquipoId) => {
       isloading.value = true
       swal
         .fire({
@@ -256,20 +213,20 @@ export default {
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
           cancelButtonColor: '#d33',
-          confirmButtonText: 'Si, Archivar Puesto de trabajo!',
+          confirmButtonText: 'Si, archivar estatus!',
           cancelButtonText: 'Cancelar'
         })
         .then(result => {
           if (result.isConfirmed) {
             swal
               .fire({
-                title: 'Area de trabajo archivado!',
-                text: 'El Area de trabajo ha sido archivado satisfactoriamente .',
+                title: 'Estatus archivado!',
+                text: 'El Estatus ha sido archivado satisfactoriamente .',
                 icon: 'success'
               })
               .then(result => {
                 if (result.isConfirmed) {
-                  deleteArea(areaId, data => {
+                  deleteStatusComputer(estatusEquipoId, (data) => {
                     refreshTable()
                   })
                 }
@@ -280,35 +237,32 @@ export default {
         })
     }
     return {
-      departaments,
-      refAreaModal,
+      statusComputers,
       fields,
       perPage,
       currentPage,
       rows,
       filter,
       perPageSelect,
-      areas,
-      areasFieldsBlank,
-      areaFields,
+      roleFieldsBlank,
+      statusComputerFields,
       isloading,
       searchValue,
       searchField,
       onFiltered,
-      addArea,
+      addStatusComputer,
       refreshTable,
-      RemoveArea,
+      RemoveRole,
       nameState,
-      departamentState,
       showModal,
 
-      validateDepartament,
-      validateArea,
-      resetForm
+      validateName,
+      resetStatusComputerFields
     }
   }
 }
 </script>
 
 <style>
+
 </style>

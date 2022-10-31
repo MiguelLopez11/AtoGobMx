@@ -37,7 +37,6 @@
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
-      :table-height="330"
     >
       <template #header-actions="header">
         {{ header.text }}
@@ -63,7 +62,7 @@
     </EasyDataTable>
     <b-modal
       v-model="showModal"
-      title="Agregar Departamento"
+      title="Agregar Role"
       size="xl"
       centered
       button-size="lg"

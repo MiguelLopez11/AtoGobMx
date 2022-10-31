@@ -21,10 +21,10 @@
         <b-tab title="Datos personales" active>
           <b-card>
             <Form @submit="submitExpedient">
-              <b-row cols="2">
+              <b-row cols="4">
                 <b-col>
                   <b-form-group class="mt-3" label="Estado">
-                    <Field name="StateField" :rules="validateStateField">
+                    <Field name="StateField" :rules="validateStateField" as="text">
                       <b-form-input
                         v-model="expedient.estado"
                         :state="EstadoState"
@@ -37,10 +37,11 @@
                   </b-form-group>
                 </b-col>
                 <b-col>
-                  <b-form-group class="mt-3" label="Municipio">
+                  <b-form-group class="mt-3" label="Municipio" >
                     <Field
                       name="municipalityField"
                       :rules="validateMunicipality"
+                      as="text"
                     >
                       <b-form-input
                         v-model="expedient.municipio"
@@ -60,7 +61,7 @@
                 </b-col>
                 <b-col>
                   <b-form-group class="mt-3" label="Calle">
-                    <Field name="streetField" :rules="validateStreet">
+                    <Field name="streetField" :rules="validateStreet" as="text">
                       <b-form-input
                         v-model="expedient.calle"
                         :state="streetState"
@@ -77,10 +78,12 @@
                     <Field
                       name="numberExteriorField"
                       :rules="validateNumberExterior"
+                      as="text"
                     >
                       <b-form-input
                         v-model="expedient.numeroExterior"
                         :state="exteriorNumberState"
+                        type="number"
                       />
                     </Field>
                     <ErrorMessage name="numberExteriorField">
@@ -91,15 +94,16 @@
                 </b-col>
                 <b-col>
                   <b-form-group class="mt-3" label="Numero interior">
-                    <b-form-input v-model="expedient.numeroInterior" />
+                    <b-form-input  type="number" v-model="expedient.numeroInterior" />
                   </b-form-group>
                 </b-col>
                 <b-col>
                   <b-form-group class="mt-3" label="Codigo postal">
-                    <Field name="postalCodeField" :rules="validatePostalCode">
+                    <Field name="postalCodeField" :rules="validatePostalCode" as="text">
                       <b-form-input
                         v-model="expedient.codigoPostal"
                         :state="postalCodeState"
+                        type="number"
                       />
                     </Field>
                     <ErrorMessage name="postalCodeField">
@@ -114,6 +118,7 @@
                       name="emailField"
                       type="email"
                       :rules="validateEmail"
+                      as="text"
                     >
                       <b-form-input
                         v-model="expedient.correoElectronico"
@@ -338,14 +343,6 @@ export default {
               redirect.push('/ExpedientesDigitales/list')
             })
           }
-          // $toast.open({
-          //   message: `${data.data}`,
-          //   position: 'top-left',
-          //   duration: 2000,
-          //   dismissible: true,
-          //   type: 'success',
-          //   onDismiss: () => redirect.push('/ExpedientesDigitales/list')
-          // })
         })
     }
     return {

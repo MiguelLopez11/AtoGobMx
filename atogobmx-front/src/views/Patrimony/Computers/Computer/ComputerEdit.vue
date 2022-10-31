@@ -10,7 +10,7 @@
       <b-tabs>
         <b-tab title="Datos generales del Equipo">
           <Form @submit="onUpdateComputer()">
-            <b-row cols="2">
+            <b-row cols="3">
               <b-col>
                 <b-form-group class="mt-3" label="Marca">
                   <Field name="BrandField" :rules="validateBrand" as="text">
@@ -122,6 +122,29 @@
                   ></ErrorMessage>
                 </b-form-group>
               </b-col>
+              <b-col>
+                <b-form-group class="mt-3" label="Estatus">
+                  <Field
+                    name="StatusField"
+                    :rules="validateStateComputer"
+                    as="number"
+                  >
+                    <b-form-select
+                      v-model="computer.estatusEquipoId"
+                      autofocus
+                      :options="statusComputers"
+                      value-field="estatusEquipoId"
+                      text-field="nombre"
+                      :state="stateComputerState"
+                    >
+                    </b-form-select>
+                  </Field>
+                  <ErrorMessage
+                    class="text-danger"
+                    name="StatusField"
+                  ></ErrorMessage>
+                </b-form-group>
+              </b-col>
             </b-row>
             <b-row align-h="end">
               <b-button
@@ -137,20 +160,14 @@
             </b-row>
           </Form>
         </b-tab>
-        <b-tab
-          title="Monitor"
-        >
+        <b-tab title="Monitor">
           <DisplayCrud :EquipoComputoId="computerId" />
         </b-tab>
-        <b-tab
-          title="Teclado"
-        >
-          en proceso¡
+        <b-tab title="Teclado">
+          <KeyboardCrud :EquipoComputoId="computerId" />
         </b-tab>
-        <b-tab
-          title="Mouse"
-        >
-          en proceso¡
+        <b-tab title="Mouse">
+          <MouseCrud :EquipoComputoId="computerId" />
         </b-tab>
       </b-tabs>
     </b-card>
@@ -159,6 +176,8 @@
 
 <script>
 import DisplayCrud from '@/views/Patrimony/Computers/Display/DisplayCrud.vue'
+import KeyboardCrud from '@/views/Patrimony/Computers/Keyboards/KeyboardCrud.vue'
+import MouseCrud from '@/views/Patrimony/Computers/Mouse/MouseCrud.vue'
 import ComputerServices from '@/Services/computer.Services'
 import AreaServices from '@/Services/area.Services'
 import DepartamentServices from '@/Services/departament.Services'
@@ -172,10 +191,12 @@ export default {
     Form,
     Field,
     ErrorMessage,
-    DisplayCrud
+    DisplayCrud,
+    KeyboardCrud,
+    MouseCrud
   },
   setup () {
-    const { getComputer, updateComputer } = ComputerServices()
+    const { getComputer, updateComputer, getStatus } = ComputerServices()
     const { getAreasByDepartament } = AreaServices()
     const { getDepartaments } = DepartamentServices()
     const swal = inject('$swal')
@@ -183,6 +204,7 @@ export default {
     const computer = ref([])
     const areas = ref([])
     const departaments = ref([])
+    const statusComputers = ref([])
     const router = useRoute()
     const redirect = useRouter()
     const brandState = ref(false)
@@ -191,7 +213,8 @@ export default {
     const processorState = ref(false)
     const departamentState = ref(false)
     const areaState = ref(false)
-    const computerId = ref(router.params.EquipoComputoId)
+    const stateComputerState = ref(false)
+    const computerId = ref(parseInt(router.params.EquipoComputoId))
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
       { text: 'Equipos de computo', to: '/EquiposComputo/list' },
@@ -213,9 +236,21 @@ export default {
       })
     }
     getComputer(computerId.value, data => {
+      console.log(data)
       computer.value = data
       getAreas(data.departamentoId)
       validateState()
+    })
+    getStatus(data => {
+      statusComputers.value = data
+      if (data.length === 0) {
+        swal.fire({
+          title: 'No se encuentran estatus registrados!',
+          text:
+            'No se encuentran estatus registrados en el sistema, registre primero un estatus para continuar.',
+          icon: 'warning'
+        })
+      }
     })
     getDepartaments(data => {
       departaments.value = data
@@ -294,13 +329,32 @@ export default {
       validateState()
       return true
     }
+    const validateStateComputer = () => {
+      if (!computer.value.estatusEquipoId) {
+        stateComputerState.value = false
+        return 'Este campo es requerido'
+      }
+      stateComputerState.value = true
+      return true
+    }
     const validateState = () => {
-      brandState.value = computer.value.marca !== '' && computer.value.marca !== null && /^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(computer.value.marca)
-      memoryState.value = computer.value.memoriaRAM !== '' && computer.value.memoriaRAM !== null
-      storageState.value = computer.value.almacenamiento !== '' && computer.value.almacenamiento !== null
-      processorState.value = computer.value.procesador !== '' && computer.value.procesador !== null
-      departamentState.value = computer.value.departament !== 0 && computer.value.departament !== null
-      areaState.value = computer.value.areaId !== 0 && computer.value.areaId !== null
+      brandState.value =
+        computer.value.marca !== '' &&
+        computer.value.marca !== null &&
+        /^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(computer.value.marca)
+      memoryState.value =
+        computer.value.memoriaRAM !== '' && computer.value.memoriaRAM !== null
+      storageState.value =
+        computer.value.almacenamiento !== '' &&
+        computer.value.almacenamiento !== null
+      processorState.value =
+        computer.value.procesador !== '' && computer.value.procesador !== null
+      departamentState.value =
+        computer.value.departament !== 0 && computer.value.departament !== null
+      areaState.value =
+        computer.value.areaId !== 0 && computer.value.areaId !== null
+      stateComputerState.value =
+        computer.value.estatusEquipoId !== 0 && computer.value.estatusEquipoId !== null
       return ''
     }
     return {
@@ -315,6 +369,8 @@ export default {
       areas,
       departaments,
       computerId,
+      statusComputers,
+      stateComputerState,
 
       validateBrand,
       validateMemory,
@@ -324,7 +380,8 @@ export default {
       validateArea,
       onUpdateComputer,
       validateState,
-      getAreas
+      getAreas,
+      validateStateComputer
     }
   }
 }

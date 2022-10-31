@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20221027220930_correccion_estatus")]
+    partial class correccion_estatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -439,7 +441,7 @@ namespace AtoGobMx.Migrations
                     b.Property<int>("DepartamentoId")
                         .HasColumnType("int");
 
-                    b.Property<int>("EstatusEquipoId")
+                    b.Property<int>("EstatusId")
                         .HasColumnType("int");
 
                     b.Property<string>("Marca")
@@ -460,7 +462,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasIndex("DepartamentoId");
 
-                    b.HasIndex("EstatusEquipoId");
+                    b.HasIndex("EstatusId");
 
                     b.ToTable("EquipoComputo");
                 });
@@ -888,9 +890,9 @@ namespace AtoGobMx.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AtoGobMx.Models.PAT_EstatusEquipo", "EstatusEquipo")
+                    b.HasOne("AtoGobMx.Models.PAT_EstatusEquipo", "InventarioEstatus")
                         .WithMany("EquipoComputo")
-                        .HasForeignKey("EstatusEquipoId")
+                        .HasForeignKey("EstatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -898,7 +900,7 @@ namespace AtoGobMx.Migrations
 
                     b.Navigation("Departamentos");
 
-                    b.Navigation("EstatusEquipo");
+                    b.Navigation("InventarioEstatus");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.PAT_Mobiliario", b =>
