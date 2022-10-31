@@ -91,6 +91,22 @@
           </b-col>
           <!--2-->
           <b-col>
+            <b-form-group class="mt-3" label="Estatus">
+              <Field name="StatusField" :rules="validateStatus" as="text">
+                <b-form-select
+                  v-model="publicLightingFields.estatusId"
+                  autofocus
+                  :state="StatusState"
+                  :options="statusPublicLighting"
+                  value-field="estatusId"
+                  text-field="nombreEstatus"
+                ></b-form-select>
+              </Field>
+              <ErrorMessage class="text-danger" name="StatusField"/>
+            </b-form-group>
+          </b-col>
+          <!--3-->
+          <b-col>
             <b-form-group class="mt-3" label="Domicilio">
               <Field name="DomicileField" :rules="validateDomicile" as="text">
                 <b-form-input
@@ -101,7 +117,7 @@
               <ErrorMessage class="text-danger" name="DomicileField"/>
             </b-form-group>
           </b-col>
-          <!--3-->
+          <!--4-->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion Domicilio">
               <Field name="addresdescriptionField" :rules="validateAddresdescription" as="text">
@@ -114,7 +130,7 @@
               <ErrorMessage class="text-danger" name="addresdescriptionField"/>
             </b-form-group>
           </b-col>
-          <!--4-->
+          <!--5-->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion del problema">
               <Field name="ProblemField" :rules="validateProblem" as="text">
@@ -151,6 +167,7 @@
 import PubliclightingServices from '@/Services/publiclighting.Services'
 import TypeTaskLightingServices from '@/Services/tasktypelighting.Services'
 import EditExpedientLighting from '@/Services/expedientlighting.Services'
+import statusServices from '@/Services/statuslighting.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -166,6 +183,7 @@ export default {
     const { getPublicLighting, createPublicLighting, deletePublicLighting } = PubliclightingServices()
     const { getTaskTypeLighting } = TypeTaskLightingServices()
     const { createExpedientLighting } = EditExpedientLighting()
+    const { getStatus } = statusServices()
     const showModal = ref(false)
     const publicLighting = ref([])
     const statusPublicLighting = ref([])
@@ -194,10 +212,23 @@ export default {
       domicilio: null,
       descripcionDomicilio: null,
       tareaTipoId: null,
+      estatusId: null,
       tieneExpediente: true,
       archivado: false
     })
     // tarea: null,
+
+    getStatus(data => {
+      statusPublicLighting.value = data
+      if (data.length === 0) {
+        swal.fire({
+          title: 'No se encuentra un tipo de estatus registrado!',
+          text:
+            'No se encuentra tipo de estatus registrado en el departamento seleccionado, registre primero un tipo de estatus para continuar',
+          icon: 'warning'
+        })
+      }
+    })
 
     getTaskTypeLighting(data => {
       typeTaskLighting.value = data
@@ -217,6 +248,15 @@ export default {
         return 'Este campo es requerido'
       }
       TaskState.value = true
+      return true
+    }
+
+    const validateStatus = () => {
+      if (!publicLightingFields.value.estatusId) {
+        StatusState.value = false
+        return 'Este campo es requerido'
+      }
+      StatusState.value = true
       return true
     }
 
@@ -278,6 +318,7 @@ export default {
 
     const fields = ref([
       { value: 'alumbradoId', text: 'ID', sortable: true },
+      { value: 'estatus.nombreEstatus', text: 'Estatus' },
       { value: 'tareaTipoAlumbrado.nombreTarea', text: 'Tipo de tarea' },
       { value: 'descripcionProblema', text: 'Descripcion del problema' },
       { value: 'domicilio', text: 'Domicilio' },
@@ -402,6 +443,7 @@ export default {
       validateTask,
       validateAddresdescription,
       validateDomicile,
+      validateStatus,
       resetPublicLightingFields,
       validateProblem
     }

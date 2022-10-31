@@ -73,13 +73,13 @@
     lazy
   >
   <b-row>
-      <b-form-group class="mt-3" label=": ">
+      <b-form-group class="mt-3" label="Alumbrado: ">
         <b-form-select
           autofocus
           :options="employees"
-          value-field=""
-          text-field=""
-          v-model="expedientLightingFields."
+          value-field="estatusId"
+          text-field="nombreEstatus"
+          v-model="expedientLightingFields.estatusId"
         />
       </b-form-group>
     </b-row>
@@ -184,19 +184,6 @@ export default {
       { value: 'areaId', text: 'Area' },
       { value: 'actions', text: 'Acciones' }
     ])
-
-    // const resetexpedientLightingFields = () => {
-    //   showModal.value = false
-    //   expedientLightingFields.value = JSON.parse(
-    //     JSON.stringify(expedientLightingFieldsBlank)
-    //   )
-    //   PublicPlaceState.value = false
-    //   LocationState.value = false
-    //   HighDateState.value = false
-    //   departamentState.value = false
-    //   areaState.value = false
-    //   DescriptionSolutionState.value = false
-    // }
 
     getExpedientLighting(data => {
       expedientLighting.value = data
