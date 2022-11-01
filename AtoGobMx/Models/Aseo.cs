@@ -13,6 +13,6 @@ namespace AtoGobMx.Models
         public string Domicilio { get; set; }
         public string Objetivo { get; set; }
         public bool Archivado { get; set; }
-        public int? RutaId { get; set; }
+        //public int? RutaId { get; set; }
     }
 }

@@ -20,11 +20,19 @@ namespace AtoGobMx.Context
         public DbSet<EmpleadosAlumbrado> EmpleadosAlumbrado { get; set; }
         public DbSet<Aseo> Aseo { get; set; }
         public DbSet<Ruta> Ruta { get; set; }
+        public DbSet<Zona> Zona { get; set; }
         public DbSet<Cementerios> Cementerios { get; set; }
         public DbSet<DireccionCementerio> DireccionCementerio { get; set; }
         public DbSet<ExpedienteDigital> ExpedienteDigital { get; set; }
         public DbSet<Archivos> Archivos { get; set; }
         public DbSet<Departamentos> Departamentos { get; set; }
         public DbSet<PuestoTrabajo> PuestoTrabajo { get; set; }
+        public DbSet<PAT_EquipoComputo> EquipoComputo { get; set; }
+        public DbSet<PAT_Monitor> PAT_Monitor { get; set; }
+        public DbSet<PAT_Mouse> PAT_Mouse { get; set; }
+        public DbSet<PAT_Teclado> PAT_Teclado { get; set; }
+        public DbSet<PAT_Vehiculo> PAT_Vehiculo { get; set; }
+        public DbSet<PAT_Mobiliario> PAT_Mobiliario { get; set; }
+        public DbSet<InventarioEstatus> InventarioEstatus { get; set; }
     }
 }

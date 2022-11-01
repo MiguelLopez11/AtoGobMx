@@ -14,12 +14,15 @@
           </div>
 
           <div class="col-lg-6 mb-5 mb-lg-0">
-              <!-- <img
-                src="https://www.atotonilco.gob.mx/templates/it_headlines/custom/images/logo_h.png"
-                class="img-fluid"
-              /> -->
-            <div class="card">
-              <span align="center" class="display-6 mb-2 mt-3 p-0">Inicio de Sesion</span>
+            <div class="card" style="background-color: #f8f9fa">
+              <b-img center height="200" width="200" src="https://img.icons8.com/external-flaticons-flat-flat-icons/344/external-login-web-development-flaticons-flat-flat-icons.png"></b-img>
+              <!-- <b-avatar
+                  style="margin-left: 200px"
+                  ref="refAvatar"
+                  src="https://cdn-icons-png.flaticon.com/512/74/74235.png"
+                  size="250px"
+                /> -->
+              <!-- <span align="center" class="display-6 mb-2 mt-3 p-0">Inicio de Sesion</span> -->
               <div class="card-body py-3 px-md-5">
                 <Form @submit="onLogIn">
                   <div class="form-outline mb-4">
@@ -103,8 +106,11 @@ export default {
     })
     const onLogIn = () => {
       LogIn(user.value, data => {
+        console.log(data)
         if (data.usuarioId) {
-          window.sessionStorage.setItem('User', JSON.stringify(data))
+          window.sessionStorage.setItem('isLogged', true)
+          window.sessionStorage.setItem('Role', data.role.nombre)
+          window.sessionStorage.setItem('Departamento', data.empleado.departamentos.nombre)
           swal
             .fire({
               title: 'Inicio de sesión correcto.!',
@@ -180,22 +186,5 @@ export default {
 </script>
 
 <style scoped>
-.divider:after,
-.divider:before {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: #eee;
-}
-.h-custom {
-  height: calc(100% - 73px);
-}
-@media (max-width: 450px) {
-  .h-custom {
-    height: 100%;
-  }
-}
-body {
-  background-color: #ffff !important;
-}
+
 </style>

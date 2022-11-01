@@ -29,7 +29,7 @@ namespace AtoGobMx.Controllers
             return Ok(Ruta);
         }
 
-        [HttpGet("RutaId")]
+        [HttpGet("{RutaId}")]
         public async Task<ActionResult> GetRutaById(int RutaId)
         {
             var rutaaseo = await _context.Ruta
@@ -71,7 +71,7 @@ namespace AtoGobMx.Controllers
             rutaAseo.Destino = ruta.Destino;
             //rutaAseo.kilometros = ruta.kilometros;
             rutaAseo.Obsevacion = ruta.Obsevacion;
-            rutaAseo.Archivado = ruta.Archivado;
+            rutaAseo.Archivado = ruta.Archivado; 
 
             _context.Ruta.Update(rutaAseo);
             await _context.SaveChangesAsync();

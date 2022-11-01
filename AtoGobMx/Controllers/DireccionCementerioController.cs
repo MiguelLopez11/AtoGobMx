@@ -24,7 +24,7 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<DireccionCementerio>> GetDireccionCementerios()
         {
             var direccion = await _context.DireccionCementerio
-                .OrderBy(o => o.NombreCementerio)
+                //.OrderBy(o => o.NombreCementerio)
                 .Where(w => !w.Archivado)
                 .Select(s => _mapper.Map<DireccionCementerio>(s))
                 .ToArrayAsync();
@@ -43,7 +43,7 @@ namespace AtoGobMx.Controllers
             return Ok(direccion);
         }
 
-        [HttpPost()]
+        [HttpPost]
         public async Task<ActionResult> PostDireccionCementerios(DireccionCementerio direccioncementerio)
         {
             _context.DireccionCementerio.Add(direccioncementerio);

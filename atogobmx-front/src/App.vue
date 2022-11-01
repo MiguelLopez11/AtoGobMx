@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-card class="m-2" v-if="userData">
+    <b-card class="m-2" v-if="isLogged">
       <b-navbar sticky>
         <b-navbar-nav>
           <b-nav-item>
@@ -67,6 +67,10 @@
               <i class="bi bi-folder-fill"></i>
               Expediente
             </b-dropdown-item>
+            <b-dropdown-item to="/AlumbradoEmpleado/list">
+              <!-- <i class="bi bi-folder-fill"></i> -->
+              Empleado Alumbrado
+            </b-dropdown-item>
           </b-nav-item-dropdown>
           <!--Cementerios-->
           <b-nav-item-dropdown
@@ -80,6 +84,41 @@
             <b-dropdown-item to="/Cementerios/list">
               <!-- <i class="bi bi-lightning-charge-fill"></i> -->
               Cementerios
+            </b-dropdown-item>
+            <b-dropdown-item to="/DireccionCementerios/list">
+              <!-- <i class="bi bi-lightning-charge-fill"></i> -->
+              Direccion cementerios
+            </b-dropdown-item>
+          </b-nav-item-dropdown>
+          <!--Aseo-->
+          <b-nav-item-dropdown
+            text="Aseo"
+            dropright
+            auto-close="outside"
+          >
+            <template v-slot:button-content>
+              <!-- <i class="bi bi-globe2"></i> -->
+            </template>
+            <b-dropdown-item to="/Aseo/list">
+              <!-- <i class="bi bi-lightning-charge-fill"></i> -->
+              Aseo
+            </b-dropdown-item>
+            <b-dropdown-item to="/Ruta/list">
+              <!-- <i class="bi bi-lightning-charge-fill"></i> -->
+              Ruta
+            </b-dropdown-item>
+            <b-dropdown-item to="/Zona/list">
+              <!-- <i class="bi bi-lightning-charge-fill"></i> -->
+              Zona
+            </b-dropdown-item>
+          </b-nav-item-dropdown>
+          <b-nav-item-dropdown text="Patriminio" right auto-close>
+             <template v-slot:button-content>
+              <i class="bi bi-bookmark-check-fill"></i>
+            </template>
+            <b-dropdown-item to="/EquiposComputo/list">
+              <i class="bi bi-pc-display"></i>
+              Equipos de computo
             </b-dropdown-item>
           </b-nav-item-dropdown>
           <b-nav-item-dropdown text="Administrador" right auto-close>
@@ -96,17 +135,17 @@
             </b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>
-        <b-row align-h="end">
-          <b-navbar-nav>
-              <b-button v-if="!userData" size="lg" to="/Login" style="background-color: #7367f0">
+        <b-row align-h="end" cols="1">
+          <div>
+              <b-button v-if="!isLogged" size="lg" to="/Login" style="background-color: #7367f0" class="mr-3">
                 <i class="bi bi-box-arrow-right"></i>
                 Login
               </b-button>
-              <b-button v-if="userData" size="lg" @click="removeLocalStorgare()" style="background-color: #7367f0">
+              <b-button v-if="isLogged" size="lg" @click="removeLocalStorgare()" style="background-color: #7367f0" class="mr-3">
                 <i class="bi bi-box-arrow-right"></i>
                 Cerrar Sesión
               </b-button>
-          </b-navbar-nav>
+          </div>
         </b-row>
       </b-navbar>
     </b-card>
@@ -123,9 +162,9 @@ export default {
     const router = useRouter()
     const swal = inject('$swal')
     const background = ref(LogoAtogobMx)
-    const userData = window.sessionStorage.getItem('User')
+    const isLogged = window.sessionStorage.getItem('isLogged')
     const removeLocalStorgare = () => {
-      window.sessionStorage.removeItem('User')
+      window.sessionStorage.removeItem('isLogged')
       swal.fire({
         title: 'Cerrar Sesión!',
         text: 'Se ha cerrado sesion correctamente',
@@ -137,7 +176,7 @@ export default {
     }
     return {
       background,
-      userData,
+      isLogged,
 
       removeLocalStorgare
       // roleUser,

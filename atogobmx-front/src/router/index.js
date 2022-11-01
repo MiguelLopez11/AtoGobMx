@@ -10,6 +10,14 @@ const routes = [
     }
   },
   {
+    path: '/PageNotAllowed',
+    name: 'PageNotPermission',
+    component: () => import('../views/PageNotPermission/PageNotPermission.vue'),
+    meta: {
+      requiresAuth: false
+    }
+  },
+  {
     path: '/',
     name: 'Home',
     component: () => import('../views/Home/HomePage.vue'),
@@ -33,7 +41,9 @@ const routes = [
     name: 'Area-Edit',
     component: () => import('../views/RecursosHumanos/areas/AreaEdit.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Recursos Humanos'
     }
   },
   {
@@ -41,7 +51,9 @@ const routes = [
     name: 'Empleados',
     component: () => import('@/views/RecursosHumanos/Employees/EmployeeList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Recursos Humanos'
     }
   },
   {
@@ -49,7 +61,9 @@ const routes = [
     name: 'Empleados-Edit',
     component: () => import('@/views/RecursosHumanos/Employees/EmployeeEdit.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Recursos Humanos'
     }
   },
   {
@@ -57,7 +71,9 @@ const routes = [
     name: 'ExpedientesDigitales',
     component: () => import('@/views/RecursosHumanos/ExpedienteDigital/ExpedientDigitalList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Recursos Humanos'
     }
   },
   {
@@ -65,7 +81,9 @@ const routes = [
     name: 'ExpedienteDigital-edit',
     component: () => import('@/views/RecursosHumanos/ExpedienteDigital/ExpedientDigitalEdit.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Recursos Humanos'
     }
   },
   {
@@ -165,11 +183,93 @@ const routes = [
     }
   },
   {
+    path: '/DireccionCementerios/list',
+    name: 'DireccionCementerios',
+    component: () => import('@/views/ServiciosPublicos/cementery/addresscementery/AddressCementeryList.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/DireccionCementerios/:DireccionId',
+    name: 'DireccionCementerios-Edit',
+    component: () => import('@/views/ServiciosPublicos/cementery/addresscementery/EditAddressCementery.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/Aseo/list',
+    name: 'Aseo',
+    component: () => import('@/views/ServiciosPublicos/cleanness/Cleanness/CleannessList.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/Aseo/:AseoId',
+    name: 'Aseo-Edit',
+    component: () => import('@/views/ServiciosPublicos/cleanness/Cleanness/EditCleanness.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/Ruta/list',
+    name: 'Ruta',
+    component: () => import('@/views/ServiciosPublicos/cleanness/Road/RoadList.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/Ruta/:RutaId',
+    name: 'Ruta-Edit',
+    component: () => import('@/views/ServiciosPublicos/cleanness/Road/EditRoad.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/Zona/list',
+    name: 'Zona',
+    component: () => import('@/views/ServiciosPublicos/cleanness/Zone/ZoneList.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/Zona/:ZonaId',
+    name: 'Zona-Edit',
+    component: () => import('@/views/ServiciosPublicos/cleanness/Zone/EditZone.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/AlumbradoEmpleado/list',
+    name: 'AlumbradoEmpleado',
+    component: () => import('@/views/ServiciosPublicos/streetLighting/lightingEmployee/LightingEmployeeList.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/AlumbradoEmpleado/:AlumbradoEmpleadoId',
+    name: 'AlumbradoEmpleado-Edit',
+    component: () => import('@/views/ServiciosPublicos/streetLighting/lightingEmployee/EditLightingEmployee.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: '/Usuarios/list',
     name: 'Usuarios',
     component: () => import('@/views/Users/UserList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Dirección de sistemas'
     }
   },
   {
@@ -177,7 +277,9 @@ const routes = [
     name: 'Usuarios-Edit',
     component: () => import('@/views/Users/UserEdit.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Dirección de sistemas'
     }
   },
   {
@@ -185,7 +287,9 @@ const routes = [
     name: 'Roles',
     component: () => import('@/views/Roles/RoleList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Dirección de sistemas'
     }
   },
   {
@@ -193,7 +297,9 @@ const routes = [
     name: 'Roles-Edit',
     component: () => import('@/views/Roles/RoleEdit.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Dirección de sistemas'
     }
   },
   {
@@ -201,7 +307,9 @@ const routes = [
     name: 'Departamentos',
     component: () => import('@/views/RecursosHumanos/Departaments/DepartamentList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Recursos Humanos'
     }
   },
   {
@@ -209,7 +317,9 @@ const routes = [
     name: 'Departamentos-Edit',
     component: () => import('@/views/RecursosHumanos/Departaments/DepartamentEdit.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Recursos Humanos'
     }
   },
   {
@@ -217,7 +327,9 @@ const routes = [
     name: 'PuestosTrabajos',
     component: () => import('@/views/RecursosHumanos/WorkStation/WorkStationList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Recursos Humanos'
     }
   },
   {
@@ -225,7 +337,29 @@ const routes = [
     name: 'PuestoTrabajo-Edit',
     component: () => import('@/views/RecursosHumanos/WorkStation/WorkStationEdit.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Recursos Humanos'
+    }
+  },
+  {
+    path: '/EquiposComputo/list',
+    name: 'EquiposComputo',
+    component: () => import('@/views/Patrimony/Computers/Computer/ComputerList.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Patrimonio'
+    }
+  },
+  {
+    path: '/EquiposComputo/:EquipoComputoId',
+    name: 'EquiposComputo-Edit',
+    component: () => import('@/views/Patrimony/Computers/Computer/ComputerEdit.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Patrimonio'
     }
   }
 ]
@@ -235,7 +369,9 @@ const router = createRouter({
   routes
 })
 router.beforeEach(async (to, from, next) => {
-  const isLoggedIn = window.sessionStorage.getItem('User') !== null
+  const isLoggedIn = window.sessionStorage.getItem('isLogged')
+  const role = window.sessionStorage.getItem('Role')
+  const departamento = window.sessionStorage.getItem('Departamento')
   if (['Login'].includes(to.name) && isLoggedIn) {
     next({ name: 'Home' })
   } else if (to.meta.requiresAuth && !isLoggedIn) {
@@ -243,6 +379,9 @@ router.beforeEach(async (to, from, next) => {
       path: '/Login',
       query: { redirect: to.fullPath }
     })
+  // eslint-disable-next-line no-mixed-operators
+  } else if (to.meta.rol && to.meta.departamento && departamento !== to.meta.departamento && role !== 'Administrador') {
+    next({ name: 'PageNotPermission' })
   } else {
     next()
   }

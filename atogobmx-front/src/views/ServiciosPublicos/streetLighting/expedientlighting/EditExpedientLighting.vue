@@ -7,137 +7,165 @@
       <div>
         <h3>Expediente Alumbrado</h3>
       </div>
-      <Form @submit="onUpdateExpedientLighting">
-        <b-row cols="2">
-          <b-col>
-            <b-form-group class="mt-3" label="Nombre del Tipo Tarea">
-              <Field name="TypeTaskField" :rules="validateTypeTask">
-                <b-form-select
-                  v-model="expedientLighting.tarea"
-                  autofocus
-                  :state="TypeTaskState"
-                  :options="statusPublicLighting"
-                  value-field="estatusId"
-                  text-field="nombreEstatus"
-                ></b-form-select>
-              </Field>
-              <ErrorMessage name="TypeTaskField"
-                ><span>Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i>
-              </ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Fecha Alta">
-              <Field name="HighDateField" :rules="validateHighDate">
-                <Datepicker
-                  locale="es"
-                  name="Date"
-                  text-input
-                  v-model="expedientLighting.fechaAlta"
-                  :state="HighDateState"
-                ></Datepicker>
-              </Field>
-              <ErrorMessage name="HighDateField"
-                ><span>Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i>
-              </ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Domicilio">
-              <Field name="DomicileField" :rules="validateDomicile">
-                <b-form-input
-                  v-model="expedientLighting.domicilio"
-                  :state="DomicileState"
-                ></b-form-input>
-              </Field>
-              <ErrorMessage name="DomicileField"
-                ><span>Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i>
-              </ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Fecha Baja">
-              <Field name="LowDateField" :rules="validateLowDate">
-                <Datepicker
-                  locale="es"
-                  name="date"
-                  text-input
-                  v-model="expedientLighting.fechaBaja"
-                  :state="LowDateState"
-                ></Datepicker>
-              </Field>
-              <ErrorMessage name="LowDateField"
-                ><span>Este campo es requerido llenarlo </span
-                ><i class="bi bi-exclamation-circle"></i>
-              </ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Descripcion Domicilio">
-              <Field
-                name="addresdescriptionField"
-                :rules="validateAddresdescription"
+      <b-tabs>
+        <b-tab title="Datos generales">
+          <Form @submit="onUpdateExpedientLighting">
+            <b-row cols="2">
+              <!--1-->
+              <b-col>
+                <b-form-group class="mt-3" label="Lugar publico">
+                  <Field
+                    name="PublicPlaceField"
+                    :rules="validatePublicPlace"
+                    as="text"
+                  >
+                    <b-form-input
+                      v-model="expedientLighting.lugarPublico"
+                      :state="PublicPlaceState"
+                    ></b-form-input>
+                  </Field>
+                  <ErrorMessage
+                    class="text-danger"
+                    name="PublicPlaceField"
+                  ></ErrorMessage>
+                </b-form-group>
+              </b-col>
+              <!--2-->
+              <b-col>
+                <b-form-group class="mt-3" label="Localidad">
+                  <Field
+                    name="LocationField"
+                    :rules="validateLocation"
+                    as="text"
+                  >
+                    <b-form-input
+                      v-model="expedientLighting.localidad"
+                      :state="LocationState"
+                    ></b-form-input>
+                  </Field>
+                  <ErrorMessage
+                    class="text-danger"
+                    name="LocationField"
+                  ></ErrorMessage>
+                </b-form-group>
+              </b-col>
+              <!--3-->
+              <b-col>
+                <b-form-group class="mt-3" label="Fecha Alta">
+                  <Field name="HighDateField" :rules="validateHighDate" as="">
+                    <Datepicker
+                      locale="es"
+                      name="date"
+                      text-input
+                      v-model="expedientLighting.fechaAlta"
+                      :state="HighDateState"
+                    ></Datepicker>
+                  </Field>
+                  <ErrorMessage name="HighDateField"></ErrorMessage>
+                </b-form-group>
+              </b-col>
+              <!--4-->
+              <b-col>
+                <b-form-group class="mt-3" label="Departamento">
+                  <Field
+                    name="DepartamentField"
+                    :rules="validateDepartament"
+                    as="number"
+                  >
+                    <b-form-select
+                      v-model="expedientLighting.departamentoId"
+                      autofocus
+                      :options="departaments"
+                      value-field="departamentoId"
+                      text-field="nombre"
+                      :state="departamentState"
+                      @input="getAreas(EmployeesFields.departamentoId)"
+                    >
+                    </b-form-select>
+                  </Field>
+                  <ErrorMessage
+                    class="text-danger"
+                    name="DepartamentField"
+                  ></ErrorMessage>
+                </b-form-group>
+              </b-col>
+              <!--5-->
+              <b-col>
+                <b-form-group class="mt-3" label="Area">
+                  <Field name="AreaField" :rules="validateArea" as="number">
+                    <b-form-select
+                      v-model="expedientLighting.areaId"
+                      autofocus
+                      :options="areas"
+                      value-field="areaId"
+                      text-field="nombre"
+                      :state="areaState"
+                      @input="getWorkStation(EmployeesFields.areaId)"
+                    >
+                    </b-form-select>
+                  </Field>
+                  <ErrorMessage
+                    class="text-danger"
+                    name="AreaField"
+                  ></ErrorMessage>
+                </b-form-group>
+              </b-col>
+              <!--6-->
+              <b-col>
+                <b-form-group class="mt-3" label="Descripcion Solucion">
+                  <Field
+                    name="DescriptionSolutionField"
+                    :rules="validateDescriptionSolution"
+                    as="text"
+                  >
+                    <b-form-textarea
+                      v-model="expedientLighting.descripcionSolucion"
+                      :state="DescriptionSolutionState"
+                      rows="4"
+                    ></b-form-textarea>
+                  </Field>
+                  <ErrorMessage
+                    class="text-danger"
+                    name="DescriptionSolutionField"
+                  ></ErrorMessage>
+                </b-form-group>
+              </b-col>
+            </b-row>
+            <b-row align-h="end">
+              <b-button
+                class="w-auto m-2 text-white"
+                variant="primary"
+                to="/ExpedienteAlumbrado/list"
               >
-                <b-form-textarea
-                  v-model="expedientLighting.descripcionDomicilio"
-                  :state="addresdescriptionState"
-                  rows="4"
-                ></b-form-textarea>
-              </Field>
-              <ErrorMessage name="addresdescriptionField"
-                ><span>Este campo es requerido llenarlo </span
-                ><i class="bi bi-exclamation-circle"></i>
-              </ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Solucion Del Problema">
-              <Field
-                name="DescriptionSolutionField"
-                :rules="validateDescriptionSolution"
+                Cancelar
+              </b-button>
+              <b-button class="w-auto m-2" variant="success" type="submit"
+                >Guardar</b-button
               >
-                <b-form-textarea
-                  v-model="expedientLighting.descripcionSolucion"
-                  :state="DescriptionSolutionState"
-                  rows="4"
-                ></b-form-textarea>
-              </Field>
-              <ErrorMessage name="DescriptionSolutionField"
-                ><span>Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i>
-              </ErrorMessage>
-            </b-form-group>
-          </b-col>
-        </b-row>
-        <b-row align-h="end">
-          <b-button
-            class="w-auto m-2 text-white"
-            variant="primary"
-            to="/ExpedienteAlumbrado/list"
-          >
-            Cancelar
-          </b-button>
-          <b-button class="w-auto m-2" variant="success" type="submit"
-            >Guardar</b-button
-          >
-        </b-row>
-      </Form>
+            </b-row>
+          </Form>
+        </b-tab>
+        <b-tab title="Empleados">
+          <employee-lighting />
+        </b-tab>
+        <b-tab title="Vehiculos"> </b-tab>
+      </b-tabs>
     </b-card>
   </b-card>
 </template>
 
 <script>
 import ExpedientlightingServices from '@/Services/expedientlighting.Services'
+import AreaServices from '@/Services/area.Services'
+import DepartamentServices from '@/Services/departament.Services'
+import EmployeeLighting from '@/views/ServiciosPublicos/streetLighting/lightingEmployee/LightingEmployeeList.vue'
 // import StatusServices from '@/Services/statuslighting.Services'
 import { Field, Form, ErrorMessage } from 'vee-validate'
 // import AreaServices from '@/Services/area.Services'
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Datepicker from '@vuepic/vue-datepicker'
-import { useToast } from 'vue-toast-notification'
+// import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   props: {
@@ -147,29 +175,35 @@ export default {
     Datepicker,
     Field,
     Form,
-    ErrorMessage
+    ErrorMessage,
+    EmployeeLighting
   },
   setup (props) {
+    const swal = inject('$swal')
+    const { getAreasByDepartament } = AreaServices()
+    const { getDepartaments } = DepartamentServices()
     const {
       getExpedientLightingById,
       updatExpedientLighting
     } = ExpedientlightingServices()
     // const { getStatusById } = StatusServices()
-    const $toast = useToast()
+    // const $toast = useToast()
     const expedientLighting = ref([])
-    const statusPublicLighting = ref([])
+    const departaments = ref([])
+    const areas = ref([])
+    // const statusPublicLighting = ref([])
     const router = useRoute()
     const redirect = useRouter()
     // const route = useRouter()
-    const TypeTaskState = ref(false)
-    const DescriptionSolutionState = ref(false)
+    const PublicPlaceState = ref(false)
+    const LocationState = ref(false)
     const HighDateState = ref(false)
-    const addresdescriptionState = ref(false)
-    const DomicileState = ref(false)
-    const LowDateState = ref(false)
+    const departamentState = ref(false)
+    const areaState = ref(false)
+    const DescriptionSolutionState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Alumbrado', to: '/ExpedienteAlumbrado/list' },
+      { text: 'Expediente', to: '/ExpedienteAlumbrado/list' },
       { text: 'Editar-ExpedienteAlumbrado' }
     ])
 
@@ -184,28 +218,98 @@ export default {
         // validateState()
         expedientLighting.value = data
         // eslint-disable-next-line no-unneeded-ternary
-        TypeTaskState.value = data.tarea === null ? false : true
+        PublicPlaceState.value = data.lugarPublico === null ? false : true
       }
     )
     const onUpdateExpedientLighting = () => {
-      updatExpedientLighting(expedientLighting.value, data => {})
-      $toast.open({
-        message: 'El expediente alumbrado se a modificado correcta mente',
-        position: 'top',
-        duration: 1000,
-        dismissible: true,
-        type: 'success',
-        onDismiss: () => redirect.push('/ExpedienteAlumbrado/list')
+      updatExpedientLighting(expedientLighting.value, data => {
+        swal
+          .fire({
+            title: '¡Expediente modificado correctamente!',
+            text: 'El expediente se ha modificado  satisfactoriamente.',
+            icon: 'success'
+          })
+          .then(result => {
+            if (result.isConfirmed) {
+              redirect.push('/ExpedienteAlumbrado/list')
+            }
+          })
       })
+
+      // $toast.open({
+      //   message: 'El expediente alumbrado se a modificado correcta mente',
+      //   position: 'top',
+      //   duration: 1000,
+      //   dismissible: true,
+      //   type: 'success',
+      //   onDismiss: () => redirect.push('/ExpedienteAlumbrado/list')
+      // })
     }
-    const validateTypeTask = () => {
-      if (!expedientLighting.value.tarea) {
+
+    getDepartaments(data => {
+      departaments.value = data
+      if (data.length === 0) {
+        swal.fire({
+          title: 'No se encuentran departamentos registrados!',
+          text:
+            'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
+          icon: 'error'
+        })
+      }
+    })
+
+    const getAreas = departamentoId => {
+      if (departamentoId) {
+        getAreasByDepartament(departamentoId, data => {
+          areas.value = data
+          if (data.length === 0) {
+            swal.fire({
+              title: 'No se encuentran areas registradas!',
+              text:
+                'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
+              icon: 'error'
+            })
+          }
+        })
+      }
+    }
+
+    const validatePublicPlace = () => {
+      if (!expedientLighting.value.lugarPublico) {
         validateState()
         return 'Este campo es requerido'
       }
       validateState()
       return true
     }
+
+    const validateLocation = () => {
+      if (!expedientLighting.value.localidad) {
+        validateState()
+        return 'Este campo es requerido'
+      }
+      validateState()
+      return true
+    }
+
+    const validateDepartament = () => {
+      if (!expedientLighting.value.departamentoId) {
+        validateState()
+        return 'Este campo es requerido'
+      }
+      validateState()
+      return true
+    }
+
+    const validateArea = () => {
+      if (!expedientLighting.value.areaId) {
+        validateState()
+        return 'Este campo es requerido'
+      }
+      validateState()
+      return true
+    }
+
     const validateDescriptionSolution = () => {
       if (!expedientLighting.value.descripcionSolucion) {
         validateState()
@@ -214,22 +318,7 @@ export default {
       validateState()
       return true
     }
-    const validateDomicile = () => {
-      if (!expedientLighting.value.domicilio) {
-        validateState()
-        return 'Este campo es requerido'
-      }
-      validateState()
-      return true
-    }
-    const validateLowDate = () => {
-      if (!expedientLighting.value.fechaBaja) {
-        validateState()
-        return 'Este campo es requerido'
-      }
-      validateState()
-      return true
-    }
+
     const validateHighDate = () => {
       if (!expedientLighting.value.fechaAlta) {
         validateState()
@@ -238,29 +327,30 @@ export default {
       validateState()
       return true
     }
-    const validateAddresdescription = () => {
-      if (!expedientLighting.value.descripcionDomicilio) {
-        validateState()
-        return 'Este campo es requerido'
-      }
-      validateState()
-      return true
-    }
+
     const validateState = () => {
       // eslint-disable-next-line no-unneeded-ternary
-      TypeTaskState.value = expedientLighting.value.tarea !== ''
+      PublicPlaceState.value =
+        expedientLighting.value.lugarPublico !== '' ||
+        expedientLighting.value.lugarPublico !== null
       // eslint-disable-next-line no-unneeded-ternary
       HighDateState.value = expedientLighting.value.fechaAlta !== null
       // eslint-disable-next-line no-unneeded-ternary
-      DomicileState.value = expedientLighting.value.domicilio !== ''
+      LocationState.value =
+        expedientLighting.value.localidad !== '' ||
+        expedientLighting.value.localidad !== null
       // eslint-disable-next-line no-unneeded-ternary
-      addresdescriptionState.value =
-        expedientLighting.value.descripcionDomicilio !== ''
+      departamentState.value =
+        expedientLighting.value.departamentoId !== 0 ||
+        expedientLighting.value.departamentoId !== null
       // eslint-disable-next-line no-unneeded-ternary
       DescriptionSolutionState.value =
-        expedientLighting.value.descripcionSolucion !== ''
+        expedientLighting.value.descripcionSolucion !== '' ||
+        expedientLighting.value.descripcionSolucion !== null
       // eslint-disable-next-line no-unneeded-ternary
-      LowDateState.value = expedientLighting.value.fechaBaja !== null
+      areaState.value =
+        expedientLighting.value.areaId !== 0 ||
+        expedientLighting.value.descripcionSolucion !== null
     }
     // getAreas((data) => {
     //   areas.value = data
@@ -268,21 +358,23 @@ export default {
     return {
       expedientLighting,
       breadcrumbItems,
-      statusPublicLighting,
-      router,
-      TypeTaskState,
-      DescriptionSolutionState,
+      areas,
+      departaments,
+      PublicPlaceState,
       HighDateState,
-      addresdescriptionState,
-      DomicileState,
-      LowDateState,
+      LocationState,
+      departamentState,
+      areaState,
+      router,
+      DescriptionSolutionState,
       onUpdateExpedientLighting,
-      validateTypeTask,
+      validatePublicPlace,
+      validateLocation,
+      validateDepartament,
+      validateArea,
       validateDescriptionSolution,
       validateHighDate,
-      validateAddresdescription,
-      validateLowDate,
-      validateDomicile
+      getAreas
     }
   }
 }

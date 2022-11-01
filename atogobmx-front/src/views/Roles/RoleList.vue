@@ -69,7 +69,7 @@
       button-size="lg"
       hide-footer
     >
-      <Form @submit="addDepartamento">
+      <Form @submit="addRole">
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre">
@@ -188,7 +188,7 @@ export default {
       })
       return 'datos recargados'
     }
-    const addDepartamento = () => {
+    const addRole = () => {
       createRole(roleFields.value, (data) => {
         refreshTable()
         swal.fire({
@@ -214,15 +214,15 @@ export default {
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
           cancelButtonColor: '#d33',
-          confirmButtonText: 'Si, archivar departamento!',
+          confirmButtonText: 'Si, archivar Role!',
           cancelButtonText: 'Cancelar'
         })
         .then(result => {
           if (result.isConfirmed) {
             swal
               .fire({
-                title: 'Departamento archivado!',
-                text: 'El departamento ha sido archivado satisfactoriamente .',
+                title: 'Role archivado!',
+                text: 'El Role ha sido archivado satisfactoriamente .',
                 icon: 'success'
               })
               .then(result => {
@@ -251,7 +251,7 @@ export default {
       searchValue,
       searchField,
       onFiltered,
-      addDepartamento,
+      addRole,
       refreshTable,
       RemoveRole,
       nameState,

@@ -87,7 +87,7 @@ namespace AtoGobMx.Controllers
         [HttpPost]
         public async Task<ActionResult<Empleado>> PostEmpleados(Empleado Empleado)
         {
-
+            Empleado.FechaAlta = DateTime.Today;
             _context.Empleados.Add(Empleado);
             await _context.SaveChangesAsync();
             return CreatedAtAction("GetEmpleadosById", new { EmpleadoId = Empleado.EmpleadoId }, Empleado);
@@ -106,7 +106,6 @@ namespace AtoGobMx.Controllers
             }
             emp.EmpleadoId = empleado.EmpleadoId;
             emp.NombreCompleto = empleado.NombreCompleto;
-            //emp.FechaNacimiento = empleado.FechaNacimiento;
             emp.FechaAlta = empleado.FechaAlta;
             emp.FechaBaja = empleado.FechaBaja;
             emp.AreaId = empleado.AreaId;
