@@ -123,24 +123,25 @@ namespace AtoGobMx.Controllers
             try
             {
 
-            var empleado = _context.Empleados
-                .FirstOrDefault(f => f.EmpleadoId == empleadoId);
-            if (empleado == null)
-            {
-                return NotFound();
+                var empleado = _context.Empleados
+                    .FirstOrDefault(f => f.EmpleadoId == empleadoId);
+                if (empleado == null)
+                {
+                    return NotFound();
+                }
+                empleado.Archivado = true;
+                empleado.TieneExpediente = false;
+                empleado.FechaBaja = DateTime.Today;
+
+                var expediente = await _context.ExpedienteDigital
+                    .FirstOrDefaultAsync(f => f.EmpleadoId == empleadoId);
+
+                expediente.Archivado = true;
+                _context.Empleados.Update(empleado);
+                await _context.SaveChangesAsync();
+                return Ok("Empleado archivado");
             }
-            empleado.Archivado = true;
-            empleado.TieneExpediente = false;
-            empleado.FechaBaja = DateTime.Today;
-
-            var expediente = await _context.ExpedienteDigital
-                .FirstOrDefaultAsync(f => f.EmpleadoId == empleadoId);
-
-            expediente.Archivado = true;
-            _context.Empleados.Update(empleado);
-            await _context.SaveChangesAsync();
-            return Ok("Empleado archivado");
-            }catch (Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

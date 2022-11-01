@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    [Migration("20220901144002_Correcciones-DB")]
-    partial class CorreccionesDB
+    [Migration("20221101201710_Correcciones_DB")]
+    partial class Correcciones_DB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

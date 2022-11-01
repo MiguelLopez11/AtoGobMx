@@ -77,7 +77,7 @@ namespace AtoGobMx.Controllers
             _context.Cementerios.Update(cementeri);
             await _context.SaveChangesAsync();
             return Ok("Tipo de cementerio actualizado correctamente");
-            
+
         }
 
         [HttpDelete("{CementeriosId}")]

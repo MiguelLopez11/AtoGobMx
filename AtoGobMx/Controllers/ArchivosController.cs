@@ -46,32 +46,34 @@ namespace AtoGobMx.Controllers
             try
             {
 
-            var expediente = await _context.ExpedienteDigital
-                .Include(i => i.Empleados)
-                .Where(w => !w.Archivado)
-                .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == ExpedienteDigitalId);
-            if (expediente == null)
-            {
-                return NotFound("El ID del expediente no existe.");
-            }
-            var documento = await _context.Archivos
-                .Where(w => w.TipoArchivo == ".pdf" || w.TipoArchivo == ".docx")
-                .FirstOrDefaultAsync(f => f.ArchivoId == ArchivoId);
-            if (documento == null)
-            {
-                return NotFound("No se encuentra Archivo");
-            }
-            var filePath = $"Files/Documentos/{expediente.Empleados.NombreCompleto}/{documento.Nombre}";
-            var provider = new FileExtensionContentTypeProvider();
-            if (!provider.TryGetContentType(filePath, out var contentType))
-            {
-                contentType = "application/octet-stream";
-            }
+                var expediente = await _context.ExpedienteDigital
+                    .Include(i => i.Empleados)
+                    .Where(w => !w.Archivado)
+                    .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == ExpedienteDigitalId);
+                if (expediente == null)
+                {
+                    return NotFound("El ID del expediente no existe.");
+                }
+                var documento = await _context.Archivos
+                    .Where(w => w.TipoArchivo == ".pdf" || w.TipoArchivo == ".docx")
+                    .FirstOrDefaultAsync(f => f.ArchivoId == ArchivoId);
+                if (documento == null)
+                {
+                    return NotFound("No se encuentra Archivo");
+                }
+                var filePath = $"Files/Documentos/{expediente.Empleados.NombreCompleto}/{documento.Nombre}";
+                var provider = new FileExtensionContentTypeProvider();
+                if (!provider.TryGetContentType(filePath, out var contentType))
+                {
+                    contentType = "application/octet-stream";
+                }
 
-            var bytes = await System.IO.File.ReadAllBytesAsync(filePath);
-            return File(bytes, contentType, Path.GetFileName(filePath));
-            }catch(Exception e)
+                var bytes = await System.IO.File.ReadAllBytesAsync(filePath);
+                return File(bytes, contentType, Path.GetFileName(filePath));
+            }
+            catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return NoContent();
             }
 
@@ -117,12 +119,12 @@ namespace AtoGobMx.Controllers
 
             zipFileMemoryStream.Seek(0, SeekOrigin.Begin);
             return File(zipFileMemoryStream, "application/octet-stream", $"Documentos_{DateOnly.FromDateTime(DateTime.Now)}_{expediente.Empleados.NombreCompleto}.zip");
-        
-    }
+
+        }
         [HttpPost("Imagen/{expedienteDigitalId}/")]
         public async Task<IActionResult> UploadPhotoProfile(IFormFile file, int expedienteDigitalId)
         {
-                #region Comprobar si el expediente existe
+            #region Comprobar si el expediente existe
             try
             {
                 var expediente = await _context.ExpedienteDigital
@@ -192,7 +194,7 @@ namespace AtoGobMx.Controllers
             {
                 return BadRequest("Ah ocurrido un error inesperado");
             }
-        #endregion
+            #endregion
         }
         [HttpPost("Documentos/{expedienteDigitalId}/")]
         public async Task<IActionResult> UploadDocuments(List<IFormFile> Files, int expedienteDigitalId)
@@ -257,7 +259,7 @@ namespace AtoGobMx.Controllers
             {
                 return BadRequest("Ah ocurrido un error inesperado");
             }
-        #endregion
+            #endregion
         }
         [HttpDelete("Documentos/Eliminar/{ExpedienteDigitalId}/{ArchivoId}")]
         public async Task<IActionResult> DeleteDocuments(int ExpedienteDigitalId, int ArchivoId)
@@ -265,7 +267,7 @@ namespace AtoGobMx.Controllers
             var Expediente = await _context.ExpedienteDigital
                 .Include(i => i.Empleados)
                 .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == ExpedienteDigitalId);
-            
+
             if (Expediente == null)
             {
                 return NotFound($"No se encuentra expediente con el ID {ExpedienteDigitalId}");
@@ -283,10 +285,10 @@ namespace AtoGobMx.Controllers
             {
                 file.Delete();
                 //System.IO.File.Delete(path);
-            Archivo.Archivado = true;
-            _context.Archivos.Update(Archivo);
-            await _context.SaveChangesAsync();
-            return Ok("Documento archivado correctamente.");
+                Archivo.Archivado = true;
+                _context.Archivos.Update(Archivo);
+                await _context.SaveChangesAsync();
+                return Ok("Documento archivado correctamente.");
             }
             Archivo.Archivado = true;
             _context.Archivos.Update(Archivo);
