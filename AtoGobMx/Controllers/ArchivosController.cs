@@ -288,7 +288,10 @@ namespace AtoGobMx.Controllers
             await _context.SaveChangesAsync();
             return Ok("Documento archivado correctamente.");
             }
-            return BadRequest("Error inesperado, no se encuentra el documento");
+            Archivo.Archivado = true;
+            _context.Archivos.Update(Archivo);
+            await _context.SaveChangesAsync();
+            return Ok("Documento archivado correctamente.");
         }
     }
 }

@@ -21,7 +21,7 @@
         @click="showModal = !showModal"
         type="submit"
       >
-        <i class="bi bi-person-video2"></i>
+        <i class="bi bi-pc-display-horizontal"></i>
         Agregar Computadora
       </b-button>
     </b-row>
@@ -43,7 +43,7 @@
       </template>
       <template #item-actions="items">
         <b-button
-          @click="RemoveRole(items.equipoComputoId)"
+          @click="RemoveComputer(items.equipoComputoId)"
           class="m-1"
           variant="outline-danger"
           ><i class="bi bi-trash3"></i
@@ -58,9 +58,9 @@
         </b-button>
       </template>
       <template #item-inventarioEstatus="items">
-        <span class="bg-success text-white rounded">
-        {{items.inventarioEstatus.nombre}}
-        </span>
+        <b-badge :variant="items.estatusEquipo.nombre === 'En Funcionamiento' ? 'success': '' || items.estatusEquipo.nombre === 'En Mantenimiento' ? 'warning': '' || items.estatusEquipo.nombre === 'Dado de baja' ? 'danger': ''">
+        {{items.estatusEquipo.nombre}}
+        </b-badge>
       </template>
     </EasyDataTable>
     <b-modal
@@ -179,14 +179,14 @@
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Estatus">
-              <Field name="StatusField" :rules="validateArea" as="number">
+              <Field name="StatusField" :rules="validateStateComputer" as="number">
                 <b-form-select
-                  v-model="computerFields.estatusId"
+                  v-model="computerFields.estatusEquipoId"
                   autofocus
                   :options="statusComputers"
-                  value-field="inventarioEstatusId"
+                  value-field="EstatusEquipoId"
                   text-field="nombre"
-                  :state="areaState"
+                  :state="stateComputerState"
                 >
                 </b-form-select>
               </Field>
@@ -249,6 +249,7 @@ export default {
     const processorState = ref(false)
     const departamentState = ref(false)
     const areaState = ref(false)
+    const stateComputerState = ref(false)
     const showModal = ref(false)
     const computerFields = ref({
       equipoComputoId: 0,
@@ -258,7 +259,7 @@ export default {
       procesador: '',
       departamentoId: null,
       areaId: null,
-      estatusId: null,
+      estatusEquipoId: null,
       archivado: false
     })
     const computerFieldsBlank = ref(JSON.parse(JSON.stringify(computerFields)))
@@ -387,6 +388,14 @@ export default {
       areaState.value = true
       return true
     }
+    const validateStateComputer = () => {
+      if (!computerFields.value.estatusEquipoId) {
+        stateComputerState.value = false
+        return 'Este campo es requerido'
+      }
+      stateComputerState.value = true
+      return true
+    }
     const refreshTable = () => {
       isloading.value = true
       getComputers(data => {
@@ -418,7 +427,7 @@ export default {
       computerFields.value = JSON.parse(JSON.stringify(computerFieldsBlank))
       brandState.value = false
     }
-    const RemoveRole = equipoComputoId => {
+    const RemoveComputer = equipoComputoId => {
       isloading.value = true
       swal
         .fire({
@@ -467,13 +476,14 @@ export default {
       onFiltered,
       addComputer,
       refreshTable,
-      RemoveRole,
+      RemoveComputer,
       brandState,
       memoryState,
       storageState,
       processorState,
       departamentState,
       areaState,
+      stateComputerState,
       showModal,
       areas,
       departaments,
@@ -486,6 +496,7 @@ export default {
       resetRoleFields,
       validateDepartament,
       validateArea,
+      validateStateComputer,
       getAreas
     }
   }

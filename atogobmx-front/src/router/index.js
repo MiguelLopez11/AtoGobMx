@@ -14,7 +14,8 @@ const routes = [
     name: 'PageNotPermission',
     component: () => import('../views/PageNotPermission/PageNotPermission.vue'),
     meta: {
-      requiresAuth: false
+      requiresAuth: true,
+      rol: 'Empleado'
     }
   },
   {
@@ -22,7 +23,8 @@ const routes = [
     name: 'Home',
     component: () => import('../views/Home/HomePage.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado'
     }
   },
   {
@@ -356,6 +358,36 @@ const routes = [
     path: '/EquiposComputo/:EquipoComputoId',
     name: 'EquiposComputo-Edit',
     component: () => import('@/views/Patrimony/Computers/Computer/ComputerEdit.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Patrimonio'
+    }
+  },
+  {
+    path: '/EstatusEquipo/list',
+    name: 'EstatusEquipo',
+    component: () => import('@/views/Patrimony/Computers/StatusComputer/StatusComputerList.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Administrador',
+      departamento: 'Patrimonio'
+    }
+  },
+  {
+    path: '/EstatusEquipo/:EstatusEquipoId',
+    name: 'EstatusEquipo-edit',
+    component: () => import('@/views/Patrimony/Computers/StatusComputer/StatusComputerEdit.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Administrador',
+      departamento: 'Patrimonio'
+    }
+  },
+  {
+    path: '/Vehiculos/list',
+    name: 'Vehiculos',
+    component: () => import('@/views/Patrimony/Vehicles/VehiclesList.vue'),
     meta: {
       requiresAuth: true,
       rol: 'Empleado',

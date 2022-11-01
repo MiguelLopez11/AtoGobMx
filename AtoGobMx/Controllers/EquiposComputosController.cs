@@ -20,7 +20,7 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<IEnumerable<PAT_EquipoComputo>>> GetEquipos()
         {
             var Equipos = await _context.EquipoComputo
-                .Include(i => i.InventarioEstatus)
+                .Include(i => i.EstatusEquipo)
                 .Include(i => i.Area)
                 .Where(w => !w.Archivado)
                 .ToListAsync();
@@ -31,7 +31,7 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<PAT_EquipoComputo>> GetEquipoById(int EquipoComputoId)
         {
             var equipo = await _context.EquipoComputo
-                .Include(i => i.InventarioEstatus)
+                .Include(i => i.EstatusEquipo)
                 .Include(i => i.Area)
                 .FirstOrDefaultAsync(f => f.EquipoComputoId == EquipoComputoId);
 
@@ -93,7 +93,7 @@ namespace AtoGobMx.Controllers
             equipo.MemoriaRAM = equipoComputo.MemoriaRAM;
             equipo.Almacenamiento = equipoComputo.Almacenamiento;
             equipo.Procesador = equipoComputo.Procesador;
-            equipo.EstatusId = equipoComputo.EstatusId;
+            equipo.EstatusEquipoId = equipoComputo.EstatusEquipoId;
             equipo.AreaId = equipoComputo.AreaId;
             equipo.Archivado = equipoComputo.Archivado;
 
@@ -104,16 +104,25 @@ namespace AtoGobMx.Controllers
         [HttpDelete("{EquipoComputoId}")]
         public async Task<IActionResult> DeleteEquipoComputo(int EquipoComputoId)
         {
-            var equipo = await _context.EquipoComputo
-                .FirstOrDefaultAsync(f => f.EquipoComputoId == EquipoComputoId);
-            if (equipo == null)
+            try
             {
-                return NotFound();
+                var equipo = await _context.EquipoComputo
+                .FirstOrDefaultAsync(f => f.EquipoComputoId == EquipoComputoId);
+                if (equipo == null)
+                {
+                    return NotFound();
+                }
+                var estatus = await _context.InventarioEstatus
+                    .FirstOrDefaultAsync(f => f.Nombre.Equals("Dado de baja"));
+                equipo.EstatusEquipoId = estatus.EstatusEquipoId;
+                _context.EquipoComputo.Update(equipo);
+                await _context.SaveChangesAsync();
+                return Ok("Producto archivado");
             }
-            equipo.Archivado = true;
-            _context.EquipoComputo.Update(equipo);
-            await _context.SaveChangesAsync();
-            return Ok("Producto archivado");
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

@@ -13,7 +13,7 @@
         @click="showModal = !showModal"
         type="submit"
       >
-        <i class="bi bi-person-video2"></i>
+        <i class="bi bi-display-fill"></i>
         Agregar Monitor
       </b-button>
     </b-row>
@@ -53,20 +53,27 @@
       <Form @submit="addDisplay">
         <b-row cols="3">
           <b-col>
-            <b-form-group class="mt-3" label="Nombre">
+            <b-form-group class="mt-3" label="Marca">
               <Field
-                name="NameField"
-                :rules="validateName"
+                name="BrandField"
+                :rules="validateBrand"
                 as="text"
               >
-                <b-form-input v-model="displayFields.nombre" :state="nameState"> </b-form-input>
+                <b-form-input v-model="displayFields.marca" :state="brandState"> </b-form-input>
               </Field>
-              <ErrorMessage class="text-danger" name="NameField"></ErrorMessage>
+              <ErrorMessage class="text-danger" name="BrandField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="Descripción">
-              <b-form-input v-model="displayFields.descripcion"> </b-form-input>
+            <b-form-group class="mt-3" label="Pulgadas">
+              <Field
+                name="inchesField"
+                :rules="validateInches"
+                as="text"
+              >
+                <b-form-input type="number" v-model="displayFields.pulgadas" :state="inchesState"> </b-form-input>
+              </Field>
+              <ErrorMessage class="text-danger" name="inchesField"></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
@@ -108,7 +115,7 @@ export default {
   },
   setup (props) {
     const swal = inject('$swal')
-    const { getDisplays, createRole, deleteRole } = ComputerServices()
+    const { getDisplays, createDisplay, deleteDisplay } = ComputerServices()
     // const $toast = useToast()
     const displays = ref([])
     const perPage = ref(5)
@@ -117,8 +124,9 @@ export default {
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('nombre')
-    const nameState = ref(false)
+    const searchField = ref('marca')
+    const brandState = ref(false)
+    const inchesState = ref(false)
     const showModal = ref(false)
     const displayFields = ref({
       monitorId: 0,
@@ -130,7 +138,6 @@ export default {
     })
     const displayFieldsBlank = ref(JSON.parse(JSON.stringify(displayFields)))
     const fields = ref([
-      { value: 'monitorId', text: 'ID', sortable: true },
       { value: 'marca', text: 'Marca' },
       { value: 'pulgadas', text: 'Pulgadas' },
       { value: 'actions', text: 'Acciones' }
@@ -148,17 +155,20 @@ export default {
     const onFiltered = (filteredItems) => {
       currentPage.value = 1
     }
-    const validateName = () => {
-      if (!displayFields.value.nombre) {
-        nameState.value = false
+    const validateBrand = () => {
+      if (!displayFields.value.marca) {
+        brandState.value = false
         return 'Este campo es requerido'
       }
-      // eslint-disable-next-line no-useless-escape
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(displayFields.value.nombre)) {
-        nameState.value = false
-        return 'El nombre del area solo puede contener letras'
+      brandState.value = true
+      return true
+    }
+    const validateInches = () => {
+      if (!displayFields.value.pulgadas) {
+        inchesState.value = false
+        return 'Este campo es requerido'
       }
-      nameState.value = true
+      inchesState.value = true
       return true
     }
     const refreshTable = () => {
@@ -176,11 +186,11 @@ export default {
       return 'datos recargados'
     }
     const addDisplay = () => {
-      createRole(displayFields.value, (data) => {
+      createDisplay(displayFields.value, (data) => {
         refreshTable()
         swal.fire({
-          title: 'Role registrado correctamente!',
-          text: 'El role se ha registrado al sistema satisfactoriamente.',
+          title: 'Monitor registrado correctamente!',
+          text: 'El monitor se ha registrado al sistema satisfactoriamente.',
           icon: 'success'
         })
       })
@@ -189,7 +199,8 @@ export default {
     const resetRoleFields = () => {
       showModal.value = false
       displayFields.value = JSON.parse(JSON.stringify(displayFieldsBlank))
-      nameState.value = false
+      brandState.value = false
+      inchesState.value = false
     }
     const RemoveDisplay = (monitorId) => {
       isloading.value = true
@@ -214,7 +225,7 @@ export default {
               })
               .then(result => {
                 if (result.isConfirmed) {
-                  deleteRole(monitorId, (data) => {
+                  deleteDisplay(monitorId, (data) => {
                     refreshTable()
                   })
                 }
@@ -240,10 +251,12 @@ export default {
       addDisplay,
       refreshTable,
       RemoveDisplay,
-      nameState,
+      brandState,
+      inchesState,
       showModal,
 
-      validateName,
+      validateBrand,
+      validateInches,
       resetRoleFields
     }
   }

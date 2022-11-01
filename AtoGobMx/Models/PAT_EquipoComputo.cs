@@ -16,7 +16,7 @@ namespace AtoGobMx.Models
         public string Procesador { get; set; }
         public int AreaId { get; set; }
         public int DepartamentoId { get; set; }
-        public int EstatusId { get; set; }
+        public int EstatusEquipoId { get; set; }
         public bool Archivado { get; set; }
 
 
@@ -25,7 +25,7 @@ namespace AtoGobMx.Models
         [ForeignKey("DepartamentoId")]
         public Departamentos? Departamentos { get; set; }
 
-        [ForeignKey("EstatusId")]
-        public InventarioEstatus? InventarioEstatus { get; set; }
+        [ForeignKey("EstatusEquipoId")]
+        public PAT_EstatusEquipo? EstatusEquipo { get; set; }
     }
 }

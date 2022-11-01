@@ -4,11 +4,11 @@ using System.Text.Json.Serialization;
 
 namespace AtoGobMx.Models
 {
-    public class InventarioEstatus
+    public class PAT_EstatusEquipo
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int InventarioEstatusId { get; set; }
+        public int EstatusEquipoId { get; set; }
         [Required]
         public string Nombre { get; set; }
         public string? Descripcion { get; set; }

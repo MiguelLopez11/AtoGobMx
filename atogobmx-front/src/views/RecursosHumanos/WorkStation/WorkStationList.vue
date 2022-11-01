@@ -37,7 +37,6 @@
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
-      :table-height="330"
     >
       <template #header-actions="header">
         {{ header.text }}

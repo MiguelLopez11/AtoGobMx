@@ -101,7 +101,7 @@
         multiple
         accept=".doc, .docx,.pdf"
       />
-      <b-button variant="outline-primary" @click="submitFiles()"
+      <b-button :disabled="disableButton" variant="outline-primary" @click="submitFiles()"
         >Cargar Archivo(s)</b-button
       >
     </div>
@@ -125,6 +125,7 @@ export default {
     const { getDocuments, deleteDocument, createDocuments } = FileServices()
     const showModal = ref(false)
     const refFile = ref()
+    const disableButton = ref(true)
     const DocumentModal = ref()
     const swal = inject('$swal')
     const documents = ref([])
@@ -171,8 +172,19 @@ export default {
       currentPage.value = 1
     }
     const onChangeFile = () => {
+      console.log(refFile.value.files)
       for (const file of refFile.value.files) {
-        formData.append('files', file, file.name)
+        if (file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg') {
+          disableButton.value = true
+          swal.fire({
+            title: 'Documento no válido!',
+            text: 'Se ha seleccionado un documento que no es valido, revise e intentelo de nuevo.',
+            icon: 'error'
+          })
+        } else {
+          formData.append('files', file, file.name)
+          disableButton.value = false
+        }
       }
     }
     const submitFiles = () => {
@@ -245,6 +257,7 @@ export default {
       documents,
       expedienteDigitalId,
       showModal,
+      disableButton,
 
       onFiltered,
       RemoveDocument,
