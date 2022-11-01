@@ -14,7 +14,7 @@ namespace AtoGobMx.Controllers
         private readonly AtoGobMxContext _context;
         private readonly IMapper mapper;
 
-        public InventarioAlumbradoController (AtoGobMxContext context, IMapper mapper)
+        public InventarioAlumbradoController(AtoGobMxContext context, IMapper mapper)
         {
             _context = context;
             this.mapper = mapper;

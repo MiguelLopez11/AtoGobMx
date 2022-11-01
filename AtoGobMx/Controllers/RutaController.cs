@@ -71,7 +71,7 @@ namespace AtoGobMx.Controllers
             rutaAseo.Destino = ruta.Destino;
             //rutaAseo.kilometros = ruta.kilometros;
             rutaAseo.Obsevacion = ruta.Obsevacion;
-            rutaAseo.Archivado = ruta.Archivado; 
+            rutaAseo.Archivado = ruta.Archivado;
 
             _context.Ruta.Update(rutaAseo);
             await _context.SaveChangesAsync();

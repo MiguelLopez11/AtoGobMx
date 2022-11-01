@@ -126,8 +126,8 @@ namespace AtoGobMx.Controllers
 }
 
 
-             //.OrderBy(o => o.Tarea)
-            //alum.Tarea = alumbrado.Tarea;
-            //alum.DescripcionSolucion = alumbrado.DescripcionSolucion;
-            //alum.FechaAlta = alumbrado.FechaAlta;
-            //alum.FechaBaja = alumbrado.FechaBaja;
+//.OrderBy(o => o.Tarea)
+//alum.Tarea = alumbrado.Tarea;
+//alum.DescripcionSolucion = alumbrado.DescripcionSolucion;
+//alum.FechaAlta = alumbrado.FechaAlta;
+//alum.FechaBaja = alumbrado.FechaBaja;

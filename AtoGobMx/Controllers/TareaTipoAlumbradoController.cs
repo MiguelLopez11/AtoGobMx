@@ -15,7 +15,7 @@ namespace AtoGobMx.Controllers
         private readonly AtoGobMxContext _context;
         private readonly IMapper _mapper;
 
-        public TareaTipoAlumbradoController (AtoGobMxContext context, IMapper mapper)
+        public TareaTipoAlumbradoController(AtoGobMxContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;

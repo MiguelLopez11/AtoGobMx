@@ -23,7 +23,7 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<Zona>> GetZona()
         {
             var zona = await _context.Zona
-                
+
                 .Where(w => !w.Archivado)
                 .Select(s => _mapper.Map<Zona>(s))
                 .ToArrayAsync();
