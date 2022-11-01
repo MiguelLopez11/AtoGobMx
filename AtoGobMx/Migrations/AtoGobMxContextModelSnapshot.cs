@@ -437,6 +437,27 @@ namespace AtoGobMx.Migrations
                     b.ToTable("InventarioAlumbrado");
                 });
 
+            modelBuilder.Entity("AtoGobMx.Models.InventarioEstatus", b =>
+                {
+                    b.Property<int>("InventarioEstatusId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Archivado")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Descripcion")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("InventarioEstatusId");
+
+                    b.ToTable("InventarioEstatus");
+                });
+
             modelBuilder.Entity("AtoGobMx.Models.PAT_EquipoComputo", b =>
                 {
                     b.Property<int>("EquipoComputoId")
