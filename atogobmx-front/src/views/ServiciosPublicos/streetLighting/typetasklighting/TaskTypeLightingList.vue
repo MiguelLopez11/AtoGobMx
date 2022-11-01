@@ -77,8 +77,8 @@
                 <b-form-input
                   v-model="taskTypeLightingFields.nombreTarea"
                   :state="NameState"
-                  onchange="validar"
                 >
+                  <!-- onchange="validar" -->
                 </b-form-input>
               </Field>
               <ErrorMessage class="text-danger" name="NameField"></ErrorMessage>

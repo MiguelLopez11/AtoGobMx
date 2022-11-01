@@ -185,6 +185,86 @@ const routes = [
     }
   },
   {
+    path: '/DireccionCementerios/list',
+    name: 'DireccionCementerios',
+    component: () => import('@/views/ServiciosPublicos/cementery/addresscementery/AddressCementeryList.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/DireccionCementerios/:DireccionId',
+    name: 'DireccionCementerios-Edit',
+    component: () => import('@/views/ServiciosPublicos/cementery/addresscementery/EditAddressCementery.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/Aseo/list',
+    name: 'Aseo',
+    component: () => import('@/views/ServiciosPublicos/cleanness/Cleanness/CleannessList.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/Aseo/:AseoId',
+    name: 'Aseo-Edit',
+    component: () => import('@/views/ServiciosPublicos/cleanness/Cleanness/EditCleanness.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/Ruta/list',
+    name: 'Ruta',
+    component: () => import('@/views/ServiciosPublicos/cleanness/Road/RoadList.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/Ruta/:RutaId',
+    name: 'Ruta-Edit',
+    component: () => import('@/views/ServiciosPublicos/cleanness/Road/EditRoad.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/Zona/list',
+    name: 'Zona',
+    component: () => import('@/views/ServiciosPublicos/cleanness/Zone/ZoneList.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/Zona/:ZonaId',
+    name: 'Zona-Edit',
+    component: () => import('@/views/ServiciosPublicos/cleanness/Zone/EditZone.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/AlumbradoEmpleado/list',
+    name: 'AlumbradoEmpleado',
+    component: () => import('@/views/ServiciosPublicos/streetLighting/lightingEmployee/LightingEmployeeList.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/AlumbradoEmpleado/:AlumbradoEmpleadoId',
+    name: 'AlumbradoEmpleado-Edit',
+    component: () => import('@/views/ServiciosPublicos/streetLighting/lightingEmployee/EditLightingEmployee.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: '/Usuarios/list',
     name: 'Usuarios',
     component: () => import('@/views/Users/UserList.vue'),
@@ -331,6 +411,7 @@ router.beforeEach(async (to, from, next) => {
       path: '/Login',
       query: { redirect: to.fullPath }
     })
+  // eslint-disable-next-line no-mixed-operators
   } else if (to.meta.rol && to.meta.departamento && departamento !== to.meta.departamento && role !== 'Administrador') {
     next({ name: 'PageNotPermission' })
   } else {

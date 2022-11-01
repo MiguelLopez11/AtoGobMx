@@ -70,7 +70,7 @@
     hide-footer
   >
     <b-row>
-      <b-form-group class="mt-3" label="Empleado: ">
+      <b-form-group class="mt-3" label="Empleado:">
         <b-form-select
           autofocus
           :options="employees"

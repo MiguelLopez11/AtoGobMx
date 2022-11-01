@@ -71,10 +71,10 @@
       lazy
     >
       <Form @submit="addPublicLighting">
-        <b-row cols="2">
+        <b-row cols="3">
           <!--1-->
           <b-col>
-            <b-form-group class="mt-3" label="Tipo de cervicio">
+            <b-form-group class="mt-3" label="Tipo de tarea">
               <Field name="TaskField" :rules="validateTask" as="text">
                 <b-form-select
                   v-model="publicLightingFields.tareaTipoId"
@@ -89,11 +89,11 @@
             </b-form-group>
           </b-col>
           <!--2-->
-          <!-- <b-col>
+          <b-col>
             <b-form-group class="mt-3" label="Estatus">
               <Field name="StatusField" :rules="validateStatus" as="text">
                 <b-form-select
-                  v-model="publicLightingFields.estatusAlumbradoId"
+                  v-model="publicLightingFields.estatusId"
                   autofocus
                   :state="StatusState"
                   :options="statusPublicLighting"
@@ -103,7 +103,7 @@
               </Field>
               <ErrorMessage class="text-danger" name="StatusField"/>
             </b-form-group>
-          </b-col> -->
+          </b-col>
           <!--3-->
           <b-col>
             <b-form-group class="mt-3" label="Domicilio">
@@ -164,17 +164,14 @@
 
 <script>
 import PubliclightingServices from '@/Services/publiclighting.Services'
-// import StatusLightingServices from '@/Services/statuslighting.Services'
 import TypeTaskLightingServices from '@/Services/tasktypelighting.Services'
 import EditExpedientLighting from '@/Services/expedientlighting.Services'
-// import Datepicker from '@vuepic/vue-datepicker'
+import statusServices from '@/Services/statuslighting.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
-// import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
-    // Datepicker,
     EasyDataTable: window['vue3-easy-data-table'],
     Form,
     Field,
@@ -183,9 +180,9 @@ export default {
   setup () {
     const swal = inject('$swal')
     const { getPublicLighting, createPublicLighting, deletePublicLighting } = PubliclightingServices()
-    // const { getStatus } = StatusLightingServices()
     const { getTaskTypeLighting } = TypeTaskLightingServices()
     const { createExpedientLighting } = EditExpedientLighting()
+    const { getStatus } = statusServices()
     const showModal = ref(false)
     const publicLighting = ref([])
     const statusPublicLighting = ref([])
@@ -214,10 +211,23 @@ export default {
       domicilio: null,
       descripcionDomicilio: null,
       tareaTipoId: null,
-      // estatusAlumbradoId: null,
+      estatusId: null,
+      tieneExpediente: true,
       archivado: false
     })
     // tarea: null,
+
+    getStatus(data => {
+      statusPublicLighting.value = data
+      if (data.length === 0) {
+        swal.fire({
+          title: 'No se encuentra un tipo de estatus registrado!',
+          text:
+            'No se encuentra tipo de estatus registrado en el departamento seleccionado, registre primero un tipo de estatus para continuar',
+          icon: 'warning'
+        })
+      }
+    })
 
     getTaskTypeLighting(data => {
       typeTaskLighting.value = data
@@ -231,18 +241,6 @@ export default {
       }
     })
 
-    // getStatus(data => {
-    //   statusPublicLighting.value = data
-    //   if (data.length === 0) {
-    //     swal.fire({
-    //       title: 'No se encuentra un estatus registrado!',
-    //       text:
-    //         'No se encuentra estatus registrado en el departamento seleccionado, registre primero un tipo de estatus para continuar',
-    //       icon: 'warning'
-    //     })
-    //   }
-    // })
-
     const validateTask = () => {
       if (!publicLightingFields.value.tareaTipoId) {
         TaskState.value = false
@@ -252,14 +250,14 @@ export default {
       return true
     }
 
-    // const validateStatus = () => {
-    //   if (!publicLightingFields.value.estatusAlumbradoId) {
-    //     StatusState.value = false
-    //     return 'Este campo es requerido'
-    //   }
-    //   StatusState.value = true
-    //   return true
-    // }
+    const validateStatus = () => {
+      if (!publicLightingFields.value.estatusId) {
+        StatusState.value = false
+        return 'Este campo es requerido'
+      }
+      StatusState.value = true
+      return true
+    }
 
     const validateProblem = () => {
       if (!publicLightingFields.value.descripcionProblema) {
@@ -319,8 +317,8 @@ export default {
 
     const fields = ref([
       { value: 'alumbradoId', text: 'ID', sortable: true },
-      { value: 'tareaTipoAlumbrado.nombreTarea', text: 'Tipo de tarea' },
       { value: 'estatus.nombreEstatus', text: 'Estatus' },
+      { value: 'tareaTipoAlumbrado.nombreTarea', text: 'Tipo de tarea' },
       { value: 'descripcionProblema', text: 'Descripcion del problema' },
       { value: 'domicilio', text: 'Domicilio' },
       { value: 'descripcionDomicilio', text: 'Descripcion Domicilio' },
@@ -341,7 +339,6 @@ export default {
 
     getPublicLighting(data => {
       publicLighting.value = data
-      // rows.value = data.length
       if (publicLighting.value.length > 0) {
         isloading.value = false
       } else {
@@ -352,7 +349,6 @@ export default {
     })
 
     const onFiltered = filteredItems => {
-      // rows.value = filteredItems.length
       currentPage.value = 1
     }
 
@@ -383,20 +379,7 @@ export default {
             icon: 'success'
           })
         })
-        // refreshTable()
-        // swal.fire({
-        //   title: '¡Alumbrado publico agregado correctamente!',
-        //   text: 'Alumbrado registrado satisfactoriamente',
-        //   icon: 'success'
-        // })
-        // $toast.success('Alumbrado registrado correctamente.', {
-        //   position: 'top-right',
-        //   duration: 1500
-        // })
       })
-      // resetStreetLightingFields()
-      // publicLightingFields.value = JSON.parse(
-      //   JSON.stringify(publicLightingFieldsBlank))
       showModal.value = false
       resetPublicLightingFields()
     }
@@ -421,8 +404,7 @@ export default {
             })
             swal.fire({
               title: '¡Alumbrado archivado!',
-              text:
-                'El alumbrado publico ha sido archivado satisfactoriamente.',
+              text: 'El alumbrado publico ha sido archivado satisfactoriamente.',
               icon: 'success'
             })
           } else {
@@ -460,21 +442,12 @@ export default {
       validateTask,
       validateAddresdescription,
       validateDomicile,
+      validateStatus,
       resetPublicLightingFields,
       validateProblem
-      // validateStatus
-      // getTaskTypeLightingById
     }
   }
 }
-
-// resetStreetLightingFields
-// option,
-// lightingFailuresValues,
-// rows,
-// const rows = ref(null)
-// const $toast = useToast()
-// const option = ref()
 </script>
 
 <style></style>

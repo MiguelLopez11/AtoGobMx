@@ -4,11 +4,11 @@
       <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
     </b-card>
     <b-card>
-      <b-tabs content-class="mt-3">
-        <b-tab title="Datos Generales" active>
-          <div>
+      <!-- <b-tabs content-class="mt-3"> -->
+        <!-- <b-tab title="Datos Generales" active> -->
+          <!-- <div>
             <h3>Reporte Alumbrado</h3>
-          </div>
+          </div> -->
           <Form @submit="onUpdatePublicLighting">
             <b-row cols="3">
               <!--1-->
@@ -32,7 +32,7 @@
                 <b-form-group class="mt-3" label="Estatus">
                   <Field name="StatusField" :rules="validateStatus" as="text">
                     <b-form-select
-                      v-model="publicLighting.estatusAlumbradoId"
+                      v-model="publicLighting.estatusId"
                       autofocus
                       :state="StatusState"
                       :options="statusPublicLighting"
@@ -96,18 +96,18 @@
               >
             </b-row>
           </Form>
-        </b-tab>
-        <b-tab title="Expediente Alumbrado">
-          <ExpedientPublic :expedientLightingId="1" />
-        </b-tab>
-      </b-tabs>
+        <!-- </b-tab> -->
+        <!-- <b-tab title="Expediente Alumbrado">
+          <ExpedientPublic :expedientLightingId="1" /> -->
+        <!-- </b-tab> -->
+      <!-- </b-tabs> -->
     </b-card>
   </b-card>
 </template>
 
 <script>
 import StreetlightingServices from '@/Services/publiclighting.Services'
-import ExpedientPublic from '@/views/ServiciosPublicos/streetLighting/expedientlighting/EditExpedientLighting.vue'
+// import ExpedientPublic from '@/views/ServiciosPublicos/streetLighting/expedientlighting/EditExpedientLighting.vue'
 import StatusLightingServices from '@/Services/statuslighting.Services'
 import TypeTaskLightingServices from '@/Services/tasktypelighting.Services'
 import { Field, Form, ErrorMessage } from 'vee-validate'
@@ -121,8 +121,8 @@ export default {
     // Datepicker,
     Field,
     Form,
-    ErrorMessage,
-    ExpedientPublic
+    ErrorMessage
+    // ExpedientPublic
   },
   setup () {
     const swal = inject('$swal')
@@ -132,7 +132,6 @@ export default {
     } = StreetlightingServices()
     const { getStatus } = StatusLightingServices()
     const { getTaskTypeLighting } = TypeTaskLightingServices()
-    // const $toast = useToast()
     const publicLighting = ref([])
     const statusPublicLighting = ref([])
     const typeTaskLighting = ref([])
@@ -149,19 +148,9 @@ export default {
       { text: 'Editar-Alumbrado' }
     ])
 
-    // jenerar propiedades
-
-    // getStatusById((data) => {
-    //   statusPublicLighting.value = data
-    // })
-
     getPublicLightingById(router.params.AlumbradoId, data => {
-      // streetLighting.value = data
-      // validateState()
       publicLighting.value = data
       validateState()
-      // eslint-disable-next-line no-unneeded-ternary
-      // TaskState.value = data.tarea === null ? false : true
     })
 
     getTaskTypeLighting(data => {
@@ -213,7 +202,7 @@ export default {
     }
 
     const validateStatus = () => {
-      if (!publicLighting.value.estatusAlumbradoId) {
+      if (!publicLighting.value.estatusId) {
         validateState()
         return 'Este campo es requerido'
       }
@@ -265,7 +254,7 @@ export default {
       // eslint-disable-next-line no-unneeded-ternary
       TaskState.value = publicLighting.value.tareaTipoId !== null
       // eslint-disable-next-line no-unneeded-ternary
-      StatusState.value = publicLighting.value.estatusAlumbradoId !== null
+      StatusState.value = publicLighting.value.estatusId !== null
       // eslint-disable-next-line no-unneeded-ternary
       DomicileState.value = publicLighting.value.domicilio !== ''
       // eslint-disable-next-line no-unneeded-ternary

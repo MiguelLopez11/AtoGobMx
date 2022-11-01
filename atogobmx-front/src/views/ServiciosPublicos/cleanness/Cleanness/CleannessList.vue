@@ -6,7 +6,7 @@
         style="width: 350px"
         v-model="searchValue"
         type="search"
-        placeholder="Buscar Cementerios..."
+        placeholder="Buscar Aseo..."
       ></b-form-input>
       <b-button
         variant="primary"
@@ -23,7 +23,7 @@
       >
         <!-- v-b-modal.modal-cementery -->
         <i class="bi bi-person-plus-fill"></i>
-        Agregar Cementerios
+        Agregar Aseo
       </b-button>
     </b-row>
     <EasyDataTable
@@ -34,17 +34,18 @@
       border-cell
       :loading="isloading"
       :headers="fields"
-      :items="cementeryService"
+      :items="cleannessService"
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
+      :table-height="330"
     >
       <template #header-actions="header">
         {{ header.text }}
       </template>
       <template #item-actions="items">
         <b-button
-          @click="RemoveCementeryService(items.cementeriosId)"
+          @click="RemoveCleannessService(items.aseoId)"
           class="m-1"
           variant="outline-danger"
           ><i class="bi bi-trash3"></i
@@ -53,8 +54,8 @@
           class="m-1"
           variant="outline-warning"
           :to="{
-            name: 'Cementerios-Edit',
-            params: { CementeriosId: items.cementeriosId }
+            name: 'Aseo-Edit',
+            params: { AseoId: items.aseoId }
           }"
           ><i class="bi bi-pencil-square"></i
         ></b-button>
@@ -62,87 +63,85 @@
     </EasyDataTable>
 
     <b-modal
-      id="modal-cementery"
-      tittle="Agregar Cementerios"
+      id="modal-clenness"
+      tittle="Agregar Aseo"
       v-model="showModal"
       size="xl"
       hide-footer
       button-size="lg"
       lazy
     >
-      <Form @submit="addCementeryService">
+      <Form @submit="addCleannessService">
         <b-row cols="2">
           <!-- 1 -->
           <b-col>
-            <b-form-group class="mt-3" label="Nombre del propietario">
+            <b-form-group class="mt-3" label="Nombre del servicio">
               <Field
-                name="PropietaryField"
-                :rules="validatePropietary"
+                name="NameServiceField"
+                :rules="validateNameService"
                 as="text"
               >
                 <b-form-input
-                  v-model="cementeryServiceFields.nombrePropietario"
-                  :state="PropietaryState"
+                  v-model="cleannessServiceFields.nombreServicio"
+                  :state="NameServiceState"
                 >
                 </b-form-input>
               </Field>
               <ErrorMessage
                 class="text-danger"
-                name="PropietaryField"
+                name="NameServiceField"
               ></ErrorMessage>
             </b-form-group>
           </b-col>
           <!-- 2 -->
           <b-col>
-            <b-form-group class="mt-3" label="Numero de espacios">
-              <Field name="SpacesField" :rules="validateSpaces" as="number">
+            <b-form-group class="mt-3" label="Establecimiento publico">
+              <Field name="PublicEstablishmentField" :rules="validatePublicEstablishment" as="text">
                 <b-form-input
-                  v-model="cementeryServiceFields.numeroEspasios"
-                  :state="SpacesState"
-                  type="number"
+                  v-model="cleannessServiceFields.establecimientoPublico"
+                  :state="PublicEstablishmentState"
                 >
                 </b-form-input>
               </Field>
               <ErrorMessage
                 class="text-danger"
-                name="SpacesField"
+                name="PublicEstablishmentField"
               ></ErrorMessage>
             </b-form-group>
           </b-col>
           <!-- 3 -->
           <b-col>
-            <b-form-group class="mt-3" label="Metros correspondientes">
-              <Field name="MeterField" :rules="validateMeter" as="number">
+            <b-form-group class="mt-3" label="Domicilio">
+              <Field name="DomicileField" :rules="validateDomicile" as="text">
                 <b-form-input
-                  v-model="cementeryServiceFields.metrosCorrespondientes"
-                  :state="MeterState"
+                  v-model="cleannessServiceFields.domicilio"
+                  :state="DomicileState"
                 >
                 </b-form-input>
               </Field>
               <ErrorMessage
                 class="text-danger"
-                name="MeterField"
+                name="DomicileField"
               ></ErrorMessage>
             </b-form-group>
           </b-col>
           <!-- 4 -->
           <b-col>
-            <b-form-group class="mt-3" label="Espacios Disponibles">
+            <b-form-group class="mt-3" label="Objetivo">
               <Field
-                name="AvailableField"
-                :rules="validateAvailable"
-                as="number"
+                name="ObjectiveField"
+                :rules="validateObjective"
+                as="text"
               >
                 <b-form-input
-                  v-model="cementeryServiceFields.espaciosDisponibles"
-                  :state="AvailableState"
-                  type="number"
+                  v-model="cleannessServiceFields.objetivo"
+                  :state="ObjectiveState"
                 >
                 </b-form-input>
               </Field>
               <ErrorMessage
                 class="text-danger"
-                name="AvailableField"
+                name="ObjectiveField"
               ></ErrorMessage>
             </b-form-group>
           </b-col>
@@ -152,7 +151,7 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            @click="resetCementeryServiceFields"
+            @click="resetCleannessServiceFields"
           >
             <!-- v-b-modal.modal-cementery -->
             Cancelar
@@ -167,7 +166,7 @@
 </template>
 
 <script>
-import CementeryService from '@/Services/cementery.Services'
+import CleannessService from '@/Services/cleanness.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
 // import { useToast } from 'vue-toast-notification'
@@ -182,64 +181,60 @@ export default {
   setup () {
     const swal = inject('$swal')
     const showModal = ref(false)
-    const {
-      getCementery,
-      createCementery,
-      deleteCementery
-    } = CementeryService()
+    const { getCleanness, createCleanness, deleteCleanness } = CleannessService()
     // const $toast = useToast()
-    const cementeryService = ref([])
+    const cleannessService = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
     const filter = ref(null)
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('nombrePropietario')
-    const PropietaryState = ref(false)
-    const SpacesState = ref(false)
-    const MeterState = ref(false)
-    const AvailableState = ref(false)
-    const cementeryServiceFields = ref({
-      cementeriosId: 0,
-      nombrePropietario: '',
-      numeroEspasios: null,
-      metrosCorrespondientes: null,
-      espaciosDisponibles: null,
+    const searchField = ref('nombreServicio')
+    const NameServiceState = ref(false)
+    const PublicEstablishmentState = ref(false)
+    const DomicileState = ref(false)
+    const ObjectiveState = ref(false)
+    const cleannessServiceFields = ref({
+      aseoId: 0,
+      nombreServicio: null,
+      establecimientoPublico: null,
+      domicilio: null,
+      objetivo: null,
       archivado: false
     })
 
-    const CementeryServiceFieldsBlank = ref(
-      JSON.parse(JSON.stringify(cementeryServiceFields))
+    const CleannessServiceFieldsBlank = ref(
+      JSON.parse(JSON.stringify(cleannessServiceFields))
     )
 
     const fields = ref([
-      { value: 'cementeriosId', text: 'ID', sortable: true },
-      { value: 'nombrePropietario', text: 'Nombre de propietario' },
-      { value: 'numeroEspasios', text: 'Espacios' },
-      { value: 'metrosCorrespondientes', text: 'Metros' },
-      { value: 'espaciosDisponibles', text: 'Espacios Disponibles' },
+      { value: 'aseoId', text: 'ID', sortable: true },
+      { value: 'nombreServicio', text: 'Nombre del servicio' },
+      { value: 'establecimientoPublico', text: 'Establecimiento publico' },
+      { value: 'domicilio', text: 'Domicilio' },
+      { value: 'objetivo', text: 'Objetivo' },
       { value: 'actions', text: 'Acciones' }
     ])
 
-    const resetCementeryServiceFields = () => {
+    const resetCleannessServiceFields = () => {
       showModal.value = false
-      cementeryServiceFields.value = JSON.parse(
-        JSON.stringify(CementeryServiceFieldsBlank)
+      cleannessServiceFields.value = JSON.parse(
+        JSON.stringify(CleannessServiceFieldsBlank)
       )
-      PropietaryState.value = false
-      SpacesState.value = false
-      MeterState.value = false
-      AvailableState.value = false
+      NameServiceState.value = false
+      PublicEstablishmentState.value = false
+      DomicileState.value = false
+      ObjectiveState.value = false
     }
 
-    getCementery(data => {
-      cementeryService.value = data
+    getCleanness(data => {
+      cleannessService.value = data
 
-      if (cementeryService.value.length > 0) {
+      if (cleannessService.value.length > 0) {
         isloading.value = false
       } else {
-        if (cementeryService.value.length <= 0) {
+        if (cleannessService.value.length <= 0) {
           isloading.value = false
         }
       }
@@ -249,95 +244,95 @@ export default {
       currentPage.value = 1
     }
 
-    const validatePropietary = () => {
-      if (!cementeryServiceFields.value.nombrePropietario) {
-        PropietaryState.value = false
+    const validateNameService = () => {
+      if (!cleannessServiceFields.value.nombreServicio) {
+        NameServiceState.value = false
         return 'Este campo es requerido'
       }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(cementeryServiceFields.value.nombrePropietario)) {
-        PropietaryState.value = false
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(cleannessServiceFields.value.nombreServicio)) {
+        NameServiceState.value = false
         return 'Este campo solo puede contener letras'
       }
 
-      if (!cementeryServiceFields.value.nombrePropietario.trim().length > 0) {
-        PropietaryState.value = false
+      if (!cleannessServiceFields.value.nombreServicio.trim().length > 0) {
+        NameServiceState.value = false
         return 'Este campo no puede contener espacios'
       }
 
-      PropietaryState.value = true
+      NameServiceState.value = true
       return true
     }
 
-    const validateSpaces = () => {
-      if (!cementeryServiceFields.value.numeroEspasios) {
-        SpacesState.value = false
+    const validatePublicEstablishment = () => {
+      if (!cleannessServiceFields.value.establecimientoPublico) {
+        PublicEstablishmentState.value = false
         return 'Este campo es requerido'
       }
 
-      if (!/^[0-9]+$/i.test(cementeryServiceFields.value.numeroEspasios)) {
-        SpacesState.value = false
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(cleannessServiceFields.value.establecimientoPublico)) {
+        PublicEstablishmentState.value = false
         return 'Este campo solo puede contener numeros'
       }
 
-      if (!cementeryServiceFields.value.numeroEspasios.trim().length > 0) {
-        SpacesState.value = false
+      if (!cleannessServiceFields.value.establecimientoPublico.trim().length > 0) {
+        PublicEstablishmentState.value = false
         return 'Este campo no puede contener espacios'
       }
 
-      SpacesState.value = true
+      PublicEstablishmentState.value = true
       return true
     }
 
-    const validateMeter = () => {
-      if (!cementeryServiceFields.value.metrosCorrespondientes) {
-        MeterState.value = false
+    const validateDomicile = () => {
+      if (!cleannessServiceFields.value.domicilio) {
+        DomicileState.value = false
         return 'Este campo es requerido'
       }
 
-      if (!/^\d*\.\d+$/i.test(cementeryServiceFields.value.metrosCorrespondientes)) {
-        MeterState.value = false
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(cleannessServiceFields.value.domicilio)) {
+        DomicileState.value = false
         return 'Este campo solo puede contener numeros'
       }
 
-      if (!cementeryServiceFields.value.metrosCorrespondientes.trim().length > 0) {
-        MeterState.value = false
+      if (!cleannessServiceFields.value.domicilio.trim().length > 0) {
+        DomicileState.value = false
         return 'Este campo no puede contener espacios'
       }
 
-      MeterState.value = true
+      DomicileState.value = true
       return true
     }
 
-    const validateAvailable = () => {
-      if (!cementeryServiceFields.value.espaciosDisponibles) {
-        AvailableState.value = false
+    const validateObjective = () => {
+      if (!cleannessServiceFields.value.objetivo) {
+        ObjectiveState.value = false
         return 'Este campo es requerido'
       }
 
-      if (!/^[0-9]+$/i.test(cementeryServiceFields.value.espaciosDisponibles)) {
-        AvailableState.value = false
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(cleannessServiceFields.value.objetivo)) {
+        ObjectiveState.value = false
         return 'Este campo solo puede contener numeros'
       }
 
-      if (!cementeryServiceFields.value.espaciosDisponibles.trim().length > 0) {
-        AvailableState.value = false
+      if (!cleannessServiceFields.value.objetivo.trim().length > 0) {
+        ObjectiveState.value = false
         return 'Este campo no puede contener espacios'
       }
 
-      AvailableState.value = true
+      ObjectiveState.value = true
       return true
     }
 
     const refreshTable = () => {
       isloading.value = true
-      getCementery(data => {
-        cementeryService.value = data
+      getCleanness(data => {
+        cleannessService.value = data
 
-        if (cementeryService.value.length > 0) {
+        if (cleannessService.value.length > 0) {
           isloading.value = false
         } else {
-          if (cementeryService.value.length <= 0) {
+          if (cleannessService.value.length <= 0) {
             isloading.value = false
           }
         }
@@ -345,20 +340,20 @@ export default {
       return 'datos recargados'
     }
 
-    const addCementeryService = () => {
-      createCementery(cementeryServiceFields.value, data => {
+    const addCleannessService = () => {
+      createCleanness(cleannessServiceFields.value, data => {
         refreshTable()
         swal.fire({
-          title: '¡Cementerios agregado correctamente!',
-          text: 'Cementerios registrado satisfactoriamente',
+          title: '¡Aseo agregado correctamente!',
+          text: 'Aseo registrado satisfactoriamente',
           icon: 'success'
         })
       })
       showModal.value = false
-      resetCementeryServiceFields()
+      resetCleannessServiceFields()
     }
 
-    const RemoveCementeryService = cementeryId => {
+    const RemoveCleannessService = cleannessId => {
       isloading.value = true
       swal.fire({
         title: '¿Estas seguro',
@@ -367,17 +362,17 @@ export default {
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, Archivar Cementerios!',
+        confirmButtonText: 'Si, Archivar Aseo!',
         cancelButtonText: 'Cancelar'
       }).then(result => {
         if (result.isConfirmed) {
-          deleteCementery(cementeryId, (data) => {
+          deleteCleanness(cleannessId, (data) => {
             refreshTable()
           })
           swal.fire({
-            title: '¡Cementerio archivado!',
+            title: '¡Aseo archivado!',
             text:
-                'El cementerio ha sido archivado satisfactoriamente.',
+                'El aseo ha sido archivado satisfactoriamente.',
             icon: 'success'
           })
         } else {
@@ -387,8 +382,8 @@ export default {
     }
 
     return {
-      cementeryService,
-      cementeryServiceFields,
+      cleannessService,
+      cleannessServiceFields,
       perPage,
       currentPage,
       filter,
@@ -397,22 +392,22 @@ export default {
       isloading,
       searchValue,
       searchField,
-      CementeryServiceFieldsBlank,
+      CleannessServiceFieldsBlank,
       fields,
-      PropietaryState,
-      SpacesState,
-      MeterState,
-      AvailableState,
+      NameServiceState,
+      PublicEstablishmentState,
+      DomicileState,
+      ObjectiveState,
 
       onFiltered,
-      validatePropietary,
-      validateSpaces,
-      validateMeter,
-      validateAvailable,
-      addCementeryService,
-      RemoveCementeryService,
+      addCleannessService,
+      RemoveCleannessService,
       refreshTable,
-      resetCementeryServiceFields
+      validateNameService,
+      validatePublicEstablishment,
+      validateDomicile,
+      validateObjective,
+      resetCleannessServiceFields
     }
   }
 }

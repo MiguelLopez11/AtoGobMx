@@ -12,8 +12,9 @@ namespace AtoGobMx.Models
         public int AlumbradoId { get; set; }
         public string DescripcionProblema { get; set; }
         public string Domicilio { get; set; }
-        public string? DescripcionDomicilio { get; set; }
+        public string DescripcionDomicilio { get; set; }
         public bool Archivado { get; set; }
+        public bool TieneExpediente { get; set; }
         public int? EstatusId { get; set; }
         public int? InventarioAlumbradoId { get; set; }
         public int? TareaTipoId { get; set; }
