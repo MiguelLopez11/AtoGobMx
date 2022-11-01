@@ -362,8 +362,7 @@ export default {
         errorMessage.value = 'Este campo es requerido '
         return errorMessage.value
       }
-      const regex = /^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{8,}$/
-      if (!regex.test(userFields.value.contraseña)) {
+      if (!/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{8,}$/(userFields.value.contraseña)) {
         passwordState.value = false
         errorMessage.value =
           'La contraseña debe de contener minimo 8 Caracteres, minusculas y mayusculas '
@@ -385,8 +384,7 @@ export default {
         confirmErrorMessage.value = 'Las contraseñas no coinciden '
         return confirmErrorMessage.value
       }
-      const regex = /^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{8,}$/
-      if (!regex.test(userFields.value.contraseña)) {
+      if (!/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{8,}$/.test(userFields.value.contraseña)) {
         passwordState.value = false
         confirmErrorMessage.value =
           'La contraseña debe de contener minimo 8 Caracteres, minusculas y mayusculas '
@@ -402,8 +400,6 @@ export default {
       roleState.value = userFields.value.roleId === 0 ? false : true
       // eslint-disable-next-line no-unneeded-ternary
       employeeState.value = userFields.value.empleadoId === 0 ? false : true
-      // eslint-disable-next-line no-unneeded-ternary
-      // confirmPasswordState.value = userFields.value.confirmarContraseña === null ? false : true
 
       return ''
     }

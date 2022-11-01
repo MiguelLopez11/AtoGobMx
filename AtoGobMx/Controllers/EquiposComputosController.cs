@@ -104,16 +104,25 @@ namespace AtoGobMx.Controllers
         [HttpDelete("{EquipoComputoId}")]
         public async Task<IActionResult> DeleteEquipoComputo(int EquipoComputoId)
         {
-            var equipo = await _context.EquipoComputo
-                .FirstOrDefaultAsync(f => f.EquipoComputoId == EquipoComputoId);
-            if (equipo == null)
+            try
             {
-                return NotFound();
+                var equipo = await _context.EquipoComputo
+                .FirstOrDefaultAsync(f => f.EquipoComputoId == EquipoComputoId);
+                if (equipo == null)
+                {
+                    return NotFound();
+                }
+                var estatus = await _context.InventarioEstatus
+                    .FirstOrDefaultAsync(f => f.Nombre.Equals("Dado de baja"));
+                equipo.EstatusEquipoId = estatus.EstatusEquipoId;
+                _context.EquipoComputo.Update(equipo);
+                await _context.SaveChangesAsync();
+                return Ok("Producto archivado");
             }
-            equipo.Archivado = true;
-            _context.EquipoComputo.Update(equipo);
-            await _context.SaveChangesAsync();
-            return Ok("Producto archivado");
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

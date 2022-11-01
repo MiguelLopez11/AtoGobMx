@@ -115,7 +115,8 @@ export default {
             .fire({
               title: 'Inicio de sesión correcto.!',
               text: 'Se ha iniciado sesion correctamente.',
-              icon: 'success'
+              icon: 'success',
+              confirmButtonText: 'Ir a inicio'
             })
             .then(result => {
               if (result.isConfirmed) {

@@ -43,7 +43,7 @@
       </template>
       <template #item-actions="items">
         <b-button
-          @click="RemoveRole(items.equipoComputoId)"
+          @click="RemoveComputer(items.equipoComputoId)"
           class="m-1"
           variant="outline-danger"
           ><i class="bi bi-trash3"></i
@@ -427,7 +427,7 @@ export default {
       computerFields.value = JSON.parse(JSON.stringify(computerFieldsBlank))
       brandState.value = false
     }
-    const RemoveRole = equipoComputoId => {
+    const RemoveComputer = equipoComputoId => {
       isloading.value = true
       swal
         .fire({
@@ -476,7 +476,7 @@ export default {
       onFiltered,
       addComputer,
       refreshTable,
-      RemoveRole,
+      RemoveComputer,
       brandState,
       memoryState,
       storageState,

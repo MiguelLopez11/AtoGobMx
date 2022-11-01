@@ -303,6 +303,16 @@ const routes = [
       rol: 'Administrador',
       departamento: 'Patrimonio'
     }
+  },
+  {
+    path: '/Vehiculos/list',
+    name: 'Vehiculos',
+    component: () => import('@/views/Patrimony/Vehicles/VehiclesList.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Patrimonio'
+    }
   }
 ]
 
