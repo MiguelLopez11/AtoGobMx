@@ -72,7 +72,7 @@
       lazy
     >
       <Form @submit="addPublicLighting">
-        <b-row cols="2">
+        <b-row cols="3">
           <!--1-->
           <b-col>
             <b-form-group class="mt-3" label="Tipo de tarea">
@@ -98,7 +98,7 @@
                   autofocus
                   :state="StatusState"
                   :options="statusPublicLighting"
-                  value-field="estatusId"
+                  value-field="estatusAlumbradoId"
                   text-field="nombreEstatus"
                 ></b-form-select>
               </Field>

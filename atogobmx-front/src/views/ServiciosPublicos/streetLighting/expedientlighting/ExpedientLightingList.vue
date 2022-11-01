@@ -77,7 +77,7 @@
         <b-form-select
           autofocus
           :options="employees"
-          value-field="estatusId"
+          value-field="estatusAlumbradoId"
           text-field="nombreEstatus"
           v-model="expedientLightingFields.estatusId"
         />
