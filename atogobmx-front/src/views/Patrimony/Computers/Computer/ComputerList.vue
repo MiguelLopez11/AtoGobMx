@@ -184,7 +184,7 @@
                   v-model="computerFields.estatusEquipoId"
                   autofocus
                   :options="statusComputers"
-                  value-field="EstatusEquipoId"
+                  value-field="estatusEquipoId"
                   text-field="nombre"
                   :state="stateComputerState"
                 >

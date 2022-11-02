@@ -108,9 +108,8 @@ import UsersServices from '@/Services/users.Services'
 import RoleServices from '@/Services/role.Services'
 import EmployeeServices from '@/Services/employee.Services'
 import { Field, Form, ErrorMessage } from 'vee-validate'
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
@@ -119,10 +118,10 @@ export default {
     ErrorMessage
   },
   setup () {
+    const swal = inject('$swal')
     const { getEmployees } = EmployeeServices()
     const { getUser, updateUser } = UsersServices()
     const { getRoles } = RoleServices()
-    const $toast = useToast()
     const employees = ref([])
     const user = ref([])
     const roles = ref([])
@@ -223,14 +222,16 @@ export default {
       return ''
     }
     const onUpdateUser = () => {
-      updateUser(user.value, (data) => {})
-      $toast.open({
-        message: 'Usuario modificado correctamente',
-        position: 'top',
-        duration: 2000,
-        dismissible: true,
-        type: 'success',
-        onDismiss: () => redirect.push('/Usuarios/list')
+      updateUser(user.value, (data) => {
+        swal.fire({
+          title: 'Usuario modificado correctamente!',
+          text: 'El Usuario se ha modificado al sistema satisfactoriamente.',
+          icon: 'success'
+        }).then(result => {
+          if (result.isConfirmed) {
+            redirect.push('/Usuarios/list')
+          }
+        })
       })
     }
     return {

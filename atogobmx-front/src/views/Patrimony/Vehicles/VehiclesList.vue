@@ -21,7 +21,7 @@
         @click="showModal = !showModal"
         type="submit"
       >
-        <i class="bi bi-pc-display-horizontal"></i>
+        <i class="bi bi-car-front-fill" />
         Agregar vehiculo
       </b-button>
     </b-row>
@@ -50,8 +50,8 @@
         ></b-button>
         <b-button class="m-1" variant="outline-warning"
           :to="{
-            name: 'EquiposComputo-Edit',
-            params: { EquipoComputoId: items.vehiculoId},
+            name: 'Vehiculos-Edit',
+            params: { VehiculoId: items.vehiculoId},
           }"
         >
           <i class="bi bi-pencil-square" />
@@ -246,7 +246,7 @@ export default {
     const licensePlateState = ref(false)
     const serialNumberState = ref(false)
     const releaseYearState = ref(false)
-    const stateComputerState = ref(false)
+    // const stateComputerState = ref(false)
     const doorsState = ref(false)
     const transmissionState = ref(false)
     const showModal = ref(false)
@@ -403,7 +403,7 @@ export default {
       licensePlateState.value = false
       serialNumberState.value = false
       releaseYearState.value = false
-      stateComputerState.value = false
+      // stateComputerState.value = false
       doorsState.value = false
       transmissionState.value = false
       vehiclesFields.value = JSON.parse(JSON.stringify(vehiclesFieldsBlank))
@@ -464,7 +464,7 @@ export default {
       licensePlateState,
       serialNumberState,
       releaseYearState,
-      stateComputerState,
+      // stateComputerState,
       doorsState,
       transmissionState,
       typeTransmissions,

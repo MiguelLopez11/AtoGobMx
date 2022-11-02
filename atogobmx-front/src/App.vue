@@ -13,6 +13,7 @@
             <label  class="m-2">AtogobMx</label>
           </div>
           <b-nav-item-dropdown
+            v-if="departament === 'Recursos Humanos' || role === 'Administrador'"
             text="Recursos Humanos"
             dropright
             auto-close="outside"
@@ -43,6 +44,7 @@
           </b-nav-item-dropdown>
           <!--Alumbrado Publico-->
           <b-nav-item-dropdown
+            v-if="departament === 'Servicios Publicos' || role === 'Administrador'"
             text="Servicios Publicos"
             dropright
             auto-close="outside"
@@ -74,6 +76,7 @@
           </b-nav-item-dropdown>
           <!--Cementerios-->
           <b-nav-item-dropdown
+            v-if="departament === 'Cementerios' || role === 'Administrador'"
             text="Cementerios"
             dropright
             auto-close="outside"
@@ -92,6 +95,7 @@
           </b-nav-item-dropdown>
           <!--Aseo-->
           <b-nav-item-dropdown
+            v-if="departament === 'Servicios Publicos' || role === 'Administrador'"
             text="Aseo"
             dropright
             auto-close="outside"
@@ -112,7 +116,7 @@
               Zona
             </b-dropdown-item>
           </b-nav-item-dropdown>
-          <b-nav-item-dropdown text="Patriminio" right auto-close>
+          <b-nav-item-dropdown v-if="departament === 'Patrimonio' || role === 'Administrador'" text="Patriminio">
              <template v-slot:button-content>
               <i class="bi bi-bookmark-check-fill"></i>
             </template>
@@ -171,6 +175,10 @@ export default {
     const swal = inject('$swal')
     const background = ref(LogoAtogobMx)
     const isLogged = window.sessionStorage.getItem('isLogged')
+    const departament = window.sessionStorage.getItem('Departamento')
+    const role = window.sessionStorage.getItem('Role')
+    const area = window.sessionStorage.getItem('Area')
+    console.log(area)
     const removeLocalStorgare = () => {
       window.sessionStorage.removeItem('isLogged')
       swal.fire({
@@ -185,6 +193,9 @@ export default {
     return {
       background,
       isLogged,
+      departament,
+      role,
+      area,
 
       removeLocalStorgare
       // roleUser,

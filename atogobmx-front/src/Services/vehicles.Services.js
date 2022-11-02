@@ -2,11 +2,6 @@ import axios from 'axios'
 
 export default function VehiclesServices () {
   const BaseUrl = 'https://localhost:7065/api'
-  const getAreas = (callback) => {
-    axios.get(`${BaseUrl}/Areas`).then((response) => {
-      callback(response.data)
-    })
-  }
   const getVehicles = (callback) => {
     axios.get(`${BaseUrl}/PAT_Vehiculos`).then((response) => {
       callback(response.data)
@@ -23,7 +18,7 @@ export default function VehiclesServices () {
     })
   }
   const updateVehicle = (data, callback) => {
-    axios.put(`${BaseUrl}/PAT_Vehiculos/${data.areaId}`, data).then((response) => {
+    axios.put(`${BaseUrl}/PAT_Vehiculos/${data.vehiculoId}`, data).then((response) => {
       callback(response.data)
     })
   }
@@ -33,7 +28,6 @@ export default function VehiclesServices () {
     })
   }
   return {
-    getAreas,
     getVehicles,
     getVehicle,
     createVehicle,

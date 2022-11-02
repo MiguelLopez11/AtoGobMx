@@ -92,14 +92,6 @@ export default {
           }
         })
       })
-      // $toast.open({
-      //   message: 'Departamento modificado correctamente',
-      //   position: 'top',
-      //   duration: 2000,
-      //   dismissible: true,
-      //   type: 'success',
-      //   onDismiss: () => redirect.push('')
-      // })
     }
     getDepartament(router.params.DepartamentoId, data => {
       departament.value = data
@@ -120,7 +112,7 @@ export default {
     const validateState = () => {
       // eslint-disable-next-line no-unneeded-ternary
       nameState.value = departament.value.nombre === '' ? false : true
-      return 'HOli'
+      return ''
     }
     return {
       departament,
