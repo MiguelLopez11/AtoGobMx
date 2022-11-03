@@ -25,6 +25,7 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<ExpedienteAlumbrado>> GetExpedienteFalla()
         {
             var expefalla = await _context.ExpedienteAlumbrado
+                .Include(i => i.Alumbrado)
                 .Where(w => !w.Archivado)
                 .OrderBy(o => o.ExpedienteAlumbradoId)
                 .ToListAsync();

@@ -72,13 +72,13 @@
     lazy
   >
   <b-row>
-      <b-form-group class="mt-3" label="Alumbrado: ">
+      <b-form-group class="mt-3" label="Domicilio de registro alumbrado: ">
         <b-form-select
           autofocus
           :options="employees"
-          value-field="estatusAlumbradoId"
-          text-field="nombreEstatus"
-          v-model="expedientLightingFields.estatusId"
+          value-field="alumbradoId"
+          text-field="domicilio"
+          v-model="expedientLightingFields.domicilio"
         />
       </b-form-group>
     </b-row>
@@ -101,6 +101,7 @@
 import ExpedientlightingServices from '@/Services/expedientlighting.Services'
 import AreaServices from '@/Services/area.Services'
 import DepartamentServices from '@/Services/departament.Services'
+// import publiclightingServices from '@/Services/publiclighting.Services'
 import { ref, inject } from 'vue'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
@@ -112,6 +113,7 @@ export default {
     const showModal = ref(false)
     const { getAreasByDepartament } = AreaServices()
     const { getDepartaments } = DepartamentServices()
+    // const { } = publiclightingServices()
     const {
       getExpedientLighting,
       createExpedientLighting,
@@ -138,10 +140,6 @@ export default {
       areaId: null,
       archivado: false
     })
-
-    // getStatus(data => {
-    //   statusPublicLighting.value = data
-    // })
 
     getDepartaments(data => {
       departaments.value = data
