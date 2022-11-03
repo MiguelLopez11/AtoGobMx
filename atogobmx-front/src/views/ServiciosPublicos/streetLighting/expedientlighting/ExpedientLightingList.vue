@@ -21,7 +21,6 @@
         @click="showModal = !showModal"
         type="submit"
       >
-        <!-- v-b-modal.modal-expedientlighting -->
         <i class="bi bi-folder-fill m-1"></i>
         crear Expediente
       </b-button>
@@ -72,13 +71,13 @@
     lazy
   >
   <b-row>
-      <b-form-group class="mt-3" label="Alumbrado: ">
+      <b-form-group class="mt-3" label="Domicilio de registro alumbrado: ">
         <b-form-select
           autofocus
           :options="employees"
-          value-field="estatusAlumbradoId"
-          text-field="nombreEstatus"
-          v-model="expedientLightingFields.estatusId"
+          value-field="alumbradoId"
+          text-field="domicilio"
+          v-model="expedientLightingFields.domicilio"
         />
       </b-form-group>
     </b-row>
@@ -101,6 +100,7 @@
 import ExpedientlightingServices from '@/Services/expedientlighting.Services'
 import AreaServices from '@/Services/area.Services'
 import DepartamentServices from '@/Services/departament.Services'
+// import publiclightingServices from '@/Services/publiclighting.Services'
 import { ref, inject } from 'vue'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
@@ -112,6 +112,7 @@ export default {
     const showModal = ref(false)
     const { getAreasByDepartament } = AreaServices()
     const { getDepartaments } = DepartamentServices()
+    // const { } = publiclightingServices()
     const {
       getExpedientLighting,
       createExpedientLighting,
@@ -138,10 +139,6 @@ export default {
       areaId: null,
       archivado: false
     })
-
-    // getStatus(data => {
-    //   statusPublicLighting.value = data
-    // })
 
     getDepartaments(data => {
       departaments.value = data
@@ -197,7 +194,6 @@ export default {
     })
 
     const onFiltered = filteredItems => {
-      // rows.value = filteredItems.length
       currentPage.value = 1
     }
 
@@ -205,7 +201,6 @@ export default {
       isloading.value = true
       getExpedientLighting(data => {
         expedientLighting.value = data
-        // rows.value = data.length
         if (expedientLighting.value.length > 0) {
           isloading.value = false
         } else {
@@ -227,8 +222,6 @@ export default {
         })
       })
       showModal.value = false
-      // resetexpedientLightingFields()
-      // resetStreetLightingFields()
       // expedientLightingFields.value = JSON.parse(
       //   JSON.stringify(expedientLightingFieldsBlank)
       // )

@@ -6,8 +6,10 @@ import Vue3EasyDataTable from 'vue3-easy-data-table'
 import Datepicker from '@vuepic/vue-datepicker'
 import VueToast from 'vue-toast-notification'
 import VueSweetalert2 from 'vue-sweetalert2'
-import 'sweetalert2/dist/sweetalert2.min.css'
+import vSelect from 'vue-select'
 
+import 'vue-select/dist/vue-select.css'
+import 'sweetalert2/dist/sweetalert2.min.css'
 import 'vue-neat-modal/dist/vue-neat-modal.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue-3/dist/bootstrap-vue-3.css'
@@ -19,4 +21,5 @@ import 'vue-toast-notification/dist/theme-sugar.css'
 const app = createApp(App)
 app.component('date-picker', Datepicker)
 app.component('EasyDataTable', Vue3EasyDataTable)
+app.component('v-select', vSelect)
 app.use(router).use(BootstrapVue3).use(VueToast).use(VueSweetalert2).mount('#app')
