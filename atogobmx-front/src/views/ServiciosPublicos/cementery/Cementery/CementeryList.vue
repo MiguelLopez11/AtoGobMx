@@ -116,6 +116,8 @@
                 <b-form-input
                   v-model="cementeryServiceFields.metrosCorrespondientes"
                   :state="MeterState"
+                  type="number"
+                  min="1"
                 >
                 </b-form-input>
               </Field>

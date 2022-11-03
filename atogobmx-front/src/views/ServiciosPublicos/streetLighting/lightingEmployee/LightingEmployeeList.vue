@@ -80,15 +80,19 @@
                 :rules="validateName"
                 as="text"
               >
-                <b-form-select
+              {{lightingEmployeeServiceFields}}
+              <v-select  multiple v-model="lightingEmployeeServiceFields.empleadoId" :options="employees" label="nombreCompleto" :key="employees.empleadoId" :reduce="employees => employees.empleadoId"  />
+                <!-- <b-form-select
                   v-model="lightingEmployeeServiceFields.empleadoId"
                   :state="NameState"
                   autofocus
+                  multiple
+                  :selected="selected2"
                   :options="employees"
                   value-field="empleadoId"
                   text-field="nombreCompleto"
                 >
-                </b-form-select>
+                </b-form-select> -->
               </Field>
               <ErrorMessage
                 class="text-danger"
@@ -130,7 +134,13 @@ export default {
     Field,
     ErrorMessage
   },
-  setup () {
+  props: {
+    expedienteAlumbradoId: {
+      type: Number,
+      required: true
+    }
+  },
+  setup (props) {
     const swal = inject('$swal')
     const showModal = ref(false)
     const { getAddressLightingEmployee, createAddressLightingEmployee, deleteAddressLightingEmployee } = LightingEmployeeService()
@@ -148,7 +158,8 @@ export default {
     const NameState = ref(false)
     const lightingEmployeeServiceFields = ref({
       alumbradoEmpleadoId: 0,
-      empleadoId: null,
+      expedienteAlumbradoId: props.expedienteAlumbradoId,
+      empleadoId: {},
       archivado: false
     })
 

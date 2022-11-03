@@ -146,7 +146,7 @@
           </Form>
         </b-tab>
         <b-tab title="Empleados">
-          <employee-lighting />
+          <employee-lighting :expedienteAlumbradoId="expedienteAlumbradoId"/>
         </b-tab>
         <b-tab title="Vehiculos"> </b-tab>
       </b-tabs>
@@ -194,7 +194,7 @@ export default {
     // const statusPublicLighting = ref([])
     const router = useRoute()
     const redirect = useRouter()
-    // const route = useRouter()
+    const expedienteAlumbradoId = ref(router.params.ExpedienteAlumbradoId)
     const PublicPlaceState = ref(false)
     const LocationState = ref(false)
     const HighDateState = ref(false)
@@ -374,7 +374,8 @@ export default {
       validateArea,
       validateDescriptionSolution,
       validateHighDate,
-      getAreas
+      getAreas,
+      expedienteAlumbradoId
     }
   }
 }

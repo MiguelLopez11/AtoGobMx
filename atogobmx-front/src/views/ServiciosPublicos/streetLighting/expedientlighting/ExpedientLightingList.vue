@@ -21,7 +21,6 @@
         @click="showModal = !showModal"
         type="submit"
       >
-        <!-- v-b-modal.modal-expedientlighting -->
         <i class="bi bi-folder-fill m-1"></i>
         crear Expediente
       </b-button>
@@ -195,7 +194,6 @@ export default {
     })
 
     const onFiltered = filteredItems => {
-      // rows.value = filteredItems.length
       currentPage.value = 1
     }
 
@@ -203,7 +201,6 @@ export default {
       isloading.value = true
       getExpedientLighting(data => {
         expedientLighting.value = data
-        // rows.value = data.length
         if (expedientLighting.value.length > 0) {
           isloading.value = false
         } else {
@@ -225,8 +222,6 @@ export default {
         })
       })
       showModal.value = false
-      // resetexpedientLightingFields()
-      // resetStreetLightingFields()
       // expedientLightingFields.value = JSON.parse(
       //   JSON.stringify(expedientLightingFieldsBlank)
       // )
