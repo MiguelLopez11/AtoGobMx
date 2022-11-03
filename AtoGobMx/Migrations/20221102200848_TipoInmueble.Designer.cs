@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20221102200848_TipoInmueble")]
+    partial class TipoInmueble
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -498,23 +500,17 @@ namespace AtoGobMx.Migrations
                     b.Property<int>("AreaId")
                         .HasColumnType("int");
 
-                    b.Property<int>("DepartamentoId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Descripción")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("TipoMobiliarioId")
-                        .HasColumnType("int");
+                    b.Property<string>("NombreMobiliario")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("MobiliarioId");
 
                     b.HasIndex("AreaId");
-
-                    b.HasIndex("DepartamentoId");
-
-                    b.HasIndex("TipoMobiliarioId");
 
                     b.ToTable("Mobiliario");
                 });
@@ -959,23 +955,7 @@ namespace AtoGobMx.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AtoGobMx.Models.Departamentos", "Departamentos")
-                        .WithMany()
-                        .HasForeignKey("DepartamentoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AtoGobMx.Models.PAT_TipoMobiliario", "TipoMobiliario")
-                        .WithMany()
-                        .HasForeignKey("TipoMobiliarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Area");
-
-                    b.Navigation("Departamentos");
-
-                    b.Navigation("TipoMobiliario");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.PAT_Monitor", b =>

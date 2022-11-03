@@ -403,6 +403,26 @@ const routes = [
       rol: 'Administrador',
       departamento: 'Patrimonio'
     }
+  },
+  {
+    path: '/Mobiliarios/list',
+    name: 'Mobiliarios',
+    component: () => import('@/views/Patrimony/Furnitures/FurnitureList.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Patrimonio'
+    }
+  },
+  {
+    path: '/Mobiliarios/:MobiliarioId',
+    name: 'Mobiliarios-Edit',
+    component: () => import('@/views/Patrimony/Furnitures/FurnitureEdit.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Administrador',
+      departamento: 'Patrimonio'
+    }
   }
 ]
 

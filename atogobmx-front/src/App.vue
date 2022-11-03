@@ -132,6 +132,10 @@
               <i class="bi bi-car-front-fill"></i>
               Vehiculos
             </b-dropdown-item>
+            <b-dropdown-item to="/Mobiliarios/list">
+              <i class="bi bi-lamp-fill"></i>
+              Mobiliarios
+            </b-dropdown-item>
           </b-nav-item-dropdown>
           <b-nav-item-dropdown text="Administrador" right auto-close>
             <template v-slot:button-content>

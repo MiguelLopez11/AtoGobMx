@@ -41,21 +41,6 @@
       <template #header-actions="header">
         {{ header.text }}
       </template>
-      <!-- <template #item-departaments="items">
-        <div>
-          {{items.departamentos.nombre || items}}
-        </div>
-      </template>
-      <template #item-areas="items">
-        <div>
-          {{items.area.nombre || items}}
-        </div>
-      </template>
-      <template #item-workStations="items">
-        <div>
-
-        </div>
-      </template> -->
       <template #item-actions="items">
         <b-button
           @click="RemoveEmployee(items.empleadoId)"
@@ -246,9 +231,6 @@ export default {
     const areaState = ref(false)
     const workStationState = ref(false)
     const departamentState = ref(false)
-    const headerDepartament = ref()
-    const headerArea = ref()
-    const headerWorkStation = ref()
     const expedientFieldBlank = ref({
       expedienteDigitalId: 0,
       empleadoId: null,
@@ -474,9 +456,6 @@ export default {
       workStationState,
       departamentState,
       showModal,
-      headerDepartament,
-      headerArea,
-      headerWorkStation,
 
       onFiltered,
       addEmployee,
