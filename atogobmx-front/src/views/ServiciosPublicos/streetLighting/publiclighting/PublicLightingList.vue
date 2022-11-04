@@ -72,7 +72,7 @@
     >
       <Form @submit="addPublicLighting">
         <b-row cols="3">
-          <!--1-->
+          <!--Tipo de tarea a agregar-->
           <b-col>
             <b-form-group class="mt-3" label="Tipo de tarea">
               <Field name="TaskField" :rules="validateTask" as="text">
@@ -88,7 +88,7 @@
               <ErrorMessage class="text-danger" name="TaskField"/>
             </b-form-group>
           </b-col>
-          <!--2-->
+          <!--agregar un estatus-->
           <b-col>
             <b-form-group class="mt-3" label="Estatus">
               <Field name="StatusField" :rules="validateStatus" as="text">
@@ -104,7 +104,7 @@
               <ErrorMessage class="text-danger" name="StatusField"/>
             </b-form-group>
           </b-col>
-          <!--3-->
+          <!--agregar domicilio-->
           <b-col>
             <b-form-group class="mt-3" label="Domicilio">
               <Field name="DomicileField" :rules="validateDomicile" as="text">
@@ -116,7 +116,7 @@
               <ErrorMessage class="text-danger" name="DomicileField"/>
             </b-form-group>
           </b-col>
-          <!--4-->
+          <!--agregar descripcion de un domicilio-->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion Domicilio">
               <Field name="addresdescriptionField" :rules="validateAddresdescription" as="text">
@@ -129,7 +129,7 @@
               <ErrorMessage class="text-danger" name="addresdescriptionField"/>
             </b-form-group>
           </b-col>
-          <!--5-->
+          <!--Agregar una descripcion del problema-->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion del problema">
               <Field name="ProblemField" :rules="validateProblem" as="text">

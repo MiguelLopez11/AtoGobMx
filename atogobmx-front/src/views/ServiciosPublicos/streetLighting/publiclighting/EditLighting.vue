@@ -4,14 +4,12 @@
       <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
     </b-card>
     <b-card>
-      <!-- <b-tabs content-class="mt-3"> -->
-        <!-- <b-tab title="Datos Generales" active> -->
-          <!-- <div>
+          <div>
             <h3>Reporte Alumbrado</h3>
-          </div> -->
+          </div>
           <Form @submit="onUpdatePublicLighting">
             <b-row cols="3">
-              <!--1-->
+              <!--Tipo de tarea a agregar-->
               <b-col>
                 <b-form-group class="mt-3" label="Tipo de Tarea">
                   <Field name="TaskField" :rules="validateTask" as="text">
@@ -27,7 +25,7 @@
                   <ErrorMessage class="text-danger" name="TaskField"></ErrorMessage>
                 </b-form-group>
               </b-col>
-              <!--2-->
+              <!--agregar un estatus-->
               <b-col>
                 <b-form-group class="mt-3" label="Estatus">
                   <Field name="StatusField" :rules="validateStatus" as="text">
@@ -43,7 +41,7 @@
                   <ErrorMessage class="text-danger" name="StatusField"></ErrorMessage>
                 </b-form-group>
               </b-col>
-              <!--3-->
+              <!--agregar domicilio-->
               <b-col>
                 <b-form-group class="mt-3" label="Domicilio">
                   <Field name="DomicileField" :rules="validateDomicile" as="text">
@@ -55,7 +53,7 @@
                   <ErrorMessage class="text-danger" name="DomicileField"></ErrorMessage>
                 </b-form-group>
               </b-col>
-              <!--4-->
+              <!--agregar descripcion de un domicilio-->
               <b-col>
                 <b-form-group class="mt-3" label="Descripcion Domicilio">
                   <Field name="addresdescriptionField" :rules="validateAddresdescription" as="text">
@@ -68,7 +66,7 @@
                   <ErrorMessage class="text-danger" name="addresdescriptionField"></ErrorMessage>
                 </b-form-group>
               </b-col>
-              <!--5-->
+              <!--Agregar una descripcion del problema-->
               <b-col>
                 <b-form-group class="mt-3" label="Descripcion del problema">
                   <Field name="ProblemField" :rules="validateProblem" as="text">
@@ -96,11 +94,6 @@
               >
             </b-row>
           </Form>
-        <!-- </b-tab> -->
-        <!-- <b-tab title="Expediente Alumbrado">
-          <ExpedientPublic :expedientLightingId="1" /> -->
-        <!-- </b-tab> -->
-      <!-- </b-tabs> -->
     </b-card>
   </b-card>
 </template>

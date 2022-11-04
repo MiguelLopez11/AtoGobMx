@@ -71,6 +71,7 @@
     >
       <Form @submit="addTaskTypeLighting">
         <b-row cols="2">
+          <!--Agregar nombre-->
           <b-col>
             <b-form-group class="mt-3" label="Nombre">
               <Field name="NameField" :rules="validateName" as="text">
@@ -84,6 +85,7 @@
               <ErrorMessage class="text-danger" name="NameField"></ErrorMessage>
             </b-form-group>
           </b-col>
+          <!--Agregar descripcion-->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion">
               <Field name="DescriptionField" :rules="validateDescription" as="text">

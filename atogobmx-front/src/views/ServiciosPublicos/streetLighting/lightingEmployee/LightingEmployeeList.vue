@@ -21,7 +21,6 @@
         @click="showModal = !showModal"
         type="submit"
       >
-        <!-- v-b-modal.modal-cementery -->
         <i class="bi bi-person-plus-fill"></i>
         Agregar Alumbrado empleado
       </b-button>
@@ -50,15 +49,6 @@
           variant="outline-danger"
           ><i class="bi bi-trash3"></i
         ></b-button>
-        <b-button
-          class="m-1"
-          variant="outline-warning"
-          :to="{
-            name: 'AlumbradoEmpleado-Edit',
-            params: { AlumbradoEmpleadoId: items.alumbradoempleadoId }
-          }"
-          ><i class="bi bi-pencil-square"></i
-        ></b-button>
       </template>
     </EasyDataTable>
     <b-modal
@@ -72,7 +62,7 @@
     >
       <Form @submit="addLightingEmployeeService">
         <b-row cols="2">
-          <!-- 1 -->
+          <!-- Nombre del empleado -->
           <b-col>
             <b-form-group class="mt-3" label="Nombre empleado">
               <Field
@@ -108,7 +98,6 @@
             variant="primary"
             @click="resetLightingEmployeeServiceFields"
           >
-            <!-- v-b-modal.modal-cementery -->
             Cancelar
           </b-button>
           <b-button class="w-auto m-2" variant="success" type="submit">
@@ -125,7 +114,6 @@ import LightingEmployeeService from '@/Services/lightingemployee.Services'
 import EmployeeServices from '@/Services/employee.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
-// import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
@@ -145,7 +133,6 @@ export default {
     const showModal = ref(false)
     const { getAddressLightingEmployee, createAddressLightingEmployee, deleteAddressLightingEmployee } = LightingEmployeeService()
     const { getEmployees } = EmployeeServices()
-    // const $toast = useToast()
     const lightingEmployeeService = ref([])
     const employees = ref([])
     const perPage = ref(5)
@@ -213,16 +200,6 @@ export default {
         NameState.value = false
         return 'Este campo es requerido'
       }
-
-      // if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(lightingEmployeeServiceFields.value.empleadoId)) {
-      //   NameState.value = false
-      //   return 'Este campo solo puede contener letras'
-      // }
-
-      // if (!lightingEmployeeServiceFields.value.empleadoId.trim().length > 0) {
-      //   NameState.value = false
-      //   return 'Este campo no puede contener espacios'
-      // }
 
       NameState.value = true
       return true

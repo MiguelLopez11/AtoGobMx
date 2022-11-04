@@ -22,7 +22,7 @@ namespace AtoGobMx.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ExpedienteAlumbrado>> GetExpedienteFalla()
+        public async Task<ActionResult<ExpedienteAlumbrado>> GetExpedienteAlumbrado()
         {
             var expefalla = await _context.ExpedienteAlumbrado
                 .Include(i => i.Alumbrado)
@@ -32,6 +32,7 @@ namespace AtoGobMx.Controllers
             return Ok(expefalla);
         }
 
+        //"Alumbrado/AlumbradoId"
         [HttpGet("Alumbrado/AlumbradoId")]
         public async Task<ActionResult> GetExpedienteAlumbradoByAlumbrado(int AlumbradoId)
         {

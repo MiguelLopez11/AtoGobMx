@@ -98,8 +98,8 @@
 
 <script>
 import ExpedientlightingServices from '@/Services/expedientlighting.Services'
-import AreaServices from '@/Services/area.Services'
-import DepartamentServices from '@/Services/departament.Services'
+// import AreaServices from '@/Services/area.Services'
+// import DepartamentServices from '@/Services/departament.Services'
 // import publiclightingServices from '@/Services/publiclighting.Services'
 import { ref, inject } from 'vue'
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -110,8 +110,8 @@ export default {
   setup () {
     const swal = inject('$swal')
     const showModal = ref(false)
-    const { getAreasByDepartament } = AreaServices()
-    const { getDepartaments } = DepartamentServices()
+    // const { getAreasByDepartament } = AreaServices()
+    // const { getDepartaments } = DepartamentServices()
     // const { } = publiclightingServices()
     const {
       getExpedientLighting,
@@ -119,7 +119,7 @@ export default {
       deleteExpedientLighting
     } = ExpedientlightingServices()
     const expedientLighting = ref([])
-    const departaments = ref([])
+    // const departaments = ref([])
     const areas = ref([])
     const isOpen = ref(false)
     const perPage = ref(5)
@@ -131,40 +131,40 @@ export default {
     const searchField = ref('lugarPublico')
     const expedientLightingFields = ref({
       expedienteAlumbradoId: 0,
-      descripcionSolucion: null,
+      // descripcionSolucion: null,
       fechaAlta: null,
-      lugarPublico: null,
-      localidad: null,
-      departamentoId: null,
-      areaId: null,
+      // lugarPublico: null,
+      // localidad: null,
+      // departamentoId: null,
+      // areaId: null,
       archivado: false
     })
 
-    getDepartaments(data => {
-      departaments.value = data
-      if (data.length === 0) {
-        swal.fire({
-          title: 'No se encuentran departamentos registrados!',
-          text:
-            'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
-          icon: 'warning'
-        })
-      }
-    })
+    // getDepartaments(data => {
+    //   departaments.value = data
+    //   if (data.length === 0) {
+    //     swal.fire({
+    //       title: 'No se encuentran departamentos registrados!',
+    //       text:
+    //         'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
+    //       icon: 'warning'
+    //     })
+    //   }
+    // })
 
-    const getAreas = departamentoId => {
-      getAreasByDepartament(departamentoId, data => {
-        areas.value = data
-        if (data.length === 0) {
-          swal.fire({
-            title: 'No se encuentran areas registradas!',
-            text:
-              'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
-            icon: 'warning'
-          })
-        }
-      })
-    }
+    // const getAreas = departamentoId => {
+    //   getAreasByDepartament(departamentoId, data => {
+    //     areas.value = data
+    //     if (data.length === 0) {
+    //       swal.fire({
+    //         title: 'No se encuentran areas registradas!',
+    //         text:
+    //           'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
+    //         icon: 'warning'
+    //       })
+    //     }
+    //   })
+    // }
 
     // pone mis cambios de mis campos vacios de nuevo
     const expedientLightingFieldsBlank = ref(
@@ -173,9 +173,9 @@ export default {
 
     const fields = ref([
       { value: 'expedienteAlumbradoId', text: 'ID', sortable: true },
+      { value: 'fechaAlta', text: 'Fecha alta' },
       { value: 'lugarPublico', text: 'Lugar publico' },
       { value: 'localidad', text: 'Localidad' },
-      { value: 'fechaAlta', text: 'Fecha alta' },
       { value: 'departamentoId', text: 'Departamento' },
       { value: 'areaId', text: 'Area' },
       { value: 'actions', text: 'Acciones' }
@@ -273,7 +273,7 @@ export default {
       areas,
 
       onFiltered,
-      getAreas,
+      // getAreas,
       addExpedientLighting,
       refreshTable,
       RemoveExpedientLighting
