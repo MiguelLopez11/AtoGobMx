@@ -211,15 +211,15 @@ export default {
     // VALIDATIONS
     const validateFolio = () => {
       if (!furniture.value.codigoInventario) {
-        folioState.value = false
+        validateState()
         return 'Este campo es requerido'
       }
       // eslint-disable-next-line no-useless-escape
       if (!/^(?=.*\d)(?=.*[a-zA-Z])([A-ZñÑáéíóúÁÉÍÓÚ])[A-Z0-9]+$/i.test(furniture.value.codigoInventario)) {
-        folioState.value = false
+        validateState()
         return 'El nombre del area solo puede contener letras'
       }
-      folioState.value = true
+      validateState()
       return true
     }
     const validateTypeFurniture = () => {

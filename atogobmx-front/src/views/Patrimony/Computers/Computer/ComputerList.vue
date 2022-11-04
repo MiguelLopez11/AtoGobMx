@@ -74,6 +74,18 @@
       <Form @submit="addComputer">
         <b-row cols="3">
           <b-col>
+            <b-form-group class="mt-3" label="Nomenclatura">
+              <Field
+                name="FolioField"
+                :rules="validateFolio"
+                as="text"
+              >
+                <b-form-input v-model="computerFields.codigoInventario" :state="folioState"> </b-form-input>
+              </Field>
+              <ErrorMessage class="text-danger" name="FolioField"></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <b-col>
             <b-form-group class="mt-3" label="Marca">
               <Field name="BrandField" :rules="validateBrand" as="text">
                 <b-form-input
@@ -249,14 +261,16 @@ export default {
     const processorState = ref(false)
     const departamentState = ref(false)
     const areaState = ref(false)
+    const folioState = ref(false)
     const stateComputerState = ref(false)
     const showModal = ref(false)
     const computerFields = ref({
       equipoComputoId: 0,
-      marca: '',
-      memoriaRAM: '',
-      almacenamiento: '',
-      procesador: '',
+      codigoInventario: null,
+      marca: null,
+      memoriaRAM: null,
+      almacenamiento: null,
+      procesador: null,
       departamentoId: null,
       areaId: null,
       estatusEquipoId: null,
@@ -264,7 +278,7 @@ export default {
     })
     const computerFieldsBlank = ref(JSON.parse(JSON.stringify(computerFields)))
     const fields = ref([
-      { value: 'equipoComputoId', text: 'ID', sortable: true },
+      { value: 'codigoInventario', text: 'Nomenclatura', sortable: true },
       { value: 'marca', text: 'Marca' },
       { value: 'memoriaRAM', text: 'Memoria RAM' },
       { value: 'almacenamiento', text: 'Almacenamiento' },
@@ -320,6 +334,19 @@ export default {
           })
         }
       })
+    }
+    const validateFolio = () => {
+      if (!computerFields.value.codigoInventario) {
+        folioState.value = false
+        return 'Este campo es requerido'
+      }
+      // eslint-disable-next-line no-useless-escape
+      if (!/^(?=.*\d)(?=.*[a-zA-Z])([A-ZñÑáéíóúÁÉÍÓÚ])[A-Z0-9]+$/i.test(computerFields.value.codigoInventario)) {
+        folioState.value = false
+        return 'El nombre del area solo puede contener letras'
+      }
+      folioState.value = true
+      return true
     }
     const validateBrand = () => {
       if (!computerFields.value.marca) {
@@ -488,6 +515,7 @@ export default {
       areas,
       departaments,
       statusComputers,
+      folioState,
 
       validateBrand,
       validateMemory,
@@ -497,6 +525,7 @@ export default {
       validateDepartament,
       validateArea,
       validateStateComputer,
+      validateFolio,
       getAreas
     }
   }

@@ -35,5 +35,7 @@ namespace AtoGobMx.Context
         public DbSet<PAT_Mobiliario> Mobiliario { get; set; }
         public DbSet<PAT_TipoMobiliario> TipoMobiliario { get; set; }
         public DbSet<PAT_EstatusEquipo> InventarioEstatus { get; set; }
+        public DbSet<PAT_Armeria> Armeria { get; set; }
+        public DbSet<PAT_CategoriaArmeria> CategoriaArmeria { get; set; }
     }
 }
