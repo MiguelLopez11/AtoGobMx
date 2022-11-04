@@ -8,7 +8,7 @@ namespace AtoGobMx.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int MobiliarioId { get; set; }
-        //public string NombreMobiliario { get; set; }
+        public string CodigoInventario { get; set; }
         public string Descripción { get; set; }
         public int AreaId { get; set; }
         public int TipoMobiliarioId { get; set; }

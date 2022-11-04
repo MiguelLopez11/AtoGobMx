@@ -22,7 +22,7 @@
         type="submit"
       >
         <i class="bi bi-easel2-fill"></i>
-        Agregar Inmueble
+        Agregar mobiliario
       </b-button>
     </b-row>
     <EasyDataTable
@@ -62,7 +62,7 @@
     <b-modal
       id="modal-employee"
       v-model="showModal"
-      title="Agregar empleados"
+      title="Agregar Mobiliario"
       size="xl"
       hide-footer
       centered
@@ -72,7 +72,19 @@
       <Form @submit="addFurniture">
         <b-row cols="3">
           <b-col>
-            <b-form-group class="mt-3" label="Tipo de inmueble">
+            <b-form-group class="mt-3" label="Nomenclatura">
+              <Field
+                name="FolioField"
+                :rules="validateFolio"
+                as="text"
+              >
+                <b-form-input v-model="furnituresFields.codigoInventario" :state="folioState"> </b-form-input>
+              </Field>
+              <ErrorMessage class="text-danger" name="FolioField"></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Tipo de mobiliario">
               <Field
                 name="typeFurnitureField"
                 :rules="validateTypeFurniture"
@@ -194,13 +206,15 @@ export default {
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('nombreCompleto')
+    const searchField = ref('codigoInventario')
     const typeFurnitureState = ref(false)
     const descriptionState = ref(false)
+    const folioState = ref(false)
     const areaState = ref(false)
     const departamentState = ref(false)
     const furnituresFields = ref({
       mobiliarioId: 0,
+      codigoInventario: null,
       descripción: '',
       areaId: null,
       tipoMobiliarioId: null,
@@ -233,7 +247,7 @@ export default {
       }
     })
     const fields = ref([
-      { value: 'mobiliarioId', text: 'ID', sortable: true },
+      { value: 'codigoInventario', text: 'Nomenclatura', sortable: true },
       { value: 'descripción', text: 'Nombre' },
       { value: 'departamentos.nombre', text: 'Departamento' },
       { value: 'area.nombre', text: 'Area de Trabajo' },
@@ -245,6 +259,7 @@ export default {
       typeFurnitureState.value = false
       descriptionState.value = false
       areaState.value = false
+      folioState.value = false
       departamentState.value = false
     }
     getFurnitures((data) => {
@@ -329,6 +344,19 @@ export default {
       typeFurnitureState.value = true
       return true
     }
+    const validateFolio = () => {
+      if (!furnituresFields.value.codigoInventario) {
+        folioState.value = false
+        return 'Este campo es requerido'
+      }
+      // eslint-disable-next-line no-useless-escape
+      if (!/^(?=.*\d)(?=.*[a-zA-Z])([A-ZñÑáéíóúÁÉÍÓÚ])[A-Z0-9]+$/i.test(furnituresFields.value.codigoInventario)) {
+        folioState.value = false
+        return 'El nombre del area solo puede contener letras'
+      }
+      folioState.value = true
+      return true
+    }
     const validateDepartament = () => {
       if (!furnituresFields.value.departamentoId) {
         departamentState.value = false
@@ -372,6 +400,7 @@ export default {
       descriptionState,
       areaState,
       departamentState,
+      folioState,
       showModal,
 
       onFiltered,
@@ -382,6 +411,7 @@ export default {
       validateArea,
       validateDescription,
       validateDepartament,
+      validateFolio,
       getAreas,
       resetFurnitureFields
     }

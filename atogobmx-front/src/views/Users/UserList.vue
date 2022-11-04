@@ -212,7 +212,7 @@ export default {
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('nombre')
+    const searchField = ref('nombreUsuario')
     const errorMessage = ref('')
     const confirmErrorMessage = ref('')
     // Fields

@@ -239,7 +239,7 @@ export default {
     const typeTransmissions = ref([{ id: 1, nombre: 'Manual' }, { id: 2, nombre: 'Automático' }])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('area.nombre')
+    const searchField = ref('marca')
     const brandState = ref(false)
     const modelState = ref(false)
     const colorState = ref(false)

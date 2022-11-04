@@ -423,6 +423,26 @@ const routes = [
       rol: 'Administrador',
       departamento: 'Patrimonio'
     }
+  },
+  {
+    path: '/CategoriasMobiliario/list',
+    name: 'CategoriasMobiliario',
+    component: () => import('@/views/Patrimony/Furnitures/TypeFurnitures/TypeFurnitureList.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Patrimonio'
+    }
+  },
+  {
+    path: '/CategoriasMobiliario/:TipoMobiliarioId',
+    name: 'CategoriasMobiliario-Edit',
+    component: () => import('@/views/Patrimony/Furnitures/TypeFurnitures/TypeFurnitureEdit.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Administrador',
+      departamento: 'Patrimonio'
+    }
   }
 ]
 

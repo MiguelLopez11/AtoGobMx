@@ -8,7 +8,19 @@
         <h3>Editar Inmueble</h3>
       </div>
       <Form @submit="onUpdateWorkStation()">
-         <b-row cols="3">
+        <b-row cols="3">
+          <b-col>
+            <b-form-group class="mt-3" label="Nomenclatura">
+              <Field
+                name="FolioField"
+                :rules="validateFolio"
+                as="text"
+              >
+                <b-form-input v-model="furniture.codigoInventario" :state="folioState"> </b-form-input>
+              </Field>
+              <ErrorMessage class="text-danger" name="FolioField"></ErrorMessage>
+            </b-form-group>
+          </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Tipo de inmueble">
               <Field
@@ -25,7 +37,10 @@
                   :state="typeFurnitureState"
                 />
               </Field>
-              <ErrorMessage class="text-danger" name="typeFurnitureField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="typeFurnitureField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -40,7 +55,10 @@
                   :state="descriptionState"
                 />
               </Field>
-              <ErrorMessage class="text-danger" name="DescriptionField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="DescriptionField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -52,6 +70,7 @@
               >
                 <b-form-select
                   v-model="furniture.departamentoId"
+                  required
                   autofocus
                   :options="departaments"
                   value-field="departamentoId"
@@ -61,16 +80,15 @@
                 >
                 </b-form-select>
               </Field>
-              <ErrorMessage class="text-danger" name="DepartamentField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="DepartamentField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Area">
-              <Field
-                name="AreaField"
-                :rules="validateArea"
-                as="number"
-              >
+              <Field name="AreaField" :rules="validateArea" as="number">
                 <b-form-select
                   v-model="furniture.areaId"
                   autofocus
@@ -89,7 +107,7 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            @click="resetFurnitureFields"
+            to="/Mobiliarios/list"
           >
             Cancelar
           </b-button>
@@ -111,6 +129,7 @@ import { useRoute, useRouter } from 'vue-router'
 // import { useToast } from 'vue-toast-notification'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import '@vuepic/vue-datepicker/dist/main.css'
+import 'vue-select/dist/vue-select.css'
 export default {
   components: {
     Form,
@@ -119,7 +138,11 @@ export default {
   },
   setup () {
     const swal = inject('$swal')
-    const { getTypeFurniture, updateTypeFurniture, getTypeFurnitures } = FurnitureServices()
+    const {
+      getFurniture,
+      updateFurniture,
+      getTypeFurnitures
+    } = FurnitureServices()
     const { getAreasByDepartament } = AreasServices()
     const { getDepartaments } = DepartamentServices()
     const areas = ref([])
@@ -128,73 +151,95 @@ export default {
     const departaments = ref([])
     const router = useRoute()
     const redirect = useRouter()
-    const nameState = ref(false)
+    const folioState = ref(false)
+    const typeFurnitureState = ref(false)
+    const descriptionState = ref(false)
     const areaState = ref(false)
     const departamentState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Puestos de Trabajo', to: '/PuestosTrabajos/list' },
-      { text: 'Editar-Puesto de trabajo' }
+      { text: 'Mobiliarios', to: '/Mobiliarios/list' },
+      { text: 'Editar mobiliario' }
     ])
     const onUpdateWorkStation = () => {
-      updateTypeFurniture(furniture.value, data => {
-        swal.fire({
-          title: 'Puesto de trabajo modificado correctamente!',
-          text: 'El Puesto de trabajo se ha modificado  satisfactoriamente.',
-          icon: 'success'
-        }).then(result => {
-          if (result.isConfirmed) {
-            redirect.push('/PuestosTrabajos/list')
-          }
-        })
+      updateFurniture(furniture.value, data => {
+        swal
+          .fire({
+            title: 'Inmueble modificado correctamente!',
+            text: 'El inmueble se ha modificado  satisfactoriamente.',
+            icon: 'success'
+          })
+          .then(result => {
+            if (result.isConfirmed) {
+              redirect.push('/Mobiliarios/list')
+            }
+          })
       })
     }
-    getTypeFurnitures(data => {
-      typeFurnitures.value = data
-    })
     getDepartaments(data => {
       departaments.value = data
       if (data.length === 0) {
         swal.fire({
           title: 'No se encuentran departamentos registrados!',
-          text: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
+          text:
+            'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
           icon: 'error'
         })
       }
     })
-    const getAreas = (departamentoId) => {
+    const getAreas = departamentoId => {
       getAreasByDepartament(departamentoId, data => {
         areas.value = data
         if (data.length === 0) {
           swal.fire({
             title: 'No se encuentran areas registradas!',
-            text: 'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
+            text:
+              'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
             icon: 'error'
           })
         }
       })
     }
-    getTypeFurniture(router.params.MobiliarioId, data => {
+    getFurniture(router.params.MobiliarioId, data => {
       furniture.value = data
-      nameState.value = data.nombre !== null
-      departamentState.value = data.departamentoId !== null
-      areaState.value = data.areaId !== null
       getAreas(data.departamentoId)
+      validateState()
     })
-    const validateName = () => {
-      if (!furniture.value.nombre) {
-        nameState.value = false
+    getTypeFurnitures(data => {
+      typeFurnitures.value = data
+    })
+    // VALIDATIONS
+    const validateFolio = () => {
+      if (!furniture.value.codigoInventario) {
+        folioState.value = false
         return 'Este campo es requerido'
       }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(furniture.value.nombre)) {
-        nameState.value = false
-        return 'El nombre solo puede contener letras'
+      // eslint-disable-next-line no-useless-escape
+      if (!/^(?=.*\d)(?=.*[a-zA-Z])([A-ZñÑáéíóúÁÉÍÓÚ])[A-Z0-9]+$/i.test(furniture.value.codigoInventario)) {
+        folioState.value = false
+        return 'El nombre del area solo puede contener letras'
       }
-      nameState.value = true
+      folioState.value = true
+      return true
+    }
+    const validateTypeFurniture = () => {
+      if (!furniture.value.tipoMobiliarioId) {
+        validateState()
+        return 'Este campo es requerido'
+      }
+      validateState()
       return true
     }
     const validateDepartament = () => {
       if (!furniture.value.departamentoId) {
+        validateState()
+        return 'Este campo es requerido'
+      }
+      validateState()
+      return true
+    }
+    const validateDescription = () => {
+      if (!furniture.value.descripción) {
         validateState()
         return 'Este campo es requerido'
       }
@@ -211,7 +256,10 @@ export default {
     }
     const validateState = () => {
       departamentState.value = furniture.value.departamentoId !== null
+      typeFurnitureState.value = furniture.value.tipoMobiliarioId !== null
+      descriptionState.value = furniture.value.descripción !== null && furniture.value.descripción !== ''
       areaState.value = furniture.value.areaId !== null
+      folioState.value = furniture.value.codigoInventario !== null && /^(?=.*\d)(?=.*[a-zA-Z])([A-ZñÑáéíóúÁÉÍÓÚ])[A-Z0-9]+$/i.test(furniture.value.codigoInventario)
       return ''
     }
     return {
@@ -220,20 +268,35 @@ export default {
       breadcrumbItems,
       areas,
       departaments,
+      folioState,
       departamentState,
+      typeFurnitureState,
+      descriptionState,
       areaState,
-      nameState,
       //   router
 
       onUpdateWorkStation,
-      validateName,
-      validateState,
       validateDepartament,
       validateArea,
-      getAreas
+      getAreas,
+      validateTypeFurniture,
+      validateDescription,
+      validateState,
+      validateFolio
     }
   }
 }
 </script>
 
-<style></style>
+<style>
+:root {
+  --vs-search-input-color: #eeeeee;
+  --vs-controls-color: #664cc3;
+  --vs-dropdown-bg: #ffffff;
+  --vs-selected-bg: #7367f0;
+  --vs-selected-color: #eeeeee;
+  --vs-dropdown-bg: #ffffff;
+  --vs-dropdown-color: #7367f0;
+  --vs-dropdown-option-color: #7367f0;
+  }
+</style>

@@ -63,8 +63,8 @@ namespace AtoGobMx.Controllers
                 return NotFound();
             }
             PAT_Mobiliario.MobiliarioId = mobiliario.MobiliarioId;
+            PAT_Mobiliario.CodigoInventario = mobiliario.CodigoInventario;
             PAT_Mobiliario.Descripción = mobiliario.Descripción;
-            //PAT_Mobiliario.NombreMobiliario = mobiliario.NombreMobiliario;
             PAT_Mobiliario.AreaId = mobiliario.AreaId;
             PAT_Mobiliario.DepartamentoId = mobiliario.DepartamentoId;
             PAT_Mobiliario.TipoMobiliarioId = mobiliario.TipoMobiliarioId;

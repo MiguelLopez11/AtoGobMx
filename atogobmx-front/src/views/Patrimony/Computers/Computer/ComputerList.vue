@@ -242,7 +242,7 @@ export default {
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('area.nombre')
+    const searchField = ref('marca')
     const brandState = ref(false)
     const memoryState = ref(false)
     const storageState = ref(false)

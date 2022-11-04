@@ -58,7 +58,7 @@ namespace AtoGobMx.Controllers
             }
             PAT_TipoMobiliario.TipoMobiliarioId = tipoMobiliario.TipoMobiliarioId;
             PAT_TipoMobiliario.Nombre = tipoMobiliario.Nombre;
-            PAT_TipoMobiliario.Descripción = tipoMobiliario.Descripción;
+            PAT_TipoMobiliario.Descripcion = tipoMobiliario.Descripcion;
             PAT_TipoMobiliario.Archivado = tipoMobiliario.Archivado;
 
             _context.TipoMobiliario.Update(PAT_TipoMobiliario);
