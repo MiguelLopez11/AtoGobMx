@@ -4,7 +4,9 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
+using DinkToPdf;
+using DinkToPdf.Contracts;
+using System;
 
 namespace AtoGobMx.Controllers
 {
@@ -14,11 +16,13 @@ namespace AtoGobMx.Controllers
     {
         private readonly AtoGobMxContext _context;
         private readonly IMapper _mapper;
+        private readonly IConverter _converter;
 
-        public ExpedienteAlumbradoController(AtoGobMxContext context, IMapper mapper)
+        public ExpedienteAlumbradoController(AtoGobMxContext context, IMapper mapper, IConverter converter)
         {
             _context = context;
             _mapper = mapper;
+            _converter = converter;
         }
 
         [HttpGet]
@@ -45,18 +49,73 @@ namespace AtoGobMx.Controllers
             }
             return Ok(expedienteAlumbrado);
         }
-
-        [HttpGet("{ExpedienteAlumbradoId}")]
-        public async Task<ActionResult> GetExpedienteAlumbradoById(int ExpedienteAlumbradoId)
+        [HttpGet("Download")]
+        public async Task<ActionResult<ExpedienteAlumbrado>> DownloadExpedienteAlumbrado()
         {
-            var expediente = await _context.ExpedienteAlumbrado
-                .FirstOrDefaultAsync(f => f.ExpedienteAlumbradoId == ExpedienteAlumbradoId);
-            if (expediente == null)
+            var html = $@"
+           <!DOCTYPE html>
+           <html lang=""en"">
+           <head>
+           </head>
+          <body>
+          <table>
+
+  <tr>
+
+    <td>Celda 1</td>
+
+    <td>Celda 2</td>
+
+    <td>Celda 3</td>
+
+  </tr>
+
+  <tr>
+
+    <td>Celda 4</td>
+
+    <td>Celda 5</td>
+
+    <td>Celda 6</td>
+
+  </tr>
+
+</table>
+          </body>
+          </html>
+          ";
+            GlobalSettings globalSettings = new GlobalSettings();
+            globalSettings.ColorMode = ColorMode.Color;
+            globalSettings.Orientation = Orientation.Portrait;
+            globalSettings.PaperSize = PaperKind.A4;
+            globalSettings.Margins = new MarginSettings { Top = 25, Bottom = 25 };
+            ObjectSettings objectSettings = new ObjectSettings();
+            //objectSettings.PagesCount = true;
+            objectSettings.HtmlContent = html;
+            WebSettings webSettings = new WebSettings();
+            webSettings.DefaultEncoding = "utf-8";
+            HeaderSettings headerSettings = new HeaderSettings();
+            headerSettings.FontSize = 15;
+            headerSettings.FontName = "Ariel";
+            //headerSettings.Right = "Page [page] of [toPage]";
+            headerSettings.Line = true;
+            //FooterSettings footerSettings = new FooterSettings();
+            //footerSettings.FontSize = 12;
+            //footerSettings.FontName = "Ariel";
+            //footerSettings.Center = "This is for demonstration purposes only.";
+            //footerSettings.Line = true;
+            objectSettings.HeaderSettings = headerSettings;
+            //objectSettings.FooterSettings = footerSettings;
+            objectSettings.WebSettings = webSettings;
+            HtmlToPdfDocument htmlToPdfDocument = new HtmlToPdfDocument()
             {
-                //Ok($"No se encuentra la falla con el ID: {FallasId}");
-                return NotFound();
-            }
-            return Ok(expediente);
+                GlobalSettings = globalSettings,
+                Objects = { objectSettings },
+            };
+
+            var pdfFile = _converter.Convert(htmlToPdfDocument); ;
+            return File(pdfFile,
+            "application/octet-stream", "DemoPdf.pdf");
         }
 
         [HttpPost()]
