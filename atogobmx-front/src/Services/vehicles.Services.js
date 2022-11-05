@@ -23,7 +23,33 @@ export default function VehiclesServices () {
     })
   }
   const deleteVehicle = (vehiculoId, callback) => {
-    axios.delete(`${BaseUrl}/PAT_Vehiculos/${vehiculoId}`).then((response) => {
+    axios.delete(`${BaseUrl}/PAT_EstatusVehiculo/${vehiculoId}`).then((response) => {
+      callback(response.data)
+    })
+  }
+  // Vehicle status
+  const getEstatusVehicles = (callback) => {
+    axios.get(`${BaseUrl}/PAT_EstatusVehiculo`).then((response) => {
+      callback(response.data)
+    })
+  }
+  const getEstatusVehicle = (estatusVehiculoId, callback) => {
+    axios.get(`${BaseUrl}/PAT_EstatusVehiculo/${estatusVehiculoId}`).then((response) => {
+      callback(response.data)
+    })
+  }
+  const createEstatusVehicle = (data, callback) => {
+    axios.post(`${BaseUrl}/PAT_EstatusVehiculo`, data).then((response) => {
+      callback(response.data)
+    })
+  }
+  const updateEstatusVehicle = (data, callback) => {
+    axios.put(`${BaseUrl}/PAT_EstatusVehiculo/${data.estatusVehiculoId}`, data).then((response) => {
+      callback(response.data)
+    })
+  }
+  const deleteEstatusVehicle = (estatusVehiculoId, callback) => {
+    axios.delete(`${BaseUrl}/PAT_EstatusVehiculo/${estatusVehiculoId}`).then((response) => {
       callback(response.data)
     })
   }
@@ -32,6 +58,12 @@ export default function VehiclesServices () {
     getVehicle,
     createVehicle,
     updateVehicle,
-    deleteVehicle
+    deleteVehicle,
+    // ESTATUSVEHICULOS
+    getEstatusVehicles,
+    getEstatusVehicle,
+    createEstatusVehicle,
+    updateEstatusVehicle,
+    deleteEstatusVehicle
   }
 }

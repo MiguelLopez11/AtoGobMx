@@ -125,6 +125,10 @@
               <i class="bi bi-list-check"></i>
               Estatus Equipos Computo
             </b-dropdown-item>
+            <b-dropdown-item to="/EstatusVehiculo/list">
+              <i class="bi bi-activity"></i>
+              Estatus Vehiculo
+            </b-dropdown-item>
             <b-dropdown-item to="/Vehiculos/list">
               <i class="bi bi-car-front-fill"></i>
               Vehiculos

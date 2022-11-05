@@ -21,7 +21,7 @@
         @click="showModal = !showModal"
         type="submit"
       >
-        <i class="bi bi-bezier2" />
+        <i class="bi bi-activity"></i>
         Agregar estatus
       </b-button>
     </b-row>
@@ -33,7 +33,7 @@
       border-cell
       :loading="isloading"
       :headers="fields"
-      :items="statusComputers"
+      :items="statusVehicles"
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
@@ -42,22 +42,26 @@
         {{ header.text }}
       </template>
       <template #item-actions="items">
-        <b-button
-          @click="RemoveStatusComputer(items.estatusEquipoId)"
-          class="m-1"
-          variant="outline-danger"
-          ><i class="bi bi-trash3"></i
-        ></b-button>
-        <b-button
-          class="m-1"
-          variant="outline-warning"
-          :to="{
-            name: 'EstatusEquipo-edit',
-            params: { EstatusEquipoId: items.estatusEquipoId },
-          }"
-        >
-          <i class="bi bi-pencil-square" />
-        </b-button>
+        <b-dropdown size="lg" variant="link" dropright no-caret>
+          <template #button-content>
+            <i class="bi bi-three-dots-vertical"></i>
+          </template>
+          <b-dropdown-item
+            @click="RemoveStatusVehicles(items.estatusVehiculoId)"
+            class="m-1"
+            variant="outline-danger"
+            ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
+          >
+          <b-dropdown-item
+            class="m-1"
+            variant="outline-warning"
+            :to="{
+              name: 'EstatusVehiculo-Edit',
+              params: { EstatusVehiculoId: items.estatusVehiculoId }
+            }"
+            ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
+          >
+        </b-dropdown>
       </template>
     </EasyDataTable>
     <b-modal
@@ -72,19 +76,20 @@
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre">
-              <Field
-                name="NameField"
-                :rules="validateName"
-                as="text"
-              >
-                <b-form-input v-model="statusComputerFields.nombre" :state="nameState"> </b-form-input>
+              <Field name="NameField" :rules="validateName" as="text">
+                <b-form-input
+                  v-model="statusComputerFields.nombre"
+                  :state="nameState"
+                >
+                </b-form-input>
               </Field>
               <ErrorMessage class="text-danger" name="NameField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Descripción">
-              <b-form-input v-model="statusComputerFields.descripcion"> </b-form-input>
+              <b-form-input v-model="statusComputerFields.descripcion">
+              </b-form-input>
             </b-form-group>
           </b-col>
         </b-row>
@@ -106,7 +111,7 @@
 </template>
 
 <script>
-import ComputerServices from '@/Services/computer.Services'
+import VehiclesServices from '@/Services/vehicles.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
 // import { useToast } from 'vue-toast-notification'
@@ -120,9 +125,13 @@ export default {
   },
   setup () {
     const swal = inject('$swal')
-    const { getStatus, createStatusComputer, deleteStatusComputer } = ComputerServices()
+    const {
+      getEstatusVehicles,
+      createEstatusVehicle,
+      deleteEstatusVehicle
+    } = VehiclesServices()
     // const $toast = useToast()
-    const statusComputers = ref([])
+    const statusVehicles = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
     const rows = ref(null)
@@ -134,29 +143,30 @@ export default {
     const nameState = ref(false)
     const showModal = ref(false)
     const statusComputerFields = ref({
-      estatusEquipoId: 0,
+      estatusVehiculoId: 0,
       nombre: null,
       descripcion: null,
       archivado: false
     })
-    const statusComputerFieldsBlank = ref(JSON.parse(JSON.stringify(statusComputerFields)))
+    const statusVehicleFieldsBlank = ref(
+      JSON.parse(JSON.stringify(statusComputerFields))
+    )
     const fields = ref([
-      { value: 'roleId', text: 'ID', sortable: true },
       { value: 'nombre', text: 'Nombre' },
       { value: 'descripcion', text: 'Descripcion' },
       { value: 'actions', text: 'Acciones' }
     ])
-    getStatus((data) => {
-      statusComputers.value = data
-      if (statusComputers.value.length > 0) {
+    getEstatusVehicles(data => {
+      statusVehicles.value = data
+      if (statusVehicles.value.length > 0) {
         isloading.value = false
       } else {
-        if (statusComputers.value.length <= 0) {
+        if (statusVehicles.value.length <= 0) {
           isloading.value = false
         }
       }
     })
-    const onFiltered = (filteredItems) => {
+    const onFiltered = filteredItems => {
       rows.value = filteredItems.length
       currentPage.value = 1
     }
@@ -166,7 +176,9 @@ export default {
         return 'Este campo es requerido'
       }
       // eslint-disable-next-line no-useless-escape
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(statusComputerFields.value.nombre)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(statusComputerFields.value.nombre)
+      ) {
         nameState.value = false
         return 'El nombre del area solo puede contener letras'
       }
@@ -175,12 +187,12 @@ export default {
     }
     const refreshTable = () => {
       isloading.value = true
-      getStatus((data) => {
-        statusComputers.value = data
-        if (statusComputers.value.length > 0) {
+      getEstatusVehicles(data => {
+        statusVehicles.value = data
+        if (statusVehicles.value.length > 0) {
           isloading.value = false
         } else {
-          if (statusComputers.value.length <= 0) {
+          if (statusVehicles.value.length <= 0) {
             isloading.value = false
           }
         }
@@ -188,7 +200,7 @@ export default {
       return 'datos recargados'
     }
     const addStatusComputer = () => {
-      createStatusComputer(statusComputerFields.value, (data) => {
+      createEstatusVehicle(statusComputerFields.value, data => {
         refreshTable()
         swal.fire({
           title: 'Estatus registrado correctamente!',
@@ -200,10 +212,12 @@ export default {
     }
     const resetStatusComputerFields = () => {
       showModal.value = false
-      statusComputerFields.value = JSON.parse(JSON.stringify(statusComputerFieldsBlank))
+      statusComputerFields.value = JSON.parse(
+        JSON.stringify(statusVehicleFieldsBlank)
+      )
       nameState.value = false
     }
-    const RemoveStatusComputer = (estatusEquipoId) => {
+    const RemoveStatusVehicles = estatusVehicleId => {
       isloading.value = true
       swal
         .fire({
@@ -226,7 +240,7 @@ export default {
               })
               .then(result => {
                 if (result.isConfirmed) {
-                  deleteStatusComputer(estatusEquipoId, (data) => {
+                  deleteEstatusVehicle(estatusVehicleId, data => {
                     refreshTable()
                   })
                 }
@@ -237,14 +251,14 @@ export default {
         })
     }
     return {
-      statusComputers,
+      statusVehicles,
       fields,
       perPage,
       currentPage,
       rows,
       filter,
       perPageSelect,
-      statusComputerFieldsBlank,
+      statusVehicleFieldsBlank,
       statusComputerFields,
       isloading,
       searchValue,
@@ -252,7 +266,7 @@ export default {
       onFiltered,
       addStatusComputer,
       refreshTable,
-      RemoveStatusComputer,
+      RemoveStatusVehicles,
       nameState,
       showModal,
 
@@ -263,6 +277,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

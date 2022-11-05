@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20221105183522_EstatusVehiculos")]
+    partial class EstatusVehiculos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -538,7 +540,7 @@ namespace AtoGobMx.Migrations
 
             modelBuilder.Entity("AtoGobMx.Models.PAT_EstatusVehiculo", b =>
                 {
-                    b.Property<int>("EstatusVehiculoId")
+                    b.Property<int>("EstatusEquipoId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -552,7 +554,7 @@ namespace AtoGobMx.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.HasKey("EstatusVehiculoId");
+                    b.HasKey("EstatusEquipoId");
 
                     b.ToTable("EstatusVehiculo");
                 });
@@ -706,9 +708,6 @@ namespace AtoGobMx.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("EstatusVehiculoId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Marca")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -733,8 +732,6 @@ namespace AtoGobMx.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("VehiculoId");
-
-                    b.HasIndex("EstatusVehiculoId");
 
                     b.ToTable("Vehiculo");
                 });
@@ -1097,17 +1094,6 @@ namespace AtoGobMx.Migrations
                         .HasForeignKey("EquipoComputoId");
 
                     b.Navigation("EquipoComputo");
-                });
-
-            modelBuilder.Entity("AtoGobMx.Models.PAT_Vehiculo", b =>
-                {
-                    b.HasOne("AtoGobMx.Models.PAT_EstatusVehiculo", "EstatusVehiculo")
-                        .WithMany()
-                        .HasForeignKey("EstatusVehiculoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("EstatusVehiculo");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.PuestoTrabajo", b =>

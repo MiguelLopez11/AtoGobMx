@@ -400,7 +400,7 @@ const routes = [
     component: () => import('@/views/Patrimony/Vehicles/VehicleEdit.vue'),
     meta: {
       requiresAuth: true,
-      rol: 'Administrador',
+      rol: 'Empleado',
       departamento: 'Patrimonio'
     }
   },
@@ -420,7 +420,7 @@ const routes = [
     component: () => import('@/views/Patrimony/Furnitures/FurnitureEdit.vue'),
     meta: {
       requiresAuth: true,
-      rol: 'Administrador',
+      rol: 'Empleado',
       departamento: 'Patrimonio'
     }
   },
@@ -438,6 +438,26 @@ const routes = [
     path: '/CategoriasMobiliario/:TipoMobiliarioId',
     name: 'CategoriasMobiliario-Edit',
     component: () => import('@/views/Patrimony/Furnitures/TypeFurnitures/TypeFurnitureEdit.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Patrimonio'
+    }
+  },
+  {
+    path: '/EstatusVehiculo/list',
+    name: 'EstatusVehiculo',
+    component: () => import('@/views/Patrimony/Vehicles/StatusVehicles/StatusVehicleList.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Administrador',
+      departamento: 'Patrimonio'
+    }
+  },
+  {
+    path: '/EstatusVehiculo/:EstatusVehiculoId',
+    name: 'EstatusVehiculo-Edit',
+    component: () => import('@/views/Patrimony/Vehicles/StatusVehicles/StatusVehicleEdit.vue'),
     meta: {
       requiresAuth: true,
       rol: 'Administrador',
