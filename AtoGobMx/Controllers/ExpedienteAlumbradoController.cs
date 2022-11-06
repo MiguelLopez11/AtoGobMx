@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using DinkToPdf;
 using DinkToPdf.Contracts;
 using System;
+using Microsoft.Win32;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace AtoGobMx.Controllers
 {
@@ -56,31 +58,42 @@ namespace AtoGobMx.Controllers
            <!DOCTYPE html>
            <html lang=""en"">
            <head>
+           <style>
+      .alinear{
+      text - align: center;
+      }
+      .registros{
+        margin: 70px;
+        text-align: left;
+        transition: .5s;
+        line-height: 2.4em;
+        border-top: 1px solid  #5D6975;
+        border-bottom: 1px solid  #5D6975;
+        padding-left: 15px;
+        background-color: #76D7C4;
+      }
+      .alinear2{
+        margin: 90px;
+        left: 100px;
+        padding-left: 750px;
+        transition: .5s;
+        line-height: 4.4em;
+        border-top: 1px solid  #5D6975;
+        border-bottom: 1px solid  #5D6975;
+        background-color: #EFCA66;
+      }
+    </style>
            </head>
           <body>
-          <table>
-
-  <tr>
-
-    <td>Celda 1</td>
-
-    <td>Celda 2</td>
-
-    <td>Celda 3</td>
-
-  </tr>
-
-  <tr>
-
-    <td>Celda 4</td>
-
-    <td>Celda 5</td>
-
-    <td>Celda 6</td>
-
-  </tr>
-
-</table>
+            <div>
+                <img src="""">
+            </div>
+            <div>
+                <h1 style=""text-align: center;"">Alumbrado Publico </h1>
+            </div>
+            <div>
+                <h3>Domicilio:</h3>
+            </div>
           </body>
           </html>
           ";
