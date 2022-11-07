@@ -9,6 +9,7 @@ using DinkToPdf.Contracts;
 using System;
 using Microsoft.Win32;
 using static System.Net.Mime.MediaTypeNames;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace AtoGobMx.Controllers
 {
@@ -58,41 +59,51 @@ namespace AtoGobMx.Controllers
            <!DOCTYPE html>
            <html lang=""en"">
            <head>
-           <style>
-      .alinear{
-      text - align: center;
-      }
-      .registros{
-        margin: 70px;
-        text-align: left;
-        transition: .5s;
-        line-height: 2.4em;
-        border-top: 1px solid  #5D6975;
-        border-bottom: 1px solid  #5D6975;
-        padding-left: 15px;
-        background-color: #76D7C4;
-      }
-      .alinear2{
-        margin: 90px;
-        left: 100px;
-        padding-left: 750px;
-        transition: .5s;
-        line-height: 4.4em;
-        border-top: 1px solid  #5D6975;
-        border-bottom: 1px solid  #5D6975;
-        background-color: #EFCA66;
-      }
-    </style>
+            <style>
+                .registros{{
+                    margin: 90px;
+                    column-count: 2;
+                    padding-left: 15px;
+                    border-top: 1px solid #5D6975;
+                    border-bottom: 1px solid  #5D6975;
+                    line-height: 5.4em;
+                }}
+                .alinear2{{
+                    margin: 90px;
+                    padding-left: 420px;
+                    transition: .5s;
+                    line-height: 4.4em;
+                    border-top: 1px solid  #5D6975;
+                    border-bottom: 1px solid  #5D6975;
+                    background-color: #F2F3F4 ;
+                }}
+                .card2{{
+                    margin: 90px;
+                    line-height: 4.4em;
+                    border-top: 1px solid  #5D6975;
+                }}
+                .alinear{{
+                    text-align: center;
+                }}
+            </style>
            </head>
           <body>
-            <div>
-                <img src="""">
+            <div class="">
+                <img src="">
             </div>
+            <h1 class=""alinear"">Reporte de alumbrado publico </h1>
+            <h3 class=""alinear2"">Fecha: </h3>
             <div>
-                <h1 style=""text-align: center;"">Alumbrado Publico </h1>
-            </div>
-            <div>
-                <h3>Domicilio:</h3>
+                <div class=""registros"">
+                    <h3>Domicilio: </h3>
+                    <h3>Localida: </h3>
+                    <h3>Nombre area: </h3>
+                    <h3>Departamento: </h3>
+                </div>
+
+                <div class=""card2"">
+                    <h3>Descripcion Solucion: </h3>
+                </div>
             </div>
           </body>
           </html>
