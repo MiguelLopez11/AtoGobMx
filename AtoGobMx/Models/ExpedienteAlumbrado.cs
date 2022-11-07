@@ -11,6 +11,8 @@ namespace AtoGobMx.Models
         public int ExpedienteAlumbradoId { get; set; }
         public DateTime? FechaAlta { get; set; }
         public string? DescripcionSolucion { get; set; }
+        [Required]
+        public string nomenclatura { get; set; }
         public string? LugarPublico { get; set; }
         public string? Localidad { get; set; }
         public bool Archivado { get; set; }

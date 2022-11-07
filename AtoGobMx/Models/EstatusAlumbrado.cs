@@ -11,7 +11,7 @@ namespace AtoGobMx.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int EstatusAlumbradoId { get; set; }
         public string NombreEstatus { get; set; }
-        public string Descripcion { get; set; }
+        public string? Descripcion { get; set; }
         public bool Archivado { get; set; }
 
         [JsonIgnore]

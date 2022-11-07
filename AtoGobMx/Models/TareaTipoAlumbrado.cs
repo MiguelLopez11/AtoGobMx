@@ -11,7 +11,7 @@ namespace AtoGobMx.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int TareaTipoId { get; set; }
         public string NombreTarea { get; set; }
-        public string Descripcion { get; set; }
+        public string? Descripcion { get; set; }
         public bool Archivado { get; set; }
 
         [JsonIgnore]
