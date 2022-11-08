@@ -7,9 +7,10 @@
         v-model="searchValue"
         type="search"
         placeholder="Buscar Expediente Alumbrado..."
-      ></b-form-input>
+      >
+      </b-form-input>
       <b-button
-        variant="primary"
+        :disabled="publicLighting.length < 1"
         style="
           background-color: rgb(94,80,238);
           height: 50px;
@@ -21,13 +22,13 @@
         @click="showModal = !showModal"
         type="submit"
       >
-        <i class="bi bi-folder-fill m-1"></i>
-        crear Expediente
+        <i class="bi bi-folder-fill m-1" />
+        Crear Expediente
       </b-button>
     </b-row>
     <EasyDataTable
       rows-per-page-message="registros por pagina"
-      empty-message="No se encontro ningun registro"
+      empty-message="No se encuentran registros"
       table-class-name="customize-table"
       buttons-pagination
       border-cell
@@ -45,145 +46,101 @@
         <b-button
           @click="RemoveExpedientLighting(items.expedienteAlumbradoId)"
           class="m-1"
-          variant="outline-danger"
-          ><i class="bi bi-trash3"></i
-        ></b-button>
+          variant="outline-danger">
+          <i class="bi bi-trash3"></i>
+        </b-button>
         <b-button
-          class="m-1"
-          variant="outline-warning"
           :to="{
             name: 'ExpedienteAlumbrado-Edit',
-            params: { ExpedienteAlumbradoId: items.expedienteAlumbradoId }
+            params: { ExpedienteAlumbradoId: items.expedienteAlumbradoId },
           }"
-          ><i class="bi bi-pencil-square"></i
-        ></b-button>
+          class="m-1"
+          variant="outline-warning"
+          >
+          <i class="bi bi-pencil-square"></i>
+        </b-button>
       </template>
     </EasyDataTable>
   </b-card>
   <b-modal
-    id="modal-expedientlighting"
-    title="Agregar Expediente Alumbrado"
     v-model="showModal"
+    title="Agregar Expediente Alumbrado"
     size="xl"
-    hide-footer
     centered
-    button-size="lg"
-    lazy
+    hide-footer
   >
-  <b-row>
-      <b-form-group class="mt-3" label="Domicilio de registro alumbrado: ">
+    <b-row>
+      <b-form-group class="mt-3" label="Nombre de obra Alumbrado:">
         <b-form-select
           autofocus
-          :options="employees"
+          :options="publicLighting"
           value-field="alumbradoId"
-          text-field="domicilio"
-          v-model="expedientLightingFields.domicilio"
+          text-field="nombreObra"
+          v-model="expedientLightingFields.alumbradoId"
         />
       </b-form-group>
     </b-row>
     <b-row align-h="end">
-      <b-button
-        class="w-auto m-2 text-white"
-        variant="primary"
-        @click="showModal = !showModal"
-      >
-        Cancelar
-      </b-button>
-      <b-button class="w-auto m-2" variant="success" @click="onAddExpedient()">
-        Guardar
-      </b-button>
-    </b-row>
+          <b-button
+            class="w-auto m-2 text-white"
+            variant="primary"
+            @click="showModal = !showModal"
+          >
+            Cancelar
+          </b-button>
+          <b-button
+            class="w-auto m-2"
+            variant="success"
+            @click="onAddExpedientLighting()"
+          >
+            Guardar
+          </b-button>
+        </b-row>
   </b-modal>
 </template>
 
 <script>
-import ExpedientlightingServices from '@/Services/expedientlighting.Services'
-import AreaServices from '@/Services/area.Services'
-import DepartamentServices from '@/Services/departament.Services'
-// import publiclightingServices from '@/Services/publiclighting.Services'
 import { ref, inject } from 'vue'
-import '@vuepic/vue-datepicker/dist/main.css'
+import ExpedientLighting from '@/Services/expedientlighting.Services'
+import publiclightingServices from '@/Services/publiclighting.Services'
 export default {
   components: {
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup () {
-    const swal = inject('$swal')
     const showModal = ref(false)
-    const { getAreasByDepartament } = AreaServices()
-    const { getDepartaments } = DepartamentServices()
-    // const { } = publiclightingServices()
-    const {
-      getExpedientLighting,
-      createExpedientLighting,
-      deleteExpedientLighting
-    } = ExpedientlightingServices()
+    const swal = inject('$swal')
+    const { getPublicLightingExpedient } = publiclightingServices()
+    const { getExpedientLighting, createExpedientLighting, deleteExpedientLighting } = ExpedientLighting()
     const expedientLighting = ref([])
-    const departaments = ref([])
-    const areas = ref([])
-    const isOpen = ref(false)
+    const publicLighting = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
     const filter = ref(null)
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('lugarPublico')
+    const searchField = ref('nombreObra')
     const expedientLightingFields = ref({
       expedienteAlumbradoId: 0,
-      descripcionSolucion: null,
-      fechaAlta: null,
-      lugarPublico: null,
-      localidad: null,
-      departamentoId: null,
-      areaId: null,
+      alumbradoId: null,
       archivado: false
     })
-
-    getDepartaments(data => {
-      departaments.value = data
-      if (data.length === 0) {
-        swal.fire({
-          title: 'No se encuentran departamentos registrados!',
-          text:
-            'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
-          icon: 'warning'
-        })
-      }
-    })
-
-    const getAreas = departamentoId => {
-      getAreasByDepartament(departamentoId, data => {
-        areas.value = data
-        if (data.length === 0) {
-          swal.fire({
-            title: 'No se encuentran areas registradas!',
-            text:
-              'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
-            icon: 'warning'
-          })
-        }
-      })
-    }
-
-    // pone mis cambios de mis campos vacios de nuevo
-    const expedientLightingFieldsBlank = ref(
-      JSON.parse(JSON.stringify(expedientLightingFields))
-    )
+    const expedientLightingFieldsBlank = ref(JSON.parse(JSON.stringify(expedientLightingFields)))
 
     const fields = ref([
-      { value: 'expedienteAlumbradoId', text: 'ID', sortable: true },
-      { value: 'lugarPublico', text: 'Lugar publico' },
-      { value: 'localidad', text: 'Localidad' },
-      { value: 'fechaAlta', text: 'Fecha alta' },
-      { value: 'departamentoId', text: 'Departamento' },
-      { value: 'areaId', text: 'Area' },
+      { value: 'expedienteAlumbradoId', text: 'No.Expediente', sortable: true },
+      { value: 'alumbrado.nombreObra', text: 'Nombre de obra alumbrado', sortable: true },
       { value: 'actions', text: 'Acciones' }
     ])
-
-    getExpedientLighting(data => {
+    const getPublicLighting = () => {
+      getPublicLightingExpedient(data => {
+        publicLighting.value = data
+      })
+      return ''
+    }
+    getExpedientLighting((data) => {
       expedientLighting.value = data
-      // rows.value = data.length
       if (expedientLighting.value.length > 0) {
         isloading.value = false
       } else {
@@ -191,15 +148,11 @@ export default {
           isloading.value = false
         }
       }
+      getPublicLighting()
     })
-
-    const onFiltered = filteredItems => {
-      currentPage.value = 1
-    }
-
     const refreshTable = () => {
       isloading.value = true
-      getExpedientLighting(data => {
+      getExpedientLighting((data) => {
         expedientLighting.value = data
         if (expedientLighting.value.length > 0) {
           isloading.value = false
@@ -209,30 +162,30 @@ export default {
           }
         }
       })
-      return 'datos recargados'
     }
-
-    const addExpedientLighting = () => {
+    const onFiltered = (filteredItems) => {
+      currentPage.value = 1
+    }
+    const onAddExpedientLighting = () => {
       createExpedientLighting(expedientLightingFields.value, data => {
+        showModal.value = false
+        expedientLightingFields.value = JSON.parse(JSON.stringify(expedientLightingFieldsBlank))
         refreshTable()
-        swal.fire({
-          title: '¡Expediente publico agregado correctamente!',
-          text: 'Expediente registrado satisfactoriamente',
-          icon: 'success'
-        })
+        getPublicLighting()
+        swal
+          .fire({
+            title: '¡Expediente Registrado!',
+            text: 'El expediente ha sido registrado al sistema satisfactoriamente .',
+            icon: 'success'
+          })
       })
-      showModal.value = false
-      // expedientLightingFields.value = JSON.parse(
-      //   JSON.stringify(expedientLightingFieldsBlank)
-      // )
     }
-
-    const RemoveExpedientLighting = StreetLightingId => {
+    const RemoveExpedientLighting = (expedienteDigitalId) => {
       isloading.value = true
       swal
         .fire({
-          title: '¿Estas seguro',
-          text: 'No podras revertir esto',
+          title: '¿Estas seguro?',
+          text: 'No podrás revertir esto!',
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
@@ -242,25 +195,23 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            deleteExpedientLighting(StreetLightingId, data => {
+            deleteExpedientLighting(expedienteDigitalId, (data) => {
               refreshTable()
+              getPublicLighting()
             })
-            swal.fire({
-              title: '¡Expediente archivado!',
-              text: 'El expediente ha sido archivado satisfactoriamente.',
-              icon: 'success'
-            })
+            swal
+              .fire({
+                title: '¡Alumbrado archivado!',
+                text: 'El alumbrado ha sido archivado satisfactoriamente .',
+                icon: 'success'
+              })
           } else {
             isloading.value = false
           }
         })
     }
-
     return {
-      expedientLighting,
-      expedientLightingFields,
-      showModal,
-      isOpen,
+      fields,
       perPage,
       currentPage,
       filter,
@@ -268,18 +219,20 @@ export default {
       isloading,
       searchValue,
       searchField,
-      expedientLightingFieldsBlank,
-      fields,
-      areas,
+      expedientLighting,
+      publicLighting,
+      showModal,
+      expedientLightingFields,
 
       onFiltered,
-      getAreas,
-      addExpedientLighting,
+      RemoveExpedientLighting,
       refreshTable,
-      RemoveExpedientLighting
+      onAddExpedientLighting
     }
   }
 }
 </script>
 
-<style></style>
+<style>
+
+</style>

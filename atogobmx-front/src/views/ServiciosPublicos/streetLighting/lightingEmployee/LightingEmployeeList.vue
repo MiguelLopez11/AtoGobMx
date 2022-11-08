@@ -21,7 +21,6 @@
         @click="showModal = !showModal"
         type="submit"
       >
-        <!-- v-b-modal.modal-cementery -->
         <i class="bi bi-person-plus-fill"></i>
         Agregar Alumbrado empleado
       </b-button>
@@ -45,19 +44,10 @@
       </template>
       <template #item-actions="items">
         <b-button
-          @click="RemoveLightingEmployeeService(items.alumbradoempleadoId)"
+          @click="RemoveLightingEmployeeService(items.alumbradoEmpleadoId)"
           class="m-1"
           variant="outline-danger"
           ><i class="bi bi-trash3"></i
-        ></b-button>
-        <b-button
-          class="m-1"
-          variant="outline-warning"
-          :to="{
-            name: 'AlumbradoEmpleado-Edit',
-            params: { AlumbradoEmpleadoId: items.alumbradoempleadoId }
-          }"
-          ><i class="bi bi-pencil-square"></i
         ></b-button>
       </template>
     </EasyDataTable>
@@ -72,18 +62,20 @@
     >
       <Form @submit="addLightingEmployeeService">
         <b-row cols="2">
-          <!-- 1 -->
+          <!-- Nombre del empleado -->
           <b-col>
             <b-form-group class="mt-3" label="Nombre empleado">
-              <Field
-                name="NameField"
-                :rules="validateName"
-                as="text"
-              >
-              {{lightingEmployeeServiceFields}}
-              <v-select  multiple v-model="lightingEmployeeServiceFields.empleadoId" :options="employees" label="nombreCompleto" :key="employees.empleadoId" :reduce="employees => employees.empleadoId"  />
+              <Field name="NameField" :rules="validateName" as="text">
+                <v-select
+                  multiple
+                  v-model="employeesSelected"
+                  :options="employees"
+                  label="nombreCompleto"
+                  :key="employees.empleadoId"
+                  :reduce="employees => employees.empleadoId"
+                />
                 <!-- <b-form-select
-                  v-model="lightingEmployeeServiceFields.empleadoId"
+                  v-model="lightingEmployeeFieldslightingEmployeeFields.empleadoId"
                   :state="NameState"
                   autofocus
                   multiple
@@ -94,10 +86,7 @@
                 >
                 </b-form-select> -->
               </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="NameField"
-              ></ErrorMessage>
+              <ErrorMessage class="text-danger" name="NameField"></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
@@ -108,7 +97,6 @@
             variant="primary"
             @click="resetLightingEmployeeServiceFields"
           >
-            <!-- v-b-modal.modal-cementery -->
             Cancelar
           </b-button>
           <b-button class="w-auto m-2" variant="success" type="submit">
@@ -125,7 +113,6 @@ import LightingEmployeeService from '@/Services/lightingemployee.Services'
 import EmployeeServices from '@/Services/employee.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
-// import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
@@ -143,11 +130,15 @@ export default {
   setup (props) {
     const swal = inject('$swal')
     const showModal = ref(false)
-    const { getAddressLightingEmployee, createAddressLightingEmployee, deleteAddressLightingEmployee } = LightingEmployeeService()
+    const {
+      getAddressLightingEmployee,
+      createAddressLightingEmployee,
+      deleteAddressLightingEmployee
+    } = LightingEmployeeService()
     const { getEmployees } = EmployeeServices()
-    // const $toast = useToast()
     const lightingEmployeeService = ref([])
     const employees = ref([])
+    const employeesSelected = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
     const filter = ref(null)
@@ -156,10 +147,10 @@ export default {
     const searchValue = ref('')
     const searchField = ref('empleadoId')
     const NameState = ref(false)
-    const lightingEmployeeServiceFields = ref({
+    const lightingEmployeeFields = ref({
       alumbradoEmpleadoId: 0,
       expedienteAlumbradoId: props.expedienteAlumbradoId,
-      empleadoId: {},
+      empleadoId: 0,
       archivado: false
     })
 
@@ -168,14 +159,15 @@ export default {
       if (data.length === 0) {
         swal.fire({
           title: 'No se encuentra un tipo de Empleado alumbrado',
-          text: 'No se encuentra tipo de empleado alumbrado registrado en el departamento seleccionado, registre primero un tipo de empleado para continuar',
+          text:
+            'No se encuentra tipo de empleado alumbrado registrado en el departamento seleccionado, registre primero un tipo de empleado para continuar',
           icon: 'warning'
         })
       }
     })
 
     const LightingEmployeeServiceFieldsBlank = ref(
-      JSON.parse(JSON.stringify(lightingEmployeeServiceFields))
+      JSON.parse(JSON.stringify(lightingEmployeeFields))
     )
 
     const fields = ref([
@@ -186,7 +178,7 @@ export default {
 
     const resetLightingEmployeeServiceFields = () => {
       showModal.value = false
-      lightingEmployeeServiceFields.value = JSON.parse(
+      lightingEmployeeFields.value = JSON.parse(
         JSON.stringify(LightingEmployeeServiceFieldsBlank)
       )
       NameState.value = false
@@ -209,20 +201,10 @@ export default {
     }
 
     const validateName = () => {
-      if (!lightingEmployeeServiceFields.value.empleadoId) {
+      if (!employeesSelected.value.length === 0) {
         NameState.value = false
         return 'Este campo es requerido'
       }
-
-      // if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(lightingEmployeeServiceFields.value.empleadoId)) {
-      //   NameState.value = false
-      //   return 'Este campo solo puede contener letras'
-      // }
-
-      // if (!lightingEmployeeServiceFields.value.empleadoId.trim().length > 0) {
-      //   NameState.value = false
-      //   return 'Este campo no puede contener espacios'
-      // }
 
       NameState.value = true
       return true
@@ -245,49 +227,56 @@ export default {
     }
 
     const addLightingEmployeeService = () => {
-      createAddressLightingEmployee(lightingEmployeeServiceFields.value, data => {
-        refreshTable()
-        swal.fire({
-          title: '¡Empleado alumbrado agregado correctamente!',
-          text: 'Empleado alumbrado registrado satisfactoriamente',
-          icon: 'success'
-        })
+      for (let i = 0; i < employeesSelected.value.length; i++) {
+        lightingEmployeeFields.value.empleadoId = employeesSelected.value[i]
+        createAddressLightingEmployee(
+          lightingEmployeeFields.value,
+          data => {
+            refreshTable()
+          })
+      }
+      swal.fire({
+        title: '¡Empleado alumbrado agregado correctamente!',
+        text: 'Empleado alumbrado registrado satisfactoriamente',
+        icon: 'success'
       })
       showModal.value = false
       resetLightingEmployeeServiceFields()
     }
 
-    const RemoveLightingEmployeeService = lightingemployeeId => {
+    const RemoveLightingEmployeeService = alumbradoEmpleadoId => {
       isloading.value = true
-      swal.fire({
-        title: '¿Estas seguro',
-        text: 'No podras revertir esto',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, Archivar Empleado alumbrado!',
-        cancelButtonText: 'Cancelar'
-      }).then(result => {
-        if (result.isConfirmed) {
-          deleteAddressLightingEmployee(lightingemployeeId, (data) => {
-            refreshTable()
-          })
-          swal.fire({
-            title: '¡Empleado alumbrado archivado!',
-            text:
+      swal
+        .fire({
+          title: '¿Estas seguro',
+          text: 'No podras revertir esto',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, Archivar Empleado alumbrado!',
+          cancelButtonText: 'Cancelar'
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            deleteAddressLightingEmployee(alumbradoEmpleadoId, data => {
+              refreshTable()
+            })
+            swal.fire({
+              title: '¡Empleado alumbrado archivado!',
+              text:
                 'El empleado alumbrado ha sido archivado satisfactoriamente.',
-            icon: 'success'
-          })
-        } else {
-          isloading.value = false
-        }
-      })
+              icon: 'success'
+            })
+          } else {
+            isloading.value = false
+          }
+        })
     }
 
     return {
       lightingEmployeeService,
-      lightingEmployeeServiceFields,
+      lightingEmployeeFields,
       perPage,
       currentPage,
       filter,
@@ -300,6 +289,7 @@ export default {
       fields,
       NameState,
       employees,
+      employeesSelected,
 
       onFiltered,
       addLightingEmployeeService,

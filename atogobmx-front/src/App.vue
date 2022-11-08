@@ -83,11 +83,11 @@
             </template>
             <b-dropdown-item to="/Cementerios/list">
               <!-- <i class="bi bi-lightning-charge-fill"></i> -->
-              Cementerios
+              Gabetas
             </b-dropdown-item>
             <b-dropdown-item to="/DireccionCementerios/list">
               <!-- <i class="bi bi-lightning-charge-fill"></i> -->
-              Direccion cementerios
+              Cementerios
             </b-dropdown-item>
           </b-nav-item-dropdown>
           <!--Aseo-->

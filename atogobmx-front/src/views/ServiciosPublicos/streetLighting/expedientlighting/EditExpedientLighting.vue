@@ -11,7 +11,7 @@
         <b-tab title="Datos generales">
           <Form @submit="onUpdateExpedientLighting">
             <b-row cols="2">
-              <!--1-->
+              <!--Lugar publico-->
               <b-col>
                 <b-form-group class="mt-3" label="Lugar publico">
                   <Field
@@ -30,7 +30,7 @@
                   ></ErrorMessage>
                 </b-form-group>
               </b-col>
-              <!--2-->
+              <!--Localidad-->
               <b-col>
                 <b-form-group class="mt-3" label="Localidad">
                   <Field
@@ -49,7 +49,7 @@
                   ></ErrorMessage>
                 </b-form-group>
               </b-col>
-              <!--3-->
+              <!--Fecha alta-->
               <b-col>
                 <b-form-group class="mt-3" label="Fecha Alta">
                   <Field name="HighDateField" :rules="validateHighDate" as="">
@@ -64,7 +64,7 @@
                   <ErrorMessage name="HighDateField"></ErrorMessage>
                 </b-form-group>
               </b-col>
-              <!--4-->
+              <!--Departamento-->
               <b-col>
                 <b-form-group class="mt-3" label="Departamento">
                   <Field
@@ -89,7 +89,7 @@
                   ></ErrorMessage>
                 </b-form-group>
               </b-col>
-              <!--5-->
+              <!--Area-->
               <b-col>
                 <b-form-group class="mt-3" label="Area">
                   <Field name="AreaField" :rules="validateArea" as="number">
@@ -110,7 +110,7 @@
                   ></ErrorMessage>
                 </b-form-group>
               </b-col>
-              <!--6-->
+              <!--Descripcion solucion-->
               <b-col>
                 <b-form-group class="mt-3" label="Descripcion Solucion">
                   <Field
@@ -168,9 +168,6 @@ import Datepicker from '@vuepic/vue-datepicker'
 // import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
-  props: {
-    expedientLightingId: Number
-  },
   components: {
     Datepicker,
     Field,
@@ -186,15 +183,12 @@ export default {
       getExpedientLightingById,
       updatExpedientLighting
     } = ExpedientlightingServices()
-    // const { getStatusById } = StatusServices()
-    // const $toast = useToast()
     const expedientLighting = ref([])
     const departaments = ref([])
     const areas = ref([])
-    // const statusPublicLighting = ref([])
     const router = useRoute()
     const redirect = useRouter()
-    const expedienteAlumbradoId = ref(router.params.ExpedienteAlumbradoId)
+    const expedienteAlumbradoId = ref(parseInt(router.params.ExpedienteAlumbradoId))
     const PublicPlaceState = ref(false)
     const LocationState = ref(false)
     const HighDateState = ref(false)
@@ -207,13 +201,8 @@ export default {
       { text: 'Editar-ExpedienteAlumbrado' }
     ])
 
-    // getStatusById((data) => {
-    //   statusPublicLighting.value = data
-    // })
-
     getExpedientLightingById(
-      router.params.ExpedienteAlumbradoId || props.expedientLightingId,
-      data => {
+      router.params.ExpedienteAlumbradoId, data => {
         // streetLighting.value = data
         // validateState()
         expedientLighting.value = data

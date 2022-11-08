@@ -257,14 +257,6 @@ const routes = [
     }
   },
   {
-    path: '/AlumbradoEmpleado/:AlumbradoEmpleadoId',
-    name: 'AlumbradoEmpleado-Edit',
-    component: () => import('@/views/ServiciosPublicos/streetLighting/lightingEmployee/EditLightingEmployee.vue'),
-    meta: {
-      requiresAuth: true
-    }
-  },
-  {
     path: '/Usuarios/list',
     name: 'Usuarios',
     component: () => import('@/views/Users/UserList.vue'),
