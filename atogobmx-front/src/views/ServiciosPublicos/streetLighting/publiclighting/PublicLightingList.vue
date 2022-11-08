@@ -71,7 +71,7 @@
       lazy
     >
       <Form @submit="addPublicLighting">
-        <b-row cols="3">
+        <b-row cols="2">
           <!--Tipo de tarea a agregar-->
           <b-col>
             <b-form-group class="mt-3" label="Tipo de tarea">
@@ -102,6 +102,18 @@
                 ></b-form-select>
               </Field>
               <ErrorMessage class="text-danger" name="StatusField"/>
+            </b-form-group>
+          </b-col>
+          <!--agregar nombreobra-->
+          <b-col>
+            <b-form-group class="mt-3" label="nombre de obra alumbrado">
+              <Field name="NameWorkField" :rules="validateNameWork" as="text">
+                <b-form-input
+                  v-model="publicLightingFields.nombreObra"
+                  :state="NameWorkState"
+                ></b-form-input>
+              </Field>
+              <ErrorMessage class="text-danger" name="NameWorkField"/>
             </b-form-group>
           </b-col>
           <!--agregar domicilio-->
@@ -150,7 +162,6 @@
             variant="primary"
             @click="resetPublicLightingFields"
           >
-            <!-- v-b-modal.modal-publiclighting -->
             Cancelar
           </b-button>
           <b-button class="w-auto m-2" variant="success" type="submit">
@@ -194,8 +205,9 @@ export default {
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('domicilio')
+    const searchField = ref('nombreObra')
     const ProblemState = ref(false)
+    const NameWorkState = ref(false)
     const addresdescriptionState = ref(false)
     const DomicileState = ref(false)
     const TaskState = ref(false)
@@ -208,6 +220,7 @@ export default {
     const publicLightingFields = ref({
       alumbradoId: 0,
       descripcionProblema: null,
+      nombreObra: '',
       domicilio: null,
       descripcionDomicilio: null,
       tareaTipoId: null,
@@ -276,6 +289,23 @@ export default {
       return true
     }
 
+    const validateNameWork = () => {
+      if (!publicLightingFields.value.nombreObra) {
+        NameWorkState.value = false
+        return 'Este campo es requerido'
+      }
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(publicLightingFields.value.nombreObra)) {
+        NameWorkState.value = false
+        return 'Este campo solo puede contener letras'
+      }
+      if (!publicLightingFields.value.nombreObra.trim().length > 0) {
+        NameWorkState.value = false
+        return 'Este campo no puede contener espacios'
+      }
+      NameWorkState.value = true
+      return true
+    }
+
     const validateDomicile = () => {
       if (!publicLightingFields.value.domicilio) {
         DomicileState.value = false
@@ -319,6 +349,7 @@ export default {
       { value: 'alumbradoId', text: 'ID', sortable: true },
       { value: 'estatus.nombreEstatus', text: 'Estatus' },
       { value: 'tareaTipoAlumbrado.nombreTarea', text: 'Tipo de tarea' },
+      { value: 'nombreObra', text: 'nombre de Obra Alumbrado' },
       { value: 'descripcionProblema', text: 'Descripcion del problema' },
       { value: 'domicilio', text: 'Domicilio' },
       { value: 'descripcionDomicilio', text: 'Descripcion Domicilio' },
@@ -335,6 +366,7 @@ export default {
       addresdescriptionState.value = false
       DomicileState.value = false
       StatusState.value = false
+      NameWorkState.value = false
     }
 
     getPublicLighting(data => {
@@ -429,6 +461,7 @@ export default {
       publicLightingFieldsBlank,
       fields,
       TaskState,
+      NameWorkState,
       addresdescriptionState,
       DomicileState,
       StatusState,
@@ -440,6 +473,7 @@ export default {
       refreshTable,
       RemovePublicLighting,
       validateTask,
+      validateNameWork,
       validateAddresdescription,
       validateDomicile,
       validateStatus,

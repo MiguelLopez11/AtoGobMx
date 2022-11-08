@@ -40,7 +40,19 @@ namespace AtoGobMx.Controllers
         }
 
         //"Alumbrado/AlumbradoId"
-        [HttpGet("Alumbrado/AlumbradoId")]
+        [HttpGet("{ExpedienteAlumbradoId}")]
+        public async Task<ActionResult> GetExpedienteById(int ExpedienteAlumbradoId)
+        {
+            var expedienteAlumbrado = await _context.ExpedienteAlumbrado
+                .Include(i => i.Alumbrado)
+                .FirstOrDefaultAsync(f => f.ExpedienteAlumbradoId == ExpedienteAlumbradoId);
+            if (expedienteAlumbrado == null)
+            {
+                return NotFound();
+            }
+            return Ok(expedienteAlumbrado);
+        }
+        [HttpGet("Alumbrado/{AlumbradoId}")]
         public async Task<ActionResult> GetExpedienteAlumbradoByAlumbrado(int AlumbradoId)
         {
             var expedienteAlumbrado = await _context.ExpedienteAlumbrado
@@ -147,6 +159,9 @@ namespace AtoGobMx.Controllers
         {
             _context.ExpedienteAlumbrado.Add(expedienteAlumbrado);
             expedienteAlumbrado.FechaAlta = DateTime.Now;
+            var TareaAlumbrado = await _context.Alumbrado
+                .FirstOrDefaultAsync(f => f.AlumbradoId == expedienteAlumbrado.AlumbradoId);
+            TareaAlumbrado.TieneExpediente = true;
             await _context.SaveChangesAsync();
             return Ok("Expediente creado correctamente");
         }

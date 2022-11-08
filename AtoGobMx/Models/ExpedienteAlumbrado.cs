@@ -11,8 +11,7 @@ namespace AtoGobMx.Models
         public int ExpedienteAlumbradoId { get; set; }
         public DateTime? FechaAlta { get; set; }
         public string? DescripcionSolucion { get; set; }
-        [Required]
-        public string nomenclatura { get; set; }
+        public string? Nomenclatura { get; set; }
         public string? LugarPublico { get; set; }
         public string? Localidad { get; set; }
         public bool Archivado { get; set; }
@@ -28,6 +27,9 @@ namespace AtoGobMx.Models
 
         [ForeignKey("AreaId")]
         public Area? Area { get; set; }
+
+        [ForeignKey("VeiculoId")]
+        public PAT_Vehiculo? PAT_Vehiculo { get; set; }
 
         [JsonIgnore]
         public virtual IEnumerable<EmpleadosAlumbrado>? EmpleadosAlumbrado { get; set; }

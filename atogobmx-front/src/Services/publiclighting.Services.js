@@ -8,6 +8,11 @@ export default function publiclightingServices () {
         callback(response.data)
       })
   }
+  const getPublicLightingExpedient = (callback) => {
+    axios.get('https://localhost:7065/api/Alumbrado/ServiciosSinExpediente').then((response) => {
+      callback(response.data)
+    })
+  }
   const getPublicLightingById = (AlumbradoId, callback) => {
     axios.get(`https://localhost:7065/api/Alumbrado/${AlumbradoId}`).then((response) => {
       callback(response.data)
@@ -32,6 +37,7 @@ export default function publiclightingServices () {
   }
   return {
     getPublicLighting,
+    getPublicLightingExpedient,
     getPublicLightingById,
     createPublicLighting,
     updatePublicLighting,
