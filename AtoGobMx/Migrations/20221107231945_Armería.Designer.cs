@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20221107231945_Armería")]
+    partial class Armería
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -423,9 +425,6 @@ namespace AtoGobMx.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<bool>("Archivado")
-                        .HasColumnType("tinyint(1)");
-
                     b.Property<int>("Calibre")
                         .HasColumnType("int");
 
@@ -440,6 +439,9 @@ namespace AtoGobMx.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("PAT_CategoriaArmeriaCategoriaArmeriaId")
+                        .HasColumnType("int");
+
                     b.Property<string>("TipoArma")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -448,7 +450,27 @@ namespace AtoGobMx.Migrations
 
                     b.HasIndex("EmpleadoId");
 
+                    b.HasIndex("PAT_CategoriaArmeriaCategoriaArmeriaId");
+
                     b.ToTable("Armeria");
+                });
+
+            modelBuilder.Entity("AtoGobMx.Models.PAT_CategoriaArmeria", b =>
+                {
+                    b.Property<int>("CategoriaArmeriaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Descripcion")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("CategoriaArmeriaId");
+
+                    b.ToTable("CategoriaArmeria");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.PAT_EquipoComputo", b =>
@@ -995,6 +1017,10 @@ namespace AtoGobMx.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("AtoGobMx.Models.PAT_CategoriaArmeria", null)
+                        .WithMany("Armeria")
+                        .HasForeignKey("PAT_CategoriaArmeriaCategoriaArmeriaId");
+
                     b.Navigation("Empleado");
                 });
 
@@ -1168,6 +1194,11 @@ namespace AtoGobMx.Migrations
             modelBuilder.Entity("AtoGobMx.Models.InventarioAlumbrado", b =>
                 {
                     b.Navigation("Alumbrado");
+                });
+
+            modelBuilder.Entity("AtoGobMx.Models.PAT_CategoriaArmeria", b =>
+                {
+                    b.Navigation("Armeria");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.PAT_EstatusEquipo", b =>

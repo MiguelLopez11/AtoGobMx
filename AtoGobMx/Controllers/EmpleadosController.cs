@@ -43,6 +43,22 @@ namespace AtoGobMx.Controllers
                 .ToListAsync();
             return Ok(empleados);
         }
+        [HttpGet("Armeria")]
+        public async Task<ActionResult<Empleado>> GetEmpleadosArmeria()
+        {
+            var empleados = await _context.Empleados
+                .Include(i => i.Area)
+                .Include(i => i.Departamentos)
+                .Include(i => i.PuestoTrabajo)
+                .Where(w => w.Departamentos.Nombre == "Comisaria de seguridad publica")
+                .Where(w => !w.Archivado)
+                .ToListAsync();
+            if (empleados == null)
+            {
+                return BadRequest();
+            }
+            return Ok(empleados);
+        }
 
         [HttpGet("{EmpleadoId}")]
         public async Task<ActionResult> GetEmpleadosById(int EmpleadoId)

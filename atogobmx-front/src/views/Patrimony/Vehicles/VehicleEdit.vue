@@ -142,7 +142,7 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            @click="resetVehicleFields()"
+            to="/Vehiculos/list"
           >
             Cancelar
           </b-button>

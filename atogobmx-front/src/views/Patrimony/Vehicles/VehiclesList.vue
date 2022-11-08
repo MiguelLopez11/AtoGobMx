@@ -42,20 +42,34 @@
         {{ header.text }}
       </template>
       <template #item-actions="items">
-        <b-button
-          @click="RemoveVehicle(items.vehiculoId)"
-          class="m-1"
-          variant="outline-danger"
-          ><i class="bi bi-trash3"></i
-        ></b-button>
-        <b-button class="m-1" variant="outline-warning"
-          :to="{
-            name: 'Vehiculos-Edit',
-            params: { VehiculoId: items.vehiculoId},
-          }"
+        <b-dropdown
+          id="ActionsDropdown"
+          size="lg"
+          style="text-color: black"
+          variant="link"
+          toggle-class="text-decoration-none"
+          dropright
+          no-caret
         >
-          <i class="bi bi-pencil-square" />
-        </b-button>
+          <template #button-content>
+            <i class="bi bi-three-dots-vertical"></i>
+          </template>
+          <b-dropdown-item
+            @click="RemoveVehicle(items.vehiculoId)"
+            class="m-1"
+            variant="outline-danger"
+            ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
+          >
+          <b-dropdown-item
+            class="m-1"
+            variant="outline-warning"
+            :to="{
+              name: 'Vehiculos-Edit',
+              params: { VehiculoId: items.vehiculoId }
+            }"
+            ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
+          >
+        </b-dropdown>
       </template>
     </EasyDataTable>
     <b-modal
@@ -118,7 +132,11 @@
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Placa">
-              <Field name="LicensePlateField" :rules="validateLicensePlate" as="text">
+              <Field
+                name="LicensePlateField"
+                :rules="validateLicensePlate"
+                as="text"
+              >
                 <b-form-input
                   placeholder="Ingresa la placa del vehiculo"
                   v-model="vehiclesFields.placa"
@@ -154,7 +172,11 @@
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Modelo">
-              <Field name="ReleaseYearField" :rules="validateReleaseYear" as="number">
+              <Field
+                name="ReleaseYearField"
+                :rules="validateReleaseYear"
+                as="number"
+              >
                 <b-form-input
                   placeholder="Ingresa el modelo del vehiculo"
                   v-model="vehiclesFields.añoLanzamiento"
@@ -163,7 +185,10 @@
                 >
                 </b-form-input>
               </Field>
-              <ErrorMessage class="text-danger" name="ReleaseYearField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="ReleaseYearField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -177,12 +202,19 @@
                 >
                 </b-form-input>
               </Field>
-              <ErrorMessage class="text-danger" name="DoorsField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="DoorsField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Transimisión">
-              <Field name="TransmissionField" :rules="validateTransmission" as="number">
+              <Field
+                name="TransmissionField"
+                :rules="validateTransmission"
+                as="number"
+              >
                 <b-form-select
                   v-model="vehiclesFields.transmisión"
                   autofocus
@@ -193,7 +225,10 @@
                 >
                 </b-form-select>
               </Field>
-              <ErrorMessage class="text-danger" name="TransmissionField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="TransmissionField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
@@ -236,7 +271,10 @@ export default {
     const currentPage = ref(1)
     const filter = ref(null)
     const perPageSelect = ref([5, 10, 25, 50, 100])
-    const typeTransmissions = ref([{ id: 1, nombre: 'Manual' }, { id: 2, nombre: 'Automático' }])
+    const typeTransmissions = ref([
+      { id: 1, nombre: 'Manual' },
+      { id: 2, nombre: 'Automático' }
+    ])
     const isloading = ref(true)
     const searchValue = ref('')
     const searchField = ref('marca')
@@ -318,7 +356,11 @@ export default {
         licensePlateState.value = false
         return 'Este campo es requerido'
       }
-      if (!/^(?=.*\d)(?=.*[a-zA-Z])([A-ZñÑáéíóúÁÉÍÓÚ])[A-Z0-9]{5,6}$/.test(vehiclesFields.value.placa)) {
+      if (
+        !/^(?=.*\d)(?=.*[a-zA-Z])([A-ZñÑáéíóúÁÉÍÓÚ])[A-Z0-9]{5,6}$/.test(
+          vehiclesFields.value.placa
+        )
+      ) {
         licensePlateState.value = false
         return 'Este campo solo acepta mayusculas y numeros y no acepta mas de 6 caracteres'
       }
@@ -330,7 +372,11 @@ export default {
         serialNumberState.value = false
         return 'Este campo es requerido'
       }
-      if (!/^(?=.*\d)(?=.*[a-zA-Z])([A-ZñÑáéíóúÁÉÍÓÚ])[A-Z0-9]{17,17}$/.test(vehiclesFields.value.numeroSerie)) {
+      if (
+        !/^(?=.*\d)(?=.*[a-zA-Z])([A-ZñÑáéíóúÁÉÍÓÚ])[A-Z0-9]{17,17}$/.test(
+          vehiclesFields.value.numeroSerie
+        )
+      ) {
         serialNumberState.value = false
         return 'Este campo solo acepta mayusculas y numeros y no acepta mas de 17 caracteres'
       }
@@ -387,9 +433,9 @@ export default {
       createVehicle(vehiclesFields.value, data => {
         refreshTable()
         swal.fire({
-          title: 'Equipo registrado correctamente!',
+          title: 'Vehiculo registrado correctamente!',
           text:
-            'El equipo de computo se ha registrado al sistema satisfactoriamente.',
+            'El vehiculo de computo se ha registrado al sistema satisfactoriamente.',
           icon: 'success'
         })
       })

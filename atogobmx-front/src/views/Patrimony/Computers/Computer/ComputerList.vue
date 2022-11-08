@@ -42,20 +42,27 @@
         {{ header.text }}
       </template>
       <template #item-actions="items">
-        <b-button
-          @click="RemoveComputer(items.equipoComputoId)"
-          class="m-1"
-          variant="outline-danger"
-          ><i class="bi bi-trash3"></i
-        ></b-button>
-        <b-button class="m-1" variant="outline-warning"
-          :to="{
+        <b-dropdown id="ActionsDropdown" size="lg" style="text-color: black" variant="link" toggle-class="text-decoration-none" dropright no-caret>
+          <template #button-content>
+            <i class="bi bi-three-dots-vertical"></i>
+          </template>
+          <b-dropdown-item
+            @click="RemoveComputer(items.equipoComputoId)"
+            class="m-1"
+            variant="outline-danger">
+            <i class="bi bi-trash3" />
+            Archivar
+            </b-dropdown-item>
+          <b-dropdown-item
+            class="m-1"
+            variant="outline-warning"
+            :to="{
             name: 'EquiposComputo-Edit',
             params: { EquipoComputoId: items.equipoComputoId},
-          }"
-        >
-          <i class="bi bi-pencil-square" />
-        </b-button>
+            }"
+            ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
+          >
+        </b-dropdown>
       </template>
       <template #item-inventarioEstatus="items">
         <b-badge :variant="items.estatusEquipo.nombre === 'En Funcionamiento' ? 'success': '' || items.estatusEquipo.nombre === 'En Mantenimiento' ? 'warning': '' || items.estatusEquipo.nombre === 'Dado de baja' ? 'danger': ''">

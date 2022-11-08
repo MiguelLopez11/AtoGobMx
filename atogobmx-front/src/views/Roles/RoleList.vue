@@ -42,22 +42,34 @@
         {{ header.text }}
       </template>
       <template #item-actions="items">
-        <b-button
-          @click="RemoveRole(items.roleId)"
-          class="m-1"
-          variant="outline-danger"
-          ><i class="bi bi-trash3"></i
-        ></b-button>
-        <b-button
-          class="m-1"
-          variant="outline-warning"
-          :to="{
-            name: 'Roles-Edit',
-            params: { RoleId: items.roleId },
-          }"
+        <b-dropdown
+          id="ActionsDropdown"
+          size="lg"
+          style="text-color: black"
+          variant="link"
+          toggle-class="text-decoration-none"
+          dropright
+          no-caret
         >
-          <i class="bi bi-pencil-square" />
-        </b-button>
+          <template #button-content>
+            <i class="bi bi-three-dots-vertical"></i>
+          </template>
+          <b-dropdown-item
+            @click="RemoveRole(items.roleId)"
+            class="m-1"
+            variant="outline-danger"
+            ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
+          >
+          <b-dropdown-item
+            class="m-1"
+            variant="outline-warning"
+            :to="{
+              name: 'Roles-Edit',
+              params: { RoleId: items.roleId }
+            }"
+            ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
+          >
+        </b-dropdown>
       </template>
     </EasyDataTable>
     <b-modal
@@ -72,12 +84,9 @@
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre">
-              <Field
-                name="NameField"
-                :rules="validateName"
-                as="text"
-              >
-                <b-form-input v-model="roleFields.nombre" :state="nameState"> </b-form-input>
+              <Field name="NameField" :rules="validateName" as="text">
+                <b-form-input v-model="roleFields.nombre" :state="nameState">
+                </b-form-input>
               </Field>
               <ErrorMessage class="text-danger" name="NameField"></ErrorMessage>
             </b-form-group>
@@ -146,7 +155,7 @@ export default {
       { value: 'descripcion', text: 'Descripcion' },
       { value: 'actions', text: 'Acciones' }
     ])
-    getRoles((data) => {
+    getRoles(data => {
       roles.value = data
       if (roles.value.length > 0) {
         isloading.value = false
@@ -156,7 +165,7 @@ export default {
         }
       }
     })
-    const onFiltered = (filteredItems) => {
+    const onFiltered = filteredItems => {
       rows.value = filteredItems.length
       currentPage.value = 1
     }
@@ -175,7 +184,7 @@ export default {
     }
     const refreshTable = () => {
       isloading.value = true
-      getRoles((data) => {
+      getRoles(data => {
         roles.value = data
         if (roles.value.length > 0) {
           isloading.value = false
@@ -188,7 +197,7 @@ export default {
       return 'datos recargados'
     }
     const addRole = () => {
-      createRole(roleFields.value, (data) => {
+      createRole(roleFields.value, data => {
         refreshTable()
         swal.fire({
           title: 'Role registrado correctamente!',
@@ -203,7 +212,7 @@ export default {
       roleFields.value = JSON.parse(JSON.stringify(roleFieldsBlank))
       nameState.value = false
     }
-    const RemoveRole = (roleId) => {
+    const RemoveRole = roleId => {
       isloading.value = true
       swal
         .fire({
@@ -226,7 +235,7 @@ export default {
               })
               .then(result => {
                 if (result.isConfirmed) {
-                  deleteRole(roleId, (data) => {
+                  deleteRole(roleId, data => {
                     refreshTable()
                   })
                 }
@@ -263,6 +272,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

@@ -463,6 +463,26 @@ const routes = [
       rol: 'Administrador',
       departamento: 'Patrimonio'
     }
+  },
+  {
+    path: '/Armeria/list',
+    name: 'Armeria',
+    component: () => import('@/views/Patrimony/Armory/ArmoryList.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Patrimonio'
+    }
+  },
+  {
+    path: '/Armeria/:ArmaId',
+    name: 'Armeria-Edit',
+    component: () => import('@/views/Patrimony/Armory/ArmoryEdit.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Patrimonio'
+    }
   }
 ]
 

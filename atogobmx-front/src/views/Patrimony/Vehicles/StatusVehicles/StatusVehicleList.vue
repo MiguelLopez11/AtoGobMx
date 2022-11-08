@@ -42,7 +42,7 @@
         {{ header.text }}
       </template>
       <template #item-actions="items">
-        <b-dropdown size="lg" variant="link" dropright no-caret>
+        <b-dropdown id="ActionsDropdown" size="lg" style="text-color: black" variant="link" toggle-class="text-decoration-none" dropright no-caret>
           <template #button-content>
             <i class="bi bi-three-dots-vertical"></i>
           </template>

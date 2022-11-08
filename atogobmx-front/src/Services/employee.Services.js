@@ -12,6 +12,11 @@ export default function EmployeeServices () {
       callback(response.data)
     })
   }
+  const getEmployeesArmory = (callback) => {
+    axios.get(`${BaseUrl}/Empleados/Armeria`).then((response) => {
+      callback(response.data)
+    })
+  }
   const getEmployee = (EmployeeId, callback) => {
     axios.get(`${BaseUrl}/Empleados/${EmployeeId}`).then((response) => {
       callback(response.data)
@@ -35,6 +40,7 @@ export default function EmployeeServices () {
   return {
     getEmployees,
     getEmployee,
+    getEmployeesArmory,
     createEmployee,
     updateEmployee,
     deleteEmployee,

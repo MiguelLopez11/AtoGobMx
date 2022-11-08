@@ -42,22 +42,34 @@
         {{ header.text }}
       </template>
       <template #item-actions="items">
-        <b-button
-          @click="RemoveDepatamento(items.departamentoId)"
-          class="m-1"
-          variant="outline-danger"
-          ><i class="bi bi-trash3"></i
-        ></b-button>
-        <b-button
-          class="m-1"
-          variant="outline-warning"
-          :to="{
-            name: 'Departamentos-Edit',
-            params: { DepartamentoId: items.departamentoId },
-          }"
+        <b-dropdown
+          id="ActionsDropdown"
+          size="lg"
+          style="text-color: black"
+          variant="link"
+          toggle-class="text-decoration-none"
+          dropright
+          no-caret
         >
-          <i class="bi bi-pencil-square" />
-        </b-button>
+          <template #button-content>
+            <i class="bi bi-three-dots-vertical"></i>
+          </template>
+          <b-dropdown-item
+            @click="RemoveDepatamento(items.departamentoId)"
+            class="m-1"
+            variant="outline-danger"
+            ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
+          >
+          <b-dropdown-item
+            class="m-1"
+            variant="outline-warning"
+            :to="{
+              name: 'Departamentos-Edit',
+              params: { DepartamentoId: items.departamentoId }
+            }"
+            ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
+          >
+        </b-dropdown>
       </template>
     </EasyDataTable>
     <b-modal
@@ -73,19 +85,20 @@
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre">
-              <Field
-                name="NameField"
-                :rules="validateArea"
-                as="text"
-              >
-                <b-form-input v-model="departamentFields.nombre" :state="nameState"> </b-form-input>
+              <Field name="NameField" :rules="validateArea" as="text">
+                <b-form-input
+                  v-model="departamentFields.nombre"
+                  :state="nameState"
+                >
+                </b-form-input>
               </Field>
               <ErrorMessage class="text-danger" name="NameField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Descripción">
-              <b-form-input v-model="departamentFields.descripcion"> </b-form-input>
+              <b-form-input v-model="departamentFields.descripcion">
+              </b-form-input>
             </b-form-group>
           </b-col>
         </b-row>
@@ -121,7 +134,11 @@ export default {
   },
   setup () {
     const swal = inject('$swal')
-    const { getDepartaments, createDepartament, deleteDepartament } = DepartamentServices()
+    const {
+      getDepartaments,
+      createDepartament,
+      deleteDepartament
+    } = DepartamentServices()
     // const $toast = useToast()
     const departaments = ref([])
     const perPage = ref(5)
@@ -140,14 +157,16 @@ export default {
       descripcion: null,
       archivado: false
     })
-    const departamentFieldsBlank = ref(JSON.parse(JSON.stringify(departamentFields)))
+    const departamentFieldsBlank = ref(
+      JSON.parse(JSON.stringify(departamentFields))
+    )
     const fields = ref([
       { value: 'departamentoId', text: 'ID', sortable: true },
       { value: 'nombre', text: 'Nombre' },
       { value: 'descripcion', text: 'Descripcion' },
       { value: 'actions', text: 'Acciones' }
     ])
-    getDepartaments((data) => {
+    getDepartaments(data => {
       departaments.value = data
       if (departaments.value.length > 0) {
         isloading.value = false
@@ -157,7 +176,7 @@ export default {
         }
       }
     })
-    const onFiltered = (filteredItems) => {
+    const onFiltered = filteredItems => {
       rows.value = filteredItems.length
       currentPage.value = 1
     }
@@ -176,7 +195,7 @@ export default {
     }
     const refreshTable = () => {
       isloading.value = true
-      getDepartaments((data) => {
+      getDepartaments(data => {
         departaments.value = data
         if (departaments.value.length > 0) {
           isloading.value = false
@@ -189,11 +208,12 @@ export default {
       return 'datos recargados'
     }
     const addDepartamento = () => {
-      createDepartament(departamentFields.value, (data) => {
+      createDepartament(departamentFields.value, data => {
         refreshTable()
         swal.fire({
           title: 'Departamento registrado correctamente!',
-          text: 'El departamento se ha registrado al sistema satisfactoriamente.',
+          text:
+            'El departamento se ha registrado al sistema satisfactoriamente.',
           icon: 'success'
         })
       })
@@ -201,10 +221,12 @@ export default {
     }
     const resetDepartamentFields = () => {
       showModal.value = false
-      departamentFields.value = JSON.parse(JSON.stringify(departamentFieldsBlank))
+      departamentFields.value = JSON.parse(
+        JSON.stringify(departamentFieldsBlank)
+      )
       nameState.value = false
     }
-    const RemoveDepatamento = (departamentoId) => {
+    const RemoveDepatamento = departamentoId => {
       isloading.value = true
       swal
         .fire({
@@ -227,7 +249,7 @@ export default {
               })
               .then(result => {
                 if (result.isConfirmed) {
-                  deleteDepartament(departamentoId, (data) => {
+                  deleteDepartament(departamentoId, data => {
                     refreshTable()
                   })
                 }
@@ -264,6 +286,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

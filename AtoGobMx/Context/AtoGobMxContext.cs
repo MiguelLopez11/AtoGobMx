@@ -37,6 +37,6 @@ namespace AtoGobMx.Context
         public DbSet<PAT_EstatusEquipo> InventarioEstatus { get; set; }
         public DbSet<PAT_EstatusVehiculo> EstatusVehiculo { get; set; }
         public DbSet<PAT_Armeria> Armeria { get; set; }
-        public DbSet<PAT_CategoriaArmeria> CategoriaArmeria { get; set; }
+        //public DbSet<PAT_CategoriaArmeria> CategoriaArmeria { get; set; }
     }
 }

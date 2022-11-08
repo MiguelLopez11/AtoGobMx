@@ -125,13 +125,13 @@
               <i class="bi bi-list-check"></i>
               Estatus Equipos Computo
             </b-dropdown-item>
-            <b-dropdown-item to="/EstatusVehiculo/list">
-              <i class="bi bi-activity"></i>
-              Estatus Vehiculo
-            </b-dropdown-item>
             <b-dropdown-item to="/Vehiculos/list">
               <i class="bi bi-car-front-fill"></i>
               Vehiculos
+            </b-dropdown-item>
+            <b-dropdown-item to="/EstatusVehiculo/list">
+              <i class="bi bi-activity"></i>
+              Estatus Vehiculo
             </b-dropdown-item>
             <b-dropdown-item to="/Mobiliarios/list">
               <i class="bi bi-lamp-fill"></i>
@@ -141,6 +141,11 @@
               <i class="bi bi-columns-gap"></i>
               Categoria Mobiliario
             </b-dropdown-item>
+            <b-dropdown-item to="/Armeria/list">
+              <i class="bi bi-award-fill"></i>
+              Armeria
+            </b-dropdown-item>
+
           </b-nav-item-dropdown>
           <b-nav-item-dropdown text="Administrador" right auto-close>
             <template v-slot:button-content>

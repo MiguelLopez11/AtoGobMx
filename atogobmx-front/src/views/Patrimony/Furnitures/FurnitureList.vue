@@ -42,21 +42,35 @@
         {{ header.text }}
       </template>
       <template #item-actions="items">
-        <b-button
-          @click="RemoveFurniture(items.mobiliarioId)"
-          class="m-1"
-          variant="outline-danger"
-          ><i class="bi bi-trash3"></i
-        ></b-button>
-        <b-button
-          class="m-1"
-          variant="outline-warning"
-          :to="{
-            name: 'Mobiliarios-Edit',
-            params: { MobiliarioId: items.mobiliarioId },
-          }"
-          ><i class="bi bi-pencil-square"></i
-        ></b-button>
+        <b-dropdown
+          size="lg"
+          style="text-color: black"
+          variant="link"
+          toggle-class="text-decoration-none"
+          dropright
+          no-caret
+        >
+          <template #button-content>
+            <i class="bi bi-three-dots-vertical"></i>
+          </template>
+          <b-dropdown-item
+            @click="RemoveFurniture(items.mobiliarioId)"
+            class="m-1"
+            variant="outline-danger"
+          >
+            <i class="bi bi-trash3" />
+            Archivar
+          </b-dropdown-item>
+          <b-dropdown-item
+            class="m-1"
+            variant="outline-warning"
+            :to="{
+              name: 'Mobiliarios-Edit',
+              params: { MobiliarioId: items.mobiliarioId }
+            }"
+            ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
+          >
+        </b-dropdown>
       </template>
     </EasyDataTable>
     <b-modal
@@ -73,14 +87,17 @@
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nomenclatura">
-              <Field
-                name="FolioField"
-                :rules="validateFolio"
-                as="text"
-              >
-                <b-form-input v-model="furnituresFields.codigoInventario" :state="folioState"> </b-form-input>
+              <Field name="FolioField" :rules="validateFolio" as="text">
+                <b-form-input
+                  v-model="furnituresFields.codigoInventario"
+                  :state="folioState"
+                >
+                </b-form-input>
               </Field>
-              <ErrorMessage class="text-danger" name="FolioField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="FolioField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -99,7 +116,10 @@
                   :state="typeFurnitureState"
                 />
               </Field>
-              <ErrorMessage class="text-danger" name="typeFurnitureField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="typeFurnitureField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -114,7 +134,10 @@
                   :state="descriptionState"
                 />
               </Field>
-              <ErrorMessage class="text-danger" name="DescriptionField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="DescriptionField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -135,16 +158,15 @@
                 >
                 </b-form-select>
               </Field>
-              <ErrorMessage class="text-danger" name="DepartamentField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="DepartamentField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Area">
-              <Field
-                name="AreaField"
-                :rules="validateArea"
-                as="number"
-              >
+              <Field name="AreaField" :rules="validateArea" as="number">
                 <b-form-select
                   v-model="furnituresFields.areaId"
                   autofocus
@@ -191,7 +213,12 @@ export default {
     ErrorMessage
   },
   setup () {
-    const { getFurnitures, createFurniture, deleteFurniture, getTypeFurnitures } = FurnitureServices()
+    const {
+      getFurnitures,
+      createFurniture,
+      deleteFurniture,
+      getTypeFurnitures
+    } = FurnitureServices()
     const swal = inject('$swal')
     const { getAreasByDepartament } = AreaServices()
     const { getDepartaments } = DepartamentServices()
@@ -224,13 +251,14 @@ export default {
     const furnituresFieldsBlank = ref(
       JSON.parse(JSON.stringify(furnituresFields))
     )
-    const getAreas = (departamentoId) => {
+    const getAreas = departamentoId => {
       getAreasByDepartament(departamentoId, data => {
         areas.value = data
         if (data.length === 0) {
           swal.fire({
             title: 'No se encuentran areas registradas!',
-            text: 'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
+            text:
+              'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
             icon: 'warning'
           })
         }
@@ -241,7 +269,8 @@ export default {
       if (data.length === 0) {
         swal.fire({
           title: 'No se encuentran departamentos registrados!',
-          text: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
+          text:
+            'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
           icon: 'warning'
         })
       }
@@ -262,7 +291,7 @@ export default {
       folioState.value = false
       departamentState.value = false
     }
-    getFurnitures((data) => {
+    getFurnitures(data => {
       furnitures.value = data
       if (furnitures.value.length > 0) {
         isloading.value = false
@@ -272,15 +301,22 @@ export default {
         }
       }
     })
-    getTypeFurnitures((data) => {
+    getTypeFurnitures(data => {
       typeFurnitures.value = data
+      if (data.length === 0) {
+        swal.fire({
+          title: '¡No se encuentrar tipos de mobiliarios registrados!',
+          text: 'Registre un tipo de mobiliario primero para continuar',
+          icon: 'warning'
+        })
+      }
     })
-    const onFiltered = (filteredItems) => {
+    const onFiltered = filteredItems => {
       currentPage.value = 1
     }
     const refreshTable = () => {
       isloading.value = true
-      getFurnitures((data) => {
+      getFurnitures(data => {
         furnitures.value = data
         if (furnitures.value.length > 0) {
           isloading.value = false
@@ -294,7 +330,7 @@ export default {
     }
 
     const addFurniture = () => {
-      createFurniture(furnituresFields.value, (data) => {
+      createFurniture(furnituresFields.value, data => {
         refreshTable()
         swal.fire({
           title: '¡Inmueble registrado correctamente!',
@@ -306,7 +342,7 @@ export default {
       resetFurnitureFields()
     }
 
-    const RemoveFurniture = (mobiliarioId) => {
+    const RemoveFurniture = mobiliarioId => {
       isloading.value = true
       swal
         .fire({
@@ -321,15 +357,14 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            deleteFurniture(mobiliarioId, (data) => {
+            deleteFurniture(mobiliarioId, data => {
               refreshTable()
             })
-            swal
-              .fire({
-                title: '¡Inmueble archivado!',
-                text: 'El ¡inmueble ha sido archivado satisfactoriamente .',
-                icon: 'success'
-              })
+            swal.fire({
+              title: '¡Inmueble archivado!',
+              text: 'El ¡inmueble ha sido archivado satisfactoriamente .',
+              icon: 'success'
+            })
           } else {
             isloading.value = false
           }
@@ -350,7 +385,11 @@ export default {
         return 'Este campo es requerido'
       }
       // eslint-disable-next-line no-useless-escape
-      if (!/^(?=.*\d)(?=.*[a-zA-Z])([A-ZñÑáéíóúÁÉÍÓÚ])[A-Z0-9]+$/i.test(furnituresFields.value.codigoInventario)) {
+      if (
+        !/^(?=.*\d)(?=.*[a-zA-Z])([A-ZñÑáéíóúÁÉÍÓÚ])[A-Z0-9]+$/i.test(
+          furnituresFields.value.codigoInventario
+        )
+      ) {
         folioState.value = false
         return 'El nombre del area solo puede contener letras'
       }
@@ -419,5 +458,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>
