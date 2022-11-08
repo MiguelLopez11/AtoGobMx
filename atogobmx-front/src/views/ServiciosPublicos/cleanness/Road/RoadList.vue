@@ -61,7 +61,6 @@
         ></b-button>
       </template>
     </EasyDataTable>
-
     <b-modal
       id="modal-road"
       tittle="Agregar Ruta"
@@ -73,8 +72,47 @@
     >
       <Form @submit="addRoadService">
         <b-row cols="2">
-          <!-- 1 -->
-          <b-col>
+          <GMapMap
+            :center="center"
+            map-type-id="satellite"
+            :zoom="20"
+            :options ="{
+              zoomControl: true,
+              mapTypeControl: false,
+              scaleControl: false,
+              rotateControl: true,
+              disableDefaultUi: false
+            }"
+            style="width: 1000px; height: 500px"
+          >
+              <GMapMarker
+                :zoom="10"
+                :key="index"
+                v-for="(m, index) in markers"
+                :position="m.position"
+                :clickable="true"
+                :draggable="true"
+                @click="center = m.position"
+              />
+          </GMapMap>
+          <!-- <GMapMap
+            :center="center"
+            :zoom="50"
+            :setMaxZoom="100"
+            style="width: 1000px; height: 500px"
+          >
+            <GMapCluster >
+              <GMapMarker
+                :key="index"
+                v-for="(m, index) in markers"
+                :position="m.position"
+                :clickable="true"
+                :draggable="true"
+                @click="center = m.position"
+              />
+            </GMapCluster>
+          </GMapMap> -->
+          <!-- <b-col>
             <b-form-group class="mt-3" label="Origen">
               <Field
                 name="OriginField"
@@ -93,7 +131,6 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!-- 2 -->
           <b-col>
             <b-form-group class="mt-3" label="Destino">
               <Field name="DestinationField" :rules="validateDestination" as="text">
@@ -109,7 +146,6 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!-- 3 -->
           <b-col>
             <b-form-group class="mt-3" label="Observacion">
               <Field name="ObservationField" :rules="validateObservation" as="text">
@@ -124,16 +160,14 @@
                 name="ObservationField"
               ></ErrorMessage>
             </b-form-group>
-          </b-col>
+          </b-col> -->
         </b-row>
-
         <b-row align-h="end">
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
             @click="resetRoadServiceFields"
           >
-            <!-- v-b-modal.modal-cementery -->
             Cancelar
           </b-button>
           <b-button class="w-auto m-2" variant="success" type="submit">
@@ -147,16 +181,13 @@
 
 <script>
 import RoadService from '@/Services/road.Services'
-import { Form, Field, ErrorMessage } from 'vee-validate'
+import { Form } from 'vee-validate'
 import { ref, inject } from 'vue'
-// import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
     EasyDataTable: window['vue3-easy-data-table'],
-    Form,
-    Field,
-    ErrorMessage
+    Form
   },
   setup () {
     const swal = inject('$swal')
@@ -181,11 +212,18 @@ export default {
       obsevacion: null,
       archivado: false
     })
-
+    const markers = ref([
+      {
+        position: {
+          lat: 20.5546629,
+          lng: -102.4953904
+        }
+      }
+    ])
     const RoadServiceFieldsBlank = ref(
       JSON.parse(JSON.stringify(RoadServiceFields))
     )
-
+    const center = ref({ lat: 20.5546629, lng: -102.4953904 })
     const fields = ref([
       { value: 'rutaId', text: 'ID', sortable: true },
       { value: 'origen', text: 'Origen' },
@@ -215,7 +253,9 @@ export default {
         }
       }
     })
-
+    const addMaker = id => {
+      console.log(id)
+    }
     const onFiltered = filteredItems => {
       currentPage.value = 1
     }
@@ -266,7 +306,9 @@ export default {
         return 'Este campo es requerido'
       }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(RoadServiceFields.value.obsevacion)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(RoadServiceFields.value.obsevacion)
+      ) {
         ObservationState.value = false
         return 'Este campo solo puede contener numeros'
       }
@@ -311,30 +353,31 @@ export default {
 
     const RemoveRoadService = routeId => {
       isloading.value = true
-      swal.fire({
-        title: '¿Estas seguro',
-        text: 'No podras revertir esto',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, Archivar Ruta!',
-        cancelButtonText: 'Cancelar'
-      }).then(result => {
-        if (result.isConfirmed) {
-          deleteRoad(routeId, (data) => {
-            refreshTable()
-          })
-          swal.fire({
-            title: '¡Ruta archivada!',
-            text:
-                'La ruta ha sido archivado satisfactoriamente.',
-            icon: 'success'
-          })
-        } else {
-          isloading.value = false
-        }
-      })
+      swal
+        .fire({
+          title: '¿Estas seguro',
+          text: 'No podras revertir esto',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, Archivar Ruta!',
+          cancelButtonText: 'Cancelar'
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            deleteRoad(routeId, data => {
+              refreshTable()
+            })
+            swal.fire({
+              title: '¡Ruta archivada!',
+              text: 'La ruta ha sido archivado satisfactoriamente.',
+              icon: 'success'
+            })
+          } else {
+            isloading.value = false
+          }
+        })
     }
 
     return {
@@ -353,7 +396,10 @@ export default {
       OriginState,
       DestinationState,
       ObservationState,
+      center,
+      markers,
 
+      addMaker,
       onFiltered,
       addRoadService,
       RemoveRoadService,

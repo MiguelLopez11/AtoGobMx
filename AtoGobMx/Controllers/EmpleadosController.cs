@@ -43,6 +43,36 @@ namespace AtoGobMx.Controllers
                 .ToListAsync();
             return Ok(empleados);
         }
+        //[HttpGet("AlumbradoPublico/{ExpedienteAlumbradoPublicoId}")]
+        //public async Task<ActionResult<Empleado>> GetEmpleadosAlumbradoPublico(int ExpedienteAlumbradoPublicoId)
+        //{
+        //    List<Empleado> empleados = new List<Empleado>();
+        //    //Empleados Registrados en alumbrado 
+        //    var empleadosAlumbrado = await _context.EmpleadosAlumbrado
+        //        .Where(w => !w.Archivado)
+        //        .Where(w => w.ExpedienteAlumbradoId == ExpedienteAlumbradoPublicoId)
+        //        .ToListAsync();
+        //    //todos los empleados
+        //    var emp = await _context.Empleados
+        //            .Include(i => i.Area)
+        //            .Include(i => i.Departamentos)
+        //            .Include(i => i.PuestoTrabajo)
+        //            .Where(w => !w.Archivado)
+        //            .ToListAsync();
+            //si esta vacio, retorna todos los empleados
+            //for (int i = 0; i <= emp.Count; i++)
+            //{
+            //    for (int j =0; j <= empleadosAlumbrado.Count; j++)
+            //    {
+            //        if (emp[i].EmpleadoId != empleadosAlumbrado[j].EmpleadoId)
+            //        {
+            //            empleados.Add(emp[i]);
+            //        }
+            //    }
+            //}
+                //return Ok(empleados);
+            
+        //}
 
         [HttpGet("{EmpleadoId}")]
         public async Task<ActionResult> GetEmpleadosById(int EmpleadoId)

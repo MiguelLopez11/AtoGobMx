@@ -46,6 +46,9 @@ namespace AtoGobMx.Migrations
                     b.Property<int?>("InventarioAlumbradoId")
                         .HasColumnType("int");
 
+                    b.Property<string>("NombreObra")
+                        .HasColumnType("longtext");
+
                     b.Property<int?>("TareaTipoId")
                         .HasColumnType("int");
 
@@ -158,8 +161,8 @@ namespace AtoGobMx.Migrations
                     b.Property<int>("EspaciosDisponibles")
                         .HasColumnType("int");
 
-                    b.Property<int>("MetrosCorrespondientes")
-                        .HasColumnType("int");
+                    b.Property<float>("MetrosCorrespondientes")
+                        .HasColumnType("float");
 
                     b.Property<string>("NombrePropietario")
                         .IsRequired()
@@ -304,7 +307,6 @@ namespace AtoGobMx.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Descripcion")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("NombreEstatus")
@@ -346,6 +348,12 @@ namespace AtoGobMx.Migrations
                     b.Property<string>("LugarPublico")
                         .HasColumnType("longtext");
 
+                    b.Property<string>("Nomenclatura")
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("VeiculoId")
+                        .HasColumnType("int");
+
                     b.HasKey("ExpedienteAlumbradoId");
 
                     b.HasIndex("AlumbradoId");
@@ -353,6 +361,8 @@ namespace AtoGobMx.Migrations
                     b.HasIndex("AreaId");
 
                     b.HasIndex("DepartamentoId");
+
+                    b.HasIndex("VeiculoId");
 
                     b.ToTable("ExpedienteAlumbrado");
                 });
@@ -716,7 +726,6 @@ namespace AtoGobMx.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Descripcion")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("NombreTarea")
@@ -878,11 +887,17 @@ namespace AtoGobMx.Migrations
                         .WithMany("ExpedienteAlumbrado")
                         .HasForeignKey("DepartamentoId");
 
+                    b.HasOne("AtoGobMx.Models.PAT_Vehiculo", "PAT_Vehiculo")
+                        .WithMany("ExpedienteAlumbrado")
+                        .HasForeignKey("VeiculoId");
+
                     b.Navigation("Alumbrado");
 
                     b.Navigation("Area");
 
                     b.Navigation("Departamentos");
+
+                    b.Navigation("PAT_Vehiculo");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.ExpedienteDigital", b =>
@@ -1042,6 +1057,11 @@ namespace AtoGobMx.Migrations
             modelBuilder.Entity("AtoGobMx.Models.PAT_EstatusEquipo", b =>
                 {
                     b.Navigation("EquipoComputo");
+                });
+
+            modelBuilder.Entity("AtoGobMx.Models.PAT_Vehiculo", b =>
+                {
+                    b.Navigation("ExpedienteAlumbrado");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Role", b =>

@@ -7,6 +7,7 @@ import Datepicker from '@vuepic/vue-datepicker'
 import VueToast from 'vue-toast-notification'
 import VueSweetalert2 from 'vue-sweetalert2'
 import vSelect from 'vue-select'
+import VueGoogleMaps from '@fawmi/vue-google-maps'
 
 import 'vue-select/dist/vue-select.css'
 import 'sweetalert2/dist/sweetalert2.min.css'
@@ -22,4 +23,8 @@ const app = createApp(App)
 app.component('date-picker', Datepicker)
 app.component('EasyDataTable', Vue3EasyDataTable)
 app.component('v-select', vSelect)
-app.use(router).use(BootstrapVue3).use(VueToast).use(VueSweetalert2).mount('#app')
+app.use(router).use(BootstrapVue3).use(VueToast).use(VueSweetalert2).use(VueGoogleMaps, {
+  load: {
+    key: 'AIzaSyAu9G_tPHiWvYnf-qkessxqcv4pQaJPhfY'
+  }
+}).mount('#app')

@@ -58,9 +58,8 @@ namespace AtoGobMx.Controllers
             }
             return Ok(alumbrado);
         }
-
         [HttpPost]
-        public async Task<IActionResult> PostAlumbrado(Alumbrado alumbrado)
+        public async Task<ActionResult<Alumbrado>> PostAlumbrado(Alumbrado alumbrado)
         {
             _context.Alumbrado.Add(alumbrado);
             await _context.SaveChangesAsync();
@@ -82,6 +81,7 @@ namespace AtoGobMx.Controllers
 
             alum.AlumbradoId = alumbrado.AlumbradoId;
             alum.DescripcionProblema = alumbrado.DescripcionProblema;
+            alum.NombreObra = alumbrado.NombreObra;
             alum.Domicilio = alumbrado.Domicilio;
             alum.DescripcionDomicilio = alumbrado.DescripcionDomicilio;
             alum.EstatusId = alumbrado.EstatusId;

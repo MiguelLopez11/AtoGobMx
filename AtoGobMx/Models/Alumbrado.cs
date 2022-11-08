@@ -10,6 +10,7 @@ namespace AtoGobMx.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 
         public int AlumbradoId { get; set; }
+        public string? NombreObra { get; set; }
         public string DescripcionProblema { get; set; }
         public string Domicilio { get; set; }
         public string DescripcionDomicilio { get; set; }
