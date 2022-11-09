@@ -12,6 +12,8 @@ namespace AtoGobMx.Models
         public string NombrePropietario { get; set; }
         public int NumeroEspasios { get; set; }
         public float MetrosCorrespondientes { get; set; }
+        public float Longitud { get; set; }
+        public float Latitud { get; set; }
         public int EspaciosDisponibles { get; set; }
         public bool Archivado { get; set; }
 
