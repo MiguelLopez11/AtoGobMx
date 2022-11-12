@@ -181,8 +181,14 @@ namespace AtoGobMx.Controllers
             }
 
             expedientalumbra.ExpedienteAlumbradoId = ExpedienteAlumbradoId;
-            expedienteAlumbrado.DescripcionSolucion = expedientalumbra.DescripcionSolucion;
+            expedientalumbra.DescripcionSolucion = expedienteAlumbrado.DescripcionSolucion;
             expedientalumbra.AlumbradoId = expedienteAlumbrado.AlumbradoId;
+            expedientalumbra.FechaAlta = expedienteAlumbrado.FechaAlta;
+            expedientalumbra.Nomenclatura = expedienteAlumbrado.Nomenclatura;
+            expedientalumbra.LugarPublico = expedienteAlumbrado.LugarPublico;
+            expedientalumbra.Localidad = expedienteAlumbrado.Localidad;
+            expedientalumbra.DepartamentoId = expedienteAlumbrado.DepartamentoId;
+            expedientalumbra.AreaId = expedienteAlumbrado.AreaId;
 
             _context.ExpedienteAlumbrado.Update(expedientalumbra);
             await _context.SaveChangesAsync();
