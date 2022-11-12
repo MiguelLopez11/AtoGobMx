@@ -155,7 +155,6 @@ export default {
       JSON.parse(JSON.stringify(statusLightingFields))
     )
     const fields = ref([
-      { value: 'estatusAlumbradoId', text: 'ID', sortable: true },
       { value: 'nombreEstatus', text: 'Nombre' },
       { value: 'descripcion', text: 'Descripcion' },
       { value: 'actions', text: 'Acciones' }

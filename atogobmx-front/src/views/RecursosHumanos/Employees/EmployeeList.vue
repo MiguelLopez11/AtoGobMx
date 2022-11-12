@@ -41,37 +41,41 @@
       <template #header-actions="header">
         {{ header.text }}
       </template>
-      <!-- <template #item-departaments="items">
-        <div>
-          {{items.departamentos.nombre || items}}
-        </div>
-      </template>
-      <template #item-areas="items">
-        <div>
-          {{items.area.nombre || items}}
-        </div>
-      </template>
-      <template #item-workStations="items">
-        <div>
-
-        </div>
-      </template> -->
       <template #item-actions="items">
-        <b-button
-          @click="RemoveEmployee(items.empleadoId)"
-          class="m-1"
-          variant="outline-danger"
-          ><i class="bi bi-trash3"></i
-        ></b-button>
-        <b-button
-          class="m-1"
-          variant="outline-warning"
-          :to="{
-            name: 'Empleados-Edit',
-            params: { EmpleadoId: items.empleadoId },
-          }"
-          ><i class="bi bi-pencil-square"></i
-        ></b-button>
+        <b-dropdown
+          :disabled="items.archivado"
+          id="ActionsDropdown"
+          size="lg"
+          style="text-color: black"
+          variant="link"
+          toggle-class="text-decoration-none"
+          dropright
+          no-caret
+        >
+          <template #button-content>
+            <i class="bi bi-three-dots-vertical"></i>
+          </template>
+          <b-dropdown-item
+            @click="RemoveEmployee(items.empleadoId)"
+            class="m-1"
+            variant="outline-danger"
+            ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
+          >
+          <b-dropdown-item
+            class="m-1"
+            variant="outline-warning"
+            :to="{
+              name: 'Empleados-Edit',
+              params: { EmpleadoId: items.empleadoId }
+            }"
+            ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
+          >
+        </b-dropdown>
+      </template>
+      <template #item-status="items">
+        <b-badge :variant="items.archivado === false ? 'success': 'danger'">
+        {{items.archivado === false ? 'Activo' : 'Archivado'}}
+        </b-badge>
       </template>
     </EasyDataTable>
     <b-modal
@@ -88,11 +92,7 @@
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre Completo">
-              <Field
-                name="nameField"
-                :rules="validateName"
-                as="text"
-              >
+              <Field name="nameField" :rules="validateName" as="text">
                 <b-form-input
                   v-model="EmployeesFields.nombreCompleto"
                   :state="nameState"
@@ -119,16 +119,15 @@
                 >
                 </b-form-select>
               </Field>
-              <ErrorMessage class="text-danger" name="DepartamentField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="DepartamentField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Area">
-              <Field
-                name="AreaField"
-                :rules="validateArea"
-                as="number"
-              >
+              <Field name="AreaField" :rules="validateArea" as="number">
                 <b-form-select
                   v-model="EmployeesFields.areaId"
                   autofocus
@@ -160,16 +159,15 @@
                 >
                 </b-form-select>
               </Field>
-              <ErrorMessage class="text-danger" name="workStationField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="workStationField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Fecha de Contratación">
-              <Field
-                name="DateWorkField"
-                :rules="validateWorkDate"
-                as="text"
-              >
+              <Field name="DateWorkField" :rules="validateWorkDate" as="text">
                 <Datepicker
                   v-model="EmployeesFields.fechaAlta"
                   locale="es"
@@ -179,7 +177,10 @@
                 >
                 </Datepicker>
               </Field>
-              <ErrorMessage class="text-danger" name="DateWorkField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="DateWorkField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
@@ -246,9 +247,6 @@ export default {
     const areaState = ref(false)
     const workStationState = ref(false)
     const departamentState = ref(false)
-    const headerDepartament = ref()
-    const headerArea = ref()
-    const headerWorkStation = ref()
     const expedientFieldBlank = ref({
       expedienteDigitalId: 0,
       empleadoId: null,
@@ -268,25 +266,27 @@ export default {
     const EmployeesFieldsBlank = ref(
       JSON.parse(JSON.stringify(EmployeesFields))
     )
-    const getAreas = (departamentoId) => {
+    const getAreas = departamentoId => {
       getAreasByDepartament(departamentoId, data => {
         areas.value = data
         if (data.length === 0) {
           swal.fire({
             title: 'No se encuentran areas registradas!',
-            text: 'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
+            text:
+              'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
             icon: 'warning'
           })
         }
       })
     }
-    const getWorkStation = (departamentoId) => {
+    const getWorkStation = departamentoId => {
       getWorkStationByArea(departamentoId, data => {
         workStations.value = data
         if (data.length === 0) {
           swal.fire({
             title: 'No se encuentran puestos de trabajo registrados!',
-            text: 'No se encuentran puestos de trabajo registrados en el area seleccionado, registre primero un puesto de trabajo para continuar.',
+            text:
+              'No se encuentran puestos de trabajo registrados en el area seleccionado, registre primero un puesto de trabajo para continuar.',
             icon: 'warning'
           })
         }
@@ -297,7 +297,8 @@ export default {
       if (data.length === 0) {
         swal.fire({
           title: 'No se encuentran departamentos registrados!',
-          text: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
+          text:
+            'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
           icon: 'warning'
         })
       }
@@ -311,7 +312,9 @@ export default {
         nameState.value = false
         return 'Este campo no puede contener solo espacios'
       }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(EmployeesFields.value.nombreCompleto)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(EmployeesFields.value.nombreCompleto)
+      ) {
         nameState.value = false
         return 'El nombre solo puede contener letras'
       }
@@ -359,12 +362,12 @@ export default {
       return true
     }
     const fields = ref([
-      { value: 'empleadoId', text: 'ID', sortable: true },
       { value: 'nombreCompleto', text: 'Nombre' },
       { value: 'departamentos.nombre', text: 'Departamento' },
       { value: 'area.nombre', text: 'Area de Trabajo' },
       { value: 'puestoTrabajo.nombre', text: 'Puesto de Trabajo' },
       { value: 'fechaAlta', text: 'Fecha de contratación' },
+      { value: 'status', text: 'Estado' },
       { value: 'actions', text: 'Acciones' }
     ])
     const resetEmployeesFields = () => {
@@ -377,7 +380,7 @@ export default {
       departamentState.value = false
       workStationState.value = false
     }
-    getEmployees((data) => {
+    getEmployees(data => {
       employees.value = data
       if (employees.value.length > 0) {
         isloading.value = false
@@ -387,12 +390,12 @@ export default {
         }
       }
     })
-    const onFiltered = (filteredItems) => {
+    const onFiltered = filteredItems => {
       currentPage.value = 1
     }
     const refreshTable = () => {
       isloading.value = true
-      getEmployees((data) => {
+      getEmployees(data => {
         employees.value = data
         if (employees.value.length > 0) {
           isloading.value = false
@@ -406,7 +409,7 @@ export default {
     }
 
     const addEmployee = () => {
-      createEmployee(EmployeesFields.value, (data) => {
+      createEmployee(EmployeesFields.value, data => {
         expedientFieldBlank.value.empleadoId = data.empleadoId
         createExpedient(expedientFieldBlank.value, data => {
           console.log(data)
@@ -422,7 +425,7 @@ export default {
       resetEmployeesFields()
     }
 
-    const RemoveEmployee = (employeeId) => {
+    const RemoveEmployee = employeeId => {
       isloading.value = true
       swal
         .fire({
@@ -437,15 +440,14 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            deleteEmployee(employeeId, (data) => {
+            deleteEmployee(employeeId, data => {
               refreshTable()
             })
-            swal
-              .fire({
-                title: '¡Empleado archivado!',
-                text: 'El empleado ha sido archivado satisfactoriamente .',
-                icon: 'success'
-              })
+            swal.fire({
+              title: '¡Empleado archivado!',
+              text: 'El empleado ha sido archivado satisfactoriamente .',
+              icon: 'success'
+            })
           } else {
             isloading.value = false
           }
@@ -474,9 +476,6 @@ export default {
       workStationState,
       departamentState,
       showModal,
-      headerDepartament,
-      headerArea,
-      headerWorkStation,
 
       onFiltered,
       addEmployee,
@@ -496,5 +495,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

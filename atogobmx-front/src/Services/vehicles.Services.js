@@ -2,11 +2,6 @@ import axios from 'axios'
 
 export default function VehiclesServices () {
   const BaseUrl = 'https://localhost:7065/api'
-  const getAreas = (callback) => {
-    axios.get(`${BaseUrl}/Areas`).then((response) => {
-      callback(response.data)
-    })
-  }
   const getVehicles = (callback) => {
     axios.get(`${BaseUrl}/PAT_Vehiculos`).then((response) => {
       callback(response.data)
@@ -23,21 +18,52 @@ export default function VehiclesServices () {
     })
   }
   const updateVehicle = (data, callback) => {
-    axios.put(`${BaseUrl}/PAT_Vehiculos/${data.areaId}`, data).then((response) => {
+    axios.put(`${BaseUrl}/PAT_Vehiculos/${data.vehiculoId}`, data).then((response) => {
       callback(response.data)
     })
   }
   const deleteVehicle = (vehiculoId, callback) => {
-    axios.delete(`${BaseUrl}/PAT_Vehiculos/${vehiculoId}`).then((response) => {
+    axios.delete(`${BaseUrl}/PAT_EstatusVehiculo/${vehiculoId}`).then((response) => {
+      callback(response.data)
+    })
+  }
+  // Vehicle status
+  const getEstatusVehicles = (callback) => {
+    axios.get(`${BaseUrl}/PAT_EstatusVehiculo`).then((response) => {
+      callback(response.data)
+    })
+  }
+  const getEstatusVehicle = (estatusVehiculoId, callback) => {
+    axios.get(`${BaseUrl}/PAT_EstatusVehiculo/${estatusVehiculoId}`).then((response) => {
+      callback(response.data)
+    })
+  }
+  const createEstatusVehicle = (data, callback) => {
+    axios.post(`${BaseUrl}/PAT_EstatusVehiculo`, data).then((response) => {
+      callback(response.data)
+    })
+  }
+  const updateEstatusVehicle = (data, callback) => {
+    axios.put(`${BaseUrl}/PAT_EstatusVehiculo/${data.estatusVehiculoId}`, data).then((response) => {
+      callback(response.data)
+    })
+  }
+  const deleteEstatusVehicle = (estatusVehiculoId, callback) => {
+    axios.delete(`${BaseUrl}/PAT_EstatusVehiculo/${estatusVehiculoId}`).then((response) => {
       callback(response.data)
     })
   }
   return {
-    getAreas,
     getVehicles,
     getVehicle,
     createVehicle,
     updateVehicle,
-    deleteVehicle
+    deleteVehicle,
+    // ESTATUSVEHICULOS
+    getEstatusVehicles,
+    getEstatusVehicle,
+    createEstatusVehicle,
+    updateEstatusVehicle,
+    deleteEstatusVehicle
   }
 }

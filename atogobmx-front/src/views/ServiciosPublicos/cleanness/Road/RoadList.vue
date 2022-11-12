@@ -225,7 +225,6 @@ export default {
     )
     const center = ref({ lat: 20.5546629, lng: -102.4953904 })
     const fields = ref([
-      { value: 'rutaId', text: 'ID', sortable: true },
       { value: 'origen', text: 'Origen' },
       { value: 'destino', text: 'Destino' },
       { value: 'obsevacion', text: 'Observacion' },

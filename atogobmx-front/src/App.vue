@@ -1,18 +1,16 @@
 <template>
   <div>
     <b-card class="m-2" v-if="isLogged">
-      <b-navbar sticky>
-        <b-navbar-nav>
-          <b-nav-item>
-            <template v-slot:button-content>
-              <b-avatar :src="background" />
-            </template>
-          </b-nav-item>
-          <div>
+      <b-navbar fixed>
+        <b-navbar-nav fill>
+          <b-nav pills>
+          <b-nav-item style="margin-top: -7px; text-decoration-color: white;" to="/">
             <b-avatar :src="background" />
-            <label  class="m-2">AtogobMx</label>
-          </div>
+            AtogobMx
+          </b-nav-item>
+          </b-nav>
           <b-nav-item-dropdown
+            v-if="departament === 'Recursos Humanos' || role === 'Administrador'"
             text="Recursos Humanos"
             dropright
             auto-close="outside"
@@ -43,6 +41,7 @@
           </b-nav-item-dropdown>
           <!--Alumbrado Publico-->
           <b-nav-item-dropdown
+            v-if="departament === 'Servicios Publicos' || role === 'Administrador'"
             text="Servicios Publicos"
             dropright
             auto-close="outside"
@@ -74,6 +73,7 @@
           </b-nav-item-dropdown>
           <!--Cementerios-->
           <b-nav-item-dropdown
+            v-if="departament === 'Cementerios' || role === 'Administrador'"
             text="Cementerios"
             dropright
             auto-close="outside"
@@ -92,6 +92,7 @@
           </b-nav-item-dropdown>
           <!--Aseo-->
           <b-nav-item-dropdown
+            v-if="departament === 'Servicios Publicos' || role === 'Administrador'"
             text="Aseo"
             dropright
             auto-close="outside"
@@ -112,7 +113,7 @@
               Zona
             </b-dropdown-item>
           </b-nav-item-dropdown>
-          <b-nav-item-dropdown text="Patriminio" right auto-close>
+          <b-nav-item-dropdown v-if="departament === 'Patrimonio' || role === 'Administrador'" text="Patriminio">
              <template v-slot:button-content>
               <i class="bi bi-bookmark-check-fill"></i>
             </template>
@@ -128,6 +129,23 @@
               <i class="bi bi-car-front-fill"></i>
               Vehiculos
             </b-dropdown-item>
+            <b-dropdown-item to="/EstatusVehiculo/list">
+              <i class="bi bi-activity"></i>
+              Estatus Vehiculo
+            </b-dropdown-item>
+            <b-dropdown-item to="/Mobiliarios/list">
+              <i class="bi bi-lamp-fill"></i>
+              Mobiliarios
+            </b-dropdown-item>
+            <b-dropdown-item to="/CategoriasMobiliario/list">
+              <i class="bi bi-columns-gap"></i>
+              Categoria Mobiliario
+            </b-dropdown-item>
+            <b-dropdown-item to="/Armeria/list">
+              <i class="bi bi-award-fill"></i>
+              Armeria
+            </b-dropdown-item>
+
           </b-nav-item-dropdown>
           <b-nav-item-dropdown text="Administrador" right auto-close>
             <template v-slot:button-content>
@@ -144,16 +162,14 @@
           </b-nav-item-dropdown>
         </b-navbar-nav>
         <b-row align-h="end" cols="1">
-          <div>
-              <b-button v-if="!isLogged" size="lg" to="/Login" style="background-color: #7367f0" class="mr-3">
+              <b-button v-if="!isLogged" size="lg" to="/Login" style="background-color: #7367f0" class="mr-3 ml-3">
                 <i class="bi bi-box-arrow-right"></i>
                 Login
               </b-button>
-              <b-button v-if="isLogged" size="lg" @click="removeLocalStorgare()" style="background-color: #7367f0" class="mr-3">
+              <b-button v-if="isLogged" size="lg" @click="removeLocalStorgare()" style="background-color: #7367f0" class="mr-3 ml-3">
                 <i class="bi bi-box-arrow-right"></i>
                 Cerrar Sesión
               </b-button>
-          </div>
         </b-row>
       </b-navbar>
     </b-card>
@@ -171,6 +187,9 @@ export default {
     const swal = inject('$swal')
     const background = ref(LogoAtogobMx)
     const isLogged = window.sessionStorage.getItem('isLogged')
+    const departament = window.sessionStorage.getItem('Departamento')
+    const role = window.sessionStorage.getItem('Role')
+    const area = window.sessionStorage.getItem('Area')
     const removeLocalStorgare = () => {
       window.sessionStorage.removeItem('isLogged')
       swal.fire({
@@ -185,6 +204,9 @@ export default {
     return {
       background,
       isLogged,
+      departament,
+      role,
+      area,
 
       removeLocalStorgare
       // roleUser,
@@ -219,7 +241,14 @@ body {
 }
 .dropdown-item.active {
   background-color: #7367f0 !important;
+
   /* --bs-btn-hover-color: #7367f0;
   --bs-btn-active-color: #7367f0; */
+}
+a.router-link-active.router-link-exact-active{
+  color: #7f8996;
+}
+a.nav-link{
+  color: #7f8996;
 }
 </style>

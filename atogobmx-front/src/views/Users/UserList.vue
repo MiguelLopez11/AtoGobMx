@@ -42,22 +42,34 @@
         {{ header.text }}
       </template>
       <template #item-actions="items">
-        <b-button
-          @click="RemoveUser(items.usuarioId)"
-          class="m-1"
-          variant="outline-danger"
-          ><i class="bi bi-trash3"></i
-        ></b-button>
-        <b-button
-          class="m-1"
-          variant="outline-warning"
-          :to="{
-            name: 'Usuarios-Edit',
-            params: { usuarioId: items.usuarioId }
-          }"
+        <b-dropdown
+          id="ActionsDropdown"
+          size="lg"
+          style="text-color: black"
+          variant="link"
+          toggle-class="text-decoration-none"
+          dropright
+          no-caret
         >
-          <i class="bi bi-pencil-square" />
-        </b-button>
+          <template #button-content>
+            <i class="bi bi-three-dots-vertical"></i>
+          </template>
+          <b-dropdown-item
+            @click="RemoveUser(items.usuarioId)"
+            class="m-1"
+            variant="outline-danger"
+            ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
+          >
+          <b-dropdown-item
+            class="m-1"
+            variant="outline-warning"
+            :to="{
+              name: 'Usuarios-Edit',
+              params: { usuarioId: items.usuarioId }
+            }"
+            ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
+          >
+        </b-dropdown>
       </template>
     </EasyDataTable>
     <b-modal
@@ -212,7 +224,7 @@ export default {
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('nombre')
+    const searchField = ref('nombreUsuario')
     const errorMessage = ref('')
     const confirmErrorMessage = ref('')
     // Fields
@@ -227,7 +239,6 @@ export default {
     })
     const areasFieldsBlank = ref(JSON.parse(JSON.stringify(userFields)))
     const fields = ref([
-      { value: 'usuarioId', text: 'ID', sortable: true },
       { value: 'nombreUsuario', text: 'Nombre de usuario' },
       { value: 'role.nombre', text: 'Role' },
       { value: 'actions', text: 'Acciones' }
@@ -362,7 +373,9 @@ export default {
         errorMessage.value = 'Este campo es requerido '
         return errorMessage.value
       }
-      if (!/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{8,}$/(userFields.value.contraseña)) {
+      if (
+        !/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{8,}$/(userFields.value.contraseña)
+      ) {
         passwordState.value = false
         errorMessage.value =
           'La contraseña debe de contener minimo 8 Caracteres, minusculas y mayusculas '
@@ -384,7 +397,11 @@ export default {
         confirmErrorMessage.value = 'Las contraseñas no coinciden '
         return confirmErrorMessage.value
       }
-      if (!/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{8,}$/.test(userFields.value.contraseña)) {
+      if (
+        !/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{8,}$/.test(
+          userFields.value.contraseña
+        )
+      ) {
         passwordState.value = false
         confirmErrorMessage.value =
           'La contraseña debe de contener minimo 8 Caracteres, minusculas y mayusculas '

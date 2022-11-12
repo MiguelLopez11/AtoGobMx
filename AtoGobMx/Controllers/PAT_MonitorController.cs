@@ -19,7 +19,7 @@ namespace AtoGobMx.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PAT_Monitor>>> GetMonitores()
         {
-            var monitores = await _context.PAT_Monitor
+            var monitores = await _context.Monitor
                 .Include(i => i.EquipoComputo)
                 .Where(w => !w.Archivado)
                 .ToListAsync();
@@ -29,7 +29,7 @@ namespace AtoGobMx.Controllers
         [HttpGet("{MonitorId}")]
         public async Task<ActionResult<PAT_Monitor>> GetMonitorById(int MonitorId)
         {
-            var monitor = await _context.PAT_Monitor.FirstOrDefaultAsync(f => f.MonitorId == MonitorId);
+            var monitor = await _context.Monitor.FirstOrDefaultAsync(f => f.MonitorId == MonitorId);
 
             if (monitor == null)
             {
@@ -41,7 +41,7 @@ namespace AtoGobMx.Controllers
         [HttpPost]
         public async Task<ActionResult<PAT_Monitor>> PostMonitor(PAT_Monitor monitor)
         {
-            _context.PAT_Monitor.Add(monitor);
+            _context.Monitor.Add(monitor);
             await _context.SaveChangesAsync();
             return StatusCode(200, "Se ha credo exitosamente");
         }
@@ -52,7 +52,7 @@ namespace AtoGobMx.Controllers
             {
                 return Ok("Los ID ingresados no coinciden");
             }
-            var PAT_Monitor = await _context.PAT_Monitor.FindAsync(MonitorId);
+            var PAT_Monitor = await _context.Monitor.FindAsync(MonitorId);
             if (PAT_Monitor == null)
             {
                 return NotFound();
@@ -62,21 +62,21 @@ namespace AtoGobMx.Controllers
             PAT_Monitor.Pulgadas = monitor.Pulgadas;
             PAT_Monitor.Archivado = monitor.Archivado;
 
-            _context.PAT_Monitor.Update(PAT_Monitor);
+            _context.Monitor.Update(PAT_Monitor);
             await _context.SaveChangesAsync();
             return Ok("Monitor actualizado correctamente");
         }
         [HttpDelete("{MonitorId}")]
         public async Task<IActionResult> DeleteMonitor(int MonitorId)
         {
-            var monitor = await _context.PAT_Monitor
+            var monitor = await _context.Monitor
                 .FirstOrDefaultAsync(f => f.MonitorId == MonitorId);
             if (monitor == null)
             {
                 return NotFound();
             }
             monitor.Archivado = true;
-            _context.PAT_Monitor.Update(monitor);
+            _context.Monitor.Update(monitor);
             await _context.SaveChangesAsync();
             return Ok("Producto archivado");
         }
