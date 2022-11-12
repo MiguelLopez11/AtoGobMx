@@ -37,6 +37,8 @@ namespace AtoGobMx.Context
         public DbSet<PAT_EstatusEquipo> InventarioEstatus { get; set; }
         public DbSet<PAT_EstatusVehiculo> EstatusVehiculo { get; set; }
         public DbSet<PAT_Armeria> Armeria { get; set; }
+        public DbSet<SERMED_Cita> Citas { get; set; }
+        public DbSet<SERMED_Producto> Medicamentos { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
