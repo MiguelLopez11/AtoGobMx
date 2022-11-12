@@ -72,6 +72,7 @@ namespace AtoGobMx.Controllers
             cementeri.NombrePropietario = cementerios.NombrePropietario;
             cementeri.NumeroEspasios = cementerios.NumeroEspasios;
             cementeri.MetrosCorrespondientes = cementerios.MetrosCorrespondientes;
+            cementeri.DireccionId = cementerios.DireccionId;
             cementeri.EspaciosDisponibles = cementerios.EspaciosDisponibles;
 
             _context.Cementerios.Update(cementeri);

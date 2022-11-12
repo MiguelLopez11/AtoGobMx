@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20221112230416_Proveedor")]
+    partial class Proveedor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -750,18 +752,6 @@ namespace AtoGobMx.Migrations
 
                     b.HasKey("ControlValeId");
 
-                    b.HasIndex("DepartamentoId");
-
-                    b.HasIndex("EmpleadoId");
-
-                    b.HasIndex("EstatusValeId");
-
-                    b.HasIndex("ProductoId");
-
-                    b.HasIndex("ProveedorId");
-
-                    b.HasIndex("TipoId");
-
                     b.ToTable("ControlDeVales");
                 });
 
@@ -781,10 +771,6 @@ namespace AtoGobMx.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("DetalleProductoId");
-
-                    b.HasIndex("DetalleValeId");
-
-                    b.HasIndex("ProductoId");
 
                     b.ToTable("PROV_DetalleProducto");
                 });
@@ -811,8 +797,6 @@ namespace AtoGobMx.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("DetalleValeId");
-
-                    b.HasIndex("ProductoId");
 
                     b.ToTable("PROV_DetalleVale");
                 });
@@ -1268,69 +1252,6 @@ namespace AtoGobMx.Migrations
                     b.Navigation("EquipoComputo");
                 });
 
-            modelBuilder.Entity("AtoGobMx.Models.PROV_ControlVales", b =>
-                {
-                    b.HasOne("AtoGobMx.Models.Departamentos", "Departamentos")
-                        .WithMany("ControlDeVales")
-                        .HasForeignKey("DepartamentoId");
-
-                    b.HasOne("AtoGobMx.Models.Empleado", "Empleados")
-                        .WithMany("ControlDeVales")
-                        .HasForeignKey("EmpleadoId");
-
-                    b.HasOne("AtoGobMx.Models.PROV_EstatusVale", "PROV_EstatusVale")
-                        .WithMany("ControlDeVales")
-                        .HasForeignKey("EstatusValeId");
-
-                    b.HasOne("AtoGobMx.Models.PROV_Producto", "PROV_Producto")
-                        .WithMany("ControlDeVales")
-                        .HasForeignKey("ProductoId");
-
-                    b.HasOne("AtoGobMx.Models.PROV_Proveedor", "PROV_Proveedor")
-                        .WithMany("ControlDeVales")
-                        .HasForeignKey("ProveedorId");
-
-                    b.HasOne("AtoGobMx.Models.PROV_TipoVales", "TipoVales")
-                        .WithMany("ControlDeVales")
-                        .HasForeignKey("TipoId");
-
-                    b.Navigation("Departamentos");
-
-                    b.Navigation("Empleados");
-
-                    b.Navigation("PROV_EstatusVale");
-
-                    b.Navigation("PROV_Producto");
-
-                    b.Navigation("PROV_Proveedor");
-
-                    b.Navigation("TipoVales");
-                });
-
-            modelBuilder.Entity("AtoGobMx.Models.PROV_DetalleProducto", b =>
-                {
-                    b.HasOne("AtoGobMx.Models.PROV_DetalleVale", "PROV_DetalleVale")
-                        .WithMany("PROV_DetalleProducto")
-                        .HasForeignKey("DetalleValeId");
-
-                    b.HasOne("AtoGobMx.Models.PROV_Producto", "PROV_Producto")
-                        .WithMany("PROV_DetalleProducto")
-                        .HasForeignKey("ProductoId");
-
-                    b.Navigation("PROV_DetalleVale");
-
-                    b.Navigation("PROV_Producto");
-                });
-
-            modelBuilder.Entity("AtoGobMx.Models.PROV_DetalleVale", b =>
-                {
-                    b.HasOne("AtoGobMx.Models.PROV_Producto", "PROV_Producto")
-                        .WithMany("PROV_DetalleVale")
-                        .HasForeignKey("ProductoId");
-
-                    b.Navigation("PROV_Producto");
-                });
-
             modelBuilder.Entity("AtoGobMx.Models.PuestoTrabajo", b =>
                 {
                     b.HasOne("AtoGobMx.Models.Area", "Area")
@@ -1379,8 +1300,6 @@ namespace AtoGobMx.Migrations
 
             modelBuilder.Entity("AtoGobMx.Models.Departamentos", b =>
                 {
-                    b.Navigation("ControlDeVales");
-
                     b.Navigation("ExpedienteAlumbrado");
                 });
 
@@ -1391,8 +1310,6 @@ namespace AtoGobMx.Migrations
 
             modelBuilder.Entity("AtoGobMx.Models.Empleado", b =>
                 {
-                    b.Navigation("ControlDeVales");
-
                     b.Navigation("EmpleadosAlumbrado");
 
                     b.Navigation("Usuarios");
@@ -1431,35 +1348,6 @@ namespace AtoGobMx.Migrations
             modelBuilder.Entity("AtoGobMx.Models.PAT_Vehiculo", b =>
                 {
                     b.Navigation("ExpedienteAlumbrado");
-                });
-
-            modelBuilder.Entity("AtoGobMx.Models.PROV_DetalleVale", b =>
-                {
-                    b.Navigation("PROV_DetalleProducto");
-                });
-
-            modelBuilder.Entity("AtoGobMx.Models.PROV_EstatusVale", b =>
-                {
-                    b.Navigation("ControlDeVales");
-                });
-
-            modelBuilder.Entity("AtoGobMx.Models.PROV_Producto", b =>
-                {
-                    b.Navigation("ControlDeVales");
-
-                    b.Navigation("PROV_DetalleProducto");
-
-                    b.Navigation("PROV_DetalleVale");
-                });
-
-            modelBuilder.Entity("AtoGobMx.Models.PROV_Proveedor", b =>
-                {
-                    b.Navigation("ControlDeVales");
-                });
-
-            modelBuilder.Entity("AtoGobMx.Models.PROV_TipoVales", b =>
-                {
-                    b.Navigation("ControlDeVales");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Role", b =>

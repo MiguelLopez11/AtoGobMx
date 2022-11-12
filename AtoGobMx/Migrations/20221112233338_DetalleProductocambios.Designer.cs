@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20221112233338_DetalleProductocambios")]
+    partial class DetalleProductocambios
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -812,8 +814,6 @@ namespace AtoGobMx.Migrations
 
                     b.HasKey("DetalleValeId");
 
-                    b.HasIndex("ProductoId");
-
                     b.ToTable("PROV_DetalleVale");
                 });
 
@@ -1322,15 +1322,6 @@ namespace AtoGobMx.Migrations
                     b.Navigation("PROV_Producto");
                 });
 
-            modelBuilder.Entity("AtoGobMx.Models.PROV_DetalleVale", b =>
-                {
-                    b.HasOne("AtoGobMx.Models.PROV_Producto", "PROV_Producto")
-                        .WithMany("PROV_DetalleVale")
-                        .HasForeignKey("ProductoId");
-
-                    b.Navigation("PROV_Producto");
-                });
-
             modelBuilder.Entity("AtoGobMx.Models.PuestoTrabajo", b =>
                 {
                     b.HasOne("AtoGobMx.Models.Area", "Area")
@@ -1448,8 +1439,6 @@ namespace AtoGobMx.Migrations
                     b.Navigation("ControlDeVales");
 
                     b.Navigation("PROV_DetalleProducto");
-
-                    b.Navigation("PROV_DetalleVale");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.PROV_Proveedor", b =>

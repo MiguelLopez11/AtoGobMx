@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20221112232739_ControldeValesmodificaciones")]
+    partial class ControldeValesmodificaciones
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -782,10 +784,6 @@ namespace AtoGobMx.Migrations
 
                     b.HasKey("DetalleProductoId");
 
-                    b.HasIndex("DetalleValeId");
-
-                    b.HasIndex("ProductoId");
-
                     b.ToTable("PROV_DetalleProducto");
                 });
 
@@ -811,8 +809,6 @@ namespace AtoGobMx.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("DetalleValeId");
-
-                    b.HasIndex("ProductoId");
 
                     b.ToTable("PROV_DetalleVale");
                 });
@@ -1307,30 +1303,6 @@ namespace AtoGobMx.Migrations
                     b.Navigation("TipoVales");
                 });
 
-            modelBuilder.Entity("AtoGobMx.Models.PROV_DetalleProducto", b =>
-                {
-                    b.HasOne("AtoGobMx.Models.PROV_DetalleVale", "PROV_DetalleVale")
-                        .WithMany("PROV_DetalleProducto")
-                        .HasForeignKey("DetalleValeId");
-
-                    b.HasOne("AtoGobMx.Models.PROV_Producto", "PROV_Producto")
-                        .WithMany("PROV_DetalleProducto")
-                        .HasForeignKey("ProductoId");
-
-                    b.Navigation("PROV_DetalleVale");
-
-                    b.Navigation("PROV_Producto");
-                });
-
-            modelBuilder.Entity("AtoGobMx.Models.PROV_DetalleVale", b =>
-                {
-                    b.HasOne("AtoGobMx.Models.PROV_Producto", "PROV_Producto")
-                        .WithMany("PROV_DetalleVale")
-                        .HasForeignKey("ProductoId");
-
-                    b.Navigation("PROV_Producto");
-                });
-
             modelBuilder.Entity("AtoGobMx.Models.PuestoTrabajo", b =>
                 {
                     b.HasOne("AtoGobMx.Models.Area", "Area")
@@ -1433,11 +1405,6 @@ namespace AtoGobMx.Migrations
                     b.Navigation("ExpedienteAlumbrado");
                 });
 
-            modelBuilder.Entity("AtoGobMx.Models.PROV_DetalleVale", b =>
-                {
-                    b.Navigation("PROV_DetalleProducto");
-                });
-
             modelBuilder.Entity("AtoGobMx.Models.PROV_EstatusVale", b =>
                 {
                     b.Navigation("ControlDeVales");
@@ -1446,10 +1413,6 @@ namespace AtoGobMx.Migrations
             modelBuilder.Entity("AtoGobMx.Models.PROV_Producto", b =>
                 {
                     b.Navigation("ControlDeVales");
-
-                    b.Navigation("PROV_DetalleProducto");
-
-                    b.Navigation("PROV_DetalleVale");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.PROV_Proveedor", b =>

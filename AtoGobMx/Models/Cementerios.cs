@@ -15,7 +15,11 @@ namespace AtoGobMx.Models
         public float Longitud { get; set; }
         public float Latitud { get; set; }
         public int EspaciosDisponibles { get; set; }
+        public int? DireccionId { get; set; }
         public bool Archivado { get; set; }
+
+        [ForeignKey("DireccionId")]
+        public DireccionCementerio? DireccionCementerio { get; set; }
 
     }
 }
