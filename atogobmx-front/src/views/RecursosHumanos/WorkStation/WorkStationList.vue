@@ -202,7 +202,6 @@ export default {
       JSON.parse(JSON.stringify(workStationFields))
     )
     const fields = ref([
-      { value: 'puestoTrabajoId', text: 'ID', sortable: true },
       { value: 'nombre', text: 'Nombre' },
       { value: 'departamentos.nombre', text: 'Departamento' },
       { value: 'area.nombre', text: 'Area' },

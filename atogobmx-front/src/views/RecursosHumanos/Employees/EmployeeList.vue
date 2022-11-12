@@ -43,6 +43,7 @@
       </template>
       <template #item-actions="items">
         <b-dropdown
+          :disabled="items.archivado"
           id="ActionsDropdown"
           size="lg"
           style="text-color: black"
@@ -70,6 +71,11 @@
             ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
           >
         </b-dropdown>
+      </template>
+      <template #item-status="items">
+        <b-badge :variant="items.archivado === false ? 'success': 'danger'">
+        {{items.archivado === false ? 'Activo' : 'Archivado'}}
+        </b-badge>
       </template>
     </EasyDataTable>
     <b-modal
@@ -356,12 +362,12 @@ export default {
       return true
     }
     const fields = ref([
-      { value: 'empleadoId', text: 'ID', sortable: true },
       { value: 'nombreCompleto', text: 'Nombre' },
       { value: 'departamentos.nombre', text: 'Departamento' },
       { value: 'area.nombre', text: 'Area de Trabajo' },
       { value: 'puestoTrabajo.nombre', text: 'Puesto de Trabajo' },
       { value: 'fechaAlta', text: 'Fecha de contratación' },
+      { value: 'status', text: 'Estado' },
       { value: 'actions', text: 'Acciones' }
     ])
     const resetEmployeesFields = () => {

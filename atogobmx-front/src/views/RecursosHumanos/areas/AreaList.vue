@@ -188,7 +188,6 @@ export default {
     })
     const areasFieldsBlank = ref(JSON.parse(JSON.stringify(areaFields)))
     const fields = ref([
-      { value: 'areaId', text: 'ID', sortable: true },
       { value: 'nombre', text: 'Nombre' },
       { value: 'descripcion', text: 'Descripcion' },
       { value: 'departamentos.nombre', text: 'Departamento' },

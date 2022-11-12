@@ -209,7 +209,6 @@ export default {
     )
 
     const fields = ref([
-      { value: 'aseoId', text: 'ID', sortable: true },
       { value: 'nombreServicio', text: 'Nombre del servicio' },
       { value: 'establecimientoPublico', text: 'Establecimiento publico' },
       { value: 'domicilio', text: 'Domicilio' },

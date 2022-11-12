@@ -158,7 +158,6 @@ export default {
       JSON.parse(JSON.stringify(typeFurnitureFields))
     )
     const fields = ref([
-      { value: 'tipoMobiliarioId', text: 'ID', sortable: true },
       { value: 'nombre', text: 'Nombre' },
       { value: 'descripcion', text: 'Descripcion' },
       { value: 'actions', text: 'Acciones' }

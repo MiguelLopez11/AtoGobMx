@@ -150,7 +150,6 @@ export default {
     })
     const roleFieldsBlank = ref(JSON.parse(JSON.stringify(roleFields)))
     const fields = ref([
-      { value: 'roleId', text: 'ID', sortable: true },
       { value: 'nombre', text: 'Nombre' },
       { value: 'descripcion', text: 'Descripcion' },
       { value: 'actions', text: 'Acciones' }

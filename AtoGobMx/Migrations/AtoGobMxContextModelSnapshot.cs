@@ -117,6 +117,15 @@ namespace AtoGobMx.Migrations
                     b.HasIndex("DepartamentoId");
 
                     b.ToTable("Area");
+
+                    b.HasData(
+                        new
+                        {
+                            AreaId = 1,
+                            Archivado = false,
+                            DepartamentoId = 1,
+                            Nombre = "Soporte TI"
+                        });
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Aseo", b =>
@@ -195,6 +204,14 @@ namespace AtoGobMx.Migrations
                     b.HasKey("DepartamentoId");
 
                     b.ToTable("Departamentos");
+
+                    b.HasData(
+                        new
+                        {
+                            DepartamentoId = 1,
+                            Archivado = false,
+                            Nombre = "Direccion de Sistemas"
+                        });
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.DireccionCementerio", b =>
@@ -271,6 +288,19 @@ namespace AtoGobMx.Migrations
                     b.HasIndex("PuestoTrabajoId");
 
                     b.ToTable("Empleados");
+
+                    b.HasData(
+                        new
+                        {
+                            EmpleadoId = 1,
+                            Archivado = false,
+                            AreaId = 1,
+                            DepartamentoId = 1,
+                            FechaAlta = new DateTime(2022, 11, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            NombreCompleto = "Administrador",
+                            PuestoTrabajoId = 1,
+                            TieneExpediente = true
+                        });
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.EmpleadosAlumbrado", b =>
@@ -351,7 +381,7 @@ namespace AtoGobMx.Migrations
                     b.Property<string>("Nomenclatura")
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("VeiculoId")
+                    b.Property<int?>("PAT_VehiculoVehiculoId")
                         .HasColumnType("int");
 
                     b.HasKey("ExpedienteAlumbradoId");
@@ -362,7 +392,7 @@ namespace AtoGobMx.Migrations
 
                     b.HasIndex("DepartamentoId");
 
-                    b.HasIndex("VeiculoId");
+                    b.HasIndex("PAT_VehiculoVehiculoId");
 
                     b.ToTable("ExpedienteAlumbrado");
                 });
@@ -758,6 +788,16 @@ namespace AtoGobMx.Migrations
                     b.HasIndex("DepartamentoId");
 
                     b.ToTable("PuestoTrabajo");
+
+                    b.HasData(
+                        new
+                        {
+                            PuestoTrabajoId = 1,
+                            Archivado = false,
+                            AreaId = 1,
+                            DepartamentoId = 1,
+                            Nombre = "Auxiliar de soporte"
+                        });
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Role", b =>
@@ -779,6 +819,14 @@ namespace AtoGobMx.Migrations
                     b.HasKey("RoleId");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            RoleId = 1,
+                            Archivado = false,
+                            Nombre = "Administrador"
+                        });
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Ruta", b =>
@@ -861,6 +909,18 @@ namespace AtoGobMx.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("Usuarios");
+
+                    b.HasData(
+                        new
+                        {
+                            UsuarioId = 1,
+                            Archivado = false,
+                            ConfirmarContraseña = "Admin123",
+                            Contraseña = "Admin123",
+                            EmpleadoId = 1,
+                            NombreUsuario = "Administrador",
+                            RoleId = 1
+                        });
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Zona", b =>
@@ -978,17 +1038,15 @@ namespace AtoGobMx.Migrations
                         .WithMany("ExpedienteAlumbrado")
                         .HasForeignKey("DepartamentoId");
 
-                    b.HasOne("AtoGobMx.Models.PAT_Vehiculo", "PAT_Vehiculo")
+                    b.HasOne("AtoGobMx.Models.PAT_Vehiculo", null)
                         .WithMany("ExpedienteAlumbrado")
-                        .HasForeignKey("VeiculoId");
+                        .HasForeignKey("PAT_VehiculoVehiculoId");
 
                     b.Navigation("Alumbrado");
 
                     b.Navigation("Area");
 
                     b.Navigation("Departamentos");
-
-                    b.Navigation("PAT_Vehiculo");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.ExpedienteDigital", b =>

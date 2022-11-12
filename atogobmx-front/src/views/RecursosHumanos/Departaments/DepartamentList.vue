@@ -161,7 +161,6 @@ export default {
       JSON.parse(JSON.stringify(departamentFields))
     )
     const fields = ref([
-      { value: 'departamentoId', text: 'ID', sortable: true },
       { value: 'nombre', text: 'Nombre' },
       { value: 'descripcion', text: 'Descripcion' },
       { value: 'actions', text: 'Acciones' }

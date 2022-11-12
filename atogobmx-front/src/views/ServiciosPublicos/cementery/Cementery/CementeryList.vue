@@ -216,7 +216,6 @@ export default {
     )
 
     const fields = ref([
-      { value: 'cementeriosId', text: 'ID', sortable: true },
       { value: 'nombrePropietario', text: 'Nombre de propietario' },
       { value: 'numeroEspasios', text: 'Espacios' },
       { value: 'metrosCorrespondientes', text: 'Metros' },

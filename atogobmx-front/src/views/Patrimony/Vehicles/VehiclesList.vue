@@ -302,7 +302,6 @@ export default {
     })
     const vehiclesFieldsBlank = ref(JSON.parse(JSON.stringify(vehiclesFields)))
     const fields = ref([
-      { value: 'vehiculoId', text: 'ID', sortable: true },
       { value: 'marca', text: 'Marca' },
       { value: 'modelo', text: 'Submarca' },
       { value: 'color', text: 'Color' },

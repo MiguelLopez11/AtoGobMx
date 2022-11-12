@@ -156,7 +156,6 @@ export default {
       JSON.parse(JSON.stringify(taskTypeLightingFields))
     )
     const fields = ref([
-      { value: 'tareaTipoId', text: 'ID', sortable: true },
       { value: 'nombreTarea', text: 'Nombre' },
       { value: 'descripcion', text: 'Descripcion' },
       { value: 'actions', text: 'Acciones' }
