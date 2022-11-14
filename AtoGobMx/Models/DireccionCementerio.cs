@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AtoGobMx.Models
@@ -14,5 +15,8 @@ namespace AtoGobMx.Models
         public string Calle { get; set; }
         public int NumeroExterior { get; set; }
         public bool Archivado { get; set; }
+
+        [JsonIgnore]
+        public virtual IEnumerable<Cementerios>? Cementerios { get; set; }
     }
 }

@@ -4,20 +4,21 @@ using System.Text.Json.Serialization;
 
 namespace AtoGobMx.Models
 {
-    public class Departamentos
+    public class PROV_Producto
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int DepartamentoId { get; set; }
+        public int ProductoId { get; set; }
         public string Nombre { get; set; }
-        public string? Descripcion { get; set; }
+        public int Precio { get; set; }
         public bool Archivado { get; set; }
 
         [JsonIgnore]
-        public virtual IEnumerable<ExpedienteAlumbrado>? ExpedienteAlumbrado { get; set; }
-        [JsonIgnore]
         public virtual IEnumerable<PROV_ControlVales>? ControlDeVales { get; set; }
-        //[JsonIgnore]
-        //public virtual IEnumerable<Inventario>? Inventario { get; set; }
+        [JsonIgnore]
+        public virtual IEnumerable<PROV_DetalleProducto>? PROV_DetalleProducto { get; set; }
+        [JsonIgnore]
+        public virtual IEnumerable<PROV_DetalleVale>? PROV_DetalleVale { get; set; }
+
     }
 }
