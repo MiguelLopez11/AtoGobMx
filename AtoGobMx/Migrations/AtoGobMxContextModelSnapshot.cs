@@ -1333,7 +1333,131 @@ namespace AtoGobMx.Migrations
 
                     b.Navigation("EstatusEquipo");
                 });
+            modelBuilder.Entity("AtoGobMx.Models.OP_EstatusObras", b =>
+            {
+                b.Property<int>("EstatusObraId")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
+                b.Property<bool>("Archivado")
+                    .HasColumnType("tinyint(1)");
+
+                b.Property<string>("Descripcion")
+                    .IsRequired()
+                    .HasColumnType("longtext");
+
+                b.Property<string>("NombreEstatus")
+                    .IsRequired()
+                    .HasColumnType("longtext");
+
+                b.HasKey("EstatusObraId");
+
+                b.ToTable("OP_EstatusObras");
+            });
+
+            modelBuilder.Entity("AtoGobMx.Models.OP_Obras", b =>
+            {
+                b.Property<int>("ObraId")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
+
+                b.Property<bool>("Archivado")
+                    .HasColumnType("tinyint(1)");
+
+                b.Property<string>("Descripcion")
+                    .IsRequired()
+                    .HasColumnType("longtext");
+
+                b.Property<int?>("EstatusObraId")
+                    .HasColumnType("int");
+
+                b.Property<float>("Latitud")
+                    .HasColumnType("float");
+
+                b.Property<float>("Longitud")
+                    .HasColumnType("float");
+
+                b.Property<string>("NombreObra")
+                    .IsRequired()
+                    .HasColumnType("longtext");
+
+                b.HasKey("ObraId");
+
+                b.HasIndex("EstatusObraId");
+
+                b.ToTable("ObrasPublicas");
+            });
+
+            modelBuilder.Entity("AtoGobMx.Models.OP_Obras", b =>
+            {
+                b.HasOne("AtoGobMx.Models.OP_EstatusObras", "OP_EstatusObras")
+                    .WithMany("ObrasPublicas")
+                    .HasForeignKey("EstatusObraId");
+
+                b.Navigation("OP_EstatusObras");
+            });
+            modelBuilder.Entity("AtoGobMx.Models.PROV_ControlVales", b =>
+            {
+                b.HasOne("AtoGobMx.Models.Departamentos", "Departamentos")
+                    .WithMany("ControlDeVales")
+                    .HasForeignKey("DepartamentoId");
+
+                b.HasOne("AtoGobMx.Models.Empleado", "Empleados")
+                    .WithMany("ControlDeVales")
+                    .HasForeignKey("EmpleadoId");
+
+                b.HasOne("AtoGobMx.Models.PROV_EstatusVale", "PROV_EstatusVale")
+                    .WithMany("ControlDeVales")
+                    .HasForeignKey("EstatusValeId");
+
+                b.HasOne("AtoGobMx.Models.PROV_Producto", "PROV_Producto")
+                    .WithMany("ControlDeVales")
+                    .HasForeignKey("ProductoId");
+
+                b.HasOne("AtoGobMx.Models.PROV_Proveedor", "PROV_Proveedor")
+                    .WithMany("ControlDeVales")
+                    .HasForeignKey("ProveedorId");
+
+                b.HasOne("AtoGobMx.Models.PROV_TipoVales", "TipoVales")
+                    .WithMany("ControlDeVales")
+                    .HasForeignKey("TipoId");
+
+                b.Navigation("Departamentos");
+
+                b.Navigation("Empleados");
+
+                b.Navigation("PROV_EstatusVale");
+
+                b.Navigation("PROV_Producto");
+
+                b.Navigation("PROV_Proveedor");
+
+                b.Navigation("TipoVales");
+            });
+
+            modelBuilder.Entity("AtoGobMx.Models.PROV_DetalleProducto", b =>
+            {
+                b.HasOne("AtoGobMx.Models.PROV_DetalleVale", "PROV_DetalleVale")
+                    .WithMany("PROV_DetalleProducto")
+                    .HasForeignKey("DetalleValeId");
+
+                b.HasOne("AtoGobMx.Models.PROV_Producto", "PROV_Producto")
+                    .WithMany("PROV_DetalleProducto")
+                    .HasForeignKey("ProductoId");
+
+                b.Navigation("PROV_DetalleVale");
+
+                b.Navigation("PROV_Producto");
+            });
+
+            modelBuilder.Entity("AtoGobMx.Models.PROV_DetalleVale", b =>
+            {
+                b.HasOne("AtoGobMx.Models.PROV_Producto", "PROV_Producto")
+                    .WithMany("PROV_DetalleVale")
+                    .HasForeignKey("ProductoId");
+
+                b.Navigation("PROV_Producto");
+            });
             modelBuilder.Entity("AtoGobMx.Models.PAT_Mobiliario", b =>
                 {
                     b.HasOne("AtoGobMx.Models.Area", "Area")
