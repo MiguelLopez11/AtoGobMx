@@ -12,6 +12,21 @@
           <Form @submit="onUpdateComputer()">
             <b-row cols="3">
               <b-col>
+                <b-form-group class="mt-3" label="Nomenclatura">
+                  <Field name="FolioField" :rules="validateFolio" as="text">
+                    <b-form-input
+                      v-model="computer.codigoInventario"
+                      :state="folioState"
+                    >
+                    </b-form-input>
+                  </Field>
+                  <ErrorMessage
+                    class="text-danger"
+                    name="FolioField"
+                  ></ErrorMessage>
+                </b-form-group>
+              </b-col>
+              <b-col>
                 <b-form-group class="mt-3" label="Marca">
                   <Field name="BrandField" :rules="validateBrand" as="text">
                     <b-form-input
@@ -207,6 +222,7 @@ export default {
     const statusComputers = ref([])
     const router = useRoute()
     const redirect = useRouter()
+    const folioState = ref(false)
     const brandState = ref(false)
     const memoryState = ref(false)
     const storageState = ref(false)
@@ -236,7 +252,6 @@ export default {
       })
     }
     getComputer(computerId.value, data => {
-      console.log(data)
       computer.value = data
       getAreas(data.departamentoId)
       validateState()
@@ -277,6 +292,19 @@ export default {
       })
     }
     // VALIDATIONS
+    const validateFolio = () => {
+      if (!computer.value.codigoInventario) {
+        validateState()
+        return 'Este campo es requerido'
+      }
+      // eslint-disable-next-line no-useless-escape
+      if (!/^(?=.*\d)(?=.*[a-zA-Z])([A-ZñÑáéíóúÁÉÍÓÚ])[A-Z0-9]+$/i.test(computer.value.codigoInventario)) {
+        validateState()
+        return 'El nombre del area solo puede contener letras'
+      }
+      validateState()
+      return true
+    }
     const validateBrand = () => {
       if (!computer.value.marca) {
         validateState()
@@ -354,7 +382,9 @@ export default {
       areaState.value =
         computer.value.areaId !== 0 && computer.value.areaId !== null
       stateComputerState.value =
-        computer.value.estatusEquipoId !== 0 && computer.value.estatusEquipoId !== null
+        computer.value.estatusEquipoId !== 0 &&
+        computer.value.estatusEquipoId !== null
+      folioState.value = computer.value.codigoInventario !== null && /^(?=.*\d)(?=.*[a-zA-Z])([A-ZñÑáéíóúÁÉÍÓÚ])[A-Z0-9]+$/i.test(computer.value.codigoInventario)
       return ''
     }
     return {
@@ -371,6 +401,7 @@ export default {
       computerId,
       statusComputers,
       stateComputerState,
+      folioState,
 
       validateBrand,
       validateMemory,
@@ -381,7 +412,8 @@ export default {
       onUpdateComputer,
       validateState,
       getAreas,
-      validateStateComputer
+      validateStateComputer,
+      validateFolio
     }
   }
 }

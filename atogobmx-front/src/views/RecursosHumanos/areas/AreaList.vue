@@ -42,22 +42,34 @@
         {{ header.text }}
       </template>
       <template #item-actions="items">
-        <b-button
-          @click="RemoveArea(items.areaId)"
-          class="m-1"
-          variant="outline-danger"
-          ><i class="bi bi-trash3"></i
-        ></b-button>
-        <b-button
-          class="m-1"
-          variant="outline-warning"
-          :to="{
-            name: 'Area-Edit',
-            params: { AreaId: items.areaId }
-          }"
+        <b-dropdown
+          id="ActionsDropdown"
+          size="lg"
+          style="text-color: black"
+          variant="link"
+          toggle-class="text-decoration-none"
+          dropright
+          no-caret
         >
-          <i class="bi bi-pencil-square" />
-        </b-button>
+          <template #button-content>
+            <i class="bi bi-three-dots-vertical"></i>
+          </template>
+          <b-dropdown-item
+            @click="RemoveArea(items.areaId)"
+            class="m-1"
+            variant="outline-danger"
+            ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
+          >
+          <b-dropdown-item
+            class="m-1"
+            variant="outline-warning"
+            :to="{
+              name: 'Area-Edit',
+              params: { AreaId: items.areaId }
+            }"
+            ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
+          >
+        </b-dropdown>
       </template>
     </EasyDataTable>
     <b-modal
@@ -73,11 +85,7 @@
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nombre">
-              <Field
-                name="NameField"
-                :rules="validateArea"
-                as="text"
-              >
+              <Field name="NameField" :rules="validateArea" as="text">
                 <b-form-input v-model="areaFields.nombre" :state="nameState">
                 </b-form-input>
               </Field>
@@ -86,7 +94,11 @@
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Departamento">
-              <Field name="DepartamentField" :rules="validateDepartament" as="number">
+              <Field
+                name="DepartamentField"
+                :rules="validateDepartament"
+                as="number"
+              >
                 <b-form-select
                   v-model="areaFields.departamentoId"
                   autofocus
@@ -97,7 +109,10 @@
                 >
                 </b-form-select>
               </Field>
-              <ErrorMessage class="text-danger" name="DepartamentField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="DepartamentField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -161,18 +176,18 @@ export default {
       departamentoId: 0,
       archivado: false
     })
-    watch(departaments, (values) => {
+    watch(departaments, values => {
       if (values.length === 0) {
         swal.fire({
           title: 'No se encuentran departamentos registrados!',
-          text: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
+          text:
+            'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
           icon: 'warning'
         })
       }
     })
     const areasFieldsBlank = ref(JSON.parse(JSON.stringify(areaFields)))
     const fields = ref([
-      { value: 'areaId', text: 'ID', sortable: true },
       { value: 'nombre', text: 'Nombre' },
       { value: 'descripcion', text: 'Descripcion' },
       { value: 'departamentos.nombre', text: 'Departamento' },
@@ -233,7 +248,8 @@ export default {
       createArea(areaFields.value, data => {
         swal.fire({
           title: '¡Area de trabajo registrado correctamente!',
-          text: 'El Area de trabajo se ha registrado al sistema satisfactoriamente.',
+          text:
+            'El Area de trabajo se ha registrado al sistema satisfactoriamente.',
           icon: 'success'
         })
         refreshTable()
@@ -264,7 +280,8 @@ export default {
             swal
               .fire({
                 title: 'Area de trabajo archivado!',
-                text: 'El Area de trabajo ha sido archivado satisfactoriamente .',
+                text:
+                  'El Area de trabajo ha sido archivado satisfactoriamente .',
                 icon: 'success'
               })
               .then(result => {
@@ -310,5 +327,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

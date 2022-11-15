@@ -263,7 +263,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'Dirección de sistemas'
+      departamento: 'Dirección de Sistemas y Tecnologías de la Comunicación'
     }
   },
   {
@@ -273,7 +273,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'Dirección de sistemas'
+      departamento: 'Dirección de Sistemas y Tecnologías de la Comunicación'
     }
   },
   {
@@ -283,7 +283,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'Dirección de sistemas'
+      departamento: 'Dirección de Sistemas y Tecnologías de la Comunicación'
     }
   },
   {
@@ -293,7 +293,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'Dirección de sistemas'
+      departamento: 'Dirección de Sistemas y Tecnologías de la Comunicación'
     }
   },
   {
@@ -385,6 +385,96 @@ const routes = [
       rol: 'Empleado',
       departamento: 'Patrimonio'
     }
+  },
+  {
+    path: '/Vehiculos/:VehiculoId',
+    name: 'Vehiculos-Edit',
+    component: () => import('@/views/Patrimony/Vehicles/VehicleEdit.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Patrimonio'
+    }
+  },
+  {
+    path: '/Mobiliarios/list',
+    name: 'Mobiliarios',
+    component: () => import('@/views/Patrimony/Furnitures/FurnitureList.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Patrimonio'
+    }
+  },
+  {
+    path: '/Mobiliarios/:MobiliarioId',
+    name: 'Mobiliarios-Edit',
+    component: () => import('@/views/Patrimony/Furnitures/FurnitureEdit.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Patrimonio'
+    }
+  },
+  {
+    path: '/CategoriasMobiliario/list',
+    name: 'CategoriasMobiliario',
+    component: () => import('@/views/Patrimony/Furnitures/TypeFurnitures/TypeFurnitureList.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Patrimonio'
+    }
+  },
+  {
+    path: '/CategoriasMobiliario/:TipoMobiliarioId',
+    name: 'CategoriasMobiliario-Edit',
+    component: () => import('@/views/Patrimony/Furnitures/TypeFurnitures/TypeFurnitureEdit.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Patrimonio'
+    }
+  },
+  {
+    path: '/EstatusVehiculo/list',
+    name: 'EstatusVehiculo',
+    component: () => import('@/views/Patrimony/Vehicles/StatusVehicles/StatusVehicleList.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Administrador',
+      departamento: 'Patrimonio'
+    }
+  },
+  {
+    path: '/EstatusVehiculo/:EstatusVehiculoId',
+    name: 'EstatusVehiculo-Edit',
+    component: () => import('@/views/Patrimony/Vehicles/StatusVehicles/StatusVehicleEdit.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Administrador',
+      departamento: 'Patrimonio'
+    }
+  },
+  {
+    path: '/Armeria/list',
+    name: 'Armeria',
+    component: () => import('@/views/Patrimony/Armory/ArmoryList.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Patrimonio'
+    }
+  },
+  {
+    path: '/Armeria/:ArmaId',
+    name: 'Armeria-Edit',
+    component: () => import('@/views/Patrimony/Armory/ArmoryEdit.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Patrimonio'
+    }
   }
 ]
 
@@ -403,7 +493,6 @@ router.beforeEach(async (to, from, next) => {
       path: '/Login',
       query: { redirect: to.fullPath }
     })
-  // eslint-disable-next-line no-mixed-operators
   } else if (to.meta.rol && to.meta.departamento && departamento !== to.meta.departamento && role !== 'Administrador') {
     next({ name: 'PageNotPermission' })
   } else {

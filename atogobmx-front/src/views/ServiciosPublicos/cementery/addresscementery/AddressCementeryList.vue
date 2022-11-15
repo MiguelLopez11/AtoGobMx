@@ -231,7 +231,6 @@ export default {
     )
 
     const fields = ref([
-      { value: 'direccionId', text: 'ID', sortable: true },
       { value: 'nombreCementerio', text: 'Nombre Cementerio' },
       { value: 'municipio', text: 'Municipio' },
       { value: 'localidad', text: 'Localidad' },

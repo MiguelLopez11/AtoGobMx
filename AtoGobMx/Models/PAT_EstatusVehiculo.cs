@@ -7,7 +7,7 @@ namespace AtoGobMx.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int EstatusEquipoId { get; set; }
+        public int EstatusVehiculoId { get; set; }
         [Required]
         public string Nombre { get; set; }
         public string? Descripcion { get; set; }

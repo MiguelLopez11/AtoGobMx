@@ -42,20 +42,27 @@
         {{ header.text }}
       </template>
       <template #item-actions="items">
-        <b-button
-          @click="RemoveComputer(items.equipoComputoId)"
-          class="m-1"
-          variant="outline-danger"
-          ><i class="bi bi-trash3"></i
-        ></b-button>
-        <b-button class="m-1" variant="outline-warning"
-          :to="{
+        <b-dropdown id="ActionsDropdown" size="lg" style="text-color: black" variant="link" toggle-class="text-decoration-none" dropright no-caret>
+          <template #button-content>
+            <i class="bi bi-three-dots-vertical"></i>
+          </template>
+          <b-dropdown-item
+            @click="RemoveComputer(items.equipoComputoId)"
+            class="m-1"
+            variant="outline-danger">
+            <i class="bi bi-trash3" />
+            Archivar
+            </b-dropdown-item>
+          <b-dropdown-item
+            class="m-1"
+            variant="outline-warning"
+            :to="{
             name: 'EquiposComputo-Edit',
             params: { EquipoComputoId: items.equipoComputoId},
-          }"
-        >
-          <i class="bi bi-pencil-square" />
-        </b-button>
+            }"
+            ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
+          >
+        </b-dropdown>
       </template>
       <template #item-inventarioEstatus="items">
         <b-badge :variant="items.estatusEquipo.nombre === 'En Funcionamiento' ? 'success': '' || items.estatusEquipo.nombre === 'En Mantenimiento' ? 'warning': '' || items.estatusEquipo.nombre === 'Dado de baja' ? 'danger': ''">
@@ -73,6 +80,18 @@
     >
       <Form @submit="addComputer">
         <b-row cols="3">
+          <b-col>
+            <b-form-group class="mt-3" label="Nomenclatura">
+              <Field
+                name="FolioField"
+                :rules="validateFolio"
+                as="text"
+              >
+                <b-form-input v-model="computerFields.codigoInventario" :state="folioState"> </b-form-input>
+              </Field>
+              <ErrorMessage class="text-danger" name="FolioField"></ErrorMessage>
+            </b-form-group>
+          </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Marca">
               <Field name="BrandField" :rules="validateBrand" as="text">
@@ -184,7 +203,7 @@
                   v-model="computerFields.estatusEquipoId"
                   autofocus
                   :options="statusComputers"
-                  value-field="EstatusEquipoId"
+                  value-field="estatusEquipoId"
                   text-field="nombre"
                   :state="stateComputerState"
                 >
@@ -242,21 +261,23 @@ export default {
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('area.nombre')
+    const searchField = ref('marca')
     const brandState = ref(false)
     const memoryState = ref(false)
     const storageState = ref(false)
     const processorState = ref(false)
     const departamentState = ref(false)
     const areaState = ref(false)
+    const folioState = ref(false)
     const stateComputerState = ref(false)
     const showModal = ref(false)
     const computerFields = ref({
       equipoComputoId: 0,
-      marca: '',
-      memoriaRAM: '',
-      almacenamiento: '',
-      procesador: '',
+      codigoInventario: null,
+      marca: null,
+      memoriaRAM: null,
+      almacenamiento: null,
+      procesador: null,
       departamentoId: null,
       areaId: null,
       estatusEquipoId: null,
@@ -264,7 +285,7 @@ export default {
     })
     const computerFieldsBlank = ref(JSON.parse(JSON.stringify(computerFields)))
     const fields = ref([
-      { value: 'equipoComputoId', text: 'ID', sortable: true },
+      { value: 'codigoInventario', text: 'Nomenclatura', sortable: true },
       { value: 'marca', text: 'Marca' },
       { value: 'memoriaRAM', text: 'Memoria RAM' },
       { value: 'almacenamiento', text: 'Almacenamiento' },
@@ -320,6 +341,19 @@ export default {
           })
         }
       })
+    }
+    const validateFolio = () => {
+      if (!computerFields.value.codigoInventario) {
+        folioState.value = false
+        return 'Este campo es requerido'
+      }
+      // eslint-disable-next-line no-useless-escape
+      if (!/^(?=.*\d)(?=.*[a-zA-Z])([A-ZñÑáéíóúÁÉÍÓÚ])[A-Z0-9]+$/i.test(computerFields.value.codigoInventario)) {
+        folioState.value = false
+        return 'El nombre del area solo puede contener letras'
+      }
+      folioState.value = true
+      return true
     }
     const validateBrand = () => {
       if (!computerFields.value.marca) {
@@ -488,6 +522,7 @@ export default {
       areas,
       departaments,
       statusComputers,
+      folioState,
 
       validateBrand,
       validateMemory,
@@ -497,6 +532,7 @@ export default {
       validateDepartament,
       validateArea,
       validateStateComputer,
+      validateFolio,
       getAreas
     }
   }

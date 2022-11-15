@@ -42,22 +42,34 @@
         {{ header.text }}
       </template>
       <template #item-actions="items">
-        <b-button
-          @click="RemoveWorkStation(items.puestoTrabajoId)"
-          class="m-1"
-          variant="outline-danger"
-          ><i class="bi bi-trash3"></i
-        ></b-button>
-        <b-button
-          class="m-1"
-          variant="outline-warning"
-          :to="{
-            name: 'PuestoTrabajo-Edit',
-            params: { puestoTrabajoId: items.puestoTrabajoId }
-          }"
+        <b-dropdown
+          id="ActionsDropdown"
+          size="lg"
+          style="text-color: black"
+          variant="link"
+          toggle-class="text-decoration-none"
+          dropright
+          no-caret
         >
-          <i class="bi bi-pencil-square" />
-        </b-button>
+          <template #button-content>
+            <i class="bi bi-three-dots-vertical"></i>
+          </template>
+          <b-dropdown-item
+            @click="RemoveWorkStation(items.puestoTrabajoId)"
+            class="m-1"
+            variant="outline-danger"
+            ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
+          >
+          <b-dropdown-item
+            class="m-1"
+            variant="outline-warning"
+            :to="{
+              name: 'PuestoTrabajo-Edit',
+              params: { puestoTrabajoId: items.puestoTrabajoId }
+            }"
+            ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
+          >
+        </b-dropdown>
       </template>
     </EasyDataTable>
     <b-modal
@@ -190,7 +202,6 @@ export default {
       JSON.parse(JSON.stringify(workStationFields))
     )
     const fields = ref([
-      { value: 'puestoTrabajoId', text: 'ID', sortable: true },
       { value: 'nombre', text: 'Nombre' },
       { value: 'departamentos.nombre', text: 'Departamento' },
       { value: 'area.nombre', text: 'Area' },
@@ -318,7 +329,8 @@ export default {
             swal
               .fire({
                 title: 'Puesto de trabajo archivado!',
-                text: 'El Puesto de trabajo ha sido archivado satisfactoriamente .',
+                text:
+                  'El Puesto de trabajo ha sido archivado satisfactoriamente .',
                 icon: 'success'
               })
               .then(result => {

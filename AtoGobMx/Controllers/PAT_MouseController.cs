@@ -19,7 +19,7 @@ namespace AtoGobMx.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PAT_Mouse>>> GetMouses()
         {
-            var Mouses = await _context.PAT_Mouse
+            var Mouses = await _context.Mouse
                 .Include(i => i.EquipoComputo)
                 .Where(w => !w.Archivado)
                 .ToListAsync();
@@ -29,7 +29,7 @@ namespace AtoGobMx.Controllers
         [HttpGet("{MouseId}")]
         public async Task<ActionResult<PAT_Mouse>> GetMouseById(int MouseId)
         {
-            var Mouse = await _context.PAT_Mouse.FirstOrDefaultAsync(f => f.MouseId == MouseId);
+            var Mouse = await _context.Mouse.FirstOrDefaultAsync(f => f.MouseId == MouseId);
 
             if (Mouse == null)
             {
@@ -41,7 +41,7 @@ namespace AtoGobMx.Controllers
         [HttpPost]
         public async Task<ActionResult<PAT_Mouse>> PostMouse(PAT_Mouse Mouse)
         {
-            _context.PAT_Mouse.Add(Mouse);
+            _context.Mouse.Add(Mouse);
             await _context.SaveChangesAsync();
             return StatusCode(200, "Se ha credo exitosamente");
         }
@@ -52,7 +52,7 @@ namespace AtoGobMx.Controllers
             {
                 return Ok("Los ID ingresados no coinciden");
             }
-            var PAT_Mouse = await _context.PAT_Mouse.FindAsync(MouseId);
+            var PAT_Mouse = await _context.Mouse.FindAsync(MouseId);
             if (PAT_Mouse == null)
             {
                 return NotFound();
@@ -62,21 +62,21 @@ namespace AtoGobMx.Controllers
             PAT_Mouse.TipoConexion = mouse.TipoConexion;
             PAT_Mouse.Archivado = mouse.Archivado;
 
-            _context.PAT_Mouse.Update(PAT_Mouse);
+            _context.Mouse.Update(PAT_Mouse);
             await _context.SaveChangesAsync();
             return Ok("Equipo de computo actualizado correctamente");
         }
         [HttpDelete("{MouseId}")]
         public async Task<IActionResult> DeleteMouse(int MouseId)
         {
-            var mouse = await _context.PAT_Mouse
+            var mouse = await _context.Mouse
                 .FirstOrDefaultAsync(f => f.MouseId == MouseId);
             if (mouse == null)
             {
                 return NotFound();
             }
             mouse.Archivado = true;
-            _context.PAT_Mouse.Update(mouse);
+            _context.Mouse.Update(mouse);
             await _context.SaveChangesAsync();
             return Ok("Producto archivado");
         }

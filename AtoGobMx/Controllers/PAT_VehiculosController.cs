@@ -19,7 +19,7 @@ namespace AtoGobMx.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PAT_Vehiculo>>> GetVehiculos()
         {
-            var vehiculos = await _context.PAT_Vehiculo
+            var vehiculos = await _context.Vehiculo
                 .Where(w => !w.Archivado)
                 .ToListAsync();
             return Ok(vehiculos);
@@ -28,7 +28,7 @@ namespace AtoGobMx.Controllers
         [HttpGet("{VehiculoId}")]
         public async Task<ActionResult<PAT_Vehiculo>> GetVehiculo(int VehiculoId)
         {
-            var vehiculo = await _context.PAT_Vehiculo.FirstOrDefaultAsync(f => f.VehiculoId == VehiculoId);
+            var vehiculo = await _context.Vehiculo.FirstOrDefaultAsync(f => f.VehiculoId == VehiculoId);
 
             if (vehiculo == null)
             {
@@ -40,7 +40,7 @@ namespace AtoGobMx.Controllers
         [HttpPost]
         public async Task<ActionResult<PAT_Vehiculo>> PostMonitor(PAT_Vehiculo vehiculo)
         {
-            _context.PAT_Vehiculo.Add(vehiculo);
+            _context.Vehiculo.Add(vehiculo);
             await _context.SaveChangesAsync();
             return StatusCode(200, "Se ha credo exitosamente");
         }
@@ -51,7 +51,7 @@ namespace AtoGobMx.Controllers
             {
                 return Ok("Los ID ingresados no coinciden");
             }
-            var Vehiculo = await _context.PAT_Vehiculo.FindAsync(VehiculoId);
+            var Vehiculo = await _context.Vehiculo.FindAsync(VehiculoId);
             if (Vehiculo == null)
             {
                 return NotFound();
@@ -67,21 +67,21 @@ namespace AtoGobMx.Controllers
             Vehiculo.Transmisión = vehiculo.Transmisión;
             Vehiculo.Archivado = vehiculo.Archivado;
 
-            _context.PAT_Vehiculo.Update(Vehiculo);
+            _context.Vehiculo.Update(Vehiculo);
             await _context.SaveChangesAsync();
             return Ok("Monitor actualizado correctamente");
         }
         [HttpDelete("{VehiculoId}")]
         public async Task<IActionResult> DeleteVehiculo(int VehiculoId)
         {
-            var vehiculo = await _context.PAT_Vehiculo
+            var vehiculo = await _context.Vehiculo
                 .FirstOrDefaultAsync(f => f.VehiculoId == VehiculoId);
             if (vehiculo == null)
             {
                 return NotFound();
             }
             vehiculo.Archivado = true;
-            _context.PAT_Vehiculo.Update(vehiculo);
+            _context.Vehiculo.Update(vehiculo);
             await _context.SaveChangesAsync();
             return Ok("Producto archivado");
         }

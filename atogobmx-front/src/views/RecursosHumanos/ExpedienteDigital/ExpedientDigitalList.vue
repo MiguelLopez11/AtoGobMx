@@ -43,22 +43,34 @@
         {{ header.text }}
       </template>
       <template #item-actions="items">
-        <b-button
-          @click="RemoveExpedient(items.expedienteDigitalId)"
-          class="m-1"
-          variant="outline-danger">
-          <i class="bi bi-trash3"></i>
-        </b-button>
-        <b-button
-          :to="{
-            name: 'ExpedienteDigital-edit',
-            params: { ExpedienteDigitalId: items.expedienteDigitalId },
-          }"
-          class="m-1"
-          variant="outline-warning"
+        <b-dropdown
+          id="ActionsDropdown"
+          size="lg"
+          style="text-color: black"
+          variant="link"
+          toggle-class="text-decoration-none"
+          dropright
+          no-caret
+        >
+          <template #button-content>
+            <i class="bi bi-three-dots-vertical"></i>
+          </template>
+          <b-dropdown-item
+            @click="RemoveExpedient(items.expedienteDigitalId)"
+            class="m-1"
+            variant="outline-danger"
+            ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
           >
-          <i class="bi bi-pencil-square"></i>
-        </b-button>
+          <b-dropdown-item
+            class="m-1"
+            variant="outline-warning"
+            :to="{
+              name: 'ExpedienteDigital-edit',
+              params: { ExpedienteDigitalId: items.expedienteDigitalId }
+            }"
+            ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
+          >
+        </b-dropdown>
       </template>
     </EasyDataTable>
   </b-card>
@@ -81,21 +93,17 @@
       </b-form-group>
     </b-row>
     <b-row align-h="end">
-          <b-button
-            class="w-auto m-2 text-white"
-            variant="primary"
-            @click="showModal = !showModal"
-          >
-            Cancelar
-          </b-button>
-          <b-button
-            class="w-auto m-2"
-            variant="success"
-            @click="onAddExpedient()"
-          >
-            Guardar
-          </b-button>
-        </b-row>
+      <b-button
+        class="w-auto m-2 text-white"
+        variant="primary"
+        @click="showModal = !showModal"
+      >
+        Cancelar
+      </b-button>
+      <b-button class="w-auto m-2" variant="success" @click="onAddExpedient()">
+        Guardar
+      </b-button>
+    </b-row>
   </b-modal>
 </template>
 
@@ -110,7 +118,11 @@ export default {
   setup () {
     const showModal = ref(false)
     const swal = inject('$swal')
-    const { getExpedients, deleteExpedient, createExpedient } = ExpedientDigitalServices()
+    const {
+      getExpedients,
+      deleteExpedient,
+      createExpedient
+    } = ExpedientDigitalServices()
     const { getEmployeesWithoutExpedient } = EmployeeServices()
     const expedients = ref([])
     const employees = ref([])
@@ -120,13 +132,15 @@ export default {
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('nombre')
+    const searchField = ref('empleados.nombreCompleto')
     const expedientFields = ref({
       expedienteDigitalId: 0,
       empleadoId: null,
       archivado: false
     })
-    const expedientFieldsBlank = ref(JSON.parse(JSON.stringify(expedientFields)))
+    const expedientFieldsBlank = ref(
+      JSON.parse(JSON.stringify(expedientFields))
+    )
     const fields = ref([
       { value: 'expedienteDigitalId', text: 'No.Expediente', sortable: true },
       { value: 'empleados.nombreCompleto', text: 'Empleado', sortable: true },
@@ -138,7 +152,7 @@ export default {
       })
       return ''
     }
-    getExpedients((data) => {
+    getExpedients(data => {
       expedients.value = data
       if (expedients.value.length > 0) {
         isloading.value = false
@@ -151,7 +165,7 @@ export default {
     })
     const refreshTable = () => {
       isloading.value = true
-      getExpedients((data) => {
+      getExpedients(data => {
         expedients.value = data
         if (expedients.value.length > 0) {
           isloading.value = false
@@ -162,7 +176,7 @@ export default {
         }
       })
     }
-    const onFiltered = (filteredItems) => {
+    const onFiltered = filteredItems => {
       currentPage.value = 1
     }
     const onAddExpedient = () => {
@@ -171,15 +185,15 @@ export default {
         expedientFields.value = JSON.parse(JSON.stringify(expedientFieldsBlank))
         refreshTable()
         getEmployees()
-        swal
-          .fire({
-            title: '¡Expediente Registrado!',
-            text: 'El expediente ha sido registrado al sistema satisfactoriamente .',
-            icon: 'success'
-          })
+        swal.fire({
+          title: '¡Expediente Registrado!',
+          text:
+            'El expediente ha sido registrado al sistema satisfactoriamente .',
+          icon: 'success'
+        })
       })
     }
-    const RemoveExpedient = (expedienteDigitalId) => {
+    const RemoveExpedient = expedienteDigitalId => {
       isloading.value = true
       swal
         .fire({
@@ -194,16 +208,15 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            deleteExpedient(expedienteDigitalId, (data) => {
+            deleteExpedient(expedienteDigitalId, data => {
               refreshTable()
               getEmployees()
             })
-            swal
-              .fire({
-                title: '¡Empleado archivado!',
-                text: 'El empleado ha sido archivado satisfactoriamente .',
-                icon: 'success'
-              })
+            swal.fire({
+              title: '¡Empleado archivado!',
+              text: 'El empleado ha sido archivado satisfactoriamente .',
+              icon: 'success'
+            })
           } else {
             isloading.value = false
           }
@@ -232,6 +245,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>
