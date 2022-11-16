@@ -46,8 +46,11 @@ namespace AtoGobMx.Context
         public DbSet<PAT_EstatusEquipo> InventarioEstatus { get; set; }
         public DbSet<PAT_EstatusVehiculo> EstatusVehiculo { get; set; }
         public DbSet<PAT_Armeria> Armeria { get; set; }
-        public DbSet<SERMED_Cita> Citas { get; set; }
-        public DbSet<SERMED_Producto> Medicamentos { get; set; }
+        public DbSet<SERMED_Cita> Cita { get; set; }
+        public DbSet<SERMED_Producto> Medicamento { get; set; }
+        public DbSet<SERMED_ExpedienteMedico> ExpedienteMedico { get; set; }
+        public DbSet<SERMED_ProductosReceta> ProductoReceta { get; set; }
+        public DbSet<SERMED_Receta> Receta { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -60,5 +63,4 @@ namespace AtoGobMx.Context
             modelBuilder.Entity<Usuario>().HasData(new Usuario { UsuarioId = 1, NombreUsuario = "Administrador",Contraseña="Admin123", ConfirmarContraseña="Admin123",EmpleadoId = 1,RoleId = 1, Archivado = false });          
         }
     }
-
 }

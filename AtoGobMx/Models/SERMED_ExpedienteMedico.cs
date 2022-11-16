@@ -21,7 +21,7 @@ namespace AtoGobMx.Models
         public string? Discapacidad { get; set; }
         public string? AntecedentesPersonales { get; set; }
         public string? AntecedentesFamiliares { get; set; }
-
+        public bool Archivado { get; set; }
 
 
         [ForeignKey("EmpleadoId")]

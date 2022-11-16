@@ -8,10 +8,13 @@ namespace AtoGobMx.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CitaId { get; set; }
         public string NombreCitante { get; set; }
-        public DateOnly Fecha { get; set; }
-        public TimeOnly Hora { get; set; }
+        public DateTime FechaHora { get; set; }
+        public int EmpleadoId { get; set; }
         public string Descripcion { get; set; }
         public bool Archivado { get; set; }
+
+        [ForeignKey("EmpleadoId")]
+        public Empleado? Empleados { get; set; }
 
     }
 }

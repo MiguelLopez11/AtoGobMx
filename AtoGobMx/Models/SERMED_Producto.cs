@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace AtoGobMx.Models
 {
@@ -13,6 +14,8 @@ namespace AtoGobMx.Models
         public string Contenido { get; set; }
         public DateTime FechaVencimiento { get; set; }
         public int CantidadDisponible { get; set; }
-        public float Precio { get; set; }
+        public bool Archivado { get; set; }
+        [JsonIgnore]
+        public virtual IEnumerable<SERMED_ProductosReceta>? ProductosReceta { get; set; }
     }
 }

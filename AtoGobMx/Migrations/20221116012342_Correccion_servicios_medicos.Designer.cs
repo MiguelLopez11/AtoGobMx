@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20221116012342_Correccion_servicios_medicos")]
+    partial class Correccion_servicios_medicos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1174,9 +1176,6 @@ namespace AtoGobMx.Migrations
                     b.Property<string>("AntecedentesPersonales")
                         .HasColumnType("longtext");
 
-                    b.Property<bool>("Archivado")
-                        .HasColumnType("tinyint(1)");
-
                     b.Property<string>("Discapacidad")
                         .HasColumnType("longtext");
 
@@ -1209,9 +1208,6 @@ namespace AtoGobMx.Migrations
                     b.Property<int>("ProductoId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    b.Property<bool>("Archivado")
-                        .HasColumnType("tinyint(1)");
 
                     b.Property<int>("CantidadDisponible")
                         .HasColumnType("int");
