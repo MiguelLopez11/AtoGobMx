@@ -7,6 +7,11 @@ export default function EmployeeServices () {
       callback(response.data)
     })
   }
+  const getEmployeesUnfiled = (callback) => {
+    axios.get(`${BaseUrl}/Empleados/SinArchivar`).then((response) => {
+      callback(response.data)
+    })
+  }
   const getEmployeesWithoutExpedient = (callback) => {
     axios.get(`${BaseUrl}/Empleados/SinExpedientes`).then((response) => {
       callback(response.data)
@@ -39,11 +44,12 @@ export default function EmployeeServices () {
   }
   return {
     getEmployees,
-    getEmployee,
+    getEmployeesUnfiled,
     getEmployeesArmory,
+    getEmployeesWithoutExpedient,
+    getEmployee,
     createEmployee,
     updateEmployee,
-    deleteEmployee,
-    getEmployeesWithoutExpedient
+    deleteEmployee
   }
 }

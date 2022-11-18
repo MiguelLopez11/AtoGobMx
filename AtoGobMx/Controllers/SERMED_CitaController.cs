@@ -59,7 +59,7 @@ namespace AtoGobMx.Controllers
                 return NotFound();
             }
             Cita.CitaId = cita.CitaId;
-            Cita.NombreCitante = cita.NombreCitante;
+            //Cita.NombreCitante = cita.NombreCitante;
             Cita.FechaHora = cita.FechaHora;
             //Cita.Hora = cita.Hora;
             Cita.Descripcion = cita.Descripcion;

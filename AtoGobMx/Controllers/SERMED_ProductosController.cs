@@ -19,36 +19,36 @@ namespace AtoGobMx.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SERMED_Producto>>> GetMedicamento()
         {
-            var productos = await _context.Medicamento
+            var Medicamentos = await _context.Medicamento
                 .Where(w => w.Archivado)
                 .ToListAsync();
-            if (productos == null)
+            if (Medicamentos == null)
             {
                 return BadRequest("No se encuentran citas registradas");
             }
-            return Ok(productos);
+            return Ok(Medicamentos);
         }
 
         [HttpGet("{productoId}")]
         public async Task<ActionResult<SERMED_Producto>> GetMedicamentoById(int productoId)
         {
-            var productosReceta = await _context.Medicamento
+            var Medicamento = await _context.Medicamento
                 .Where(w => !w.Archivado)
                 .FirstOrDefaultAsync(f => f.ProductoId == productoId);
 
-            if (productosReceta == null)
+            if (Medicamento == null)
             {
                 return NotFound();
             }
 
-            return Ok(productosReceta);
+            return Ok(Medicamento);
         }
         [HttpPost]
         public async Task<ActionResult<SERMED_Producto>> PostMedicamento(SERMED_Producto producto)
         {
             _context.Medicamento.Add(producto);
             await _context.SaveChangesAsync();
-            return StatusCode(200, "Expediente medico Se ha credo exitosamente");
+            return StatusCode(200, "Medicamento credo exitosamente");
         }
         [HttpPut("{productoId}")]
         public async Task<IActionResult> PutMedicamento(int productoId, SERMED_Producto producto)

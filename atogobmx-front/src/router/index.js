@@ -475,6 +475,26 @@ const routes = [
       rol: 'Empleado',
       departamento: 'Patrimonio'
     }
+  },
+  {
+    path: '/ServiciosMedicos/Cita/list',
+    name: 'ServiciosMedicos-Cita',
+    component: () => import('@/views/MunicipalMedicalServices/MedicalAppointment/MedicalAppointmentList.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Direccion de servicios medicos municipales'
+    }
+  },
+  {
+    path: '/ServiciosMedicos/Cita/:CitaId',
+    name: 'ServiciosMedicos-Cita-Edit',
+    component: () => import('@/views/MunicipalMedicalServices/MedicalAppointment/MedicalAppointmentEdit.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Direccion de servicios medicos municipales'
+    }
   }
 ]
 

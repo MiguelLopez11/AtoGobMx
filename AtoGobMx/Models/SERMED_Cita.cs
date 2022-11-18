@@ -7,7 +7,7 @@ namespace AtoGobMx.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CitaId { get; set; }
-        public string NombreCitante { get; set; }
+        //public string NombreCitante { get; set; }
         public DateTime FechaHora { get; set; }
         public int EmpleadoId { get; set; }
         public string Descripcion { get; set; }
