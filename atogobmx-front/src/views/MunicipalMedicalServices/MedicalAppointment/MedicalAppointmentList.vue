@@ -60,7 +60,7 @@
             variant="outline-danger"
           >
             <i class="bi bi-trash3">
-                Archivar
+              Archivar
             </i>
           </b-dropdown-item>
           <b-dropdown-item
@@ -69,10 +69,10 @@
             :to="{
               name: 'Armeria-Edit',
               params: { ArmaId: items.armaId }
-              }"
-            >
-            <i class="bi bi-pencil-square"/>
-              Editar
+            }"
+          >
+            <i class="bi bi-pencil-square" />
+            Editar
           </b-dropdown-item>
         </b-dropdown>
       </template>
@@ -88,7 +88,11 @@
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Empleado Citante">
-              <Field name="NomenclatureField" :rules="validateNomeclature" as="text">
+              <Field
+                name="NomenclatureField"
+                :rules="validateNomeclature"
+                as="text"
+              >
                 <b-form-select
                   v-model="medicalAppointmentFields.empleadoId"
                   autofocus
@@ -136,6 +140,22 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
+          <b-col>
+            <VueCal
+              class="vuecal--rounded-theme vuecal--blue-theme"
+              style="width: 1000px"
+              ref="vuecal"
+              active-view="day"
+              locale="es"
+              editable-events
+              @cell-dblclick="
+                $refs.vuecal.createEvent($event, 30, {
+                  title: '',
+                  class: 'blue-event'
+                })
+              "
+            />
+          </b-col>
         </b-row>
         <b-row align-h="end">
           <b-button
@@ -160,6 +180,8 @@ import Datepicker from '@vuepic/vue-datepicker'
 import EmployeeServices from '@/Services/employee.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
+import VueCal from 'vue-cal'
+import 'vue-cal/dist/vuecal.css'
 // import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
@@ -168,11 +190,16 @@ export default {
     Field,
     ErrorMessage,
     Datepicker,
+    VueCal,
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup () {
     const swal = inject('$swal')
-    const { getMedicalAppointments, createWeapon, deleteWeapon } = MunicipalMedicalServices()
+    const {
+      getMedicalAppointments,
+      createWeapon,
+      deleteWeapon
+    } = MunicipalMedicalServices()
     const { getEmployeesUnfiled } = EmployeeServices()
     const medicalAppointments = ref([])
     const employees = ref([])
@@ -196,7 +223,9 @@ export default {
       descripcion: null,
       archivado: false
     })
-    const weaponsFieldsBlank = ref(JSON.parse(JSON.stringify(medicalAppointmentFields)))
+    const weaponsFieldsBlank = ref(
+      JSON.parse(JSON.stringify(medicalAppointmentFields))
+    )
     const fields = ref([
       { value: 'empleados.nombreCompleto', text: 'Citante' },
       { value: 'fechaHora', text: 'Fecha y hora' },
@@ -220,8 +249,7 @@ export default {
       if (data.length === 0) {
         swal.fire({
           title: 'No se encuentran empleados registrador!',
-          text:
-            'Registre primero un empleado para continuar.',
+          text: 'Registre primero un empleado para continuar.',
           icon: 'warning'
         })
       }
@@ -245,8 +273,7 @@ export default {
         refreshTable()
         swal.fire({
           title: 'Arma registrada correctamente!',
-          text:
-            'El arma se ha registrado al sistema satisfactoriamente.',
+          text: 'El arma se ha registrado al sistema satisfactoriamente.',
           icon: 'success'
         })
       })
@@ -270,8 +297,7 @@ export default {
             swal
               .fire({
                 title: 'Arma archivada!',
-                text:
-                  'El arma ha sido archivado satisfactoriamente .',
+                text: 'El arma ha sido archivado satisfactoriamente .',
                 icon: 'success'
               })
               .then(result => {
@@ -337,7 +363,9 @@ export default {
       typeWeaponState.value = false
       gaugeState.value = false
       employeeState.value = false
-      medicalAppointmentFields.value = JSON.parse(JSON.stringify(weaponsFieldsBlank))
+      medicalAppointmentFields.value = JSON.parse(
+        JSON.stringify(weaponsFieldsBlank)
+      )
     }
     return {
       medicalAppointments,
@@ -375,4 +403,5 @@ export default {
 }
 </script>
 
-<style></style>
+<style scoped>
+</style>
