@@ -14,7 +14,7 @@
             <b-form-group class="mt-3" label="Nombre obra">
               <Field name="NameWorksField" :rules="validateNameWorks" as="text">
                 <b-form-input
-                  v-model="publicWorks.nombreObra"
+                  v-model="publicWorks.nombre"
                   :state="NameWorksState"
                 >
                 </b-form-input>
@@ -153,6 +153,19 @@ export default {
       { text: 'Departamento obras publicas', to: '/ObrasPublicas/list' },
       { text: 'Editar-Obras publicas' }
     ])
+
+    getWorksStatus(data => {
+      worksStatus.value = data
+      if (data.length === 0) {
+        swal.fire({
+          title: 'No se encuentra un tipo de obra publica registrado!',
+          text:
+            'No se encuentra tipo de obra publica registrado en el departamento seleccionado, registre primero un tipo de obra publica para continuar',
+          icon: 'warning'
+        })
+      }
+    })
+
     const onUpdatePublicWorks = () => {
       updatePublicWorks(publicWorks.value, (data) => {})
       swal.fire({
@@ -182,11 +195,11 @@ export default {
     })
 
     const validateNameWorks = () => {
-      if (!publicWorks.value.nombreObra) {
+      if (!publicWorks.value.nombre) {
         validateState()
         return 'Este campo es requerido'
       }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(publicWorks.value.nombreObra)) {
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(publicWorks.value.nombre)) {
         validateState()
         return 'El nombre de la obra solo puede contener letras'
       }
@@ -246,7 +259,7 @@ export default {
 
     const validateState = () => {
       // eslint-disable-next-line no-unneeded-ternary
-      NameWorksState.value = publicWorks.value.nombreObra === '' ? false : true
+      NameWorksState.value = publicWorks.value.nombre === '' ? false : true
       // eslint-disable-next-line no-unneeded-ternary
       LatitudeState.value = publicWorks.value.latitud === '' ? false : true
       // eslint-disable-next-line no-unneeded-ternary

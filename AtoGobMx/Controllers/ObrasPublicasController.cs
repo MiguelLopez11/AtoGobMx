@@ -65,7 +65,7 @@ namespace AtoGobMx.Controllers
             }
 
             obrapublic.ObraId = ObraId;
-            obrapublic.NombreObra = obrasPublicas.NombreObra;
+            obrapublic.Nombre = obrasPublicas.Nombre;
             obrapublic.Latitud = obrasPublicas.Latitud;
             obrapublic.Longitud = obrasPublicas.Longitud;
             obrapublic.Descripcion = obrasPublicas.Descripcion;

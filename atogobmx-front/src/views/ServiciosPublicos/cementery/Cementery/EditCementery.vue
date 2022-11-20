@@ -9,7 +9,7 @@
       </div>
       <Form @submit="onUpdateCementeryService">
         <b-row cols="2">
-          <!-- 1 -->
+          <!--Agregar Nombre del propietario -->
           <b-col>
             <b-form-group class="mt-3" label="Nombre del propietario">
               <Field
@@ -29,7 +29,7 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!-- 2 -->
+          <!--Agregar numero de espacios -->
           <b-col>
             <b-form-group class="mt-3" label="Numero de espacios">
               <Field name="SpacesField" :rules="validateSpaces" as="number">
@@ -46,7 +46,7 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!-- 3 -->
+          <!--Agregar Metros correspondientes -->
           <b-col>
             <b-form-group class="mt-3" label="Metros correspondientes">
               <Field name="MeterField" :rules="validateMeter" as="number">
@@ -62,7 +62,7 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!-- 4 -->
+          <!--Agregar espacios disponibles -->
           <b-col>
             <b-form-group class="mt-3" label="Espacios Disponibles">
               <Field

@@ -88,6 +88,7 @@ const routes = [
       departamento: 'Recursos Humanos'
     }
   },
+  // modulos arturo
   {
     path: '/Alumbrado/list',
     name: 'Alumbrado',
@@ -256,6 +257,151 @@ const routes = [
       requiresAuth: true
     }
   },
+  {
+    path: '/ObrasPublicas/list',
+    name: 'ObrasPublicas',
+    component: () => import('@/views/ServiciosPublicos/publicworks/publicWorks/PublicWorksList.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/ObrasPublicas/:ObraId',
+    name: 'ObrasPublicas-Edit',
+    component: () => import('@/views/ServiciosPublicos/publicworks/publicWorks/EditPublicWorks.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/EstatusOP/list',
+    name: 'EstatusOP',
+    component: () => import('@/views/ServiciosPublicos/publicworks/worksStatus/WorksStatusList.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/EstatusOP/:EstatusObraId',
+    name: 'EstatusOP-Edit',
+    component: () => import('@/views/ServiciosPublicos/publicworks/worksStatus/EditWorksStatus.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/DetalleProducto/list',
+    name: 'DetalleProducto',
+    component: () => import('@/views/Supply/detailproduct/DetailProductList.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/DetalleProducto/:DetalleProductoId',
+    name: 'DetalleProducto-Edit',
+    component: () => import('@/views/Supply/detailproduct/EditDetailProduct.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/DetalleVale/list',
+    name: 'DetalleVale',
+    component: () => import('@/views/Supply/detailvoucher/DetailVoucherList.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/DetalleVale/:DetalleValeId',
+    name: 'DetalleVale-Edit',
+    component: () => import('@/views/Supply/detailvoucher/EditDetailVoucher.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/Producto/list',
+    name: 'Producto',
+    component: () => import('@/views/Supply/productvoucher/ProductVoucherList.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/Producto/:ProductoId',
+    name: 'Producto-Edit',
+    component: () => import('@/views/Supply/productvoucher/EditProductVoucher.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/Proveedor/list',
+    name: 'Proveedor',
+    component: () => import('@/views/Supply/provider/ProviderList.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/Proveedor/:ProveedorId',
+    name: 'Proveedor-Edit',
+    component: () => import('@/views/Supply/provider/EditProvider.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/EstatusVale/list',
+    name: 'EstatusVale',
+    component: () => import('@/views/Supply/statusvoucher/StatusVoucherList.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/EstatusVale/:EstatusValeId',
+    name: 'EstatusVale-Edit',
+    component: () => import('@/views/Supply/statusvoucher/EditStatusVoucher.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/TipoVale/list',
+    name: 'TipoVale',
+    component: () => import('@/views/Supply/typevoucher/TypeVoucherList.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/TipoVale/:TipoId',
+    name: 'TipoVale-Edit',
+    component: () => import('@/views/Supply/typevoucher/EditTypeVoucher.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/ControlVale/list',
+    name: 'ControlVale',
+    component: () => import('@/views/Supply/vouchercontrol/VoucherControlList.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/ControlVale/:ControlValeId',
+    name: 'ControlVale-Edit',
+    component: () => import('@/views/Supply/vouchercontrol/EditVoucherControl.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  // termino modulos arturo
   {
     path: '/Usuarios/list',
     name: 'Usuarios',

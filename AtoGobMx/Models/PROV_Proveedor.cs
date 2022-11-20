@@ -10,6 +10,7 @@ namespace AtoGobMx.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ProveedorId { get; set; }
         public string Nombre { get; set; }
+        public string RFC { get; set; }
         public string RepresentanteLegal { get; set; }
         public string Direccion { get; set; }
         [MaxLength(10)]

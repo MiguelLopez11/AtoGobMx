@@ -67,7 +67,7 @@ namespace AtoGobMx.Controllers
             }
 
             tipovale.TipoId = TipoId;
-            tipovale.NombreVale = tipoVales.NombreVale;
+            tipovale.Nombre = tipoVales.Nombre;
             tipovale.Descripcion = tipoVales.Descripcion;
             tipovale.Archivado = tipoVales.Archivado;
 

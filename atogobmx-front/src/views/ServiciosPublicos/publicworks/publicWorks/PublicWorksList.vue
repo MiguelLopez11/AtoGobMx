@@ -75,7 +75,7 @@
             <b-form-group class="mt-3" label="Nombre obra">
               <Field name="NameWorksField" :rules="validateNameWorks" as="text">
                 <b-form-input
-                  v-model="publicWorksFields.nombreObra"
+                  v-model="publicWorksFields.nombre"
                   :state="NameWorksState"
                 >
                 </b-form-input>
@@ -126,6 +126,22 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
+          <!--agregar un estatus obra-->
+          <b-col>
+            <b-form-group class="mt-3" label="Estatus de la Obra">
+              <Field name="WorkStatusField" :rules="validateWorkStatus" as="text">
+                <b-form-select
+                  v-model="publicWorksFields.estatusObraId"
+                  autofocus
+                  :state="WorkStatusState"
+                  :options="worksStatus"
+                  value-field="estatusObraId"
+                  text-field="nombreEstatus"
+                ></b-form-select>
+              </Field>
+              <ErrorMessage class="text-danger" name="WorkStatusField"/>
+            </b-form-group>
+          </b-col>
           <!--Descripcion-->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion">
@@ -144,22 +160,6 @@
                 class="text-danger"
                 name="DescriptionField"
               ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!--agregar un estatus obra-->
-          <b-col>
-            <b-form-group class="mt-3" label="Estatus de la Obra">
-              <Field name="WorkStatusField" :rules="validateWorkStatus" as="text">
-                <b-form-select
-                  v-model="publicWorksFields.estatusObraId"
-                  autofocus
-                  :state="WorkStatusState"
-                  :options="worksStatus"
-                  value-field="estatusObraId"
-                  text-field="nombreEstatus"
-                ></b-form-select>
-              </Field>
-              <ErrorMessage class="text-danger" name="WorkStatusField"/>
             </b-form-group>
           </b-col>
         </b-row>
@@ -214,12 +214,24 @@ export default {
     const WorkStatusState = ref(false)
     const publicWorksFields = ref({
       obraId: 0,
-      nombreObra: null,
+      nombre: null,
       latitud: null,
       longitud: null,
       descripcion: null,
       estatusObraId: null,
       archivado: false
+    })
+
+    getWorksStatus(data => {
+      worksStatus.value = data
+      if (data.length === 0) {
+        swal.fire({
+          title: 'No se encuentra un tipo de estatus en obras publicas registrado!',
+          text:
+            'No se encuentra tipo de estatus en obras publicas registrado en el departamento seleccionado, registre primero un tipo de estatus en obras publicas para continuar',
+          icon: 'warning'
+        })
+      }
     })
 
     const publicWorksFieldsBlank = ref(
@@ -228,7 +240,7 @@ export default {
 
     const fields = ref([
       { value: 'obraId', text: 'ID', sortable: true },
-      { value: 'nombreObra', text: 'Nombre de la obra' },
+      { value: 'nombre', text: 'Nombre de la obra' },
       { value: 'latitud', text: 'Latitud' },
       { value: 'longitud', text: 'Longitud' },
       { value: 'descripcion', text: 'Descripcion' },
@@ -265,28 +277,16 @@ export default {
       currentPage.value = 1
     }
 
-    worksStatus(data => {
-      publicWorksFields.value = data
-      if (data.length === 0) {
-        swal.fire({
-          title: 'No se encuentra un estatus_OP registrado!',
-          text:
-            'No se encuentra estatus_OP registrado en el departamento seleccionado, registre primero un tipo de estatus para continuar',
-          icon: 'warning'
-        })
-      }
-    })
-
     const validateNameWorks = () => {
-      if (!publicWorksFields.value.nombreObra) {
+      if (!publicWorksFields.value.nombre) {
         NameWorksState.value = false
         return 'Este campo es requerido'
       }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(publicWorksFields.value.nombreObra)) {
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(publicWorksFields.value.nombre)) {
         NameWorksState.value = false
         return 'El nombre de la obra solo puede contener letras'
       }
-      if (!publicWorksFields.value.nombreObra.trim().length > 0) {
+      if (!publicWorksFields.value.nombre.trim().length > 0) {
         NameWorksState.value = false
         return 'Este campo no puede contener espacios'
       }
@@ -421,6 +421,7 @@ export default {
 
     return {
       publicWorks,
+      worksStatus,
       publicWorksFields,
       showModal,
       perPage,
@@ -437,6 +438,7 @@ export default {
       LengthState,
       WorkStatusState,
       DescriptionState,
+
       onFiltered,
       addPublicWorks,
       refreshTable,
