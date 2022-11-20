@@ -495,6 +495,16 @@ const routes = [
       rol: 'Empleado',
       departamento: 'Direccion de servicios medicos municipales'
     }
+  },
+  {
+    path: '/ServiciosMedicos/Agenda',
+    name: 'ServiciosMedicos-Agenda',
+    component: () => import('@/views/MunicipalMedicalServices/Schedule/ScheduleMedical.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Direccion de servicios medicos municipales'
+    }
   }
 ]
 

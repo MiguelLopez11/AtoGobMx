@@ -17,10 +17,7 @@
           font-size: 18px;
           margin-right: 15px;
           margin-left: 20px;
-        "
-        @click="showModal = !showModal"
-        type="submit"
-      >
+        ">
         <i class="bi bi-car-front-fill" />
         Agendar Cita
       </b-button>
@@ -78,7 +75,6 @@
       </template>
     </EasyDataTable>
     <b-modal
-      v-model="showModal"
       title="Registrar Arma"
       size="xl"
       button-size="lg"
@@ -140,23 +136,34 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <b-col>
-            <VueCal
-              class="vuecal--rounded-theme vuecal--blue-theme"
-              style="width: 1000px"
-              ref="vuecal"
-              active-view="day"
-              locale="es"
-              editable-events
-              @cell-dblclick="
-                $refs.vuecal.createEvent($event, 30, {
-                  title: '',
-                  class: 'blue-event'
-                })
-              "
-            />
-          </b-col>
         </b-row>
+        <b-container>
+          <b-row>
+            <b-col lg="8">
+              <VueCal
+                ref="vuecal"
+                style="height: 400px"
+                class="vuecal--rounded-theme"
+                :time-from="8 * 60"
+                :time-to="23 * 60"
+                active-view="week"
+                locale="es"
+                editable-events
+                @cell-dblclick="
+                  $refs.vuecal.createEvent($event, 30, {
+                    title: '',
+                    class: 'sport'
+                  })
+                "
+              />
+            </b-col>
+            <b-col>
+              <b-button>
+                Agregar
+              </b-button>
+            </b-col>
+          </b-row>
+        </b-container>
         <b-row align-h="end">
           <b-button
             class="w-auto m-2 text-white"
@@ -180,8 +187,6 @@ import Datepicker from '@vuepic/vue-datepicker'
 import EmployeeServices from '@/Services/employee.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
-import VueCal from 'vue-cal'
-import 'vue-cal/dist/vuecal.css'
 // import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
@@ -190,7 +195,7 @@ export default {
     Field,
     ErrorMessage,
     Datepicker,
-    VueCal,
+    // VueCal,
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup () {
@@ -215,7 +220,6 @@ export default {
     const typeWeaponState = ref(false)
     const gaugeState = ref(false)
     const employeeState = ref(false)
-    const showModal = ref(false)
     const medicalAppointmentFields = ref({
       citaId: 0,
       fechaHora: null,
@@ -357,7 +361,6 @@ export default {
       return true
     }
     const resetArmoryFields = () => {
-      showModal.value = false
       nomenclatureState.value = false
       brandState.value = false
       typeWeaponState.value = false
@@ -386,7 +389,6 @@ export default {
       typeWeaponState,
       gaugeState,
       employeeState,
-      showModal,
 
       onFiltered,
       addArmory,
@@ -403,5 +405,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

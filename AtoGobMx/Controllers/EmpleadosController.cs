@@ -24,7 +24,7 @@ namespace AtoGobMx.Controllers
             var empleados = await _context.Empleados
                 .Include(i => i.Area)
                 .Include(i => i.Departamentos)
-                .Include(i => i.PuestoTrabaj
+                .Include(i => i.PuestoTrabajo)
                 .OrderBy(o => o.EmpleadoId)
                 .ToListAsync();
             return Ok(empleados);
