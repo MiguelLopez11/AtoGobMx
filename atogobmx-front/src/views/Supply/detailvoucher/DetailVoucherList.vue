@@ -396,6 +396,7 @@ export default {
     }
     return {
       detailVoucher,
+      productVoucher,
       detailVoucherFields,
       showModal,
       perPage,

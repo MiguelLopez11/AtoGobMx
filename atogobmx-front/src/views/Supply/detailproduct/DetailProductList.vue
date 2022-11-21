@@ -264,6 +264,7 @@ export default {
       })
       return 'datos recargados'
     }
+
     const addDetailProduct = () => {
       createDetailProduct(detailProductFields.value, data => {
         refreshTable()
@@ -276,6 +277,7 @@ export default {
       showModal.value = false
       resetDetailProductFields()
     }
+
     const RemoveDetailProduct = WorksStatusId => {
       isloading.value = true
       swal.fire({
@@ -304,8 +306,11 @@ export default {
           }
         })
     }
+
     return {
       detailProduct,
+      detailVoucher,
+      productVoucher,
       detailProductFields,
       showModal,
       perPage,

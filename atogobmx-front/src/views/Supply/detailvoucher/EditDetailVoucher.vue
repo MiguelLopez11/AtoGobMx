@@ -260,6 +260,7 @@ export default {
 
     return {
       detailVoucher,
+      productVoucher,
       breadcrumbItems,
       QuantityState,
       IVAState,

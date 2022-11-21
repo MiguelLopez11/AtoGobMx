@@ -178,6 +178,8 @@ export default {
 
     return {
       detailProduct,
+      detailVoucher,
+      productVoucher,
       breadcrumbItems,
       DetailVoucherState,
       ProductState,
