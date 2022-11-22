@@ -25,13 +25,20 @@
           <!--Agregar descripcion-->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion">
-              <Field name="DescriptionField" :rules="validateDescription" as="text">
+              <Field
+                name="DescriptionField"
+                :rules="validateDescription"
+                as="text"
+              >
                 <b-form-input
                   v-model="statusLighting.descripcion"
                   :state="DescriptionState"
                 ></b-form-input>
               </Field>
-              <ErrorMessage class="text-danger" name="DescriptionField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="DescriptionField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
@@ -42,8 +49,8 @@
             to="/EstatusAlumbrado/list"
             type="reset"
           >
-            Cancelar</b-button
-          >
+            Cancelar
+          </b-button>
           <b-button type="success" class="col-1 m-2" variant="success">
             Guardar
           </b-button>
@@ -81,16 +88,18 @@ export default {
       { text: 'Editar-Estatus Alumbrado' }
     ])
     const onUpdateStatusLighting = () => {
-      updateStatusLighting(statusLighting.value, (data) => {})
-      swal.fire({
-        title: '¡Estatus modificado correctamente!',
-        text: 'El estatus se ha modificado  satisfactoriamente.',
-        icon: 'success'
-      }).then(result => {
-        if (result.isConfirmed) {
-          redirect.push('/EstatusAlumbrado/list')
-        }
-      })
+      updateStatusLighting(statusLighting.value, data => {})
+      swal
+        .fire({
+          title: '¡Estatus modificado correctamente!',
+          text: 'El estatus se ha modificado  satisfactoriamente.',
+          icon: 'success'
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            redirect.push('/EstatusAlumbrado/list')
+          }
+        })
       // $toast.open({
       //   message: 'Estetus Alumbrado modificado correctamente',
       //   position: 'top',
@@ -100,7 +109,7 @@ export default {
       //   onDismiss: () => redirect.push('/EstatusAlumbrado/list')
       // })
     }
-    getStatusById(router.params.EstatusId, (data) => {
+    getStatusById(router.params.EstatusId, data => {
       statusLighting.value = data
     })
 
@@ -109,7 +118,9 @@ export default {
         validateState()
         return 'Este campo es requerido'
       }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(statusLighting.value.nombreEstatus)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(statusLighting.value.nombreEstatus)
+      ) {
         NameState.value = false
         return 'El nombre de estatus solo puede contener letras'
       }
@@ -153,6 +164,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

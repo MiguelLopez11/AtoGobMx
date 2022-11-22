@@ -67,7 +67,7 @@ namespace AtoGobMx.Controllers
             }
 
             estatusobra.EstatusObraId = EstatusObraId;
-            estatusobra.NombreEstatus = op_EstatusObras.NombreEstatus;
+            estatusobra.Nombre = op_EstatusObras.Nombre;
             estatusobra.Descripcion = op_EstatusObras.Descripcion;
             estatusobra.Archivado = op_EstatusObras.Archivado;
 

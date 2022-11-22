@@ -70,7 +70,8 @@ namespace AtoGobMx.Controllers
             detallevale.DetalleValeId = DetalleValeId;
             detallevale.Cantidad = detalleVale.Cantidad;
             detallevale.Precio = detalleVale.Precio;
-            detallevale.subtotal = detalleVale.subtotal;
+            detallevale.Total = detalleVale.Total;
+            detallevale.IVA = detalleVale.IVA;
             detallevale.ProductoId = detalleVale.ProductoId;
             detallevale.Archivado = detalleVale.Archivado;
 

@@ -38,5 +38,7 @@ namespace AtoGobMx.Models
         public virtual IEnumerable<EmpleadosAlumbrado>? EmpleadosAlumbrado { get; set; }
         [JsonIgnore]
         public virtual IEnumerable<PROV_ControlVales>? ControlDeVales { get; set; }
+        [JsonIgnore]
+        public virtual IEnumerable<OP_Empleados>? OP_Empleados { get; set; }
     }
 }
