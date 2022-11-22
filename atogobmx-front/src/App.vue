@@ -7,15 +7,6 @@
             <b-avatar :src="background" />
             AtogobMx
           </b-navbar-brand>
-          <!-- <b-nav pills>
-            <b-nav-item
-              style="margin-top: -7px; text-decoration-color: white;"
-              to="/"
-            >
-              <b-avatar :src="background" />
-              AtogobMx
-            </b-nav-item> -->
-          <!-- </b-nav> -->
           <b-nav-item-dropdown
             v-if="
               departament === 'Recursos Humanos' || role === 'Administrador'
@@ -153,6 +144,10 @@
             <template v-slot:button-content>
               <i class="bi bi-hospital-fill" />
             </template>
+            <b-dropdown-item to="/ServiciosMedicos/Agenda">
+              <i class="bi bi-file-medical"></i>
+              Agenda
+            </b-dropdown-item>
             <b-dropdown-item to="/ServiciosMedicos/Cita/list">
               <i class="bi bi-file-medical"></i>
               Citas

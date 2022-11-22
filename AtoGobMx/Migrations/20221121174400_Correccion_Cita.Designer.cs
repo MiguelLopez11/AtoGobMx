@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20221121174400_Correccion_Cita")]
+    partial class Correccion_Cita
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1153,13 +1155,11 @@ namespace AtoGobMx.Migrations
                     b.Property<int>("EmpleadoId")
                         .HasColumnType("int");
 
-                    b.Property<string>("FechaDesde")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<DateTime>("FechaDesde")
+                        .HasColumnType("datetime(6)");
 
-                    b.Property<string>("FechaHasta")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<DateTime>("FechaHasta")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Motivo")
                         .IsRequired()

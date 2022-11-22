@@ -52,7 +52,7 @@
             <i class="bi bi-three-dots-vertical"></i>
           </template>
           <b-dropdown-item
-            @click="RemoveArmory(items.armaId)"
+            @click="RemoveArmory(items.citaId)"
             class="m-1"
             variant="outline-danger"
           >
@@ -64,8 +64,8 @@
             class="m-1"
             variant="outline-warning"
             :to="{
-              name: 'Armeria-Edit',
-              params: { ArmaId: items.armaId }
+              name: 'ServiciosMedicos-Cita-Edit',
+              params: { CitaId: items.citaId }
             }"
           >
             <i class="bi bi-pencil-square" />
@@ -80,7 +80,7 @@
       button-size="lg"
       hide-footer
     >
-      <Form @submit="addArmory">
+      <!-- <Form @submit="addArmory">
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Empleado Citante">
@@ -176,26 +176,20 @@
             Guardar
           </b-button>
         </b-row>
-      </Form>
+      </Form> -->
     </b-modal>
   </b-card>
 </template>
 
 <script>
 import MunicipalMedicalServices from '@/Services/municipalMedical.Services'
-import Datepicker from '@vuepic/vue-datepicker'
+// import Datepicker from '@vuepic/vue-datepicker'
 import EmployeeServices from '@/Services/employee.Services'
-import { Form, Field, ErrorMessage } from 'vee-validate'
+// import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
-// import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
-    Form,
-    Field,
-    ErrorMessage,
-    Datepicker,
-    // VueCal,
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup () {
@@ -232,10 +226,10 @@ export default {
     )
     const fields = ref([
       { value: 'empleados.nombreCompleto', text: 'Citante' },
-      { value: 'fechaHora', text: 'Fecha y hora' },
+      { value: 'motivo', text: 'Motivo de cita' },
+      { value: 'fechaDesde', text: 'Fecha y hora de inicio' },
+      { value: 'fechaHasta', text: 'Fecha y hora final' },
       { value: 'descripcion', text: 'Descripción' },
-      //   { value: 'calibre', text: 'Calibre' },
-      //   { value: 'empleado.nombreCompleto', text: 'Portador' },
       { value: 'actions', text: 'Acciones' }
     ])
     getMedicalAppointments(data => {

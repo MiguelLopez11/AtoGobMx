@@ -19,8 +19,10 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<IEnumerable<SERMED_Cita>>> GetCitas()
         {
             var Citas = await _context.Cita
+                .Where(w => !w.Archivado)
+                .Include(i => i.Empleados.Departamentos)
                 .ToListAsync();
-            if (Citas == null)
+            if (Citas.Count == 0)
             {
                 return BadRequest("No se encuentran citas registradas"); 
             }
@@ -30,7 +32,9 @@ namespace AtoGobMx.Controllers
         [HttpGet("{CitaId}")]
         public async Task<ActionResult<SERMED_Cita>> GetCitaById(int CitaId)
         {
-            var Cita = await _context.Cita.FirstOrDefaultAsync(f => f.CitaId == CitaId);
+            var Cita = await _context.Cita
+                .Include(i => i.Empleados)
+                .FirstOrDefaultAsync(f => f.CitaId == CitaId);
 
             if (Cita == null)
             {
@@ -59,9 +63,9 @@ namespace AtoGobMx.Controllers
                 return NotFound();
             }
             Cita.CitaId = cita.CitaId;
-            //Cita.NombreCitante = cita.NombreCitante;
-            Cita.FechaHora = cita.FechaHora;
-            //Cita.Hora = cita.Hora;
+            Cita.Motivo = cita.Motivo;
+            Cita.FechaDesde = cita.FechaDesde;
+            Cita.FechaHasta = cita.FechaHasta;
             Cita.Descripcion = cita.Descripcion;
             Cita.Archivado = cita.Archivado;
 
