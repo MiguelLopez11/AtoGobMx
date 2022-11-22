@@ -25,6 +25,17 @@ namespace AtoGobMx.Controllers
                 .Include(i => i.Area)
                 .Include(i => i.Departamentos)
                 .Include(i => i.PuestoTrabajo)
+                .OrderBy(o => o.EmpleadoId)
+                .ToListAsync();
+            return Ok(empleados);
+        }
+        [HttpGet("SinArchivar")]
+        public async Task<ActionResult<Empleado>> GetEmpleadosSinArchivar()
+        {
+            var empleados = await _context.Empleados
+                .Include(i => i.Area)
+                .Include(i => i.Departamentos)
+                .Include(i => i.PuestoTrabajo)
                 //.Include(i => i.usuario)
                 .Where(w => !w.Archivado)
                 .OrderBy(o => o.EmpleadoId)

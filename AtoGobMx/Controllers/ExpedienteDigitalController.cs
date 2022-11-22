@@ -23,7 +23,6 @@ namespace AtoGobMx.Controllers
         {
             var expedientes = await _context.ExpedienteDigital
                 .Include(i => i.Empleados)
-                .Where(w => !w.Archivado)
                 .OrderBy(o => o.ExpedienteDigitalId)
                 .ToListAsync();
             return Ok(expedientes);
