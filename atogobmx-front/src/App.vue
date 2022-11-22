@@ -224,7 +224,7 @@
             </b-dropdown-item>
             <b-dropdown-item to="/EstatusVale/list">
               <!-- <i class="bi bi-lightning-charge-fill"></i> -->
-              Estatus deL vale
+              Estatus del vale
             </b-dropdown-item>
             <b-dropdown-item to="/Producto/list">
               <!-- <i class="bi bi-lightning-charge-fill"></i> -->

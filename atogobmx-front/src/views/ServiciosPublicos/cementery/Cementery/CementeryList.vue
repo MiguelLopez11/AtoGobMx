@@ -72,7 +72,7 @@
     >
       <Form @submit="addCementeryService">
         <b-row cols="2">
-          <!-- 1 -->
+          <!--Agregar propietario -->
           <b-col>
             <b-form-group class="mt-3" label="Nombre del propietario">
               <Field
@@ -92,7 +92,7 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!-- 2 -->
+          <!--Agregar espacios -->
           <b-col>
             <b-form-group class="mt-3" label="Numero de espacios">
               <Field name="SpacesField" :rules="validateSpaces" as="number">
@@ -109,7 +109,7 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!-- 3 -->
+          <!--Agregar metros correspondientes -->
           <b-col>
             <b-form-group class="mt-3" label="Metros correspondientes">
               <Field name="MeterField" :rules="validateMeter" as="number">
@@ -127,7 +127,7 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!-- 4 -->
+          <!--Agregar espacios -->
           <b-col>
             <b-form-group class="mt-3" label="Espacios Disponibles">
               <Field
@@ -149,7 +149,42 @@
             </b-form-group>
           </b-col>
         </b-row>
-
+        <b-row cols="1" align-h="center">
+          <b-button
+            v-b-toggle.collapse-1
+            variant="primary"
+          >
+            Mapa
+          </b-button>
+          <b-collapse id="collapse-1" class="mt-2">
+            <b-card>
+              <b-alert variant="warning" dismissible show>Arrastra el punto del mapa al lugar donde se encuentra su gabeta.</b-alert>
+              <GMapMap
+            :center="center"
+            map-type-id="satellite"
+            :zoom="20"
+            :options="{
+              zoomControl: true,
+              mapTypeControl: false,
+              scaleControl: false,
+              rotateControl: true,
+              disableDefaultUi: false
+            }"
+            style="width: 1000px; height: 500px"
+          >
+            <GMapMarker
+              :zoom="10"
+              :key="index"
+              v-for="(m, index) in markers"
+              :position="m.position"
+              :clickable="true"
+              :draggable="true"
+              @click="center = m.position"
+            />
+          </GMapMap>
+            </b-card>
+          </b-collapse>
+        </b-row>
         <b-row align-h="end">
           <b-button
             class="w-auto m-2 text-white"
@@ -214,7 +249,15 @@ export default {
     const CementeryServiceFieldsBlank = ref(
       JSON.parse(JSON.stringify(cementeryServiceFields))
     )
-
+    const markers = ref([
+      {
+        position: {
+          lat: 20.5546629,
+          lng: -102.4953904
+        }
+      }
+    ])
+    const center = ref({ lat: 20.5546629, lng: -102.4953904 })
     const fields = ref([
       { value: 'nombrePropietario', text: 'Nombre de propietario' },
       { value: 'numeroEspasios', text: 'Espacios' },
@@ -256,7 +299,11 @@ export default {
         return 'Este campo es requerido'
       }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(cementeryServiceFields.value.nombrePropietario)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+          cementeryServiceFields.value.nombrePropietario
+        )
+      ) {
         PropietaryState.value = false
         return 'Este campo solo puede contener letras'
       }
@@ -296,12 +343,16 @@ export default {
         return 'Este campo es requerido'
       }
 
-      if (!/^\d*\.\d+$/i.test(cementeryServiceFields.value.metrosCorrespondientes)) {
+      if (
+        !/^\d*\.\d+$/i.test(cementeryServiceFields.value.metrosCorrespondientes)
+      ) {
         MeterState.value = false
         return 'Este campo solo puede contener numeros'
       }
 
-      if (!cementeryServiceFields.value.metrosCorrespondientes.trim().length > 0) {
+      if (
+        !cementeryServiceFields.value.metrosCorrespondientes.trim().length > 0
+      ) {
         MeterState.value = false
         return 'Este campo no puede contener espacios'
       }
@@ -361,30 +412,31 @@ export default {
 
     const RemoveCementeryService = cementeryId => {
       isloading.value = true
-      swal.fire({
-        title: '¿Estas seguro',
-        text: 'No podras revertir esto',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, Archivar Cementerios!',
-        cancelButtonText: 'Cancelar'
-      }).then(result => {
-        if (result.isConfirmed) {
-          deleteCementery(cementeryId, (data) => {
-            refreshTable()
-          })
-          swal.fire({
-            title: '¡Cementerio archivado!',
-            text:
-                'El cementerio ha sido archivado satisfactoriamente.',
-            icon: 'success'
-          })
-        } else {
-          isloading.value = false
-        }
-      })
+      swal
+        .fire({
+          title: '¿Estas seguro',
+          text: 'No podras revertir esto',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, Archivar Cementerios!',
+          cancelButtonText: 'Cancelar'
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            deleteCementery(cementeryId, data => {
+              refreshTable()
+            })
+            swal.fire({
+              title: '¡Cementerio archivado!',
+              text: 'El cementerio ha sido archivado satisfactoriamente.',
+              icon: 'success'
+            })
+          } else {
+            isloading.value = false
+          }
+        })
     }
 
     return {
@@ -404,6 +456,8 @@ export default {
       SpacesState,
       MeterState,
       AvailableState,
+      markers,
+      center,
 
       onFiltered,
       validatePropietary,
