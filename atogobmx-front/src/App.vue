@@ -4,22 +4,11 @@
       <b-navbar fixed>
         <b-navbar-nav fill>
           <b-nav pills>
-            <b-nav-item
-              style="margin-top: -7px; text-decoration-color: white;"
-              to="/"
-            >
-              <b-avatar :src="background" />
-              AtogobMx
-            </b-nav-item>
-          </b-nav>
-  <b-card align="center" class="m-2" v-if="isLogged">
-    <b-navbar>
-      <div class="col-lg-8 col-xs-12 col-centered">
-        <b-navbar-nav justified>
-          <b-navbar-brand to="/">
+          <b-nav-item style="margin-top: -7px; text-decoration-color: white;" to="/">
             <b-avatar :src="background" />
             AtogobMx
-          </b-navbar-brand>
+          </b-nav-item>
+          </b-nav>
           <b-nav-item-dropdown
             v-if="
               departament === 'Recursos Humanos' || role === 'Administrador'
@@ -61,193 +50,6 @@
             dropright
             auto-close="outside"
           >
-          <template v-slot:button-content>
-            <i class="bi bi-globe2"></i>
-          </template>
-            <!--Alumbrado Publico-->
-            <b-nav-item-dropdown
-              v-if="departament === 'Alumbrado publico' || role === 'Administrador'"
-              text="⚡ Alumbrado publico"
-              dropright
-              class="btn-group dropend"
-            >
-              <template v-slot:button-content>
-                <!-- <i class="bi bi-globe2"></i> -->
-              </template>
-              <b-dropdown-item to="/Alumbrado/list">
-                <i class="bi bi-lightning-charge-fill"></i>
-                Alumbrado Público
-              </b-dropdown-item>
-              <b-dropdown-item to="/EstatusAlumbrado/list">
-                <i class="bi bi-layers-fill"></i>
-                Estatus Alumbrado
-              </b-dropdown-item>
-              <!-- v-if="1 < 0" -->
-              <b-dropdown-item to="/TareaTipoAlumbrado/list">
-                <i class="bi bi-layers-fill"></i>
-                Tarea tipo
-              </b-dropdown-item>
-              <b-dropdown-item to="/ExpedienteAlumbrado/list">
-                <i class="bi bi-folder-fill"></i>
-                Expediente
-              </b-dropdown-item>
-              <b-dropdown-item to="/AlumbradoEmpleado/list">
-                <!-- <i class="bi bi-folder-fill"></i> -->
-                Empleado Alumbrado
-              </b-dropdown-item>
-            </b-nav-item-dropdown>
-            <!--Cementerios-->
-            <b-nav-item-dropdown
-              v-if="departament === 'Cementerios' || role === 'Administrador'"
-              text="⚰️ Cementerios"
-              dropright
-              class="btn-group dropend"
-            >
-              <template v-slot:button-content> </template>
-              <b-dropdown-item to="/Cementerios/list">
-                Gabetas
-              </b-dropdown-item>
-              <b-dropdown-item to="/DireccionCementerios/list">
-                Cementerios
-              </b-dropdown-item>
-            </b-nav-item-dropdown>
-            <!--Aseo-->
-            <b-nav-item-dropdown
-              v-if="departament === 'Aseo' || role === 'Administrador'"
-              text="🧹 Aseo"
-              dropright
-              class="btn-group dropend"
-            >
-              <template v-slot:button-content>
-                <!-- <i class="bi bi-globe2"></i> -->
-              </template>
-              <b-dropdown-item to="/Aseo/list">
-                <!-- <i class="bi bi-lightning-charge-fill"></i> -->
-                Aseo
-              </b-dropdown-item>
-              <b-dropdown-item to="/Ruta/list">
-                <!-- <i class="bi bi-lightning-charge-fill"></i> -->
-                Ruta
-              </b-dropdown-item>
-              <b-dropdown-item to="/Zona/list">
-                <!-- <i class="bi bi-lightning-charge-fill"></i> -->
-                Zona
-              </b-dropdown-item>
-            </b-nav-item-dropdown>
-            <!--Obras Publicas-->
-            <b-nav-item-dropdown
-              v-if="departament === 'Obras Publicas' || role === 'Administrador'"
-              text="🏗️ Obras publicas"
-              dropright
-              class="btn-group dropend"
-            >
-              <template v-slot:button-content>
-                <!-- <i class="bi bi-globe2"></i> -->
-              </template>
-              <b-dropdown-item to="/ObrasPublicas/list">
-                <!-- <i class="bi bi-lightning-charge-fill"></i> -->
-                Obras publicas
-              </b-dropdown-item>
-              <b-dropdown-item to="/EstatusOP/list">
-                <!-- <i class="bi bi-lightning-charge-fill"></i> -->
-                Estatus de obras publicas
-              </b-dropdown-item>
-            </b-nav-item-dropdown>
-          </b-nav-item-dropdown>
-          <!--Cementerios-->
-          <!-- <b-nav-item-dropdown
-            v-if="departament === 'Cementerios' || role === 'Administrador'"
-            text="Cementerios"
-            dropright
-            auto-close="outside"
-          >
-            <template v-slot:button-content> </template>
-            <b-dropdown-item to="/Cementerios/list">
-              Gabetas
-            </b-dropdown-item>
-            <b-dropdown-item to="/DireccionCementerios/list">
-              Cementerios
-            </b-dropdown-item>
-          </b-nav-item-dropdown> -->
-          <!--Aseo-->
-          <!-- <b-nav-item-dropdown
-            v-if="departament === 'Aseo' || role === 'Administrador'"
-            text="Aseo"
-            dropright
-            auto-close="outside"
-          >
-            <template v-slot:button-content>
-            </template>
-            <b-dropdown-item to="/Aseo/list">
-              Aseo
-            </b-dropdown-item>
-            <b-dropdown-item to="/Ruta/list">
-              Ruta
-            </b-dropdown-item>
-            <b-dropdown-item to="/Zona/list">
-              Zona
-            </b-dropdown-item>
-          </b-nav-item-dropdown> -->
-          <!--Obras publicas-->
-          <!-- <b-nav-item-dropdown
-            v-if="departament === 'Obras publicas' || role === 'Administrador'"
-            text="ObrasPublicas"
-            dropright
-            auto-close="outside"
-          >
-            <template v-slot:button-content>
-            </template>
-            <b-dropdown-item to="/ObrasPublicas/list">
-              Obras publicas
-            </b-dropdown-item>
-            <b-dropdown-item to="/EstatusOP/list">
-              Estatus de obras publicas
-            </b-dropdown-item>
-            <b-dropdown-item to="//list">
-              <i class="bi bi-lightning-charge-fill"></i>
-              nohay nada
-            </b-dropdown-item>
-          </b-nav-item-dropdown> -->
-          <!--Proveeduria-->
-          <b-nav-item-dropdown
-            v-if="
-              departament === 'Control de vales' || role === 'Administrador'
-            "
-            text="Control de vales"
-            dropright
-            auto-close="outside"
-          >
-            <template v-slot:button-content>
-              <!-- <i class="bi bi-globe2"></i> -->
-            </template>
-            <b-dropdown-item to="/ControlVale/list">
-              <!-- <i class="bi bi-lightning-charge-fill"></i> -->
-              Control de vale
-            </b-dropdown-item>
-            <b-dropdown-item to="/DetalleProducto/list">
-              <!-- <i class="bi bi-lightning-charge-fill"></i> -->
-              Detalle del producto
-            </b-dropdown-item>
-            <b-dropdown-item to="/DetalleVale/list">
-              <!-- <i class="bi bi-lightning-charge-fill"></i> -->
-              Detalle del vale
-            </b-dropdown-item>
-            <b-dropdown-item to="/EstatusVale/list">
-              <!-- <i class="bi bi-lightning-charge-fill"></i> -->
-              Estatus del vale
-            </b-dropdown-item>
-            <b-dropdown-item to="/Producto/list">
-              <!-- <i class="bi bi-lightning-charge-fill"></i> -->
-              Producto
-            </b-dropdown-item>
-            <b-dropdown-item to="/Proveedor/list">
-              <!-- <i class="bi bi-lightning-charge-fill"></i> -->
-              Proveedor
-            </b-dropdown-item>
-            <b-dropdown-item to="/TipoVale/list">
-              <!-- <i class="bi bi-lightning-charge-fill"></i> -->
-              Tipo del vale
-            </b-dropdown-item>
             <template v-slot:button-content>
               <i class="bi bi-globe2"></i>
             </template>
@@ -259,6 +61,7 @@
               <i class="bi bi-layers-fill"></i>
               Estatus Alumbrado
             </b-dropdown-item>
+            <!-- v-if="1 < 0" -->
             <b-dropdown-item to="/TareaTipoAlumbrado/list">
               <i class="bi bi-layers-fill"></i>
               Tarea tipo
@@ -268,39 +71,49 @@
               Expediente
             </b-dropdown-item>
             <b-dropdown-item to="/AlumbradoEmpleado/list">
+              <!-- <i class="bi bi-folder-fill"></i> -->
               Empleado Alumbrado
             </b-dropdown-item>
           </b-nav-item-dropdown>
+          <!--Cementerios-->
           <b-nav-item-dropdown
             v-if="departament === 'Cementerios' || role === 'Administrador'"
             text="Cementerios"
             dropright
             auto-close="outside"
           >
-            <template v-slot:button-content> </template>
+            <template v-slot:button-content>
+              <!-- <i class="bi bi-globe2"></i> -->
+            </template>
             <b-dropdown-item to="/Cementerios/list">
+              <!-- <i class="bi bi-lightning-charge-fill"></i> -->
               Gabetas
             </b-dropdown-item>
             <b-dropdown-item to="/DireccionCementerios/list">
+              <!-- <i class="bi bi-lightning-charge-fill"></i> -->
               Cementerios
             </b-dropdown-item>
           </b-nav-item-dropdown>
+          <!--Aseo-->
           <b-nav-item-dropdown
-            v-if="
-              departament === 'Servicios Publicos' || role === 'Administrador'
-            "
+            v-if="departament === 'Servicios Publicos' || role === 'Administrador'"
             text="Aseo"
             dropright
             auto-close="outside"
           >
-            <template v-slot:button-content> </template>
+            <template v-slot:button-content>
+              <!-- <i class="bi bi-globe2"></i> -->
+            </template>
             <b-dropdown-item to="/Aseo/list">
+              <!-- <i class="bi bi-lightning-charge-fill"></i> -->
               Aseo
             </b-dropdown-item>
             <b-dropdown-item to="/Ruta/list">
+              <!-- <i class="bi bi-lightning-charge-fill"></i> -->
               Ruta
             </b-dropdown-item>
             <b-dropdown-item to="/Zona/list">
+              <!-- <i class="bi bi-lightning-charge-fill"></i> -->
               Zona
             </b-dropdown-item>
           </b-nav-item-dropdown>
@@ -339,19 +152,7 @@
               <i class="bi bi-award-fill"></i>
               Armeria
             </b-dropdown-item>
-          </b-nav-item-dropdown>
-          <b-nav-item-dropdown text="Servicios Medicos Municipales">
-            <template v-slot:button-content>
-              <i class="bi bi-hospital-fill" />
-            </template>
-            <b-dropdown-item to="/ServiciosMedicos/Agenda">
-              <i class="bi bi-file-medical"></i>
-              Agenda
-            </b-dropdown-item>
-            <b-dropdown-item to="/ServiciosMedicos/Cita/list">
-              <i class="bi bi-file-medical"></i>
-              Citas
-            </b-dropdown-item>
+
           </b-nav-item-dropdown>
           <b-nav-item-dropdown text="Administrador" right auto-close>
             <template v-slot:button-content>
@@ -368,55 +169,18 @@
           </b-nav-item-dropdown>
         </b-navbar-nav>
         <b-row align-h="end" cols="1">
-          <b-button
-            v-if="!isLogged"
-            size="lg"
-            to="/Login"
-            style="background-color: #7367f0"
-            class="mr-3 ml-3"
-          >
-            <i class="bi bi-box-arrow-right"></i>
-            Login
-          </b-button>
-          <b-button
-            v-if="isLogged"
-            size="lg"
-            @click="removeLocalStorgare()"
-            style="background-color: #7367f0"
-            class="mr-3 ml-3"
-          >
-            <i class="bi bi-box-arrow-right"></i>
-            Cerrar Sesión
-          </b-button>
+              <b-button v-if="!isLogged" size="lg" to="/Login" style="background-color: #7367f0" class="mr-3 ml-3">
+                <i class="bi bi-box-arrow-right"></i>
+                Login
+              </b-button>
+              <b-button v-if="isLogged" size="lg" @click="removeLocalStorgare()" style="background-color: #7367f0" class="mr-3 ml-3">
+                <i class="bi bi-box-arrow-right"></i>
+                Cerrar Sesión
+              </b-button>
         </b-row>
       </b-navbar>
     </b-card>
   </div>
-      </div>
-      <b-row align-h="end" cols="1">
-        <b-button
-          v-if="!isLogged"
-          size="lg"
-          to="/Login"
-          style="background-color: #7367f0"
-          class="mr-3 ml-3"
-        >
-          <i class="bi bi-box-arrow-right"></i>
-          Login
-        </b-button>
-        <b-button
-          v-if="isLogged"
-          size="lg"
-          @click="removeLocalStorgare()"
-          style="background-color: #7367f0"
-          class="mr-3 ml-3"
-        >
-          <i class="bi bi-box-arrow-right"></i>
-          Cerrar Sesión
-        </b-button>
-      </b-row>
-    </b-navbar>
-  </b-card>
   <router-view></router-view>
 </template>
 <script>
