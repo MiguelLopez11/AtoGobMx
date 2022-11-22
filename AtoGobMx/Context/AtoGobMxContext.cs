@@ -24,6 +24,7 @@ namespace AtoGobMx.Context
         public DbSet<Cementerios> Cementerios { get; set; }
         public DbSet<DireccionCementerio> DireccionCementerio { get; set; }
         public DbSet<ExpedienteDigital> ExpedienteDigital { get; set; }
+        public DbSet<OP_Empleados> OP_Empleados { get; set; }
         public DbSet<OP_Obras> ObrasPublicas { get; set; }
         public DbSet<OP_EstatusObras> OP_EstatusObras { get; set; }
         public DbSet<PROV_ControlVales> ControlDeVales { get; set; }

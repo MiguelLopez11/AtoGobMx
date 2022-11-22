@@ -9,7 +9,7 @@ namespace AtoGobMx.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int EstatusValeId { get; set; }
-        public string EstatusVale { get; set; }
+        public string Nombre { get; set; }
         public string Descripcion { get; set; }
         public bool Archivado { get; set; }
 

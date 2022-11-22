@@ -68,7 +68,7 @@ namespace AtoGobMx.Controllers
 
             produc.ProductoId = ProductoId;
             produc.Nombre = producto.Nombre;
-            produc.Precio = producto.Precio;
+            //produc.Precio = producto.Precio;
             produc.Archivado = producto.Archivado;
 
             _context.PROV_Producto.Update(produc);

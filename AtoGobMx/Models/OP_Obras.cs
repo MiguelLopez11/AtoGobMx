@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace AtoGobMx.Models
 {
@@ -8,7 +9,7 @@ namespace AtoGobMx.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ObraId { get; set; }
-        public string NombreObra { get; set; }
+        public string Nombre { get; set; }
         public float Latitud { get; set; }
         public float Longitud { get; set; }
         public string Descripcion { get; set; }
@@ -17,6 +18,9 @@ namespace AtoGobMx.Models
 
         [ForeignKey("EstatusObraId")]
         public OP_EstatusObras? OP_EstatusObras { get; set; }
+
+        [JsonIgnore]
+        public virtual IEnumerable<OP_Empleados>? OP_Empleados { get; set; }
 
     }
 }

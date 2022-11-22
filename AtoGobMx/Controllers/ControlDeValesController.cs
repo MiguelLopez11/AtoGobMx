@@ -47,6 +47,10 @@ namespace AtoGobMx.Controllers
         [HttpPost]
         public async Task<ActionResult<PROV_ControlVales>> PostControlDeVales(PROV_ControlVales controlDeVales)
         {
+            _context.ControlDeVales.Add(controlDeVales);
+            controlDeVales.FechaEmicion = DateTime.Now;
+            _context.ControlDeVales.Add(controlDeVales);
+            controlDeVales.FechaVigencia = DateTime.Now;
             object value = _context.ControlDeVales.Add(controlDeVales);
             await _context.SaveChangesAsync();
             return Ok("Control de vales creado correctamente");
@@ -69,7 +73,7 @@ namespace AtoGobMx.Controllers
             controlvale.ControlValeId = ControlValeId;
             controlvale.FechaEmicion = controlDeVales.FechaEmicion;
             controlvale.FechaVigencia = controlDeVales.FechaVigencia;
-            controlvale.TipoCombustible = controlDeVales.TipoCombustible;
+            //controlvale.TipoCombustible = controlDeVales.TipoCombustible;
             controlvale.DepartamentoId = controlDeVales.DepartamentoId;
             controlvale.EmpleadoId = controlDeVales.EmpleadoId;
             controlvale.ProveedorId = controlDeVales.ProveedorId;

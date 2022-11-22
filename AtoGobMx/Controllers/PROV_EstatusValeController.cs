@@ -67,7 +67,7 @@ namespace AtoGobMx.Controllers
             }
 
             estatusvale.EstatusValeId = EstatusValeId;
-            estatusvale.EstatusVale = estatusVale.EstatusVale;
+            estatusvale.Nombre = estatusVale.Nombre;
             estatusvale.Descripcion = estatusVale.Descripcion;
             estatusvale.Archivado = estatusVale.Archivado;
 
