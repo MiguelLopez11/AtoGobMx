@@ -1,11 +1,15 @@
 <template>
     <VueSidebarMenuAkahon
       menuTitle="AtoGobMX"
-      bgColor="#666768"
-      secondaryColor="#666768"
+      bgColor="#ffffff"
+      secondaryColor="#ffffff"
       :menuLogo="background"
       :isSearch="false"
       :menuItems="menu"
+      logoTitleColor="#7b7a81"
+      menuItemsTextColor="#b9b8bc"
+      menuFooterTextColor="#b9b8bc"
+      iconsColor="#000000"
     />
       <!-- :button-exit-clicked="removeLocalStorgare()" -->
     <!-- <b-navbar toggleable="xl">
@@ -312,7 +316,7 @@ margin-left: -30px;
   width: auto;
 }
 body {
-  background-color: rgb(236, 237, 238) !important;
+  background-color: #f8f7fa !important;
 }
 .card-body {
   background-color: #f8f9fa;
