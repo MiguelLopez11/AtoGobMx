@@ -237,9 +237,6 @@
               <!-- <i class="bi bi-lightning-charge-fill"></i> -->
               Tipo del vale
             </b-dropdown-item>
-            <template v-slot:button-content>
-              <i class="bi bi-globe2"></i>
-            </template>
             <b-dropdown-item to="/Alumbrado/list">
               <i class="bi bi-lightning-charge-fill"></i>
               Alumbrado Público
