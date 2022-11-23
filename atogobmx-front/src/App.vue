@@ -1,25 +1,13 @@
 <template>
-  <div>
-    <b-card class="m-2" v-if="isLogged">
-      <b-navbar fixed>
-        <b-navbar-nav fill>
-          <b-nav pills>
-            <b-nav-item
-              style="margin-top: -7px; text-decoration-color: white;"
-              to="/"
-            >
-              <b-avatar :src="background" />
-              AtogobMx
-            </b-nav-item>
-          </b-nav>
   <b-card align="center" class="m-2" v-if="isLogged">
-    <b-navbar>
-      <div class="col-lg-8 col-xs-12 col-centered">
-        <b-navbar-nav justified>
-          <b-navbar-brand to="/">
-            <b-avatar :src="background" />
-            AtogobMx
-          </b-navbar-brand>
+    <b-navbar toggleable="xl">
+      <b-navbar-brand to="/">
+        <b-avatar :src="background" />
+        AtogobMx
+      </b-navbar-brand>
+      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+      <b-collapse id="nav-collapse" is-nav>
+        <b-navbar-nav class="ml-auto">
           <b-nav-item-dropdown
             v-if="
               departament === 'Recursos Humanos' || role === 'Administrador'
@@ -54,6 +42,7 @@
             </b-dropdown-item>
           </b-nav-item-dropdown>
           <b-nav-item-dropdown
+            right
             v-if="
               departament === 'Servicios Publicos' || role === 'Administrador'
             "
@@ -248,9 +237,6 @@
               <!-- <i class="bi bi-lightning-charge-fill"></i> -->
               Tipo del vale
             </b-dropdown-item>
-            <template v-slot:button-content>
-              <i class="bi bi-globe2"></i>
-            </template>
             <b-dropdown-item to="/Alumbrado/list">
               <i class="bi bi-lightning-charge-fill"></i>
               Alumbrado Público
@@ -305,6 +291,7 @@
             </b-dropdown-item>
           </b-nav-item-dropdown>
           <b-nav-item-dropdown
+            right
             v-if="departament === 'Patrimonio' || role === 'Administrador'"
             text="Patriminio"
           >
@@ -339,21 +326,9 @@
               <i class="bi bi-award-fill"></i>
               Armeria
             </b-dropdown-item>
+
           </b-nav-item-dropdown>
-          <b-nav-item-dropdown text="Servicios Medicos Municipales">
-            <template v-slot:button-content>
-              <i class="bi bi-hospital-fill" />
-            </template>
-            <b-dropdown-item to="/ServiciosMedicos/Agenda">
-              <i class="bi bi-file-medical"></i>
-              Agenda
-            </b-dropdown-item>
-            <b-dropdown-item to="/ServiciosMedicos/Cita/list">
-              <i class="bi bi-file-medical"></i>
-              Citas
-            </b-dropdown-item>
-          </b-nav-item-dropdown>
-          <b-nav-item-dropdown text="Administrador" right auto-close>
+          <b-nav-item-dropdown text="Administrador" right auto-close style="margin-right: 70px">
             <template v-slot:button-content>
               <i class="bi bi-clipboard2-pulse-fill"></i>
             </template>
@@ -367,8 +342,8 @@
             </b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>
-        <b-row align-h="end" cols="1">
-          <b-button
+        <b-row align-h="end" style="margin-right:0">
+          <!-- <b-button
             v-if="!isLogged"
             size="lg"
             to="/Login"
@@ -377,45 +352,25 @@
           >
             <i class="bi bi-box-arrow-right"></i>
             Login
-          </b-button>
+          </b-button> -->
           <b-button
             v-if="isLogged"
             size="lg"
             @click="removeLocalStorgare()"
-            style="background-color: #7367f0"
-            class="mr-3 ml-3"
+            style="background-color: #7367f0; font-size: 18px"
           >
             <i class="bi bi-box-arrow-right"></i>
             Cerrar Sesión
           </b-button>
         </b-row>
-      </b-navbar>
-    </b-card>
-  </div>
-      </div>
-      <b-row align-h="end" cols="1">
-        <b-button
-          v-if="!isLogged"
-          size="lg"
-          to="/Login"
-          style="background-color: #7367f0"
-          class="mr-3 ml-3"
-        >
-          <i class="bi bi-box-arrow-right"></i>
-          Login
-        </b-button>
-        <b-button
-          v-if="isLogged"
-          size="lg"
-          @click="removeLocalStorgare()"
-          style="background-color: #7367f0"
-          class="mr-3 ml-3"
-        >
-          <i class="bi bi-box-arrow-right"></i>
-          Cerrar Sesión
-        </b-button>
-      </b-row>
+      </b-collapse>
     </b-navbar>
+    <!-- <b-navbar>
+      <div class="col-lg-8 col-xs-12 col-centered">
+        <b-navbar-nav justified>
+        </b-navbar-nav>
+      </div>
+    </b-navbar> -->
   </b-card>
   <router-view></router-view>
 </template>
@@ -423,8 +378,10 @@
 import { ref, inject } from 'vue'
 import LogoAtogobMx from '@/Images/Icon.png'
 import { useRouter } from 'vue-router'
+import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
 
 export default {
+  components: {},
   setup () {
     const router = useRouter()
     const swal = inject('$swal')
@@ -433,6 +390,12 @@ export default {
     const departament = window.sessionStorage.getItem('Departamento')
     const role = window.sessionStorage.getItem('Role')
     const area = window.sessionStorage.getItem('Area')
+    const menu = ref([
+      {
+        header: 'AtoGobMX',
+        hiddenOnCollapse: true
+      }
+    ])
     const removeLocalStorgare = () => {
       window.sessionStorage.removeItem('isLogged')
       swal
@@ -443,7 +406,6 @@ export default {
         })
         .then(result => {
           router.go('/Login')
-          // router.push({ name: 'Login' })
         })
     }
     return {
@@ -452,10 +414,9 @@ export default {
       departament,
       role,
       area,
+      menu,
 
       removeLocalStorgare
-      // roleUser,
-      // DepartamentUser
     }
   }
 }
