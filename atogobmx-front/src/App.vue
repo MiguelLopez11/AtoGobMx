@@ -1,6 +1,14 @@
 <template>
-  <b-card align="center" class="m-2" v-if="isLogged">
-    <b-navbar toggleable="xl">
+    <VueSidebarMenuAkahon
+      menuTitle="AtoGobMX"
+      bgColor="#666768"
+      secondaryColor="#666768"
+      :menuLogo="background"
+      :isSearch="false"
+      :menuItems="menu"
+    />
+      <!-- :button-exit-clicked="removeLocalStorgare()" -->
+    <!-- <b-navbar toggleable="xl">
       <b-navbar-brand to="/">
         <b-avatar :src="background" />
         AtogobMx
@@ -227,29 +235,31 @@
               Roles
             </b-dropdown-item>
           </b-nav-item-dropdown>
-          <b-button
-            v-if="isLogged"
-            size="lg"
-            @click="removeLocalStorgare()"
-            style="background-color: #7367f0; font-size: 18px; margin-left: -10px"
-          >
-            <i class="bi bi-box-arrow-right"></i>
-            Cerrar Sesión
-          </b-button>
+          <b-row cols="1">
+            <b-button
+              v-if="isLogged"
+              @click="removeLocalStorgare()"
+              style="background-color: #7367f0; font-size: 20px; margin-right:-10px"
+            >
+              <i class="bi bi-box-arrow-right"></i>
+            </b-button>
+          </b-row>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
-  </b-card>
+  </b-card> -->
   <router-view></router-view>
 </template>
 <script>
 import { ref, inject } from 'vue'
 import LogoAtogobMx from '@/Images/Icon.png'
 import { useRouter } from 'vue-router'
-import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
+import VueSidebarMenuAkahon from 'vue-sidebar-menu-akahon'
 
 export default {
-  components: {},
+  components: {
+    VueSidebarMenuAkahon
+  },
   setup () {
     const router = useRouter()
     const swal = inject('$swal')
@@ -258,12 +268,7 @@ export default {
     const departament = window.sessionStorage.getItem('Departamento')
     const role = window.sessionStorage.getItem('Role')
     const area = window.sessionStorage.getItem('Area')
-    const menu = ref([
-      {
-        header: 'AtoGobMX',
-        hiddenOnCollapse: true
-      }
-    ])
+    const menu = ref([{ link: '/', name: 'Home', icon: 'bx-grid-alt' }])
     const removeLocalStorgare = () => {
       window.sessionStorage.removeItem('isLogged')
       swal
@@ -298,6 +303,9 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+.sidebar .nav-list {
+margin-left: -30px;
 }
 .navbar-nav .nav-link {
   border-width: 2px;
