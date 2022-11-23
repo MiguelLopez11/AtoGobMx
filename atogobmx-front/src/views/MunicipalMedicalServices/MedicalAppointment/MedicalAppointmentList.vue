@@ -228,7 +228,7 @@ export default {
       { value: 'empleados.nombreCompleto', text: 'Citante' },
       { value: 'motivo', text: 'Motivo de cita' },
       { value: 'fechaDesde', text: 'Fecha y hora de inicio' },
-      { value: 'fechaHasta', text: 'Fecha y hora final' },
+      { value: 'fechaHasta', text: 'Fecha y hora de termino' },
       { value: 'descripcion', text: 'Descripción' },
       { value: 'actions', text: 'Acciones' }
     ])
