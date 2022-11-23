@@ -67,59 +67,59 @@ namespace AtoGobMx.Controllers
         [HttpGet("Download")]
         public async Task<ActionResult<ExpedienteAlumbrado>> DownloadExpedienteAlumbrado()
         {
-            var html = $@"
-           <!DOCTYPE html>
-           <html lang=""en"">
-           <head>
-            <style>
-                .registros{{
-                    margin: 90px;
-                    column-count: 2;
-                    padding-left: 15px;
-                    border-top: 1px solid #5D6975;
-                    border-bottom: 1px solid  #5D6975;
-                    line-height: 5.4em;
-                }}
-                .alinear2{{
-                    margin: 90px;
-                    padding-left: 420px;
-                    transition: .5s;
-                    line-height: 4.4em;
-                    border-top: 1px solid  #5D6975;
-                    border-bottom: 1px solid  #5D6975;
-                    background-color: #F2F3F4 ;
-                }}
-                .card2{{
-                    margin: 90px;
-                    line-height: 4.4em;
-                    border-top: 1px solid  #5D6975;
-                }}
-                .alinear{{
-                    text-align: center;
-                }}
-            </style>
-           </head>
-          <body>
-            <div class="">
-                <img src="">
-            </div>
-            <h1 class=""alinear"">Reporte de alumbrado publico </h1>
-            <h3 class=""alinear2"">Fecha: </h3>
-            <div>
-                <div class=""registros"">
-                    <h3>Domicilio:@registros.Nomenclatura </h3>
-                    <h3>Localida: </h3>
-                    <h3>Nombre area: </h3>
-                    <h3>Departamento: </h3>
+                var html = $@"
+               <!DOCTYPE html>
+               <html lang=""en"">
+               <head>
+                <style>
+                    .registros{{
+                        margin: 90px;
+                        column-count: 2;
+                        padding-left: 15px;
+                        border-top: 1px solid #5D6975;
+                        border-bottom: 1px solid  #5D6975;
+                        line-height: 5.4em;
+                    }}
+                    .alinear2{{
+                        margin: 90px;
+                        padding-left: 420px;
+                        transition: .5s;
+                        line-height: 4.4em;
+                        border-top: 1px solid  #5D6975;
+                        border-bottom: 1px solid  #5D6975;
+                        background-color: #F2F3F4 ;
+                    }}
+                    .card2{{
+                        margin: 90px;
+                        line-height: 4.4em;
+                        border-top: 1px solid  #5D6975;
+                    }}
+                    .alinear{{
+                        text-align: center;
+                    }}
+                </style>
+               </head>
+              <body>
+                <div class= >
+                    <img src= >
                 </div>
+                <h1 class='alinear'>Reporte de alumbrado publico </h1>
+                <h3 class='alinear2'>Fecha: </h3>
+                <div>
+                    <div class='registros'>
+                        <h3>Domicilio: </h3>
+                        <h3>Localida: </h3>
+                        <h3>Nombre area: </h3>
+                        <h3>Departamento: </h3>
+                    </div>
 
-                <div class=""card2"">
-                    <h3>Descripcion Solucion: </h3>
+                    <div class='card2'>
+                        <h3>Descripcion Solucion: </h3>
+                    </div>
                 </div>
-            </div>
-          </body>
-          </html>
-          ";
+              </body>
+              </html>
+              ";
             GlobalSettings globalSettings = new GlobalSettings();
             globalSettings.ColorMode = ColorMode.Color;
             globalSettings.Orientation = Orientation.Portrait;
