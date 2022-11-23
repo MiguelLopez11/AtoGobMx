@@ -22,10 +22,6 @@ namespace AtoGobMx.Controllers
                 .Where(w => !w.Archivado)
                 .Include(i => i.Empleados.Departamentos)
                 .ToListAsync();
-            if (Citas.Count == 0)
-            {
-                return BadRequest("No se encuentran citas registradas"); 
-            }
             return Ok(Citas);
         }
 
