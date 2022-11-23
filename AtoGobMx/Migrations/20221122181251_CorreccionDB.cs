@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AtoGobMx.Migrations
 {
-    public partial class correccionDB : Migration
+    public partial class CorreccionDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -32,26 +32,6 @@ namespace AtoGobMx.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Aseo", x => x.AseoId);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Citas",
-                columns: table => new
-                {
-                    CitaId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    NombreCitante = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Fecha = table.Column<DateOnly>(type: "date", nullable: false),
-                    Hora = table.Column<TimeOnly>(type: "time(6)", nullable: false),
-                    Descripcion = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Archivado = table.Column<bool>(type: "tinyint(1)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Citas", x => x.CitaId);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -165,21 +145,23 @@ namespace AtoGobMx.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Medicamentos",
+                name: "Medicamento",
                 columns: table => new
                 {
                     ProductoId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CategoriaMedicamentoId = table.Column<int>(type: "int", nullable: false),
                     Nombre = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Contenido = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     FechaVencimiento = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    CantidadDisponible = table.Column<int>(type: "int", nullable: false)
+                    CantidadDisponible = table.Column<int>(type: "int", nullable: false),
+                    Archivado = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Medicamentos", x => x.ProductoId);
+                    table.PrimaryKey("PK_Medicamento", x => x.ProductoId);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -189,7 +171,7 @@ namespace AtoGobMx.Migrations
                 {
                     EstatusObraId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    NombreEstatus = table.Column<string>(type: "longtext", nullable: false)
+                    Nombre = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Descripcion = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -207,7 +189,7 @@ namespace AtoGobMx.Migrations
                 {
                     EstatusValeId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    EstatusVale = table.Column<string>(type: "longtext", nullable: false)
+                    Nombre = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Descripcion = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -227,7 +209,8 @@ namespace AtoGobMx.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Nombre = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Precio = table.Column<int>(type: "int", nullable: false),
+                    Descripcion = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Archivado = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
@@ -243,6 +226,8 @@ namespace AtoGobMx.Migrations
                     ProveedorId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Nombre = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    RFC = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     RepresentanteLegal = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -339,7 +324,7 @@ namespace AtoGobMx.Migrations
                 {
                     TipoId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    NombreVale = table.Column<string>(type: "longtext", nullable: false)
+                    Nombre = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Descripcion = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -462,7 +447,7 @@ namespace AtoGobMx.Migrations
                 {
                     ObraId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    NombreObra = table.Column<string>(type: "longtext", nullable: false)
+                    Nombre = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Latitud = table.Column<float>(type: "float", nullable: false),
                     Longitud = table.Column<float>(type: "float", nullable: false),
@@ -489,8 +474,9 @@ namespace AtoGobMx.Migrations
                     DetalleValeId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Cantidad = table.Column<int>(type: "int", nullable: false),
-                    Precio = table.Column<int>(type: "int", nullable: false),
-                    subtotal = table.Column<int>(type: "int", nullable: false),
+                    Precio = table.Column<float>(type: "float", nullable: false),
+                    IVA = table.Column<float>(type: "float", nullable: false),
+                    Total = table.Column<float>(type: "float", nullable: false),
                     ProductoId = table.Column<int>(type: "int", nullable: true),
                     Archivado = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
@@ -868,6 +854,35 @@ namespace AtoGobMx.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Cita",
+                columns: table => new
+                {
+                    CitaId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Motivo = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    FechaDesde = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    FechaHasta = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    EmpleadoId = table.Column<int>(type: "int", nullable: false),
+                    Descripcion = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Archivado = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cita", x => x.CitaId);
+                    table.ForeignKey(
+                        name: "FK_Cita_Empleados_EmpleadoId",
+                        column: x => x.EmpleadoId,
+                        principalTable: "Empleados",
+                        principalColumn: "EmpleadoId",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "ControlDeVales",
                 columns: table => new
                 {
@@ -875,13 +890,12 @@ namespace AtoGobMx.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     FechaEmicion = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     FechaVigencia = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    TipoCombustible = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
                     DepartamentoId = table.Column<int>(type: "int", nullable: true),
+                    AreaId = table.Column<int>(type: "int", nullable: true),
                     EmpleadoId = table.Column<int>(type: "int", nullable: true),
                     ProveedorId = table.Column<int>(type: "int", nullable: true),
                     ProductoId = table.Column<int>(type: "int", nullable: true),
-                    DetalleValeId = table.Column<float>(type: "float", nullable: true),
+                    DetalleValeId = table.Column<int>(type: "int", nullable: true),
                     EstatusValeId = table.Column<int>(type: "int", nullable: true),
                     TipoId = table.Column<int>(type: "int", nullable: true),
                     Archivado = table.Column<bool>(type: "tinyint(1)", nullable: false)
@@ -889,6 +903,11 @@ namespace AtoGobMx.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ControlDeVales", x => x.ControlValeId);
+                    table.ForeignKey(
+                        name: "FK_ControlDeVales_Area_AreaId",
+                        column: x => x.AreaId,
+                        principalTable: "Area",
+                        principalColumn: "AreaId");
                     table.ForeignKey(
                         name: "FK_ControlDeVales_Departamentos_DepartamentoId",
                         column: x => x.DepartamentoId,
@@ -899,6 +918,11 @@ namespace AtoGobMx.Migrations
                         column: x => x.EmpleadoId,
                         principalTable: "Empleados",
                         principalColumn: "EmpleadoId");
+                    table.ForeignKey(
+                        name: "FK_ControlDeVales_PROV_DetalleVale_DetalleValeId",
+                        column: x => x.DetalleValeId,
+                        principalTable: "PROV_DetalleVale",
+                        principalColumn: "DetalleValeId");
                     table.ForeignKey(
                         name: "FK_ControlDeVales_PROV_EstatusVale_EstatusValeId",
                         column: x => x.EstatusValeId,
@@ -984,6 +1008,91 @@ namespace AtoGobMx.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "ExpedienteMedico",
+                columns: table => new
+                {
+                    ExpedienteMedicoId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    EmpleadoId = table.Column<int>(type: "int", nullable: false),
+                    Estatura = table.Column<float>(type: "float", nullable: false),
+                    Peso = table.Column<float>(type: "float", nullable: false),
+                    TipoSangre = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Sexo = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Alergias = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Discapacidad = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    AntecedentesPersonales = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    AntecedentesFamiliares = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Archivado = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ExpedienteMedico", x => x.ExpedienteMedicoId);
+                    table.ForeignKey(
+                        name: "FK_ExpedienteMedico_Empleados_EmpleadoId",
+                        column: x => x.EmpleadoId,
+                        principalTable: "Empleados",
+                        principalColumn: "EmpleadoId",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "OP_Empleados",
+                columns: table => new
+                {
+                    EmpleadoObrasId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    EmpleadoId = table.Column<int>(type: "int", nullable: true),
+                    ObraId = table.Column<int>(type: "int", nullable: true),
+                    Archivado = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OP_Empleados", x => x.EmpleadoObrasId);
+                    table.ForeignKey(
+                        name: "FK_OP_Empleados_Empleados_EmpleadoId",
+                        column: x => x.EmpleadoId,
+                        principalTable: "Empleados",
+                        principalColumn: "EmpleadoId");
+                    table.ForeignKey(
+                        name: "FK_OP_Empleados_ObrasPublicas_ObraId",
+                        column: x => x.ObraId,
+                        principalTable: "ObrasPublicas",
+                        principalColumn: "ObraId");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Receta",
+                columns: table => new
+                {
+                    RecetaId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    EmpleadoId = table.Column<int>(type: "int", nullable: false),
+                    diagnostico = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    FechaAlta = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Archivado = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Receta", x => x.RecetaId);
+                    table.ForeignKey(
+                        name: "FK_Receta_Empleados_EmpleadoId",
+                        column: x => x.EmpleadoId,
+                        principalTable: "Empleados",
+                        principalColumn: "EmpleadoId",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Usuarios",
                 columns: table => new
                 {
@@ -1040,6 +1149,37 @@ namespace AtoGobMx.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "ProductoReceta",
+                columns: table => new
+                {
+                    ProductoRecetaId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    RecetaId = table.Column<int>(type: "int", nullable: false),
+                    ProductoId = table.Column<int>(type: "int", nullable: false),
+                    cantidad = table.Column<int>(type: "int", nullable: true),
+                    Descripcion = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Archivado = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductoReceta", x => x.ProductoRecetaId);
+                    table.ForeignKey(
+                        name: "FK_ProductoReceta_Medicamento_ProductoId",
+                        column: x => x.ProductoId,
+                        principalTable: "Medicamento",
+                        principalColumn: "ProductoId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductoReceta_Receta_RecetaId",
+                        column: x => x.RecetaId,
+                        principalTable: "Receta",
+                        principalColumn: "RecetaId",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.InsertData(
                 table: "Departamentos",
                 columns: new[] { "DepartamentoId", "Archivado", "Descripcion", "Nombre" },
@@ -1063,7 +1203,12 @@ namespace AtoGobMx.Migrations
             migrationBuilder.InsertData(
                 table: "Empleados",
                 columns: new[] { "EmpleadoId", "Archivado", "AreaId", "DepartamentoId", "FechaAlta", "FechaBaja", "NombreCompleto", "PuestoTrabajoId", "TieneExpediente" },
-                values: new object[] { 1, false, 1, 1, new DateTime(2022, 11, 14, 0, 0, 0, 0, DateTimeKind.Local), null, "Administrador", 1, true });
+                values: new object[] { 1, false, 1, 1, new DateTime(2022, 11, 22, 0, 0, 0, 0, DateTimeKind.Local), null, "Administrador", 1, true });
+
+            migrationBuilder.InsertData(
+                table: "ExpedienteDigital",
+                columns: new[] { "ExpedienteDigitalId", "Archivado", "Calle", "CodigoPostal", "CorreoElectronico", "EmpleadoId", "Estado", "FechaNacimiento", "Localidad", "Municipio", "NumeroExterior", "NumeroInterior" },
+                values: new object[] { 1, false, null, null, null, 1, null, null, null, null, null, null });
 
             migrationBuilder.InsertData(
                 table: "Usuarios",
@@ -1106,9 +1251,24 @@ namespace AtoGobMx.Migrations
                 column: "DireccionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Cita_EmpleadoId",
+                table: "Cita",
+                column: "EmpleadoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ControlDeVales_AreaId",
+                table: "ControlDeVales",
+                column: "AreaId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ControlDeVales_DepartamentoId",
                 table: "ControlDeVales",
                 column: "DepartamentoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ControlDeVales_DetalleValeId",
+                table: "ControlDeVales",
+                column: "DetalleValeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ControlDeVales_EmpleadoId",
@@ -1201,6 +1361,11 @@ namespace AtoGobMx.Migrations
                 column: "EmpleadoId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ExpedienteMedico_EmpleadoId",
+                table: "ExpedienteMedico",
+                column: "EmpleadoId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Mobiliario_AreaId",
                 table: "Mobiliario",
                 column: "AreaId");
@@ -1231,6 +1396,26 @@ namespace AtoGobMx.Migrations
                 column: "EstatusObraId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_OP_Empleados_EmpleadoId",
+                table: "OP_Empleados",
+                column: "EmpleadoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OP_Empleados_ObraId",
+                table: "OP_Empleados",
+                column: "ObraId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductoReceta_ProductoId",
+                table: "ProductoReceta",
+                column: "ProductoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductoReceta_RecetaId",
+                table: "ProductoReceta",
+                column: "RecetaId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PROV_DetalleProducto_DetalleValeId",
                 table: "PROV_DetalleProducto",
                 column: "DetalleValeId");
@@ -1254,6 +1439,11 @@ namespace AtoGobMx.Migrations
                 name: "IX_PuestoTrabajo_DepartamentoId",
                 table: "PuestoTrabajo",
                 column: "DepartamentoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Receta_EmpleadoId",
+                table: "Receta",
+                column: "EmpleadoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Teclado_EquipoComputoId",
@@ -1291,7 +1481,7 @@ namespace AtoGobMx.Migrations
                 name: "Cementerios");
 
             migrationBuilder.DropTable(
-                name: "Citas");
+                name: "Cita");
 
             migrationBuilder.DropTable(
                 name: "ControlDeVales");
@@ -1300,7 +1490,7 @@ namespace AtoGobMx.Migrations
                 name: "EmpleadosAlumbrado");
 
             migrationBuilder.DropTable(
-                name: "Medicamentos");
+                name: "ExpedienteMedico");
 
             migrationBuilder.DropTable(
                 name: "Mobiliario");
@@ -1312,7 +1502,10 @@ namespace AtoGobMx.Migrations
                 name: "Mouse");
 
             migrationBuilder.DropTable(
-                name: "ObrasPublicas");
+                name: "OP_Empleados");
+
+            migrationBuilder.DropTable(
+                name: "ProductoReceta");
 
             migrationBuilder.DropTable(
                 name: "PROV_DetalleProducto");
@@ -1351,7 +1544,13 @@ namespace AtoGobMx.Migrations
                 name: "TipoMobiliario");
 
             migrationBuilder.DropTable(
-                name: "OP_EstatusObras");
+                name: "ObrasPublicas");
+
+            migrationBuilder.DropTable(
+                name: "Medicamento");
+
+            migrationBuilder.DropTable(
+                name: "Receta");
 
             migrationBuilder.DropTable(
                 name: "PROV_DetalleVale");
@@ -1363,22 +1562,22 @@ namespace AtoGobMx.Migrations
                 name: "Roles");
 
             migrationBuilder.DropTable(
-                name: "Empleados");
-
-            migrationBuilder.DropTable(
                 name: "Alumbrado");
 
             migrationBuilder.DropTable(
                 name: "Vehiculo");
 
             migrationBuilder.DropTable(
+                name: "OP_EstatusObras");
+
+            migrationBuilder.DropTable(
+                name: "Empleados");
+
+            migrationBuilder.DropTable(
                 name: "PROV_Producto");
 
             migrationBuilder.DropTable(
                 name: "InventarioEstatus");
-
-            migrationBuilder.DropTable(
-                name: "PuestoTrabajo");
 
             migrationBuilder.DropTable(
                 name: "EstatusAlumbrado");
@@ -1391,6 +1590,9 @@ namespace AtoGobMx.Migrations
 
             migrationBuilder.DropTable(
                 name: "EstatusVehiculo");
+
+            migrationBuilder.DropTable(
+                name: "PuestoTrabajo");
 
             migrationBuilder.DropTable(
                 name: "Area");

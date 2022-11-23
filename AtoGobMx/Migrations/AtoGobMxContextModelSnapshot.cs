@@ -307,7 +307,7 @@ namespace AtoGobMx.Migrations
                             Archivado = false,
                             AreaId = 1,
                             DepartamentoId = 1,
-                            FechaAlta = new DateTime(2022, 11, 21, 0, 0, 0, 0, DateTimeKind.Local),
+                            FechaAlta = new DateTime(2022, 11, 22, 0, 0, 0, 0, DateTimeKind.Local),
                             NombreCompleto = "Administrador",
                             PuestoTrabajoId = 1,
                             TieneExpediente = true
@@ -1556,7 +1556,7 @@ namespace AtoGobMx.Migrations
             modelBuilder.Entity("AtoGobMx.Models.OP_Empleados", b =>
                 {
                     b.HasOne("AtoGobMx.Models.Empleado", "Empleados")
-                        .WithMany("OP_Empleados")
+                        .WithMany()
                         .HasForeignKey("EmpleadoId");
 
                     b.HasOne("AtoGobMx.Models.OP_Obras", "ObrasPublicas")
