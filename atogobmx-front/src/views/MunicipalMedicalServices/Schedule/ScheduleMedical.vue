@@ -1,7 +1,7 @@
 <template>
   <b-card class="m-2">
     <b-card class="m-1 border border-3">
-      <h2>Agenda Municipal</h2>
+      <h3>Agenda Municipal</h3>
     </b-card>
     <b-row>
       <b-col>
@@ -137,9 +137,10 @@
         Fecha: {{ scheduleSelected.start.format('DD/MM/YYYY') }}
       </li>
       <li style="font-size: 20px">
-        Desde: {{ scheduleSelected.start.formatTime() }} Hasta: {{ scheduleSelected.end.formatTime() }}
+        Desde: {{ scheduleSelected.start.formatTime() }} Hasta:
+        {{ scheduleSelected.end.formatTime() }}
       </li>
-      <li style="font-size: 20px"> Detalles: {{ scheduleSelected.content }}</li>
+      <li style="font-size: 20px">Detalles: {{ scheduleSelected.content }}</li>
     </ul>
     <b-row cols="4" align-h="center">
       <b-col>
@@ -165,6 +166,7 @@ import { Form, Field, ErrorMessage } from 'vee-validate'
 import Datepicker from '@vuepic/vue-datepicker'
 import MunicipalMedicalServices from '@/Services/municipalMedical.Services'
 import EmployeeServices from '@/Services/employee.Services'
+import { useRouter } from 'vue-router'
 import 'vue-cal/dist/vuecal.css'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { ref, inject } from 'vue'
@@ -183,6 +185,7 @@ export default {
       getMedicalAppointments,
       createMedicalAppointment
     } = MunicipalMedicalServices()
+    const redirect = useRouter()
     const date = ref([])
     const employees = ref([])
     const schedules = ref([])
@@ -247,14 +250,18 @@ export default {
       schedulesFields.value.fechaDesde = date.value[0]
       schedulesFields.value.fechaHasta = date.value[1]
       createMedicalAppointment(schedulesFields.value, data => {
-        swal.fire({
-          title: 'Cita registrada correctamente!',
-          text: 'La cita se ha registrado al sistema satisfactoriamente.',
-          icon: 'success'
-        })
+        swal
+          .fire({
+            title: 'Cita registrada correctamente!',
+            text: 'La cita se ha registrado al sistema satisfactoriamente.',
+            icon: 'success'
+          })
+          .then(result => {
+            if (result.isConfirmed) {
+              redirect.push('/ServiciosMedicos/Cita/list')
+            }
+          })
       })
-      resetFields()
-      refreshSchedules()
     }
     const onEventClick = event => {
       scheduleSelected.value = event

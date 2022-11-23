@@ -17,7 +17,9 @@
           font-size: 18px;
           margin-right: 15px;
           margin-left: 20px;
-        ">
+        "
+        to="/ServiciosMedicos/Agenda"
+      >
         <i class="bi bi-car-front-fill" />
         Agendar Cita
       </b-button>
@@ -52,7 +54,7 @@
             <i class="bi bi-three-dots-vertical"></i>
           </template>
           <b-dropdown-item
-            @click="RemoveArmory(items.citaId)"
+            @click="RemoveMedicalAppointment(items.citaId)"
             class="m-1"
             variant="outline-danger"
           >
@@ -74,130 +76,19 @@
         </b-dropdown>
       </template>
     </EasyDataTable>
-    <b-modal
-      title="Registrar Arma"
-      size="xl"
-      button-size="lg"
-      hide-footer
-    >
-      <!-- <Form @submit="addArmory">
-        <b-row cols="3">
-          <b-col>
-            <b-form-group class="mt-3" label="Empleado Citante">
-              <Field
-                name="NomenclatureField"
-                :rules="validateNomeclature"
-                as="text"
-              >
-                <b-form-select
-                  v-model="medicalAppointmentFields.empleadoId"
-                  autofocus
-                  :state="employeeState"
-                  value-field="empleadoId"
-                  text-field="nombreCompleto"
-                  :options="employees"
-                >
-                </b-form-select>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="NomenclatureField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Fecha y hora">
-              <Field name="BrandField" :rules="validateBrand" as="text">
-                <Datepicker
-                  v-model="medicalAppointmentFields.fechaAlta"
-                  locale="es"
-                >
-                </Datepicker>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="BrandField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Descripcion">
-              <Field name="BrandField" :rules="validateTypeWeapon" as="text">
-                <b-form-textarea
-                  placeholder="Describe el motivo de la cita"
-                  v-model="medicalAppointmentFields.tipoArma"
-                  :state="typeWeaponState"
-                >
-                </b-form-textarea>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="BrandField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-        </b-row>
-        <b-container>
-          <b-row>
-            <b-col lg="8">
-              <VueCal
-                ref="vuecal"
-                style="height: 400px"
-                class="vuecal--rounded-theme"
-                :time-from="8 * 60"
-                :time-to="23 * 60"
-                active-view="week"
-                locale="es"
-                editable-events
-                @cell-dblclick="
-                  $refs.vuecal.createEvent($event, 30, {
-                    title: '',
-                    class: 'sport'
-                  })
-                "
-              />
-            </b-col>
-            <b-col>
-              <b-button>
-                Agregar
-              </b-button>
-            </b-col>
-          </b-row>
-        </b-container>
-        <b-row align-h="end">
-          <b-button
-            class="w-auto m-2 text-white"
-            variant="primary"
-            @click="resetArmoryFields()"
-          >
-            Cancelar
-          </b-button>
-          <b-button class="w-auto m-2" variant="success" type="submit">
-            Guardar
-          </b-button>
-        </b-row>
-      </Form> -->
-    </b-modal>
   </b-card>
 </template>
 
 <script>
 import MunicipalMedicalServices from '@/Services/municipalMedical.Services'
-// import Datepicker from '@vuepic/vue-datepicker'
 import EmployeeServices from '@/Services/employee.Services'
-// import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
-import '@vuepic/vue-datepicker/dist/main.css'
 export default {
-  components: {
-    EasyDataTable: window['vue3-easy-data-table']
-  },
   setup () {
     const swal = inject('$swal')
     const {
       getMedicalAppointments,
-      createWeapon,
-      deleteWeapon
+      deleteMedicalAppointment
     } = MunicipalMedicalServices()
     const { getEmployeesUnfiled } = EmployeeServices()
     const medicalAppointments = ref([])
@@ -266,18 +157,7 @@ export default {
       })
       return 'datos recargados'
     }
-    const addArmory = () => {
-      createWeapon(medicalAppointmentFields.value, data => {
-        refreshTable()
-        swal.fire({
-          title: 'Arma registrada correctamente!',
-          text: 'El arma se ha registrado al sistema satisfactoriamente.',
-          icon: 'success'
-        })
-      })
-      resetArmoryFields()
-    }
-    const RemoveArmory = ArmaId => {
+    const RemoveMedicalAppointment = ArmaId => {
       isloading.value = true
       swal
         .fire({
@@ -287,7 +167,7 @@ export default {
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
           cancelButtonColor: '#d33',
-          confirmButtonText: 'Si, archivar arma!',
+          confirmButtonText: 'Si, cancelar cita!',
           cancelButtonText: 'Cancelar'
         })
         .then(result => {
@@ -300,7 +180,7 @@ export default {
               })
               .then(result => {
                 if (result.isConfirmed) {
-                  deleteWeapon(ArmaId, data => {
+                  deleteMedicalAppointment(ArmaId, data => {
                     refreshTable()
                   })
                 }
@@ -385,9 +265,8 @@ export default {
       employeeState,
 
       onFiltered,
-      addArmory,
       refreshTable,
-      RemoveArmory,
+      RemoveMedicalAppointment,
       resetArmoryFields,
       validateNomeclature,
       validateBrand,
