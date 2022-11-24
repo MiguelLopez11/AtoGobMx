@@ -41,7 +41,56 @@ namespace AtoGobMx.Controllers
                 //Ok($"No se encuentra la falla con el ID: {FallasId}");
                 return NotFound();
             }
-            return Ok();
+            return Ok(vehiculo);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<VehiculosAlumbrado>> PostVehiculoAlumbrado(VehiculosAlumbrado vehiculosAlumbrado)
+        {
+            object value = _context.VehiculosAlumbrado.Add(vehiculosAlumbrado);
+            await _context.SaveChangesAsync();
+            return Ok("Vehiculo Alumbrado creado correctamente");
+        }
+
+        [HttpPut("{VehiculoAlumbradoId}")]
+        public async Task<ActionResult> PutVehiculoAlumbrado(int VehiculoAlumbradoId, VehiculosAlumbrado vehiculosAlumbrado)
+        {
+            if (vehiculosAlumbrado.VehiculoAlumbradoId != VehiculoAlumbradoId)
+            {
+                return Ok("Los ID no ingresados no coinciden");
+            }
+
+            var vehiculo = await _context.VehiculosAlumbrado.FirstOrDefaultAsync(f => f.VehiculoAlumbradoId == VehiculoAlumbradoId);
+            if (vehiculo == null)
+            {
+                return BadRequest("El Registro del proveedor no existe");
+            }
+
+            vehiculo.VehiculoAlumbradoId = VehiculoAlumbradoId;
+            vehiculo.EstatusVehiculoId = vehiculosAlumbrado.EstatusVehiculoId;
+            vehiculo.VehiculoId = vehiculosAlumbrado.VehiculoId;
+            vehiculo.ExpedienteAlumbradoId = vehiculosAlumbrado.ExpedienteAlumbradoId;
+            vehiculo.Archivado = vehiculosAlumbrado.Archivado;
+
+            _context.VehiculosAlumbrado.Update(vehiculo);
+            await _context.SaveChangesAsync();
+            return Ok("Vehiculos alumbrado actualizado correctamente");
+        }
+
+        [HttpDelete("{VehiculoAlumbradoId}")]
+        public async Task<IActionResult> DeleteVehiculoAlumbrado(int VehiculoAlumbradoId)
+        {
+            var vehiculo = _context.VehiculosAlumbrado
+                .FirstOrDefault(f => f.VehiculoAlumbradoId == VehiculoAlumbradoId);
+            if (vehiculo == null)
+            {
+                return NotFound();
+            }
+
+            vehiculo.Archivado = true;
+            _context.VehiculosAlumbrado.Update(vehiculo);
+            await _context.SaveChangesAsync();
+            return Ok("Vehiculo alumbrado Archivado");
         }
     }
 }
