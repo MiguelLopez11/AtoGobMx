@@ -8,7 +8,9 @@ import VueToast from 'vue-toast-notification'
 import VueSweetalert2 from 'vue-sweetalert2'
 import vSelect from 'vue-select'
 import VueGoogleMaps from '@fawmi/vue-google-maps'
+import vueAwesomeSidebar from 'vue-awesome-sidebar'
 
+import 'vue-awesome-sidebar/dist/vue-awesome-sidebar.css'
 import 'vue-select/dist/vue-select.css'
 import 'sweetalert2/dist/sweetalert2.min.css'
 import 'vue-neat-modal/dist/vue-neat-modal.css'
@@ -27,4 +29,4 @@ app.use(router).use(BootstrapVue3).use(VueToast).use(VueSweetalert2).use(VueGoog
   load: {
     key: 'AIzaSyAu9G_tPHiWvYnf-qkessxqcv4pQaJPhfY'
   }
-}).mount('#app')
+}).use(vueAwesomeSidebar).mount('#app')

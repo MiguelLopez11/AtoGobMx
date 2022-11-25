@@ -55,7 +55,7 @@
           <b-button
             class="col-1 m-2 text-white"
             variant="primary"
-            to="/areas/list"
+            to="RecursosHumanos/areas/list"
             type="reset"
             >Cancelar</b-button
           >
@@ -93,7 +93,7 @@ export default {
     const departamentState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Areas', to: '/Areas/list' },
+      { text: 'Areas', to: '/RecursosHumanos/Areas/List' },
       { text: 'Editar-Area' }
     ])
     const onUpdateArea = () => {
@@ -104,7 +104,7 @@ export default {
           icon: 'success'
         }).then(result => {
           if (result.isConfirmed) {
-            redirect.push('/Areas/list')
+            redirect.push('/RecursosHumanos/Areas/List')
           }
         })
       })

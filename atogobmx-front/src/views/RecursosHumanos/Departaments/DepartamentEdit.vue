@@ -40,7 +40,7 @@
           <b-button
             class="col-1 m-2 text-white"
             variant="primary"
-            to="/Departamentos/list"
+            to="/RecursosHumanos/Departamentos/list"
             type="reset"
           >
             Cancelar</b-button
@@ -77,7 +77,7 @@ export default {
     const nameState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Departamentos', to: '/Departamentos/list' },
+      { text: 'Departamentos', to: '/RecursosHumanos/Departamentos/list' },
       { text: 'Editar-Departamento' }
     ])
     const onUpdateDepartamento = () => {
@@ -88,7 +88,7 @@ export default {
           icon: 'success'
         }).then(result => {
           if (result.isConfirmed) {
-            redirect.push('/Departamentos/list')
+            redirect.push('/RecursosHumanos/Departamentos/list')
           }
         })
       })

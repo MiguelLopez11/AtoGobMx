@@ -68,7 +68,7 @@
           <b-button
             class="col-1 m-2 text-white"
             variant="primary"
-            to="/PuestosTrabajos/list"
+            to="/RecursosHumanos/PuestosTrabajos/list"
             type="reset"
           >
             Cancelar</b-button
@@ -113,7 +113,7 @@ export default {
     const departamentState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Puestos de Trabajo', to: '/PuestosTrabajos/list' },
+      { text: 'Puestos de Trabajo', to: '/RecursosHumanos/PuestosTrabajos/list' },
       { text: 'Editar-Puesto de trabajo' }
     ])
     const onUpdateWorkStation = () => {
@@ -124,7 +124,7 @@ export default {
           icon: 'success'
         }).then(result => {
           if (result.isConfirmed) {
-            redirect.push('/PuestosTrabajos/list')
+            redirect.push('/RecursosHumanos/PuestosTrabajos/list')
           }
         })
       })
