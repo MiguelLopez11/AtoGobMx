@@ -107,7 +107,7 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            to="/Mobiliarios/list"
+            to="/PatrimonioMunicipal/Mobiliarios/list"
           >
             Cancelar
           </b-button>
@@ -158,7 +158,7 @@ export default {
     const departamentState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Mobiliarios', to: '/Mobiliarios/list' },
+      { text: 'Mobiliarios', to: '/PatrimonioMunicipal/Mobiliarios/list' },
       { text: 'Editar mobiliario' }
     ])
     const onUpdateWorkStation = () => {
@@ -171,7 +171,7 @@ export default {
           })
           .then(result => {
             if (result.isConfirmed) {
-              redirect.push('/Mobiliarios/list')
+              redirect.push('/PatrimonioMunicipal/Mobiliarios/list')
             }
           })
       })

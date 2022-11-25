@@ -40,7 +40,7 @@
           <b-button
             class="col-1 m-2 text-white"
             variant="primary"
-            to="/Departamentos/list"
+            to="/PatrimonioMunicipal/EstatusVehiculo/list"
             type="reset"
           >
             Cancelar</b-button
@@ -77,7 +77,7 @@ export default {
     const nameState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Estatus vehiculo', to: '/EstatusVehiculo/list' },
+      { text: 'Estatus vehiculo', to: '/PatrimonioMunicipal/EstatusVehiculo/list' },
       { text: 'Editar Estatus Vehiculo' }
     ])
     const onUpdateStatus = () => {
@@ -88,7 +88,7 @@ export default {
           icon: 'success'
         }).then(result => {
           if (result.isConfirmed) {
-            redirect.push('/EstatusVehiculo/list')
+            redirect.push('/PatrimonioMunicipal/EstatusVehiculo/list')
           }
         })
       })

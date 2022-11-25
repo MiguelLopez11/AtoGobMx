@@ -77,8 +77,8 @@ export default {
     const nameState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Estatus computer', to: '/EstatusEquipo/list' },
-      { text: 'Editar-Departamento' }
+      { text: 'Estatus computer', to: '/PatrimonioMunicipal/EstatusEquipo/list' },
+      { text: 'Editar-Estatus' }
     ])
     const onUpdateStatus = () => {
       updateStatusComputer(statusComputer.value, data => {
@@ -88,7 +88,7 @@ export default {
           icon: 'success'
         }).then(result => {
           if (result.isConfirmed) {
-            redirect.push('/EstatusEquipo/list')
+            redirect.push('/PatrimonioMunicipal/EstatusEquipo/list')
           }
         })
       })

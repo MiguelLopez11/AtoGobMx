@@ -142,7 +142,7 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            to="/Vehiculos/list"
+            to="/PatrimonioMunicipal/Vehiculos/list"
           >
             Cancelar
           </b-button>
@@ -185,7 +185,7 @@ export default {
     const transmissionState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Vehiculos', to: '/Vehiculos/list' },
+      { text: 'Vehiculos', to: '/PatrimonioMunicipal/Vehiculos/list' },
       { text: 'Editar Vehiculo' }
     ])
     getVehicle(router.params.VehiculoId, data => {
@@ -200,7 +200,7 @@ export default {
         icon: 'success'
       }).then(result => {
         if (result.isConfirmed) {
-          redirect.push('/Vehiculos/list')
+          redirect.push('/PatrimonioMunicipal/Vehiculos/list')
         }
       })
     }

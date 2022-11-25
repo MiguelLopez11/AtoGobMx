@@ -10,6 +10,60 @@ const routes = [
     }
   },
   {
+    path: '/RecursosHumanos',
+    name: 'RecursosHumanos',
+    component: () => import('../components/ResourcesHumanRoutes'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado'
+    }
+  },
+  {
+    path: '/ServiciosPublicos',
+    name: 'ServiciosPublicos',
+    component: () => import('../components/PublicServicesRoutes'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado'
+    }
+  },
+  {
+    path: '/Proveeduria',
+    name: 'Proveeduria',
+    component: () => import('../components/SupplyRoutes'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado'
+    }
+  },
+  {
+    path: '/PatrimonioMunicipal',
+    name: 'PatrimonioMunicipal',
+    component: () => import('../components/PatrimonyMunicipalRoutes'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado'
+    }
+  },
+  {
+    path: '/ServiciosMedicosMunicipales',
+    name: 'ServiciosMedicosMunicipales',
+    component: () => import('../components/MedicalServicesRoutes'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado'
+    }
+  },
+  {
+    path: '/Administrador',
+    name: 'Administrador',
+    component: () => import('../components/AdministratorRoutes'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Administrador'
+    }
+  },
+  {
     path: '/PageNotAllowed',
     name: 'PageNotPermission',
     component: () => import('../views/PageNotPermission/PageNotPermission.vue'),
@@ -28,7 +82,7 @@ const routes = [
     }
   },
   {
-    path: '/Areas/List',
+    path: '/RecursosHumanos/Areas/List',
     name: 'Areas',
     component: () => import('../views/RecursosHumanos/areas/AreaList.vue'),
     meta: {
@@ -39,7 +93,7 @@ const routes = [
     }
   },
   {
-    path: '/Areas/:AreaId',
+    path: '/RecursosHumanos/Areas/:AreaId',
     name: 'Area-Edit',
     component: () => import('../views/RecursosHumanos/areas/AreaEdit.vue'),
     meta: {
@@ -49,7 +103,7 @@ const routes = [
     }
   },
   {
-    path: '/Empleados/list',
+    path: '/RecursosHumanos/Empleados/list',
     name: 'Empleados',
     component: () => import('@/views/RecursosHumanos/Employees/EmployeeList.vue'),
     meta: {
@@ -59,7 +113,7 @@ const routes = [
     }
   },
   {
-    path: '/Empleados/:EmpleadoId',
+    path: '/RecursosHumanos/Empleados/:EmpleadoId',
     name: 'Empleados-Edit',
     component: () => import('@/views/RecursosHumanos/Employees/EmployeeEdit.vue'),
     meta: {
@@ -69,7 +123,7 @@ const routes = [
     }
   },
   {
-    path: '/ExpedientesDigitales/list',
+    path: '/RecursosHumanos/ExpedientesDigitales/list',
     name: 'ExpedientesDigitales',
     component: () => import('@/views/RecursosHumanos/ExpedienteDigital/ExpedientDigitalList.vue'),
     meta: {
@@ -79,7 +133,7 @@ const routes = [
     }
   },
   {
-    path: '/ExpedientesDigitales/:ExpedienteDigitalId',
+    path: '/RecursosHumanos/ExpedientesDigitales/:ExpedienteDigitalId',
     name: 'ExpedienteDigital-edit',
     component: () => import('@/views/RecursosHumanos/ExpedienteDigital/ExpedientDigitalEdit.vue'),
     meta: {
@@ -403,7 +457,7 @@ const routes = [
   },
   // termino modulos arturo
   {
-    path: '/Usuarios/list',
+    path: '/Administrador/Usuarios/list',
     name: 'Usuarios',
     component: () => import('@/views/Users/UserList.vue'),
     meta: {
@@ -423,7 +477,7 @@ const routes = [
     }
   },
   {
-    path: '/Roles/list',
+    path: '/Administrador/Roles/list',
     name: 'Roles',
     component: () => import('@/views/Roles/RoleList.vue'),
     meta: {
@@ -433,7 +487,7 @@ const routes = [
     }
   },
   {
-    path: '/Roles/:RoleId',
+    path: '/Administrador/Roles/:RoleId',
     name: 'Roles-Edit',
     component: () => import('@/views/Roles/RoleEdit.vue'),
     meta: {
@@ -443,7 +497,7 @@ const routes = [
     }
   },
   {
-    path: '/Departamentos/list',
+    path: '/RecursosHumanos/Departamentos/list',
     name: 'Departamentos',
     component: () => import('@/views/RecursosHumanos/Departaments/DepartamentList.vue'),
     meta: {
@@ -453,7 +507,7 @@ const routes = [
     }
   },
   {
-    path: '/Departamentos/:DepartamentoId',
+    path: '/RecursosHumanos/Departamentos/:DepartamentoId',
     name: 'Departamentos-Edit',
     component: () => import('@/views/RecursosHumanos/Departaments/DepartamentEdit.vue'),
     meta: {
@@ -463,7 +517,7 @@ const routes = [
     }
   },
   {
-    path: '/PuestosTrabajos/list',
+    path: '/RecursosHumanos/PuestosTrabajos/list',
     name: 'PuestosTrabajos',
     component: () => import('@/views/RecursosHumanos/WorkStation/WorkStationList.vue'),
     meta: {
@@ -473,7 +527,7 @@ const routes = [
     }
   },
   {
-    path: '/PuestosTrabajos/:puestoTrabajoId',
+    path: '/RecursosHumanos/PuestosTrabajos/:puestoTrabajoId',
     name: 'PuestoTrabajo-Edit',
     component: () => import('@/views/RecursosHumanos/WorkStation/WorkStationEdit.vue'),
     meta: {
@@ -483,7 +537,7 @@ const routes = [
     }
   },
   {
-    path: '/EquiposComputo/list',
+    path: '/PatrimonioMunicipal/EquiposComputo/list',
     name: 'EquiposComputo',
     component: () => import('@/views/Patrimony/Computers/Computer/ComputerList.vue'),
     meta: {
@@ -493,7 +547,7 @@ const routes = [
     }
   },
   {
-    path: '/EquiposComputo/:EquipoComputoId',
+    path: '/PatrimonioMunicipal/EquiposComputo/:EquipoComputoId',
     name: 'EquiposComputo-Edit',
     component: () => import('@/views/Patrimony/Computers/Computer/ComputerEdit.vue'),
     meta: {
@@ -503,7 +557,7 @@ const routes = [
     }
   },
   {
-    path: '/EstatusEquipo/list',
+    path: '/PatrimonioMunicipal/EstatusEquipo/list',
     name: 'EstatusEquipo',
     component: () => import('@/views/Patrimony/Computers/StatusComputer/StatusComputerList.vue'),
     meta: {
@@ -513,7 +567,7 @@ const routes = [
     }
   },
   {
-    path: '/EstatusEquipo/:EstatusEquipoId',
+    path: '/PatrimonioMunicipal/EstatusEquipo/:EstatusEquipoId',
     name: 'EstatusEquipo-edit',
     component: () => import('@/views/Patrimony/Computers/StatusComputer/StatusComputerEdit.vue'),
     meta: {
@@ -523,7 +577,7 @@ const routes = [
     }
   },
   {
-    path: '/Vehiculos/list',
+    path: '/PatrimonioMunicipal/Vehiculos/list',
     name: 'Vehiculos',
     component: () => import('@/views/Patrimony/Vehicles/VehiclesList.vue'),
     meta: {
@@ -533,7 +587,7 @@ const routes = [
     }
   },
   {
-    path: '/Vehiculos/:VehiculoId',
+    path: '/PatrimonioMunicipal/Vehiculos/:VehiculoId',
     name: 'Vehiculos-Edit',
     component: () => import('@/views/Patrimony/Vehicles/VehicleEdit.vue'),
     meta: {
@@ -543,7 +597,7 @@ const routes = [
     }
   },
   {
-    path: '/Mobiliarios/list',
+    path: '/PatrimonioMunicipal/Mobiliarios/list',
     name: 'Mobiliarios',
     component: () => import('@/views/Patrimony/Furnitures/FurnitureList.vue'),
     meta: {
@@ -553,7 +607,7 @@ const routes = [
     }
   },
   {
-    path: '/Mobiliarios/:MobiliarioId',
+    path: '/PatrimonioMunicipal/Mobiliarios/:MobiliarioId',
     name: 'Mobiliarios-Edit',
     component: () => import('@/views/Patrimony/Furnitures/FurnitureEdit.vue'),
     meta: {
@@ -563,7 +617,7 @@ const routes = [
     }
   },
   {
-    path: '/CategoriasMobiliario/list',
+    path: '/PatrimonioMunicipal/CategoriasMobiliario/list',
     name: 'CategoriasMobiliario',
     component: () => import('@/views/Patrimony/Furnitures/TypeFurnitures/TypeFurnitureList.vue'),
     meta: {
@@ -573,7 +627,7 @@ const routes = [
     }
   },
   {
-    path: '/CategoriasMobiliario/:TipoMobiliarioId',
+    path: '/PatrimonioMunicipal/CategoriasMobiliario/:TipoMobiliarioId',
     name: 'CategoriasMobiliario-Edit',
     component: () => import('@/views/Patrimony/Furnitures/TypeFurnitures/TypeFurnitureEdit.vue'),
     meta: {
@@ -583,7 +637,7 @@ const routes = [
     }
   },
   {
-    path: '/EstatusVehiculo/list',
+    path: '/PatrimonioMunicipal/EstatusVehiculo/list',
     name: 'EstatusVehiculo',
     component: () => import('@/views/Patrimony/Vehicles/StatusVehicles/StatusVehicleList.vue'),
     meta: {
@@ -593,7 +647,7 @@ const routes = [
     }
   },
   {
-    path: '/EstatusVehiculo/:EstatusVehiculoId',
+    path: '/PatrimonioMunicipal/EstatusVehiculo/:EstatusVehiculoId',
     name: 'EstatusVehiculo-Edit',
     component: () => import('@/views/Patrimony/Vehicles/StatusVehicles/StatusVehicleEdit.vue'),
     meta: {
@@ -603,7 +657,7 @@ const routes = [
     }
   },
   {
-    path: '/Armeria/list',
+    path: '/PatrimonioMunicipal/Armeria/list',
     name: 'Armeria',
     component: () => import('@/views/Patrimony/Armory/ArmoryList.vue'),
     meta: {
@@ -613,7 +667,7 @@ const routes = [
     }
   },
   {
-    path: '/Armeria/:ArmaId',
+    path: '/PatrimonioMunicipal/Armeria/:ArmaId',
     name: 'Armeria-Edit',
     component: () => import('@/views/Patrimony/Armory/ArmoryEdit.vue'),
     meta: {

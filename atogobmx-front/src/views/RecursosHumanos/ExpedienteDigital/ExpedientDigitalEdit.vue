@@ -136,7 +136,7 @@
                 <b-button
                   class="w-auto m-2 text-white"
                   variant="primary"
-                  to="/ExpedientesDigitales/list"
+                  to="/RecursosHumanos/ExpedientesDigitales/list"
                 >
                   Cancelar
                 </b-button>
@@ -230,16 +230,8 @@ export default {
           text: 'El expediente se ha modificado correctamente.',
           icon: 'success'
         }).then(result => {
-          redirect.push('/ExpedientesDigitales/list')
+          redirect.push('/RecursosHumanos/ExpedientesDigitales/list')
         })
-        // $toast.open({
-        //   message: 'Expediente modificado correctamente',
-        //   position: 'top',
-        //   duration: 2000,
-        //   dismissible: true,
-        //   type: 'success',
-        //   onDismiss: () => redirect.push('/ExpedientesDigitales/list')
-        // })
       })
     }
     // Validations
@@ -331,7 +323,7 @@ export default {
               text: 'El archivo ingresado no es válido, por favor ingresa un archivo valido.',
               icon: 'error'
             }).then(result => {
-              redirect.push('/ExpedientesDigitales/list')
+              redirect.push('/RecursosHumanos/ExpedientesDigitales/list')
             })
           } else {
             showModal.value = false
@@ -340,7 +332,7 @@ export default {
               text: 'La imagen de perfil se ha registrado al sistema satisfactoriamente.',
               icon: 'success'
             }).then(result => {
-              redirect.push('/ExpedientesDigitales/list')
+              redirect.push('/RecursosHumanos/ExpedientesDigitales/list')
             })
           }
         })

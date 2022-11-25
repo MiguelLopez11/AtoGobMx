@@ -40,7 +40,7 @@
           <b-button
             class="col-1 m-2 text-white"
             variant="primary"
-            to="/Departamentos/list"
+            to="/PatrimonioMunicipal/CategoriasMobiliario/list"
             type="reset"
           >
             Cancelar</b-button
@@ -77,7 +77,7 @@ export default {
     const nameState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Categorias Mobiliarios', to: '/CategoriasMobiliario/list' },
+      { text: 'Categorias Mobiliarios', to: '/PatrimonioMunicipal/CategoriasMobiliario/list' },
       { text: 'Editar Categoria Mobiliario' }
     ])
     const onUpdateTypeFurniture = () => {
@@ -88,7 +88,7 @@ export default {
           icon: 'success'
         }).then(result => {
           if (result.isConfirmed) {
-            redirect.push('/CategoriasMobiliario/list')
+            redirect.push('/PatrimonioMunicipal/CategoriasMobiliario/list')
           }
         })
       })

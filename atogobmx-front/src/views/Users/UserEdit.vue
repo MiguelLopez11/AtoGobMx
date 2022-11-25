@@ -90,7 +90,7 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            v-b-modal.modal-users
+            to="/Administrador/Roles/list"
           >
             Cancelar
           </b-button>
@@ -136,7 +136,7 @@ export default {
     const confirmErrorMessage = ref('')
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Usuarios', to: '/Usuarios/list' },
+      { text: 'Usuarios', to: '/Administrador/Usuarios/list' },
       { text: 'Editar-Usuario' }
     ])
     getUser(router.params.usuarioId, (data) => {
@@ -229,7 +229,7 @@ export default {
           icon: 'success'
         }).then(result => {
           if (result.isConfirmed) {
-            redirect.push('/Usuarios/list')
+            redirect.push('/Administrador/Usuarios/list')
           }
         })
       })
