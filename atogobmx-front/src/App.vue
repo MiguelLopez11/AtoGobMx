@@ -7,9 +7,10 @@
       :isSearch="false"
       :menuItems="menu"
       logoTitleColor="#7b7a81"
-      menuItemsTextColor="#b9b8bc"
-      menuFooterTextColor="#b9b8bc"
-      iconsColor="#000000"
+      menuItemsTextColor="#807e85"
+      menuFooterTextColor="#807e85"
+      iconsColor="#807e85"
+      menuItemsHoverColor="#9d94f4"
     />
       <!-- :button-exit-clicked="removeLocalStorgare()" -->
     <!-- <b-navbar toggleable="xl">
@@ -230,11 +231,11 @@
             <template v-slot:button-content>
               <i class="bi bi-clipboard2-pulse-fill"></i>
             </template>
-            <b-dropdown-item to="/Usuarios/list">
+            <b-dropdown-item to="Administrador/Usuarios/list">
               <i class="bi bi-person-bounding-box"></i>
               Usuarios
             </b-dropdown-item>
-            <b-dropdown-item to="/Roles/list">
+            <b-dropdown-item to="Administrador/Roles/list">
               <i class="bi bi-person-rolodex"></i>
               Roles
             </b-dropdown-item>
@@ -250,8 +251,8 @@
           </b-row>
         </b-navbar-nav>
       </b-collapse>
-    </b-navbar>
-  </b-card> -->
+    </b-navbar> -->
+  <!-- </b-card> -->
   <router-view></router-view>
 </template>
 <script>
@@ -272,7 +273,15 @@ export default {
     const departament = window.sessionStorage.getItem('Departamento')
     const role = window.sessionStorage.getItem('Role')
     const area = window.sessionStorage.getItem('Area')
-    const menu = ref([{ link: '/', name: 'Home', icon: 'bx-grid-alt' }])
+    const menu = ref([
+      { link: '/', name: 'Inicio', icon: 'bi bi-house' },
+      { link: '/RecursosHumanos', name: 'Recursos Humanos', icon: 'bi bi-people-fill' },
+      { link: '/ServiciosPublicos', name: 'Servicios Publicos', icon: 'bi bi-globe2' },
+      { link: '/Proveeduria', name: 'Proveeduria', icon: 'bi bi-clipboard2-data-fill' },
+      { link: '/PatrimonioMunicipal', name: 'Patrimonio Publico', icon: 'bi bi-bookmark-check-fill' },
+      { link: '/ServiciosMedicosMunicipales', name: 'Servicios Medicos Municipales', icon: 'bi bi-hospital-fill' },
+      { link: '/Administrador', name: 'Administrador', icon: 'bi bi-clipboard2-pulse-fill' }
+    ])
     const removeLocalStorgare = () => {
       window.sessionStorage.removeItem('isLogged')
       swal
@@ -319,7 +328,7 @@ body {
   background-color: #f8f7fa !important;
 }
 .card-body {
-  background-color: #f8f9fa;
+  /* background-color: #f8f9fa; */
   border-radius: 5px;
 }
 .btn-link:hover {

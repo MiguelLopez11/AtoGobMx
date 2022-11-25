@@ -40,7 +40,7 @@
           <b-button
             class="col-1 m-2 text-white"
             variant="primary"
-            to="/Departamentos/list"
+            to="/Administrador/Roles/list"
             type="reset"
           >
             Cancelar</b-button
@@ -77,7 +77,7 @@ export default {
     const nameState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Departamentos', to: '/Departamentos/list' },
+      { text: 'Roles', to: '/Administrador/Roles/list' },
       { text: 'Editar-Departamento' }
     ])
     const onUpdateRole = () => {
@@ -88,7 +88,7 @@ export default {
           icon: 'success'
         }).then(result => {
           if (result.isConfirmed) {
-            redirect.push('/Roles/list')
+            redirect.push('/Administrador/Roles/list')
           }
         })
       })

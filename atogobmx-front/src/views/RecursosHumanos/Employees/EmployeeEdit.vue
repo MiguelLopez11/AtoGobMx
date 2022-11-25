@@ -110,7 +110,7 @@
           <b-button
             class="col-1 m-2 text-white"
             variant="primary"
-            to="/Empleados/list"
+            to="/RecursosHumanos/Empleados/list"
             type="reset"
           >
             Cancelar</b-button
@@ -162,7 +162,7 @@ export default {
     const departamentState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Empleados', to: '/Empleados/list' },
+      { text: 'Empleados', to: '/RecursosHumanos/Empleados/list' },
       { text: 'Editar-Empleados' }
     ])
     getEmployee(router.params.EmpleadoId, (data) => {
@@ -218,7 +218,7 @@ export default {
           icon: 'success'
         }).then(result => {
           if (result.isConfirmed) {
-            redirect.push('/Empleados/list')
+            redirect.push('/RecursosHumanos/Empleados/list')
           }
         })
       })

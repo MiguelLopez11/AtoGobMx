@@ -165,7 +165,7 @@
               <b-button
                 class="w-auto m-2 text-white"
                 variant="primary"
-                to="/EquiposComputo/list"
+                to="/PatrimonioMunicipal/EquiposComputo/list"
               >
                 Cancelar
               </b-button>
@@ -233,7 +233,7 @@ export default {
     const computerId = ref(parseInt(router.params.EquipoComputoId))
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Equipos de computo', to: '/EquiposComputo/list' },
+      { text: 'Equipos de computo', to: '/PatrimonioMunicipal/EquiposComputo/list' },
       { text: 'Editar-Equipo' }
     ])
     const onUpdateComputer = () => {
@@ -246,7 +246,7 @@ export default {
           })
           .then(result => {
             if (result.isConfirmed) {
-              redirect.push('/EquiposComputo/list')
+              redirect.push('/PatrimonioMunicipal/EquiposComputo/list')
             }
           })
       })

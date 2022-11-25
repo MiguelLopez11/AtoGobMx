@@ -98,7 +98,7 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            to="/Armeria/list"
+            to="/PatrimonioMunicipal/Armeria/list"
           >
             Cancelar
           </b-button>
@@ -139,7 +139,7 @@ export default {
     const employeeState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Armeria', to: '/Armeria/list' },
+      { text: 'Armeria', to: '/PatrimonioMunicipal/Armeria/list' },
       { text: 'Editar Arma' }
     ])
     getWeapon(router.params.ArmaId, data => {
@@ -166,7 +166,7 @@ export default {
         icon: 'success'
       }).then(result => {
         if (result.isConfirmed) {
-          redirect.push('/Armeria/list')
+          redirect.push('/PatrimonioMunicipal/Armeria/list')
         }
       })
     }

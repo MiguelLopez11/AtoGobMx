@@ -1,12 +1,8 @@
 <template>
-  <b-card class="m-2 w-auto">
-    <b-card
-      :img-src="background"
-      no-body
-      overlay
-      style="width: auto;"
-    >
-    </b-card>
+  <b-card
+    no-body
+  >
+
   </b-card>
 </template>
 
@@ -17,10 +13,10 @@ import LogoAtogobMx from '@/Images/LogoAtogobMx.jpg'
 export default {
   setup () {
     const background = ref(LogoAtogobMx)
-    const userData = window.sessionStorage.getItem('User')
+    // const userData = window.sessionStorage.getItem('User')
     return {
-      background,
-      userData
+      background
+      // userData
     }
   }
 }
