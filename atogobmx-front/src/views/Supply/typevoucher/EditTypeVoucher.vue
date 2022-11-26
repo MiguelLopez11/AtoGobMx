@@ -39,7 +39,7 @@
           <b-button
             class="col-1 m-2 text-white"
             variant="primary"
-            to="/TipoVale/list"
+            to="/ServiciosPublicos/TipoVale/list"
             type="reset"
           >
             Cancelar
@@ -75,7 +75,7 @@ export default {
     const DescriptionState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Departamento de tipo de vale', to: '/TipoVale/list' },
+      { text: 'Tipo de vale', to: '/ServiciosPublicos/TipoVale/list' },
       { text: 'Editar-TipoVale' }
     ])
     const onUpdateTypeVoucher = () => {
@@ -88,7 +88,7 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            redirect.push('/TipoVale/list')
+            redirect.push('/ServiciosPublicos/TipoVale/list')
           }
         })
     }

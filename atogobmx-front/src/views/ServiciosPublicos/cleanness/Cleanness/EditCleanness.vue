@@ -87,7 +87,7 @@
           <b-button
             class="col-1 m-2 text-white"
             variant="primary"
-            to="/Aseo/list"
+            to="/ServiciosPublicos/Aseo/list"
             type="reset"
           >
             Cancelar</b-button
@@ -127,7 +127,7 @@ export default {
     const ObjectiveState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Departamento aseo', to: '/Aseo/list' },
+      { text: 'Aseo publico', to: '/ServiciosPublicos/Aseo/list' },
       { text: 'Editar-aseo' }
     ])
     const onUpdateCleannessService = () => {
@@ -138,7 +138,7 @@ export default {
         icon: 'success'
       }).then(result => {
         if (result.isConfirmed) {
-          redirect.push('/Aseo/list')
+          redirect.push('/ServiciosPublicos/Aseo/list')
         }
       })
     }

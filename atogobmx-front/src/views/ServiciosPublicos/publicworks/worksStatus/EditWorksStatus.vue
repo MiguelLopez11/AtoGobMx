@@ -39,7 +39,7 @@
           <b-button
             class="col-1 m-2 text-white"
             variant="primary"
-            to="/EstatusOP/list"
+            to="/ServiciosPublicos/EstatusOP/list"
             type="reset"
           >
             Cancelar
@@ -76,7 +76,7 @@ export default {
     const DescriptionState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Departamento estatus OP', to: '/EstatusOp/list' },
+      { text: 'Estatus OP', to: '/ServiciosPublicos/EstatusOp/list' },
       { text: 'Editar-Obras publicas estatus' }
     ])
     const onUpdateWorksStatus = () => {
@@ -87,7 +87,7 @@ export default {
         icon: 'success'
       }).then(result => {
         if (result.isConfirmed) {
-          redirect.push('/EstatusOP/list')
+          redirect.push('/ServiciosPublicos/EstatusOP/list')
         }
       })
     }

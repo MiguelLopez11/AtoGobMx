@@ -46,7 +46,7 @@
           <b-button
             class="col-1 m-2 text-white"
             variant="primary"
-            to="/EstatusAlumbrado/list"
+            to="/ServiciosPublicos/EstatusAlumbrado/list"
             type="reset"
           >
             Cancelar
@@ -84,7 +84,7 @@ export default {
     const DescriptionState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Departamento estatus', to: '/EstatusAlumbrado/list' },
+      { text: 'Departamento estatus', to: '/ServiciosPublicos/EstatusAlumbrado/list' },
       { text: 'Editar-Estatus Alumbrado' }
     ])
     const onUpdateStatusLighting = () => {
@@ -97,7 +97,7 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            redirect.push('/EstatusAlumbrado/list')
+            redirect.push('/ServiciosPublicos/EstatusAlumbrado/list')
           }
         })
       // $toast.open({

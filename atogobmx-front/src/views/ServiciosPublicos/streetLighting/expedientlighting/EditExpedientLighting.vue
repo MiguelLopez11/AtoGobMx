@@ -135,7 +135,7 @@
               <b-button
                 class="w-auto m-2 text-white"
                 variant="primary"
-                to="/ExpedienteAlumbrado/list"
+                to="/ServiciosPublicos/ExpedienteAlumbrado/list"
               >
                 Cancelar
               </b-button>
@@ -197,7 +197,7 @@ export default {
     const DescriptionSolutionState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Expediente', to: '/ExpedienteAlumbrado/list' },
+      { text: 'Expediente', to: '/ServiciosPublicos/ExpedienteAlumbrado/list' },
       { text: 'Editar-ExpedienteAlumbrado' }
     ])
 
@@ -220,7 +220,7 @@ export default {
           })
           .then(result => {
             if (result.isConfirmed) {
-              redirect.push('/ExpedienteAlumbrado/list')
+              redirect.push('/ServiciosPublicos/ExpedienteAlumbrado/list')
             }
           })
       })

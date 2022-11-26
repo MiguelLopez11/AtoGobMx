@@ -236,7 +236,7 @@
           <b-button
             class="col-1 m-2 text-white"
             variant="primary"
-            to="/ControlVale/list"
+            to="/ServiciosPublicos/ControlVale/list"
             type="reset"
           >
             Cancelar
@@ -304,7 +304,7 @@ export default {
     const TypeVoucherState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Departamento de control de vale', to: '/ControlVale/list' },
+      { text: 'Control de vale', to: '/ServiciosPublicos/ControlVale/list' },
       { text: 'Editar-Control de Vale' }
     ])
 
@@ -408,7 +408,7 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            redirect.push('/ControlVale/list')
+            redirect.push('/ServiciosPublicos/ControlVale/list')
           }
         })
     }

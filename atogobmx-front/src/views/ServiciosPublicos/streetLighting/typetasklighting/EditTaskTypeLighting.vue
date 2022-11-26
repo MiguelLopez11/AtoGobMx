@@ -39,7 +39,7 @@
           <b-button
             class="col-1 m-2 text-white"
             variant="primary"
-            to="/TareaTipoAlumbrado/list"
+            to="/ServiciosPublicos/TareaTipoAlumbrado/list"
             type="reset"
           >
             Cancelar</b-button
@@ -77,7 +77,7 @@ export default {
     const DescriptionState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Departamento Tipo Tarea', to: '/TareaTipoAlumbrado/list' },
+      { text: 'Departamento Tipo Tarea', to: '/ServiciosPublicos/TareaTipoAlumbrado/list' },
       { text: 'Editar-TareaTipoAlumbrado' }
     ])
 
@@ -89,7 +89,7 @@ export default {
         icon: 'success'
       }).then(result => {
         if (result.isConfirmed) {
-          redirect.push('/TareaTipoAlumbrado/list')
+          redirect.push('/ServiciosPublicos/TareaTipoAlumbrado/list')
         }
       })
       // $toast.open({

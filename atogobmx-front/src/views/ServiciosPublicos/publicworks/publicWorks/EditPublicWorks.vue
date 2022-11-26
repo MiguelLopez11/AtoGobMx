@@ -107,7 +107,7 @@
           <b-button
             class="col-1 m-2 text-white"
             variant="primary"
-            to="/ObrasPublicas/list"
+            to="/ServiciosPublicos/ObrasPublicas/list"
             type="reset"
           >
             Cancelar
@@ -150,7 +150,7 @@ export default {
     const WorkStatusState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Departamento obras publicas', to: '/ObrasPublicas/list' },
+      { text: 'Obras publicas', to: '/ServiciosPublicos/ObrasPublicas/list' },
       { text: 'Editar-Obras publicas' }
     ])
 
@@ -174,7 +174,7 @@ export default {
         icon: 'success'
       }).then(result => {
         if (result.isConfirmed) {
-          redirect.push('/ObrasPublicas/list')
+          redirect.push('/ServiciosPublicos/ObrasPublicas/list')
         }
       })
     }

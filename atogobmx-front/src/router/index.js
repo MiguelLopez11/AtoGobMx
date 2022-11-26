@@ -144,315 +144,412 @@ const routes = [
   },
   // modulos arturo
   {
-    path: '/Alumbrado/list',
+    path: '/ServiciosPublicos/AlumbradoPublico/list',
+    name: 'AlumbradoPublico',
+    component: () => import('@/components/PublicLighting.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado'
+    }
+  },
+  {
+    path: '/ServiciosPublicos/CementeriosPublicos/list',
+    name: 'CementeriosPublicos',
+    component: () => import('@/components/PublicCementery.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado'
+    }
+  },
+  {
+    path: '/ServiciosPublicos/AseoPublico/list',
+    name: 'AseoPublico',
+    component: () => import('@/components/PublicCleaning.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado'
+    }
+  },
+  {
+    path: '/ServiciosPublicos/Alumbrado/list',
     name: 'Alumbrado',
     component: () => import('@/views/ServiciosPublicos/streetLighting/publiclighting/PublicLightingList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Servicios Publicos'
     }
   },
   {
-    path: '/Alumbrado/:AlumbradoId',
+    path: '/ServiciosPublicos/Alumbrado/:AlumbradoId',
     name: 'Alumbrado-Edit',
     component: () => import('@/views/ServiciosPublicos/streetLighting/publiclighting/EditLighting.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Servicios Publicos'
     }
   },
   {
-    path: '/EstatusAlumbrado/list',
+    path: '/ServiciosPublicos/EstatusAlumbrado/list',
     name: 'EstatusAlumbradorado',
     component: () => import('@/views/ServiciosPublicos/streetLighting/statuslighting/StatusLightingList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Administrador',
+      departamento: 'Servicios Publicos'
     }
   },
   {
-    path: '/EstatusAlumbrado/:EstatusId',
+    path: '/ServiciosPublicos/EstatusAlumbrado/:EstatusId',
     name: 'EstatusAlumbrado-Edit',
     component: () => import('@/views/ServiciosPublicos/streetLighting/statuslighting/EditStatusLighting.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Administrador',
+      departamento: 'Servicios Publicos'
     }
   },
   {
-    path: '/ExpedienteAlumbrado/list',
+    path: '/ServiciosPublicos/ExpedienteAlumbrado/list',
     name: 'ExpedienteAlumbradorado',
     component: () => import('@/views/ServiciosPublicos/streetLighting/expedientlighting/ExpedientLightingList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Servicios Publicos'
     }
   },
   {
-    path: '/ExpedienteAlumbrado/:ExpedienteAlumbradoId',
+    path: '/ServiciosPublicos/ExpedienteAlumbrado/:ExpedienteAlumbradoId',
     name: 'ExpedienteAlumbrado-Edit',
     component: () => import('@/views/ServiciosPublicos/streetLighting/expedientlighting/EditExpedientLighting.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Servicios Publicos'
     }
   },
+  // {
+  //   path: '/InventarioAlumbrado/list',
+  //   name: 'InventarioAlumbradorado',
+  //   component: () => import('@/views/ServiciosPublicos/streetLighting/inventorylighting/InventoryLightingList.vue'),
+  //   meta: {
+  //     requiresAuth: true
+  //   }
+  // },
+  // {
+  //   path: '/InventarioAlumbrado/:InventarioAlumbradoId',
+  //   name: 'InventarioAlumbrado-Edit',
+  //   component: () => import('@/views/ServiciosPublicos/streetLighting/inventorylighting/EditInventoryLighting.vue'),
+  //   meta: {
+  //     requiresAuth: true
+  //   }
+  // },
   {
-    path: '/InventarioAlumbrado/list',
-    name: 'InventarioAlumbradorado',
-    component: () => import('@/views/ServiciosPublicos/streetLighting/inventorylighting/InventoryLightingList.vue'),
-    meta: {
-      requiresAuth: true
-    }
-  },
-  {
-    path: '/InventarioAlumbrado/:InventarioAlumbradoId',
-    name: 'InventarioAlumbrado-Edit',
-    component: () => import('@/views/ServiciosPublicos/streetLighting/inventorylighting/EditInventoryLighting.vue'),
-    meta: {
-      requiresAuth: true
-    }
-  },
-  {
-    path: '/TareaTipoAlumbrado/list',
+    path: '/ServiciosPublicos/TareaTipoAlumbrado/list',
     name: 'TareaTipoAlumbradorado',
     component: () => import('@/views/ServiciosPublicos/streetLighting/typetasklighting/TaskTypeLightingList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Administrador',
+      departamento: 'Servicios Publicos'
     }
   },
   {
-    path: '/TareaTipoAlumbrado/:TareaTipoAlumbradoId',
+    path: '/ServiciosPublicos/TareaTipoAlumbrado/:TareaTipoAlumbradoId',
     name: 'TareaTipoAlumbrado-Edit',
     component: () => import('@/views/ServiciosPublicos/streetLighting/typetasklighting/EditTaskTypeLighting.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Administrador',
+      departamento: 'Servicios Publicos'
     }
   },
   {
-    path: '/Cementerios/list',
+    path: '/ServiciosPublicos/Cementerios/list',
     name: 'Cementerios',
     component: () => import('@/views/ServiciosPublicos/cementery/Cementery/CementeryList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Servicios Publicos'
     }
   },
   {
-    path: '/Cementerios/:CementeriosId',
+    path: '/ServiciosPublicos/Cementerios/:CementeriosId',
     name: 'Cementerios-Edit',
     component: () => import('@/views/ServiciosPublicos/cementery/Cementery/EditCementery.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Servicios Publicos'
     }
   },
   {
-    path: '/DireccionCementerios/list',
+    path: '/ServiciosPublicos/DireccionCementerios/list',
     name: 'DireccionCementerios',
     component: () => import('@/views/ServiciosPublicos/cementery/addresscementery/AddressCementeryList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Servicios Publicos'
     }
   },
   {
-    path: '/DireccionCementerios/:DireccionId',
+    path: '/ServiciosPublicos/DireccionCementerios/:DireccionId',
     name: 'DireccionCementerios-Edit',
     component: () => import('@/views/ServiciosPublicos/cementery/addresscementery/EditAddressCementery.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Servicios Publicos'
     }
   },
   {
-    path: '/Aseo/list',
+    path: '/ServiciosPublicos/Aseo/list',
     name: 'Aseo',
     component: () => import('@/views/ServiciosPublicos/cleanness/Cleanness/CleannessList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Servicios Publicos'
     }
   },
   {
-    path: '/Aseo/:AseoId',
+    path: '/ServiciosPublicos/Aseo/:AseoId',
     name: 'Aseo-Edit',
     component: () => import('@/views/ServiciosPublicos/cleanness/Cleanness/EditCleanness.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Servicios Publicos'
     }
   },
   {
-    path: '/Ruta/list',
+    path: '/ServiciosPublicos/Ruta/list',
     name: 'Ruta',
     component: () => import('@/views/ServiciosPublicos/cleanness/Road/RoadList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Servicios Publicos'
     }
   },
   {
-    path: '/Ruta/:RutaId',
+    path: '/ServiciosPublicos/Ruta/:RutaId',
     name: 'Ruta-Edit',
     component: () => import('@/views/ServiciosPublicos/cleanness/Road/EditRoad.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Servicios Publicos'
     }
   },
+  // {
+  //   path: '/Zona/list',
+  //   name: 'Zona',
+  //   component: () => import('@/views/ServiciosPublicos/cleanness/Zone/ZoneList.vue'),
+  //   meta: {
+  //     requiresAuth: true
+  //   }
+  // },
+  // {
+  //   path: '/Zona/:ZonaId',
+  //   name: 'Zona-Edit',
+  //   component: () => import('@/views/ServiciosPublicos/cleanness/Zone/EditZone.vue'),
+  //   meta: {
+  //     requiresAuth: true
+  //   }
+  // },
+  // {
+  //   path: '/ServiciosPublicos/AlumbradoEmpleado/list',
+  //   name: 'AlumbradoEmpleado',
+  //   component: () => import('@/views/ServiciosPublicos/streetLighting/lightingEmployee/LightingEmployeeList.vue'),
+  //   meta: {
+  //     requiresAuth: true,
+  //     rol: 'Empleado',
+  //     departamento: 'Servicios Publicos'
+  //   }
+  // },
   {
-    path: '/Zona/list',
-    name: 'Zona',
-    component: () => import('@/views/ServiciosPublicos/cleanness/Zone/ZoneList.vue'),
-    meta: {
-      requiresAuth: true
-    }
-  },
-  {
-    path: '/Zona/:ZonaId',
-    name: 'Zona-Edit',
-    component: () => import('@/views/ServiciosPublicos/cleanness/Zone/EditZone.vue'),
-    meta: {
-      requiresAuth: true
-    }
-  },
-  {
-    path: '/AlumbradoEmpleado/list',
-    name: 'AlumbradoEmpleado',
-    component: () => import('@/views/ServiciosPublicos/streetLighting/lightingEmployee/LightingEmployeeList.vue'),
-    meta: {
-      requiresAuth: true
-    }
-  },
-  {
-    path: '/ObrasPublicas/list',
+    path: '/ServiciosPublicos/ObrasPublicas/list',
     name: 'ObrasPublicas',
     component: () => import('@/views/ServiciosPublicos/publicworks/publicWorks/PublicWorksList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Obras Publicas'
     }
   },
   {
-    path: '/ObrasPublicas/:ObraId',
+    path: '/ServiciosPublicos/ObrasPublicas/:ObraId',
     name: 'ObrasPublicas-Edit',
     component: () => import('@/views/ServiciosPublicos/publicworks/publicWorks/EditPublicWorks.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Obras Publicas'
     }
   },
   {
-    path: '/EstatusOP/list',
+    path: '/ServiciosPublicos/EstatusOP/list',
     name: 'EstatusOP',
     component: () => import('@/views/ServiciosPublicos/publicworks/worksStatus/WorksStatusList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Administrador',
+      departamento: 'Obras Publicas'
     }
   },
   {
-    path: '/EstatusOP/:EstatusObraId',
+    path: '/ServiciosPublicos/EstatusOP/:EstatusObraId',
     name: 'EstatusOP-Edit',
     component: () => import('@/views/ServiciosPublicos/publicworks/worksStatus/EditWorksStatus.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Administrador',
+      departamento: 'Obras Publicas'
     }
   },
   {
-    path: '/DetalleProducto/list',
+    path: '/ServiciosPublicos/DetalleProducto/list',
     name: 'DetalleProducto',
     component: () => import('@/views/Supply/detailproduct/DetailProductList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Control de vales'
     }
   },
   {
-    path: '/DetalleProducto/:DetalleProductoId',
+    path: '/ServiciosPublicos/DetalleProducto/:DetalleProductoId',
     name: 'DetalleProducto-Edit',
     component: () => import('@/views/Supply/detailproduct/EditDetailProduct.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Control de vales'
     }
   },
   {
-    path: '/DetalleVale/list',
+    path: '/ServiciosPublicos/DetalleVale/list',
     name: 'DetalleVale',
     component: () => import('@/views/Supply/detailvoucher/DetailVoucherList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Control de vales'
     }
   },
   {
-    path: '/DetalleVale/:DetalleValeId',
+    path: '/ServiciosPublicos/DetalleVale/:DetalleValeId',
     name: 'DetalleVale-Edit',
     component: () => import('@/views/Supply/detailvoucher/EditDetailVoucher.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Control de vales'
     }
   },
   {
-    path: '/Producto/list',
+    path: '/ServiciosPublicos/Producto/list',
     name: 'Producto',
     component: () => import('@/views/Supply/productvoucher/ProductVoucherList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Control de vales'
     }
   },
   {
-    path: '/Producto/:ProductoId',
+    path: '/ServiciosPublicos/Producto/:ProductoId',
     name: 'Producto-Edit',
     component: () => import('@/views/Supply/productvoucher/EditProductVoucher.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Control de vales'
     }
   },
   {
-    path: '/Proveedor/list',
+    path: '/ServiciosPublicos/Proveedor/list',
     name: 'Proveedor',
     component: () => import('@/views/Supply/provider/ProviderList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Control de vales'
     }
   },
   {
-    path: '/Proveedor/:ProveedorId',
+    path: '/ServiciosPublicos/Proveedor/:ProveedorId',
     name: 'Proveedor-Edit',
     component: () => import('@/views/Supply/provider/EditProvider.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Control de vales'
     }
   },
   {
-    path: '/EstatusVale/list',
+    path: '/ServiciosPublicos/EstatusVale/list',
     name: 'EstatusVale',
     component: () => import('@/views/Supply/statusvoucher/StatusVoucherList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Administrador',
+      departamento: 'Control de vales'
     }
   },
   {
-    path: '/EstatusVale/:EstatusValeId',
+    path: '/ServiciosPublicos/EstatusVale/:EstatusValeId',
     name: 'EstatusVale-Edit',
     component: () => import('@/views/Supply/statusvoucher/EditStatusVoucher.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Administrador',
+      departamento: 'Control de vales'
     }
   },
   {
-    path: '/TipoVale/list',
+    path: '/ServiciosPublicos/TipoVale/list',
     name: 'TipoVale',
     component: () => import('@/views/Supply/typevoucher/TypeVoucherList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Administardor',
+      departamento: 'Control de vales'
     }
   },
   {
-    path: '/TipoVale/:TipoId',
+    path: '/ServiciosPublicos/TipoVale/:TipoId',
     name: 'TipoVale-Edit',
     component: () => import('@/views/Supply/typevoucher/EditTypeVoucher.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Administrador',
+      departamento: 'Control de vales'
     }
   },
   {
-    path: '/ControlVale/list',
+    path: '/ServiciosPublicos/ControlVale/list',
     name: 'ControlVale',
     component: () => import('@/views/Supply/vouchercontrol/VoucherControlList.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Control de vales'
     }
   },
   {
-    path: '/ControlVale/:ControlValeId',
+    path: '/ServiciosPublicos/ControlVale/:ControlValeId',
     name: 'ControlVale-Edit',
     component: () => import('@/views/Supply/vouchercontrol/EditVoucherControl.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Control de vales'
     }
   },
   // termino modulos arturo

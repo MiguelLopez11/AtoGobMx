@@ -106,7 +106,7 @@
           <b-button
             class="col-1 m-2 text-white"
             variant="primary"
-            to="/DetalleVale/list"
+            to="/ServiciosPublicos/DetalleVale/list"
             type="reset"
           >
             Cancelar
@@ -148,7 +148,7 @@ export default {
     const ProductState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Departamento detalle vale', to: '/DetalleVale/list' },
+      { text: 'Detalle vale', to: '/ServiciosPublicos/DetalleVale/list' },
       { text: 'Editar-Detalle vale' }
     ])
     const onUpdateDetailVoucher = () => {
@@ -161,7 +161,7 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            redirect.push('/DetalleVale/list')
+            redirect.push('/ServiciosPublicos/DetalleVale/list')
           }
         })
     }

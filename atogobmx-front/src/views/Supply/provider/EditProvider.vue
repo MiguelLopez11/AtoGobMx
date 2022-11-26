@@ -103,7 +103,7 @@
           <b-button
             class="col-1 m-2 text-white"
             variant="primary"
-            to="/Proveedor/list"
+            to="/ServiciosPublicos/Proveedor/list"
             type="reset"
           >
             Cancelar
@@ -144,7 +144,7 @@ export default {
     const emailMessage = ref('')
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Departamento proveedor', to: '/Proveedor/list' },
+      { text: 'Proveedor', to: '/ServiciosPublicos/Proveedor/list' },
       { text: 'Editar-Proveedor' }
     ])
     const onUpdateProvider = () => {
@@ -157,7 +157,7 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            redirect.push('/Proveedor/list')
+            redirect.push('/ServiciosPublicos/Proveedor/list')
           }
         })
     }

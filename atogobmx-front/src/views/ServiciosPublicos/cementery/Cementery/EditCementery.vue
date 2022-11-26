@@ -89,7 +89,7 @@
           <b-button
             class="col-1 m-2 text-white"
             variant="primary"
-            to="/Cementerios/list"
+            to="/ServiciosPublicos/Cementerios/list"
             type="reset"
           >
             Cancelar</b-button
@@ -129,7 +129,7 @@ export default {
     const AvailableState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Departamento cementerios', to: '/Cementerios/list' },
+      { text: 'Cementerios', to: '/ServiciosPublicos/Cementerios/list' },
       { text: 'Editar-cementerios' }
     ])
     const onUpdateCementeryService = () => {
@@ -140,7 +140,7 @@ export default {
         icon: 'success'
       }).then(result => {
         if (result.isConfirmed) {
-          redirect.push('/Cementerios/list')
+          redirect.push('/ServiciosPublicos/Cementerios/list')
         }
       })
     }
