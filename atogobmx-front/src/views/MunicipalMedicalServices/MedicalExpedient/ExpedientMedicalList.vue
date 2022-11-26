@@ -6,11 +6,10 @@
         style="width: 350px"
         v-model="searchValue"
         type="search"
-        placeholder="Buscar Expediente..."
+        placeholder="Buscar Expediente médico..."
       >
       </b-form-input>
       <b-button
-        :disabled="employees.length < 1"
         style="
           background-color: rgb(94, 80, 238);
           height: 50px;
