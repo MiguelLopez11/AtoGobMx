@@ -2,7 +2,6 @@
   <b-card class="m-2">
     <abbr title="Cambiar Foto de perfil">
       <b-avatar
-        ref="refAvatar"
         :src="
           `https://localhost:7065/api/Archivos/FotoPerfil/${expedienteDigitalId}`
         "
@@ -125,10 +124,7 @@
                         :state="emailState"
                       />
                     </Field>
-                    <ErrorMessage name="emailField">
-                      <span class="text-danger">{{ emailMessage }} </span>
-                      <i class="bi bi-exclamation-circle"></i
-                    ></ErrorMessage>
+                    <ErrorMessage name="emailField" />
                   </b-form-group>
                 </b-col>
               </b-row>
@@ -198,7 +194,6 @@ export default {
     const { createExpedientPhotoProfile } = FileServices()
     const { getExpedient, updateExpedient } = ExpedientdigitalServices()
     const refFile = ref()
-    const refAvatar = ref()
     const router = useRoute()
     // const $toast = useToast()
     const redirect = useRouter()
@@ -211,13 +206,11 @@ export default {
     const exteriorNumberState = ref(false)
     const postalCodeState = ref(false)
     const emailState = ref(false)
-    const emailMessage = ref('')
     const file = ref()
     // Methods
+
     getExpedient(expedienteDigitalId.value, data => {
       expedient.value = data
-      emailState.value = data.correoElectronico !== null
-      emailMessage.value = 'Este campo es requerido '
       validateState()
     })
     const onChangeFile = () => {
@@ -277,17 +270,15 @@ export default {
     }
     const validateEmail = () => {
       if (!expedient.value.correoElectronico) {
-        emailState.value = false
-        emailMessage.value = 'Este campo es requerido'
-        return emailMessage.value
+        validateState()
+        return 'Este campo es requerido'
       }
       const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
       if (!regex.test(expedient.value.correoElectronico)) {
-        emailState.value = false
-        emailMessage.value = 'Este campo debe ser un correo electrónico válido'
-        return emailMessage.value
+        validateState()
+        return 'Este campo debe ser un correo electrónico válido'
       }
-      emailState.value = true
+      validateState()
       return true
     }
     const validateState = () => {
@@ -296,6 +287,7 @@ export default {
       streetState.value = expedient.value.calle !== null
       exteriorNumberState.value = expedient.value.numeroExterior !== null
       postalCodeState.value = expedient.value.codigoPostal !== null
+      emailState.value = expedient.value.correoElectronico !== null && /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(expedient.value.correoElectronico)
       return ''
     }
     // Cargar Imagen
@@ -315,7 +307,6 @@ export default {
         router.params.ExpedienteDigitalId,
         formData,
         data => {
-          // const icon = ref('success')
           if (data.type) {
             showModal.value = false
             swal.fire({
@@ -348,9 +339,7 @@ export default {
       refFile,
       file,
       showModal,
-      emailMessage,
       expedient,
-      refAvatar,
 
       onChangeFile,
       submitPhoto,

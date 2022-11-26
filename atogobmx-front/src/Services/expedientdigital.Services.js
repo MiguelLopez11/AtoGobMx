@@ -12,6 +12,11 @@ export default function ExpedientDigitalServices () {
       callback(response.data)
     })
   }
+  const getExpedientByEmpleadoId = (EmpleadoId, callback) => {
+    axios.get(`${BaseUrl}/ExpedienteDigital/Empleado/${EmpleadoId}`).then((response) => {
+      callback(response.data)
+    })
+  }
   const createExpedient = (data, callback) => {
     axios.post(`${BaseUrl}/ExpedienteDigital`, data).then((response) => {
       callback(response.data)
@@ -30,6 +35,7 @@ export default function ExpedientDigitalServices () {
   return {
     getExpedients,
     getExpedient,
+    getExpedientByEmpleadoId,
     createExpedient,
     updateExpedient,
     deleteExpedient

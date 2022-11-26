@@ -25,7 +25,6 @@ namespace AtoGobMx.Controllers
         {
             var expediente = await _context.ExpedienteDigital
                 .Include(i => i.Empleados)
-                .Where(w => !w.Archivado)
                 .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expedienteDigitalId);
             if (expediente == null)
             {
@@ -48,7 +47,6 @@ namespace AtoGobMx.Controllers
 
                 var expediente = await _context.ExpedienteDigital
                     .Include(i => i.Empleados)
-                    .Where(w => !w.Archivado)
                     .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == ExpedienteDigitalId);
                 if (expediente == null)
                 {
@@ -98,6 +96,7 @@ namespace AtoGobMx.Controllers
         {
             var expediente = await _context.ExpedienteDigital
                 .Include(i => i.Empleados)
+                .Where(w => !w.Archivado)
                 .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == ExpedienteDigitalId);
 
             var FolderPath = Path.Combine(Directory.GetCurrentDirectory(), $"Files/Documentos/{expediente.Empleados.NombreCompleto}");
@@ -128,7 +127,6 @@ namespace AtoGobMx.Controllers
             try
             {
                 var expediente = await _context.ExpedienteDigital
-                    .Where(w => !w.Archivado)
                     .Include(i => i.Empleados)
                     .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expedienteDigitalId);
 
@@ -204,7 +202,6 @@ namespace AtoGobMx.Controllers
             {
                 #region Comprobar si el expediente existe
                 var expediente = await _context.ExpedienteDigital
-                    .Where(w => !w.Archivado)
                     .Include(i => i.Empleados)
                     .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expedienteDigitalId);
 
@@ -284,7 +281,6 @@ namespace AtoGobMx.Controllers
             if (file.Exists)
             {
                 file.Delete();
-                //System.IO.File.Delete(path);
                 Archivo.Archivado = true;
                 _context.Archivos.Update(Archivo);
                 await _context.SaveChangesAsync();

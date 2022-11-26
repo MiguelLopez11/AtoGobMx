@@ -11,11 +11,12 @@
     <b-button
       variant="success"
       style="
-          height: 50px;
-          width: auto;
-          font-size: 15px;
-          margin-right: 15px;
-          margin-left: 20px;"
+        height: 50px;
+        width: auto;
+        font-size: 15px;
+        margin-right: 15px;
+        margin-left: 20px;
+      "
       type="submit"
       @click="showModal = !showModal"
     >
@@ -26,24 +27,21 @@
       v-if="documents.length > 0"
       variant="primary"
       style="
-          height: 50px;
-          width: auto;
-          font-size: 16px;
-          margin-right: 15px;
-          margin-left: 20px;
-          text-align: center;"
+        height: 50px;
+        width: auto;
+        font-size: 16px;
+        margin-right: 15px;
+        margin-left: 20px;
+        text-align: center;
+      "
       type="submit"
       :href="`https://localhost:7065/api/Archivos/Documentos/${expedienteDigitalId}/Zip`"
     >
-    <i class="bi bi-download"></i>
-    Descargar Documentos
+      <i class="bi bi-download"></i>
+      Descargar Documentos
     </b-button>
   </b-row>
-  <b-alert
-    variant="warning"
-    show
-    dismissible
-  >
+  <b-alert variant="warning" show dismissible>
     Si el documento no se descarga, contacte a soporte para corregirlo.
   </b-alert>
   <EasyDataTable
@@ -73,9 +71,7 @@
       <b-button
         class="m-1"
         variant="outline-warning"
-        :href="
-          `https://localhost:7065/api/Archivos/Documentos/Descargar/${expedienteDigitalId}/${items.archivoId}`
-        "
+        :href="`https://localhost:7065/api/Archivos/Documentos/Descargar/${expedienteDigitalId}/${items.archivoId}`"
       >
         <i class="bi bi-download"></i>
       </b-button>
@@ -101,7 +97,10 @@
         multiple
         accept=".doc, .docx,.pdf"
       />
-      <b-button :disabled="disableButton" variant="outline-primary" @click="submitFiles()"
+      <b-button
+        :disabled="disableButton"
+        variant="outline-primary"
+        @click="submitFiles()"
         >Cargar Archivo(s)</b-button
       >
     </div>
@@ -171,18 +170,26 @@ export default {
       currentPage.value = 1
     }
     const onChangeFile = () => {
-      console.log(refFile.value.files)
       for (const file of refFile.value.files) {
+        formData.append('files', file, file.name)
+        disableButton.value = false
+        documents.value.forEach(element => {
+          if (element.nombre === file.name) {
+            swal.fire({
+              title: 'Documento ya existe!',
+              text: 'Posiblemente uno o más de los documentos seleccionados ya existen en el sistema.',
+              icon: 'error'
+            })
+            disableButton.value = true
+          }
+        })
         if (file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg') {
-          disableButton.value = true
           swal.fire({
             title: 'Documento no válido!',
             text: 'Se ha seleccionado un documento que no es valido, revise e intentelo de nuevo.',
             icon: 'error'
           })
-        } else {
-          formData.append('files', file, file.name)
-          disableButton.value = false
+          disableButton.value = true
         }
       }
     }
@@ -268,5 +275,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

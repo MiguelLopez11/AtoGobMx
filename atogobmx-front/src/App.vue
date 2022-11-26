@@ -1,5 +1,6 @@
 <template>
     <VueSidebarMenuAkahon
+      v-if="isLogged"
       menuTitle="AtoGobMX"
       bgColor="#ffffff"
       secondaryColor="#ffffff"
