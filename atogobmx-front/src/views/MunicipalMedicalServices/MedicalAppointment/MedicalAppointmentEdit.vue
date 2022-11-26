@@ -7,17 +7,13 @@
       <div>
         <h3>Editar Cita</h3>
       </div>
-      <Form @submit="addMedicalAppointment">
+      <Form @submit="onUpdateMedicalAppointment">
         <b-row cols="1">
           <b-col>
             <b-form-group label="Empleado Citante">
-              <Field
-                name="NomenclatureField"
-                as="text"
-                :rules="validateEmployee"
-              >
+              <Field name="EmployeeField" as="text" :rules="validateEmployee">
                 <b-form-select
-                  v-model="medicalAppointments.empleadoId"
+                  v-model="medicalAppointment.empleadoId"
                   autofocus
                   :state="employeeState"
                   value-field="empleadoId"
@@ -28,7 +24,7 @@
               </Field>
               <ErrorMessage
                 class="text-danger"
-                name="NomenclatureField"
+                name="EmployeeField"
               ></ErrorMessage>
             </b-form-group>
           </b-col>
@@ -36,7 +32,7 @@
             <b-form-group label="Motivo">
               <Field name="ReasonField" as="text" :rules="validateReason">
                 <b-form-input
-                  v-model="medicalAppointments.motivo"
+                  v-model="medicalAppointment.motivo"
                   placeholder="Ingresa el motivo de la cita"
                   size="xl"
                   :state="reasonState"
@@ -78,7 +74,7 @@
                 :rules="validateDescription"
               >
                 <b-form-textarea
-                  v-model="medicalAppointments.descripcion"
+                  v-model="medicalAppointment.descripcion"
                   placeholder="Describe el motivo de la cita"
                   :state="descriptionState"
                 >
@@ -113,8 +109,8 @@ import MunicipalMedicalServices from '@/Services/municipalMedical.Services'
 import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Datepicker from '@vuepic/vue-datepicker'
-// import { useToast } from 'vue-toast-notification'
 import { Form, Field, ErrorMessage } from 'vee-validate'
+import EmployeeServices from '@/Services/employee.Services'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
@@ -126,27 +122,27 @@ export default {
   setup () {
     const { getMedicalAppointment, updateMedicalAppointment } =
       MunicipalMedicalServices()
+    const { getEmployeesUnfiled } = EmployeeServices()
     const swal = inject('$swal')
-    const medicalAppointments = ref([])
-    const statusComputers = ref([])
+    const medicalAppointment = ref([])
+    const employees = ref([])
+    const date = ref([])
     const router = useRoute()
     const redirect = useRouter()
-    const folioState = ref(false)
-    const brandState = ref(false)
-    const memoryState = ref(false)
-    const storageState = ref(false)
-    const processorState = ref(false)
-    const departamentState = ref(false)
-    const areaState = ref(false)
-    const stateComputerState = ref(false)
+    const employeeState = ref(false)
+    const reasonState = ref(false)
+    const dateState = ref(false)
+    const descriptionState = ref(false)
     const citaId = ref(parseInt(router.params.CitaId))
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
       { text: 'Equipos de computo', to: '/ServiciosMedicos/Cita/list' },
       { text: 'Editar-Equipo' }
     ])
-    const onUpdateComputer = () => {
-      updateMedicalAppointment(medicalAppointments.value, data => {
+    const onUpdateMedicalAppointment = () => {
+      medicalAppointment.value.fechaDesde = date.value[0]
+      medicalAppointment.value.fechaHasta = date.value[1]
+      updateMedicalAppointment(medicalAppointment.value, data => {
         swal
           .fire({
             title: 'Equipo modificado correctamente!',
@@ -161,141 +157,71 @@ export default {
       })
     }
     getMedicalAppointment(citaId.value, data => {
-      medicalAppointments.value = data
+      medicalAppointment.value = data
+      date.value.push(data.fechaDesde)
+      date.value.push(data.fechaHasta)
       validateState()
     })
+    getEmployeesUnfiled(data => {
+      employees.value = data
+    })
     // VALIDATIONS
-    const validateFolio = () => {
-      if (!medicalAppointments.value.codigoInventario) {
-        validateState()
-        return 'Este campo es requerido'
-      }
-      // eslint-disable-next-line no-useless-escape
-      if (
-        !/^(?=.*\d)(?=.*[a-zA-Z])([A-ZñÑáéíóúÁÉÍÓÚ])[A-Z0-9]+$/i.test(
-          medicalAppointments.value.codigoInventario
-        )
-      ) {
-        validateState()
-        return 'El nombre del area solo puede contener letras'
-      }
-      validateState()
-      return true
-    }
-    const validateBrand = () => {
-      if (!medicalAppointments.value.marca) {
-        validateState()
-        return 'Este campo es requerido'
-      }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(medicalAppointments.value.marca)) {
-        validateState()
-        return 'El campo no puede contener solo espacios'
-      }
-      validateState()
-      return true
-    }
-    const validateMemory = () => {
-      if (!medicalAppointments.value.memoriaRAM) {
+    const validateEmployee = () => {
+      if (!medicalAppointment.value.empleadoId) {
         validateState()
         return 'Este campo es requerido'
       }
       validateState()
       return true
     }
-    const validateStorage = () => {
-      if (!medicalAppointments.value.almacenamiento) {
+    const validateReason = () => {
+      if (!medicalAppointment.value.motivo) {
         validateState()
         return 'Este campo es requerido'
       }
       validateState()
       return true
     }
-    const validateProcessor = () => {
-      if (!medicalAppointments.value.procesador) {
+    const validateDate = () => {
+      if (!date.value[0]) {
         validateState()
         return 'Este campo es requerido'
       }
       validateState()
       return true
     }
-    const validateDepartament = () => {
-      if (!medicalAppointments.value.departamentoId) {
+    const validateDescription = () => {
+      if (!medicalAppointment.value.descripcion) {
         validateState()
         return 'Este campo es requerido'
       }
       validateState()
-      return true
-    }
-    const validateArea = () => {
-      if (!medicalAppointments.value.areaId) {
-        validateState()
-        return 'Este campo es requerido'
-      }
-      validateState()
-      return true
-    }
-    const validateStateComputer = () => {
-      if (!medicalAppointments.value.estatusEquipoId) {
-        stateComputerState.value = false
-        return 'Este campo es requerido'
-      }
-      stateComputerState.value = true
       return true
     }
     const validateState = () => {
-      brandState.value =
-        medicalAppointments.value.marca !== '' &&
-        medicalAppointments.value.marca !== null &&
-        /^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(medicalAppointments.value.marca)
-      memoryState.value =
-        medicalAppointments.value.memoriaRAM !== '' &&
-        medicalAppointments.value.memoriaRAM !== null
-      storageState.value =
-        medicalAppointments.value.almacenamiento !== '' &&
-        medicalAppointments.value.almacenamiento !== null
-      processorState.value =
-        medicalAppointments.value.procesador !== '' &&
-        medicalAppointments.value.procesador !== null
-      departamentState.value =
-        medicalAppointments.value.departament !== 0 &&
-        medicalAppointments.value.departament !== null
-      areaState.value =
-        medicalAppointments.value.areaId !== 0 &&
-        medicalAppointments.value.areaId !== null
-      stateComputerState.value =
-        medicalAppointments.value.estatusEquipoId !== 0 &&
-        medicalAppointments.value.estatusEquipoId !== null
-      folioState.value =
-        medicalAppointments.value.codigoInventario !== null &&
-        /^(?=.*\d)(?=.*[a-zA-Z])([A-ZñÑáéíóúÁÉÍÓÚ])[A-Z0-9]+$/i.test(
-          medicalAppointments.value.codigoInventario
-        )
+      employeeState.value = medicalAppointment.value.empleadoId !== null
+      reasonState.value = medicalAppointment.value.motivo !== '' && medicalAppointment.value.motivo !== null
+      dateState.value = date.value[0] !== '' && date.value[0] !== null
+      descriptionState.value = medicalAppointment.value.descripcion !== '' && medicalAppointment.value.descripcion !== null
       return ''
     }
     return {
-      medicalAppointments,
+      medicalAppointment,
       breadcrumbItems,
-      brandState,
-      memoryState,
-      storageState,
-      processorState,
-      departamentState,
-      areaState,
       citaId,
-      statusComputers,
-      stateComputerState,
-      folioState,
+      employees,
+      date,
+      employeeState,
+      reasonState,
+      dateState,
+      descriptionState,
 
-      validateBrand,
-      validateMemory,
-      validateStorage,
-      validateProcessor,
-      validateDepartament,
-      validateArea,
-      onUpdateComputer,
-      validateState,
-      validateStateComputer,
-      validateFolio
+      validateEmployee,
+      validateReason,
+      validateDate,
+      validateDescription,
+      onUpdateMedicalAppointment,
+      validateState
     }
   }
 }

@@ -705,6 +705,26 @@ const routes = [
       rol: 'Empleado',
       departamento: 'Direccion de servicios medicos municipales'
     }
+  },
+  {
+    path: '/ServiciosMedicos/ExpedienteMedico/list',
+    name: 'ServiciosMedicos-ExpedienteMedico-List',
+    component: () => import('@/views/MunicipalMedicalServices/MedicalExpedient/ExpedientMedicalList'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Direccion de servicios medicos municipales'
+    }
+  },
+  {
+    path: '/ServiciosMedicos/ExpedienteMedico/:ExpedienteMedicoId',
+    name: 'ServiciosMedicos-ExpedienteMedico-Edit',
+    component: () => import('@/views/MunicipalMedicalServices/MedicalExpedient/ExpedientMedicalEdit'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Direccion de servicios medicos municipales'
+    }
   }
 ]
 
