@@ -12,7 +12,7 @@
       <b-button
         :disabled="employees.length < 1"
         style="
-          background-color: rgb(94,80,238);
+          background-color: rgb(94, 80, 238);
           height: 50px;
           width: auto;
           font-size: 18px;
@@ -68,8 +68,10 @@
               name: 'ExpedienteDigital-edit',
               params: { ExpedienteDigitalId: items.expedienteDigitalId }
             }"
-            ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
           >
+            <i class="bi bi-pencil-square" />
+              Editar
+            </b-dropdown-item>
         </b-dropdown>
       </template>
     </EasyDataTable>
@@ -118,11 +120,8 @@ export default {
   setup () {
     const showModal = ref(false)
     const swal = inject('$swal')
-    const {
-      getExpedients,
-      deleteExpedient,
-      createExpedient
-    } = ExpedientDigitalServices()
+    const { getExpedients, deleteExpedient, createExpedient } =
+      ExpedientDigitalServices()
     const { getEmployeesWithoutExpedient } = EmployeeServices()
     const expedients = ref([])
     const employees = ref([])
@@ -187,8 +186,7 @@ export default {
         getEmployees()
         swal.fire({
           title: '¡Expediente Registrado!',
-          text:
-            'El expediente ha sido registrado al sistema satisfactoriamente .',
+          text: 'El expediente ha sido registrado al sistema satisfactoriamente .',
           icon: 'success'
         })
       })
