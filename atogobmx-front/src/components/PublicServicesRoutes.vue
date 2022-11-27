@@ -6,9 +6,6 @@
           variant="secundary"
           class="border border-2 border-dark w-75 mt-3"
           to="/ServiciosPublicos/AlumbradoPublico/list"
-          variant="outline-secondary"
-          class="border border-2 border-secundary w-75 mt-3"
-          to="/Empleados/list"
           style="border-size: 2px"
         >
           <svg
@@ -31,9 +28,6 @@
           variant="secundary "
           class="border border-2 border-dark w-75 mt-3"
           to="/ServiciosPublicos/CementeriosPublicos/list"
-          variant="outline-secondary"
-          class="border border-2 border-secundary w-75 mt-3"
-          to="/Departamentos/list"
         >
           <svg
             id="Layer_1"
@@ -61,9 +55,6 @@
           variant="secundary"
           class="border border-2 border-dark w-75 mt-3"
           to="/ServiciosPublicos/AseoPublico/list"
-          variant="outline-secondary"
-          class="border border-2 border-secundary w-75 mt-3"
-          to="/Areas/list"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
