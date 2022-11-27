@@ -43,7 +43,7 @@
       </template>
       <template #item-actions="items">
         <b-dropdown
-          :disabled="items.archivado"
+          :disabled="items.archivado && role !== 'Administrador' || 'Director'"
           id="ActionsDropdown"
           size="lg"
           style="text-color: black"
@@ -68,8 +68,18 @@
               name: 'Empleados-Edit',
               params: { EmpleadoId: items.empleadoId }
             }"
-            ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
           >
+              <i class="bi bi-pencil-square" />
+              Editar
+          </b-dropdown-item>
+          <b-dropdown-item
+            class="m-1"
+            variant="outline-warning"
+            @click="onClickExpedient(items.empleadoId)"
+          >
+            <i class="bi bi-archive-fill" />
+            Expediente Digital
+          </b-dropdown-item>
         </b-dropdown>
       </template>
       <template #item-status="items">
@@ -209,7 +219,7 @@ import workStationServices from '@/Services/workStation.Services'
 import ExpedientdigitalServices from '@/Services/expedientdigital.Services'
 import Datepicker from '@vuepic/vue-datepicker'
 import { Form, Field, ErrorMessage } from 'vee-validate'
-
+import { useRouter } from 'vue-router'
 import { ref, inject } from 'vue'
 // import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -227,7 +237,9 @@ export default {
     const { getAreasByDepartament } = AreaServices()
     const { getDepartaments } = DepartamentServices()
     const { getWorkStationByArea } = workStationServices()
-    const { createExpedient } = ExpedientdigitalServices()
+    const { createExpedient, getExpedientByEmpleadoId } = ExpedientdigitalServices()
+    const redirect = useRouter()
+    const role = window.sessionStorage.getItem('Role')
     // const $toast = useToast()
     const showModal = ref(false)
     const employees = ref([])
@@ -303,6 +315,14 @@ export default {
         })
       }
     })
+    const onClickExpedient = (empleadoId) => {
+      getExpedientByEmpleadoId(empleadoId, data => {
+        redirect.push({
+          name: 'ExpedienteDigital-edit',
+          params: { ExpedienteDigitalId: empleadoId }
+        })
+      })
+    }
     const validateName = () => {
       if (!EmployeesFields.value.nombreCompleto) {
         nameState.value = false
@@ -476,6 +496,7 @@ export default {
       workStationState,
       departamentState,
       showModal,
+      role,
 
       onFiltered,
       addEmployee,
@@ -489,7 +510,8 @@ export default {
       validateWorkSation,
       getAreas,
       getWorkStation,
-      resetEmployeesFields
+      resetEmployeesFields,
+      onClickExpedient
     }
   }
 }

@@ -1,5 +1,6 @@
 <template>
     <VueSidebarMenuAkahon
+      v-if="isLogged"
       menuTitle="AtoGobMX"
       bgColor="#ffffff"
       secondaryColor="#ffffff"
@@ -77,31 +78,18 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
-.sidebar .nav-list {
+/* .sidebar .nav-list {
 margin-left: -30px;
 }
 .navbar-nav .nav-link {
   border-width: 2px;
   width: auto;
-}
+} */
 body {
   background-color: #f8f7fa !important;
 }
-.card-body {
-  /* background-color: #f8f9fa; */
-  border-radius: 5px;
-}
-.btn-link:hover {
-  background-color: #7367f0 !important;
-  color: rgb(255, 255, 255) !important;
-}
-.dropdown-item.active {
-  background-color: #7367f0 !important;
-}
-a.router-link-active.router-link-exact-active {
-  color: #7f8996;
-}
-a.nav-link {
-  color: #7f8996;
+.btn:hover{
+  color: #ffff;
+  background-color: #9d94f4 !important;
 }
 </style>

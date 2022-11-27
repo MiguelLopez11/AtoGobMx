@@ -40,6 +40,19 @@ namespace AtoGobMx.Controllers
             }
             return Ok(expedienteDigital);
         }
+        [HttpGet("Empleado/{EmpleadoId}")]
+        public async Task<ActionResult> GetExpedienteByEmpleadoId(int EmpleadoId)
+        {
+            var expedienteDigital = await _context.ExpedienteDigital
+                .Include(i => i.Archivos)
+                .Include(i => i.Empleados)
+                .FirstOrDefaultAsync(f => f.EmpleadoId == EmpleadoId);
+            if (expedienteDigital == null)
+            {
+                return NotFound();
+            }
+            return Ok(expedienteDigital);
+        }
         [HttpPost]
         public async Task<ActionResult<ExpedienteDigital>> PostExpedienteEmpleado(ExpedienteDigital expedienteDigital)
         {
