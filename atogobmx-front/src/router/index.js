@@ -28,6 +28,15 @@ const routes = [
     }
   },
   {
+    path: '/ObrasPublicas',
+    name: 'ObrasPublicas',
+    component: () => import('../components/PublickWorks'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado'
+    }
+  },
+  {
     path: '/Proveeduria',
     name: 'Proveeduria',
     component: () => import('../components/SupplyRoutes'),
