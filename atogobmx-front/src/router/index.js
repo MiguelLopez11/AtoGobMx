@@ -28,8 +28,8 @@ const routes = [
     }
   },
   {
-    path: '/ObrasPublicas',
-    name: 'ObrasPublicas',
+    path: '/Obras',
+    name: 'Obras',
     component: () => import('../components/PublickWorks'),
     meta: {
       requiresAuth: true,

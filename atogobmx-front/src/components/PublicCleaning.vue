@@ -3,8 +3,8 @@
     <b-row cols="3">
       <b-col>
         <b-button
-          variant="secundary"
-          class="border border-2 border-dark w-75 mt-3"
+          variant="outline-secondary"
+          class="border border-2 border-secundary w-75 mt-3"
           to="/ServiciosPublicos/Aseo/list"
           style="border-size: 2px"
         >
@@ -86,8 +86,8 @@
       </b-col>
       <b-col>
         <b-button
-          variant="secundary"
-          class="border border-2 border-dark w-75 mt-3"
+          variant="outline-secondary"
+          class="border border-2 border-secundary w-75 mt-3"
           to="/ServiciosPublicos/Ruta/list"
           style="border-size: 2px"
         >

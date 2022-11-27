@@ -37,7 +37,7 @@ export default {
       { link: '/', name: 'Inicio', icon: 'bi bi-house' },
       { link: '/RecursosHumanos', name: 'Recursos Humanos', icon: 'bi bi-people-fill' },
       { link: '/ServiciosPublicos', name: 'Servicios Publicos', icon: 'bi bi-globe2' },
-      { link: '/ObrasPublicas', name: 'Obras Publicas', icon: 'icono-arg-camion-construccion' },
+      { link: '/Obras', name: 'Obras Publicas', icon: 'bi bi-cone-striped' },
       { link: '/Proveeduria', name: 'Proveeduria', icon: 'bi bi-clipboard2-data-fill' },
       { link: '/PatrimonioMunicipal', name: 'Patrimonio Publico', icon: 'bi bi-bookmark-check-fill' },
       { link: '/ServiciosMedicosMunicipales', name: 'Servicios Medicos Municipales', icon: 'bi bi-hospital-fill' },

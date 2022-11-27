@@ -5,7 +5,7 @@
         <b-button
           variant="outline-secondary"
           class="border border-2 border-secundary w-75 mt-3"
-          to="/Empleados/list"
+          to="/ServiciosPublicos/ControlVale/list"
           style="border-size: 2px"
         >
           <svg
@@ -28,7 +28,7 @@
         <b-button
           variant="outline-secondary"
           class="border border-2 border-secundary w-75 mt-3"
-          to="/Empleados/list"
+          to="/ServiciosPublicos/EstatusVale/list"
           style="border-size: 2px"
         >
           <svg
@@ -51,7 +51,7 @@
         <b-button
           variant="outline-secondary"
           class="border border-2 border-secundary w-75 mt-3"
-          to="/Areas/list"
+          to="/ServiciosPublicos/Producto/list"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -72,7 +72,7 @@
         <b-button
           variant="outline-secondary"
           class="border border-2 border-secundary w-75 mt-3"
-          to="/Areas/list"
+          to="/ServiciosPublicos/Proveedor/list"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -96,7 +96,7 @@
         <b-button
           variant="outline-secondary"
           class="border border-2 border-secundary w-75 mt-3"
-          to="/Areas/list"
+          to="/ServiciosPublicos/TipoVale/list"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -112,6 +112,96 @@
             />
           </svg>
           <p>Tipo de vale</p>
+        </b-button>
+      </b-col>
+      <b-col>
+        <b-button
+          variant="outline-secondary"
+          class="border border-2 border-secundary w-75 mt-3"
+          to="/ServiciosPublicos/DetalleVale/list"
+        >
+          <svg
+            id="Layer_1"
+            data-name="Layer 1"
+            width="140"
+            height="150"
+            fill="currentColor"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 50.46 50.46"
+          >
+            <polygon
+              class="cls-1"
+              points="14.35 34.66 14.35 33.09 31.65 33.09 31.65 31.71 14.35 31.71 14.35 15.17 12.98 15.17 12.98 31.71 11.52 31.71 11.52 33.09 12.98 33.09 12.98 34.66 14.35 34.66"
+            />
+            <path
+              class="cls-1"
+              d="M17.15,22.86a1.21,1.21,0,0,0-1.21,1.21v6h2.42v-6A1.21,1.21,0,0,0,17.15,22.86Z"
+            />
+            <path
+              class="cls-1"
+              d="M21.29,17.69a1.21,1.21,0,0,0-1.21,1.21V30.06H22.5V18.9A1.21,1.21,0,0,0,21.29,17.69Z"
+            />
+            <path
+              class="cls-1"
+              d="M25.44,13.17a1.21,1.21,0,0,0-1.21,1.21V30.06h2.42V14.38A1.21,1.21,0,0,0,25.44,13.17Z"
+            />
+            <path
+              class="cls-1"
+              d="M29.58,19.17a1.21,1.21,0,0,0-1.21,1.21v9.68h2.42V20.38A1.21,1.21,0,0,0,29.58,19.17Z"
+            />
+            <path
+              class="cls-1"
+              d="M29.32,40.26H11.26a2.34,2.34,0,0,1-2.34-2.34V8.26a2.34,2.34,0,0,1,2.34-2.34H30.65l0,6.07a1.06,1.06,0,0,0,1.08,1c.38,0,3,0,5.25,0v19.3h.25a8,8,0,0,1,1.58.16l-.07-21.06v-.09L32,4.13,32,4.06H11.26a4.2,4.2,0,0,0-4.2,4.2V37.92a4.2,4.2,0,0,0,4.2,4.2H29.54a7.93,7.93,0,0,1-.23-1.85ZM35.61,11H32.77l0-3.11Z"
+            />
+            <path
+              class="cls-1"
+              d="M37.27,34.14a6.13,6.13,0,1,0,6.13,6.13A6.13,6.13,0,0,0,37.27,34.14Zm2.48,5H38.11V39a1.19,1.19,0,0,0-.2-.77.64.64,0,0,0-.52-.23.66.66,0,0,0-.5.18.71.71,0,0,0-.18.52.67.67,0,0,0,.17.48,2.2,2.2,0,0,0,.73.41,8.89,8.89,0,0,1,.95.44,2.89,2.89,0,0,1,.65.48,1.9,1.9,0,0,1,.41.62,2.12,2.12,0,0,1,.14.81,1.91,1.91,0,0,1-.54,1.41,2.29,2.29,0,0,1-1.35.62v1h-1V44a2.22,2.22,0,0,1-2-2.37v-.14h1.65v.14a1.14,1.14,0,0,0,.23.78.84.84,0,0,0,.67.26.81.81,0,0,0,.57-.18.63.63,0,0,0,.2-.5.73.73,0,0,0-.18-.53,1.86,1.86,0,0,0-.68-.39,8.83,8.83,0,0,1-.91-.39,3,3,0,0,1-.68-.46,1.93,1.93,0,0,1-.45-.63,2.12,2.12,0,0,1-.16-.86,1.92,1.92,0,0,1,.55-1.41,2.27,2.27,0,0,1,1.33-.62v-1h1v1.05a2.1,2.1,0,0,1,1.28.73,2.46,2.46,0,0,1,.51,1.6Z"
+            />
+          </svg>
+          <p>Detalle Vale</p>
+        </b-button>
+      </b-col>
+      <b-col>
+        <b-button
+          variant="outline-secondary"
+          class="border border-2 border-secundary w-75 mt-3"
+          to="/ServiciosPublicos/DetalleProducto/list"
+        >
+          <svg
+            id="Layer_1"
+            data-name="Layer 1"
+            width="140"
+            height="150"
+            fill="currentColor"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 50.46 50.46"
+          >
+            <path
+              class="cls-1"
+              d="M34.79,5.18l0,0H15.65l-8,10.41,0,0V38.73a4.58,4.58,0,0,0,4.55,4.59H38.27a4.58,4.58,0,0,0,4.55-4.59V15.58ZM26.46,7h7.43l6.44,8.54H26.46ZM16.57,7h8.08v8.54H10.21ZM41,38.73a2.75,2.75,0,0,1-2.74,2.76H12.19a2.75,2.75,0,0,1-2.74-2.76V17.35H41Z"
+            />
+            <path
+              class="cls-1"
+              d="M25.22,27.37h8.62a.75.75,0,0,0,0-1.5H25.22a.75.75,0,0,0,0,1.5Z"
+            />
+            <path
+              class="cls-1"
+              d="M25.22,23h8.62a.75.75,0,0,0,0-1.5H25.22a.75.75,0,0,0,0,1.5Z"
+            />
+            <path
+              class="cls-1"
+              d="M16.26,31.78H33.84a.75.75,0,0,0,0-1.5H16.26a.75.75,0,0,0,0,1.5Z"
+            />
+            <path
+              class="cls-1"
+              d="M16.26,36.19H33.84a.75.75,0,0,0,0-1.5H16.26a.75.75,0,0,0,0,1.5Z"
+            />
+            <path
+              class="cls-1"
+              d="M16.26,28h5.52a.76.76,0,0,0,.75-.75V21.72a.75.75,0,0,0-.75-.75H16.26a.74.74,0,0,0-.74.75v5.51A.75.75,0,0,0,16.26,28ZM17,22.47h4v4H17Z"
+            />
+          </svg>
+          <p>Detalle Producto</p>
         </b-button>
       </b-col>
     </b-row>
