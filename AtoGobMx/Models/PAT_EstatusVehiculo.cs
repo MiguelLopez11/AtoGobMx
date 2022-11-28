@@ -12,5 +12,8 @@ namespace AtoGobMx.Models
         public string Nombre { get; set; }
         public string? Descripcion { get; set; }
         public bool Archivado { get; set; }
+
+        [JsonIgnore]
+        public virtual IEnumerable<VehiculosAlumbrado>? VehiculosAlumbrado { get; set; }
     }
 }

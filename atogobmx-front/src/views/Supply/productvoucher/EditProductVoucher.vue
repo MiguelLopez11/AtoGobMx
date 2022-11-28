@@ -39,7 +39,7 @@
           <b-button
             class="col-1 m-2 text-white"
             variant="primary"
-            to="/Producto/list"
+            to="/ServiciosPublicos/Producto/list"
             type="reset"
           >
             Cancelar
@@ -75,7 +75,7 @@ export default {
     const DescriptionState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Departamento productos', to: '/Producto/list' },
+      { text: 'Productos', to: '/ServiciosPublicos/Producto/list' },
       { text: 'Editar-Producto' }
     ])
     const onUpdateProductVoucher = () => {
@@ -88,7 +88,7 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            redirect.push('/Producto/list')
+            redirect.push('/ServiciosPublicos/Producto/list')
           }
         })
     }

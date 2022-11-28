@@ -5,7 +5,7 @@
         <b-button
           variant="outline-secondary"
           class="border border-2 border-secundary w-75 mt-3"
-          to="/Empleados/list"
+          to="/ServiciosPublicos/AlumbradoPublico/list"
           style="border-size: 2px"
         >
           <svg
@@ -27,21 +27,24 @@
         <b-button
           variant="outline-secondary"
           class="border border-2 border-secundary w-75 mt-3"
-          to="/Departamentos/list"
+          to="/ServiciosPublicos/CementeriosPublicos/list"
         >
           <svg
-            xmlns="http://www.w3.org/2000/svg"
+            id="Layer_1"
+            data-name="Layer 1"
             width="140"
             height="150"
             fill="currentColor"
-            class="bi bi-sign-intersection"
-            viewBox="0 0 16 16"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 50.46 50.46"
           >
             <path
-              d="M7.25 4v3.25H4v1.5h3.25V12h1.5V8.75H12v-1.5H8.75V4h-1.5Z"
+              class="cls-1"
+              d="M24.71,17.9a2.27,2.27,0,0,1,1.79-3.64h0a2.25,2.25,0,0,1,1.94,1.09,2.3,2.3,0,0,1,0,2.31,8.34,8.34,0,0,1-.52.89.5.5,0,0,0,0,.61l4.82,5.6a.49.49,0,0,0,.38.18h0a.53.53,0,0,0,.38-.18c2.27-2.66,2.66-3.86,2.67-3.92A10.77,10.77,0,1,0,17.81,23c.05.06,10.11,12.1,18.55,22.18a.46.46,0,0,0,.38.18h.08a.5.5,0,0,0,.39-.31l3-8.08a.53.53,0,0,0-.08-.5Z"
             />
             <path
-              d="M9.05.435c-.58-.58-1.52-.58-2.1 0L.436 6.95c-.58.58-.58 1.519 0 2.098l6.516 6.516c.58.58 1.519.58 2.098 0l6.516-6.516c.58-.58.58-1.519 0-2.098L9.05.435Zm-1.4.7a.495.495 0 0 1 .7 0l6.516 6.515a.495.495 0 0 1 0 .7L8.35 14.866a.495.495 0 0 1-.7 0L1.134 8.35a.495.495 0 0 1 0-.7L7.65 1.134Z"
+              class="cls-1"
+              d="M19.87,28.43a.46.46,0,0,0-.38-.18h0a.5.5,0,0,0-.39.18L12.4,36.5a.51.51,0,0,0-.09.5l3,8.08a.49.49,0,0,0,.38.31h.08a.5.5,0,0,0,.39-.18l8.6-10.29a.49.49,0,0,0,0-.64Z"
             />
           </svg>
           <p>Cementerios</p>
@@ -51,7 +54,7 @@
         <b-button
           variant="outline-secondary"
           class="border border-2 border-secundary w-75 mt-3"
-          to="/Areas/list"
+          to="/ServiciosPublicos/AseoPublico/list"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

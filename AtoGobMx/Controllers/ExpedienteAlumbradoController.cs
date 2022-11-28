@@ -107,7 +107,7 @@ namespace AtoGobMx.Controllers
                 <h3 class='alinear2'>Fecha: </h3>
                 <div>
                     <div class='registros'>
-                        <h3>Domicilio: </h3>
+                        <h3>Domicilio:  </h3>
                         <h3>Localida: </h3>
                         <h3>Nombre area: </h3>
                         <h3>Departamento: </h3>

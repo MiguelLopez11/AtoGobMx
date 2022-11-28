@@ -39,7 +39,7 @@
           <b-button
             class="col-1 m-2 text-white"
             variant="primary"
-            to="/EstatusOP/list"
+            to="/ServiciosPublicos/EstatusVale/list"
             type="reset"
           >
             Cancelar
@@ -75,7 +75,7 @@ export default {
     const DescriptionState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Departamento estatus', to: '/EstatusOP/list' },
+      { text: 'Estatus', to: '/ServiciosPublicos/EstatusVale/list' },
       { text: 'Editar-EstatusOP' }
     ])
     const onUpdateStatusVoucher = () => {
@@ -88,7 +88,7 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            redirect.push('/EstatusOP/list')
+            redirect.push('/ServiciosPublicos/EstatusVale/list')
           }
         })
     }

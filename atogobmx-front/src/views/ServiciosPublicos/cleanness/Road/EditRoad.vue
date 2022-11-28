@@ -67,7 +67,7 @@
           <b-button
             class="col-1 m-2 text-white"
             variant="primary"
-            to="/Ruta/list"
+            to="/ServiciosPublicos/Ruta/list"
             type="reset"
           >
             Cancelar</b-button
@@ -106,7 +106,7 @@ export default {
     const ObservationState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Departamento ruta', to: '/Ruta/list' },
+      { text: 'Ruta', to: '/ServiciosPublicos/Ruta/list' },
       { text: 'Editar-ruta' }
     ])
     const onUpdateRoadService = () => {
@@ -117,7 +117,7 @@ export default {
         icon: 'success'
       }).then(result => {
         if (result.isConfirmed) {
-          redirect.push('/Ruta/list')
+          redirect.push('/ServiciosPublicos/Ruta/list')
         }
       })
     }

@@ -6,7 +6,7 @@
         style="width: 350px"
         v-model="searchValue"
         type="search"
-        placeholder="Buscar Alumbrado empleado..."
+        placeholder="Buscar alumbrado empleado..."
       ></b-form-input>
       <b-button
         variant="primary"
@@ -22,7 +22,7 @@
         type="submit"
       >
         <i class="bi bi-person-plus-fill"></i>
-        Agregar Alumbrado empleado
+        Agregar alumbrado empleado
       </b-button>
     </b-row>
     <EasyDataTable
@@ -53,7 +53,7 @@
     </EasyDataTable>
     <b-modal
       id="modal-lightingemployee"
-      tittle="Agregar Alumbrado Empleado"
+      tittle="Agregar alumbrado Empleado"
       v-model="showModal"
       size="xl"
       hide-footer
