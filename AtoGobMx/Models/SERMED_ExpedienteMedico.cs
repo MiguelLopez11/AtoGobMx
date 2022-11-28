@@ -9,14 +9,10 @@ namespace AtoGobMx.Models
         public int ExpedienteMedicoId { get; set; }
         [Required]
         public int EmpleadoId { get; set; }
-        [Required]
-        public float Estatura { get; set; }
-        [Required]
-        public float Peso { get; set; }
-        [Required]
-        public string TipoSangre { get; set; }
-        [Required]
-        public string Sexo { get; set; }
+        public float? Estatura { get; set; }
+        public float? Peso { get; set; }
+        public string? TipoSangre { get; set; }
+        public string? Sexo { get; set; }
         public string? Alergias { get; set; }
         public string? Discapacidad { get; set; }
         public string? AntecedentesPersonales { get; set; }

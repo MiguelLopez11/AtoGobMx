@@ -12,6 +12,8 @@
       menuFooterTextColor="#807e85"
       iconsColor="#807e85"
       menuItemsHoverColor="#9d94f4"
+      :profileImg="`https://localhost:7065/api/Archivos/FotoPerfil/${1}`"
+      :profileName="employee"
     />
   <router-view></router-view>
 </template>
@@ -33,6 +35,8 @@ export default {
     const departament = window.sessionStorage.getItem('Departamento')
     const role = window.sessionStorage.getItem('Role')
     const area = window.sessionStorage.getItem('Area')
+    const employee = window.sessionStorage.getItem('Empleado')
+    console.log(employee)
     const menu = ref([
       { link: '/', name: 'Inicio', icon: 'bi bi-house' },
       { link: '/RecursosHumanos', name: 'Recursos Humanos', icon: 'bi bi-people-fill' },
@@ -62,6 +66,7 @@ export default {
       role,
       area,
       menu,
+      employee,
 
       removeLocalStorgare
     }
@@ -77,6 +82,9 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+.sidebar .nav-list {
+margin-left: -30px;
 }
 /* .sidebar .nav-list {
 margin-left: -30px;

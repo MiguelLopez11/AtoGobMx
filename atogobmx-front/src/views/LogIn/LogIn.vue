@@ -112,6 +112,7 @@ export default {
           window.sessionStorage.setItem('Role', data.role.nombre)
           window.sessionStorage.setItem('Departamento', data.empleado.departamentos.nombre)
           window.sessionStorage.setItem('Area', data.empleado.area.nombre)
+          window.sessionStorage.setItem('Empleado', data.empleado)
           swal
             .fire({
               title: 'Inicio de sesión correcto.!',

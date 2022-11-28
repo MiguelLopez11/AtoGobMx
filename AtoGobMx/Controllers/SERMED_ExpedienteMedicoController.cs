@@ -20,7 +20,7 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<IEnumerable<SERMED_ExpedienteMedico>>> GetCitas()
         {
             var expedientesMedicos = await _context.ExpedienteMedico
-                .Where(w => w.Archivado)
+                .Include(i => i.Empleados)
                 .ToListAsync();
             if (expedientesMedicos == null)
             {
@@ -33,7 +33,6 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<SERMED_ExpedienteMedico>> GetCitaById(int ExpedienteMedicoId)
         {
             var ExpedienteMedico = await _context.ExpedienteMedico
-                .Where(w => !w.Archivado)
                 .FirstOrDefaultAsync(f => f.ExpedienteMedicoId == ExpedienteMedicoId);
 
             if (ExpedienteMedico == null)
