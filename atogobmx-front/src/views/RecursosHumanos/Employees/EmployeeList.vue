@@ -264,6 +264,9 @@ export default {
       empleadoId: null,
       archivado: false
     })
+    const expedientmedicalBlank = ref({
+
+    })
     const EmployeesFields = ref({
       empleadoId: 0,
       nombreCompleto: '',
@@ -497,6 +500,7 @@ export default {
       departamentState,
       showModal,
       role,
+      expedientmedicalBlank,
 
       onFiltered,
       addEmployee,
