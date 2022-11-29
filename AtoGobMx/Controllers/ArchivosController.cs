@@ -20,7 +20,7 @@ namespace AtoGobMx.Controllers
             _context = Context;
             _mapper = mapper;
         }
-        [HttpGet("FotoPerfil/{expedienteDigitalId}/")]
+        [HttpGet("FotoPerfil/{expedienteDigitalId}")]
         public async Task<IActionResult> GetImagenPerfil(int expedienteDigitalId)
         {
             var expediente = await _context.ExpedienteDigital
@@ -31,6 +31,25 @@ namespace AtoGobMx.Controllers
                 return NotFound("El ID del expediente no existe.");
             }
             var fotoPerfil = await _context.Archivos.FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expedienteDigitalId);
+            if (fotoPerfil == null)
+            {
+                return NotFound("No se encuentra foto de perfil registrado a ese expediente.");
+            }
+            var image = System.IO.File.OpenRead($"Files/images/{expediente.Empleados.NombreCompleto}/{fotoPerfil.Nombre}");
+            return File(image, "image/jpeg");
+
+        }
+        [HttpGet("FotoPerfil/Empleado/{EmpleadoId}")]
+        public async Task<IActionResult> GetImagenPerfilByEmployee(int EmpleadoId)
+        {
+            var expediente = await _context.ExpedienteDigital
+                .Include(i => i.Empleados)
+                .FirstOrDefaultAsync(f => f.EmpleadoId == EmpleadoId);
+            if (expediente == null)
+            {
+                return NotFound("El ID del expediente no existe.");
+            }
+            var fotoPerfil = await _context.Archivos.FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expediente.ExpedienteDigitalId);
             if (fotoPerfil == null)
             {
                 return NotFound("No se encuentra foto de perfil registrado a ese expediente.");
