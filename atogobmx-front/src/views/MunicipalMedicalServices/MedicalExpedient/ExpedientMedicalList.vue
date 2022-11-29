@@ -22,7 +22,7 @@
         type="submit"
       >
         <i class="bi bi-folder-fill m-1" />
-        Crear Expediente
+        Agregar Expediente Médico
       </b-button>
     </b-row>
     <EasyDataTable
@@ -60,7 +60,7 @@
             <i class="bi bi-three-dots-vertical"></i>
           </template>
           <b-dropdown-item
-            @click="RemoveExpedient(items.expedienteDigitalId)"
+            @click="RemoveExpedient(items.expedienteMedicoId)"
             class="m-1"
             variant="outline-danger"
             ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
@@ -70,7 +70,7 @@
             variant="outline-warning"
             :to="{
               name: 'ExpedienteDigital-edit',
-              params: { ExpedienteDigitalId: items.expedienteDigitalId }
+              params: { ExpedienteDigitalId: items.expedienteMedicoId }
             }"
           >
             <i class="bi bi-pencil-square" />
@@ -115,7 +115,7 @@
 
 <script>
 import { ref, inject } from 'vue'
-import ExpedientDigitalServices from '@/Services/expedientdigital.Services'
+import MunicipalMedicalServices from '@/Services/municipalMedical.Services'
 import EmployeeServices from '@/Services/employee.Services'
 export default {
   components: {
@@ -124,8 +124,8 @@ export default {
   setup () {
     const showModal = ref(false)
     const swal = inject('$swal')
-    const { getExpedients, deleteExpedient, createExpedient } =
-      ExpedientDigitalServices()
+    const { getExpedientsMedical, deleteExpedientMedical, createExpedientMedical } =
+      MunicipalMedicalServices()
     const { getEmployeesWithoutExpedient } = EmployeeServices()
     const expedients = ref([])
     const employees = ref([])
@@ -145,7 +145,7 @@ export default {
       JSON.parse(JSON.stringify(expedientFields))
     )
     const fields = ref([
-      { value: 'expedienteDigitalId', text: 'No.Expediente', sortable: true },
+      // { value: 'expedienteDigitalId', text: 'No.Expediente', sortable: true },
       { value: 'empleados.nombreCompleto', text: 'Empleado', sortable: true },
       { value: 'status', text: 'Estado' },
       { value: 'actions', text: 'Acciones' }
@@ -156,7 +156,7 @@ export default {
       })
       return ''
     }
-    getExpedients(data => {
+    getExpedientsMedical(data => {
       expedients.value = data
       if (expedients.value.length > 0) {
         isloading.value = false
@@ -169,7 +169,7 @@ export default {
     })
     const refreshTable = () => {
       isloading.value = true
-      getExpedients(data => {
+      getExpedientsMedical(data => {
         expedients.value = data
         if (expedients.value.length > 0) {
           isloading.value = false
@@ -184,7 +184,7 @@ export default {
       currentPage.value = 1
     }
     const onAddExpedient = () => {
-      createExpedient(expedientFields.value, data => {
+      createExpedientMedical(expedientFields.value, data => {
         showModal.value = false
         expedientFields.value = JSON.parse(JSON.stringify(expedientFieldsBlank))
         refreshTable()
@@ -211,7 +211,7 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            deleteExpedient(expedienteDigitalId, data => {
+            deleteExpedientMedical(expedienteDigitalId, data => {
               refreshTable()
               getEmployees()
             })
