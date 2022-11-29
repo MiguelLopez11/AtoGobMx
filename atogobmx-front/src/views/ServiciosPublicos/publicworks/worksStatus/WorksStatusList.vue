@@ -1,5 +1,8 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
@@ -11,7 +14,7 @@
       <b-button
         variant="primary"
         style="
-          background-color: rgb(94,80,238);
+          background-color: rgb(94, 80, 238);
           height: 50px;
           width: auto;
           font-size: 18px;
@@ -22,7 +25,7 @@
         type="submit"
       >
         <i class="bi bi-person-plus-fill"></i>
-        Estatus de  obras publicas
+        Estatus de obras publicas
       </b-button>
     </b-row>
     <EasyDataTable
@@ -42,21 +45,34 @@
         {{ header.text }}
       </template>
       <template #item-actions="items">
-        <b-button
-          @click="RemoveWorksStatus(items.estatusObraId)"
-          class="m-1"
-          variant="outline-danger"
-          ><i class="bi bi-trash3"></i
-        ></b-button>
-        <b-button
-          class="m-1"
-          variant="outline-warning"
-          :to="{
-            name: 'EstatusOP-Edit',
-            params: { EstatusObraId: items.estatusObraId }
-          }"
-          ><i class="bi bi-pencil-square"></i
-        ></b-button>
+        <b-dropdown
+          id="ActionsDropdown"
+          size="lg"
+          style="text-color: black"
+          variant="link"
+          toggle-class="text-decoration-none"
+          dropright
+          no-caret
+        >
+          <template #button-content>
+            <i class="bi bi-three-dots-vertical"></i>
+          </template>
+          <b-dropdown-item
+            @click="RemoveWorksStatus(items.estatusObraId)"
+            class="m-1"
+            variant="outline-danger"
+            ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
+          >
+          <b-dropdown-item
+            class="m-1"
+            variant="outline-warning"
+            :to="{
+              name: 'EstatusOP-Edit',
+              params: { EstatusObraId: items.estatusObraId }
+            }"
+            ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
+          >
+        </b-dropdown>
       </template>
     </EasyDataTable>
     <b-modal
@@ -86,13 +102,20 @@
           <!--Agregar Descripcion-->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion">
-              <Field name="DescriptionField" :rules="validateDescription" as="text">
+              <Field
+                name="DescriptionField"
+                :rules="validateDescription"
+                as="text"
+              >
                 <b-form-input
                   v-model="worksStatusFields.descripcion"
                   :state="DescriptionState"
                 ></b-form-input>
               </Field>
-              <ErrorMessage class="text-danger" name="DescriptionField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="DescriptionField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
@@ -128,7 +151,8 @@ export default {
   setup () {
     const swal = inject('$swal')
     const showModal = ref(false)
-    const { getWorksStatus, createWorksStatus, deleteWorksStatus } = worksStatusServices()
+    const { getWorksStatus, createWorksStatus, deleteWorksStatus } =
+      worksStatusServices()
     const worksStatus = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
@@ -139,6 +163,12 @@ export default {
     const searchField = ref('nombre')
     const NameState = ref(false)
     const DescriptionState = ref(false)
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      { text: 'Obras publicas', to: '/Obras' },
+      { text: 'Estatus de obra publica' }
+    ])
+
     const worksStatusFields = ref({
       estatusObraId: 0,
       nombre: null,
@@ -202,7 +232,9 @@ export default {
         DescriptionState.value = false
         return 'Este campo es requerido'
       }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(worksStatusFields.value.descripcion)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(worksStatusFields.value.descripcion)
+      ) {
         DescriptionState.value = false
         return 'La descripcion solo puede contener letras'
       }
@@ -243,27 +275,27 @@ export default {
     }
     const RemoveWorksStatus = WorksStatusId => {
       isloading.value = true
-      swal.fire({
-        title: '¿Estas seguro?',
-        text: 'No podrás revertir esto!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, Archivar estatus de obras pblicas!',
-        cancelButtonText: 'Cancelar'
-      })
+      swal
+        .fire({
+          title: '¿Estas seguro?',
+          text: 'No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, Archivar estatus de obras pblicas!',
+          cancelButtonText: 'Cancelar'
+        })
         .then(result => {
           if (result.isConfirmed) {
-            deleteWorksStatus(WorksStatusId, (data) => {
+            deleteWorksStatus(WorksStatusId, data => {
               refreshTable()
             })
-            swal
-              .fire({
-                title: '¡Estatus de obras publicas archivado!',
-                text: 'El estatus de obras publicas ha sido archivado satisfactoriamente.',
-                icon: 'success'
-              })
+            swal.fire({
+              title: '¡Estatus de obras publicas archivado!',
+              text: 'El estatus de obras publicas ha sido archivado satisfactoriamente.',
+              icon: 'success'
+            })
           } else {
             isloading.value = false
           }
@@ -272,6 +304,7 @@ export default {
     return {
       worksStatus,
       worksStatusFields,
+      breadcrumbItems,
       showModal,
       perPage,
       currentPage,
@@ -297,6 +330,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

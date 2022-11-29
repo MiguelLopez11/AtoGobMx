@@ -1,4 +1,7 @@
 <template>
+  <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
   <b-card class="m-3" align="center">
     <b-row cols="3">
       <b-col>
@@ -102,7 +105,22 @@
 </template>
 
 <script>
-export default {}
+import { ref } from 'vue'
+import '@vuepic/vue-datepicker/dist/main.css'
+
+export default {
+  setup () {
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      { text: 'Servicios publicos', to: '/ServiciosPublicos' },
+      { text: 'Alumbrado publico' }
+    ])
+
+    return {
+      breadcrumbItems
+    }
+  }
+}
 </script>
 
 <style></style>

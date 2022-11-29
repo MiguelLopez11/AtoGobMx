@@ -1,5 +1,8 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
@@ -11,7 +14,7 @@
       <b-button
         variant="primary"
         style="
-          background-color: rgb(94,80,238);
+          background-color: rgb(94, 80, 238);
           height: 50px;
           width: auto;
           font-size: 18px;
@@ -42,21 +45,34 @@
         {{ header.text }}
       </template>
       <template #item-actions="items">
-        <b-button
-          @click="RemoveDetailVoucher(items.detalleValeId)"
-          class="m-1"
-          variant="outline-danger"
-          ><i class="bi bi-trash3"></i
-        ></b-button>
-        <b-button
-          class="m-1"
-          variant="outline-warning"
-          :to="{
-            name: 'DetalleVale-Edit',
-            params: { DetalleValeId: items.detalleValeId }
-          }"
-          ><i class="bi bi-pencil-square"></i
-        ></b-button>
+        <b-dropdown
+          id="ActionsDropdown"
+          size="lg"
+          style="text-color: black"
+          variant="link"
+          toggle-class="text-decoration-none"
+          dropright
+          no-caret
+        >
+          <template #button-content>
+            <i class="bi bi-three-dots-vertical"></i>
+          </template>
+          <b-dropdown-item
+            @click="RemoveDetailVoucher(items.detalleValeId)"
+            class="m-1"
+            variant="outline-danger"
+            ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
+          >
+          <b-dropdown-item
+            class="m-1"
+            variant="outline-warning"
+            :to="{
+              name: 'DetalleProducto-Edit',
+              params: { DetalleValeId: items.detalleValeId }
+            }"
+            ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
+          >
+        </b-dropdown>
       </template>
     </EasyDataTable>
     <b-modal
@@ -115,10 +131,7 @@
                 >
                 </b-form-input>
               </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="IVAField"
-              ></ErrorMessage>
+              <ErrorMessage class="text-danger" name="IVAField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <!--Agregar subtotal -->
@@ -141,11 +154,7 @@
           <!--Agregar Producto-->
           <b-col>
             <b-form-group class="mt-3" label="Producto: ">
-              <Field
-                name="ProductField"
-                :rules="validateProduct"
-                as="text"
-              >
+              <Field name="ProductField" :rules="validateProduct" as="text">
                 <b-form-select
                   v-model="detailVoucherFields.productoId"
                   autofocus
@@ -197,7 +206,8 @@ export default {
   setup () {
     const swal = inject('$swal')
     const showModal = ref(false)
-    const { getDetailVoucher, createDetailVoucher, deleteDetailVoucher } = DetailVoucherServices()
+    const { getDetailVoucher, createDetailVoucher, deleteDetailVoucher } =
+      DetailVoucherServices()
     const { getProductVoucher } = ProductVoucherServices()
     const detailVoucher = ref([])
     const productVoucher = ref([])
@@ -213,6 +223,12 @@ export default {
     const IVAState = ref(false)
     const TotalState = ref(false)
     const ProductState = ref(false)
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      { text: 'Proveeduria', to: '/Proveeduria' },
+      { text: 'Detalle vale' }
+    ])
+
     const detailVoucherFields = ref({
       detalleValeId: 0,
       cantidad: null,
@@ -368,27 +384,27 @@ export default {
     }
     const RemoveDetailVoucher = WorksStatusId => {
       isloading.value = true
-      swal.fire({
-        title: '¿Estas seguro?',
-        text: 'No podrás revertir esto!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, Archivar detalle vale!',
-        cancelButtonText: 'Cancelar'
-      })
+      swal
+        .fire({
+          title: '¿Estas seguro?',
+          text: 'No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, Archivar detalle vale!',
+          cancelButtonText: 'Cancelar'
+        })
         .then(result => {
           if (result.isConfirmed) {
-            deleteDetailVoucher(WorksStatusId, (data) => {
+            deleteDetailVoucher(WorksStatusId, data => {
               refreshTable()
             })
-            swal
-              .fire({
-                title: '¡Detalle vale archivado!',
-                text: 'El detalle vale ha sido archivado satisfactoriamente .',
-                icon: 'success'
-              })
+            swal.fire({
+              title: '¡Detalle vale archivado!',
+              text: 'El detalle vale ha sido archivado satisfactoriamente .',
+              icon: 'success'
+            })
           } else {
             isloading.value = false
           }
@@ -398,6 +414,7 @@ export default {
       detailVoucher,
       productVoucher,
       detailVoucherFields,
+      breadcrumbItems,
       showModal,
       perPage,
       currentPage,
@@ -429,6 +446,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

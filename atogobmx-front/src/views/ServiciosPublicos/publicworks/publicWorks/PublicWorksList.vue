@@ -1,9 +1,12 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
-        style="width: 350px;"
+        style="width: 350px"
         v-model="searchValue"
         type="search"
         placeholder="Buscar Obras Publicas..."
@@ -42,21 +45,34 @@
         {{ header.text }}
       </template>
       <template #item-actions="items">
-        <b-button
-          @click="RemovePublicWorks(items.obraId)"
-          class="m-1"
-          variant="outline-danger"
-          ><i class="bi bi-trash3"></i
-        ></b-button>
-        <b-button
-          class="m-1"
-          variant="outline-warning"
-          :to="{
-            name: 'ObrasPublicas-Edit',
-            params: { ObraId: items.obraId }
-          }"
-          ><i class="bi bi-pencil-square"></i
-        ></b-button>
+        <b-dropdown
+          id="ActionsDropdown"
+          size="lg"
+          style="text-color: black"
+          variant="link"
+          toggle-class="text-decoration-none"
+          dropright
+          no-caret
+        >
+          <template #button-content>
+            <i class="bi bi-three-dots-vertical"></i>
+          </template>
+          <b-dropdown-item
+            @click="RemovePublicWorks(items.obraId)"
+            class="m-1"
+            variant="outline-danger"
+            ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
+          >
+          <b-dropdown-item
+            class="m-1"
+            variant="outline-warning"
+            :to="{
+              name: 'ObrasPublicas-Edit',
+              params: { ObraId: items.obraId }
+            }"
+            ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
+          >
+        </b-dropdown>
       </template>
     </EasyDataTable>
     <b-modal
@@ -89,11 +105,7 @@
           <!--Agregar latitud-->
           <b-col>
             <b-form-group class="mt-3" label="Latitud">
-              <Field
-                name="LatitudeField"
-                :rules="validateLatitude"
-                as="number"
-              >
+              <Field name="LatitudeField" :rules="validateLatitude" as="number">
                 <b-form-input
                   v-model="publicWorksFields.latitud"
                   :state="LatitudeState"
@@ -109,11 +121,7 @@
           <!--Agregar longitud-->
           <b-col>
             <b-form-group class="mt-3" label="Longitud">
-              <Field
-                name="LengthField"
-                :rules="validateLength"
-                as="number"
-              >
+              <Field name="LengthField" :rules="validateLength" as="number">
                 <b-form-input
                   v-model="publicWorksFields.longitud"
                   :state="LengthState"
@@ -129,7 +137,11 @@
           <!--agregar un estatus obra-->
           <b-col>
             <b-form-group class="mt-3" label="Estatus de la Obra">
-              <Field name="WorkStatusField" :rules="validateWorkStatus" as="text">
+              <Field
+                name="WorkStatusField"
+                :rules="validateWorkStatus"
+                as="text"
+              >
                 <b-form-select
                   v-model="publicWorksFields.estatusObraId"
                   autofocus
@@ -139,7 +151,7 @@
                   text-field="nombreEstatus"
                 ></b-form-select>
               </Field>
-              <ErrorMessage class="text-danger" name="WorkStatusField"/>
+              <ErrorMessage class="text-danger" name="WorkStatusField" />
             </b-form-group>
           </b-col>
           <!--Descripcion-->
@@ -196,7 +208,8 @@ export default {
   setup () {
     const swal = inject('$swal')
     const showModal = ref(false)
-    const { getPublicWorks, createPublicWorks, deletePublicWorks } = PublicWorksServices()
+    const { getPublicWorks, createPublicWorks, deletePublicWorks } =
+      PublicWorksServices()
     const { getWorksStatus } = worksStatusServices()
     const publicWorks = ref([])
     const worksStatus = ref([])
@@ -212,6 +225,12 @@ export default {
     const LengthState = ref(false)
     const DescriptionState = ref(false)
     const WorkStatusState = ref(false)
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      { text: 'Obras publicas', to: '/Obras' },
+      { text: 'Obras publicas' }
+    ])
+
     const publicWorksFields = ref({
       obraId: 0,
       nombre: null,
@@ -226,9 +245,9 @@ export default {
       worksStatus.value = data
       if (data.length === 0) {
         swal.fire({
-          title: 'No se encuentra un tipo de estatus en obras publicas registrado!',
-          text:
-            'No se encuentra tipo de estatus en obras publicas registrado en el departamento seleccionado, registre primero un tipo de estatus en obras publicas para continuar',
+          title:
+            'No se encuentra un tipo de estatus en obras publicas registrado!',
+          text: 'No se encuentra tipo de estatus en obras publicas registrado en el departamento seleccionado, registre primero un tipo de estatus en obras publicas para continuar',
           icon: 'warning'
         })
       }
@@ -339,7 +358,9 @@ export default {
         DescriptionState.value = false
         return 'Este campo es requerido'
       }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(publicWorksFields.value.descripcion)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(publicWorksFields.value.descripcion)
+      ) {
         DescriptionState.value = false
         return 'La descripcion solo puede contener letras'
       }
@@ -392,27 +413,27 @@ export default {
 
     const RemovePublicWorks = StreetLightingId => {
       isloading.value = true
-      swal.fire({
-        title: '¿Estas seguro?',
-        text: 'No podrás revertir esto!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, Archivar obra!',
-        cancelButtonText: 'Cancelar'
-      })
+      swal
+        .fire({
+          title: '¿Estas seguro?',
+          text: 'No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, Archivar obra!',
+          cancelButtonText: 'Cancelar'
+        })
         .then(result => {
           if (result.isConfirmed) {
-            deletePublicWorks(StreetLightingId, (data) => {
+            deletePublicWorks(StreetLightingId, data => {
               refreshTable()
             })
-            swal
-              .fire({
-                title: '¡Obras publicas archivado!',
-                text: 'La obra publica ha sido archivado satisfactoriamente .',
-                icon: 'success'
-              })
+            swal.fire({
+              title: '¡Obras publicas archivado!',
+              text: 'La obra publica ha sido archivado satisfactoriamente .',
+              icon: 'success'
+            })
           } else {
             isloading.value = false
           }
@@ -423,6 +444,7 @@ export default {
       publicWorks,
       worksStatus,
       publicWorksFields,
+      breadcrumbItems,
       showModal,
       perPage,
       currentPage,

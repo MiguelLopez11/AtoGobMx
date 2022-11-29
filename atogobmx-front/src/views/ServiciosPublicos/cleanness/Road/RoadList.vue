@@ -1,5 +1,8 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
@@ -11,17 +14,16 @@
       <b-button
         variant="primary"
         style="
-            background-color: rgb(94,80,238);
-            height: 50px;
-            width: auto;
-            font-size: 18px;
-            margin-right: 15px;
-            margin-left: 20px;
+          background-color: rgb(94, 80, 238);
+          height: 50px;
+          width: auto;
+          font-size: 18px;
+          margin-right: 15px;
+          margin-left: 20px;
         "
         @click="showModal = !showModal"
         type="submit"
       >
-        <!-- v-b-modal.modal-cementery -->
         <i class="bi bi-person-plus-fill"></i>
         Agregar Ruta
       </b-button>
@@ -44,21 +46,34 @@
         {{ header.text }}
       </template>
       <template #item-actions="items">
-        <b-button
-          @click="RemoveRoadService(items.rutaId)"
-          class="m-1"
-          variant="outline-danger"
-          ><i class="bi bi-trash3"></i
-        ></b-button>
-        <b-button
-          class="m-1"
-          variant="outline-warning"
-          :to="{
-            name: 'Ruta-Edit',
-            params: { RutaId: items.rutaId }
-          }"
-          ><i class="bi bi-pencil-square"></i
-        ></b-button>
+        <b-dropdown
+          id="ActionsDropdown"
+          size="lg"
+          style="text-color: black"
+          variant="link"
+          toggle-class="text-decoration-none"
+          dropright
+          no-caret
+        >
+          <template #button-content>
+            <i class="bi bi-three-dots-vertical"></i>
+          </template>
+          <b-dropdown-item
+            @click="RemoveRoadService(items.rutaId)"
+            class="m-1"
+            variant="outline-danger"
+            ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
+          >
+          <b-dropdown-item
+            class="m-1"
+            variant="outline-warning"
+            :to="{
+              name: 'Ruta-Edit',
+              params: { RutaId: items.rutaId }
+            }"
+            ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
+          >
+        </b-dropdown>
       </template>
     </EasyDataTable>
     <b-modal
@@ -76,7 +91,7 @@
             :center="center"
             map-type-id="satellite"
             :zoom="20"
-            :options ="{
+            :options="{
               zoomControl: true,
               mapTypeControl: false,
               scaleControl: false,
@@ -85,82 +100,21 @@
             }"
             style="width: 1000px; height: 500px"
           >
-              <GMapMarker
-                :zoom="10"
-                :key="index"
-                v-for="(m, index) in markers"
-                :position="m.position"
-                :clickable="true"
-                :draggable="true"
-                @click="center = m.position"
-              />
-          </GMapMap>
-          <!-- <GMapMap
-            :center="center"
-            :zoom="50"
-            :setMaxZoom="100"
-            style="width: 1000px; height: 500px"
+          <GMapCluster
+            :zoom="10"
           >
-            <GMapCluster >
-              <GMapMarker
-                :key="index"
-                v-for="(m, index) in markers"
-                :position="m.position"
-                :clickable="true"
-                :draggable="true"
-                @click="center = m.position"
-              />
-            </GMapCluster>
-          </GMapMap> -->
-          <!-- <b-col>
-            <b-form-group class="mt-3" label="Origen">
-              <Field
-                name="OriginField"
-                :rules="validateOrigin"
-                as="text"
-              >
-                <b-form-input
-                  v-model="RoadServiceFields.origen"
-                  :state="OriginState"
-                >
-                </b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="OriginField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Destino">
-              <Field name="DestinationField" :rules="validateDestination" as="text">
-                <b-form-input
-                  v-model="RoadServiceFields.destino"
-                  :state="DestinationState"
-                >
-                </b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="DestinationField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Observacion">
-              <Field name="ObservationField" :rules="validateObservation" as="text">
-                <b-form-input
-                  v-model="RoadServiceFields.obsevacion"
-                  :state="ObservationState"
-                >
-                </b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="ObservationField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col> -->
+
+            <GMapMarker
+              :zoom="10"
+              :key="index"
+              v-for="(m, index) in markers"
+              :position="m.position"
+              :clickable="true"
+              :draggable="true"
+              @click="center = m.position"
+            />
+          </GMapCluster>
+          </GMapMap>
         </b-row>
         <b-row align-h="end">
           <b-button
@@ -205,6 +159,12 @@ export default {
     const OriginState = ref(false)
     const DestinationState = ref(false)
     const ObservationState = ref(false)
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      { text: 'Aseo publico', to: '/ServiciosPublicos/AseoPublico/list' },
+      { text: 'Ruta' }
+    ])
+
     const RoadServiceFields = ref({
       rutaId: 0,
       origen: null,
@@ -215,18 +175,26 @@ export default {
     const markers = ref([
       {
         position: {
-          lat: 20.5546629,
+          lat: 20.5505946,
+          lng: -102.4953904
+        }
+      },
+      {
+        position: {
+          lat: 20.5505946,
           lng: -102.4953904
         }
       }
     ])
+    const startLocation = ref({ lat: 20.5524136, lng: -102.5137753 })
+    const endLocation = ref({ lat: 20.5486875, lng: -102.5073417 })
     const RoadServiceFieldsBlank = ref(
       JSON.parse(JSON.stringify(RoadServiceFields))
     )
-    const center = ref({ lat: 20.5546629, lng: -102.4953904 })
+    const center = ref({ lat: 20.5505946, lng: -102.5094758 })
     const fields = ref([
-      { value: 'origen', text: 'Origen' },
-      { value: 'destino', text: 'Destino' },
+      { value: 'origen', text: 'Latitud' },
+      { value: 'destino', text: 'Longitud' },
       { value: 'obsevacion', text: 'Observacion' },
       { value: 'actions', text: 'Acciones' }
     ])
@@ -382,6 +350,7 @@ export default {
     return {
       roadService,
       RoadServiceFields,
+      breadcrumbItems,
       perPage,
       currentPage,
       filter,
@@ -397,6 +366,8 @@ export default {
       ObservationState,
       center,
       markers,
+      startLocation,
+      endLocation,
 
       addMaker,
       onFiltered,

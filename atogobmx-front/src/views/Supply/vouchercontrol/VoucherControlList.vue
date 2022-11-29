@@ -1,9 +1,12 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
-        style="width: 350px;"
+        style="width: 350px"
         v-model="searchValue"
         type="search"
         placeholder="Buscar Vale..."
@@ -42,21 +45,34 @@
         {{ header.text }}
       </template>
       <template #item-actions="items">
-        <b-button
-          @click="RemoveVoucherControl(items.controlValeId)"
-          class="m-1"
-          variant="outline-danger"
-          ><i class="bi bi-trash3"></i
-        ></b-button>
-        <b-button
-          class="m-1"
-          variant="outline-warning"
-          :to="{
-            name: 'ControlVale-Edit',
-            params: { ControlValeId: items.controlValeId }
-          }"
-          ><i class="bi bi-pencil-square"></i
-        ></b-button>
+        <b-dropdown
+          id="ActionsDropdown"
+          size="lg"
+          style="text-color: black"
+          variant="link"
+          toggle-class="text-decoration-none"
+          dropright
+          no-caret
+        >
+          <template #button-content>
+            <i class="bi bi-three-dots-vertical"></i>
+          </template>
+          <b-dropdown-item
+            @click="RemoveVoucherControl(items.controlValeId)"
+            class="m-1"
+            variant="outline-danger"
+            ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
+          >
+          <b-dropdown-item
+            class="m-1"
+            variant="outline-warning"
+            :to="{
+              name: 'ControlVale-Edit',
+              params: { ControlValeId: items.controlValeId }
+            }"
+            ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
+          >
+        </b-dropdown>
       </template>
     </EasyDataTable>
     <b-modal
@@ -323,11 +339,8 @@ export default {
   setup () {
     const swal = inject('$swal')
     const showModal = ref(false)
-    const {
-      getVoucherControl,
-      createVoucherControl,
-      deleteVoucherControl
-    } = VoucherControlServices()
+    const { getVoucherControl, createVoucherControl, deleteVoucherControl } =
+      VoucherControlServices()
     const { getAreasByDepartament } = AreaServices()
     const { getDepartaments } = DepartamentServices()
     const { getEmployees } = EmployeeServices()
@@ -362,6 +375,12 @@ export default {
     const DetailVoucherState = ref(false)
     const StatusVoucherState = ref(false)
     const TypeVoucherState = ref(false)
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      { text: 'Proveeduria', to: '/Proveeduria' },
+      { text: 'Control de vale' }
+    ])
+
     const voucherControlFields = ref({
       controlValeId: 0,
       fechaEmicion: null,
@@ -387,8 +406,7 @@ export default {
         if (data.length === 0) {
           swal.fire({
             title: 'No se encuentran areas registradas!',
-            text:
-              'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
+            text: 'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
             icon: 'warning'
           })
         }
@@ -400,8 +418,7 @@ export default {
       if (data.length === 0) {
         swal.fire({
           title: 'No se encuentran departamentos registrados!',
-          text:
-            'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
+          text: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
           icon: 'warning'
         })
       }
@@ -412,8 +429,7 @@ export default {
       if (data.length === 0) {
         swal.fire({
           title: 'No se encuentran empleados registrados!',
-          text:
-            'No se encuentran  empleados registrados en el sistema, registre primero un empleado para continuar.',
+          text: 'No se encuentran  empleados registrados en el sistema, registre primero un empleado para continuar.',
           icon: 'warning'
         })
       }
@@ -424,8 +440,7 @@ export default {
       if (data.length === 0) {
         swal.fire({
           title: 'No se encuentran proveedores registrados!',
-          text:
-            'No se encuentran  proveedores registrados en el sistema, registre primero un proveedor para continuar.',
+          text: 'No se encuentran  proveedores registrados en el sistema, registre primero un proveedor para continuar.',
           icon: 'warning'
         })
       }
@@ -436,8 +451,7 @@ export default {
       if (data.length === 0) {
         swal.fire({
           title: 'No se encuentran productos registrados!',
-          text:
-            'No se encuentran  productos registrados en el sistema, registre primero un producto para continuar.',
+          text: 'No se encuentran  productos registrados en el sistema, registre primero un producto para continuar.',
           icon: 'warning'
         })
       }
@@ -448,8 +462,7 @@ export default {
       if (data.length === 0) {
         swal.fire({
           title: 'No se encuentra el detalle del vale registrado!',
-          text:
-            'No se encuentra el detalle del vale registrado en el sistema, registre primero un detalle de vale para continuar.',
+          text: 'No se encuentra el detalle del vale registrado en el sistema, registre primero un detalle de vale para continuar.',
           icon: 'warning'
         })
       }
@@ -460,8 +473,7 @@ export default {
       if (data.length === 0) {
         swal.fire({
           title: 'No se encuentra el estatus del vale registrado!',
-          text:
-            'No se encuentran estatus de vales registrados en el sistema, registre primero un estatus de vale para continuar.',
+          text: 'No se encuentran estatus de vales registrados en el sistema, registre primero un estatus de vale para continuar.',
           icon: 'warning'
         })
       }
@@ -472,8 +484,7 @@ export default {
       if (data.length === 0) {
         swal.fire({
           title: 'No se encuentra el tipo de vale registrado!',
-          text:
-            'No se encuentran el tipo de vale registrado en el sistema, registre primero un tipo de vale para continuar.',
+          text: 'No se encuentran el tipo de vale registrado en el sistema, registre primero un tipo de vale para continuar.',
           icon: 'warning'
         })
       }
@@ -632,8 +643,7 @@ export default {
         refreshTable()
         swal.fire({
           title: '¡Control de vales registrado correctamente!',
-          text:
-            'El control de vales se ha registrado al sistema satisfactoriamente.',
+          text: 'El control de vales se ha registrado al sistema satisfactoriamente.',
           icon: 'success'
         })
       })
@@ -660,8 +670,7 @@ export default {
             })
             swal.fire({
               title: '¡Control de vales archivado!',
-              text:
-                'El control de vales ha sido archivado satisfactoriamente .',
+              text: 'El control de vales ha sido archivado satisfactoriamente .',
               icon: 'success'
             })
           } else {
@@ -673,6 +682,7 @@ export default {
       voucherControl,
       detailVoucher,
       employees,
+      breadcrumbItems,
       departaments,
       areas,
       provider,

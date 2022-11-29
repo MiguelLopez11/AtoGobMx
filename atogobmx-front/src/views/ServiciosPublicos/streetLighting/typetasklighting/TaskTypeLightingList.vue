@@ -1,5 +1,8 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
@@ -11,7 +14,7 @@
       <b-button
         variant="primary"
         style="
-          background-color: rgb(94,80,238);
+          background-color: rgb(94, 80, 238);
           height: 50px;
           width: auto;
           font-size: 18px;
@@ -43,21 +46,34 @@
         {{ header.text }}
       </template>
       <template #item-actions="items">
-        <b-button
-          @click="RemoveTaskTypeLighting(items.tareaTipoId)"
-          class="m-1"
-          variant="outline-danger"
-          ><i class="bi bi-trash3"></i
-        ></b-button>
-        <b-button
-          class="m-1"
-          variant="outline-warning"
-          :to="{
-            name: 'TareaTipoAlumbrado-Edit',
-            params: { TareaTipoAlumbradoId: items.tareaTipoId }
-          }"
-          ><i class="bi bi-pencil-square"></i
-        ></b-button>
+        <b-dropdown
+          id="ActionsDropdown"
+          size="lg"
+          style="text-color: black"
+          variant="link"
+          toggle-class="text-decoration-none"
+          dropright
+          no-caret
+        >
+          <template #button-content>
+            <i class="bi bi-three-dots-vertical"></i>
+          </template>
+          <b-dropdown-item
+            @click="RemoveTaskTypeLighting(items.tareaTipoId)"
+            class="m-1"
+            variant="outline-danger"
+            ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
+          >
+          <b-dropdown-item
+            class="m-1"
+            variant="outline-warning"
+            :to="{
+              name: 'TareaTipoAlumbrado-Edit',
+              params: { TareaTipoId: items.tareaTipoId }
+            }"
+            ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
+          >
+        </b-dropdown>
       </template>
     </EasyDataTable>
     <b-modal
@@ -88,13 +104,20 @@
           <!--Agregar descripcion-->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion">
-              <Field name="DescriptionField" :rules="validateDescription" as="text">
+              <Field
+                name="DescriptionField"
+                :rules="validateDescription"
+                as="text"
+              >
                 <b-form-input
                   v-model="taskTypeLightingFields.descripcion"
                   :state="DescriptionState"
                 ></b-form-input>
               </Field>
-              <ErrorMessage class="text-danger" name="DescriptionField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="DescriptionField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
@@ -132,7 +155,11 @@ export default {
   setup () {
     const swal = inject('$swal')
     const showModal = ref(false)
-    const { getTaskTypeLighting, createTaskTypeLighting, deleteTaskTypeLighting } = TaskTypeLightingServices()
+    const {
+      getTaskTypeLighting,
+      createTaskTypeLighting,
+      deleteTaskTypeLighting
+    } = TaskTypeLightingServices()
     // const $toast = useToast()
     const taskTypeLighting = ref([])
     const perPage = ref(5)
@@ -145,6 +172,12 @@ export default {
     const searchField = ref('nombreTarea')
     const DescriptionState = ref(false)
     const NameState = ref(false)
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      { text: 'Alumbrado', to: '/ServiciosPublicos/AlumbradoPublico/list' },
+      { text: 'Tipo de alumbrado' }
+    ])
+
     const taskTypeLightingFields = ref({
       tareaTipoId: 0,
       nombreTarea: null,
@@ -192,7 +225,11 @@ export default {
         NameState.value = false
         return 'Este campo es requerido'
       }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(taskTypeLightingFields.value.nombreTarea)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+          taskTypeLightingFields.value.nombreTarea
+        )
+      ) {
         NameState.value = false
         return 'El nombre del tipo de tarea solo puede contener letras'
       }
@@ -222,7 +259,11 @@ export default {
         DescriptionState.value = false
         return 'Este campo es requerido'
       }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(taskTypeLightingFields.value.descripcion)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+          taskTypeLightingFields.value.descripcion
+        )
+      ) {
         DescriptionState.value = false
         return 'la descripcion del tipo de tarea solo puede contener letras'
       }
@@ -278,27 +319,27 @@ export default {
     }
     const RemoveTaskTypeLighting = TaskTypeLightingId => {
       isloading.value = true
-      swal.fire({
-        title: '¿Estas seguro?',
-        text: 'No podrás revertir esto!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, Archivar empleado!',
-        cancelButtonText: 'Cancelar'
-      })
+      swal
+        .fire({
+          title: '¿Estas seguro?',
+          text: 'No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, Archivar empleado!',
+          cancelButtonText: 'Cancelar'
+        })
         .then(result => {
           if (result.isConfirmed) {
-            deleteTaskTypeLighting(TaskTypeLightingId, (data) => {
+            deleteTaskTypeLighting(TaskTypeLightingId, data => {
               refreshTable()
             })
-            swal
-              .fire({
-                title: '¡Tipo de tarea archivado!',
-                text: 'El tipo de tarea ha sido archivado satisfactoriamente .',
-                icon: 'success'
-              })
+            swal.fire({
+              title: '¡Tipo de tarea archivado!',
+              text: 'El tipo de tarea ha sido archivado satisfactoriamente .',
+              icon: 'success'
+            })
           } else {
             isloading.value = false
           }
@@ -310,7 +351,7 @@ export default {
     return {
       taskTypeLighting,
       taskTypeLightingFields,
-      resetPublicLightingFields,
+      breadcrumbItems,
       perPage,
       currentPage,
       showModal,
@@ -326,6 +367,7 @@ export default {
       NameState,
       DescriptionState,
       // option,
+      resetPublicLightingFields,
       onFiltered,
       addTaskTypeLighting,
       refreshTable,
@@ -338,6 +380,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

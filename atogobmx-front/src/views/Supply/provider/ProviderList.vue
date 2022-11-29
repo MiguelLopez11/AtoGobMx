@@ -1,9 +1,12 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
-        style="width: 350px;"
+        style="width: 350px"
         v-model="searchValue"
         type="search"
         placeholder="Buscar proveedor..."
@@ -42,21 +45,34 @@
         {{ header.text }}
       </template>
       <template #item-actions="items">
-        <b-button
-          @click="RemoveProvider(items.proveedorId)"
-          class="m-1"
-          variant="outline-danger"
-          ><i class="bi bi-trash3"></i
-        ></b-button>
-        <b-button
-          class="m-1"
-          variant="outline-warning"
-          :to="{
-            name: 'Proveedor-Edit',
-            params: { ProveedorId: items.proveedorId },
-          }"
-          ><i class="bi bi-pencil-square"></i
-        ></b-button>
+        <b-dropdown
+          id="ActionsDropdown"
+          size="lg"
+          style="text-color: black"
+          variant="link"
+          toggle-class="text-decoration-none"
+          dropright
+          no-caret
+        >
+          <template #button-content>
+            <i class="bi bi-three-dots-vertical"></i>
+          </template>
+          <b-dropdown-item
+            @click="RemoveProvider(items.proveedorId)"
+            class="m-1"
+            variant="outline-danger"
+            ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
+          >
+          <b-dropdown-item
+            class="m-1"
+            variant="outline-warning"
+            :to="{
+              name: 'Proveedor-Edit',
+              params: { ProveedorId: items.proveedorId }
+            }"
+            ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
+          >
+        </b-dropdown>
       </template>
     </EasyDataTable>
     <b-modal
@@ -215,6 +231,12 @@ export default {
     const PhoneState = ref(false)
     const emailState = ref(false)
     const emailMessage = ref('')
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      { text: 'Proveeduria', to: '/Proveeduria' },
+      { text: 'Proveedor' }
+    ])
+
     const providerFields = ref({
       proveedorId: 0,
       nombre: null,
@@ -226,9 +248,7 @@ export default {
       archivado: false
     })
 
-    const providerFieldsBlank = ref(
-      JSON.parse(JSON.stringify(providerFields))
-    )
+    const providerFieldsBlank = ref(JSON.parse(JSON.stringify(providerFields)))
     const fields = ref([
       { value: 'proveedorId', text: 'ID', sortable: true },
       { value: 'nombre', text: 'Nombre' },
@@ -242,9 +262,7 @@ export default {
 
     const resetProviderFields = () => {
       showModal.value = false
-      providerFields.value = JSON.parse(
-        JSON.stringify(providerFieldsBlank)
-      )
+      providerFields.value = JSON.parse(JSON.stringify(providerFieldsBlank))
       NameState.value = false
       RFCState.value = false
       LegalRepresentativeState.value = false
@@ -253,7 +271,7 @@ export default {
       emailState.value = false
     }
 
-    getProvider((data) => {
+    getProvider(data => {
       provider.value = data
       if (provider.value.length > 0) {
         isloading.value = false
@@ -264,7 +282,7 @@ export default {
       }
     })
 
-    const onFiltered = (filteredItems) => {
+    const onFiltered = filteredItems => {
       currentPage.value = 1
     }
 
@@ -307,7 +325,11 @@ export default {
         LegalRepresentativeState.value = false
         return 'Este campo es requerido'
       }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(providerFields.value.representanteLegal)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+          providerFields.value.representanteLegal
+        )
+      ) {
         LegalRepresentativeState.value = false
         return 'El representante solo puede contener letras'
       }
@@ -375,7 +397,7 @@ export default {
     // pone mis cambios de mis campos vacios de nuevo
     const refreshTable = () => {
       isloading.value = true
-      getProvider((data) => {
+      getProvider(data => {
         provider.value = data
         if (provider.value.length > 0) {
           isloading.value = false
@@ -389,12 +411,11 @@ export default {
     }
 
     const addProvider = () => {
-      createProvider(providerFields.value, (data) => {
+      createProvider(providerFields.value, data => {
         refreshTable()
         swal.fire({
           title: '¡Proveedor registrado correctamente!',
-          text:
-            'El proveedor se ha registrado al sistema satisfactoriamente.',
+          text: 'El proveedor se ha registrado al sistema satisfactoriamente.',
           icon: 'success'
         })
       })
@@ -402,7 +423,7 @@ export default {
       resetProviderFields()
     }
 
-    const RemoveStatusVoucher = (ProviderId) => {
+    const RemoveProvider = ProviderId => {
       isloading.value = true
       swal
         .fire({
@@ -415,9 +436,9 @@ export default {
           confirmButtonText: 'Si, Archivar proveedor!',
           cancelButtonText: 'Cancelar'
         })
-        .then((result) => {
+        .then(result => {
           if (result.isConfirmed) {
-            deleteProvider(ProviderId, (data) => {
+            deleteProvider(ProviderId, data => {
               refreshTable()
             })
             swal.fire({
@@ -435,6 +456,7 @@ export default {
       provider,
       providerFields,
       showModal,
+      breadcrumbItems,
       perPage,
       currentPage,
       filter,
@@ -455,7 +477,7 @@ export default {
       onFiltered,
       addProvider,
       refreshTable,
-      RemoveStatusVoucher,
+      RemoveProvider,
       validateName,
       validateRFC,
       validateLegalRepresentative,

@@ -1,5 +1,8 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
@@ -11,7 +14,7 @@
       <b-button
         variant="primary"
         style="
-          background-color: rgb(94,80,238);
+          background-color: rgb(94, 80, 238);
           height: 50px;
           width: auto;
           font-size: 18px;
@@ -42,21 +45,34 @@
         {{ header.text }}
       </template>
       <template #item-actions="items">
-        <b-button
-          @click="RemoveProductVoucher(items.productoId)"
-          class="m-1"
-          variant="outline-danger"
-          ><i class="bi bi-trash3"></i
-        ></b-button>
-        <b-button
-          class="m-1"
-          variant="outline-warning"
-          :to="{
-            name: 'Producto-Edit',
-            params: { ProductoId: items.productoId }
-          }"
-          ><i class="bi bi-pencil-square"></i
-        ></b-button>
+        <b-dropdown
+          id="ActionsDropdown"
+          size="lg"
+          style="text-color: black"
+          variant="link"
+          toggle-class="text-decoration-none"
+          dropright
+          no-caret
+        >
+          <template #button-content>
+            <i class="bi bi-three-dots-vertical"></i>
+          </template>
+          <b-dropdown-item
+            @click="RemoveProductVoucher(items.productoId)"
+            class="m-1"
+            variant="outline-danger"
+            ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
+          >
+          <b-dropdown-item
+            class="m-1"
+            variant="outline-warning"
+            :to="{
+              name: 'DetalleProducto-Edit',
+              params: { ProductoId: items.productoId }
+            }"
+            ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
+          >
+        </b-dropdown>
       </template>
     </EasyDataTable>
     <b-modal
@@ -86,13 +102,20 @@
           <!--Agregar Descripcion-->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion">
-              <Field name="DescriptionField" :rules="validateDescription" as="text">
+              <Field
+                name="DescriptionField"
+                :rules="validateDescription"
+                as="text"
+              >
                 <b-form-input
                   v-model="productVoucherFields.descripcion"
                   :state="DescriptionState"
                 ></b-form-input>
               </Field>
-              <ErrorMessage class="text-danger" name="DescriptionField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="DescriptionField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
@@ -128,7 +151,8 @@ export default {
   setup () {
     const swal = inject('$swal')
     const showModal = ref(false)
-    const { getProductVoucher, createProductVoucher, deleteProductVoucher } = ProductVoucherServices()
+    const { getProductVoucher, createProductVoucher, deleteProductVoucher } =
+      ProductVoucherServices()
     const productVoucher = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
@@ -139,6 +163,12 @@ export default {
     const searchField = ref('nombre')
     const NameState = ref(false)
     const DescriptionState = ref(false)
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      { text: 'Proveeduria', to: '/Proveeduria' },
+      { text: 'Producto' }
+    ])
+
     const productVoucherFields = ref({
       productoId: 0,
       nombre: null,
@@ -185,7 +215,9 @@ export default {
         NameState.value = false
         return 'Este campo es requerido'
       }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(productVoucherFields.value.nombre)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(productVoucherFields.value.nombre)
+      ) {
         NameState.value = false
         return 'El nombre de estatus de obras publicas solo puede contener letras'
       }
@@ -202,7 +234,11 @@ export default {
         DescriptionState.value = false
         return 'Este campo es requerido'
       }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(productVoucherFields.value.descripcion)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+          productVoucherFields.value.descripcion
+        )
+      ) {
         DescriptionState.value = false
         return 'La descripcion solo puede contener letras'
       }
@@ -245,27 +281,27 @@ export default {
 
     const RemoveProductVoucher = ProductVoucherId => {
       isloading.value = true
-      swal.fire({
-        title: '¿Estas seguro?',
-        text: 'No podrás revertir esto!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, Archivar producto!',
-        cancelButtonText: 'Cancelar'
-      })
+      swal
+        .fire({
+          title: '¿Estas seguro?',
+          text: 'No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, Archivar producto!',
+          cancelButtonText: 'Cancelar'
+        })
         .then(result => {
           if (result.isConfirmed) {
-            deleteProductVoucher(ProductVoucherId, (data) => {
+            deleteProductVoucher(ProductVoucherId, data => {
               refreshTable()
             })
-            swal
-              .fire({
-                title: '¡Producto archivado!',
-                text: 'El producto ha sido archivado satisfactoriamente .',
-                icon: 'success'
-              })
+            swal.fire({
+              title: '¡Producto archivado!',
+              text: 'El producto ha sido archivado satisfactoriamente .',
+              icon: 'success'
+            })
           } else {
             isloading.value = false
           }
@@ -275,6 +311,7 @@ export default {
     return {
       productVoucher,
       productVoucherFields,
+      breadcrumbItems,
       showModal,
       perPage,
       currentPage,
@@ -300,6 +337,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

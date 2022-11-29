@@ -1,29 +1,32 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
         style="width: 350px"
         v-model="searchValue"
         type="search"
-        placeholder="Buscar Direccin Cementerios..."
+        placeholder="Buscar Direccin..."
       ></b-form-input>
       <b-button
         variant="primary"
         style="
-            background-color: rgb(94,80,238);
-            height: 50px;
-            width: auto;
-            font-size: 18px;
-            margin-right: 15px;
-            margin-left: 20px;
+          background-color: rgb(94, 80, 238);
+          height: 50px;
+          width: auto;
+          font-size: 18px;
+          margin-right: 15px;
+          margin-left: 20px;
         "
         @click="showModal = !showModal"
         type="submit"
       >
         <!-- v-b-modal.modal-cementery -->
         <i class="bi bi-person-plus-fill"></i>
-        Agregar Direccion cementerio
+        Agregar Direccion
       </b-button>
     </b-row>
     <EasyDataTable
@@ -44,21 +47,34 @@
         {{ header.text }}
       </template>
       <template #item-actions="items">
-        <b-button
-          @click="RemoveAddressCementeryService(items.direccionId)"
-          class="m-1"
-          variant="outline-danger"
-          ><i class="bi bi-trash3"></i
-        ></b-button>
-        <b-button
-          class="m-1"
-          variant="outline-warning"
-          :to="{
-            name: 'DireccionCementerios-Edit',
-            params: { DireccionId: items.direccionId }
-          }"
-          ><i class="bi bi-pencil-square"></i
-        ></b-button>
+        <b-dropdown
+          id="ActionsDropdown"
+          size="lg"
+          style="text-color: black"
+          variant="link"
+          toggle-class="text-decoration-none"
+          dropright
+          no-caret
+        >
+          <template #button-content>
+            <i class="bi bi-three-dots-vertical"></i>
+          </template>
+          <b-dropdown-item
+            @click="RemoveAddressCementeryService(items.direccionId)"
+            class="m-1"
+            variant="outline-danger"
+            ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
+          >
+          <b-dropdown-item
+            class="m-1"
+            variant="outline-warning"
+            :to="{
+              name: 'DireccionCementerios-Edit',
+              params: { DireccionId: items.direccionId }
+            }"
+            ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
+          >
+        </b-dropdown>
       </template>
     </EasyDataTable>
 
@@ -73,7 +89,7 @@
     >
       <Form @submit="addCementeryService">
         <b-row cols="2">
-          <!-- 1 -->
+          <!--Agregar Nombre Cementerio -->
           <b-col>
             <b-form-group class="mt-3" label="Nombre del cementerio">
               <Field
@@ -93,7 +109,7 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!-- 2 -->
+          <!--Agregar Municipio -->
           <b-col>
             <b-form-group class="mt-3" label="Municipio">
               <Field
@@ -113,7 +129,7 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!-- 3 -->
+          <!--Agregar Localidad -->
           <b-col>
             <b-form-group class="mt-3" label="Localidad">
               <Field name="LocationField" :rules="validateLocation" as="text">
@@ -129,7 +145,7 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!-- 4 -->
+          <!--Agregar Calle -->
           <b-col>
             <b-form-group class="mt-3" label="Calle">
               <Field name="StreetField" :rules="validateStreet" as="text">
@@ -146,7 +162,7 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!-- 5 -->
+          <!--Agregar Numero Exterior -->
           <b-col>
             <b-form-group class="mt-3" label="Numero exterior">
               <Field
@@ -202,7 +218,11 @@ export default {
   setup () {
     const swal = inject('$swal')
     const showModal = ref(false)
-    const { getAddressCementery, createAddressCementery, deleteAddressCementery } = AddressCementeryService()
+    const {
+      getAddressCementery,
+      createAddressCementery,
+      deleteAddressCementery
+    } = AddressCementeryService()
     const addressCementeryService = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
@@ -216,6 +236,15 @@ export default {
     const LocationState = ref(false)
     const StreetState = ref(false)
     const NumberOutsideState = ref(false)
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      {
+        text: 'Cementerios',
+        to: '/ServiciosPublicos/CementeriosPublicos/list'
+      },
+      { text: 'Cementerios' }
+    ])
+
     const addressCementeryServiceFields = ref({
       direccionId: 0,
       nombreCementerio: null,
@@ -273,12 +302,18 @@ export default {
         return 'Este campo es requerido'
       }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(addressCementeryServiceFields.value.nombreCementerio)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+          addressCementeryServiceFields.value.nombreCementerio
+        )
+      ) {
         NameCementeryState.value = false
         return 'Este campo solo puede contener letras'
       }
 
-      if (!addressCementeryServiceFields.value.nombreCementerio.trim().length > 0) {
+      if (
+        !addressCementeryServiceFields.value.nombreCementerio.trim().length > 0
+      ) {
         NameCementeryState.value = false
         return 'Este campo no puede contener espacios'
       }
@@ -293,7 +328,11 @@ export default {
         return 'Este campo es requerido'
       }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(addressCementeryServiceFields.value.municipio)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+          addressCementeryServiceFields.value.municipio
+        )
+      ) {
         MunicipalityState.value = false
         return 'Este campo solo puede contener letras'
       }
@@ -313,7 +352,11 @@ export default {
         return 'Este campo es requerido'
       }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(addressCementeryServiceFields.value.localidad)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+          addressCementeryServiceFields.value.localidad
+        )
+      ) {
         LocationState.value = false
         return 'Este campo solo puede contener letras'
       }
@@ -333,7 +376,11 @@ export default {
         return 'Este campo es requerido'
       }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(addressCementeryServiceFields.value.calle)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+          addressCementeryServiceFields.value.calle
+        )
+      ) {
         StreetState.value = false
         return 'Este campo solo puede contener letras'
       }
@@ -353,12 +400,16 @@ export default {
         return 'Este campo es requerido'
       }
 
-      if (!/^[0-9]+$/i.test(addressCementeryServiceFields.value.numeroExterior)) {
+      if (
+        !/^[0-9]+$/i.test(addressCementeryServiceFields.value.numeroExterior)
+      ) {
         NumberOutsideState.value = false
         return 'Este campo solo puede contener numeros'
       }
 
-      if (!addressCementeryServiceFields.value.numeroExterior.trim().length > 0) {
+      if (
+        !addressCementeryServiceFields.value.numeroExterior.trim().length > 0
+      ) {
         NumberOutsideState.value = false
         return 'Este campo no puede contener espacios'
       }
@@ -396,7 +447,7 @@ export default {
       resetAddressCementeryServiceFields()
     }
 
-    const RemoveExpedientLighting = AddressCementeryId => {
+    const RemoveAddressCementeryService = AddressCementeryId => {
       isloading.value = true
       swal
         .fire({
@@ -429,6 +480,7 @@ export default {
       showModal,
       addressCementeryService,
       addressCementeryServiceFields,
+      breadcrumbItems,
       perPage,
       currentPage,
       filter,
@@ -447,13 +499,12 @@ export default {
       onFiltered,
       refreshTable,
       addCementeryService,
-      RemoveExpedientLighting,
+      RemoveAddressCementeryService,
       validateNameCementery,
       validateMunicipality,
       validateLocation,
       validateStreet,
       validateNumberOutside
-
     }
   }
 }

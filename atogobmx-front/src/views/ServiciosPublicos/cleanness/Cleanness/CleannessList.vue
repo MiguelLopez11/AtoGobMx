@@ -1,5 +1,8 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
@@ -11,12 +14,12 @@
       <b-button
         variant="primary"
         style="
-            background-color: rgb(94,80,238);
-            height: 50px;
-            width: auto;
-            font-size: 18px;
-            margin-right: 15px;
-            margin-left: 20px;
+          background-color: rgb(94, 80, 238);
+          height: 50px;
+          width: auto;
+          font-size: 18px;
+          margin-right: 15px;
+          margin-left: 20px;
         "
         @click="showModal = !showModal"
         type="submit"
@@ -44,21 +47,34 @@
         {{ header.text }}
       </template>
       <template #item-actions="items">
-        <b-button
-          @click="RemoveCleannessService(items.aseoId)"
-          class="m-1"
-          variant="outline-danger"
-          ><i class="bi bi-trash3"></i
-        ></b-button>
-        <b-button
-          class="m-1"
-          variant="outline-warning"
-          :to="{
-            name: 'Aseo-Edit',
-            params: { AseoId: items.aseoId }
-          }"
-          ><i class="bi bi-pencil-square"></i
-        ></b-button>
+        <b-dropdown
+          id="ActionsDropdown"
+          size="lg"
+          style="text-color: black"
+          variant="link"
+          toggle-class="text-decoration-none"
+          dropright
+          no-caret
+        >
+          <template #button-content>
+            <i class="bi bi-three-dots-vertical"></i>
+          </template>
+          <b-dropdown-item
+            @click="RemoveCleannessService(items.aseoId)"
+            class="m-1"
+            variant="outline-danger"
+            ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
+          >
+          <b-dropdown-item
+            class="m-1"
+            variant="outline-warning"
+            :to="{
+              name: 'Aseo-Edit',
+              params: { AseoId: items.aseoId }
+            }"
+            ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
+          >
+        </b-dropdown>
       </template>
     </EasyDataTable>
 
@@ -73,7 +89,7 @@
     >
       <Form @submit="addCleannessService">
         <b-row cols="2">
-          <!-- 1 -->
+          <!--Agregar nombre -->
           <b-col>
             <b-form-group class="mt-3" label="Nombre del servicio">
               <Field
@@ -93,10 +109,14 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!-- 2 -->
+          <!--Agregar Establecimiento -->
           <b-col>
             <b-form-group class="mt-3" label="Establecimiento publico">
-              <Field name="PublicEstablishmentField" :rules="validatePublicEstablishment" as="text">
+              <Field
+                name="PublicEstablishmentField"
+                :rules="validatePublicEstablishment"
+                as="text"
+              >
                 <b-form-input
                   v-model="cleannessServiceFields.establecimientoPublico"
                   :state="PublicEstablishmentState"
@@ -109,7 +129,7 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!-- 3 -->
+          <!--Agregar Domicilio -->
           <b-col>
             <b-form-group class="mt-3" label="Domicilio">
               <Field name="DomicileField" :rules="validateDomicile" as="text">
@@ -125,14 +145,10 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!-- 4 -->
+          <!--Agrgar objetivo -->
           <b-col>
             <b-form-group class="mt-3" label="Objetivo">
-              <Field
-                name="ObjectiveField"
-                :rules="validateObjective"
-                as="text"
-              >
+              <Field name="ObjectiveField" :rules="validateObjective" as="text">
                 <b-form-input
                   v-model="cleannessServiceFields.objetivo"
                   :state="ObjectiveState"
@@ -181,7 +197,8 @@ export default {
   setup () {
     const swal = inject('$swal')
     const showModal = ref(false)
-    const { getCleanness, createCleanness, deleteCleanness } = CleannessService()
+    const { getCleanness, createCleanness, deleteCleanness } =
+      CleannessService()
     // const $toast = useToast()
     const cleannessService = ref([])
     const perPage = ref(5)
@@ -195,6 +212,12 @@ export default {
     const PublicEstablishmentState = ref(false)
     const DomicileState = ref(false)
     const ObjectiveState = ref(false)
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      { text: 'Aseo publico', to: '/ServiciosPublicos/AseoPublico/list' },
+      { text: 'Aseo publico' }
+    ])
+
     const cleannessServiceFields = ref({
       aseoId: 0,
       nombreServicio: null,
@@ -249,7 +272,11 @@ export default {
         return 'Este campo es requerido'
       }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(cleannessServiceFields.value.nombreServicio)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+          cleannessServiceFields.value.nombreServicio
+        )
+      ) {
         NameServiceState.value = false
         return 'Este campo solo puede contener letras'
       }
@@ -269,12 +296,18 @@ export default {
         return 'Este campo es requerido'
       }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(cleannessServiceFields.value.establecimientoPublico)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+          cleannessServiceFields.value.establecimientoPublico
+        )
+      ) {
         PublicEstablishmentState.value = false
         return 'Este campo solo puede contener numeros'
       }
 
-      if (!cleannessServiceFields.value.establecimientoPublico.trim().length > 0) {
+      if (
+        !cleannessServiceFields.value.establecimientoPublico.trim().length > 0
+      ) {
         PublicEstablishmentState.value = false
         return 'Este campo no puede contener espacios'
       }
@@ -289,7 +322,11 @@ export default {
         return 'Este campo es requerido'
       }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(cleannessServiceFields.value.domicilio)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+          cleannessServiceFields.value.domicilio
+        )
+      ) {
         DomicileState.value = false
         return 'Este campo solo puede contener numeros'
       }
@@ -309,7 +346,9 @@ export default {
         return 'Este campo es requerido'
       }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(cleannessServiceFields.value.objetivo)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(cleannessServiceFields.value.objetivo)
+      ) {
         ObjectiveState.value = false
         return 'Este campo solo puede contener numeros'
       }
@@ -354,35 +393,37 @@ export default {
 
     const RemoveCleannessService = cleannessId => {
       isloading.value = true
-      swal.fire({
-        title: '¿Estas seguro',
-        text: 'No podras revertir esto',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, Archivar Aseo!',
-        cancelButtonText: 'Cancelar'
-      }).then(result => {
-        if (result.isConfirmed) {
-          deleteCleanness(cleannessId, (data) => {
-            refreshTable()
-          })
-          swal.fire({
-            title: '¡Aseo archivado!',
-            text:
-                'El aseo ha sido archivado satisfactoriamente.',
-            icon: 'success'
-          })
-        } else {
-          isloading.value = false
-        }
-      })
+      swal
+        .fire({
+          title: '¿Estas seguro',
+          text: 'No podras revertir esto',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, Archivar Aseo!',
+          cancelButtonText: 'Cancelar'
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            deleteCleanness(cleannessId, data => {
+              refreshTable()
+            })
+            swal.fire({
+              title: '¡Aseo archivado!',
+              text: 'El aseo ha sido archivado satisfactoriamente.',
+              icon: 'success'
+            })
+          } else {
+            isloading.value = false
+          }
+        })
     }
 
     return {
       cleannessService,
       cleannessServiceFields,
+      breadcrumbItems,
       perPage,
       currentPage,
       filter,

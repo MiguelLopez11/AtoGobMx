@@ -6,7 +6,7 @@
         style="width: 350px"
         v-model="searchValue"
         type="search"
-        placeholder="Buscar alumbrado empleado..."
+        placeholder="Buscar vehiculo..."
       ></b-form-input>
       <b-button
         variant="primary"
@@ -22,7 +22,7 @@
         type="submit"
       >
         <i class="bi bi-person-plus-fill"></i>
-        Agregar alumbrado empleado
+        Agregar vehiculo
       </b-button>
     </b-row>
     <EasyDataTable
@@ -33,7 +33,7 @@
       border-cell
       :loading="isloading"
       :headers="fields"
-      :items="lightingEmployeeService"
+      :items="lightingvehicle"
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
@@ -56,7 +56,7 @@
             <i class="bi bi-three-dots-vertical"></i>
           </template>
           <b-dropdown-item
-            @click="RemoveLightingEmployeeService(items.alumbradoEmpleadoId)"
+            @click="RemoveLightingVehicle(items.vehiculoAlumbradoId)"
             class="m-1"
             variant="outline-danger"
             ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
@@ -66,40 +66,29 @@
     </EasyDataTable>
     <b-modal
       id="modal-lightingemployee"
-      tittle="Agregar alumbrado Empleado"
+      tittle="Agregar vehiculos alumbrado"
       v-model="showModal"
       size="xl"
       hide-footer
       button-size="lg"
       lazy
     >
-      <Form @submit="addLightingEmployeeService">
+      <Form @submit="addLightingVehicle">
         <b-row cols="2">
-          <!-- Nombre del empleado -->
+          <!-- Nombre del vehiculo -->
           <b-col>
-            <b-form-group class="mt-3" label="Nombre empleado">
-              <Field name="NameField" :rules="validateName" as="text">
+            <b-form-group class="mt-3" label="Veiculo">
+              <Field name="VehicleField" :rules="validateVehicle" as="text">
                 <v-select
                   multiple
-                  v-model="employeesSelected"
-                  :options="employees"
-                  label="nombreCompleto"
-                  :key="employees.empleadoId"
-                  :reduce="employees => employees.empleadoId"
+                  v-model="vehicleSelected"
+                  :options="statusVehicles"
+                  label="Vehiculo"
+                  :key="statusVehicles.estatusVehiculoId"
+                  :reduce="statusVehicles => statusVehicles.estatusVehiculoId"
                 />
-                <!-- <b-form-select
-                  v-model="lightingEmployeeFieldslightingEmployeeFields.empleadoId"
-                  :state="NameState"
-                  autofocus
-                  multiple
-                  :selected="selected2"
-                  :options="employees"
-                  value-field="empleadoId"
-                  text-field="nombreCompleto"
-                >
-                </b-form-select> -->
               </Field>
-              <ErrorMessage class="text-danger" name="NameField"></ErrorMessage>
+              <ErrorMessage class="text-danger" name="VehicleField"></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
@@ -108,7 +97,7 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            @click="resetLightingEmployeeServiceFields"
+            @click="resetLightingVehicleFields"
           >
             Cancelar
           </b-button>
@@ -122,8 +111,8 @@
 </template>
 
 <script>
-import LightingEmployeeService from '@/Services/lightingemployee.Services'
-import EmployeeServices from '@/Services/employee.Services'
+import LightingVehicleServices from '@/Services/lightingvehicle.Services'
+import VehiclesServices from '@/Services/vehicles.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -144,66 +133,70 @@ export default {
     const swal = inject('$swal')
     const showModal = ref(false)
     const {
-      getAddressLightingEmployee,
-      createAddressLightingEmployee,
-      deleteAddressLightingEmployee
-    } = LightingEmployeeService()
-    const { getEmployees } = EmployeeServices()
-    const lightingEmployeeService = ref([])
-    const employees = ref([])
-    const employeesSelected = ref([])
+      getLightingVehicle,
+      createLightingVehicle,
+      deleteLightingVehicle
+    } = LightingVehicleServices()
+    const { getEstatusVehicles } = VehiclesServices()
+    // const { getVehicles } = VehiclesServices()
+    const lightingvehicle = ref([])
+    const statusVehicles = ref([])
+    // const vehicles = ref([])
+    const vehicleSelected = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
     const filter = ref(null)
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('empleadoId')
-    const NameState = ref(false)
-    const lightingEmployeeFields = ref({
-      alumbradoEmpleadoId: 0,
+    const searchField = ref('estatusVehiculoId')
+    // const NameState = ref(false)
+    const lightingVehicleFields = ref({
+      vehiculoAlumbradoId: 0,
       expedienteAlumbradoId: props.expedienteAlumbradoId,
-      empleadoId: 0,
+      estatusVehiculoId: 0,
+      vehiculoId: 0,
       archivado: false
     })
 
-    getEmployees(data => {
-      employees.value = data
+    getEstatusVehicles(data => {
+      statusVehicles.value = data
       if (data.length === 0) {
         swal.fire({
-          title: 'No se encuentra un tipo de Empleado alumbrado',
+          title: 'No se encuentra un vehiculo',
           text:
-            'No se encuentra tipo de empleado alumbrado registrado en el departamento seleccionado, registre primero un tipo de empleado para continuar',
+            'No se encuentran vehiculos registrados en el departamento seleccionado, registre primero un vehiculo para continuar',
           icon: 'warning'
         })
       }
     })
 
-    const LightingEmployeeServiceFieldsBlank = ref(
-      JSON.parse(JSON.stringify(lightingEmployeeFields))
+    const LightingVehicleFieldsBlank = ref(
+      JSON.parse(JSON.stringify(lightingVehicleFields))
     )
 
     const fields = ref([
-      { value: 'alumbradoEmpleadoId', text: 'ID', sortable: true },
-      { value: 'empleadoId', text: 'Nombre empleado' },
+      { value: 'vehiculoAlumbradoId', text: 'ID', sortable: true },
+      { value: 'estatusVehiculo.nombre', text: 'Vehiculo' },
+      //   { value: 'vehiculoId', text: 'Marca' },
       { value: 'actions', text: 'Acciones' }
     ])
 
-    const resetLightingEmployeeServiceFields = () => {
+    const resetLightingVehicleFields = () => {
       showModal.value = false
-      lightingEmployeeFields.value = JSON.parse(
-        JSON.stringify(LightingEmployeeServiceFieldsBlank)
+      lightingVehicleFields.value = JSON.parse(
+        JSON.stringify(LightingVehicleFieldsBlank)
       )
-      NameState.value = false
+    //   NameState.value = false
     }
 
-    getAddressLightingEmployee(data => {
-      lightingEmployeeService.value = data
+    getLightingVehicle(data => {
+      lightingvehicle.value = data
 
-      if (lightingEmployeeService.value.length > 0) {
+      if (lightingvehicle.value.length > 0) {
         isloading.value = false
       } else {
-        if (lightingEmployeeService.value.length <= 0) {
+        if (lightingvehicle.value.length <= 0) {
           isloading.value = false
         }
       }
@@ -212,26 +205,15 @@ export default {
     const onFiltered = filteredItems => {
       currentPage.value = 1
     }
-
-    const validateName = () => {
-      if (!employeesSelected.value.length === 0) {
-        NameState.value = false
-        return 'Este campo es requerido'
-      }
-
-      NameState.value = true
-      return true
-    }
-
     const refreshTable = () => {
       isloading.value = true
-      getAddressLightingEmployee(data => {
-        lightingEmployeeService.value = data
+      getLightingVehicle(data => {
+        lightingvehicle.value = data
 
-        if (lightingEmployeeService.value.length > 0) {
+        if (lightingvehicle.value.length > 0) {
           isloading.value = false
         } else {
-          if (lightingEmployeeService.value.length <= 0) {
+          if (lightingvehicle.value.length <= 0) {
             isloading.value = false
           }
         }
@@ -239,25 +221,25 @@ export default {
       return 'datos recargados'
     }
 
-    const addLightingEmployeeService = () => {
-      for (let i = 0; i < employeesSelected.value.length; i++) {
-        lightingEmployeeFields.value.empleadoId = employeesSelected.value[i]
-        createAddressLightingEmployee(
-          lightingEmployeeFields.value,
+    const addLightingVehicle = () => {
+      for (let i = 0; i < vehicleSelected.value.length; i++) {
+        lightingVehicleFields.value.empleadoId = vehicleSelected.value[i]
+        createLightingVehicle(
+          lightingVehicleFields.value,
           data => {
             refreshTable()
           })
       }
       swal.fire({
-        title: '¡Empleado alumbrado agregado correctamente!',
-        text: 'Empleado alumbrado registrado satisfactoriamente',
+        title: '¡El vehiculo se agregado correctamente!',
+        text: 'El vehiculo se ha registrado satisfactoriamente',
         icon: 'success'
       })
       showModal.value = false
-      resetLightingEmployeeServiceFields()
+      resetLightingVehicleFields()
     }
 
-    const RemoveLightingEmployeeService = alumbradoEmpleadoId => {
+    const RemoveLightingVehicle = vehiculoAlumbradoId => {
       isloading.value = true
       swal
         .fire({
@@ -267,18 +249,18 @@ export default {
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
           cancelButtonColor: '#d33',
-          confirmButtonText: 'Si, Archivar Empleado alumbrado!',
+          confirmButtonText: 'Si, Archivar vehiculo!',
           cancelButtonText: 'Cancelar'
         })
         .then(result => {
           if (result.isConfirmed) {
-            deleteAddressLightingEmployee(alumbradoEmpleadoId, data => {
+            deleteLightingVehicle(vehiculoAlumbradoId, data => {
               refreshTable()
             })
             swal.fire({
-              title: '¡Empleado alumbrado archivado!',
+              title: '¡vehiculo archivado!',
               text:
-                'El empleado alumbrado ha sido archivado satisfactoriamente.',
+                'El vehiculo ha sido archivado satisfactoriamente.',
               icon: 'success'
             })
           } else {
@@ -288,8 +270,8 @@ export default {
     }
 
     return {
-      lightingEmployeeService,
-      lightingEmployeeFields,
+      lightingvehicle,
+      lightingVehicleFields,
       perPage,
       currentPage,
       filter,
@@ -298,18 +280,18 @@ export default {
       isloading,
       searchValue,
       searchField,
-      LightingEmployeeServiceFieldsBlank,
+      LightingVehicleFieldsBlank,
       fields,
-      NameState,
-      employees,
-      employeesSelected,
+      //   NameState,
+      statusVehicles,
+      vehicleSelected,
 
       onFiltered,
-      addLightingEmployeeService,
-      RemoveLightingEmployeeService,
+      addLightingVehicle,
+      RemoveLightingVehicle,
       refreshTable,
-      validateName,
-      resetLightingEmployeeServiceFields
+      //   validateName,
+      resetLightingVehicleFields
     }
   }
 }
