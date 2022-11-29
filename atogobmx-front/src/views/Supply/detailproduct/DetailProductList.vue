@@ -1,5 +1,8 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
@@ -11,7 +14,7 @@
       <b-button
         variant="primary"
         style="
-          background-color: rgb(94,80,238);
+          background-color: rgb(94, 80, 238);
           height: 50px;
           width: auto;
           font-size: 18px;
@@ -110,11 +113,7 @@
           <!--Agregar Producto-->
           <b-col>
             <b-form-group class="mt-3" label="Producto: ">
-              <Field
-                name="ProductField"
-                :rules="validateProduct"
-                as="text"
-              >
+              <Field name="ProductField" :rules="validateProduct" as="text">
                 <b-form-select
                   v-model="detailProductFields.productoId"
                   autofocus
@@ -166,7 +165,8 @@ export default {
   setup () {
     const swal = inject('$swal')
     const showModal = ref(false)
-    const { getDetailProduct, createDetailProduct, deleteDetailProduct } = DetailProductServices()
+    const { getDetailProduct, createDetailProduct, deleteDetailProduct } =
+      DetailProductServices()
     const { getDetailVoucher } = DetailVoucherServices()
     const { getProductVoucher } = ProductVoucherServices()
     const detailProduct = ref([])
@@ -181,6 +181,12 @@ export default {
     const searchField = ref('agregardato para busqueda')
     const DetailVoucherState = ref(false)
     const ProductState = ref(false)
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      { text: 'Proveeduria', to: '/Proveeduria' },
+      { text: 'Detalle producto' }
+    ])
+
     const detailProductFields = ref({
       detalleProductoId: 0,
       productoId: null,
@@ -293,27 +299,27 @@ export default {
 
     const RemoveDetailProduct = WorksStatusId => {
       isloading.value = true
-      swal.fire({
-        title: '¿Estas seguro?',
-        text: 'No podrás revertir esto!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, Archivar detalle producto!',
-        cancelButtonText: 'Cancelar'
-      })
+      swal
+        .fire({
+          title: '¿Estas seguro?',
+          text: 'No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, Archivar detalle producto!',
+          cancelButtonText: 'Cancelar'
+        })
         .then(result => {
           if (result.isConfirmed) {
-            deleteDetailProduct(WorksStatusId, (data) => {
+            deleteDetailProduct(WorksStatusId, data => {
               refreshTable()
             })
-            swal
-              .fire({
-                title: '¡Detalle producto archivado!',
-                text: 'El detalle producto ha sido archivado satisfactoriamente .',
-                icon: 'success'
-              })
+            swal.fire({
+              title: '¡Detalle producto archivado!',
+              text: 'El detalle producto ha sido archivado satisfactoriamente .',
+              icon: 'success'
+            })
           } else {
             isloading.value = false
           }
@@ -324,6 +330,7 @@ export default {
       detailProduct,
       detailVoucher,
       productVoucher,
+      breadcrumbItems,
       detailProductFields,
       showModal,
       perPage,
@@ -350,6 +357,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

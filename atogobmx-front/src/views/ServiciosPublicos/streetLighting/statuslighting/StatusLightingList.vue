@@ -1,5 +1,8 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
@@ -11,7 +14,7 @@
       <b-button
         variant="primary"
         style="
-          background-color: rgb(94,80,238);
+          background-color: rgb(94, 80, 238);
           height: 50px;
           width: auto;
           font-size: 18px;
@@ -100,13 +103,20 @@
           <!--Agregar descripcion-->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion">
-              <Field name="DescriptionField" :rules="validateDescription" as="text">
+              <Field
+                name="DescriptionField"
+                :rules="validateDescription"
+                as="text"
+              >
                 <b-form-input
                   v-model="statusLightingFields.descripcion"
                   :state="DescriptionState"
                 ></b-form-input>
               </Field>
-              <ErrorMessage class="text-danger" name="DescriptionField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="DescriptionField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
@@ -144,7 +154,8 @@ export default {
   setup () {
     const swal = inject('$swal')
     const showModal = ref(false)
-    const { getStatus, createStatusLighting, deleteStatusLighting } = StatusLightingServices()
+    const { getStatus, createStatusLighting, deleteStatusLighting } =
+      StatusLightingServices()
     // const $toast = useToast()
     const statusLighting = ref([])
     const perPage = ref(5)
@@ -157,6 +168,12 @@ export default {
     const searchField = ref('nombreEstatus')
     const DescriptionState = ref(false)
     const NameState = ref(false)
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      { text: 'Alumbrado', to: '/ServiciosPublicos/AlumbradoPublico/list' },
+      { text: 'Estatus alumbrado' }
+    ])
+
     const statusLightingFields = ref({
       estatusAlumbradoId: 0,
       nombreEstatus: null,
@@ -204,7 +221,11 @@ export default {
         NameState.value = false
         return 'Este campo es requerido'
       }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(statusLightingFields.value.nombreEstatus)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+          statusLightingFields.value.nombreEstatus
+        )
+      ) {
         NameState.value = false
         return 'El nombre de estatus solo puede contener letras'
       }
@@ -221,7 +242,11 @@ export default {
         DescriptionState.value = false
         return 'Este campo es requerido'
       }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(statusLightingFields.value.descripcion)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+          statusLightingFields.value.descripcion
+        )
+      ) {
         DescriptionState.value = false
         return 'La descripcion solo puede contener letras'
       }
@@ -271,27 +296,27 @@ export default {
     }
     const RemoveStatusLighting = StreetLightingId => {
       isloading.value = true
-      swal.fire({
-        title: '¿Estas seguro?',
-        text: 'No podrás revertir esto!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, Archivar empleado!',
-        cancelButtonText: 'Cancelar'
-      })
+      swal
+        .fire({
+          title: '¿Estas seguro?',
+          text: 'No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, Archivar empleado!',
+          cancelButtonText: 'Cancelar'
+        })
         .then(result => {
           if (result.isConfirmed) {
-            deleteStatusLighting(StreetLightingId, (data) => {
+            deleteStatusLighting(StreetLightingId, data => {
               refreshTable()
             })
-            swal
-              .fire({
-                title: '¡Estatus archivado!',
-                text: 'El estatus ha sido archivado satisfactoriamente .',
-                icon: 'success'
-              })
+            swal.fire({
+              title: '¡Estatus archivado!',
+              text: 'El estatus ha sido archivado satisfactoriamente .',
+              icon: 'success'
+            })
           } else {
             isloading.value = false
           }
@@ -303,6 +328,7 @@ export default {
     return {
       statusLighting,
       statusLightingFields,
+      breadcrumbItems,
       showModal,
       perPage,
       currentPage,
@@ -331,6 +357,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

@@ -1,5 +1,8 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
@@ -11,7 +14,7 @@
       <b-button
         variant="primary"
         style="
-          background-color: rgb(94,80,238);
+          background-color: rgb(94, 80, 238);
           height: 50px;
           width: auto;
           font-size: 18px;
@@ -99,13 +102,20 @@
           <!--Agregar Descripcion-->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion">
-              <Field name="DescriptionField" :rules="validateDescription" as="text">
+              <Field
+                name="DescriptionField"
+                :rules="validateDescription"
+                as="text"
+              >
                 <b-form-input
                   v-model="typeVoucherFields.descripcion"
                   :state="DescriptionState"
                 ></b-form-input>
               </Field>
-              <ErrorMessage class="text-danger" name="DescriptionField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="DescriptionField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
@@ -141,7 +151,8 @@ export default {
   setup () {
     const swal = inject('$swal')
     const showModal = ref(false)
-    const { getTypeVoucher, createTypeVoucher, deleteTypeVoucher } = TypeVoucherServices()
+    const { getTypeVoucher, createTypeVoucher, deleteTypeVoucher } =
+      TypeVoucherServices()
     const typeVoucher = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
@@ -152,6 +163,12 @@ export default {
     const searchField = ref('nombre')
     const NameState = ref(false)
     const DescriptionState = ref(false)
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      { text: 'Proveeduria', to: '/Proveeduria' },
+      { text: 'Tipo de vale' }
+    ])
+
     const typeVoucherFields = ref({
       tipoId: 0,
       nombre: null,
@@ -215,7 +232,9 @@ export default {
         DescriptionState.value = false
         return 'Este campo es requerido'
       }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(typeVoucherFields.value.descripcion)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(typeVoucherFields.value.descripcion)
+      ) {
         DescriptionState.value = false
         return 'La descripcion solo puede contener letras'
       }
@@ -258,27 +277,27 @@ export default {
 
     const RemoveTypeVoucher = TypeVoucherId => {
       isloading.value = true
-      swal.fire({
-        title: '¿Estas seguro?',
-        text: 'No podrás revertir esto!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, Archivar tipo vale!',
-        cancelButtonText: 'Cancelar'
-      })
+      swal
+        .fire({
+          title: '¿Estas seguro?',
+          text: 'No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, Archivar tipo vale!',
+          cancelButtonText: 'Cancelar'
+        })
         .then(result => {
           if (result.isConfirmed) {
-            deleteTypeVoucher(TypeVoucherId, (data) => {
+            deleteTypeVoucher(TypeVoucherId, data => {
               refreshTable()
             })
-            swal
-              .fire({
-                title: '¡Tipo vale archivado!',
-                text: 'El tipo vale ha sido archivado satisfactoriamente .',
-                icon: 'success'
-              })
+            swal.fire({
+              title: '¡Tipo vale archivado!',
+              text: 'El tipo vale ha sido archivado satisfactoriamente .',
+              icon: 'success'
+            })
           } else {
             isloading.value = false
           }
@@ -289,6 +308,7 @@ export default {
       typeVoucher,
       typeVoucherFields,
       showModal,
+      breadcrumbItems,
       perPage,
       currentPage,
       filter,
@@ -313,6 +333,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

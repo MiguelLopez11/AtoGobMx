@@ -1,5 +1,8 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
@@ -12,7 +15,7 @@
       <b-button
         :disabled="publicLighting.length < 1"
         style="
-          background-color: rgb(94,80,238);
+          background-color: rgb(94, 80, 238);
           height: 50px;
           width: auto;
           font-size: 18px;
@@ -93,21 +96,21 @@
       </b-form-group>
     </b-row>
     <b-row align-h="end">
-          <b-button
-            class="w-auto m-2 text-white"
-            variant="primary"
-            @click="showModal = !showModal"
-          >
-            Cancelar
-          </b-button>
-          <b-button
-            class="w-auto m-2"
-            variant="success"
-            @click="onAddExpedientLighting()"
-          >
-            Guardar
-          </b-button>
-        </b-row>
+      <b-button
+        class="w-auto m-2 text-white"
+        variant="primary"
+        @click="showModal = !showModal"
+      >
+        Cancelar
+      </b-button>
+      <b-button
+        class="w-auto m-2"
+        variant="success"
+        @click="onAddExpedientLighting()"
+      >
+        Guardar
+      </b-button>
+    </b-row>
   </b-modal>
 </template>
 
@@ -123,7 +126,11 @@ export default {
     const showModal = ref(false)
     const swal = inject('$swal')
     const { getPublicLightingExpedient } = publiclightingServices()
-    const { getExpedientLighting, createExpedientLighting, deleteExpedientLighting } = ExpedientLighting()
+    const {
+      getExpedientLighting,
+      createExpedientLighting,
+      deleteExpedientLighting
+    } = ExpedientLighting()
     const expedientLighting = ref([])
     const publicLighting = ref([])
     const perPage = ref(5)
@@ -133,16 +140,31 @@ export default {
     const isloading = ref(true)
     const searchValue = ref('')
     const searchField = ref('nombreObra')
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      {
+        text: 'Alumbrado',
+        to: '/ServiciosPublicos/AlumbradoPublico/list'
+      },
+      { text: 'Expediente' }
+    ])
+
     const expedientLightingFields = ref({
       expedienteAlumbradoId: 0,
       alumbradoId: null,
       archivado: false
     })
-    const expedientLightingFieldsBlank = ref(JSON.parse(JSON.stringify(expedientLightingFields)))
+    const expedientLightingFieldsBlank = ref(
+      JSON.parse(JSON.stringify(expedientLightingFields))
+    )
 
     const fields = ref([
       { value: 'expedienteAlumbradoId', text: 'No.Expediente', sortable: true },
-      { value: 'alumbrado.nombreObra', text: 'Nombre de obra alumbrado', sortable: true },
+      {
+        value: 'alumbrado.nombreObra',
+        text: 'Nombre de obra alumbrado',
+        sortable: true
+      },
       { value: 'actions', text: 'Acciones' }
     ])
     const getPublicLighting = () => {
@@ -151,7 +173,7 @@ export default {
       })
       return ''
     }
-    getExpedientLighting((data) => {
+    getExpedientLighting(data => {
       expedientLighting.value = data
       if (expedientLighting.value.length > 0) {
         isloading.value = false
@@ -164,7 +186,7 @@ export default {
     })
     const refreshTable = () => {
       isloading.value = true
-      getExpedientLighting((data) => {
+      getExpedientLighting(data => {
         expedientLighting.value = data
         if (expedientLighting.value.length > 0) {
           isloading.value = false
@@ -175,24 +197,25 @@ export default {
         }
       })
     }
-    const onFiltered = (filteredItems) => {
+    const onFiltered = filteredItems => {
       currentPage.value = 1
     }
     const onAddExpedientLighting = () => {
       createExpedientLighting(expedientLightingFields.value, data => {
         showModal.value = false
-        expedientLightingFields.value = JSON.parse(JSON.stringify(expedientLightingFieldsBlank))
+        expedientLightingFields.value = JSON.parse(
+          JSON.stringify(expedientLightingFieldsBlank)
+        )
         refreshTable()
         getPublicLighting()
-        swal
-          .fire({
-            title: '¡Expediente Registrado!',
-            text: 'El expediente ha sido registrado al sistema satisfactoriamente .',
-            icon: 'success'
-          })
+        swal.fire({
+          title: '¡Expediente Registrado!',
+          text: 'El expediente ha sido registrado al sistema satisfactoriamente .',
+          icon: 'success'
+        })
       })
     }
-    const RemoveExpedientLighting = (expedienteDigitalId) => {
+    const RemoveExpedientLighting = expedienteDigitalId => {
       isloading.value = true
       swal
         .fire({
@@ -207,16 +230,15 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            deleteExpedientLighting(expedienteDigitalId, (data) => {
+            deleteExpedientLighting(expedienteDigitalId, data => {
               refreshTable()
               getPublicLighting()
             })
-            swal
-              .fire({
-                title: '¡Alumbrado archivado!',
-                text: 'El alumbrado ha sido archivado satisfactoriamente .',
-                icon: 'success'
-              })
+            swal.fire({
+              title: '¡Alumbrado archivado!',
+              text: 'El alumbrado ha sido archivado satisfactoriamente .',
+              icon: 'success'
+            })
           } else {
             isloading.value = false
           }
@@ -225,6 +247,7 @@ export default {
     return {
       fields,
       perPage,
+      breadcrumbItems,
       currentPage,
       filter,
       perPageSelect,
@@ -245,6 +268,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

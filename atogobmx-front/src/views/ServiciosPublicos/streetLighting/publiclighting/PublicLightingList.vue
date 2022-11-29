@@ -1,5 +1,8 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
@@ -11,7 +14,7 @@
       <b-button
         variant="success"
         style="
-          background-color: rgb(94,80,238);
+          background-color: rgb(94, 80, 238);
           height: 50px;
           width: auto;
           font-size: 18px;
@@ -44,7 +47,9 @@
       </template>
       <template #item-actions="items">
         <b-dropdown
-          :disabled="items.archivado && role !== 'Administrador' || 'Alumbrado'"
+          :disabled="
+            (items.archivado && role !== 'Administrador') || 'Alumbrado'
+          "
           id="ActionsDropdown"
           size="lg"
           style="text-color: black"
@@ -70,8 +75,8 @@
               params: { alumbradoId: items.alumbradoId }
             }"
           >
-              <i class="bi bi-pencil-square" />
-              Editar
+            <i class="bi bi-pencil-square" />
+            Editar
           </b-dropdown-item>
           <b-dropdown-item
             class="m-1"
@@ -124,7 +129,7 @@
                   text-field="nombreTarea"
                 ></b-form-select>
               </Field>
-              <ErrorMessage class="text-danger" name="TaskField"/>
+              <ErrorMessage class="text-danger" name="TaskField" />
             </b-form-group>
           </b-col>
           <!--agregar un estatus-->
@@ -140,7 +145,7 @@
                   text-field="nombreEstatus"
                 ></b-form-select>
               </Field>
-              <ErrorMessage class="text-danger" name="StatusField"/>
+              <ErrorMessage class="text-danger" name="StatusField" />
             </b-form-group>
           </b-col>
           <!--agregar nombreobra-->
@@ -152,7 +157,7 @@
                   :state="NameWorkState"
                 ></b-form-input>
               </Field>
-              <ErrorMessage class="text-danger" name="NameWorkField"/>
+              <ErrorMessage class="text-danger" name="NameWorkField" />
             </b-form-group>
           </b-col>
           <!--agregar domicilio-->
@@ -164,20 +169,24 @@
                   :state="DomicileState"
                 ></b-form-input>
               </Field>
-              <ErrorMessage class="text-danger" name="DomicileField"/>
+              <ErrorMessage class="text-danger" name="DomicileField" />
             </b-form-group>
           </b-col>
           <!--agregar descripcion de un domicilio-->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion Domicilio">
-              <Field name="addresdescriptionField" :rules="validateAddresdescription" as="text">
+              <Field
+                name="addresdescriptionField"
+                :rules="validateAddresdescription"
+                as="text"
+              >
                 <b-form-textarea
                   v-model="publicLightingFields.descripcionDomicilio"
                   :state="addresdescriptionState"
                   rows="4"
                 ></b-form-textarea>
               </Field>
-              <ErrorMessage class="text-danger" name="addresdescriptionField"/>
+              <ErrorMessage class="text-danger" name="addresdescriptionField" />
             </b-form-group>
           </b-col>
           <!--Agregar una descripcion del problema-->
@@ -190,7 +199,7 @@
                   rows="4"
                 ></b-form-textarea>
               </Field>
-              <ErrorMessage class="text-danger" name="ProblemField"/>
+              <ErrorMessage class="text-danger" name="ProblemField" />
             </b-form-group>
           </b-col>
         </b-row>
@@ -230,9 +239,11 @@ export default {
   },
   setup () {
     const swal = inject('$swal')
-    const { getPublicLighting, createPublicLighting, deletePublicLighting } = PubliclightingServices()
+    const { getPublicLighting, createPublicLighting, deletePublicLighting } =
+      PubliclightingServices()
     const { getTaskTypeLighting } = TypeTaskLightingServices()
-    const { createExpedientLighting, getExpedientLightingByAlumbradoId } = EditExpedientLighting()
+    const { createExpedientLighting, getExpedientLightingByAlumbradoId } =
+      EditExpedientLighting()
     const { getStatus } = statusServices()
     const redirect = useRouter()
     const showModal = ref(false)
@@ -253,6 +264,12 @@ export default {
     const DomicileState = ref(false)
     const TaskState = ref(false)
     const StatusState = ref(false)
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      { text: 'Alumbrado', to: '/ServiciosPublicos/AlumbradoPublico/list' },
+      { text: 'Alumbrado publico' }
+    ])
+
     const expedientPublicFieldBlank = ref({
       expedienteAlumbradoId: 0,
       alumbradoId: null,
@@ -276,8 +293,7 @@ export default {
       if (data.length === 0) {
         swal.fire({
           title: 'No se encuentra un tipo de estatus registrado!',
-          text:
-            'No se encuentra tipo de estatus registrado en el departamento seleccionado, registre primero un tipo de estatus para continuar',
+          text: 'No se encuentra tipo de estatus registrado en el departamento seleccionado, registre primero un tipo de estatus para continuar',
           icon: 'warning'
         })
       }
@@ -288,14 +304,13 @@ export default {
       if (data.length === 0) {
         swal.fire({
           title: 'No se encuentra un tipo de tare registrada!',
-          text:
-            'No se encuentra tipo de tarea registradas en el departamento seleccionado, registre primero un tipo de tarea para continuar',
+          text: 'No se encuentra tipo de tarea registradas en el departamento seleccionado, registre primero un tipo de tarea para continuar',
           icon: 'warning'
         })
       }
     })
 
-    const onClickExpedient = (alumbradoId) => {
+    const onClickExpedient = alumbradoId => {
       getExpedientLightingByAlumbradoId(alumbradoId, data => {
         redirect.push({
           name: 'ExpedienteAlumbrado-Edit',
@@ -327,7 +342,11 @@ export default {
         ProblemState.value = false
         return 'Este campo es requerido'
       }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(publicLightingFields.value.descripcionProblema)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+          publicLightingFields.value.descripcionProblema
+        )
+      ) {
         ProblemState.value = false
         return 'Este campo solo puede contener letras'
       }
@@ -344,7 +363,9 @@ export default {
         NameWorkState.value = false
         return 'Este campo es requerido'
       }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(publicLightingFields.value.nombreObra)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(publicLightingFields.value.nombreObra)
+      ) {
         NameWorkState.value = false
         return 'Este campo solo puede contener letras'
       }
@@ -361,7 +382,9 @@ export default {
         DomicileState.value = false
         return 'Este campo es requerido'
       }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(publicLightingFields.value.domicilio)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(publicLightingFields.value.domicilio)
+      ) {
         DomicileState.value = false
         return 'Este campo solo puede contener letras'
       }
@@ -378,7 +401,11 @@ export default {
         addresdescriptionState.value = false
         return 'Este campo es requerido'
       }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(publicLightingFields.value.descripcionDomicilio)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+          publicLightingFields.value.descripcionDomicilio
+        )
+      ) {
         addresdescriptionState.value = false
         return 'Este campo solo puede contener letras'
       }
@@ -497,6 +524,7 @@ export default {
     return {
       publicLighting,
       statusPublicLighting,
+      breadcrumbItems,
       typeTaskLighting,
       publicLightingFields,
       isOpen,

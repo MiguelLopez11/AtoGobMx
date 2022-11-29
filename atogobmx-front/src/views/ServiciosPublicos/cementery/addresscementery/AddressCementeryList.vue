@@ -1,5 +1,8 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
@@ -11,12 +14,12 @@
       <b-button
         variant="primary"
         style="
-            background-color: rgb(94,80,238);
-            height: 50px;
-            width: auto;
-            font-size: 18px;
-            margin-right: 15px;
-            margin-left: 20px;
+          background-color: rgb(94, 80, 238);
+          height: 50px;
+          width: auto;
+          font-size: 18px;
+          margin-right: 15px;
+          margin-left: 20px;
         "
         @click="showModal = !showModal"
         type="submit"
@@ -215,7 +218,11 @@ export default {
   setup () {
     const swal = inject('$swal')
     const showModal = ref(false)
-    const { getAddressCementery, createAddressCementery, deleteAddressCementery } = AddressCementeryService()
+    const {
+      getAddressCementery,
+      createAddressCementery,
+      deleteAddressCementery
+    } = AddressCementeryService()
     const addressCementeryService = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
@@ -229,6 +236,15 @@ export default {
     const LocationState = ref(false)
     const StreetState = ref(false)
     const NumberOutsideState = ref(false)
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      {
+        text: 'Cementerios',
+        to: '/ServiciosPublicos/CementeriosPublicos/list'
+      },
+      { text: 'Cementerios' }
+    ])
+
     const addressCementeryServiceFields = ref({
       direccionId: 0,
       nombreCementerio: null,
@@ -286,12 +302,18 @@ export default {
         return 'Este campo es requerido'
       }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(addressCementeryServiceFields.value.nombreCementerio)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+          addressCementeryServiceFields.value.nombreCementerio
+        )
+      ) {
         NameCementeryState.value = false
         return 'Este campo solo puede contener letras'
       }
 
-      if (!addressCementeryServiceFields.value.nombreCementerio.trim().length > 0) {
+      if (
+        !addressCementeryServiceFields.value.nombreCementerio.trim().length > 0
+      ) {
         NameCementeryState.value = false
         return 'Este campo no puede contener espacios'
       }
@@ -306,7 +328,11 @@ export default {
         return 'Este campo es requerido'
       }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(addressCementeryServiceFields.value.municipio)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+          addressCementeryServiceFields.value.municipio
+        )
+      ) {
         MunicipalityState.value = false
         return 'Este campo solo puede contener letras'
       }
@@ -326,7 +352,11 @@ export default {
         return 'Este campo es requerido'
       }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(addressCementeryServiceFields.value.localidad)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+          addressCementeryServiceFields.value.localidad
+        )
+      ) {
         LocationState.value = false
         return 'Este campo solo puede contener letras'
       }
@@ -346,7 +376,11 @@ export default {
         return 'Este campo es requerido'
       }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(addressCementeryServiceFields.value.calle)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+          addressCementeryServiceFields.value.calle
+        )
+      ) {
         StreetState.value = false
         return 'Este campo solo puede contener letras'
       }
@@ -366,12 +400,16 @@ export default {
         return 'Este campo es requerido'
       }
 
-      if (!/^[0-9]+$/i.test(addressCementeryServiceFields.value.numeroExterior)) {
+      if (
+        !/^[0-9]+$/i.test(addressCementeryServiceFields.value.numeroExterior)
+      ) {
         NumberOutsideState.value = false
         return 'Este campo solo puede contener numeros'
       }
 
-      if (!addressCementeryServiceFields.value.numeroExterior.trim().length > 0) {
+      if (
+        !addressCementeryServiceFields.value.numeroExterior.trim().length > 0
+      ) {
         NumberOutsideState.value = false
         return 'Este campo no puede contener espacios'
       }
@@ -442,6 +480,7 @@ export default {
       showModal,
       addressCementeryService,
       addressCementeryServiceFields,
+      breadcrumbItems,
       perPage,
       currentPage,
       filter,
@@ -466,7 +505,6 @@ export default {
       validateLocation,
       validateStreet,
       validateNumberOutside
-
     }
   }
 }

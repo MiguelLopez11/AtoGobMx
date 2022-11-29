@@ -1,5 +1,8 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
@@ -11,12 +14,12 @@
       <b-button
         variant="primary"
         style="
-            background-color: rgb(94,80,238);
-            height: 50px;
-            width: auto;
-            font-size: 18px;
-            margin-right: 15px;
-            margin-left: 20px;
+          background-color: rgb(94, 80, 238);
+          height: 50px;
+          width: auto;
+          font-size: 18px;
+          margin-right: 15px;
+          margin-left: 20px;
         "
         @click="showModal = !showModal"
         type="submit"
@@ -163,38 +166,36 @@
           </b-col>
         </b-row>
         <b-row cols="1" align-h="center">
-          <b-button
-            v-b-toggle.collapse-1
-            variant="primary"
-          >
-            Mapa
-          </b-button>
+          <b-button v-b-toggle.collapse-1 variant="primary"> Mapa </b-button>
           <b-collapse id="collapse-1" class="mt-2">
             <b-card>
-              <b-alert variant="warning" dismissible show>Arrastra el punto del mapa al lugar donde se encuentra su gabeta.</b-alert>
+              <b-alert variant="warning" dismissible show
+                >Arrastra el punto del mapa al lugar donde se encuentra su
+                gabeta.</b-alert
+              >
               <GMapMap
-            :center="center"
-            map-type-id="satellite"
-            :zoom="20"
-            :options="{
-              zoomControl: true,
-              mapTypeControl: false,
-              scaleControl: false,
-              rotateControl: true,
-              disableDefaultUi: false
-            }"
-            style="width: 1000px; height: 500px"
-          >
-            <GMapMarker
-              :zoom="10"
-              :key="index"
-              v-for="(m, index) in markers"
-              :position="m.position"
-              :clickable="true"
-              :draggable="true"
-              @click="center = m.position"
-            />
-          </GMapMap>
+                :center="center"
+                map-type-id="satellite"
+                :zoom="20"
+                :options="{
+                  zoomControl: true,
+                  mapTypeControl: false,
+                  scaleControl: false,
+                  rotateControl: true,
+                  disableDefaultUi: false
+                }"
+                style="width: 1000px; height: 500px"
+              >
+                <GMapMarker
+                  :zoom="10"
+                  :key="index"
+                  v-for="(m, index) in markers"
+                  :position="m.position"
+                  :clickable="true"
+                  :draggable="true"
+                  @click="center = m.position"
+                />
+              </GMapMap>
             </b-card>
           </b-collapse>
         </b-row>
@@ -232,11 +233,8 @@ export default {
   setup () {
     const swal = inject('$swal')
     const showModal = ref(false)
-    const {
-      getCementery,
-      createCementery,
-      deleteCementery
-    } = CementeryService()
+    const { getCementery, createCementery, deleteCementery } =
+      CementeryService()
     // const $toast = useToast()
     const cementeryService = ref([])
     const perPage = ref(5)
@@ -250,6 +248,15 @@ export default {
     const SpacesState = ref(false)
     const MeterState = ref(false)
     const AvailableState = ref(false)
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      {
+        text: 'Cementerios',
+        to: '/ServiciosPublicos/CementeriosPublicos/list'
+      },
+      { text: 'Gabetas' }
+    ])
+
     const cementeryServiceFields = ref({
       cementeriosId: 0,
       nombrePropietario: '',
@@ -455,6 +462,7 @@ export default {
     return {
       cementeryService,
       cementeryServiceFields,
+      breadcrumbItems,
       perPage,
       currentPage,
       filter,
