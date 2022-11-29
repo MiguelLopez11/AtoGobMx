@@ -80,6 +80,14 @@
             <i class="bi bi-archive-fill" />
             Expediente Digital
           </b-dropdown-item>
+          <b-dropdown-item
+            class="m-1"
+            variant="outline-warning"
+            @click="onClickMedicalExpedient(items.empleadoId)"
+          >
+            <i class="bi bi-journal-medical" />
+            Expediente médico
+          </b-dropdown-item>
         </b-dropdown>
       </template>
       <template #item-status="items">
@@ -217,6 +225,7 @@ import AreaServices from '@/Services/area.Services'
 import DepartamentServices from '@/Services/departament.Services'
 import workStationServices from '@/Services/workStation.Services'
 import ExpedientdigitalServices from '@/Services/expedientdigital.Services'
+import MunicipalMedicalServices from '@/Services/municipalMedical.Services'
 import Datepicker from '@vuepic/vue-datepicker'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { useRouter } from 'vue-router'
@@ -238,9 +247,9 @@ export default {
     const { getDepartaments } = DepartamentServices()
     const { getWorkStationByArea } = workStationServices()
     const { createExpedient, getExpedientByEmpleadoId } = ExpedientdigitalServices()
+    const { createExpedientMedical, getExpedientMedicalByEmpleadoId } = MunicipalMedicalServices()
     const redirect = useRouter()
     const role = window.sessionStorage.getItem('Role')
-    // const $toast = useToast()
     const showModal = ref(false)
     const employees = ref([])
     const departaments = ref([])
@@ -265,7 +274,9 @@ export default {
       archivado: false
     })
     const expedientmedicalBlank = ref({
-
+      expedienteMedicoId: 0,
+      empleadoId: null,
+      archivado: false
     })
     const EmployeesFields = ref({
       empleadoId: 0,
@@ -323,6 +334,14 @@ export default {
         redirect.push({
           name: 'ExpedienteDigital-edit',
           params: { ExpedienteDigitalId: empleadoId }
+        })
+      })
+    }
+    const onClickMedicalExpedient = (empleadoId) => {
+      getExpedientMedicalByEmpleadoId(empleadoId, data => {
+        redirect.push({
+          name: 'ServiciosMedicos-ExpedienteMedico-Edit',
+          params: { ExpedienteMedicoId: empleadoId }
         })
       })
     }
@@ -434,9 +453,9 @@ export default {
     const addEmployee = () => {
       createEmployee(EmployeesFields.value, data => {
         expedientFieldBlank.value.empleadoId = data.empleadoId
-        createExpedient(expedientFieldBlank.value, data => {
-          console.log(data)
-        })
+        createExpedient(expedientFieldBlank.value, data => {})
+        expedientmedicalBlank.value.empleadoId = data.empleadoId
+        createExpedientMedical(expedientmedicalBlank.value, data => {})
         refreshTable()
         swal.fire({
           title: '¡Empleado registrado correctamente!',
@@ -515,7 +534,8 @@ export default {
       getAreas,
       getWorkStation,
       resetEmployeesFields,
-      onClickExpedient
+      onClickExpedient,
+      onClickMedicalExpedient
     }
   }
 }

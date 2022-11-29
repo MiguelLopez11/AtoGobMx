@@ -17,10 +17,23 @@ namespace AtoGobMx.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<SERMED_ExpedienteMedico>>> GetCitas()
+        public async Task<ActionResult<IEnumerable<SERMED_ExpedienteMedico>>> GetExpedientesMedicos()
         {
             var expedientesMedicos = await _context.ExpedienteMedico
                 .Include(i => i.Empleados)
+                .ToListAsync();
+            if (expedientesMedicos == null)
+            {
+                return BadRequest("No se encuentran citas registradas");
+            }
+            return Ok(expedientesMedicos);
+        }
+        [HttpGet("Empleado/{EmpleadoId}")]
+        public async Task<ActionResult<IEnumerable<SERMED_ExpedienteMedico>>> GetExpedienteMedicoByEmpleadoId(int EmpleadoId)
+        {
+            var expedientesMedicos = await _context.ExpedienteMedico
+                .Include(i => i.Empleados)
+                .Where(w => w.EmpleadoId == EmpleadoId)
                 .ToListAsync();
             if (expedientesMedicos == null)
             {

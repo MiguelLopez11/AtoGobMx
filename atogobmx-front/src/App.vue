@@ -12,8 +12,10 @@
       menuFooterTextColor="#807e85"
       iconsColor="#807e85"
       menuItemsHoverColor="#9d94f4"
-      :profileImg="`https://localhost:7065/api/Archivos/FotoPerfil/${1}`"
+      :profileImg="`https://localhost:7065/api/Archivos/FotoPerfil/Empleado/${empleadoId}`"
       :profileName="employee"
+      :profileRole="`${departament}, ${area}`"
+      @button-exit-clicked="removeLocalStorgare()"
     />
   <router-view></router-view>
 </template>
@@ -36,6 +38,7 @@ export default {
     const role = window.sessionStorage.getItem('Role')
     const area = window.sessionStorage.getItem('Area')
     const employee = window.sessionStorage.getItem('Empleado')
+    const empleadoId = window.sessionStorage.getItem('EmpleadoId')
     console.log(employee)
     const menu = ref([
       { link: '/', name: 'Inicio', icon: 'bi bi-house' },
@@ -67,6 +70,7 @@ export default {
       area,
       menu,
       employee,
+      empleadoId,
 
       removeLocalStorgare
     }
@@ -86,15 +90,12 @@ export default {
 .sidebar .nav-list {
 margin-left: -30px;
 }
-/* .sidebar .nav-list {
-margin-left: -30px;
+.sidebar div.profile .job {
+    font-size: 10px;
 }
-.navbar-nav .nav-link {
-  border-width: 2px;
-  width: auto;
-} */
 body {
   background-color: #f8f7fa !important;
+  /* padding-left: 350px !important; */
 }
 .btn:hover{
   color: #ffff;

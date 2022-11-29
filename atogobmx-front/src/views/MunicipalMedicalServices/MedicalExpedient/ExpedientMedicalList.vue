@@ -69,12 +69,20 @@
             class="m-1"
             variant="outline-warning"
             :to="{
-              name: 'ExpedienteDigital-edit',
-              params: { ExpedienteDigitalId: items.expedienteMedicoId }
+              name: 'ServiciosMedicos-ExpedienteMedico-Edit',
+              params: { ExpedienteMedicoId: items.expedienteMedicoId }
             }"
           >
             <i class="bi bi-pencil-square" />
               Editar
+            </b-dropdown-item>
+          <b-dropdown-item
+            v-if="items.archivado && role === 'Administrador'"
+            class="m-1"
+            variant="outline-warning"
+          >
+            <i class="bi bi-back" />
+              Desarchivar
             </b-dropdown-item>
         </b-dropdown>
       </template>
@@ -82,7 +90,7 @@
   </b-card>
   <b-modal
     v-model="showModal"
-    title="Imagen de Perfil"
+    title="Expediente médico"
     size="xl"
     centered
     hide-footer
@@ -127,6 +135,7 @@ export default {
     const { getExpedientsMedical, deleteExpedientMedical, createExpedientMedical } =
       MunicipalMedicalServices()
     const { getEmployeesWithoutExpedient } = EmployeeServices()
+    const role = window.sessionStorage.getItem('Role')
     const expedients = ref([])
     const employees = ref([])
     const perPage = ref(5)
@@ -145,7 +154,6 @@ export default {
       JSON.parse(JSON.stringify(expedientFields))
     )
     const fields = ref([
-      // { value: 'expedienteDigitalId', text: 'No.Expediente', sortable: true },
       { value: 'empleados.nombreCompleto', text: 'Empleado', sortable: true },
       { value: 'status', text: 'Estado' },
       { value: 'actions', text: 'Acciones' }
@@ -238,6 +246,7 @@ export default {
       employees,
       showModal,
       expedientFields,
+      role,
 
       onFiltered,
       RemoveExpedient,
