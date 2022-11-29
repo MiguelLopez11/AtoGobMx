@@ -39,6 +39,11 @@ export default function MunicipalMedicalServices () {
       callback(response.data)
     })
   }
+  const getExpedientMedicalByEmpleadoId = (EmpleadoId, callback) => {
+    axios.get(`${BaseUrl}/SERMED_ExpedienteMedico/Empleado/${EmpleadoId}`).then((response) => {
+      callback(response.data)
+    })
+  }
   const createExpedientMedical = (data, callback) => {
     axios.post(`${BaseUrl}/SERMED_ExpedienteMedico`, data).then((response) => {
       callback(response.data)
@@ -63,6 +68,7 @@ export default function MunicipalMedicalServices () {
     // Expedient Medical
     getExpedientsMedical,
     getExpedientMedical,
+    getExpedientMedicalByEmpleadoId,
     createExpedientMedical,
     updateExpedientMedical,
     deleteExpedientMedical

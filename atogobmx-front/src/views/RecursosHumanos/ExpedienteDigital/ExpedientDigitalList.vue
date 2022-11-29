@@ -83,7 +83,7 @@
   </b-card>
   <b-modal
     v-model="showModal"
-    title="Imagen de Perfil"
+    title="Expediente Digital"
     size="xl"
     centered
     hide-footer

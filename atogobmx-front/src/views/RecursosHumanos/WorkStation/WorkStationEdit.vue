@@ -187,11 +187,9 @@ export default {
       return true
     }
     const validateState = () => {
-      // nameState.value = workStation.value.nombre !== ''
-      // eslint-disable-next-line no-unneeded-ternary
-      departamentState.value = workStation.value.departamentoId === null ? false : true
-      // eslint-disable-next-line no-unneeded-ternary
-      areaState.value = workStation.value.areaId === null ? false : true
+      departamentState.value = workStation.value.nombre !== null && workStation.value.nombre !== '' && /^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(workStation.value.nombre)
+      departamentState.value = workStation.value.departamentoId !== null
+      areaState.value = workStation.value.areaId !== null
       return ''
     }
     return {

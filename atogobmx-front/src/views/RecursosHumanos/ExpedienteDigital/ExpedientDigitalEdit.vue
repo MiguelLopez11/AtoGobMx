@@ -323,6 +323,7 @@ export default {
               text: 'La imagen de perfil se ha registrado al sistema satisfactoriamente.',
               icon: 'success'
             }).then(result => {
+              redirect.go(0)
               redirect.push('/RecursosHumanos/ExpedientesDigitales/list')
             })
           }
