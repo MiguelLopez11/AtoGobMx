@@ -7,6 +7,12 @@ export default function ExpedientLighting () {
     })
   }
 
+  const getExpedientLightingByAlumbradoId = (AlumbradoId, callback) => {
+    axios.get(`https://localhost:7065/api/ExpedienteDigital/Alumbrado/${AlumbradoId}`).then((response) => {
+      callback(response.data)
+    })
+  }
+
   const getExpedientLightingById = (expedienteAlumbradoId, callback) => {
     axios.get(`https://localhost:7065/api/ExpedienteAlumbrado/${expedienteAlumbradoId}`).then((response) => {
       callback(response.data)
@@ -36,6 +42,7 @@ export default function ExpedientLighting () {
     getExpedientLightingById,
     createExpedientLighting,
     updatExpedientLighting,
+    getExpedientLightingByAlumbradoId,
     deleteExpedientLighting
   }
 }

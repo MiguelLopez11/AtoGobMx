@@ -43,22 +43,34 @@
         {{ header.text }}
       </template>
       <template #item-actions="items">
-        <b-button
-          @click="RemoveExpedientLighting(items.expedienteAlumbradoId)"
-          class="m-1"
-          variant="outline-danger">
-          <i class="bi bi-trash3"></i>
-        </b-button>
-        <b-button
-          :to="{
-            name: 'ExpedienteAlumbrado-Edit',
-            params: { ExpedienteAlumbradoId: items.expedienteAlumbradoId },
-          }"
-          class="m-1"
-          variant="outline-warning"
+        <b-dropdown
+          id="ActionsDropdown"
+          size="lg"
+          style="text-color: black"
+          variant="link"
+          toggle-class="text-decoration-none"
+          dropright
+          no-caret
+        >
+          <template #button-content>
+            <i class="bi bi-three-dots-vertical"></i>
+          </template>
+          <b-dropdown-item
+            @click="RemoveExpedientLighting(items.expedienteAlumbradoId)"
+            class="m-1"
+            variant="outline-danger"
+            ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
           >
-          <i class="bi bi-pencil-square"></i>
-        </b-button>
+          <b-dropdown-item
+            class="m-1"
+            variant="outline-warning"
+            :to="{
+              name: 'ExpedienteAlumbrado-Edit',
+              params: { ExpedienteAlumbradoId: items.expedienteAlumbradoId }
+            }"
+            ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
+          >
+        </b-dropdown>
       </template>
     </EasyDataTable>
   </b-card>

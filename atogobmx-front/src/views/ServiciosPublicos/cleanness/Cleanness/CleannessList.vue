@@ -44,21 +44,34 @@
         {{ header.text }}
       </template>
       <template #item-actions="items">
-        <b-button
-          @click="RemoveCleannessService(items.aseoId)"
-          class="m-1"
-          variant="outline-danger"
-          ><i class="bi bi-trash3"></i
-        ></b-button>
-        <b-button
-          class="m-1"
-          variant="outline-warning"
-          :to="{
-            name: 'Aseo-Edit',
-            params: { AseoId: items.aseoId }
-          }"
-          ><i class="bi bi-pencil-square"></i
-        ></b-button>
+        <b-dropdown
+          id="ActionsDropdown"
+          size="lg"
+          style="text-color: black"
+          variant="link"
+          toggle-class="text-decoration-none"
+          dropright
+          no-caret
+        >
+          <template #button-content>
+            <i class="bi bi-three-dots-vertical"></i>
+          </template>
+          <b-dropdown-item
+            @click="RemoveCleannessService(items.aseoId)"
+            class="m-1"
+            variant="outline-danger"
+            ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
+          >
+          <b-dropdown-item
+            class="m-1"
+            variant="outline-warning"
+            :to="{
+              name: 'Aseo-Edit',
+              params: { AseoId: items.aseoId }
+            }"
+            ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
+          >
+        </b-dropdown>
       </template>
     </EasyDataTable>
 
@@ -73,7 +86,7 @@
     >
       <Form @submit="addCleannessService">
         <b-row cols="2">
-          <!-- 1 -->
+          <!--Agregar nombre -->
           <b-col>
             <b-form-group class="mt-3" label="Nombre del servicio">
               <Field
@@ -93,7 +106,7 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!-- 2 -->
+          <!--Agregar Establecimiento -->
           <b-col>
             <b-form-group class="mt-3" label="Establecimiento publico">
               <Field name="PublicEstablishmentField" :rules="validatePublicEstablishment" as="text">
@@ -109,7 +122,7 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!-- 3 -->
+          <!--Agregar Domicilio -->
           <b-col>
             <b-form-group class="mt-3" label="Domicilio">
               <Field name="DomicileField" :rules="validateDomicile" as="text">
@@ -125,7 +138,7 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!-- 4 -->
+          <!--Agrgar objetivo -->
           <b-col>
             <b-form-group class="mt-3" label="Objetivo">
               <Field

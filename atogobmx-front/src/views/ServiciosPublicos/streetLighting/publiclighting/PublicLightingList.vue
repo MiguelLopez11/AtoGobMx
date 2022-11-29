@@ -43,7 +43,46 @@
         {{ header.text }}
       </template>
       <template #item-actions="items">
-        <b-button
+        <b-dropdown
+          :disabled="items.archivado && role !== 'Administrador' || 'Alumbrado'"
+          id="ActionsDropdown"
+          size="lg"
+          style="text-color: black"
+          variant="link"
+          toggle-class="text-decoration-none"
+          dropright
+          no-caret
+        >
+          <template #button-content>
+            <i class="bi bi-three-dots-vertical"></i>
+          </template>
+          <b-dropdown-item
+            @click="RemovePublicLighting(items.alumbradoId)"
+            class="m-1"
+            variant="outline-danger"
+            ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
+          >
+          <b-dropdown-item
+            class="m-1"
+            variant="outline-warning"
+            :to="{
+              name: 'Alumbrado-Edit',
+              params: { alumbradoId: items.alumbradoId }
+            }"
+          >
+              <i class="bi bi-pencil-square" />
+              Editar
+          </b-dropdown-item>
+          <b-dropdown-item
+            class="m-1"
+            variant="outline-warning"
+            @click="onClickExpedient(items.alumbradoId)"
+          >
+            <i class="bi bi-archive-fill" />
+            Expediente Digital
+          </b-dropdown-item>
+        </b-dropdown>
+        <!-- <b-button
           @click="RemovePublicLighting(items.alumbradoId)"
           class="m-1"
           variant="outline-danger"
@@ -57,7 +96,7 @@
             params: { AlumbradoId: items.alumbradoId }
           }"
           ><i class="bi bi-pencil-square"></i
-        ></b-button>
+        ></b-button> -->
       </template>
     </EasyDataTable>
     <b-modal
@@ -180,6 +219,7 @@ import EditExpedientLighting from '@/Services/expedientlighting.Services'
 import statusServices from '@/Services/statuslighting.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
+import { useRouter } from 'vue-router'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
@@ -192,8 +232,9 @@ export default {
     const swal = inject('$swal')
     const { getPublicLighting, createPublicLighting, deletePublicLighting } = PubliclightingServices()
     const { getTaskTypeLighting } = TypeTaskLightingServices()
-    const { createExpedientLighting } = EditExpedientLighting()
+    const { createExpedientLighting, getExpedientLightingByAlumbradoId } = EditExpedientLighting()
     const { getStatus } = statusServices()
+    const redirect = useRouter()
     const showModal = ref(false)
     const publicLighting = ref([])
     const statusPublicLighting = ref([])
@@ -253,6 +294,15 @@ export default {
         })
       }
     })
+
+    const onClickExpedient = (alumbradoId) => {
+      getExpedientLightingByAlumbradoId(alumbradoId, data => {
+        redirect.push({
+          name: 'ExpedienteAlumbrado-Edit',
+          params: { ExpedienteAlumbradoId: alumbradoId }
+        })
+      })
+    }
 
     const validateTask = () => {
       if (!publicLightingFields.value.tareaTipoId) {
@@ -468,6 +518,7 @@ export default {
       ProblemState,
 
       onFiltered,
+      onClickExpedient,
       addPublicLighting,
       refreshTable,
       RemovePublicLighting,

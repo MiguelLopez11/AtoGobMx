@@ -44,21 +44,34 @@
         {{ header.text }}
       </template>
       <template #item-actions="items">
-        <b-button
-          @click="RemoveRoadService(items.rutaId)"
-          class="m-1"
-          variant="outline-danger"
-          ><i class="bi bi-trash3"></i
-        ></b-button>
-        <b-button
-          class="m-1"
-          variant="outline-warning"
-          :to="{
-            name: 'Ruta-Edit',
-            params: { RutaId: items.rutaId }
-          }"
-          ><i class="bi bi-pencil-square"></i
-        ></b-button>
+        <b-dropdown
+          id="ActionsDropdown"
+          size="lg"
+          style="text-color: black"
+          variant="link"
+          toggle-class="text-decoration-none"
+          dropright
+          no-caret
+        >
+          <template #button-content>
+            <i class="bi bi-three-dots-vertical"></i>
+          </template>
+          <b-dropdown-item
+            @click="RemoveRoadService(items.rutaId)"
+            class="m-1"
+            variant="outline-danger"
+            ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
+          >
+          <b-dropdown-item
+            class="m-1"
+            variant="outline-warning"
+            :to="{
+              name: 'Ruta-Edit',
+              params: { RutaId: items.rutaId }
+            }"
+            ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
+          >
+        </b-dropdown>
       </template>
     </EasyDataTable>
     <b-modal
@@ -225,8 +238,8 @@ export default {
     )
     const center = ref({ lat: 20.5546629, lng: -102.4953904 })
     const fields = ref([
-      { value: 'origen', text: 'Origen' },
-      { value: 'destino', text: 'Destino' },
+      { value: 'origen', text: 'Latitud' },
+      { value: 'destino', text: 'Longitud' },
       { value: 'obsevacion', text: 'Observacion' },
       { value: 'actions', text: 'Acciones' }
     ])
