@@ -136,8 +136,8 @@ export default {
     const citaId = ref(parseInt(router.params.CitaId))
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Equipos de computo', to: '/ServiciosMedicos/Cita/list' },
-      { text: 'Editar-Equipo' }
+      { text: 'Citas', to: '/ServiciosMedicos/Cita/list' },
+      { text: 'Editar cita' }
     ])
     const onUpdateMedicalAppointment = () => {
       medicalAppointment.value.fechaDesde = date.value[0]
@@ -145,8 +145,8 @@ export default {
       updateMedicalAppointment(medicalAppointment.value, data => {
         swal
           .fire({
-            title: 'Equipo modificado correctamente!',
-            text: 'El equipo se ha modificado  satisfactoriamente.',
+            title: 'Cita modificada correctamente!',
+            text: 'La cita se ha modificado  satisfactoriamente.',
             icon: 'success'
           })
           .then(result => {

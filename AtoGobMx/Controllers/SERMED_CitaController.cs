@@ -30,6 +30,7 @@ namespace AtoGobMx.Controllers
         {
             var Cita = await _context.Cita
                 .Include(i => i.Empleados)
+                .Where(w => !w.Archivado)
                 .FirstOrDefaultAsync(f => f.CitaId == CitaId);
 
             if (Cita == null)
@@ -37,6 +38,16 @@ namespace AtoGobMx.Controllers
                 return NotFound();
             }
 
+            return Ok(Cita);
+        }
+        [HttpGet("Empleado/{EmpleadoId}")]
+        public async Task<ActionResult<SERMED_Cita>> GetCitaByEmpleadoId(int EmpleadoId)
+        {
+            var Cita = await _context.Cita
+                .Include(i => i.Empleados)
+                .Where(w => !w.Archivado)
+                .Where(w => w.EmpleadoId == EmpleadoId)
+                .ToListAsync();
             return Ok(Cita);
         }
         [HttpPost]

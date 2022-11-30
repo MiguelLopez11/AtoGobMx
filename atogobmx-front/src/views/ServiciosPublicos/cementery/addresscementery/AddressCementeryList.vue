@@ -41,7 +41,7 @@
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
-      :table-height="330"
+      theme-color="#7367f0"
     >
       <template #header-actions="header">
         {{ header.text }}

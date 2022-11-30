@@ -40,6 +40,7 @@
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
+      theme-color="#7367f0"
     >
       <template #header-actions="header">
         {{ header.text }}
