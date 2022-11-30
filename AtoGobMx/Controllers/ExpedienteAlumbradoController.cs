@@ -64,10 +64,16 @@ namespace AtoGobMx.Controllers
             }
             return Ok(expedienteAlumbrado);
         }
-        [HttpGet("Download")]
-        public async Task<ActionResult<ExpedienteAlumbrado>> DownloadExpedienteAlumbrado()
+        [HttpGet("ExpedienteAlumbrado/Download/{ExpedienteAlumbradoID}")]
+        public async Task<ActionResult<ExpedienteAlumbrado>> DownloadExpedienteAlumbrado(int ExpedienteAlumbradoID)
         {
-                var html = $@"
+            var expefalla = await _context.ExpedienteAlumbrado
+                .Include(i => i.Alumbrado)
+                .Include(i => i.Departamentos)
+                .Include(i => i.Area)
+                .Where(w => !w.Archivado)
+                .FirstOrDefaultAsync(f => f.ExpedienteAlumbradoId == ExpedienteAlumbradoID);
+            var html = $@"
                <!DOCTYPE html>
                <html lang=""en"">
                <head>
@@ -104,10 +110,10 @@ namespace AtoGobMx.Controllers
                     <img src= >
                 </div>
                 <h1 class='alinear'>Reporte de alumbrado publico </h1>
-                <h3 class='alinear2'>Fecha: </h3>
+                <h3 class='alinear2'>Fecha: {expefalla.FechaAlta} </h3>
                 <div>
                     <div class='registros'>
-                        <h3>Domicilio:  </h3>
+                        <h3>Domicilio: </h3>
                         <h3>Localida: </h3>
                         <h3>Nombre area: </h3>
                         <h3>Departamento: </h3>
