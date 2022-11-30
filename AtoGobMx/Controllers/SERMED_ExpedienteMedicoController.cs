@@ -90,6 +90,20 @@ namespace AtoGobMx.Controllers
             await _context.SaveChangesAsync();
             return Ok("Expediente actualizada correctamente");
         }
+        [HttpPut("Desarchivar/{ExpedienteMedicoId}")]
+        public async Task<IActionResult> PutCategoria(int ExpedienteMedicoId)
+        {
+            var expedienteMedico = await _context.ExpedienteMedico.FindAsync(ExpedienteMedicoId);
+            if (expedienteMedico == null)
+            {
+                return NotFound();
+            }
+            expedienteMedico.Archivado = false;
+
+            _context.ExpedienteMedico.Update(expedienteMedico);
+            await _context.SaveChangesAsync();
+            return Ok("Expediente desarchivado correctamente");
+        }
         [HttpDelete("{ExpedienteMedicoId}")]
         public async Task<IActionResult> DeleteInventario(int ExpedienteMedicoId)
         {

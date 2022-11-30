@@ -11,7 +11,7 @@
       </b-form-input>
       <b-button
         style="
-          background-color: rgb(94, 80, 238);
+          background-color: #7367f0;
           height: 50px;
           width: auto;
           font-size: 18px;
@@ -37,6 +37,7 @@
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
+      theme-color="#7367f0"
     >
       <template #header-actions="header">
         {{ header.text }}

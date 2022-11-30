@@ -27,6 +27,7 @@
       :headers="fields"
       :items="keyboards"
       :rows-per-page="5"
+      theme-color="#7367f0"
     >
       <template #header-actions="header">
         {{ header.text }}

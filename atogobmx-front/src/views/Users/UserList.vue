@@ -37,6 +37,7 @@
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
+      theme-color="#7367f0"
     >
       <template #header-actions="header">
         {{ header.text }}
@@ -93,10 +94,7 @@
                 >
                 </b-form-input>
               </Field>
-              <ErrorMessage name="userNameField">
-                <span>Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i
-              ></ErrorMessage>
+              <ErrorMessage name="userNameField" />
             </b-form-group>
           </b-col>
           <b-col>
@@ -108,10 +106,7 @@
                   :state="passwordState"
                 />
               </Field>
-              <ErrorMessage name="passwordField">
-                <span>{{ errorMessage }} </span>
-                <i class="bi bi-exclamation-circle"></i>
-              </ErrorMessage>
+             <ErrorMessage name="passwordField" />
             </b-form-group>
           </b-col>
           <b-col>
@@ -128,10 +123,7 @@
                 >
                 </b-form-input>
               </Field>
-              <ErrorMessage name="ConfirmPasswordField">
-                <span>{{ confirmErrorMessage }}</span>
-                <i class="bi bi-exclamation-circle"></i>
-              </ErrorMessage>
+              <ErrorMessage name="ConfirmPasswordField" />
             </b-form-group>
           </b-col>
           <b-col>
@@ -146,10 +138,7 @@
                   :state="roleState"
                 ></b-form-select>
               </Field>
-              <ErrorMessage name="roleField">
-                <span>Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i
-              ></ErrorMessage>
+              <ErrorMessage name="roleField" />
             </b-form-group>
           </b-col>
           <b-col>
@@ -164,10 +153,7 @@
                   :state="employeeState"
                 ></b-form-select>
               </Field>
-              <ErrorMessage name="employeeField">
-                <span>Este campo es requerido </span
-                ><i class="bi bi-exclamation-circle"></i
-              ></ErrorMessage>
+              <ErrorMessage name="employeeField" />
             </b-form-group>
           </b-col>
         </b-row>
@@ -193,7 +179,7 @@ import UsersServices from '@/Services/users.Services'
 import RoleServices from '@/Services/role.Services'
 import EmployeeServices from '@/Services/employee.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
-import { ref, watch, inject } from 'vue'
+import { ref, inject } from 'vue'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
@@ -246,6 +232,14 @@ export default {
     // Methods
     getRoles(data => {
       roles.value = data
+      if (data.length === 0) {
+        swal.fire({
+          title: 'No se encuentran roles registrados en el sistema!',
+          text:
+            'No se encuentran roles registrados en el sistema, registre primero un departamento para continuar.',
+          icon: 'warning'
+        })
+      }
     })
     getEmployees(data => {
       employees.value = data
@@ -258,16 +252,6 @@ export default {
         if (users.value.length <= 0) {
           isloading.value = false
         }
-      }
-    })
-    watch(roles, value => {
-      if (value.length === 0) {
-        swal.fire({
-          title: 'No se encuentran roles registrados en el sistema!',
-          text:
-            'No se encuentran roles registrados en el sistema, registre primero un departamento para continuar.',
-          icon: 'warning'
-        })
       }
     })
     const onFiltered = filteredItems => {
@@ -362,7 +346,6 @@ export default {
     const validateEmployee = value => {
       if (!userFields.value.empleadoId) {
         validateState()
-        return 'Este campo es requerido'
       }
       validateState()
       return true
@@ -370,11 +353,10 @@ export default {
     const validatePassword = () => {
       if (!userFields.value.contraseña) {
         passwordState.value = false
-        errorMessage.value = 'Este campo es requerido '
-        return errorMessage.value
+        return 'Este campo es requerido '
       }
       if (
-        !/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{8,}$/(userFields.value.contraseña)
+        !/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{8,}$/.test(userFields.value.contraseña)
       ) {
         passwordState.value = false
         errorMessage.value =
@@ -385,27 +367,23 @@ export default {
       return true
     }
     const validateConfirmPassword = () => {
-      if (!userFields.value.contraseña) {
-        passwordState.value = false
-        confirmErrorMessage.value = 'Este campo es requerido '
-        return confirmErrorMessage.value
+      if (!userFields.value.confirmarContraseña) {
+        confirmPasswordState.value = false
+        return 'Este campo es requerido '
       }
       if (
         userFields.value.contraseña !== userFields.value.confirmarContraseña
       ) {
         confirmPasswordState.value = false
-        confirmErrorMessage.value = 'Las contraseñas no coinciden '
-        return confirmErrorMessage.value
+        return 'Las contraseñas no coinciden '
       }
       if (
         !/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{8,}$/.test(
-          userFields.value.contraseña
+          userFields.value.confirmarContraseña
         )
       ) {
-        passwordState.value = false
-        confirmErrorMessage.value =
-          'La contraseña debe de contener minimo 8 Caracteres, minusculas y mayusculas '
-        return confirmErrorMessage.value
+        confirmPasswordState.value = false
+        return 'La contraseña debe de contener minimo 8 Caracteres, minusculas y mayusculas '
       }
       confirmPasswordState.value = true
       return true
