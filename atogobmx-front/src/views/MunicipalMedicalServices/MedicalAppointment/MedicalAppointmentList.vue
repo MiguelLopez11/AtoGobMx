@@ -36,6 +36,7 @@
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
+      theme-color="#7367f0"
     >
       <template #header-actions="header">
         {{ header.text }}
@@ -157,7 +158,7 @@ export default {
       })
       return 'datos recargados'
     }
-    const RemoveMedicalAppointment = ArmaId => {
+    const RemoveMedicalAppointment = citaId => {
       isloading.value = true
       swal
         .fire({
@@ -180,7 +181,7 @@ export default {
               })
               .then(result => {
                 if (result.isConfirmed) {
-                  deleteMedicalAppointment(ArmaId, data => {
+                  deleteMedicalAppointment(citaId, data => {
                     refreshTable()
                   })
                 }
