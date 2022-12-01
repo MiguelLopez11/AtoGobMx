@@ -78,7 +78,7 @@
         <b-button
           variant="outline-secondary"
           class="border border-2 border-secundary w-75 mt-3"
-          to="/ServiciosPublicos/ExpedienteAlumbrado/list"
+          to="/ServiciosPublicos/TareaTipoAlumbrado/list"
           style="border-size: 2px"
         >
           <svg

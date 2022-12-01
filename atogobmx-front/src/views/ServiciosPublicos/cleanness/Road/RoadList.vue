@@ -86,35 +86,23 @@
       lazy
     >
       <Form @submit="addRoadService">
-        <b-row cols="2">
-          <GMapMap
+        <b-row>
+          <GoogleMap
+            api-key="AIzaSyAu9G_tPHiWvYnf-qkessxqcv4pQaJPhfY"
+            style="width: 100%; height: 500px"
             :center="center"
-            map-type-id="satellite"
             :zoom="20"
-            :options="{
-              zoomControl: true,
-              mapTypeControl: false,
-              scaleControl: false,
-              rotateControl: true,
-              disableDefaultUi: false
-            }"
-            style="width: 1000px; height: 500px"
+            @click="() => locations.push({ lat: 20.5546629, lng: -102.4953904})"
           >
-          <GMapCluster
-            :zoom="10"
-          >
-
-            <GMapMarker
-              :zoom="10"
-              :key="index"
-              v-for="(m, index) in markers"
-              :position="m.position"
-              :clickable="true"
-              :draggable="true"
-              @click="center = m.position"
-            />
-          </GMapCluster>
-          </GMapMap>
+            <MarkerCluster>
+              <Marker
+                v-for="(location, i) in locations"
+                :options="{ position: location }"
+                :key="i"
+              />
+              <Polyline :options="flightPath" />
+            </MarkerCluster>
+          </GoogleMap>
         </b-row>
         <b-row align-h="end">
           <b-button
@@ -137,11 +125,16 @@
 import RoadService from '@/Services/road.Services'
 import { Form } from 'vee-validate'
 import { ref, inject } from 'vue'
+import { GoogleMap, Marker, MarkerCluster, Polyline } from 'vue3-google-map'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
     EasyDataTable: window['vue3-easy-data-table'],
-    Form
+    Form,
+    GoogleMap,
+    Marker,
+    MarkerCluster,
+    Polyline
   },
   setup () {
     const swal = inject('$swal')
@@ -172,26 +165,31 @@ export default {
       obsevacion: null,
       archivado: false
     })
-    const markers = ref([
+    const locations = ref([
       {
-        position: {
-          lat: 20.5505946,
-          lng: -102.4953904
-        }
+        lat: 20.5546629,
+        lng: -105.4953904
       },
       {
-        position: {
-          lat: 20.5505946,
-          lng: -102.4953904
-        }
+        lat: 20.5546629,
+        lng: -110.4953904
+      },
+      {
+        lat: 20.5546629,
+        lng: -99.4953904
       }
     ])
-    const startLocation = ref({ lat: 20.5524136, lng: -102.5137753 })
-    const endLocation = ref({ lat: 20.5486875, lng: -102.5073417 })
+    const flightPath = ref({
+      path: locations.value,
+      geodesic: true,
+      strokeColor: '#5e50ee',
+      strokeOpacity: 1.0,
+      strokeWeight: 5
+    })
     const RoadServiceFieldsBlank = ref(
       JSON.parse(JSON.stringify(RoadServiceFields))
     )
-    const center = ref({ lat: 20.5505946, lng: -102.5094758 })
+    const center = ref({ lat: 20.5546629, lng: -102.4953904 })
     const fields = ref([
       { value: 'origen', text: 'Latitud' },
       { value: 'destino', text: 'Longitud' },
@@ -365,9 +363,8 @@ export default {
       DestinationState,
       ObservationState,
       center,
-      markers,
-      startLocation,
-      endLocation,
+      locations,
+      flightPath,
 
       addMaker,
       onFiltered,
@@ -383,4 +380,20 @@ export default {
 }
 </script>
 
-<style></style>
+<style scoped>
+.map {
+  position: relative;
+  width: 100%;
+  height: 500px;
+}
+
+.map::after {
+  position: absolute;
+  content: '';
+  width: 1px;
+  height: 100%;
+  top: 0;
+  left: 50%;
+  background: red;
+}
+</style>

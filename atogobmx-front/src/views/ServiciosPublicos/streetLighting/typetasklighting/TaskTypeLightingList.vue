@@ -70,7 +70,7 @@
             variant="outline-warning"
             :to="{
               name: 'TareaTipoAlumbrado-Edit',
-              params: { TareaTipoId: items.tareaTipoId }
+              params: { TareaTipoAlumbradoId: items.tareaTipoId }
             }"
             ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
           >
@@ -126,7 +126,7 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            @click="resetPublicLightingFields"
+            @click="resetTaskTypeLightingFields"
           >
             <!-- v-b-modal.modal-tasktypelighting -->
             Cancelar
@@ -195,7 +195,7 @@ export default {
       { value: 'actions', text: 'Acciones' }
     ])
 
-    const resetPublicLightingFields = () => {
+    const resetTaskTypeLightingFields = () => {
       showModal.value = false
       taskTypeLightingFields.value = JSON.parse(
         JSON.stringify(taskTypeLightingFieldsBlank)
@@ -316,7 +316,7 @@ export default {
       //   JSON.stringify(taskTypeLightingFieldsBlank)
       // )
       showModal.value = false
-      resetPublicLightingFields()
+      resetTaskTypeLightingFields()
     }
     const RemoveTaskTypeLighting = TaskTypeLightingId => {
       isloading.value = true
@@ -368,7 +368,7 @@ export default {
       NameState,
       DescriptionState,
       // option,
-      resetPublicLightingFields,
+      resetTaskTypeLightingFields,
       onFiltered,
       addTaskTypeLighting,
       refreshTable,
