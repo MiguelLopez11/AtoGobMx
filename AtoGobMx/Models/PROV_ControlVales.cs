@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace AtoGobMx.Models
 {
@@ -14,8 +15,6 @@ namespace AtoGobMx.Models
         public int? AreaId { get; set; }
         public int? EmpleadoId { get; set; }
         public int? ProveedorId { get; set; }
-        public int? ProductoId { get; set; }
-        public int? DetalleValeId { get; set; }
         public int? EstatusValeId { get; set; }
         public int? TipoId { get; set; }
         public bool Archivado { get; set; }
@@ -28,13 +27,12 @@ namespace AtoGobMx.Models
         public Empleado? Empleados { get; set; }
         [ForeignKey("ProveedorId")]
         public PROV_Proveedor? PROV_Proveedor { get; set; }
-        [ForeignKey("ProductoId")]
-        public PROV_Producto? PROV_Producto { get; set; }
-        [ForeignKey("DetalleValeId")]
-        public PROV_DetalleVale? PROV_DetalleVale { get; set; }
         [ForeignKey("EstatusValeId")]
         public PROV_EstatusVale? PROV_EstatusVale { get; set; }
         [ForeignKey("TipoId")]
         public PROV_TipoVales? TipoVales { get; set; }
+
+        [JsonIgnore]
+        public virtual IEnumerable<PROV_DetalleVale>? PROV_DetalleVales { get; set; }
     }
 }

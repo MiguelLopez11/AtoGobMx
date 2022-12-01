@@ -10,6 +10,7 @@ namespace AtoGobMx.Models
         public int DetalleProductoId { get; set; }
         public int? ProductoId { get; set; }
         public int? DetalleValeId { get; set; }
+        public float? Precio { get; set; }
         public bool Archivado { get; set; }
 
         [ForeignKey("ProductoId")]
