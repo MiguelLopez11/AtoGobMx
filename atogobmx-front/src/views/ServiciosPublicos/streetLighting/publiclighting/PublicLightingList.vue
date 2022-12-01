@@ -49,7 +49,7 @@
       <template #item-actions="items">
         <b-dropdown
           :disabled="
-            (items.archivado && role !== 'Administrador') || 'Alumbrado'
+            (items.archivado && role !== 'Administrador') || 'Director'
           "
           id="ActionsDropdown"
           size="lg"
@@ -73,7 +73,7 @@
             variant="outline-warning"
             :to="{
               name: 'Alumbrado-Edit',
-              params: { alumbradoId: items.alumbradoId }
+              params: { AlumbradoId: items.alumbradoId }
             }"
           >
             <i class="bi bi-pencil-square" />
@@ -424,6 +424,7 @@ export default {
     )
 
     const fields = ref([
+      { value: 'aalumbradoId', text: 'ID', sortable: true },
       { value: 'estatus.nombreEstatus', text: 'Estatus' },
       { value: 'tareaTipoAlumbrado.nombreTarea', text: 'Tipo de tarea' },
       { value: 'nombreObra', text: 'nombre de Obra Alumbrado' },

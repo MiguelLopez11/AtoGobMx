@@ -44,6 +44,7 @@ namespace AtoGobMx.Controllers
                 .ToListAsync();
             return Ok(expedientes);
         }
+
         [HttpGet("{AlumbradoId}")]
         public async Task<ActionResult> GetAlumbradoById(int AlumbradoId)
         {

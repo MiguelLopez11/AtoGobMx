@@ -70,7 +70,7 @@
             variant="outline-warning"
             :to="{
               name: 'EstatusAlumbrado-Edit',
-              params: { EstatusAlumbradoId: items.estatusAlumbradoId }
+              params: { EstatusId: items.estatusAlumbradoId }
             }"
             ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
           >
@@ -186,6 +186,7 @@ export default {
       JSON.parse(JSON.stringify(statusLightingFields))
     )
     const fields = ref([
+      // { value: 'estatusAlumbradoId', text: 'ID', sortable: true },
       { value: 'nombreEstatus', text: 'Nombre' },
       { value: 'descripcion', text: 'Descripcion' },
       { value: 'actions', text: 'Acciones' }

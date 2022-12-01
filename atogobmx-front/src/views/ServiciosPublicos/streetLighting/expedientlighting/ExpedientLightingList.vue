@@ -86,7 +86,7 @@
     hide-footer
   >
     <b-row>
-      <b-form-group class="mt-3" label="Nombre de obra Alumbrado:">
+      <b-form-group class="mt-3" label="Nombre de Alumbrado:">
         <b-form-select
           autofocus
           :options="publicLighting"

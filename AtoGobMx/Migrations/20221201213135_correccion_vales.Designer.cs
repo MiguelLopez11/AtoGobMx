@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20221201213135_correccion_vales")]
+    partial class correccion_vales
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -876,6 +878,9 @@ namespace AtoGobMx.Migrations
                     b.Property<int?>("DepartamentoId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("DetalleValeId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("EmpleadoId")
                         .HasColumnType("int");
 
@@ -887,6 +892,9 @@ namespace AtoGobMx.Migrations
 
                     b.Property<DateTime?>("FechaVigencia")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("ProductoId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("ProveedorId")
                         .HasColumnType("int");
@@ -900,9 +908,13 @@ namespace AtoGobMx.Migrations
 
                     b.HasIndex("DepartamentoId");
 
+                    b.HasIndex("DetalleValeId");
+
                     b.HasIndex("EmpleadoId");
 
                     b.HasIndex("EstatusValeId");
+
+                    b.HasIndex("ProductoId");
 
                     b.HasIndex("ProveedorId");
 
@@ -922,9 +934,6 @@ namespace AtoGobMx.Migrations
 
                     b.Property<int?>("DetalleValeId")
                         .HasColumnType("int");
-
-                    b.Property<float?>("Precio")
-                        .HasColumnType("float");
 
                     b.Property<int?>("ProductoId")
                         .HasColumnType("int");
@@ -950,21 +959,24 @@ namespace AtoGobMx.Migrations
                     b.Property<int?>("Cantidad")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ControlValeId")
-                        .HasColumnType("int");
-
                     b.Property<float?>("IVA")
                         .HasColumnType("float");
 
+                    b.Property<int?>("PROV_ControlValesControlValeId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("PROV_ProductoProductoId")
                         .HasColumnType("int");
+
+                    b.Property<float?>("Precio")
+                        .HasColumnType("float");
 
                     b.Property<float?>("Total")
                         .HasColumnType("float");
 
                     b.HasKey("DetalleValeId");
 
-                    b.HasIndex("ControlValeId");
+                    b.HasIndex("PROV_ControlValesControlValeId");
 
                     b.HasIndex("PROV_ProductoProductoId");
 
@@ -1712,6 +1724,10 @@ namespace AtoGobMx.Migrations
                         .WithMany("ControlDeVales")
                         .HasForeignKey("DepartamentoId");
 
+                    b.HasOne("AtoGobMx.Models.PROV_DetalleVale", "PROV_DetalleVale")
+                        .WithMany()
+                        .HasForeignKey("DetalleValeId");
+
                     b.HasOne("AtoGobMx.Models.Empleado", "Empleados")
                         .WithMany("ControlDeVales")
                         .HasForeignKey("EmpleadoId");
@@ -1719,6 +1735,10 @@ namespace AtoGobMx.Migrations
                     b.HasOne("AtoGobMx.Models.PROV_EstatusVale", "PROV_EstatusVale")
                         .WithMany("ControlDeVales")
                         .HasForeignKey("EstatusValeId");
+
+                    b.HasOne("AtoGobMx.Models.PROV_Producto", "PROV_Producto")
+                        .WithMany("ControlDeVales")
+                        .HasForeignKey("ProductoId");
 
                     b.HasOne("AtoGobMx.Models.PROV_Proveedor", "PROV_Proveedor")
                         .WithMany("ControlDeVales")
@@ -1734,7 +1754,11 @@ namespace AtoGobMx.Migrations
 
                     b.Navigation("Empleados");
 
+                    b.Navigation("PROV_DetalleVale");
+
                     b.Navigation("PROV_EstatusVale");
+
+                    b.Navigation("PROV_Producto");
 
                     b.Navigation("PROV_Proveedor");
 
@@ -1758,15 +1782,13 @@ namespace AtoGobMx.Migrations
 
             modelBuilder.Entity("AtoGobMx.Models.PROV_DetalleVale", b =>
                 {
-                    b.HasOne("AtoGobMx.Models.PROV_ControlVales", "PROV_ControlVale")
+                    b.HasOne("AtoGobMx.Models.PROV_ControlVales", null)
                         .WithMany("PROV_DetalleVales")
-                        .HasForeignKey("ControlValeId");
+                        .HasForeignKey("PROV_ControlValesControlValeId");
 
                     b.HasOne("AtoGobMx.Models.PROV_Producto", null)
                         .WithMany("PROV_DetalleVale")
                         .HasForeignKey("PROV_ProductoProductoId");
-
-                    b.Navigation("PROV_ControlVale");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.PuestoTrabajo", b =>
@@ -1979,6 +2001,8 @@ namespace AtoGobMx.Migrations
 
             modelBuilder.Entity("AtoGobMx.Models.PROV_Producto", b =>
                 {
+                    b.Navigation("ControlDeVales");
+
                     b.Navigation("PROV_DetalleProducto");
 
                     b.Navigation("PROV_DetalleVale");
