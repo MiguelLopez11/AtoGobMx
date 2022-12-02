@@ -20,7 +20,7 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<IEnumerable<SERMED_Producto>>> GetMedicamento()
         {
             var Medicamentos = await _context.Medicamento
-                .Where(w => w.Archivado)
+                .Where(w => !w.Archivado)
                 .ToListAsync();
             if (Medicamentos == null)
             {
@@ -63,7 +63,7 @@ namespace AtoGobMx.Controllers
                 return NotFound();
             }
             Medicamento.ProductoId = producto.ProductoId;
-            Medicamento.CategoriaMedicamentoId = producto.CategoriaMedicamentoId;
+            //Medicamento.CategoriaMedicamentoId = producto.CategoriaMedicamentoId;
             Medicamento.Nombre = producto.Nombre;
             Medicamento.Contenido = producto.Contenido;
             Medicamento.FechaVencimiento = producto.FechaVencimiento;

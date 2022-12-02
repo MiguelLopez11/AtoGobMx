@@ -39,7 +39,6 @@ export default {
     const area = window.sessionStorage.getItem('Area')
     const employee = window.sessionStorage.getItem('Empleado')
     const empleadoId = window.sessionStorage.getItem('EmpleadoId')
-    console.log(employee)
     const menu = ref([
       { link: '/', name: 'Inicio', icon: 'bi bi-house' },
       { link: '/RecursosHumanos', name: 'Recursos Humanos', icon: 'bi bi-people-fill' },
@@ -47,7 +46,7 @@ export default {
       { link: '/Obras', name: 'Obras Publicas', icon: 'bi bi-cone-striped' },
       { link: '/Proveeduria', name: 'Proveeduria', icon: 'bi bi-clipboard2-data-fill' },
       { link: '/PatrimonioMunicipal', name: 'Patrimonio Publico', icon: 'bi bi-bookmark-check-fill' },
-      { link: '/ServiciosMedicosMunicipales', name: 'Servicios Medicos Municipales', icon: 'bi bi-hospital-fill' },
+      { link: '/ServiciosMedicosMunicipales', name: 'Servicios Medicos', icon: 'bi bi-hospital-fill' },
       { link: '/Administrador', name: 'Administrador', icon: 'bi bi-clipboard2-pulse-fill' }
     ])
     const removeLocalStorgare = () => {

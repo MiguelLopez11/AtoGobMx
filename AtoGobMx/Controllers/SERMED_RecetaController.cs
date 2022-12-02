@@ -20,6 +20,7 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<IEnumerable<SERMED_Receta>>> GetRecetas()
         {
             var Recetas = await _context.Receta
+                .Include(i => i.Empleados)
                 .Where(w => !w.Archivado)
                 .ToListAsync();
             if (Recetas == null)
@@ -33,6 +34,7 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<SERMED_Cita>> GetRecetaById(int RecetaId)
         {
             var Receta = await _context.Receta
+                .Include(i => i.Empleados)
                 .Where(w => !w.Archivado)
                 .FirstOrDefaultAsync(f => f.RecetaId == RecetaId);
 
@@ -46,9 +48,10 @@ namespace AtoGobMx.Controllers
         [HttpPost]
         public async Task<ActionResult<SERMED_Receta>> PostInventario(SERMED_Receta receta)
         {
+            receta.FechaAlta = DateTime.Now;
             _context.Receta.Add(receta);
             await _context.SaveChangesAsync();
-            return StatusCode(200, "Se ha credo la receta exitosamente");
+            return CreatedAtAction("GetRecetaById", new { RecetaId = receta.RecetaId }, receta);
         }
         [HttpPut("{RecetaId}")]
         public async Task<IActionResult> PutCategoria(int RecetaId, SERMED_Receta receta)
