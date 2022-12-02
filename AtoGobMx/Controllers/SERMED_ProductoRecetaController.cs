@@ -20,7 +20,8 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<IEnumerable<SERMED_ProductosReceta>>> GetMedicamento()
         {
             var productos = await _context.ProductoReceta
-                .Where(w => w.Archivado)
+                .Include(i => i.Producto)
+                .Where(w => !w.Archivado)
                 .ToListAsync();
             return Ok(productos);
         }
