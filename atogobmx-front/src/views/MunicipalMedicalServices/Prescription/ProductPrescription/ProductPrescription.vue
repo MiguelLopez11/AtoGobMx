@@ -1,5 +1,5 @@
 <template>
-  <b-card class="m-2">
+  <b-card>
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
@@ -79,11 +79,11 @@
         <b-row cols="2">
             <b-col>
             <b-form-group class="mt-3" label="Medicamento">
-              <Field name="ColorField" :rules="validateEmployee" as="text">
+              <Field name="ProductField" :rules="validateProduct" as="text">
                 <b-form-select
                   v-model="productPrescriptionFields.productoId"
                   autofocus
-                  :state="employeeState"
+                  :state="productState"
                   value-field="productoId"
                   text-field="nombre"
                   :options="products"
@@ -92,7 +92,7 @@
               </Field>
               <ErrorMessage
                 class="text-danger"
-                name="ColorField"
+                name="ProductField"
               ></ErrorMessage>
             </b-form-group>
           </b-col>
@@ -170,6 +170,7 @@ export default {
     const { getProducts } = MedicalProductsServices()
     const productPrescriptions = ref([])
     const products = ref([])
+    const productState = ref(false)
     const perPage = ref(5)
     const currentPage = ref(1)
     const filter = ref(null)
@@ -186,9 +187,10 @@ export default {
       descripcion: null,
       archivado: false
     })
-    const weaponsFieldsBlank = ref(JSON.parse(JSON.stringify(productPrescriptionFields)))
+    const productPrescriptionFieldsBlank = ref(JSON.parse(JSON.stringify(productPrescriptionFields)))
     const fields = ref([
       { value: 'producto.nombre', text: 'Medicamento' },
+      { value: 'producto.contenido', text: 'Contenido' },
       { value: 'cantidad', text: 'cantidad' },
       { value: 'descripcion', text: 'Sugerencias' },
       { value: 'actions', text: 'Acciones' }
@@ -242,9 +244,9 @@ export default {
     }
     const resetProductPrescriptionFields = () => {
       showModal.value = false
-      productPrescriptionFields.value = JSON.parse(JSON.stringify(weaponsFieldsBlank))
+      productPrescriptionFields.value = JSON.parse(JSON.stringify(productPrescriptionFieldsBlank))
     }
-    const RemoveProductPrescription = ArmaId => {
+    const RemoveProductPrescription = productPrescriptionId => {
       isloading.value = true
       swal
         .fire({
@@ -268,7 +270,7 @@ export default {
               })
               .then(result => {
                 if (result.isConfirmed) {
-                  deleteProductPrescription(ArmaId, data => {
+                  deleteProductPrescription(productPrescriptionId, data => {
                     refreshTable()
                   })
                 }
@@ -281,16 +283,28 @@ export default {
     const onFiltered = filteredItems => {
       currentPage.value = 1
     }
-
+    // VALIDATIONS
+    const validateProduct = () => {
+      if (!productPrescriptionFields.value.productoId) {
+        validateState()
+        return 'Este campo es requerido'
+      }
+      validateState()
+      return true
+    }
+    const validateState = () => {
+      productState.value = productPrescriptionFields.value.productoId !== null
+    }
     return {
       productPrescriptions,
       products,
+      productState,
       fields,
       perPage,
       currentPage,
       filter,
       perPageSelect,
-      weaponsFieldsBlank,
+      productPrescriptionFieldsBlank,
       productPrescriptionFields,
       isloading,
       searchValue,
@@ -301,7 +315,8 @@ export default {
       addProductPrescription,
       refreshTable,
       RemoveProductPrescription,
-      resetProductPrescriptionFields
+      resetProductPrescriptionFields,
+      validateProduct
     }
   }
 }
