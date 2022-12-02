@@ -831,6 +831,26 @@ const routes = [
       rol: 'Empleado',
       departamento: 'Direccion de servicios medicos municipales'
     }
+  },
+  {
+    path: '/ServiciosMedicos/Receta/list',
+    name: 'ServiciosMedicos-Receta-List',
+    component: () => import('@/views/MunicipalMedicalServices/Prescription/PrescriptionList.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Direccion de servicios medicos municipales'
+    }
+  },
+  {
+    path: '/ServiciosMedicos/Receta/:RecetaId',
+    name: 'ServiciosMedicos-Receta-Edit',
+    component: () => import('@/views/MunicipalMedicalServices/Prescription/PrescriptionEdit'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Direccion de servicios medicos municipales'
+    }
   }
 ]
 

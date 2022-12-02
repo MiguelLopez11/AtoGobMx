@@ -9,10 +9,9 @@ namespace AtoGobMx.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int RecetaId { get; set; }
-        [Required]
-        public int EmpleadoId { get; set; }
-        public string diagnostico { get; set; }
-        public DateTime FechaAlta { get; set; }
+        public int? EmpleadoId { get; set; }
+        public string? diagnostico { get; set; }
+        public DateTime? FechaAlta { get; set; }
         public bool Archivado { get; set; }
 
         [ForeignKey("EmpleadoId")]

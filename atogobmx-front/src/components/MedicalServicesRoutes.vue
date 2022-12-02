@@ -78,6 +78,28 @@
           <p>Expediente Médico</p>
         </b-button>
       </b-col>
+      <b-col>
+        <b-button
+          variant="outline-secondary"
+          class="border border-2 border-secundary w-75 mt-3 mx-1"
+          to="/ServiciosMedicos/Receta/list"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="140"
+            height="150"
+            fill="currentColor"
+            class="bi bi-prescription2"
+            viewBox="0 0 16 16"
+          >
+            <path d="M7 6h2v2h2v2H9v2H7v-2H5V8h2V6Z" />
+            <path
+              d="M2 1a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v10.5a1.5 1.5 0 0 1-1.5 1.5h-7A1.5 1.5 0 0 1 3 14.5V4a1 1 0 0 1-1-1V1Zm2 3v10.5a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5V4H4ZM3 3h10V1H3v2Z"
+            />
+          </svg>
+          <p>Recetas</p>
+        </b-button>
+      </b-col>
     </b-row>
   </b-card>
 </template>
