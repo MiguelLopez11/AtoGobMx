@@ -18,6 +18,7 @@ namespace AtoGobMx.Models
         public int Puertas { get; set; }
         public string Transmisión { get; set; }
         public int EstatusVehiculoId { get; set; }
+
         [ForeignKey("EstatusVehiculoId")]
         public PAT_EstatusVehiculo? EstatusVehiculo { get; set; }
 

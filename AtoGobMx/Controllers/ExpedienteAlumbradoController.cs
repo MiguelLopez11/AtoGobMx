@@ -64,15 +64,15 @@ namespace AtoGobMx.Controllers
             }
             return Ok(expedienteAlumbrado);
         }
-        [HttpGet("ExpedienteAlumbrado/Download/{ExpedienteAlumbradoID}")]
-        public async Task<ActionResult<ExpedienteAlumbrado>> DownloadExpedienteAlumbrado(int ExpedienteAlumbradoID)
+        [HttpGet("Download")]
+        public async Task<ActionResult<ExpedienteAlumbrado>> DownloadExpedienteAlumbrado()
         {
-            var expefalla = await _context.ExpedienteAlumbrado
-                .Include(i => i.Alumbrado)
-                .Include(i => i.Departamentos)
-                .Include(i => i.Area)
-                .Where(w => !w.Archivado)
-                .FirstOrDefaultAsync(f => f.ExpedienteAlumbradoId == ExpedienteAlumbradoID);
+            //var expefalla = await _context.ExpedienteAlumbrado
+            //    .Include(i => i.Alumbrado)
+            //    .Include(i => i.Departamentos)
+            //    .Include(i => i.Area)
+            //    .Where(w => !w.Archivado)
+            //    .FirstOrDefaultAsync(f => f.ExpedienteAlumbradoId == ExpedienteAlumbradoID);
             var html = $@"
                <!DOCTYPE html>
                <html lang=""en"">
@@ -80,7 +80,7 @@ namespace AtoGobMx.Controllers
                 <style>
                     .registros{{
                         margin: 90px;
-                        column-count: 2;
+                        columns: 2;
                         padding-left: 15px;
                         border-top: 1px solid #5D6975;
                         border-bottom: 1px solid  #5D6975;
@@ -110,7 +110,7 @@ namespace AtoGobMx.Controllers
                     <img src= >
                 </div>
                 <h1 class='alinear'>Reporte de alumbrado publico </h1>
-                <h3 class='alinear2'>Fecha: {expefalla.FechaAlta} </h3>
+                <h3 class='alinear2'>Fecha:  </h3>
                 <div>
                     <div class='registros'>
                         <h3>Domicilio: </h3>
@@ -126,6 +126,7 @@ namespace AtoGobMx.Controllers
               </body>
               </html>
               ";
+            //{ expefalla.FechaAlta}
             GlobalSettings globalSettings = new GlobalSettings();
             globalSettings.ColorMode = ColorMode.Color;
             globalSettings.Orientation = Orientation.Portrait;

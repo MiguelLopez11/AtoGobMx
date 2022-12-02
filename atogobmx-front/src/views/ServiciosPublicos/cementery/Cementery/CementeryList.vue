@@ -278,6 +278,15 @@ export default {
         }
       }
     ])
+
+    // GEvent.addListener(map, 'click', function (overlay, point) {
+    //   if (point) {
+    //     marker.setPoint(point)
+    //     document.posicion.x.value = point.x
+    //     document.posicion.y.value = point.y
+    //   }
+    // })
+
     const center = ref({ lat: 20.5546629, lng: -102.4953904 })
     const fields = ref([
       { value: 'nombrePropietario', text: 'Nombre de propietario' },

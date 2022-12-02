@@ -185,7 +185,7 @@ export default {
 
     const fields = ref([
       { value: 'alumbradoEmpleadoId', text: 'ID', sortable: true },
-      { value: 'empleadoId', text: 'Nombre empleado' },
+      { value: 'empleados.nombreCompleto', text: 'Nombre empleado' },
       { value: 'actions', text: 'Acciones' }
     ])
 
