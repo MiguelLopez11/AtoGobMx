@@ -61,55 +61,51 @@
       lazy
     >
       <Form @submit="addLightingVehicle">
-        <b-row cols="2">
+        <b-row>
           <!-- Nombre del vehiculo -->
           <b-col>
-            <b-form-group class="mt-3" label="Marca">
-              <Field name="VehicleField" :rules="validateVehicle" as="text">
-                <v-select
-                  label="marca"
-                  v-model="vehicle.marca"
-                  :options="vehicles"
-                  :key="vehicles.vehiculoId"
-                  :reduce="vehicles => vehicles.marca"
-                />
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="VehicleField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!-- Nombre del vehiculo -->
-          <b-col>
-            <b-form-group class="mt-3" label="SubMarca">
-              <Field name="VehicleField" :rules="validateVehicle" as="text">
-                <v-select
-                  v-model="vehicle.subMarca"
-                  label="marca"
-                  :options="vehicles"
-                  :key="vehicles.vehiculoId"
-                  :reduce="vehicles => vehicles.subMarca"
-                />
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="VehicleField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!-- Nombre del vehiculo -->
-          <b-col>
-            <b-form-group class="mt-3" label="Selecciona un o varios vehículo(s):">
+            <b-form-group
+              class="mt-3"
+              label="Selecciona un o varios vehículo(s):"
+            >
               <Field name="VehicleField" :rules="validateVehicle" as="text">
                 <v-select
                   multiple
                   v-model="vehicleSelected"
-                  label="color"
                   :options="vehicles"
                   :key="vehicles.vehiculoId"
                   :reduce="vehicles => vehicles.vehiculoId"
-                />
+                  label="color"
+                >
+                  <template
+                    v-slot:option="{
+                      marca,
+                      modelo,
+                      añoLanzamiento,
+                      color,
+                      placa
+                    }"
+                  >
+                    <span
+                      >{{ marca }}-{{ modelo }}-{{ añoLanzamiento }} -
+                      {{ color }}- {{ placa }}</span
+                    >
+                  </template>
+                  <template
+                    v-slot:selected-option="{
+                      marca,
+                      modelo,
+                      añoLanzamiento,
+                      color,
+                      placa
+                    }"
+                  >
+                    <span
+                      >{{ marca }}-{{ modelo }}-{{ añoLanzamiento }} -
+                      {{ color }}- {{ placa }}</span
+                    >
+                  </template>
+                </v-select>
               </Field>
               <ErrorMessage
                 class="text-danger"
@@ -184,7 +180,7 @@ export default {
       vehiculoId: 0,
       archivado: false
     })
-    const getFieldText = (item) => {
+    const getFieldText = item => {
       return `${item.marca} - ${item.submarca}`
     }
     getVehicles(data => {
