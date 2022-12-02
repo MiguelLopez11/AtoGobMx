@@ -24,9 +24,7 @@ export default function publiclightingServices () {
     })
   }
   const updatePublicLighting = (data, callback) => {
-    console.log(data)
     axios.put(`https://localhost:7065/api/Alumbrado/${data.alumbradoId}`, data).then((response) => {
-      // console.log(response)
       callback(response.data)
     })
   }

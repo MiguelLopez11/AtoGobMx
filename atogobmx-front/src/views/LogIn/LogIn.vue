@@ -106,7 +106,6 @@ export default {
     })
     const onLogIn = () => {
       LogIn(user.value, data => {
-        console.log(data)
         if (data.usuarioId) {
           window.sessionStorage.setItem('isLogged', true)
           window.sessionStorage.setItem('Role', data.role.nombre)

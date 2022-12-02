@@ -218,9 +218,6 @@ export default {
         }
       }
     })
-    const addMaker = id => {
-      console.log(id)
-    }
     const onFiltered = filteredItems => {
       currentPage.value = 1
     }
@@ -366,7 +363,6 @@ export default {
       locations,
       flightPath,
 
-      addMaker,
       onFiltered,
       addRoadService,
       RemoveRoadService,
