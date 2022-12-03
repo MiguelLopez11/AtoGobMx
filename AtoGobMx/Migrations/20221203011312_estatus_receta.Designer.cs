@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20221203011312_estatus_receta")]
+    partial class estatus_receta
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1226,20 +1228,6 @@ namespace AtoGobMx.Migrations
                     b.HasIndex("SERMED_EstatusRecetaEstatusRecetaId");
 
                     b.ToTable("EstatusReceta");
-
-                    b.HasData(
-                        new
-                        {
-                            EstatusRecetaId = 1,
-                            Archivado = false,
-                            Nombre = "Pendiente"
-                        },
-                        new
-                        {
-                            EstatusRecetaId = 2,
-                            Archivado = false,
-                            Nombre = "Surtido"
-                        });
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.SERMED_ExpedienteMedico", b =>

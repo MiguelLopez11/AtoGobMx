@@ -53,6 +53,7 @@ namespace AtoGobMx.Context
         public DbSet<SERMED_ExpedienteMedico> ExpedienteMedico { get; set; }
         public DbSet<SERMED_ProductosReceta> ProductoReceta { get; set; }
         public DbSet<SERMED_Receta> Receta { get; set; }
+        public DbSet<SERMED_EstatusReceta> EstatusReceta { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -64,6 +65,8 @@ namespace AtoGobMx.Context
             modelBuilder.Entity<Role>().HasData(new Role { RoleId = 1, Nombre = "Administrador", Descripcion = null, Archivado = false });          
             modelBuilder.Entity<Usuario>().HasData(new Usuario { UsuarioId = 1, NombreUsuario = "Administrador",Contraseña="Admin123", ConfirmarContraseña="Admin123",EmpleadoId = 1,RoleId = 1, Archivado = false });          
             modelBuilder.Entity<ExpedienteDigital>().HasData(new ExpedienteDigital { ExpedienteDigitalId = 1,EmpleadoId = 1, Archivado = false });          
+            modelBuilder.Entity<SERMED_EstatusReceta>().HasData(new SERMED_EstatusReceta { EstatusRecetaId = 1,Nombre = "Pendiente",Descripcion = null, Archivado = false });          
+            modelBuilder.Entity<SERMED_EstatusReceta>().HasData(new SERMED_EstatusReceta { EstatusRecetaId = 2,Nombre = "Surtido", Descripcion = null, Archivado = false });          
         }
     }
 }

@@ -851,6 +851,26 @@ const routes = [
       rol: 'Empleado',
       departamento: 'Direccion de servicios medicos municipales'
     }
+  },
+  {
+    path: '/ServiciosMedicos/Productos/list',
+    name: 'ServiciosMedicos-Productos-List',
+    component: () => import('@/views/MunicipalMedicalServices/Products/ProductsList'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Direccion de servicios medicos municipales'
+    }
+  },
+  {
+    path: '/ServiciosMedicos/Productos/:ProductoId',
+    name: 'ServiciosMedicos-Productos-Edit',
+    component: () => import('@/views/MunicipalMedicalServices/Products/ProductsEdit'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Direccion de servicios medicos municipales'
+    }
   }
 ]
 
