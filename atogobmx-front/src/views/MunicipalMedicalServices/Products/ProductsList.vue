@@ -21,8 +21,8 @@
         @click="showModal = !showModal"
         type="submit"
       >
-        <i class="bi bi-car-front-fill" />
-        Nueva receta
+        <i class="bi bi-plus-circle-fill" />
+        Nuevo Producto
       </b-button>
     </b-row>
     <EasyDataTable
@@ -56,7 +56,7 @@
             <i class="bi bi-three-dots-vertical"></i>
           </template>
           <b-dropdown-item
-            @click="RemovePrescription(items.productoId)"
+            @click="RemoveProduct(items.productoId)"
             class="m-1"
             variant="outline-danger"
           >
@@ -66,8 +66,8 @@
             class="m-1"
             variant="outline-warning"
             :to="{
-              name: 'ServiciosMedicos-Receta-Edit',
-              params: { RecetaId: items.productoId }
+              name: 'ServiciosMedicos-Productos-Edit',
+              params: { ProductoId: items.productoId }
             }"
           >
             <i class="bi bi-pencil-square" />
@@ -75,16 +75,16 @@
           </b-dropdown-item>
         </b-dropdown>
       </template>
-      <template #item-cantidadDisponible="items">
+      <template #item-status="items">
         <b-badge
           class="text-white"
           :variant="
-            items.cantidadDisponible === 0  ? 'danger' : '' || items.cantidadDisponible < 5  ? 'warning' : '' || items.cantidadDisponible > 5 ? 'success' : ''
+            items.cantidadDisponible === 0  ? 'danger' : '' || items.cantidadDisponible < 5  ? 'warning' : '' || items.cantidadDisponible > 5  ? 'success' : ''
           "
         >
         <h6 align="center">
-          {{ items.cantidadDisponible }} <br>
-          {{ items.cantidadDisponible === 0  ? 'Se requiere surtir lo mas pronto posible' : '' || items.cantidadDisponible < 5  ? 'Es posible que requiera surtirlo' : '' || items.cantidadDisponible > 5 ? '' : ''  }}
+          <!-- {{ items.cantidadDisponible }} <br> -->
+          {{ items.cantidadDisponible === 0  ? 'Sin existencia' : '' || items.cantidadDisponible < 5  ? 'Poca existencia' : '' || items.cantidadDisponible > 5  ? 'En existencia' : '' }}
         </h6>
         </b-badge>
       </template>
@@ -101,7 +101,7 @@
         <b-row cols="2">
           <b-col>
             <b-form-group class="mt-3" label="Nombre">
-              <Field name="NameField" :rules="validateArea" as="text">
+              <Field name="NameField" :rules="validateName" as="text">
                 <b-form-input
                   v-model="productsFields.nombre"
                   :state="nameState"
@@ -113,10 +113,10 @@
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Contenido">
-              <Field name="ContentField" :rules="validateArea" as="text">
+              <Field name="ContentField" :rules="validateContent" as="text">
                 <b-form-input
                   v-model="productsFields.contenido"
-                  :state="nameState"
+                  :state="contentState"
                 >
                 </b-form-input>
               </Field>
@@ -128,13 +128,13 @@
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Fecha de vencimiento">
-              <Field name="ContentField" :rules="validateArea" as="text">
+              <Field name="ContentField" :rules="validateExpirationDate" as="text">
                 <Datepicker
                   v-model="productsFields.fechaVencimiento"
                   locale="es"
                   autoApply
                   :enableTimePicker="false"
-                  :state="dateWorkState"
+                  :state="expirationDateState"
                 >
                 </Datepicker>
               </Field>
@@ -146,8 +146,8 @@
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Stock (Cantidad disponible)">
-              <Field name="ContentField" :rules="validateArea" as="text">
-                <b-form-input v-model="productsFields.cantidadDisponible" :state="nameState">
+              <Field name="ContentField" :rules="validateStock" as="text">
+                <b-form-input v-model="productsFields.cantidadDisponible" :state="stockState">
                 </b-form-input>
               </Field>
               <ErrorMessage class="text-danger" name="ContentField"></ErrorMessage>
@@ -175,7 +175,6 @@
 import MunicipalMedicalServices from '@/Services/municipalMedical.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
-import { useRouter } from 'vue-router'
 import Datepicker from '@vuepic/vue-datepicker'
 
 // import { useToast } from 'vue-toast-notification'
@@ -194,7 +193,10 @@ export default {
       MunicipalMedicalServices()
     const medicalProducts = ref([])
     const showModal = ref(false)
-    const redirect = useRouter()
+    const nameState = ref(false)
+    const contentState = ref(false)
+    const expirationDateState = ref(false)
+    const stockState = ref(false)
     const perPage = ref(5)
     const currentPage = ref(1)
     const filter = ref(null)
@@ -210,12 +212,14 @@ export default {
       cantidadDisponible: null,
       archivado: false
     })
-    const weaponsFieldsBlank = ref(JSON.parse(JSON.stringify(productsFields)))
+    const productsFieldsBlank = ref(JSON.parse(JSON.stringify(productsFields)))
     const fields = ref([
       { value: 'nombre', text: 'Nombre' },
       { value: 'contenido', text: 'Contenido' },
       { value: 'fechaVencimiento', text: 'Fecha de vencimiento' },
       { value: 'cantidadDisponible', text: 'Stock(Cantidad disponible)' },
+      { value: 'cantidadFaltantes', text: 'Cantidad Faltante' },
+      { value: 'status', text: 'Estado' },
       { value: 'actions', text: 'Acciones' }
     ])
     getMedicalProducts(data => {
@@ -245,17 +249,15 @@ export default {
     const addPrescription = () => {
       createMedicalProduct(productsFields.value, data => {
         swal.fire({
-          title: 'Receta registrada correctamente!',
-          text: 'La receta se ha registrado al sistema satisfactoriamente.',
+          title: 'Producto registrado correctamente!',
+          text: 'El producto se ha registrado al sistema satisfactoriamente.',
           icon: 'success'
         })
-        redirect.push({
-          name: 'ServiciosMedicos-Receta-Edit',
-          params: { RecetaId: data.recetaId }
-        })
+        resetProductsFields()
+        refreshTable()
       })
     }
-    const RemovePrescription = recetaId => {
+    const RemoveProduct = ProductoId => {
       isloading.value = true
       swal
         .fire({
@@ -265,20 +267,20 @@ export default {
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
           cancelButtonColor: '#d33',
-          confirmButtonText: 'Si, archivar arma!',
+          confirmButtonText: 'Si, archivar Producto!',
           cancelButtonText: 'Cancelar'
         })
         .then(result => {
           if (result.isConfirmed) {
             swal
               .fire({
-                title: 'Arma archivada!',
-                text: 'El arma ha sido archivado satisfactoriamente .',
+                title: 'Producto archivado!',
+                text: 'El producto ha sido archivado satisfactoriamente .',
                 icon: 'success'
               })
               .then(result => {
                 if (result.isConfirmed) {
-                  deleteMedicalProduct(recetaId, data => {
+                  deleteMedicalProduct(ProductoId, data => {
                     refreshTable()
                   })
                 }
@@ -292,38 +294,38 @@ export default {
       currentPage.value = 1
     }
     // VALIDATIONS
-    // const validateNomeclature = () => {
-    //   if (!productsFields.value.nomenclatura) {
-    //     nomenclatureState.value = false
-    //     return 'Este campo es requerido'
-    //   }
-    //   nomenclatureState.value = true
-    //   return true
-    // }
-    // const validateBrand = () => {
-    //   if (!prescriptionFields.value.marca) {
-    //     brandState.value = false
-    //     return 'Este campo es requerido'
-    //   }
-    //   brandState.value = true
-    //   return true
-    // }
-    // const validateTypeWeapon = () => {
-    //   if (!prescriptionFields.value.tipoArma) {
-    //     typeWeaponState.value = false
-    //     return 'Este campo es requerido'
-    //   }
-    //   typeWeaponState.value = true
-    //   return true
-    // }
-    // const validateGauge = () => {
-    //   if (!prescriptionFields.value.calibre) {
-    //     gaugeState.value = false
-    //     return 'Este campo es requerido'
-    //   }
-    //   gaugeState.value = true
-    //   return true
-    // }
+    const validateName = () => {
+      if (!productsFields.value.nombre) {
+        nameState.value = false
+        return 'Este campo es requerido'
+      }
+      nameState.value = true
+      return true
+    }
+    const validateContent = () => {
+      if (!productsFields.value.contenido) {
+        contentState.value = false
+        return 'Este campo es requerido'
+      }
+      contentState.value = true
+      return true
+    }
+    const validateExpirationDate = () => {
+      if (!productsFields.value.fechaVencimiento) {
+        expirationDateState.value = false
+        return 'Este campo es requerido'
+      }
+      expirationDateState.value = true
+      return true
+    }
+    const validateStock = () => {
+      if (!productsFields.value.cantidadDisponible) {
+        stockState.value = false
+        return 'Este campo es requerido'
+      }
+      stockState.value = true
+      return true
+    }
     // const validateEmployee = () => {
     //   if (!prescriptionFields.value.empleadoId) {
     //     employeeState.value = false
@@ -332,15 +334,14 @@ export default {
     //   employeeState.value = true
     //   return true
     // }
-    // const resetArmoryFields = () => {
-    //   showModal.value = false
-    //   nomenclatureState.value = false
-    //   brandState.value = false
-    //   typeWeaponState.value = false
-    //   gaugeState.value = false
-    //   employeeState.value = false
-    //   prescriptionFields.value = JSON.parse(JSON.stringify(weaponsFieldsBlank))
-    // }
+    const resetProductsFields = () => {
+      showModal.value = false
+      nameState.value = false
+      contentState.value = false
+      expirationDateState.value = false
+      stockState.value = false
+      productsFields.value = JSON.parse(JSON.stringify(productsFieldsBlank))
+    }
     return {
       medicalProducts,
       fields,
@@ -348,22 +349,27 @@ export default {
       currentPage,
       filter,
       perPageSelect,
-      weaponsFieldsBlank,
+      productsFieldsBlank,
       productsFields,
       isloading,
       searchValue,
       showModal,
       searchField,
-      //   nomenclatureState,
-      //   brandState,
-      //   typeWeaponState,
-      //   gaugeState,
+      nameState,
+      contentState,
+      expirationDateState,
+      stockState,
       //   employeeState,
 
       onFiltered,
       addPrescription,
       refreshTable,
-      RemovePrescription
+      RemoveProduct,
+      validateName,
+      validateContent,
+      validateExpirationDate,
+      validateStock,
+      resetProductsFields
     }
   }
 }
