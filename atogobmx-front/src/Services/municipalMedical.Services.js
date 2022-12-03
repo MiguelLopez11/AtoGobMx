@@ -69,6 +69,32 @@ export default function MunicipalMedicalServices () {
       callback(response.data)
     })
   }
+  // Products
+  const getMedicalProducts = (callback) => {
+    axios.get(`${BaseUrl}/SERMED_Productos`).then((response) => {
+      callback(response.data)
+    })
+  }
+  const getMedicalProduct = (productoId, callback) => {
+    axios.get(`${BaseUrl}/SERMED_Productos/${productoId}`).then((response) => {
+      callback(response.data)
+    })
+  }
+  const createMedicalProduct = (data, callback) => {
+    axios.post(`${BaseUrl}/SERMED_Productos`, data).then((response) => {
+      callback(response.data)
+    })
+  }
+  const updateMedicalProduct = (data, callback) => {
+    axios.put(`${BaseUrl}/SERMED_Productos/${data.productoId}`, data).then((response) => {
+      callback(response.data)
+    })
+  }
+  const deleteMedicalProduct = (productoId, callback) => {
+    axios.delete(`${BaseUrl}/SERMED_Productos/${productoId}`).then((response) => {
+      callback(response.data)
+    })
+  }
   return {
     getMedicalAppointments,
     getMedicalAppointment,
@@ -83,6 +109,12 @@ export default function MunicipalMedicalServices () {
     createExpedientMedical,
     updateExpedientMedical,
     unfiledExpedient,
-    deleteExpedientMedical
+    deleteExpedientMedical,
+    // Product medical
+    getMedicalProducts,
+    getMedicalProduct,
+    createMedicalProduct,
+    updateMedicalProduct,
+    deleteMedicalProduct
   }
 }

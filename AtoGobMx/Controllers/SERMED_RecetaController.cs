@@ -21,6 +21,7 @@ namespace AtoGobMx.Controllers
         {
             var Recetas = await _context.Receta
                 .Include(i => i.Empleados)
+                .Include(i => i.EstatusReceta)
                 .Where(w => !w.Archivado)
                 .ToListAsync();
             if (Recetas == null)
@@ -35,6 +36,7 @@ namespace AtoGobMx.Controllers
         {
             var Receta = await _context.Receta
                 .Include(i => i.Empleados)
+                .Include(i => i.EstatusReceta)
                 .Where(w => !w.Archivado)
                 .FirstOrDefaultAsync(f => f.RecetaId == RecetaId);
 
@@ -48,7 +50,11 @@ namespace AtoGobMx.Controllers
         [HttpPost]
         public async Task<ActionResult<SERMED_Receta>> PostInventario(SERMED_Receta receta)
         {
+            var estatus = await _context.EstatusReceta
+                .Where(w => w.Nombre == "Pendiente")
+                .FirstOrDefaultAsync();
             receta.FechaAlta = DateTime.Now;
+            receta.EstatusRecetaId = estatus.EstatusRecetaId;
             _context.Receta.Add(receta);
             await _context.SaveChangesAsync();
             return CreatedAtAction("GetRecetaById", new { RecetaId = receta.RecetaId }, receta);

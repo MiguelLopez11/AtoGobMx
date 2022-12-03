@@ -33,7 +33,7 @@
       border-cell
       :loading="isloading"
       :headers="fields"
-      :items="prescriptions"
+      :items="medicalProducts"
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
@@ -56,7 +56,7 @@
             <i class="bi bi-three-dots-vertical"></i>
           </template>
           <b-dropdown-item
-            @click="RemovePrescription(items.recetaId)"
+            @click="RemovePrescription(items.productoId)"
             class="m-1"
             variant="outline-danger"
           >
@@ -67,7 +67,7 @@
             variant="outline-warning"
             :to="{
               name: 'ServiciosMedicos-Receta-Edit',
-              params: { RecetaId: items.recetaId }
+              params: { RecetaId: items.productoId }
             }"
           >
             <i class="bi bi-pencil-square" />
@@ -75,9 +75,17 @@
           </b-dropdown-item>
         </b-dropdown>
       </template>
-      <template #item-status="items">
-        <b-badge :variant="items.estatusReceta.nombre === 'Pendiente' ? 'warning': 'success'">
-        {{items.estatusReceta.nombre}}
+      <template #item-cantidadDisponible="items">
+        <b-badge
+          class="text-white"
+          :variant="
+            items.cantidadDisponible === 0  ? 'danger' : '' || items.cantidadDisponible < 5  ? 'warning' : '' || items.cantidadDisponible > 5 ? 'success' : ''
+          "
+        >
+        <h6 align="center">
+          {{ items.cantidadDisponible }} <br>
+          {{ items.cantidadDisponible === 0  ? 'Se requiere surtir lo mas pronto posible' : '' || items.cantidadDisponible < 5  ? 'Es posible que requiera surtirlo' : '' || items.cantidadDisponible > 5 ? '' : ''  }}
+        </h6>
         </b-badge>
       </template>
     </EasyDataTable>
@@ -90,18 +98,59 @@
       hide-footer
     >
       <Form @submit="addPrescription">
-        <b-row>
+        <b-row cols="2">
           <b-col>
-            <b-form-group class="mt-3" label="Empleado">
-              <b-form-select v-model="prescriptionFields.empleadoId" autofocus>
-                <option
-                  v-for="option in employees"
-                  :key="option.ID"
-                  :value="option.empleadoId"
+            <b-form-group class="mt-3" label="Nombre">
+              <Field name="NameField" :rules="validateArea" as="text">
+                <b-form-input
+                  v-model="productsFields.nombre"
+                  :state="nameState"
                 >
-                  {{ option.nombreCompleto }}, {{ option.departamentos.nombre }}, {{option.area.nombre}}
-                </option>
-              </b-form-select>
+                </b-form-input>
+              </Field>
+              <ErrorMessage class="text-danger" name="NameField"></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Contenido">
+              <Field name="ContentField" :rules="validateArea" as="text">
+                <b-form-input
+                  v-model="productsFields.contenido"
+                  :state="nameState"
+                >
+                </b-form-input>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="ContentField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Fecha de vencimiento">
+              <Field name="ContentField" :rules="validateArea" as="text">
+                <Datepicker
+                  v-model="productsFields.fechaVencimiento"
+                  locale="es"
+                  autoApply
+                  :enableTimePicker="false"
+                  :state="dateWorkState"
+                >
+                </Datepicker>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="ContentField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Stock (Cantidad disponible)">
+              <Field name="ContentField" :rules="validateArea" as="text">
+                <b-form-input v-model="productsFields.cantidadDisponible" :state="nameState">
+                </b-form-input>
+              </Field>
+              <ErrorMessage class="text-danger" name="ContentField"></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
@@ -123,30 +172,29 @@
 </template>
 
 <script>
-import PrescriptionServices from '@/Services/prescription.Services'
-import EmployeeServices from '@/Services/employee.Services'
-import { Form } from 'vee-validate'
+import MunicipalMedicalServices from '@/Services/municipalMedical.Services'
+import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
 import { useRouter } from 'vue-router'
+import Datepicker from '@vuepic/vue-datepicker'
 
 // import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
     Form,
-    // Field,
-    // ErrorMessage,
+    Field,
+    ErrorMessage,
+    Datepicker,
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup () {
     const swal = inject('$swal')
-    const { getPrescriptions, createPrescription, deletePrescription } =
-      PrescriptionServices()
-    const { getEmployeesUnfiled } = EmployeeServices()
-    const prescriptions = ref([])
+    const { getMedicalProducts, createMedicalProduct, deleteMedicalProduct } =
+      MunicipalMedicalServices()
+    const medicalProducts = ref([])
     const showModal = ref(false)
     const redirect = useRouter()
-    const employees = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
     const filter = ref(null)
@@ -154,50 +202,40 @@ export default {
     const isloading = ref(true)
     const searchValue = ref('')
     const searchField = ref('marca')
-    const prescriptionFields = ref({
-      recetaId: 0,
-      empleadoId: null,
-      diagnostico: '',
+    const productsFields = ref({
+      productoId: 0,
+      nombre: '',
+      contenido: '',
+      fechaVencimiento: null,
+      cantidadDisponible: null,
       archivado: false
     })
-    const weaponsFieldsBlank = ref(
-      JSON.parse(JSON.stringify(prescriptionFields))
-    )
+    const weaponsFieldsBlank = ref(JSON.parse(JSON.stringify(productsFields)))
     const fields = ref([
-      { value: 'empleados.nombreCompleto', text: 'Empleado' },
-      { value: 'diagnostico', text: 'Diagnostico' },
-      { value: 'fechaAlta', text: 'Fecha' },
-      { value: 'status', text: 'Estado' },
+      { value: 'nombre', text: 'Nombre' },
+      { value: 'contenido', text: 'Contenido' },
+      { value: 'fechaVencimiento', text: 'Fecha de vencimiento' },
+      { value: 'cantidadDisponible', text: 'Stock(Cantidad disponible)' },
       { value: 'actions', text: 'Acciones' }
     ])
-    getPrescriptions(data => {
-      prescriptions.value = data
-      if (prescriptions.value.length > 0) {
+    getMedicalProducts(data => {
+      medicalProducts.value = data
+      if (medicalProducts.value.length > 0) {
         isloading.value = false
       } else {
-        if (prescriptions.value.length <= 0) {
+        if (medicalProducts.value.length <= 0) {
           isloading.value = false
         }
       }
     })
-    getEmployeesUnfiled(data => {
-      employees.value = data
-      if (data.length === 0) {
-        swal.fire({
-          title: '¡No se encuentran empleados!',
-          text: 'Registre un empleado al que se pueda asignar un arma',
-          icon: 'warning'
-        })
-      }
-    })
     const refreshTable = () => {
       isloading.value = true
-      getPrescriptions(data => {
-        prescriptions.value = data
-        if (prescriptions.value.length > 0) {
+      getMedicalProducts(data => {
+        medicalProducts.value = data
+        if (medicalProducts.value.length > 0) {
           isloading.value = false
         } else {
-          if (prescriptions.value.length <= 0) {
+          if (medicalProducts.value.length <= 0) {
             isloading.value = false
           }
         }
@@ -205,7 +243,7 @@ export default {
       return 'datos recargados'
     }
     const addPrescription = () => {
-      createPrescription(prescriptionFields.value, data => {
+      createMedicalProduct(productsFields.value, data => {
         swal.fire({
           title: 'Receta registrada correctamente!',
           text: 'La receta se ha registrado al sistema satisfactoriamente.',
@@ -240,7 +278,7 @@ export default {
               })
               .then(result => {
                 if (result.isConfirmed) {
-                  deletePrescription(recetaId, data => {
+                  deleteMedicalProduct(recetaId, data => {
                     refreshTable()
                   })
                 }
@@ -255,7 +293,7 @@ export default {
     }
     // VALIDATIONS
     // const validateNomeclature = () => {
-    //   if (!prescriptionFields.value.nomenclatura) {
+    //   if (!productsFields.value.nomenclatura) {
     //     nomenclatureState.value = false
     //     return 'Este campo es requerido'
     //   }
@@ -304,15 +342,14 @@ export default {
     //   prescriptionFields.value = JSON.parse(JSON.stringify(weaponsFieldsBlank))
     // }
     return {
-      prescriptions,
-      employees,
+      medicalProducts,
       fields,
       perPage,
       currentPage,
       filter,
       perPageSelect,
       weaponsFieldsBlank,
-      prescriptionFields,
+      productsFields,
       isloading,
       searchValue,
       showModal,

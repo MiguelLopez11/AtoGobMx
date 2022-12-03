@@ -38,7 +38,7 @@ namespace AtoGobMx.Controllers
             return Ok(estatus);
         }
         [HttpPost]
-        public async Task<ActionResult<PAT_EstatusVehiculo>> PostInventario(PAT_EstatusVehiculo estatus)
+        public async Task<ActionResult<PAT_EstatusVehiculo>> PostEstatusVehiculo(PAT_EstatusVehiculo estatus)
         {
             _context.EstatusVehiculo.Add(estatus);
             await _context.SaveChangesAsync();
@@ -66,7 +66,7 @@ namespace AtoGobMx.Controllers
             return Ok("Estatus actualizado correctamente");
         }
         [HttpDelete("{EstatusVehiculoId}")]
-        public async Task<IActionResult> DeleteInventario(int EstatusVehiculoId)
+        public async Task<IActionResult> DeleteEstatusVehiculo(int EstatusVehiculoId)
         {
             var estatus = await _context.EstatusVehiculo
                 .FirstOrDefaultAsync(f => f.EstatusVehiculoId == EstatusVehiculoId);

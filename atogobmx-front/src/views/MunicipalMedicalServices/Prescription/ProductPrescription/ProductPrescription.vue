@@ -98,32 +98,26 @@
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Cantidad">
-              <Field name="DiagnosticField" :rules="validateNomeclature" as="text">
+              <Field name="AmountField" :rules="validateAmount" as="text">
                 <b-form-input
                   v-model="productPrescriptionFields.cantidad"
-                  :state="nomenclatureState"
+                  :state="amountState"
+                  type="number"
                 >
                 </b-form-input>
               </Field>
               <ErrorMessage
                 class="text-danger"
-                name="DiagnosticField"
+                name="AmountField"
               />
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Descripción">
-              <Field name="DiagnosticField" :rules="validateNomeclature" as="text">
                 <b-form-textarea
                   v-model="productPrescriptionFields.descripcion"
-                  :state="nomenclatureState"
                 >
                 </b-form-textarea>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="DiagnosticField"
-              />
             </b-form-group>
           </b-col>
         </b-row>
@@ -171,6 +165,7 @@ export default {
     const productPrescriptions = ref([])
     const products = ref([])
     const productState = ref(false)
+    const amountState = ref(false)
     const perPage = ref(5)
     const currentPage = ref(1)
     const filter = ref(null)
@@ -292,13 +287,27 @@ export default {
       validateState()
       return true
     }
+    const validateAmount = () => {
+      if (!productPrescriptionFields.value.cantidad) {
+        validateState()
+        return 'Este campo es requerido'
+      }
+      if (productPrescriptionFields.value.cantidad < 1) {
+        validateState()
+        return 'Se necesita al menos 1'
+      }
+      validateState()
+      return true
+    }
     const validateState = () => {
       productState.value = productPrescriptionFields.value.productoId !== null
+      amountState.value = productPrescriptionFields.value.cantidad !== null && productPrescriptionFields.value.cantidad > 0
     }
     return {
       productPrescriptions,
       products,
       productState,
+      amountState,
       fields,
       perPage,
       currentPage,
@@ -316,7 +325,8 @@ export default {
       refreshTable,
       RemoveProductPrescription,
       resetProductPrescriptionFields,
-      validateProduct
+      validateProduct,
+      validateAmount
     }
   }
 }
