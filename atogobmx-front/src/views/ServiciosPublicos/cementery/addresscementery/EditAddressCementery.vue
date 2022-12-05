@@ -9,7 +9,7 @@
       </div>
       <Form @submit="onUpdateAddressCementeryService">
         <b-row cols="2">
-          <!-- 1 -->
+          <!-- Agregar nombre -->
           <b-col>
             <b-form-group class="mt-3" label="Nombre del cementerio">
               <Field
@@ -29,7 +29,7 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!-- 2 -->
+          <!-- Agregar municipio -->
           <b-col>
             <b-form-group class="mt-3" label="Municipio">
               <Field
@@ -49,7 +49,7 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!-- 3 -->
+          <!-- Agregar localidad -->
           <b-col>
             <b-form-group class="mt-3" label="Localidad">
               <Field name="LocationField" :rules="validateLocation" as="text">
@@ -65,7 +65,7 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!-- 4 -->
+          <!-- Agregar calle -->
           <b-col>
             <b-form-group class="mt-3" label="Calle">
               <Field name="StreetField" :rules="validateStreet" as="text">
@@ -82,7 +82,7 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!-- 5 -->
+          <!-- Agregar numero exterior -->
           <b-col>
             <b-form-group class="mt-3" label="Numero exterior">
               <Field
@@ -103,6 +103,29 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
+          <GMapMap
+            :center="center"
+            map-type-id="satellite"
+            :zoom="20"
+            :options="{
+              zoomControl: true,
+              mapTypeControl: false,
+              scaleControl: false,
+              rotateControl: true,
+              disableDefaultUi: false
+            }"
+            style="width: 100%; height: 500px"
+          >
+            <GMapMarker
+              :zoom="10"
+              :key="index"
+              v-for="(m, index) in markers"
+              :position="m.position"
+              :clickable="true"
+              :draggable="true"
+              @click="center = m.position"
+            /> </GMapMap
+          >
 
         </b-row>
         <b-row align-h="end">
@@ -153,6 +176,17 @@ export default {
       { text: 'Direccion cementerio', to: '/ServiciosPublicos/DireccionCementerios/list' },
       { text: 'Editar-Estatus Alumbrado' }
     ])
+
+    const markers = ref([
+      {
+        position: {
+          lat: 20.5546629,
+          lng: -102.4953904
+        }
+      }
+    ])
+    const center = ref({ lat: 20.5546629, lng: -102.4953904 })
+
     const onUpdateAddressCementeryService = () => {
       updateAddressCementery(addressCementeryService.value, (data) => {})
       swal.fire({
@@ -165,6 +199,7 @@ export default {
         }
       })
     }
+
     getAddressCementeryById(router.params.DireccionId, (data) => {
       addressCementeryService.value = data
     })
@@ -290,6 +325,8 @@ export default {
       LocationState,
       StreetState,
       NumberOutsideState,
+      markers,
+      center,
       //   router
 
       onUpdateAddressCementeryService,

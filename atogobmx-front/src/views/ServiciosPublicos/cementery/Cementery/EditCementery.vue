@@ -83,6 +83,29 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
+          <GMapMap
+                :center="center"
+                map-type-id="satellite"
+                :zoom="20"
+                :options="{
+                  zoomControl: true,
+                  mapTypeControl: false,
+                  scaleControl: false,
+                  rotateControl: true,
+                  disableDefaultUi: false
+                }"
+                style="width: 100%; height: 500px"
+              >
+                <GMapMarker
+                  :zoom="10"
+                  :key="index"
+                  v-for="(m, index) in markers"
+                  :position="m.position"
+                  :clickable="true"
+                  :draggable="true"
+                  @click="center = m.position"
+                />
+              </GMapMap>
 
         </b-row>
         <b-row align-h="end">
@@ -132,6 +155,17 @@ export default {
       { text: 'Cementerios', to: '/ServiciosPublicos/Cementerios/list' },
       { text: 'Editar-cementerios' }
     ])
+
+    const markers = ref([
+      {
+        position: {
+          lat: 20.5546629,
+          lng: -102.4953904
+        }
+      }
+    ])
+    const center = ref({ lat: 20.5546629, lng: -102.4953904 })
+
     const onUpdateCementeryService = () => {
       updateCementery(cementeryService.value, (data) => {})
       swal.fire({
@@ -144,6 +178,7 @@ export default {
         }
       })
     }
+
     getCementeryById(router.params.CementeriosId, (data) => {
       cementeryService.value = data
     })
@@ -246,6 +281,8 @@ export default {
       SpacesState,
       MeterState,
       AvailableState,
+      markers,
+      center,
       //   router
 
       onUpdateCementeryService,

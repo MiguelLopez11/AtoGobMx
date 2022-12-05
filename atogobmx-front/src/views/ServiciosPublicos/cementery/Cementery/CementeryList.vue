@@ -185,7 +185,7 @@
                   rotateControl: true,
                   disableDefaultUi: false
                 }"
-                style="width: 1000px; height: 500px"
+                style="width: 100%; height: 500px"
               >
                 <GMapMarker
                   :zoom="10"
@@ -270,6 +270,7 @@ export default {
     const CementeryServiceFieldsBlank = ref(
       JSON.parse(JSON.stringify(cementeryServiceFields))
     )
+
     const markers = ref([
       {
         position: {

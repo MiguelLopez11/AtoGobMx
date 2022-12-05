@@ -74,57 +74,181 @@ namespace AtoGobMx.Controllers
             //    .Where(w => !w.Archivado)
             //    .FirstOrDefaultAsync(f => f.ExpedienteAlumbradoId == ExpedienteAlumbradoID);
             var html = $@"
-               <!DOCTYPE html>
-               <html lang=""en"">
-               <head>
-                <style>
-                    .registros{{
-                        margin: 90px;
-                        columns: 2;
-                        padding-left: 15px;
-                        border-top: 1px solid #5D6975;
-                        border-bottom: 1px solid  #5D6975;
-                        line-height: 5.4em;
-                    }}
-                    .alinear2{{
-                        margin: 90px;
-                        padding-left: 420px;
-                        transition: .5s;
-                        line-height: 4.4em;
-                        border-top: 1px solid  #5D6975;
-                        border-bottom: 1px solid  #5D6975;
-                        background-color: #F2F3F4 ;
-                    }}
-                    .card2{{
-                        margin: 90px;
-                        line-height: 4.4em;
-                        border-top: 1px solid  #5D6975;
-                    }}
-                    .alinear{{
-                        text-align: center;
-                    }}
-                </style>
-               </head>
-              <body>
-                <div class= >
-                    <img src= >
-                </div>
-                <h1 class='alinear'>Reporte de alumbrado publico </h1>
-                <h3 class='alinear2'>Fecha:  </h3>
-                <div>
-                    <div class='registros'>
-                        <h3>Domicilio: </h3>
-                        <h3>Localida: </h3>
-                        <h3>Nombre area: </h3>
-                        <h3>Departamento: </h3>
-                    </div>
+              <!DOCTYPE html>
+<html lang=""en"" dir=""ltr"">
+  <head>
+    <meta charset=""utf-8"" />
+    <title>Reporte PDF</title>
+    <link
+      href=""https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css""
+      rel=""stylesheet""
+      integrity=""sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65""
+      crossorigin=""anonymous""
+    />
+  </head>
+  <body>
+    <h1 style=""text-align: center;"">
+      Reporte de fallas en alumbrado publico &#128161;
+    </h1>
+    <table
+      class=""table table-striped table-striped table-bordered""
+      style=""
+        width: 30%;
+        text-align: center;
+        margin: 60px 0 0 702px;
+        border: black 3px solid;
+      ""
+    >
+      <tr style=""border: black 3px solid; background-color: #A5F1E9;"">
+        <th scope=""col"">Fecha</th>
+      </tr>
+      <tbody>
+        <tr>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
 
-                    <div class='card2'>
-                        <h3>Descripcion Solucion: </h3>
-                    </div>
-                </div>
-              </body>
-              </html>
+    <table
+      class=""table table-striped table-striped table-bordered""
+      style=""
+        width: 97%;
+        text-align: center;
+        margin: 25px 0 0 10px;
+        border: black 3px solid;
+      ""
+    >
+      <tr style=""border: black 3px solid; background-color: #A5F1E9"">
+        <th scope=""col"">Descripcion solucion</th>
+      </tr>
+      <tbody>
+        <tr>
+          <td style=""text-align: left;""></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table
+      class=""table table-striped table-striped table-bordered""
+      style=""
+        width: 25%;
+        text-align: center;
+        margin: 25px 0 0 10px;
+        border: black 3px solid;
+      ""
+    >
+      <tr style=""border: black 3px solid; background-color: #A5F1E9;"">
+        <th scope=""col"">Nomenclatura</th>
+      </tr>
+      <tbody>
+        <tr>
+          <td style=""text-align: left;""></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table
+      class=""table table-striped table-striped table-bordered""
+      style=""
+        width: 25%;
+        text-align: center;
+        margin: -62px 0 0 380px;
+        border: black 3px solid;
+      ""
+    >
+      <tr style=""border: black 3px solid; background-color: #A5F1E9;"">
+        <th scope=""col"">Lugar publico</th>
+      </tr>
+      <tbody>
+        <tr>
+          <td style=""text-align: left;""></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table
+      class=""table table-striped table-striped table-bordered""
+      style=""
+        width: 25%;
+        text-align: center;
+        margin: -62px 0 0 755px;
+        border: black 3px solid;
+      ""
+    >
+      <tr style=""border: black 3px solid; background-color: #A5F1E9;"">
+        <th scope=""col"">Localidad</th>
+      </tr>
+      <tbody>
+        <tr>
+          <td style=""text-align: left;""></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table
+      class=""table table-striped table-striped table-bordered""
+      style=""
+        width: 25%;
+        text-align: center;
+        margin: 25px 0 0 10px;
+        border: black 3px solid;
+      ""
+    >
+      <tr style=""border: black 3px solid; background-color: #A5F1E9;"">
+        <th scope=""col"">Nombre del departamento</th>
+      </tr>
+      <tbody>
+        <tr>
+          <td style=""text-align: left;""></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table
+      class=""table table-striped table-striped table-bordered""
+      style=""
+        width: 25%;
+        text-align: center;
+        margin: -62px 0 0 380px;
+        border: black 3px solid;
+      ""
+    >
+      <tr style=""border: black 3px solid; background-color: #A5F1E9;"">
+        <th scope=""col"">Nombre del are</th>
+      </tr>
+      <tbody>
+        <tr>
+          <td style=""text-align: left;""></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table
+      class=""table table-striped table-striped table-bordered""
+      style=""
+        width: 25%;
+        text-align: center;
+        margin: -62px 0 0 755px;
+        border: black 3px solid;
+      ""
+    >
+      <tr style=""border: black 3px solid; background-color: #A5F1E9;"">
+        <th scope=""col"">Nombre del empleado</th>
+      </tr>
+      <tbody>
+        <tr>
+          <td style=""text-align: left;""></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="" >
+      < p > putos </ p >
+    </ div >
+  </ body >
+</ html >
+
+
               ";
             //{ expefalla.FechaAlta}
             GlobalSettings globalSettings = new GlobalSettings();
