@@ -171,12 +171,11 @@ export default {
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('estatusVehiculoId')
+    const searchField = ref('vehiculoId')
     const NameState = ref(false)
     const lightingVehicleFields = ref({
       vehiculoAlumbradoId: 0,
       expedienteAlumbradoId: props.expedienteAlumbradoId,
-      estatusVehiculoId: 0,
       vehiculoId: 0,
       archivado: false
     })
@@ -229,7 +228,7 @@ export default {
       currentPage.value = 1
     }
 
-    const validateName = () => {
+    const validateVehicle = () => {
       if (!vehicleSelected.value.length === 0) {
         NameState.value = false
         return 'Este campo es requerido'
@@ -257,7 +256,7 @@ export default {
 
     const addLightingVehicle = () => {
       for (let i = 0; i < vehicleSelected.value.length; i++) {
-        lightingVehicleFields.value.empleadoId = vehicleSelected.value[i]
+        lightingVehicleFields.value.vehiculoId = vehicleSelected.value[i]
         createLightingVehicle(lightingVehicleFields.value, data => {
           refreshTable()
         })
@@ -323,7 +322,7 @@ export default {
       addLightingVehicle,
       RemoveLightingVehicle,
       refreshTable,
-      validateName,
+      validateVehicle,
       resetLightingVehicleFields
     }
   }
