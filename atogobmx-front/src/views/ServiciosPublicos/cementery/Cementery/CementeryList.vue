@@ -264,6 +264,8 @@ export default {
       numeroEspasios: null,
       metrosCorrespondientes: null,
       espaciosDisponibles: null,
+      latitud: null,
+      longitud: null,
       archivado: false
     })
 
@@ -279,14 +281,6 @@ export default {
         }
       }
     ])
-
-    // GEvent.addListener(map, 'click', function (overlay, point) {
-    //   if (point) {
-    //     marker.setPoint(point)
-    //     document.posicion.x.value = point.x
-    //     document.posicion.y.value = point.y
-    //   }
-    // })
 
     const center = ref({ lat: 20.5546629, lng: -102.4953904 })
     const fields = ref([
@@ -429,6 +423,8 @@ export default {
     }
 
     const addCementeryService = () => {
+      cementeryServiceFields.value.latitud = markers.value[0].position.lat
+      cementeryServiceFields.value.longitud = markers.value[0].position.lng
       createCementery(cementeryServiceFields.value, data => {
         refreshTable()
         swal.fire({

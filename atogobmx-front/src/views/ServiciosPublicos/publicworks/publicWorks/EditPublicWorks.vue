@@ -36,7 +36,6 @@
                 <b-form-input
                   v-model="publicWorks.latitud"
                   :state="LatitudeState"
-                  type="number"
                 ></b-form-input>
               </Field>
               <ErrorMessage
@@ -56,7 +55,6 @@
                 <b-form-input
                   v-model="publicWorks.longitud"
                   :state="LengthState"
-                  type="number"
                 ></b-form-input>
               </Field>
               <ErrorMessage
@@ -182,7 +180,7 @@ export default {
       publicWorks.value = data
     })
 
-    worksStatus(data => {
+    getWorksStatus(data => {
       publicWorks.value = data
       if (data.length === 0) {
         swal.fire({
@@ -258,21 +256,17 @@ export default {
     }
 
     const validateState = () => {
-      // eslint-disable-next-line no-unneeded-ternary
-      NameWorksState.value = publicWorks.value.nombre === '' ? false : true
-      // eslint-disable-next-line no-unneeded-ternary
-      LatitudeState.value = publicWorks.value.latitud === '' ? false : true
-      // eslint-disable-next-line no-unneeded-ternary
-      LengthState.value = publicWorks.value.longitud === '' ? false : true
-      // eslint-disable-next-line no-unneeded-ternary
-      DescriptionState.value = publicWorks.value.descripcion === '' ? false : true
-      // eslint-disable-next-line no-unneeded-ternary
-      WorkStatusState.value = publicWorks.value.estatusObraId === '' ? false : true
+      NameWorksState.value = publicWorks.value.nombre !== '' || publicWorks.value.nombre !== null
+      LatitudeState.value = publicWorks.value.latitud !== '' || publicWorks.value.latitud !== null
+      LengthState.value = publicWorks.value.longitud !== '' || publicWorks.value.longitud !== null
+      DescriptionState.value = publicWorks.value.descripcion !== '' || publicWorks.value.descripcion !== null
+      WorkStatusState.value = publicWorks.value.estatusObraId !== '' || publicWorks.value.estatusObraId !== null
     }
 
     return {
       publicWorks,
       breadcrumbItems,
+      worksStatus,
       NameWorksState,
       LatitudeState,
       LengthState,

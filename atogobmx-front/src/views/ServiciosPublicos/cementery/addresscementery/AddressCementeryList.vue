@@ -26,7 +26,7 @@
       >
         <!-- v-b-modal.modal-cementery -->
         <i class="bi bi-person-plus-fill"></i>
-        Agregar Direccion
+        Agregar Cementerio
       </b-button>
     </b-row>
     <EasyDataTable
@@ -183,6 +183,8 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
+        </b-row>
+        <b-row>
           <GMapMap
             :center="center"
             map-type-id="satellite"
@@ -207,7 +209,6 @@
             /> </GMapMap
           >
         </b-row>
-
         <b-row align-h="end">
           <b-button
             class="w-auto m-2 text-white"
@@ -275,6 +276,8 @@ export default {
       localidad: null,
       calle: null,
       numeroExterior: null,
+      latitud: 0,
+      longitud: 0,
       archivado: false
     })
 
@@ -468,6 +471,9 @@ export default {
     }
 
     const addCementeryService = () => {
+      console.log(markers.value[0].position.lat, markers.value[0].position.lng)
+      // addressCementeryService.value[0].latitud = markers.value[0].position.lat
+      // addressCementeryService.value[0].longitud = markers.value[0].position.lng
       createAddressCementery(addressCementeryServiceFields.value, data => {
         refreshTable()
         swal.fire({
