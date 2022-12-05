@@ -185,7 +185,7 @@
                   rotateControl: true,
                   disableDefaultUi: false
                 }"
-                style="width: 1000px; height: 500px"
+                style="width: 100%; height: 500px"
               >
                 <GMapMarker
                   :zoom="10"
@@ -270,6 +270,7 @@ export default {
     const CementeryServiceFieldsBlank = ref(
       JSON.parse(JSON.stringify(cementeryServiceFields))
     )
+
     const markers = ref([
       {
         position: {
@@ -278,6 +279,15 @@ export default {
         }
       }
     ])
+
+    // GEvent.addListener(map, 'click', function (overlay, point) {
+    //   if (point) {
+    //     marker.setPoint(point)
+    //     document.posicion.x.value = point.x
+    //     document.posicion.y.value = point.y
+    //   }
+    // })
+
     const center = ref({ lat: 20.5546629, lng: -102.4953904 })
     const fields = ref([
       { value: 'nombrePropietario', text: 'Nombre de propietario' },

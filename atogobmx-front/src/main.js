@@ -27,6 +27,6 @@ app.component('EasyDataTable', Vue3EasyDataTable)
 app.component('v-select', vSelect)
 app.use(router).use(BootstrapVue3).use(VueToast).use(VueSweetalert2).use(VueGoogleMaps, {
   load: {
-    key: 'AIzaSyAu9G_tPHiWvYnf-qkessxqcv4pQaJPhfY'
+    key: 'AIzaSyCYAwe7Fk4PQLI3bBBqxUViN4IOXVGd_z0'
   }
 }).use(vueAwesomeSidebar).mount('#app')

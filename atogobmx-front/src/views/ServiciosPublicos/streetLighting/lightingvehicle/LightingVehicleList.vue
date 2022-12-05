@@ -11,12 +11,12 @@
       <b-button
         variant="primary"
         style="
-            background-color: rgb(94,80,238);
-            height: 50px;
-            width: auto;
-            font-size: 18px;
-            margin-right: 15px;
-            margin-left: 20px;
+          background-color: rgb(94, 80, 238);
+          height: 50px;
+          width: auto;
+          font-size: 18px;
+          margin-right: 15px;
+          margin-left: 20px;
         "
         @click="showModal = !showModal"
         type="submit"
@@ -37,31 +37,18 @@
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
-      theme-color="#7367f0"
+      :table-height="330"
     >
       <template #header-actions="header">
         {{ header.text }}
       </template>
       <template #item-actions="items">
-        <b-dropdown
-          id="ActionsDropdown"
-          size="lg"
-          style="text-color: black"
-          variant="link"
-          toggle-class="text-decoration-none"
-          dropright
-          no-caret
-        >
-          <template #button-content>
-            <i class="bi bi-three-dots-vertical"></i>
-          </template>
-          <b-dropdown-item
-            @click="RemoveLightingVehicle(items.vehiculoAlumbradoId)"
-            class="m-1"
-            variant="outline-danger"
-            ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
-          >
-        </b-dropdown>
+        <b-button
+          @click="RemoveLightingVehicle(items.vehiculoAlumbradoId)"
+          class="m-1"
+          variant="outline-danger"
+          ><i class="bi bi-trash3"></i
+        ></b-button>
       </template>
     </EasyDataTable>
     <b-modal
@@ -74,25 +61,59 @@
       lazy
     >
       <Form @submit="addLightingVehicle">
-        <b-row cols="2">
+        <b-row>
           <!-- Nombre del vehiculo -->
           <b-col>
-            <b-form-group class="mt-3" label="Veiculo">
+            <b-form-group
+              class="mt-3"
+              label="Selecciona un o varios vehículo(s):"
+            >
               <Field name="VehicleField" :rules="validateVehicle" as="text">
                 <v-select
                   multiple
                   v-model="vehicleSelected"
-                  :options="statusVehicles"
-                  label="Vehiculo"
-                  :key="statusVehicles.estatusVehiculoId"
-                  :reduce="statusVehicles => statusVehicles.estatusVehiculoId"
-                />
+                  :options="vehicles"
+                  :key="vehicles.vehiculoId"
+                  :reduce="vehicles => vehicles.vehiculoId"
+                  label="color"
+                >
+                  <template
+                    v-slot:option="{
+                      marca,
+                      modelo,
+                      añoLanzamiento,
+                      color,
+                      placa
+                    }"
+                  >
+                    <span
+                      >{{ marca }}-{{ modelo }}-{{ añoLanzamiento }} -
+                      {{ color }}- {{ placa }}</span
+                    >
+                  </template>
+                  <template
+                    v-slot:selected-option="{
+                      marca,
+                      modelo,
+                      añoLanzamiento,
+                      color,
+                      placa
+                    }"
+                  >
+                    <span
+                      >{{ marca }}-{{ modelo }}-{{ añoLanzamiento }} -
+                      {{ color }}- {{ placa }}</span
+                    >
+                  </template>
+                </v-select>
               </Field>
-              <ErrorMessage class="text-danger" name="VehicleField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="VehicleField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
-
         <b-row align-h="end">
           <b-button
             class="w-auto m-2 text-white"
@@ -132,16 +153,17 @@ export default {
   setup (props) {
     const swal = inject('$swal')
     const showModal = ref(false)
-    const {
-      getLightingVehicle,
-      createLightingVehicle,
-      deleteLightingVehicle
-    } = LightingVehicleServices()
-    const { getEstatusVehicles } = VehiclesServices()
+    const { getLightingVehicle, createLightingVehicle, deleteLightingVehicle } =
+      LightingVehicleServices()
+    const { getVehicles } = VehiclesServices()
     // const { getVehicles } = VehiclesServices()
     const lightingvehicle = ref([])
-    const statusVehicles = ref([])
+    const vehicles = ref([])
     // const vehicles = ref([])
+    const vehicle = ref({
+      marca: '',
+      submarca: ''
+    })
     const vehicleSelected = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
@@ -150,7 +172,7 @@ export default {
     const isloading = ref(true)
     const searchValue = ref('')
     const searchField = ref('estatusVehiculoId')
-    // const NameState = ref(false)
+    const NameState = ref(false)
     const lightingVehicleFields = ref({
       vehiculoAlumbradoId: 0,
       expedienteAlumbradoId: props.expedienteAlumbradoId,
@@ -158,14 +180,15 @@ export default {
       vehiculoId: 0,
       archivado: false
     })
-
-    getEstatusVehicles(data => {
-      statusVehicles.value = data
+    const getFieldText = item => {
+      return `${item.marca} - ${item.submarca}`
+    }
+    getVehicles(data => {
+      vehicles.value = data
       if (data.length === 0) {
         swal.fire({
           title: 'No se encuentra un vehiculo',
-          text:
-            'No se encuentran vehiculos registrados en el departamento seleccionado, registre primero un vehiculo para continuar',
+          text: 'No se encuentran vehiculos registrados en el departamento seleccionado, registre primero un vehiculo para continuar',
           icon: 'warning'
         })
       }
@@ -177,8 +200,8 @@ export default {
 
     const fields = ref([
       { value: 'vehiculoAlumbradoId', text: 'ID', sortable: true },
-      { value: 'estatusVehiculo.nombre', text: 'Vehiculo' },
-      //   { value: 'vehiculoId', text: 'Marca' },
+      { value: 'estatusVehiculoId', text: 'Vehiculo' },
+      { value: 'vehiculoId', text: 'Marca' },
       { value: 'actions', text: 'Acciones' }
     ])
 
@@ -187,7 +210,7 @@ export default {
       lightingVehicleFields.value = JSON.parse(
         JSON.stringify(LightingVehicleFieldsBlank)
       )
-    //   NameState.value = false
+      NameState.value = false
     }
 
     getLightingVehicle(data => {
@@ -205,6 +228,17 @@ export default {
     const onFiltered = filteredItems => {
       currentPage.value = 1
     }
+
+    const validateName = () => {
+      if (!vehicleSelected.value.length === 0) {
+        NameState.value = false
+        return 'Este campo es requerido'
+      }
+
+      NameState.value = true
+      return true
+    }
+
     const refreshTable = () => {
       isloading.value = true
       getLightingVehicle(data => {
@@ -224,11 +258,9 @@ export default {
     const addLightingVehicle = () => {
       for (let i = 0; i < vehicleSelected.value.length; i++) {
         lightingVehicleFields.value.empleadoId = vehicleSelected.value[i]
-        createLightingVehicle(
-          lightingVehicleFields.value,
-          data => {
-            refreshTable()
-          })
+        createLightingVehicle(lightingVehicleFields.value, data => {
+          refreshTable()
+        })
       }
       swal.fire({
         title: '¡El vehiculo se agregado correctamente!',
@@ -259,8 +291,7 @@ export default {
             })
             swal.fire({
               title: '¡vehiculo archivado!',
-              text:
-                'El vehiculo ha sido archivado satisfactoriamente.',
+              text: 'El vehiculo ha sido archivado satisfactoriamente.',
               icon: 'success'
             })
           } else {
@@ -282,15 +313,17 @@ export default {
       searchField,
       LightingVehicleFieldsBlank,
       fields,
-      //   NameState,
-      statusVehicles,
+      NameState,
+      vehicles,
       vehicleSelected,
+      vehicle,
+      getFieldText,
 
       onFiltered,
       addLightingVehicle,
       RemoveLightingVehicle,
       refreshTable,
-      //   validateName,
+      validateName,
       resetLightingVehicleFields
     }
   }

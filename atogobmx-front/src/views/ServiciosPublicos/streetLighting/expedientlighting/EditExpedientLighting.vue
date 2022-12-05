@@ -9,8 +9,57 @@
           <b-card>
             <Form @submit="onUpdateExpedientLighting">
               <b-row cols="2">
-                <!--Lugar publico-->
+                <!--Nomenclatura-->
                 <b-col>
+                  <b-form-group class="mt-3" label="Nomenclatura">
+                    <Field
+                      name="NomenclatureField"
+                      :rules="validateNomenclature"
+                      as="text"
+                    >
+                      <b-form-input
+                        v-model="expedientLighting.nomenclatura"
+                        :state="NomenclatureState"
+                      />
+                    </Field>
+                    <ErrorMessage name="NomenclatureField">
+                      <span class="text-danger">Este campo es requerido </span>
+                      <i class="bi bi-exclamation-circle"></i
+                    ></ErrorMessage>
+                  </b-form-group>
+                </b-col>
+                <!--Fecha alta-->
+                <b-col>
+                  <b-form-group class="mt-3" label="Fecha Alta">
+                    <Field name="HighDateField" :rules="validateHighDate" as="">
+                      <Datepicker
+                        disabled
+                        locale="es"
+                        name="date"
+                        text-input
+                        v-model="expedientLighting.fechaAlta"
+                        :state="HighDateState"
+                      ></Datepicker>
+                    </Field>
+                    <ErrorMessage name="HighDateField">
+                      <span class="text-danger">Este campo es requerido </span>
+                      <i class="bi bi-exclamation-circle"></i>
+                    </ErrorMessage>
+                  </b-form-group>
+                </b-col>
+                <!--Checkbox-->
+                <b-col>
+                  <b-form-group horizontal class="mt-3" label="¿Es un lugar Público?">
+                      <b-form-checkbox
+                        style=""
+                        size="lg"
+                        v-model="isPublicPlace"
+                        :state="PublicPlaceState"
+                      />
+                  </b-form-group>
+                </b-col>
+                <!--Lugar publico-->
+                <b-col v-if="isPublicPlace">
                   <b-form-group class="mt-3" label="Lugar Publico">
                     <Field
                       name="PublicPlaceField"
@@ -29,7 +78,7 @@
                   </b-form-group>
                 </b-col>
                 <!--Localidad-->
-                <b-col>
+                <b-col v-if="isPublicPlace">
                   <b-form-group class="mt-3" label="Localidad">
                     <Field
                       name="LocationField"
@@ -47,26 +96,8 @@
                     ></ErrorMessage>
                   </b-form-group>
                 </b-col>
-                <!--Fecha alta-->
-                <b-col>
-                  <b-form-group class="mt-3" label="Fecha Alta">
-                    <Field name="HighDateField" :rules="validateHighDate" as="">
-                      <Datepicker
-                        locale="es"
-                        name="date"
-                        text-input
-                        v-model="expedientLighting.fechaAlta"
-                        :state="HighDateState"
-                      ></Datepicker>
-                    </Field>
-                    <ErrorMessage name="HighDateField">
-                      <span class="text-danger">Este campo es requerido </span>
-                      <i class="bi bi-exclamation-circle"></i>
-                    </ErrorMessage>
-                  </b-form-group>
-                </b-col>
                 <!--Departamento-->
-                <b-col>
+                <b-col v-if="!isPublicPlace">
                   <b-form-group class="mt-3" label="Departamento">
                     <Field
                       name="DepartamentField"
@@ -80,7 +111,7 @@
                         value-field="departamentoId"
                         text-field="nombre"
                         :state="departamentState"
-                        @input="getAreas(EmployeesFields.departamentoId)"
+                        @input="getAreas(employee.departamentoId)"
                       >
                       </b-form-select>
                     </Field>
@@ -91,7 +122,7 @@
                   </b-form-group>
                 </b-col>
                 <!--Area-->
-                <b-col>
+                <b-col v-if="!isPublicPlace">
                   <b-form-group class="mt-3" label="Area">
                     <Field name="AreaField" :rules="validateArea" as="number">
                       <b-form-select
@@ -101,7 +132,6 @@
                         value-field="areaId"
                         text-field="nombre"
                         :state="areaState"
-                        @input="getWorkStation(EmployeesFields.areaId)"
                       >
                       </b-form-select>
                     </Field>
@@ -150,7 +180,9 @@
         <b-tab title="Empleados">
           <EmployeeLighting :expedienteAlumbradoId="expedienteAlumbradoId" />
         </b-tab>
-        <b-tab title="Vehiculos"> </b-tab>
+        <b-tab title="Vehiculos">
+          <VehiclesLighting :expedienteAlumbradoId="expedienteAlumbradoId" />
+        </b-tab>
       </b-tabs>
     </b-card>
   </b-card>
@@ -161,6 +193,7 @@ import ExpedientlightingServices from '@/Services/expedientlighting.Services'
 import AreaServices from '@/Services/area.Services'
 import DepartamentServices from '@/Services/departament.Services'
 import EmployeeLighting from '@/views/ServiciosPublicos/streetLighting/lightingEmployee/LightingEmployeeList.vue'
+import VehiclesLighting from '@/views/ServiciosPublicos/streetLighting/lightingvehicle/LightingVehicleList.vue'
 import { Field, Form, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -172,11 +205,12 @@ export default {
     Field,
     Form,
     ErrorMessage,
-    EmployeeLighting
+    EmployeeLighting,
+    VehiclesLighting
   },
   setup (props) {
     const swal = inject('$swal')
-    const { getAreasByDepartament } = AreaServices()
+    const { getAreas } = AreaServices()
     const { getDepartaments } = DepartamentServices()
     const { getExpedientLightingById, updatExpedientLighting } =
       ExpedientlightingServices()
@@ -188,12 +222,14 @@ export default {
     const expedienteAlumbradoId = ref(
       parseInt(router.params.ExpedienteAlumbradoId)
     )
+    const isPublicPlace = ref(true)
     const PublicPlaceState = ref(false)
     const LocationState = ref(false)
     const HighDateState = ref(false)
     const departamentState = ref(false)
     const areaState = ref(false)
     const DescriptionSolutionState = ref(false)
+    const NomenclatureState = ref(false)
 
     getExpedientLightingById(expedienteAlumbradoId.value, data => {
       expedientLighting.value = data
@@ -225,47 +261,30 @@ export default {
       }
     })
 
-    // const getAreas = departamentoId => {
-    //   if (departamentoId) {
-    //     getAreasByDepartament(departamentoId, data => {
-    //       areas.value = data
-    //       if (data.length === 0) {
-    //         swal.fire({
-    //           title: 'No se encuentran areas registradas!',
-    //           text: 'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
-    //           icon: 'error'
-    //         })
-    //       }
-    //     })
-    //   }
-    // }
-    const getAreas = departamentoId => {
-      getAreasByDepartament(departamentoId, data => {
-        areas.value = data
-        if (data.length === 0) {
-          swal.fire({
-            title: 'No se encuentran areas registradas!',
-            text:
-              'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
-            icon: 'warning'
-          })
-        }
-      })
-    }
+    getAreas(data => {
+      areas.value = data
+      if (data.length === 0) {
+        swal.fire({
+          title: 'No se encuentran departamentos registrados!',
+          text: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
+          icon: 'error'
+        })
+      }
+    })
 
     // validations
 
-    // const validatePublicPlace = () => {
-    //   if (!expedientLighting.value.lugarPublico) {
-    //     validateState()
-    //     return 'Este campo es requerido'
-    //   }
-    //   validateState()
-    //   return true
-    // }
-
     const validatePublicPlace = () => {
       if (!expedientLighting.value.lugarPublico) {
+        validateState()
+        return 'Este campo es requerido'
+      }
+      validateState()
+      return true
+    }
+
+    const validateNomenclature = () => {
+      if (!expedientLighting.value.nomenclatura) {
         validateState()
         return 'Este campo es requerido'
       }
@@ -320,27 +339,19 @@ export default {
 
     const validateState = () => {
       // eslint-disable-next-line no-unneeded-ternary
-      PublicPlaceState.value =
-        expedientLighting.value.lugarPublico !== '' ||
-        expedientLighting.value.lugarPublico !== null
+      PublicPlaceState.value = expedientLighting.value.lugarPublico !== null
       // eslint-disable-next-line no-unneeded-ternary
       HighDateState.value = expedientLighting.value.fechaAlta !== null
       // eslint-disable-next-line no-unneeded-ternary
-      LocationState.value =
-        expedientLighting.value.localidad !== '' ||
-        expedientLighting.value.localidad !== null
+      LocationState.value = expedientLighting.value.localidad !== null
       // eslint-disable-next-line no-unneeded-ternary
-      departamentState.value =
-        expedientLighting.value.departamentoId !== 0 ||
-        expedientLighting.value.departamentoId !== null
+      departamentState.value = expedientLighting.value.departamentoId !== null
       // eslint-disable-next-line no-unneeded-ternary
-      DescriptionSolutionState.value =
-        expedientLighting.value.descripcionSolucion !== '' ||
-        expedientLighting.value.descripcionSolucion !== null
+      DescriptionSolutionState.value = expedientLighting.value.descripcionSolucion !== null
       // eslint-disable-next-line no-unneeded-ternary
-      areaState.value =
-        expedientLighting.value.areaId !== 0 ||
-        expedientLighting.value.descripcionSolucion !== null
+      areaState.value = expedientLighting.value.areaId !== null
+      // eslint-disable-next-line no-unneeded-ternary
+      NomenclatureState.value = expedientLighting.value.nomenclatura !== null
     }
 
     return {
@@ -352,9 +363,11 @@ export default {
       LocationState,
       departamentState,
       areaState,
+      NomenclatureState,
       router,
       DescriptionSolutionState,
       expedienteAlumbradoId,
+      isPublicPlace,
 
       onUpdateExpedientLighting,
       validatePublicPlace,
@@ -363,10 +376,15 @@ export default {
       validateArea,
       validateDescriptionSolution,
       validateHighDate,
+      validateNomenclature,
       getAreas
     }
   }
 }
 </script>
 
-<style></style>
+<style scoped>
+.form-check {
+    display: inline-block
+    }
+</style>

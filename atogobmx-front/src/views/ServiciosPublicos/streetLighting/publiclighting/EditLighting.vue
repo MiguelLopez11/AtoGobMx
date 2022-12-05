@@ -46,7 +46,7 @@
           </b-col>
           <!--agregar nombreobra-->
           <b-col>
-            <b-form-group class="mt-3" label="nombre de obra alumbrado">
+            <b-form-group class="mt-3" label="Obra o servicio de alumbrado">
               <Field name="NameWorkField" :rules="validateNameWork" as="text">
                 <b-form-input
                   v-model="publicLighting.nombreObra"
@@ -251,7 +251,7 @@ export default {
         return 'Este campo es requerido'
       }
       if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ 0-9]+$/i.test(
           publicLighting.value.descripcionProblema
         )
       ) {
@@ -281,7 +281,7 @@ export default {
         return 'Este campo es requerido'
       }
       if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ 0-9]+$/i.test(
           publicLighting.value.descripcionDomicilio
         )
       ) {
