@@ -8,8 +8,18 @@ export default function PrescriptionServices () {
       callback(response.data)
     })
   }
+  const getPrescriptionsPending = (callback) => {
+    axios.get(`${BaseUrl}/SERMED_Receta/Pendientes`).then((response) => {
+      callback(response.data)
+    })
+  }
   const getPrescription = (RecetaId, callback) => {
     axios.get(`${BaseUrl}/SERMED_Receta/${RecetaId}`).then((response) => {
+      callback(response.data)
+    })
+  }
+  const getProductsPrescriptionByRecetaId = (RecetaId, callback) => {
+    axios.get(`${BaseUrl}/SERMED_ProductoReceta/Receta/${RecetaId}`).then((response) => {
       callback(response.data)
     })
   }
@@ -57,6 +67,8 @@ export default function PrescriptionServices () {
   return {
     getPrescriptions,
     getPrescription,
+    getPrescriptionsPending,
+    getProductsPrescriptionByRecetaId,
     createPrescription,
     updatePrescription,
     deletePrescription,

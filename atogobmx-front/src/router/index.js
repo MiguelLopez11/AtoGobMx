@@ -871,6 +871,16 @@ const routes = [
       rol: 'Empleado',
       departamento: 'Direccion de servicios medicos municipales'
     }
+  },
+  {
+    path: '/ServiciosMedicos/Farmacia/list',
+    name: 'ServiciosMedicos-Farmacia',
+    component: () => import('@/views/MunicipalMedicalServices/Farmacy/FarmacyList'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado',
+      departamento: 'Direccion de servicios medicos municipales'
+    }
   }
 ]
 
