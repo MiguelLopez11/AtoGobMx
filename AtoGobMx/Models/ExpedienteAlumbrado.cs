@@ -30,5 +30,7 @@ namespace AtoGobMx.Models
         public Area? Area { get; set; }
         [JsonIgnore]
         public virtual IEnumerable<EmpleadosAlumbrado>? EmpleadosAlumbrado { get; set; }
+        [JsonIgnore]
+        public virtual IEnumerable<VehiculosAlumbrado>? VehiculosAlumbrado { get; set; }
     }
 }

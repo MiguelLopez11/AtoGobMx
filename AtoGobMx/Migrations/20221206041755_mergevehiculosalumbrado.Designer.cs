@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20221206041755_mergevehiculosalumbrado")]
+    partial class mergevehiculosalumbrado
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -398,6 +400,9 @@ namespace AtoGobMx.Migrations
                     b.Property<string>("Nomenclatura")
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("PAT_VehiculoVehiculoId")
+                        .HasColumnType("int");
+
                     b.HasKey("ExpedienteAlumbradoId");
 
                     b.HasIndex("AlumbradoId");
@@ -405,6 +410,8 @@ namespace AtoGobMx.Migrations
                     b.HasIndex("AreaId");
 
                     b.HasIndex("DepartamentoId");
+
+                    b.HasIndex("PAT_VehiculoVehiculoId");
 
                     b.ToTable("ExpedienteAlumbrado");
                 });
@@ -1590,6 +1597,10 @@ namespace AtoGobMx.Migrations
                         .WithMany("ExpedienteAlumbrado")
                         .HasForeignKey("DepartamentoId");
 
+                    b.HasOne("AtoGobMx.Models.PAT_Vehiculo", null)
+                        .WithMany("ExpedienteAlumbrado")
+                        .HasForeignKey("PAT_VehiculoVehiculoId");
+
                     b.Navigation("Alumbrado");
 
                     b.Navigation("Area");
@@ -1898,7 +1909,7 @@ namespace AtoGobMx.Migrations
             modelBuilder.Entity("AtoGobMx.Models.VehiculosAlumbrado", b =>
                 {
                     b.HasOne("AtoGobMx.Models.ExpedienteAlumbrado", "ExpedienteAlumbrado")
-                        .WithMany("VehiculosAlumbrado")
+                        .WithMany()
                         .HasForeignKey("ExpedienteAlumbradoId");
 
                     b.HasOne("AtoGobMx.Models.PAT_Vehiculo", "Vehiculo")
@@ -1961,8 +1972,6 @@ namespace AtoGobMx.Migrations
             modelBuilder.Entity("AtoGobMx.Models.ExpedienteAlumbrado", b =>
                 {
                     b.Navigation("EmpleadosAlumbrado");
-
-                    b.Navigation("VehiculosAlumbrado");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.ExpedienteDigital", b =>
@@ -1992,6 +2001,8 @@ namespace AtoGobMx.Migrations
 
             modelBuilder.Entity("AtoGobMx.Models.PAT_Vehiculo", b =>
                 {
+                    b.Navigation("ExpedienteAlumbrado");
+
                     b.Navigation("VehiculosAlumbrado");
                 });
 
