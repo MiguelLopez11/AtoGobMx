@@ -156,10 +156,8 @@ export default {
     const { getLightingVehicle, createLightingVehicle, deleteLightingVehicle } =
       LightingVehicleServices()
     const { getVehicles } = VehiclesServices()
-    // const { getVehicles } = VehiclesServices()
     const lightingvehicle = ref([])
     const vehicles = ref([])
-    // const vehicles = ref([])
     const vehicle = ref({
       marca: '',
       submarca: ''
@@ -179,9 +177,11 @@ export default {
       vehiculoId: 0,
       archivado: false
     })
+
     const getFieldText = item => {
-      return `${item.marca} - ${item.submarca}`
+      return `${item.marca} - ${item.submarca} `
     }
+
     getVehicles(data => {
       vehicles.value = data
       if (data.length === 0) {
@@ -199,8 +199,11 @@ export default {
 
     const fields = ref([
       { value: 'vehiculoAlumbradoId', text: 'ID', sortable: true },
-      { value: 'estatusVehiculoId', text: 'Vehiculo' },
-      { value: 'vehiculoId', text: 'Marca' },
+      { value: 'vehiculo.marca', text: 'Marca' },
+      { value: 'vehiculo.modelo', text: 'Modelo' },
+      { value: 'vehiculo.añoLanzamiento', text: 'Año de lanzamiento' },
+      { value: 'vehiculo.color', text: 'Color' },
+      { value: 'vehiculo.placa', text: 'Placa' },
       { value: 'actions', text: 'Acciones' }
     ])
 
