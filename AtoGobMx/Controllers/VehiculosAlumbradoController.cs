@@ -25,8 +25,8 @@ namespace AtoGobMx.Controllers
         {
             var vehiculos = await _context.VehiculosAlumbrado
                 .OrderBy(o => o.VehiculoAlumbradoId)
+                .Include(i => i.Vehiculo)
                 .Where(w => !w.Archivado)
-                .Select(s => _mapper.Map<VehiculosAlumbrado>(s))
                 .ToArrayAsync();
             return Ok(vehiculos);
         }
@@ -35,6 +35,7 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult> GetVehiculoAlumbradoById(int VehiculoAlumbradoId)
         {
             var vehiculo = await _context.VehiculosAlumbrado
+                .Include(i => i.Vehiculo)
                 .FirstOrDefaultAsync(f => f.VehiculoAlumbradoId == VehiculoAlumbradoId);
             if (vehiculo == null)
             {
@@ -51,13 +52,6 @@ namespace AtoGobMx.Controllers
             await _context.SaveChangesAsync();
             return Ok("Vehiculo Alumbrado creado correctamente");
         }
-        //[HttpPost]
-        //public async Task<ActionResult<EmpleadosAlumbrado>> PostEmpleadosAlumbrado(EmpleadosAlumbrado empleadosAlumbrado)
-        //{
-        //    object value = _context.EmpleadosAlumbrado.Add(empleadosAlumbrado);
-        //    await _context.SaveChangesAsync();
-        //    return Ok("Empleados Alumbrado creado correctamente");
-        //}
 
         [HttpPut("{VehiculoAlumbradoId}")]
         public async Task<ActionResult> PutVehiculoAlumbrado(int VehiculoAlumbradoId, VehiculosAlumbrado vehiculosAlumbrado)

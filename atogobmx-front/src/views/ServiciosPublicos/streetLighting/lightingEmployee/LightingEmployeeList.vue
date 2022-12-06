@@ -87,17 +87,6 @@
                   :key="employees.empleadoId"
                   :reduce="employees => employees.empleadoId"
                 />
-                <!-- <b-form-select
-                  v-model="lightingEmployeeFieldslightingEmployeeFields.empleadoId"
-                  :state="NameState"
-                  autofocus
-                  multiple
-                  :selected="selected2"
-                  :options="employees"
-                  value-field="empleadoId"
-                  text-field="nombreCompleto"
-                >
-                </b-form-select> -->
               </Field>
               <ErrorMessage class="text-danger" name="NameField"></ErrorMessage>
             </b-form-group>
@@ -186,7 +175,7 @@ export default {
     const fields = ref([
       { value: 'alumbradoEmpleadoId', text: 'ID', sortable: true },
       { value: 'empleados.nombreCompleto', text: 'Nombre empleado' },
-      { value: 'actions', text: 'Acciones' }
+      { value: 'actions', text: 'Acc iones' }
     ])
 
     const resetLightingEmployeeServiceFields = () => {
