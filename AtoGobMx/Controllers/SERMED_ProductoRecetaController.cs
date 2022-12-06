@@ -30,8 +30,26 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<SERMED_Producto>> GetMedicamentoById(int productoRecetaId)
         {
             var productoReceta = await _context.ProductoReceta
+                .Include(i => i.Receta)
+                .Include(i => i.Producto)
                 .Where(w => !w.Archivado)
                 .FirstOrDefaultAsync(f => f.ProductoRecetaId == productoRecetaId);
+
+            if (productoReceta == null)
+            {
+                return NotFound();
+            }
+            return Ok(productoReceta);
+        }
+        [HttpGet("Receta/{RecetaId}")]
+        public async Task<ActionResult<SERMED_Producto>> GetMedicamentoByRecetaId(int RecetaId)
+        {
+            var productoReceta = await _context.ProductoReceta
+                .Include(i => i.Receta)
+                .Include(i => i.Producto)
+                .Where(w => !w.Archivado)
+                .Where(w => w.RecetaId == RecetaId)
+                .ToListAsync();
 
             if (productoReceta == null)
             {

@@ -30,6 +30,21 @@ namespace AtoGobMx.Controllers
             }
             return Ok(Recetas);
         }
+        [HttpGet("Pendientes")]
+        public async Task<ActionResult<IEnumerable<SERMED_Receta>>> GetRecetasPendientes()
+        {
+            var Recetas = await _context.Receta
+                .Include(i => i.Empleados)
+                .Include(i => i.EstatusReceta)
+                .Where(w => w.EstatusReceta.Nombre == "Pendiente")
+                .Where(w => !w.Archivado)
+                .ToListAsync();
+            if (Recetas == null)
+            {
+                return BadRequest("No se encuentran citas registradas");
+            }
+            return Ok(Recetas);
+        }
 
         [HttpGet("{RecetaId}")]
         public async Task<ActionResult<SERMED_Cita>> GetRecetaById(int RecetaId)

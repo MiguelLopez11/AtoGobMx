@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20221203180327_productos_SERMED")]
+    partial class productos_SERMED
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -238,15 +240,9 @@ namespace AtoGobMx.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<float>("Latitud")
-                        .HasColumnType("float");
-
                     b.Property<string>("Localidad")
                         .IsRequired()
                         .HasColumnType("longtext");
-
-                    b.Property<float>("Longitud")
-                        .HasColumnType("float");
 
                     b.Property<string>("Municipio")
                         .IsRequired()
@@ -313,7 +309,7 @@ namespace AtoGobMx.Migrations
                             Archivado = false,
                             AreaId = 1,
                             DepartamentoId = 1,
-                            FechaAlta = new DateTime(2022, 12, 5, 0, 0, 0, 0, DateTimeKind.Local),
+                            FechaAlta = new DateTime(2022, 12, 3, 0, 0, 0, 0, DateTimeKind.Local),
                             NombreCompleto = "Administrador",
                             PuestoTrabajoId = 1,
                             TieneExpediente = true
