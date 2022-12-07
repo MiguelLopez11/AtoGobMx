@@ -82,13 +82,43 @@
             <b-th colspan="2" variant="light">Producto</b-th>
             <b-th colspan="2" variant="light">Contenido</b-th>
             <b-th colspan="2" variant="light">Cantidad</b-th>
+            <b-th colspan="2" variant="light">Cantidad disponible</b-th>
           </b-tr>
         </b-thead>
         <b-tbody>
-          <b-tr v-for="data in prescriptionSelected" :key="data.productoRecetaId">
+          <b-tr
+            v-for="data in prescriptionSelected"
+            :key="data.productoRecetaId"
+          >
             <b-td colspan="2">{{ data.producto.nombre }}</b-td>
             <b-td colspan="2">{{ data.producto.contenido }}</b-td>
             <b-td colspan="2">{{ data.cantidad }}</b-td>
+            <b-td colspan="2">
+              {{ data.producto.cantidadDisponible }}
+              <b-badge
+                :variant="
+                  data.producto.cantidadDisponible === 0
+                    ? 'danger'
+                    : '' || data.producto.cantidadDisponible < 5
+                    ? 'warning'
+                    : '' || data.producto.cantidadDisponible > 5
+                    ? 'success'
+                    : ''
+                "
+              >
+                <spam align="center">
+                  {{
+                    data.producto.cantidadDisponible === 0
+                      ? 'Sin existencia'
+                      : '' || data.producto.cantidadDisponible < 5
+                      ? 'Poca existencia'
+                      : '' || data.producto.cantidadDisponible > 5
+                      ? 'En existencia'
+                      : ''
+                  }}
+                </spam>
+              </b-badge>
+            </b-td>
           </b-tr>
         </b-tbody>
       </b-table-simple>
@@ -102,9 +132,6 @@ import { ref, inject } from 'vue'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
-    // Form,
-    // Field,
-    // ErrorMessage,
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup () {
@@ -112,7 +139,8 @@ export default {
     const {
       getPrescriptionsPending,
       getProductsPrescriptionByRecetaId,
-      deletePrescription
+      deletePrescription,
+      fillPrescription
     } = PrescriptionServices()
     const prescriptions = ref([])
     const prescriptionSelected = ref([])
@@ -125,6 +153,7 @@ export default {
     const searchValue = ref('')
     const searchField = ref('marca')
     const showModal = ref(false)
+    const recetaId = ref()
     const prescriptionFields = ref({
       recetaId: 0,
       empleadoId: null,
@@ -166,13 +195,17 @@ export default {
       return 'datos recargados'
     }
     const onFillPrescription = () => {
-      swal.fire({
-        title: 'Receta registrada correctamente!',
-        text: 'La receta se ha registrado al sistema satisfactoriamente.',
-        icon: 'success'
+      fillPrescription(recetaId.value, data => {
+        swal.fire({
+          title: 'Receta registrada correctamente!',
+          text: 'La receta se ha registrado al sistema satisfactoriamente.',
+          icon: 'success'
+        })
+        refreshTable()
       })
     }
     const onClickModal = RecetaId => {
+      recetaId.value = RecetaId
       showModal.value = !showModal.value
       getProductsPrescriptionByRecetaId(RecetaId, data => {
         prescriptionSelected.value = data
@@ -217,6 +250,7 @@ export default {
     return {
       prescriptions,
       employees,
+      recetaId,
       fields,
       perPage,
       currentPage,

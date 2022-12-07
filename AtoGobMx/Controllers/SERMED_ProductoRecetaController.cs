@@ -102,5 +102,20 @@ namespace AtoGobMx.Controllers
             await _context.SaveChangesAsync();
             return Ok("Medicamento archivada");
         }
+        [HttpDelete("Receta/{RecetaId}/{productoRecetaId}")]
+        public async Task<IActionResult> DeleteMedicamento(int RecetaId,  int productoRecetaId)
+        {
+            var Medicamento = await _context.ProductoReceta
+                .Where(w => w.RecetaId == RecetaId)
+                .FirstOrDefaultAsync(w => w.ProductoRecetaId == productoRecetaId);
+            if (Medicamento == null)
+            {
+                return NotFound();
+            }
+            Medicamento.Archivado = true;
+            _context.ProductoReceta.Update(Medicamento);
+            await _context.SaveChangesAsync();
+            return Ok("Medicamento archivada");
+        }
     }
 }

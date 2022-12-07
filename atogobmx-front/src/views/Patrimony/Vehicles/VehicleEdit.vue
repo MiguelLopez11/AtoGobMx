@@ -137,6 +137,29 @@
               <ErrorMessage class="text-danger" name="TransmissionField"></ErrorMessage>
             </b-form-group>
           </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Estado">
+              <Field
+                name="StateField"
+                :rules="validateVehicleState"
+                as="number"
+              >
+                <b-form-select
+                  v-model="vehicles.estatusVehiculoId"
+                  autofocus
+                  :state="vehicleState"
+                  value-field="estatusVehiculoId"
+                  text-field="nombre"
+                  :options="statusVehicles"
+                >
+                </b-form-select>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="StateField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
         </b-row>
         <b-row align-h="end">
           <b-button
@@ -169,9 +192,10 @@ export default {
   },
   setup () {
     const swal = inject('$swal')
-    const { getVehicle, updateVehicle } = VehiclesServices()
+    const { getVehicle, updateVehicle, getEstatusVehicles } = VehiclesServices()
     const typeTransmissions = ref([{ id: 1, nombre: 'Manual' }, { id: 2, nombre: 'Automático' }])
     const vehicles = ref([])
+    const statusVehicles = ref([])
     const router = useRoute()
     const redirect = useRouter()
     const brandState = ref(false)
@@ -180,6 +204,7 @@ export default {
     const licensePlateState = ref(false)
     const serialNumberState = ref(false)
     const releaseYearState = ref(false)
+    const vehicleState = ref(false)
     // const stateComputerState = ref(false)
     const doorsState = ref(false)
     const transmissionState = ref(false)
@@ -190,6 +215,9 @@ export default {
     ])
     getVehicle(router.params.VehiculoId, data => {
       vehicles.value = data
+    })
+    getEstatusVehicles(data => {
+      statusVehicles.value = data
     })
     const onUpdateVehicle = () => {
       updateVehicle(vehicles.value, (data) => {
@@ -285,6 +313,14 @@ export default {
       validateState()
       return true
     }
+    const validateVehicleState = () => {
+      if (!vehicles.value.estatusVehiculoId) {
+        validateState()
+        return 'Este campo es requerido'
+      }
+      validateState()
+      return true
+    }
     const validateState = () => {
       brandState.value = vehicles.value.marca !== null && vehicles.value.marca !== ''
       modelState.value = vehicles.value.modelo !== null && vehicles.value.modelo !== ''
@@ -294,6 +330,7 @@ export default {
       releaseYearState.value = vehicles.value.añoLanzamiento !== null && vehicles.value.añoLanzamiento !== 0
       doorsState.value = vehicles.value.puertas !== null
       transmissionState.value = vehicles.value.transmisión !== null && vehicles.value.transmisión !== ''
+      vehicleState.value = vehicles.value.estatusVehiculoId !== null
       return ''
     }
     return {
@@ -307,10 +344,11 @@ export default {
       licensePlateState,
       serialNumberState,
       releaseYearState,
-      // stateComputerState,
       doorsState,
       transmissionState,
+      vehicleState,
       typeTransmissions,
+      statusVehicles,
       validateBrand,
       validateModel,
       validateColor,
@@ -320,7 +358,8 @@ export default {
       validateDoors,
       validateTransmission,
       onUpdateVehicle,
-      validateState
+      validateState,
+      validateVehicleState
     }
   }
 }
