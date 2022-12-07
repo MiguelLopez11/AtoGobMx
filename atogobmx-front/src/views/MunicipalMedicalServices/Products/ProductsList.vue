@@ -79,12 +79,12 @@
         <b-badge
           class="text-white"
           :variant="
-            items.cantidadDisponible === 0  ? 'danger' : '' || items.cantidadDisponible < 5  ? 'warning' : '' || items.cantidadDisponible > 5  ? 'success' : ''
+            items.cantidadDisponible === 0  ? 'danger' : '' || items.cantidadDisponible < 5  ? 'warning' : '' || items.cantidadDisponible >= 5  ? 'success' : ''
           "
         >
         <h6 align="center">
           <!-- {{ items.cantidadDisponible }} <br> -->
-          {{ items.cantidadDisponible === 0  ? 'Sin existencia' : '' || items.cantidadDisponible < 5  ? 'Poca existencia' : '' || items.cantidadDisponible > 5  ? 'En existencia' : '' }}
+          {{ items.cantidadDisponible === 0  ? 'Sin existencia' : '' || items.cantidadDisponible < 5  ? 'Poca existencia' : '' || items.cantidadDisponible >= 5  ? 'En existencia' : '' }}
         </h6>
         </b-badge>
       </template>
@@ -218,7 +218,7 @@ export default {
       { value: 'contenido', text: 'Contenido' },
       { value: 'fechaVencimiento', text: 'Fecha de vencimiento' },
       { value: 'cantidadDisponible', text: 'Stock(Cantidad disponible)' },
-      { value: 'cantidadFaltantes', text: 'Cantidad Faltante' },
+      { value: 'cantidadFaltante', text: 'Cantidad Faltante' },
       { value: 'status', text: 'Estado' },
       { value: 'actions', text: 'Acciones' }
     ])

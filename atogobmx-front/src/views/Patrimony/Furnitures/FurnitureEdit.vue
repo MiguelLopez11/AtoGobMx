@@ -44,24 +44,6 @@
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="Descripción">
-              <Field
-                name="DescriptionField"
-                :rules="validateDescription"
-                as="number"
-              >
-                <b-form-input
-                  v-model="furniture.descripción"
-                  :state="descriptionState"
-                />
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="DescriptionField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <b-col>
             <b-form-group class="mt-3" label="Departamento">
               <Field
                 name="DepartamentField"
@@ -100,6 +82,25 @@
                 </b-form-select>
               </Field>
               <ErrorMessage class="text-danger" name="AreaField"></ErrorMessage>
+            </b-form-group>
+          </b-col>
+           <b-col>
+            <b-form-group class="mt-3" label="Descripción">
+              <Field
+                name="DescriptionField"
+                :rules="validateDescription"
+                as="number"
+              >
+                <b-form-textarea
+                  v-model="furniture.descripción"
+                  :state="descriptionState"
+                  rows="4"
+                />
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="DescriptionField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>

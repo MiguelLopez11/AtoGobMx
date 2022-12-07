@@ -232,6 +232,29 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Estado">
+              <Field
+                name="StateField"
+                :rules="validateState"
+                as="number"
+              >
+                <b-form-select
+                  v-model="vehiclesFields.estatusVehiculoId"
+                  autofocus
+                  :state="vehicleState"
+                  value-field="estatusVehiculoId"
+                  text-field="nombre"
+                  :options="statusVehicles"
+                >
+                </b-form-select>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="StateField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
         </b-row>
         <b-row align-h="end">
           <b-button
@@ -265,9 +288,10 @@ export default {
   },
   setup () {
     const swal = inject('$swal')
-    const { getVehicles, createVehicle, deleteVehicle } = VehiclesServices()
+    const { getVehicles, createVehicle, deleteVehicle, getEstatusVehicles } = VehiclesServices()
     // const $toast = useToast()
     const vehicles = ref([])
+    const statusVehicles = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
     const filter = ref(null)
@@ -285,6 +309,7 @@ export default {
     const licensePlateState = ref(false)
     const serialNumberState = ref(false)
     const releaseYearState = ref(false)
+    const vehicleState = ref(false)
     // const stateComputerState = ref(false)
     const doorsState = ref(false)
     const transmissionState = ref(false)
@@ -299,6 +324,7 @@ export default {
       añoLanzamiento: null,
       puertas: null,
       transmisión: null,
+      estatusVehiculoId: null,
       archivado: false
     })
     const vehiclesFieldsBlank = ref(JSON.parse(JSON.stringify(vehiclesFields)))
@@ -322,6 +348,9 @@ export default {
           isloading.value = false
         }
       }
+    })
+    getEstatusVehicles(data => {
+      statusVehicles.value = data
     })
     const onFiltered = filteredItems => {
       currentPage.value = 1
@@ -415,6 +444,14 @@ export default {
       transmissionState.value = true
       return true
     }
+    const validateState = () => {
+      if (!vehiclesFields.value.estatusVehiculoId) {
+        vehicleState.value = false
+        return 'Este campo es requerido'
+      }
+      vehicleState.value = true
+      return true
+    }
     const refreshTable = () => {
       isloading.value = true
       getVehicles(data => {
@@ -490,6 +527,7 @@ export default {
     }
     return {
       vehicles,
+      statusVehicles,
       fields,
       perPage,
       currentPage,
@@ -510,9 +548,9 @@ export default {
       licensePlateState,
       serialNumberState,
       releaseYearState,
-      // stateComputerState,
       doorsState,
       transmissionState,
+      vehicleState,
       typeTransmissions,
       showModal,
 
@@ -524,7 +562,8 @@ export default {
       validateSerialNumber,
       validateReleaseYear,
       validateDoors,
-      validateTransmission
+      validateTransmission,
+      validateState
     }
   }
 }

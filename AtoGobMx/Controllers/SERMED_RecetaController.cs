@@ -74,6 +74,46 @@ namespace AtoGobMx.Controllers
             await _context.SaveChangesAsync();
             return CreatedAtAction("GetRecetaById", new { RecetaId = receta.RecetaId }, receta);
         }
+        [HttpPost("SurtirReceta/{RecetaId}")]
+        public async Task<ActionResult<SERMED_Receta>> SurtirReceta(int RecetaId)
+        {
+            var receta = await _context.Receta
+                .FirstOrDefaultAsync(f => f.RecetaId == RecetaId);
+            var productoReceta = await _context.ProductoReceta
+                .Include(i => i.Receta)
+                .Where(f => f.RecetaId == RecetaId)
+                .ToListAsync();
+            if (productoReceta.Count == 0)
+            {
+                return BadRequest();
+            }
+            for (int i = 0; i < productoReceta.Count; i++)
+            {
+                var product = await _context.Medicamento
+                   .FirstOrDefaultAsync(f => f.ProductoId == productoReceta[i].ProductoId);
+                if (product.CantidadDisponible < productoReceta[i].cantidad)
+                {
+                    var faltante = (product.CantidadDisponible) - (productoReceta[i].cantidad);
+                    faltante = faltante * -1;
+                    product.CantidadDisponible = 0;
+                    product.CantidadFaltante = product.CantidadFaltante + faltante;
+                    _context.Medicamento.Update(product);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    product.CantidadDisponible -= productoReceta[i].cantidad;
+                    _context.Medicamento.Update(product);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            receta.EstatusRecetaId = 2;
+            _context.Receta.Update(receta);
+            await _context.SaveChangesAsync();
+            return Ok("Receta surtida");
+
+
+        }
         [HttpPut("{RecetaId}")]
         public async Task<IActionResult> PutCategoria(int RecetaId, SERMED_Receta receta)
         {
