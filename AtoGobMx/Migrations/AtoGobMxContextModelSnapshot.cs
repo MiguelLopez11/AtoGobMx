@@ -406,8 +406,6 @@ namespace AtoGobMx.Migrations
 
                     b.HasIndex("DepartamentoId");
 
-                    b.HasIndex("PAT_VehiculoVehiculoId");
-
                     b.ToTable("ExpedienteAlumbrado");
                 });
 
