@@ -185,7 +185,7 @@
                   rotateControl: true,
                   disableDefaultUi: false
                 }"
-                style="width: 1000px; height: 500px"
+                style="width: 100%; height: 500px"
               >
                 <GMapMarker
                   :zoom="10"
@@ -264,12 +264,15 @@ export default {
       numeroEspasios: null,
       metrosCorrespondientes: null,
       espaciosDisponibles: null,
+      latitud: null,
+      longitud: null,
       archivado: false
     })
 
     const CementeryServiceFieldsBlank = ref(
       JSON.parse(JSON.stringify(cementeryServiceFields))
     )
+
     const markers = ref([
       {
         position: {
@@ -278,6 +281,7 @@ export default {
         }
       }
     ])
+
     const center = ref({ lat: 20.5546629, lng: -102.4953904 })
     const fields = ref([
       { value: 'nombrePropietario', text: 'Nombre de propietario' },
@@ -419,6 +423,8 @@ export default {
     }
 
     const addCementeryService = () => {
+      cementeryServiceFields.value.latitud = markers.value[0].position.lat
+      cementeryServiceFields.value.longitud = markers.value[0].position.lng
       createCementery(cementeryServiceFields.value, data => {
         refreshTable()
         swal.fire({

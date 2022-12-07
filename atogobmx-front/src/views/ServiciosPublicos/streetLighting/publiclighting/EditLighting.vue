@@ -46,7 +46,7 @@
           </b-col>
           <!--agregar nombreobra-->
           <b-col>
-            <b-form-group class="mt-3" label="nombre de obra alumbrado">
+            <b-form-group class="mt-3" label="Obra o servicio de alumbrado">
               <Field name="NameWorkField" :rules="validateNameWork" as="text">
                 <b-form-input
                   v-model="publicLighting.nombreObra"
@@ -251,7 +251,7 @@ export default {
         return 'Este campo es requerido'
       }
       if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ 0-9]+$/i.test(
           publicLighting.value.descripcionProblema
         )
       ) {
@@ -281,7 +281,7 @@ export default {
         return 'Este campo es requerido'
       }
       if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ 0-9]+$/i.test(
           publicLighting.value.descripcionDomicilio
         )
       ) {
@@ -293,19 +293,13 @@ export default {
     }
 
     const validateState = () => {
-      // eslint-disable-next-line no-unneeded-ternary
       TaskState.value = publicLighting.value.tareaTipoId !== null
-      // eslint-disable-next-line no-unneeded-ternary
       StatusState.value = publicLighting.value.estatusId !== null
+      NameWorkState.value = publicLighting.value.nombreObra !== '' || publicLighting.value.nombreObra !== null
+      DomicileState.value = publicLighting.value.domicilio !== '' || publicLighting.value.domicilio !== null
+      addresdescriptionState.value = publicLighting.value.descripcionDomicilio !== '' || publicLighting.value.descripcionDomicilio !== null
       // eslint-disable-next-line no-unneeded-ternary
-      NameWorkState.value = publicLighting.value.nombreObra !== ''
-      // eslint-disable-next-line no-unneeded-ternary
-      DomicileState.value = publicLighting.value.domicilio !== ''
-      // eslint-disable-next-line no-unneeded-ternary
-      addresdescriptionState.value =
-        publicLighting.value.descripcionDomicilio !== ''
-      // eslint-disable-next-line no-unneeded-ternary
-      ProblemState.value = publicLighting.value.descripcionProblema !== ''
+      ProblemState.value = publicLighting.value.descripcionProblema !== '' || publicLighting.value.descripcionProblema !== null
     }
 
     return {

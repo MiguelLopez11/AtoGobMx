@@ -1,6 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace AtoGobMx.Models
 {
@@ -17,7 +18,6 @@ namespace AtoGobMx.Models
         public bool Archivado { get; set; }
         public int? AlumbradoId { get; set; }
         public int? DepartamentoId { get; set; }
-        //public int? VehiculoId { get; set; }
         public int? AreaId { get; set; }
 
         [ForeignKey("AlumbradoId")]
@@ -28,11 +28,9 @@ namespace AtoGobMx.Models
 
         [ForeignKey("AreaId")]
         public Area? Area { get; set; }
-
-        //[ForeignKey("VeiculoId")]
-        //public PAT_Vehiculo? PAT_Vehiculo { get; set; }
-
         [JsonIgnore]
         public virtual IEnumerable<EmpleadosAlumbrado>? EmpleadosAlumbrado { get; set; }
+        [JsonIgnore]
+        public virtual IEnumerable<VehiculosAlumbrado>? VehiculosAlumbrado { get; set; }
     }
 }

@@ -110,7 +110,6 @@
                 <b-form-input
                   v-model="publicWorksFields.latitud"
                   :state="LatitudeState"
-                  type="number"
                 ></b-form-input>
               </Field>
               <ErrorMessage
@@ -126,7 +125,6 @@
                 <b-form-input
                   v-model="publicWorksFields.longitud"
                   :state="LengthState"
-                  type="number"
                 ></b-form-input>
               </Field>
               <ErrorMessage

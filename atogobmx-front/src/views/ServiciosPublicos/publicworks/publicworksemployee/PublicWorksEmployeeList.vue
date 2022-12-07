@@ -6,7 +6,7 @@
         style="width: 350px"
         v-model="searchValue"
         type="search"
-        placeholder="Buscar alumbrado empleado..."
+        placeholder="Buscar empleado alumbrado..."
       ></b-form-input>
       <b-button
         variant="primary"
@@ -22,7 +22,7 @@
         type="submit"
       >
         <i class="bi bi-person-plus-fill"></i>
-        Agregar alumbrado empleado
+        Agregar empleado OP
       </b-button>
     </b-row>
     <EasyDataTable
@@ -33,7 +33,7 @@
       border-cell
       :loading="isloading"
       :headers="fields"
-      :items="lightingEmployeeService"
+      :items="publicWorksEmployeeService"
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
@@ -56,7 +56,7 @@
             <i class="bi bi-three-dots-vertical"></i>
           </template>
           <b-dropdown-item
-            @click="RemoveLightingEmployeeService(items.alumbradoEmpleadoId)"
+            @click="RemovePublickWorksEmployeeService(items.empleadoObrasId)"
             class="m-1"
             variant="outline-danger"
             ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
@@ -66,14 +66,14 @@
     </EasyDataTable>
     <b-modal
       id="modal-lightingemployee"
-      tittle="Agregar alumbrado Empleado"
+      tittle="Agregar empleado OP"
       v-model="showModal"
       size="xl"
       hide-footer
       button-size="lg"
       lazy
     >
-      <Form @submit="addLightingEmployeeService">
+      <Form @submit="addPublickWorksEmployeeService">
         <b-row cols="2">
           <!-- Nombre del empleado -->
           <b-col>
@@ -97,7 +97,7 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            @click="resetLightingEmployeeServiceFields"
+            @click="resetPublicWorksEmployeeServiceFields"
           >
             Cancelar
           </b-button>
@@ -111,7 +111,7 @@
 </template>
 
 <script>
-import LightingEmployeeService from '@/Services/lightingemployee.Services'
+import PublickWorksEmployeeService from '@/Services/publicworksemployee.Services'
 import EmployeeServices from '@/Services/employee.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
@@ -133,12 +133,12 @@ export default {
     const swal = inject('$swal')
     const showModal = ref(false)
     const {
-      getAddressLightingEmployee,
-      createAddressLightingEmployee,
-      deleteAddressLightingEmployee
-    } = LightingEmployeeService()
+      getPublickWorksEmployee,
+      createPublickWorksEmployee,
+      deletePublickWorksEmployee
+    } = PublickWorksEmployeeService()
     const { getEmployees } = EmployeeServices()
-    const lightingEmployeeService = ref([])
+    const publicWorksEmployeeService = ref([])
     const employees = ref([])
     const employeesSelected = ref([])
     const perPage = ref(5)
@@ -149,10 +149,11 @@ export default {
     const searchValue = ref('')
     const searchField = ref('empleadoId')
     const NameState = ref(false)
-    const lightingEmployeeFields = ref({
-      alumbradoEmpleadoId: 0,
+    const publicWorksEmployeeFields = ref({
+      empleadoObrasId: 0,
       expedienteAlumbradoId: props.expedienteAlumbradoId,
       empleadoId: 0,
+      obraId: 0,
       archivado: false
     })
 
@@ -168,31 +169,31 @@ export default {
       }
     })
 
-    const LightingEmployeeServiceFieldsBlank = ref(
-      JSON.parse(JSON.stringify(lightingEmployeeFields))
+    const PublicWorksEmployeeServiceFieldsBlank = ref(
+      JSON.parse(JSON.stringify(publicWorksEmployeeFields))
     )
 
     const fields = ref([
-      { value: 'alumbradoEmpleadoId', text: 'ID', sortable: true },
+      { value: 'empleadoObrasId', text: 'ID', sortable: true },
       { value: 'empleados.nombreCompleto', text: 'Nombre empleado' },
-      { value: 'actions', text: 'Acc iones' }
+      { value: 'actions', text: 'Acciones' }
     ])
 
-    const resetLightingEmployeeServiceFields = () => {
+    const resetPublicWorksEmployeeServiceFields = () => {
       showModal.value = false
-      lightingEmployeeFields.value = JSON.parse(
-        JSON.stringify(LightingEmployeeServiceFieldsBlank)
+      publicWorksEmployeeFields.value = JSON.parse(
+        JSON.stringify(PublicWorksEmployeeServiceFieldsBlank)
       )
       NameState.value = false
     }
 
-    getAddressLightingEmployee(data => {
-      lightingEmployeeService.value = data
+    getPublickWorksEmployee(data => {
+      publicWorksEmployeeService.value = data
 
-      if (lightingEmployeeService.value.length > 0) {
+      if (publicWorksEmployeeService.value.length > 0) {
         isloading.value = false
       } else {
-        if (lightingEmployeeService.value.length <= 0) {
+        if (publicWorksEmployeeService.value.length <= 0) {
           isloading.value = false
         }
       }
@@ -214,13 +215,13 @@ export default {
 
     const refreshTable = () => {
       isloading.value = true
-      getAddressLightingEmployee(data => {
-        lightingEmployeeService.value = data
+      getPublickWorksEmployee(data => {
+        publicWorksEmployeeService.value = data
 
-        if (lightingEmployeeService.value.length > 0) {
+        if (publicWorksEmployeeService.value.length > 0) {
           isloading.value = false
         } else {
-          if (lightingEmployeeService.value.length <= 0) {
+          if (publicWorksEmployeeService.value.length <= 0) {
             isloading.value = false
           }
         }
@@ -228,11 +229,11 @@ export default {
       return 'datos recargados'
     }
 
-    const addLightingEmployeeService = () => {
+    const addPublickWorksEmployeeService = () => {
       for (let i = 0; i < employeesSelected.value.length; i++) {
-        lightingEmployeeFields.value.empleadoId = employeesSelected.value[i]
-        createAddressLightingEmployee(
-          lightingEmployeeFields.value,
+        publicWorksEmployeeFields.value.empleadoId = employeesSelected.value[i]
+        createPublickWorksEmployee(
+          publicWorksEmployeeFields.value,
           data => {
             refreshTable()
           })
@@ -243,10 +244,10 @@ export default {
         icon: 'success'
       })
       showModal.value = false
-      resetLightingEmployeeServiceFields()
+      resetPublicWorksEmployeeServiceFields()
     }
 
-    const RemoveLightingEmployeeService = alumbradoEmpleadoId => {
+    const RemovePublickWorksEmployeeService = empleadoObrasId => {
       isloading.value = true
       swal
         .fire({
@@ -261,7 +262,7 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            deleteAddressLightingEmployee(alumbradoEmpleadoId, data => {
+            deletePublickWorksEmployee(empleadoObrasId, data => {
               refreshTable()
             })
             swal.fire({
@@ -277,8 +278,8 @@ export default {
     }
 
     return {
-      lightingEmployeeService,
-      lightingEmployeeFields,
+      publicWorksEmployeeService,
+      publicWorksEmployeeFields,
       perPage,
       currentPage,
       filter,
@@ -287,18 +288,18 @@ export default {
       isloading,
       searchValue,
       searchField,
-      LightingEmployeeServiceFieldsBlank,
+      PublicWorksEmployeeServiceFieldsBlank,
       fields,
       NameState,
       employees,
       employeesSelected,
 
       onFiltered,
-      addLightingEmployeeService,
-      RemoveLightingEmployeeService,
+      addPublickWorksEmployeeService,
+      RemovePublickWorksEmployeeService,
       refreshTable,
       validateName,
-      resetLightingEmployeeServiceFields
+      resetPublicWorksEmployeeServiceFields
     }
   }
 }

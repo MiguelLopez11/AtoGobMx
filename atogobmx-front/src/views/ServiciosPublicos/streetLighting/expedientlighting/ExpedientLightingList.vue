@@ -168,6 +168,7 @@ export default {
       },
       { value: 'actions', text: 'Acciones' }
     ])
+
     const getPublicLighting = () => {
       getPublicLightingExpedient(data => {
         publicLighting.value = data
@@ -216,6 +217,7 @@ export default {
         })
       })
     }
+
     const RemoveExpedientLighting = expedienteDigitalId => {
       isloading.value = true
       swal
@@ -245,6 +247,7 @@ export default {
           }
         })
     }
+
     return {
       fields,
       perPage,

@@ -14,6 +14,8 @@ namespace AtoGobMx.Models
         public string Localidad { get; set; }
         public string Calle { get; set; }
         public int NumeroExterior { get; set; }
+        public float Longitud { get; set; }
+        public float Latitud { get; set; }
         public bool Archivado { get; set; }
 
         [JsonIgnore]

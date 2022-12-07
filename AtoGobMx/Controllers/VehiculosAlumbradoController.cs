@@ -21,76 +21,77 @@ namespace AtoGobMx.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<VehiculosAlumbrado>> GetVehiculoAlumbrado()
+        public async Task<ActionResult<VehiculosAlumbrado>> GetVehiculosAlumbrado()
         {
             var vehiculos = await _context.VehiculosAlumbrado
-                .OrderBy(o => o.VehiculoAlumbradoId)
+                .Include(i => i.Vehiculo)
+                .Include(i => i.ExpedienteAlumbrado)
                 .Where(w => !w.Archivado)
-                .Select(s => _mapper.Map<VehiculosAlumbrado>(s))
                 .ToArrayAsync();
             return Ok(vehiculos);
         }
 
-        [HttpGet("{VehiculoAlumbradoId}")]
-        public async Task<ActionResult> GetVehiculoAlumbradoById(int VehiculoAlumbradoId)
+        [HttpGet("VehiculoAlumbradoId")]
+        public async Task<ActionResult> GetVehiculosAlumbradoById(int VehiculoAlumbradoId)
         {
-            var vehiculo = await _context.VehiculosAlumbrado
+            var vehiculos = await _context.VehiculosAlumbrado
+                //.Include(i => i.TareaTipoAlumbrado)
+                //.Include(i => i.Estatus)
                 .FirstOrDefaultAsync(f => f.VehiculoAlumbradoId == VehiculoAlumbradoId);
-            if (vehiculo == null)
+            if (vehiculos == null)
             {
                 //Ok($"No se encuentra la falla con el ID: {FallasId}");
                 return NotFound();
             }
-            return Ok(vehiculo);
+            return Ok(vehiculos);
         }
 
         [HttpPost]
-        public async Task<ActionResult<VehiculosAlumbrado>> PostVehiculoAlumbrado(VehiculosAlumbrado vehiculosAlumbrado)
+        public async Task<ActionResult<VehiculosAlumbrado>> PostVehiculosAlumbrado(VehiculosAlumbrado vehiculosAlumbrado)
         {
             object value = _context.VehiculosAlumbrado.Add(vehiculosAlumbrado);
             await _context.SaveChangesAsync();
-            return Ok("Vehiculo Alumbrado creado correctamente");
+            return Ok("Vehiculos Alumbrado creado correctamente");
         }
 
         [HttpPut("{VehiculoAlumbradoId}")]
-        public async Task<ActionResult> PutVehiculoAlumbrado(int VehiculoAlumbradoId, VehiculosAlumbrado vehiculosAlumbrado)
+        public async Task<ActionResult> PutVehiculosAlumbrado(int VehiculoAlumbradoId, VehiculosAlumbrado vehiculosAlumbrado)
         {
             if (vehiculosAlumbrado.VehiculoAlumbradoId != VehiculoAlumbradoId)
             {
                 return Ok("Los ID no ingresados no coinciden");
             }
 
-            var vehiculo = await _context.VehiculosAlumbrado.FirstOrDefaultAsync(f => f.VehiculoAlumbradoId == VehiculoAlumbradoId);
-            if (vehiculo == null)
+            var vehicles = await _context.VehiculosAlumbrado.FirstOrDefaultAsync(f => f.VehiculoAlumbradoId == VehiculoAlumbradoId);
+            if (vehicles == null)
             {
-                return BadRequest("El Registro del proveedor no existe");
+                return BadRequest("El Registro del vehiculo alumbrado no existe");
             }
 
-            vehiculo.VehiculoAlumbradoId = VehiculoAlumbradoId;
-            vehiculo.EstatusVehiculoId = vehiculosAlumbrado.EstatusVehiculoId;
-            vehiculo.VehiculoId = vehiculosAlumbrado.VehiculoId;
-            vehiculo.ExpedienteAlumbradoId = vehiculosAlumbrado.ExpedienteAlumbradoId;
-            vehiculo.Archivado = vehiculosAlumbrado.Archivado;
+            vehicles.VehiculoAlumbradoId = VehiculoAlumbradoId;
+            vehicles.VehiculoId = vehiculosAlumbrado.VehiculoId;
+            vehicles.ExpedienteAlumbradoId = vehiculosAlumbrado.ExpedienteAlumbradoId;
+            vehicles.Archivado = vehiculosAlumbrado.Archivado;
 
-            _context.VehiculosAlumbrado.Update(vehiculo);
+            _context.VehiculosAlumbrado.Update(vehicles);
             await _context.SaveChangesAsync();
             return Ok("Vehiculos alumbrado actualizado correctamente");
         }
 
         [HttpDelete("{VehiculoAlumbradoId}")]
-        public async Task<IActionResult> DeleteVehiculoAlumbrado(int VehiculoAlumbradoId)
+        public async Task<IActionResult> DeleteVehiculosAlumbrado(int VehiculoAlumbradoId)
         {
-            var vehiculo = _context.VehiculosAlumbrado
+            var vehicle = _context.VehiculosAlumbrado
                 .FirstOrDefault(f => f.VehiculoAlumbradoId == VehiculoAlumbradoId);
-            if (vehiculo == null)
+            if (vehicle == null)
             {
                 return NotFound();
             }
 
-            vehiculo.Archivado = true;
-            _context.VehiculosAlumbrado.Update(vehiculo);
+            vehicle.Archivado = true;
+            _context.VehiculosAlumbrado.Update(vehicle);
             await _context.SaveChangesAsync();
-            return Ok("Vehiculo alumbrado Archivado");
+            return Ok("Vehiculos alumbrado Archivado");
         }
     }
 }

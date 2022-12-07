@@ -26,7 +26,7 @@
       >
         <!-- v-b-modal.modal-cementery -->
         <i class="bi bi-person-plus-fill"></i>
-        Agregar Direccion
+        Agregar Cementerio
       </b-button>
     </b-row>
     <EasyDataTable
@@ -184,7 +184,31 @@
             </b-form-group>
           </b-col>
         </b-row>
-
+        <b-row>
+          <GMapMap
+            :center="center"
+            map-type-id="satellite"
+            :zoom="20"
+            :options="{
+              zoomControl: true,
+              mapTypeControl: false,
+              scaleControl: false,
+              rotateControl: true,
+              disableDefaultUi: false
+            }"
+            style="width: 100%; height: 500px"
+          >
+            <GMapMarker
+              :zoom="10"
+              :key="index"
+              v-for="(m, index) in markers"
+              :position="m.position"
+              :clickable="true"
+              :draggable="true"
+              @click="center = m.position"
+            /> </GMapMap
+          >
+        </b-row>
         <b-row align-h="end">
           <b-button
             class="w-auto m-2 text-white"
@@ -252,12 +276,24 @@ export default {
       localidad: null,
       calle: null,
       numeroExterior: null,
+      latitud: 0,
+      longitud: 0,
       archivado: false
     })
 
     const AddressCementeryServiceFieldsBlank = ref(
       JSON.parse(JSON.stringify(addressCementeryServiceFields))
     )
+
+    const markers = ref([
+      {
+        position: {
+          lat: 20.5546629,
+          lng: -102.4953904
+        }
+      }
+    ])
+    const center = ref({ lat: 20.5546629, lng: -102.4953904 })
 
     const fields = ref([
       { value: 'nombreCementerio', text: 'Nombre Cementerio' },
@@ -435,6 +471,9 @@ export default {
     }
 
     const addCementeryService = () => {
+      console.log(markers.value[0].position.lat, markers.value[0].position.lng)
+      // addressCementeryService.value[0].latitud = markers.value[0].position.lat
+      // addressCementeryService.value[0].longitud = markers.value[0].position.lng
       createAddressCementery(addressCementeryServiceFields.value, data => {
         refreshTable()
         swal.fire({
@@ -494,6 +533,8 @@ export default {
       LocationState,
       StreetState,
       NumberOutsideState,
+      markers,
+      center,
 
       resetAddressCementeryServiceFields,
       onFiltered,
