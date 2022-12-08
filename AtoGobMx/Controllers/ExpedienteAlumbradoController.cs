@@ -10,6 +10,9 @@ using System;
 using Microsoft.Win32;
 using static System.Net.Mime.MediaTypeNames;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Aspose.Pdf.Text;
+using Aspose.Pdf;
+using Table = Aspose.Pdf.Table;
 
 namespace AtoGobMx.Controllers
 {
@@ -64,225 +67,59 @@ namespace AtoGobMx.Controllers
             }
             return Ok(expedienteAlumbrado);
         }
-        [HttpGet("Download")]
-        public async Task<ActionResult<ExpedienteAlumbrado>> DownloadExpedienteAlumbrado()
+        [HttpGet("Download/{ExpedienteAlumbradoId}")]
+        public async Task<ActionResult<ExpedienteAlumbrado>> DownloadExpedienteAlumbrado(int ExpedienteAlumbradoId)
         {
-            //var expefalla = await _context.ExpedienteAlumbrado
-            //    .Include(i => i.Alumbrado)
-            //    .Include(i => i.Departamentos)
-            //    .Include(i => i.Area)
-            //    .Where(w => !w.Archivado)
-            //    .FirstOrDefaultAsync(f => f.ExpedienteAlumbradoId == ExpedienteAlumbradoID);
-            var html = $@"
-              <!DOCTYPE html>
-<html lang=""en"" dir=""ltr"">
-  <head>
-    <meta charset=""utf-8"" />
-    <title>Reporte PDF</title>
-    <link
-      href=""https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css""
-      rel=""stylesheet""
-      integrity=""sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65""
-      crossorigin=""anonymous""
-    />
-  </head>
-  <body>
-    <h1 style=""text-align: center;"">
-      Reporte de fallas en alumbrado publico &#128161;
-    </h1>
-    <table
-      class=""table table-striped table-striped table-bordered""
-      style=""
-        width: 30%;
-        text-align: center;
-        margin: 60px 0 0 702px;
-        border: black 3px solid;
-      ""
-    >
-      <tr style=""border: black 3px solid; background-color: #A5F1E9;"">
-        <th scope=""col"">Fecha</th>
-      </tr>
-      <tbody>
-        <tr>
-          <td></td>
-        </tr>
-      </tbody>
-    </table>
-
-    <table
-      class=""table table-striped table-striped table-bordered""
-      style=""
-        width: 97%;
-        text-align: center;
-        margin: 25px 0 0 10px;
-        border: black 3px solid;
-      ""
-    >
-      <tr style=""border: black 3px solid; background-color: #A5F1E9"">
-        <th scope=""col"">Descripcion solucion</th>
-      </tr>
-      <tbody>
-        <tr>
-          <td style=""text-align: left;""></td>
-        </tr>
-      </tbody>
-    </table>
-
-    <table
-      class=""table table-striped table-striped table-bordered""
-      style=""
-        width: 25%;
-        text-align: center;
-        margin: 25px 0 0 10px;
-        border: black 3px solid;
-      ""
-    >
-      <tr style=""border: black 3px solid; background-color: #A5F1E9;"">
-        <th scope=""col"">Nomenclatura</th>
-      </tr>
-      <tbody>
-        <tr>
-          <td style=""text-align: left;""></td>
-        </tr>
-      </tbody>
-    </table>
-
-    <table
-      class=""table table-striped table-striped table-bordered""
-      style=""
-        width: 25%;
-        text-align: center;
-        margin: -62px 0 0 380px;
-        border: black 3px solid;
-      ""
-    >
-      <tr style=""border: black 3px solid; background-color: #A5F1E9;"">
-        <th scope=""col"">Lugar publico</th>
-      </tr>
-      <tbody>
-        <tr>
-          <td style=""text-align: left;""></td>
-        </tr>
-      </tbody>
-    </table>
-
-    <table
-      class=""table table-striped table-striped table-bordered""
-      style=""
-        width: 25%;
-        text-align: center;
-        margin: -62px 0 0 755px;
-        border: black 3px solid;
-      ""
-    >
-      <tr style=""border: black 3px solid; background-color: #A5F1E9;"">
-        <th scope=""col"">Localidad</th>
-      </tr>
-      <tbody>
-        <tr>
-          <td style=""text-align: left;""></td>
-        </tr>
-      </tbody>
-    </table>
-
-    <table
-      class=""table table-striped table-striped table-bordered""
-      style=""
-        width: 25%;
-        text-align: center;
-        margin: 25px 0 0 10px;
-        border: black 3px solid;
-      ""
-    >
-      <tr style=""border: black 3px solid; background-color: #A5F1E9;"">
-        <th scope=""col"">Nombre del departamento</th>
-      </tr>
-      <tbody>
-        <tr>
-          <td style=""text-align: left;""></td>
-        </tr>
-      </tbody>
-    </table>
-
-    <table
-      class=""table table-striped table-striped table-bordered""
-      style=""
-        width: 25%;
-        text-align: center;
-        margin: -62px 0 0 380px;
-        border: black 3px solid;
-      ""
-    >
-      <tr style=""border: black 3px solid; background-color: #A5F1E9;"">
-        <th scope=""col"">Nombre del are</th>
-      </tr>
-      <tbody>
-        <tr>
-          <td style=""text-align: left;""></td>
-        </tr>
-      </tbody>
-    </table>
-
-    <table
-      class=""table table-striped table-striped table-bordered""
-      style=""
-        width: 25%;
-        text-align: center;
-        margin: -62px 0 0 755px;
-        border: black 3px solid;
-      ""
-    >
-      <tr style=""border: black 3px solid; background-color: #A5F1E9;"">
-        <th scope=""col"">Nombre del empleado</th>
-      </tr>
-      <tbody>
-        <tr>
-          <td style=""text-align: left;""></td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div class="" >
-      < p > putos </ p >
-    </ div >
-  </ body >
-</ html >
-
-
-              ";
-            //{ expefalla.FechaAlta}
-            GlobalSettings globalSettings = new GlobalSettings();
-            globalSettings.ColorMode = ColorMode.Color;
-            globalSettings.Orientation = Orientation.Portrait;
-            globalSettings.PaperSize = PaperKind.A4;
-            globalSettings.Margins = new MarginSettings { Top = 25, Bottom = 25 };
-            ObjectSettings objectSettings = new ObjectSettings();
-            //objectSettings.PagesCount = true;
-            objectSettings.HtmlContent = html;
-            WebSettings webSettings = new WebSettings();
-            webSettings.DefaultEncoding = "utf-8";
-            HeaderSettings headerSettings = new HeaderSettings();
-            headerSettings.FontSize = 15;
-            headerSettings.FontName = "Ariel";
-            //headerSettings.Right = "Page [page] of [toPage]";
-            headerSettings.Line = true;
-            //FooterSettings footerSettings = new FooterSettings();
-            //footerSettings.FontSize = 12;
-            //footerSettings.FontName = "Ariel";
-            //footerSettings.Center = "This is for demonstration purposes only.";
-            //footerSettings.Line = true;
-            objectSettings.HeaderSettings = headerSettings;
-            //objectSettings.FooterSettings = footerSettings;
-            objectSettings.WebSettings = webSettings;
-            HtmlToPdfDocument htmlToPdfDocument = new HtmlToPdfDocument()
+            var document = new Document
             {
-                GlobalSettings = globalSettings,
-                Objects = { objectSettings },
+                PageInfo = new PageInfo { Margin = new MarginInfo(28, 28, 28, 42) }
             };
 
-            var pdfFile = _converter.Convert(htmlToPdfDocument); ;
-            return File(pdfFile,
-            "application/octet-stream", "DemoPdf.pdf");
+            // Step 2
+            var pdfPage = document.Pages.Add();
+
+            // Step 3
+            var textFragment = new TextFragment($"Reporte de alumbrado");
+            // ..........................................
+
+            var table = new Table
+            {
+                // Set column auto widths of the table
+                ColumnWidths = "25% 25% 25% 25%",
+                // Set cell padding
+                DefaultCellPadding = new MarginInfo(10, 5, 10, 5), // Left Bottom Right Top
+                                                                   // Set the table border color as Green
+                Border = new BorderInfo(BorderSide.All, .5f, Color.Green),
+                // Set the border for table cells as Black
+                DefaultCellBorder = new BorderInfo(BorderSide.All, .2f, Color.Green),
+            };
+            for (var rowCount = 0; rowCount < 10; rowCount++)
+            {
+                // Add row to table
+                var row = table.Rows.Add();
+                // Add table cells
+                for (int i = 0; i < 4; i++)
+                {
+                    row.Cells.Add($"Cell ({i + 1}, {rowCount + 1})");
+                }
+            }
+            // Add table object to first page of input document
+            document.Pages[1].Paragraphs.Add(table);
+
+            // Step 4
+            pdfPage.Paragraphs.Add(textFragment);
+            pdfPage.Paragraphs.Add(table);
+
+
+            // Step 5
+            using (var streamOut = new MemoryStream())
+            {
+                document.Save(streamOut);
+                return new FileContentResult(streamOut.ToArray(), "application/pdf")
+                {
+                    FileDownloadName = "tenants.pdf"
+                };
+            }
         }
 
         [HttpPost()]
