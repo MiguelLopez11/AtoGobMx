@@ -32,7 +32,7 @@
         <b-col>
           <b-form-group class="mt-3" label="Fecha de vencimiento">
             <Field
-              name="ContentField"
+              name="ExpirationDateField"
               :rules="validateExpirationDate"
               as="text"
             >
@@ -47,22 +47,23 @@
             </Field>
             <ErrorMessage
               class="text-danger"
-              name="ContentField"
+              name="ExpirationDateField"
             ></ErrorMessage>
           </b-form-group>
         </b-col>
         <b-col>
           <b-form-group class="mt-3" label="Stock (Cantidad disponible)">
-            <Field name="ContentField" :rules="validateStock" as="text">
+            <Field name="StockField" :rules="validateStock" as="text">
               <b-form-input
                 v-model="product.cantidadDisponible"
                 :state="stockState"
+                type="number"
               >
               </b-form-input>
             </Field>
             <ErrorMessage
               class="text-danger"
-              name="ContentField"
+              name="StockField"
             ></ErrorMessage>
           </b-form-group>
         </b-col>
@@ -171,7 +172,7 @@ export default {
       nameState.value = product.value.nombre !== '' || product.value.nombre !== null
       contentState.value = product.value.contenido !== '' || product.value.contenido !== null
       expirationDateState.value = product.value.fechaVencimiento !== null
-      stockState.value = product.value.cantidadDisponible !== null
+      stockState.value = product.value.cantidadDisponible !== null && product.value.cantidadDisponible !== ''
       return ''
     }
     return {

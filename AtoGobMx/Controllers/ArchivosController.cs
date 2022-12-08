@@ -33,7 +33,8 @@ namespace AtoGobMx.Controllers
             var fotoPerfil = await _context.Archivos.FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expedienteDigitalId);
             if (fotoPerfil == null)
             {
-                return NotFound("No se encuentra foto de perfil registrado a ese expediente.");
+                var perfil = System.IO.File.OpenRead($"Files/images/blank-profile.jpg");
+                return File(perfil, "image/jpeg");
             }
             var image = System.IO.File.OpenRead($"Files/images/{expediente.Empleados.NombreCompleto}/{fotoPerfil.Nombre}");
             return File(image, "image/jpeg");
@@ -52,7 +53,8 @@ namespace AtoGobMx.Controllers
             var fotoPerfil = await _context.Archivos.FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expediente.ExpedienteDigitalId);
             if (fotoPerfil == null)
             {
-                return NotFound("No se encuentra foto de perfil registrado a ese expediente.");
+                var perfil = System.IO.File.OpenRead($"Files/images/blank-profile.jpg");
+                return File(perfil, "image/jpeg");
             }
             var image = System.IO.File.OpenRead($"Files/images/{expediente.Empleados.NombreCompleto}/{fotoPerfil.Nombre}");
             return File(image, "image/jpeg");

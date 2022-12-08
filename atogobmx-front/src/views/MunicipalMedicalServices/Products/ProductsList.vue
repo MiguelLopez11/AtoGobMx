@@ -128,7 +128,7 @@
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Fecha de vencimiento">
-              <Field name="ContentField" :rules="validateExpirationDate" as="text">
+              <Field name="ExpirationDateField" :rules="validateExpirationDate" as="text">
                 <Datepicker
                   v-model="productsFields.fechaVencimiento"
                   locale="es"
@@ -140,17 +140,17 @@
               </Field>
               <ErrorMessage
                 class="text-danger"
-                name="ContentField"
+                name="ExpirationDateField"
               ></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Stock (Cantidad disponible)">
-              <Field name="ContentField" :rules="validateStock" as="text">
+              <Field name="StockField" :rules="validateStock" as="text">
                 <b-form-input v-model="productsFields.cantidadDisponible" :state="stockState">
                 </b-form-input>
               </Field>
-              <ErrorMessage class="text-danger" name="ContentField"></ErrorMessage>
+              <ErrorMessage class="text-danger" name="StockField"></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
@@ -326,14 +326,6 @@ export default {
       stockState.value = true
       return true
     }
-    // const validateEmployee = () => {
-    //   if (!prescriptionFields.value.empleadoId) {
-    //     employeeState.value = false
-    //     return 'Este campo es requerido'
-    //   }
-    //   employeeState.value = true
-    //   return true
-    // }
     const resetProductsFields = () => {
       showModal.value = false
       nameState.value = false

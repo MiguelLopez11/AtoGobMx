@@ -81,19 +81,23 @@
 </template>
 
 <script>
-import MunicipalMedicalServices from '@/Services/municipalMedical.Services'
-import EmployeeServices from '@/Services/employee.Services'
+import PrescriptionServices from '@/Services/prescription.Services'
 import { ref, inject } from 'vue'
 export default {
-  setup () {
+  components: {},
+  props: {
+    EmpleadoId: {
+      type: Number,
+      required: true
+    }
+  },
+  setup (props) {
     const swal = inject('$swal')
     const {
-      getMedicalAppointments,
+      getPrescriptionByEmpleadoId,
       deleteMedicalAppointment
-    } = MunicipalMedicalServices()
-    const { getEmployeesUnfiled } = EmployeeServices()
+    } = PrescriptionServices()
     const medicalAppointments = ref([])
-    const employees = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
     const filter = ref(null)
@@ -101,6 +105,7 @@ export default {
     const isloading = ref(true)
     const searchValue = ref('')
     const searchField = ref('marca')
+    console.log(props.EmpleadoId)
     const medicalAppointmentFields = ref({
       citaId: 0,
       fechaHora: null,
@@ -119,7 +124,7 @@ export default {
       { value: 'descripcion', text: 'Descripción' },
       { value: 'actions', text: 'Acciones' }
     ])
-    getMedicalAppointments(data => {
+    getPrescriptionByEmpleadoId(props.EmpleadoId, data => {
       medicalAppointments.value = data
       if (medicalAppointments.value.length > 0) {
         isloading.value = false
@@ -129,19 +134,9 @@ export default {
         }
       }
     })
-    getEmployeesUnfiled(data => {
-      employees.value = data
-      if (data.length === 0) {
-        swal.fire({
-          title: 'No se encuentran empleados registrador!',
-          text: 'Registre primero un empleado para continuar.',
-          icon: 'warning'
-        })
-      }
-    })
     const refreshTable = () => {
       isloading.value = true
-      getMedicalAppointments(data => {
+      getPrescriptionByEmpleadoId(props.EmpleadoId, data => {
         medicalAppointments.value = data
         if (medicalAppointments.value.length > 0) {
           isloading.value = false
@@ -189,9 +184,59 @@ export default {
     const onFiltered = filteredItems => {
       currentPage.value = 1
     }
+    // VALIDATIONS
+    // const validateNomeclature = () => {
+    //   if (!medicalAppointmentFields.value.nomenclatura) {
+    //     nomenclatureState.value = false
+    //     return 'Este campo es requerido'
+    //   }
+    //   nomenclatureState.value = true
+    //   return true
+    // }
+    // const validateBrand = () => {
+    //   if (!medicalAppointmentFields.value.marca) {
+    //     brandState.value = false
+    //     return 'Este campo es requerido'
+    //   }
+    //   brandState.value = true
+    //   return true
+    // }
+    // const validateTypeWeapon = () => {
+    //   if (!medicalAppointmentFields.value.tipoArma) {
+    //     typeWeaponState.value = false
+    //     return 'Este campo es requerido'
+    //   }
+    //   typeWeaponState.value = true
+    //   return true
+    // }
+    // const validateGauge = () => {
+    //   if (!medicalAppointmentFields.value.calibre) {
+    //     gaugeState.value = false
+    //     return 'Este campo es requerido'
+    //   }
+    //   gaugeState.value = true
+    //   return true
+    // }
+    // const validateEmployee = () => {
+    //   if (!medicalAppointmentFields.value.empleadoId) {
+    //     employeeState.value = false
+    //     return 'Este campo es requerido'
+    //   }
+    //   employeeState.value = true
+    //   return true
+    // }
+    // const resetArmoryFields = () => {
+    //   nomenclatureState.value = false
+    //   brandState.value = false
+    //   typeWeaponState.value = false
+    //   gaugeState.value = false
+    //   employeeState.value = false
+    //   medicalAppointmentFields.value = JSON.parse(
+    //     JSON.stringify(weaponsFieldsBlank)
+    //   )
+    // }
     return {
       medicalAppointments,
-      employees,
       //   employeesArmory,
       fields,
       perPage,
@@ -203,21 +248,21 @@ export default {
       isloading,
       searchValue,
       searchField,
-      // nomenclatureState,
-      // brandState,
-      // typeWeaponState,
-      // gaugeState,
-      // employeeState,
+      //   nomenclatureState,
+      //   brandState,
+      //   typeWeaponState,
+      //   gaugeState,
+      //   employeeState,
 
       onFiltered,
       refreshTable,
       RemoveMedicalAppointment
-      // resetArmoryFields,
-      // validateNomeclature,
-      // validateBrand,
-      // validateTypeWeapon,
-      // validateGauge,
-      // validateEmployee
+    //   resetArmoryFields,
+    //   validateNomeclature,
+    //   validateBrand,
+    //   validateTypeWeapon,
+    //   validateGauge,
+    //   validateEmployee
     }
   }
 }

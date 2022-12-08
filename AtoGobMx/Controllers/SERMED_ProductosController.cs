@@ -63,6 +63,10 @@ namespace AtoGobMx.Controllers
             {
                 return NotFound();
             }
+            if (Medicamento.CantidadFaltante != 0)
+            {
+                Medicamento.CantidadFaltante += Medicamento.CantidadDisponible;
+            }
             Medicamento.ProductoId = producto.ProductoId;
             //Medicamento.CategoriaMedicamentoId = producto.CategoriaMedicamentoId;
             Medicamento.Nombre = producto.Nombre;

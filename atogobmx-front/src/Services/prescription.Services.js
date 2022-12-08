@@ -18,6 +18,11 @@ export default function PrescriptionServices () {
       callback(response.data)
     })
   }
+  const getPrescriptionByEmpleadoId = (EmpleadoId, callback) => {
+    axios.get(`${BaseUrl}/SERMED_Receta/empleado/${EmpleadoId}`).then((response) => {
+      callback(response.data)
+    })
+  }
   const getProductsPrescriptionByRecetaId = (RecetaId, callback) => {
     axios.get(`${BaseUrl}/SERMED_ProductoReceta/Receta/${RecetaId}`).then((response) => {
       callback(response.data)
@@ -75,6 +80,7 @@ export default function PrescriptionServices () {
     fillPrescription,
     getPrescriptionsPending,
     getProductsPrescriptionByRecetaId,
+    getPrescriptionByEmpleadoId,
     createPrescription,
     updatePrescription,
     deletePrescription,

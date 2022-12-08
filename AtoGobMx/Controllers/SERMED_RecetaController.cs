@@ -62,6 +62,18 @@ namespace AtoGobMx.Controllers
 
             return Ok(Receta);
         }
+        [HttpGet("empleado/{EmpleadoId}")]
+        public async Task<ActionResult<SERMED_Cita>> GetRecetaByEmpleadoID(int EmpleadoId)
+        {
+            var Recetas = await _context.Receta
+                .Include(i => i.Empleados)
+                .Include(i => i.EstatusReceta)
+                .Where(w => !w.Archivado)
+                .Where(w => w.EmpleadoId == EmpleadoId)
+                .ToListAsync();
+
+            return Ok(Recetas);
+        }
         [HttpPost]
         public async Task<ActionResult<SERMED_Receta>> PostInventario(SERMED_Receta receta)
         {

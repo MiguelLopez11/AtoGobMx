@@ -42,6 +42,11 @@
       <template #header-actions="header">
         {{ header.text }}
       </template>
+      <template #item-empleados="items">
+        <span v-if="items.empleados !== null">
+        {{ items.empleados.nombreCompleto  }}
+        </span>
+      </template>
       <template #item-actions="items">
         <b-dropdown
           id="ActionsDropdown"
@@ -164,7 +169,7 @@ export default {
       JSON.parse(JSON.stringify(prescriptionFields))
     )
     const fields = ref([
-      { value: 'empleados.nombreCompleto', text: 'Empleado' },
+      { value: 'empleados', text: 'Empleado' },
       { value: 'diagnostico', text: 'Diagnostico' },
       { value: 'fechaAlta', text: 'Fecha' },
       { value: 'status', text: 'Estado' },
