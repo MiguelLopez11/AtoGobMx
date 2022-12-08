@@ -143,7 +143,7 @@ import PrescriptionServices from '@/Services/prescription.Services'
 import MedicalProductsServices from '@/Services/medicalProducts.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
-import { useRouter } from 'vue-router'
+// import { useRouter } from 'vue-router'
 // import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
@@ -163,7 +163,7 @@ export default {
     const swal = inject('$swal')
     const { getProductsPrescriptionByRecetaId, createProductPrescription, deleteProductPrescription } = PrescriptionServices()
     const { getProducts } = MedicalProductsServices()
-    const redirect = useRouter()
+    // const redirect = useRouter()
     const productPrescriptions = ref([])
     const products = ref([])
     const productState = ref(false)
@@ -184,7 +184,7 @@ export default {
       descripcion: null,
       archivado: false
     })
-    const productPrescriptionFieldsBlank = ref(JSON.parse(JSON.stringify(productPrescriptionFields)))
+    const productPrescriptionFieldsBlank = ref(JSON.parse(JSON.stringify(productPrescriptionFields.value)))
     const fields = ref([
       { value: 'producto.nombre', text: 'Medicamento' },
       { value: 'producto.contenido', text: 'Contenido' },
@@ -229,8 +229,6 @@ export default {
     }
     const addProductPrescription = () => {
       createProductPrescription(productPrescriptionFields.value, data => {
-        resetProductPrescriptionFields()
-        refreshTable()
         swal.fire({
           title: 'Producto registrado correctamente!',
           text:
@@ -238,16 +236,17 @@ export default {
           icon: 'success'
         }).then(result => {
           if (result.isConfirmed) {
-            redirect.go(0)
+            resetProductPrescriptionFields()
+            refreshTable()
           }
         })
       })
     }
     const resetProductPrescriptionFields = () => {
+      productPrescriptionFields.value = JSON.parse(JSON.stringify(productPrescriptionFieldsBlank.value))
       showModal.value = false
       productState.value = false
       amountState.value = false
-      productPrescriptionFields.value = JSON.parse(JSON.stringify(productPrescriptionFieldsBlank))
     }
     const RemoveProductPrescription = productPrescriptionId => {
       isloading.value = true

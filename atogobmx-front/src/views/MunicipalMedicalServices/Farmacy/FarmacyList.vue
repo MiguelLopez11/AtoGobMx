@@ -27,6 +27,11 @@
       <template #header-actions="header">
         {{ header.text }}
       </template>
+      <template #item-empleados="items">
+        <span v-if="items.empleados !== null">
+          {{ items.empleados.nombreCompleto }}
+        </span>
+      </template>
       <template #item-actions="items">
         <b-dropdown
           id="ActionsDropdown"
@@ -47,6 +52,17 @@
           >
             <i class="bi bi-bell-fill" />
             Surtir Receta
+          </b-dropdown-item>
+          <b-dropdown-item
+            class="m-1"
+            variant="outline-warning"
+            :to="{
+              name: 'ServiciosMedicos-Receta-Edit',
+              params: { RecetaId: items.recetaId }
+            }"
+          >
+            <i class="bi bi-pencil-square" />
+            Editar Receta
           </b-dropdown-item>
           <b-dropdown-item
             @click="RemovePrescription(items.recetaId)"
@@ -106,7 +122,7 @@
                     : ''
                 "
               >
-                <spam align="center">
+                <span align="center">
                   {{
                     data.producto.cantidadDisponible === 0
                       ? 'Sin existencia'
@@ -116,7 +132,7 @@
                       ? 'En existencia'
                       : ''
                   }}
-                </spam>
+                </span>
               </b-badge>
             </b-td>
           </b-tr>
@@ -164,7 +180,8 @@ export default {
       JSON.parse(JSON.stringify(prescriptionFields))
     )
     const fields = ref([
-      { value: 'empleados.nombreCompleto', text: 'Empleado' },
+      // eslint-disable-next-line no-constant-condition
+      { value: 'empleados', text: 'Empleado' },
       { value: 'diagnostico', text: 'Diagnostico' },
       { value: 'fechaAlta', text: 'Fecha' },
       { value: 'status', text: 'Estado' },
@@ -205,10 +222,25 @@ export default {
       })
     }
     const onClickModal = RecetaId => {
-      recetaId.value = RecetaId
-      showModal.value = !showModal.value
       getProductsPrescriptionByRecetaId(RecetaId, data => {
-        prescriptionSelected.value = data
+        if (data.length === 0) {
+          swal.fire({
+            title: 'Receta sin productos!',
+            text: 'La receta no contiene productos registrados.',
+            icon: 'error'
+          })
+        } else {
+          if (data[0].cantidad > data[0].producto.cantidadDisponible) {
+            swal.fire({
+              title: 'Producto sin disponibilidad suficiente!',
+              text: 'La receta contiene productos que no contiene disponibilidad suficiente.',
+              icon: 'warning'
+            })
+          }
+          recetaId.value = RecetaId
+          showModal.value = !showModal.value
+          prescriptionSelected.value = data
+        }
       })
     }
     const RemovePrescription = recetaId => {
