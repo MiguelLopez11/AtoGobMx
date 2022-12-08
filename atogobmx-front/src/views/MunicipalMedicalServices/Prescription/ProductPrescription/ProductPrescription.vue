@@ -56,7 +56,7 @@
             <i class="bi bi-three-dots-vertical"></i>
           </template>
           <b-dropdown-item
-            @click="ProductPrescription(items.productoId)"
+            @click="RemoveProductPrescription(items.productoRecetaId)"
             class="m-1"
             variant="outline-danger"
           >
@@ -143,6 +143,7 @@ import PrescriptionServices from '@/Services/prescription.Services'
 import MedicalProductsServices from '@/Services/medicalProducts.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
+// import { useRouter } from 'vue-router'
 // import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
@@ -160,8 +161,9 @@ export default {
   },
   setup (props) {
     const swal = inject('$swal')
-    const { getProductPrescriptions, createProductPrescription, deleteProductPrescription } = PrescriptionServices()
+    const { getProductsPrescriptionByRecetaId, createProductPrescription, deleteProductPrescription } = PrescriptionServices()
     const { getProducts } = MedicalProductsServices()
+    // const redirect = useRouter()
     const productPrescriptions = ref([])
     const products = ref([])
     const productState = ref(false)
@@ -182,7 +184,7 @@ export default {
       descripcion: null,
       archivado: false
     })
-    const productPrescriptionFieldsBlank = ref(JSON.parse(JSON.stringify(productPrescriptionFields)))
+    const productPrescriptionFieldsBlank = ref(JSON.parse(JSON.stringify(productPrescriptionFields.value)))
     const fields = ref([
       { value: 'producto.nombre', text: 'Medicamento' },
       { value: 'producto.contenido', text: 'Contenido' },
@@ -190,7 +192,7 @@ export default {
       { value: 'descripcion', text: 'Sugerencias' },
       { value: 'actions', text: 'Acciones' }
     ])
-    getProductPrescriptions(data => {
+    getProductsPrescriptionByRecetaId(props.RecetaId, data => {
       productPrescriptions.value = data
       if (productPrescriptions.value.length > 0) {
         isloading.value = false
@@ -213,7 +215,7 @@ export default {
     })
     const refreshTable = () => {
       isloading.value = true
-      getProductPrescriptions(data => {
+      getProductsPrescriptionByRecetaId(props.RecetaId, data => {
         productPrescriptions.value = data
         if (productPrescriptions.value.length > 0) {
           isloading.value = false
@@ -227,19 +229,24 @@ export default {
     }
     const addProductPrescription = () => {
       createProductPrescription(productPrescriptionFields.value, data => {
-        refreshTable()
         swal.fire({
           title: 'Producto registrado correctamente!',
           text:
             'El producto se ha registrado al sistema satisfactoriamente.',
           icon: 'success'
+        }).then(result => {
+          if (result.isConfirmed) {
+            resetProductPrescriptionFields()
+            refreshTable()
+          }
         })
       })
-      resetProductPrescriptionFields()
     }
     const resetProductPrescriptionFields = () => {
+      productPrescriptionFields.value = JSON.parse(JSON.stringify(productPrescriptionFieldsBlank.value))
       showModal.value = false
-      productPrescriptionFields.value = JSON.parse(JSON.stringify(productPrescriptionFieldsBlank))
+      productState.value = false
+      amountState.value = false
     }
     const RemoveProductPrescription = productPrescriptionId => {
       isloading.value = true
@@ -251,21 +258,21 @@ export default {
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
           cancelButtonColor: '#d33',
-          confirmButtonText: 'Si, archivar arma!',
+          confirmButtonText: 'Si, eliminar producto!',
           cancelButtonText: 'Cancelar'
         })
         .then(result => {
           if (result.isConfirmed) {
             swal
               .fire({
-                title: 'Arma archivada!',
+                title: 'Producto archivado!',
                 text:
-                  'El arma ha sido archivado satisfactoriamente .',
+                  'El producto ha sido archivado satisfactoriamente .',
                 icon: 'success'
               })
               .then(result => {
                 if (result.isConfirmed) {
-                  deleteProductPrescription(productPrescriptionId, data => {
+                  deleteProductPrescription(props.RecetaId, productPrescriptionId, data => {
                     refreshTable()
                   })
                 }

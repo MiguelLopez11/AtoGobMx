@@ -18,6 +18,11 @@ export default function PrescriptionServices () {
       callback(response.data)
     })
   }
+  const getPrescriptionByEmpleadoId = (EmpleadoId, callback) => {
+    axios.get(`${BaseUrl}/SERMED_Receta/empleado/${EmpleadoId}`).then((response) => {
+      callback(response.data)
+    })
+  }
   const getProductsPrescriptionByRecetaId = (RecetaId, callback) => {
     axios.get(`${BaseUrl}/SERMED_ProductoReceta/Receta/${RecetaId}`).then((response) => {
       callback(response.data)
@@ -25,6 +30,11 @@ export default function PrescriptionServices () {
   }
   const createPrescription = (data, callback) => {
     axios.post(`${BaseUrl}/SERMED_Receta`, data).then((response) => {
+      callback(response.data)
+    })
+  }
+  const fillPrescription = (RecetaId, callback) => {
+    axios.post(`${BaseUrl}/SERMED_Receta/SurtirReceta/${RecetaId}`).then((response) => {
       callback(response.data)
     })
   }
@@ -59,16 +69,18 @@ export default function PrescriptionServices () {
       callback(response.data)
     })
   }
-  const deleteProductPrescription = (productoRecetaId, callback) => {
-    axios.delete(`${BaseUrl}/SERMED_ProductoReceta/${productoRecetaId}`).then((response) => {
+  const deleteProductPrescription = (RecetaId, productoRecetaId, callback) => {
+    axios.delete(`${BaseUrl}/SERMED_ProductoReceta/Receta/${RecetaId}/${productoRecetaId}`).then((response) => {
       callback(response.data)
     })
   }
   return {
     getPrescriptions,
     getPrescription,
+    fillPrescription,
     getPrescriptionsPending,
     getProductsPrescriptionByRecetaId,
+    getPrescriptionByEmpleadoId,
     createPrescription,
     updatePrescription,
     deletePrescription,

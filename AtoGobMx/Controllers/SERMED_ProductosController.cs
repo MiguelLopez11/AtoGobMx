@@ -46,6 +46,7 @@ namespace AtoGobMx.Controllers
         [HttpPost]
         public async Task<ActionResult<SERMED_Producto>> PostMedicamento(SERMED_Producto producto)
         {
+            producto.CantidadFaltante = 0;
             _context.Medicamento.Add(producto);
             await _context.SaveChangesAsync();
             return StatusCode(200, "Medicamento credo exitosamente");
@@ -61,6 +62,10 @@ namespace AtoGobMx.Controllers
             if (Medicamento == null)
             {
                 return NotFound();
+            }
+            if (Medicamento.CantidadFaltante != 0)
+            {
+                Medicamento.CantidadFaltante += Medicamento.CantidadDisponible;
             }
             Medicamento.ProductoId = producto.ProductoId;
             //Medicamento.CategoriaMedicamentoId = producto.CategoriaMedicamentoId;

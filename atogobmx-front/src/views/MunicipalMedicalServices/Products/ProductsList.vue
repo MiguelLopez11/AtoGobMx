@@ -79,12 +79,12 @@
         <b-badge
           class="text-white"
           :variant="
-            items.cantidadDisponible === 0  ? 'danger' : '' || items.cantidadDisponible < 5  ? 'warning' : '' || items.cantidadDisponible > 5  ? 'success' : ''
+            items.cantidadDisponible === 0  ? 'danger' : '' || items.cantidadDisponible < 5  ? 'warning' : '' || items.cantidadDisponible >= 5  ? 'success' : ''
           "
         >
         <h6 align="center">
           <!-- {{ items.cantidadDisponible }} <br> -->
-          {{ items.cantidadDisponible === 0  ? 'Sin existencia' : '' || items.cantidadDisponible < 5  ? 'Poca existencia' : '' || items.cantidadDisponible > 5  ? 'En existencia' : '' }}
+          {{ items.cantidadDisponible === 0  ? 'Sin existencia' : '' || items.cantidadDisponible < 5  ? 'Poca existencia' : '' || items.cantidadDisponible >= 5  ? 'En existencia' : '' }}
         </h6>
         </b-badge>
       </template>
@@ -128,7 +128,7 @@
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Fecha de vencimiento">
-              <Field name="ContentField" :rules="validateExpirationDate" as="text">
+              <Field name="ExpirationDateField" :rules="validateExpirationDate" as="text">
                 <Datepicker
                   v-model="productsFields.fechaVencimiento"
                   locale="es"
@@ -140,17 +140,17 @@
               </Field>
               <ErrorMessage
                 class="text-danger"
-                name="ContentField"
+                name="ExpirationDateField"
               ></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Stock (Cantidad disponible)">
-              <Field name="ContentField" :rules="validateStock" as="text">
+              <Field name="StockField" :rules="validateStock" as="text">
                 <b-form-input v-model="productsFields.cantidadDisponible" :state="stockState">
                 </b-form-input>
               </Field>
-              <ErrorMessage class="text-danger" name="ContentField"></ErrorMessage>
+              <ErrorMessage class="text-danger" name="StockField"></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
@@ -218,7 +218,7 @@ export default {
       { value: 'contenido', text: 'Contenido' },
       { value: 'fechaVencimiento', text: 'Fecha de vencimiento' },
       { value: 'cantidadDisponible', text: 'Stock(Cantidad disponible)' },
-      { value: 'cantidadFaltantes', text: 'Cantidad Faltante' },
+      { value: 'cantidadFaltante', text: 'Cantidad Faltante' },
       { value: 'status', text: 'Estado' },
       { value: 'actions', text: 'Acciones' }
     ])
@@ -326,14 +326,6 @@ export default {
       stockState.value = true
       return true
     }
-    // const validateEmployee = () => {
-    //   if (!prescriptionFields.value.empleadoId) {
-    //     employeeState.value = false
-    //     return 'Este campo es requerido'
-    //   }
-    //   employeeState.value = true
-    //   return true
-    // }
     const resetProductsFields = () => {
       showModal.value = false
       nameState.value = false

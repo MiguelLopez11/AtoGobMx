@@ -27,6 +27,11 @@
       <template #header-actions="header">
         {{ header.text }}
       </template>
+      <template #item-empleados="items">
+        <span v-if="items.empleados !== null">
+          {{ items.empleados.nombreCompleto }}
+        </span>
+      </template>
       <template #item-actions="items">
         <b-dropdown
           id="ActionsDropdown"
@@ -47,6 +52,17 @@
           >
             <i class="bi bi-bell-fill" />
             Surtir Receta
+          </b-dropdown-item>
+          <b-dropdown-item
+            class="m-1"
+            variant="outline-warning"
+            :to="{
+              name: 'ServiciosMedicos-Receta-Edit',
+              params: { RecetaId: items.recetaId }
+            }"
+          >
+            <i class="bi bi-pencil-square" />
+            Editar Receta
           </b-dropdown-item>
           <b-dropdown-item
             @click="RemovePrescription(items.recetaId)"
@@ -82,13 +98,43 @@
             <b-th colspan="2" variant="light">Producto</b-th>
             <b-th colspan="2" variant="light">Contenido</b-th>
             <b-th colspan="2" variant="light">Cantidad</b-th>
+            <b-th colspan="2" variant="light">Cantidad disponible</b-th>
           </b-tr>
         </b-thead>
         <b-tbody>
-          <b-tr v-for="data in prescriptionSelected" :key="data.productoRecetaId">
+          <b-tr
+            v-for="data in prescriptionSelected"
+            :key="data.productoRecetaId"
+          >
             <b-td colspan="2">{{ data.producto.nombre }}</b-td>
             <b-td colspan="2">{{ data.producto.contenido }}</b-td>
             <b-td colspan="2">{{ data.cantidad }}</b-td>
+            <b-td colspan="2">
+              {{ data.producto.cantidadDisponible }}
+              <b-badge
+                :variant="
+                  data.producto.cantidadDisponible === 0
+                    ? 'danger'
+                    : '' || data.producto.cantidadDisponible < 5
+                    ? 'warning'
+                    : '' || data.producto.cantidadDisponible > 5
+                    ? 'success'
+                    : ''
+                "
+              >
+                <span align="center">
+                  {{
+                    data.producto.cantidadDisponible === 0
+                      ? 'Sin existencia'
+                      : '' || data.producto.cantidadDisponible < 5
+                      ? 'Poca existencia'
+                      : '' || data.producto.cantidadDisponible > 5
+                      ? 'En existencia'
+                      : ''
+                  }}
+                </span>
+              </b-badge>
+            </b-td>
           </b-tr>
         </b-tbody>
       </b-table-simple>
@@ -102,9 +148,6 @@ import { ref, inject } from 'vue'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
-    // Form,
-    // Field,
-    // ErrorMessage,
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup () {
@@ -112,7 +155,8 @@ export default {
     const {
       getPrescriptionsPending,
       getProductsPrescriptionByRecetaId,
-      deletePrescription
+      deletePrescription,
+      fillPrescription
     } = PrescriptionServices()
     const prescriptions = ref([])
     const prescriptionSelected = ref([])
@@ -125,6 +169,7 @@ export default {
     const searchValue = ref('')
     const searchField = ref('marca')
     const showModal = ref(false)
+    const recetaId = ref()
     const prescriptionFields = ref({
       recetaId: 0,
       empleadoId: null,
@@ -135,7 +180,8 @@ export default {
       JSON.parse(JSON.stringify(prescriptionFields))
     )
     const fields = ref([
-      { value: 'empleados.nombreCompleto', text: 'Empleado' },
+      // eslint-disable-next-line no-constant-condition
+      { value: 'empleados', text: 'Empleado' },
       { value: 'diagnostico', text: 'Diagnostico' },
       { value: 'fechaAlta', text: 'Fecha' },
       { value: 'status', text: 'Estado' },
@@ -166,16 +212,35 @@ export default {
       return 'datos recargados'
     }
     const onFillPrescription = () => {
-      swal.fire({
-        title: 'Receta registrada correctamente!',
-        text: 'La receta se ha registrado al sistema satisfactoriamente.',
-        icon: 'success'
+      fillPrescription(recetaId.value, data => {
+        swal.fire({
+          title: 'Receta registrada correctamente!',
+          text: 'La receta se ha registrado al sistema satisfactoriamente.',
+          icon: 'success'
+        })
+        refreshTable()
       })
     }
     const onClickModal = RecetaId => {
-      showModal.value = !showModal.value
       getProductsPrescriptionByRecetaId(RecetaId, data => {
-        prescriptionSelected.value = data
+        if (data.length === 0) {
+          swal.fire({
+            title: 'Receta sin productos!',
+            text: 'La receta no contiene productos registrados.',
+            icon: 'error'
+          })
+        } else {
+          if (data[0].cantidad > data[0].producto.cantidadDisponible) {
+            swal.fire({
+              title: 'Producto sin disponibilidad suficiente!',
+              text: 'La receta contiene productos que no contiene disponibilidad suficiente.',
+              icon: 'warning'
+            })
+          }
+          recetaId.value = RecetaId
+          showModal.value = !showModal.value
+          prescriptionSelected.value = data
+        }
       })
     }
     const RemovePrescription = recetaId => {
@@ -217,6 +282,7 @@ export default {
     return {
       prescriptions,
       employees,
+      recetaId,
       fields,
       perPage,
       currentPage,

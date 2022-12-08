@@ -193,7 +193,8 @@
         <b-tab
           title="Recetas"
         >
-
+        {{expedientMedical.empleadoId}}
+        <ExpedientMedicalAppointmentList :EmpleadoId="expedientMedical.empleadoId" />
         </b-tab>
       </b-tabs>
     </b-card>
@@ -202,6 +203,7 @@
 
 <script>
 import MunicipalMedicalServices from '@/Services/municipalMedical.Services'
+import ExpedientMedicalAppointmentList from '@/views/MunicipalMedicalServices/MedicalExpedient/ExpedientMedicalAppointmentList.vue'
 import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Form, Field, ErrorMessage } from 'vee-validate'
@@ -210,7 +212,8 @@ export default {
   components: {
     Form,
     Field,
-    ErrorMessage
+    ErrorMessage,
+    ExpedientMedicalAppointmentList
   },
   setup () {
     const swal = inject('$swal')
