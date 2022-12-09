@@ -103,6 +103,7 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
+          <b-row>
           <GMapMap
             :center="center"
             map-type-id="satellite"
@@ -126,6 +127,7 @@
               @click="center = m.position"
             /> </GMapMap
           >
+          </b-row>
 
         </b-row>
         <b-row align-h="end">

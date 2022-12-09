@@ -26,7 +26,7 @@
             </b-form-group>
           </b-col>
           <!--Agregar latitud-->
-          <b-col>
+          <!-- <b-col>
             <b-form-group class="mt-3" label="Latitud">
               <Field
                 name="LatitudeField"
@@ -43,9 +43,9 @@
                 name="LatitudeField"
               ></ErrorMessage>
             </b-form-group>
-          </b-col>
+          </b-col> -->
           <!--Agregar longitud-->
-          <b-col>
+          <!-- <b-col>
             <b-form-group class="mt-3" label="Longitud">
               <Field
                 name="LengthField"
@@ -62,7 +62,7 @@
                 name="LengthField"
               ></ErrorMessage>
             </b-form-group>
-          </b-col>
+          </b-col> -->
           <!--Descripcion-->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion">
@@ -142,8 +142,8 @@ export default {
     const router = useRoute()
     const redirect = useRouter()
     const NameWorksState = ref(false)
-    const LatitudeState = ref(false)
-    const LengthState = ref(false)
+    // const LatitudeState = ref(false)
+    // const LengthState = ref(false)
     const DescriptionState = ref(false)
     const WorkStatusState = ref(false)
     const breadcrumbItems = ref([
@@ -205,42 +205,42 @@ export default {
       return true
     }
 
-    const validateLatitude = () => {
-      if (!publicWorks.value.latitud) {
-        validateState()
-        return 'Este campo es requerido'
-      }
+    // const validateLatitude = () => {
+    //   if (!publicWorks.value.latitud) {
+    //     validateState()
+    //     return 'Este campo es requerido'
+    //   }
 
-      if (!/^[0-9]+$/i.test(publicWorks.value.latitud)) {
-        validateState()
-        return 'Este campo solo puede contener numeros'
-      }
-      validateState()
-      return true
-    }
+    //   if (!/^[0-9]+$/i.test(publicWorks.value.latitud)) {
+    //     validateState()
+    //     return 'Este campo solo puede contener numeros'
+    //   }
+    //   validateState()
+    //   return true
+    // }
 
-    const validateLength = () => {
-      if (!publicWorks.value.longitud) {
-        validateState()
-        return 'Este campo es requerido'
-      }
+    // const validateLength = () => {
+    //   if (!publicWorks.value.longitud) {
+    //     validateState()
+    //     return 'Este campo es requerido'
+    //   }
 
-      if (!/^[0-9]+$/i.test(publicWorks.value.longitud)) {
-        validateState()
-        return 'Este campo solo puede contener numeros'
-      }
-      validateState()
-      return true
-    }
+    //   if (!/^[0-9]+$/i.test(publicWorks.value.longitud)) {
+    //     validateState()
+    //     return 'Este campo solo puede contener numeros'
+    //   }
+    //   validateState()
+    //   return true
+    // }
 
     const validateDescription = () => {
       if (!publicWorks.value.descripcion) {
         validateState()
         return 'Este campo es requerido'
       }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(publicWorks.value.descripcion)) {
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ ,;:. 0-9]+$/i.test(publicWorks.value.descripcion)) {
         validateState()
-        return 'La descripcion solo puede contener letras'
+        return 'La descripcion solo puede contener letras y nnumeros'
       }
       validateState()
       return true
@@ -257,8 +257,8 @@ export default {
 
     const validateState = () => {
       NameWorksState.value = publicWorks.value.nombre !== '' || publicWorks.value.nombre !== null
-      LatitudeState.value = publicWorks.value.latitud !== '' || publicWorks.value.latitud !== null
-      LengthState.value = publicWorks.value.longitud !== '' || publicWorks.value.longitud !== null
+      // LatitudeState.value = publicWorks.value.latitud !== '' || publicWorks.value.latitud !== null
+      // LengthState.value = publicWorks.value.longitud !== '' || publicWorks.value.longitud !== null
       DescriptionState.value = publicWorks.value.descripcion !== '' || publicWorks.value.descripcion !== null
       WorkStatusState.value = publicWorks.value.estatusObraId !== '' || publicWorks.value.estatusObraId !== null
     }
@@ -268,15 +268,15 @@ export default {
       breadcrumbItems,
       worksStatus,
       NameWorksState,
-      LatitudeState,
-      LengthState,
+      // LatitudeState,
+      // LengthState,
       DescriptionState,
       WorkStatusState,
 
       onUpdatePublicWorks,
       validateNameWorks,
-      validateLatitude,
-      validateLength,
+      // validateLatitude,
+      // validateLength,
       validateDescription,
       validateWorkStatus,
       validateState

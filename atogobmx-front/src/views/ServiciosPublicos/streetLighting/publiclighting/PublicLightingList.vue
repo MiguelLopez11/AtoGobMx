@@ -344,12 +344,12 @@ export default {
         return 'Este campo es requerido'
       }
       if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ 0-9]+$/i.test(
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ ,;.: 0-9]+$/i.test(
           publicLightingFields.value.descripcionProblema
         )
       ) {
         ProblemState.value = false
-        return 'Este campo solo puede contener letras'
+        return 'Este campo solo puede contener letras y numeros'
       }
       if (!publicLightingFields.value.descripcionProblema.trim().length > 0) {
         ProblemState.value = false

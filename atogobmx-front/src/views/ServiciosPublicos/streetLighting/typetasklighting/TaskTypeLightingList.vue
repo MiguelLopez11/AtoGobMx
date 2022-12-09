@@ -261,12 +261,12 @@ export default {
         return 'Este campo es requerido'
       }
       if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ ,;.: 0-9]+$/i.test(
           taskTypeLightingFields.value.descripcion
         )
       ) {
         DescriptionState.value = false
-        return 'la descripcion del tipo de tarea solo puede contener letras'
+        return 'la descripcion del tipo de tarea solo puede contener letras y numeros'
       }
       if (!taskTypeLightingFields.value.descripcion.trim().length > 0) {
         DescriptionState.value = false
