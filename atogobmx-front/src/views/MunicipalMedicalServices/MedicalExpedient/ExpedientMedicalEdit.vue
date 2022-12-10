@@ -193,8 +193,7 @@
         <b-tab
           title="Recetas"
         >
-        {{expedientMedical.empleadoId}}
-        <ExpedientMedicalAppointmentList :EmpleadoId="expedientMedical.empleadoId" />
+        <expedient-medical-appointment-list :EmpleadoId="empleadoId"></expedient-medical-appointment-list>
         </b-tab>
       </b-tabs>
     </b-card>
@@ -227,6 +226,7 @@ export default {
     // const $toast = useToast()
     const expedientMedical = ref([])
     const medicalAppointments = ref([])
+    const empleadoId = ref(parseInt(router.params.EmpleadoId))
     const redirect = useRouter()
     const perPage = ref(5)
     const currentPage = ref(1)
@@ -369,6 +369,7 @@ export default {
     return {
       expedientMedical,
       breadcrumbItems,
+      empleadoId,
       heightState,
       weightState,
       bloodTypeState,

@@ -65,7 +65,8 @@
             class="m-1"
             variant="outline-danger"
           >
-            <i class="bi bi-trash3"> Archivar </i>
+            <i class="bi bi-trash3"/>
+            Archivar
           </b-dropdown-item>
           <b-dropdown-item
             class="m-1"

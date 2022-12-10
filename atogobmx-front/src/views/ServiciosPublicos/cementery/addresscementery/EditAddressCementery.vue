@@ -1,8 +1,8 @@
 <template>
-  <b-card class="m-2">
-    <b-card class="mb-4">
-      <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
-    </b-card>
+  <b-card class=" m-2 mb-4">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2" >
     <b-card>
       <div>
         <h3>Editar Direccion Cementerio</h3>
@@ -103,10 +103,10 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
+
           <GMapMap
             :center="center"
-            map-type-id="satellite"
-            :zoom="20"
+            :zoom="17"
             :options="{
               zoomControl: true,
               mapTypeControl: false,
@@ -117,27 +117,23 @@
             style="width: 100%; height: 500px"
           >
             <GMapMarker
-              :zoom="10"
-              :key="index"
-              v-for="(m, index) in markers"
-              :position="m.position"
-              :clickable="true"
+              :zoom="20"
+              :position="center"
               :draggable="true"
-              @click="center = m.position"
-            /> </GMapMap
-          >
-
+              @drag="updateCoordinates"
+            />
+          </GMapMap>
         </b-row>
         <b-row align-h="end">
           <b-button
-            class="col-1 m-2 text-white"
+            class=" m-2 text-white"
             variant="primary"
             to="/ServiciosPublicos/DireccionCementerios/list"
             type="reset"
           >
             Cancelar</b-button
           >
-          <b-button type="success" class="col-1 m-2" variant="success">
+          <b-button type="success" class=" m-2" variant="success">
             Guardar
           </b-button>
         </b-row>
@@ -161,7 +157,8 @@ export default {
   },
   setup () {
     const swal = inject('$swal')
-    const { getAddressCementeryById, updateAddressCementery } = AddressCementeryService()
+    const { getAddressCementeryById, updateAddressCementery } =
+      AddressCementeryService()
     // const $toast = useToast()
     const addressCementeryService = ref([])
     const router = useRoute()
@@ -173,35 +170,50 @@ export default {
     const NumberOutsideState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Direccion cementerio', to: '/ServiciosPublicos/DireccionCementerios/list' },
+      {
+        text: 'Direccion cementerio',
+        to: '/ServiciosPublicos/DireccionCementerios/list'
+      },
       { text: 'Editar-Estatus Alumbrado' }
     ])
 
-    const markers = ref([
-      {
+    const markers = ref({
+      position: {
+        lat: 0,
+        lng: 0
+      }
+    })
+    const center = ref({ lat: 0, lng: 0 })
+    const updateCoordinates = (location) => {
+      markers.value = {
         position: {
-          lat: 20.5546629,
-          lng: -102.4953904
+          lat: location.latLng.lat(),
+          lng: location.latLng.lng()
         }
       }
-    ])
-    const center = ref({ lat: 20.5546629, lng: -102.4953904 })
-
-    const onUpdateAddressCementeryService = () => {
-      updateAddressCementery(addressCementeryService.value, (data) => {})
-      swal.fire({
-        title: '¡Direccion cementerio modificado correctamente!',
-        text: 'La direccion cementerio se ha modificado  satisfactoriamente.',
-        icon: 'success'
-      }).then(result => {
-        if (result.isConfirmed) {
-          redirect.push('/ServiciosPublicos/DireccionCementerios/list')
-        }
-      })
+      addressCementeryService.value.latitud = markers.value.position.lat
+      addressCementeryService.value.longitud = markers.value.position.lng
     }
 
-    getAddressCementeryById(router.params.DireccionId, (data) => {
+    const onUpdateAddressCementeryService = () => {
+      updateAddressCementery(addressCementeryService.value, data => {})
+      swal
+        .fire({
+          title: '¡Direccion cementerio modificado correctamente!',
+          text: 'La direccion cementerio se ha modificado  satisfactoriamente.',
+          icon: 'success'
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            redirect.push('/ServiciosPublicos/DireccionCementerios/list')
+          }
+        })
+    }
+
+    getAddressCementeryById(router.params.DireccionId, data => {
       addressCementeryService.value = data
+      center.value = { lat: data.latitud, lng: data.longitud }
+      markers.value.position = { lat: data.latitud, lng: data.longitud }
     })
 
     const validateNameCementery = () => {
@@ -210,7 +222,11 @@ export default {
         return 'Este campo es requerido'
       }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(addressCementeryService.value.nombreCementerio)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+          addressCementeryService.value.nombreCementerio
+        )
+      ) {
         NameCementeryState.value = false
         return 'Este campo solo puede contener letras'
       }
@@ -230,7 +246,11 @@ export default {
         return 'Este campo es requerido'
       }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(addressCementeryService.value.municipio)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+          addressCementeryService.value.municipio
+        )
+      ) {
         MunicipalityState.value = false
         return 'Este campo solo puede contener letras'
       }
@@ -250,7 +270,11 @@ export default {
         return 'Este campo es requerido'
       }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(addressCementeryService.value.localidad)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+          addressCementeryService.value.localidad
+        )
+      ) {
         LocationState.value = false
         return 'Este campo solo puede contener letras'
       }
@@ -270,7 +294,9 @@ export default {
         return 'Este campo es requerido'
       }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(addressCementeryService.value.calle)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(addressCementeryService.value.calle)
+      ) {
         StreetState.value = false
         return 'Este campo solo puede contener letras'
       }
@@ -305,16 +331,16 @@ export default {
     }
 
     const validateState = () => {
-      // eslint-disable-next-line no-unneeded-ternary
-      NameCementeryState.value = addressCementeryService.value.nombreCementerio === '' ? false : true
-      // eslint-disable-next-line no-unneeded-ternary
-      MunicipalityState.value = addressCementeryService.value.municipio === '' ? false : true
-      // eslint-disable-next-line no-unneeded-ternary
-      LocationState.value = addressCementeryService.value.localidad === '' ? false : true
-      // eslint-disable-next-line no-unneeded-ternary
-      StreetState.value = addressCementeryService.value.calle === '' ? false : true
-      // eslint-disable-next-line no-unneeded-ternary
-      NumberOutsideState.value = addressCementeryService.value.numeroExterior === '' ? false : true
+      NameCementeryState.value =
+        addressCementeryService.value.nombreCementerio !== ''
+      MunicipalityState.value =
+        addressCementeryService.value.municipio !== ''
+      LocationState.value =
+        addressCementeryService.value.localidad !== ''
+      StreetState.value =
+        addressCementeryService.value.calle !== ''
+      NumberOutsideState.value =
+        addressCementeryService.value.numeroExterior !== ''
     }
 
     return {
@@ -335,12 +361,11 @@ export default {
       validateMunicipality,
       validateLocation,
       validateStreet,
-      validateNumberOutside
+      validateNumberOutside,
+      updateCoordinates
     }
   }
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

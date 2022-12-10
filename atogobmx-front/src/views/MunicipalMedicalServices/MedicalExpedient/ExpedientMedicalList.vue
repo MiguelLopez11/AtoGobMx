@@ -71,7 +71,7 @@
             variant="outline-warning"
             :to="{
               name: 'ServiciosMedicos-ExpedienteMedico-Edit',
-              params: { ExpedienteMedicoId: items.expedienteMedicoId }
+              params: { ExpedienteMedicoId: items.expedienteMedicoId, EmpleadoId: items.empleados.empleadoId }
             }"
           >
             <i class="bi bi-pencil-square" />
