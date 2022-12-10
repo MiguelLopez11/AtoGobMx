@@ -22,7 +22,7 @@
         type="submit"
       >
         <i class="bi bi-car-front-fill" />
-        Agregar
+        Agregarrrrr
       </b-button>
     </b-row>
     <EasyDataTable

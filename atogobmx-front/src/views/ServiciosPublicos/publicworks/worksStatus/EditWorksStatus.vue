@@ -113,9 +113,9 @@ export default {
         validateState()
         return 'Este campo es requerido'
       }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(worksStatus.value.descripcion)) {
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ ,;:. 0-9]+$/i.test(worksStatus.value.descripcion)) {
         DescriptionState.value = false
-        return 'La descripcion solo puede contener letras'
+        return 'La descripcion solo puede contener letras y numeros'
       }
       validateState()
       return true

@@ -115,6 +115,10 @@ export default {
         NameState.value = false
         return 'El tipo de tarea solo puede contener letras'
       }
+      if (!taskTypeLighting.value.nombreTarea.trim().length > 0) {
+        NameState.value = false
+        return 'Este campo no puede contener espacios'
+      }
       validateState()
       return true
     }
@@ -124,9 +128,13 @@ export default {
         validateState()
         return 'Este campo es requerido'
       }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(taskTypeLighting.value.descripcion)) {
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ ,;.: 0-9]+$/i.test(taskTypeLighting.value.descripcion)) {
         DescriptionState.value = false
-        return 'El tipo de tarea solo puede contener letras'
+        return 'El tipo de tarea solo puede contener letras y numeros'
+      }
+      if (!taskTypeLighting.value.descripcion.trim().length > 0) {
+        DescriptionState.value = false
+        return 'Este campo no puede contener espacios'
       }
       validateState()
       return true

@@ -24,7 +24,6 @@
         @click="showModal = !showModal"
         type="submit"
       >
-        <!-- v-b-modal.modal-cementery -->
         <i class="bi bi-person-plus-fill"></i>
         Agregar Aseo
       </b-button>

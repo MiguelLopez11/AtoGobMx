@@ -245,12 +245,12 @@ export default {
         return 'Este campo es requerido'
       }
       if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ ,;.: 0-9]+$/i.test(
           statusLightingFields.value.descripcion
         )
       ) {
         DescriptionState.value = false
-        return 'La descripcion solo puede contener letras'
+        return 'La descripcion solo puede contener letras y numeros'
       }
       if (!statusLightingFields.value.descripcion.trim().length > 0) {
         DescriptionState.value = false

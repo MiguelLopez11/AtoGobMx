@@ -234,10 +234,10 @@ export default {
         return 'Este campo es requerido'
       }
       if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(worksStatusFields.value.descripcion)
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ ,;:. 0-9]+$/i.test(worksStatusFields.value.descripcion)
       ) {
         DescriptionState.value = false
-        return 'La descripcion solo puede contener letras'
+        return 'La descripcion solo puede contener letras y numeros'
       }
       if (!worksStatusFields.value.descripcion.trim().length > 0) {
         DescriptionState.value = false

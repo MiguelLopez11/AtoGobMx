@@ -103,7 +103,6 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-
           <GMapMap
             :center="center"
             :zoom="17"

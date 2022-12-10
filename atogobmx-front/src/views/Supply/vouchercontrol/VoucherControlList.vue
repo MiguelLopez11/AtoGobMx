@@ -206,7 +206,7 @@
             </b-form-group>
           </b-col>
           <!--Agregar Producto-->
-          <b-col>
+          <!-- <b-col>
             <b-form-group class="mt-3" label="Producto: ">
               <Field name="ProductField" :rules="validateProduct" as="text">
                 <b-form-select
@@ -224,9 +224,9 @@
                 name="ProductField"
               ></ErrorMessage>
             </b-form-group>
-          </b-col>
+          </b-col> -->
           <!--Agregar Detalle vale-->
-          <b-col>
+          <!-- <b-col>
             <b-form-group class="mt-3" label="Detalle vale: ">
               <Field
                 name="DetailVoucherField"
@@ -248,7 +248,7 @@
                 name="DetailVoucherField"
               ></ErrorMessage>
             </b-form-group>
-          </b-col>
+          </b-col> -->
           <!--Agregar Estatus vale-->
           <b-col>
             <b-form-group class="mt-3" label="Estatus vale: ">
@@ -321,8 +321,8 @@ import EmployeeServices from '@/Services/employee.Services'
 import AreaServices from '@/Services/area.Services'
 import DepartamentServices from '@/Services/departament.Services'
 import ProviderServices from '@/Services/provider.Services'
-import ProductVoucherServices from '@/Services/productvoucher.Services'
-import DetailVoucherServices from '@/Services/detailvoucher.Services'
+// import ProductVoucherServices from '@/Services/productvoucher.Services'
+// import DetailVoucherServices from '@/Services/detailvoucher.Services'
 import StatusVoucherServices from '@/Services/statusvoucher.Services'
 import TypeVoucherServices from '@/Services/typevoucher.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
@@ -346,8 +346,8 @@ export default {
     const { getDepartaments } = DepartamentServices()
     const { getEmployees } = EmployeeServices()
     const { getProvider } = ProviderServices()
-    const { getProductVoucher } = ProductVoucherServices()
-    const { getDetailVoucher } = DetailVoucherServices()
+    // const { getProductVoucher } = ProductVoucherServices()
+    // const { getDetailVoucher } = DetailVoucherServices()
     const { getStatusVoucher } = StatusVoucherServices()
     const { getTypeVoucher } = TypeVoucherServices()
     const voucherControl = ref([])
@@ -390,11 +390,11 @@ export default {
       areaId: null,
       empleadoId: null,
       proveedorId: null,
-      productoId: null,
-      detalleValeId: null,
       estatusValeId: null,
       tipoId: null,
       archivado: false
+      // productoId: null,
+      // detalleValeId: null,
     })
 
     const voucherControlFieldsBlank = ref(
@@ -447,27 +447,27 @@ export default {
       }
     })
 
-    getProductVoucher(data => {
-      productVoucher.value = data
-      if (data.length === 0) {
-        swal.fire({
-          title: 'No se encuentran productos registrados!',
-          text: 'No se encuentran  productos registrados en el sistema, registre primero un producto para continuar.',
-          icon: 'warning'
-        })
-      }
-    })
+    // getProductVoucher(data => {
+    //   productVoucher.value = data
+    //   if (data.length === 0) {
+    //     swal.fire({
+    //       title: 'No se encuentran productos registrados!',
+    //       text: 'No se encuentran  productos registrados en el sistema, registre primero un producto para continuar.',
+    //       icon: 'warning'
+    //     })
+    //   }
+    // })
 
-    getDetailVoucher(data => {
-      detailVoucher.value = data
-      if (data.length === 0) {
-        swal.fire({
-          title: 'No se encuentra el detalle del vale registrado!',
-          text: 'No se encuentra el detalle del vale registrado en el sistema, registre primero un detalle de vale para continuar.',
-          icon: 'warning'
-        })
-      }
-    })
+    // getDetailVoucher(data => {
+    //   detailVoucher.value = data
+    //   if (data.length === 0) {
+    //     swal.fire({
+    //       title: 'No se encuentra el detalle del vale registrado!',
+    //       text: 'No se encuentra el detalle del vale registrado en el sistema, registre primero un detalle de vale para continuar.',
+    //       icon: 'warning'
+    //     })
+    //   }
+    // })
 
     getStatusVoucher(data => {
       statusVoucher.value = data
@@ -492,13 +492,15 @@ export default {
     })
 
     const fields = ref([
-      { value: 'controlValeId', text: 'ID', sortable: true },
+      // { value: 'controlValeId', text: 'ID', sortable: true },
       { value: 'fechaEmicion', text: 'Fecha emicion' },
       { value: 'fechaVigencia', text: 'Fecha vigencia' },
-      { value: 'tipoCombustible', text: 'Tipo combustible' },
       { value: 'departamentoId', text: 'Departamento' },
+      { value: 'areaId', text: 'Area' },
       { value: 'empleadoId', text: 'empleado' },
       { value: 'proveedorId', text: 'Proveedor' },
+      { value: 'estatusValeId', text: 'Proveedor' },
+      { value: 'tipoId', text: 'Tipo vale' },
       { value: 'actions', text: 'Acciones' }
     ])
 
