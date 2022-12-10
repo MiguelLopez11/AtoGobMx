@@ -9,7 +9,7 @@
       </div>
       <Form @submit="onUpdateCleannessService">
         <b-row cols="2">
-          <!-- 1 -->
+          <!-- Agregar nombre del servicios -->
           <b-col>
             <b-form-group class="mt-3" label="Nombre del servicio">
               <Field
@@ -29,7 +29,7 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!-- 2 -->
+          <!--Agregar Establecimiento publico -->
           <b-col>
             <b-form-group class="mt-3" label="Establecimiento publico">
               <Field name="PublicEstablishmentField" :rules="validatePublicEstablishment" as="text">
@@ -45,7 +45,7 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!-- 3 -->
+          <!-- Agregar Domicilio -->
           <b-col>
             <b-form-group class="mt-3" label="Domicilio">
               <Field name="DomicileField" :rules="validateDomicile" as="text">
@@ -61,7 +61,7 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!-- 4 -->
+          <!-- Agregar Objetivo -->
           <b-col>
             <b-form-group class="mt-3" label="Objetivo">
               <Field

@@ -51,6 +51,30 @@ namespace AtoGobMx.Controllers
             await _context.SaveChangesAsync();
             return StatusCode(200, "Medicamento credo exitosamente");
         }
+        [HttpPut("SurtirProducto/{ProductoId}/{Cantidad}")]
+        public async Task<IActionResult> SurtirMedicamento(int ProductoId, int Cantidad)
+        {
+            var medicamento = await _context.Medicamento
+                .FirstOrDefaultAsync(f => f.ProductoId == ProductoId);
+            if (Cantidad <= medicamento.CantidadFaltante)
+            {
+                medicamento.CantidadFaltante -= Cantidad;
+                medicamento.CantidadDisponible += Cantidad;
+                _context.Medicamento.Update(medicamento);
+                await _context.SaveChangesAsync();
+                return StatusCode(200, "Medicamento credo exitosamente");
+            }
+            else
+            {
+                var med = medicamento.CantidadFaltante -= Cantidad;
+                med *= -1;
+                medicamento.CantidadFaltante = 0;
+                medicamento.CantidadDisponible += med;
+                _context.Medicamento.Update(medicamento);
+                await _context.SaveChangesAsync();
+                return StatusCode(200, "Medicamento credo exitosamente");
+            }
+        }
         [HttpPut("{productoId}")]
         public async Task<IActionResult> PutMedicamento(int productoId, SERMED_Producto producto)
         {
@@ -63,21 +87,31 @@ namespace AtoGobMx.Controllers
             {
                 return NotFound();
             }
-            if (Medicamento.CantidadFaltante != 0)
-            {
-                Medicamento.CantidadFaltante += Medicamento.CantidadDisponible;
-            }
             Medicamento.ProductoId = producto.ProductoId;
-            //Medicamento.CategoriaMedicamentoId = producto.CategoriaMedicamentoId;
             Medicamento.Nombre = producto.Nombre;
             Medicamento.Contenido = producto.Contenido;
             Medicamento.FechaVencimiento = producto.FechaVencimiento;
             Medicamento.CantidadDisponible = producto.CantidadDisponible;
+            Medicamento.CantidadFaltante = producto.CantidadFaltante;
             Medicamento.Archivado = producto.Archivado;
-
-            _context.Medicamento.Update(Medicamento);
-            await _context.SaveChangesAsync();
-            return Ok("Medicamento actualizado correctamente");
+            if (Medicamento.CantidadFaltante > 0)
+            {
+                if (Medicamento.CantidadDisponible >= Medicamento.CantidadFaltante)
+                {
+                    Medicamento.CantidadFaltante = 0;
+                    _context.Medicamento.Update(Medicamento);
+                    await _context.SaveChangesAsync();
+                    return Ok("Medicamento actualizado correctamente");
+                }
+                else
+                {
+                Medicamento.CantidadFaltante = Medicamento.CantidadFaltante - Medicamento.CantidadDisponible;
+                _context.Medicamento.Update(Medicamento);
+                await _context.SaveChangesAsync();
+                return Ok("Medicamento actualizado correctamente");
+                }
+            }
+            return BadRequest();
         }
         [HttpDelete("{productoId}")]
         public async Task<IActionResult> DeleteMedicamento(int productoId)

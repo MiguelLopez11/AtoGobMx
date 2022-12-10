@@ -70,6 +70,8 @@ namespace AtoGobMx.Controllers
             direccion.Municipio = direccioncementerio.Municipio;
             direccion.Localidad = direccioncementerio.Localidad;
             direccion.Calle = direccioncementerio.Calle;
+            direccion.Latitud = direccioncementerio.Latitud;
+            direccion.Longitud = direccioncementerio.Longitud;
             direccion.Archivado = direccioncementerio.Archivado;
 
             _context.DireccionCementerio.Update(direccion);

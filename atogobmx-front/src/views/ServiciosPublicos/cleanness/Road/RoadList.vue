@@ -86,9 +86,26 @@
       lazy
     >
       <Form @submit="addRoadService">
+        <b-row cols="2">
+          <!-- Agregar Observacion -->
+          <b-col>
+            <b-form-group class="mt-3" label="Observacion">
+              <Field name="ObservationField" :rules="validateObservation" as="text">
+                <b-form-input
+                  v-model="roadService.obsevacion"
+                  :state="ObservationState"
+                >
+                </b-form-input>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="ObservationField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+        </b-row>
         <b-row>
           <GoogleMap
-            api-key="AIzaSyAu9G_tPHiWvYnf-qkessxqcv4pQaJPhfY"
             style="width: 100%; height: 500px"
             :center="center"
             :zoom="20"
@@ -191,8 +208,8 @@ export default {
     )
     const center = ref({ lat: 20.5546629, lng: -102.4953904 })
     const fields = ref([
-      { value: 'origen', text: 'Latitud' },
-      { value: 'destino', text: 'Longitud' },
+      // { value: 'origen', text: 'Latitud' },
+      // { value: 'destino', text: 'Longitud' },
       { value: 'obsevacion', text: 'Observacion' },
       { value: 'actions', text: 'Acciones' }
     ])
@@ -222,45 +239,45 @@ export default {
       currentPage.value = 1
     }
 
-    const validateOrigin = () => {
-      if (!RoadServiceFields.value.origen) {
-        OriginState.value = false
-        return 'Este campo es requerido'
-      }
+    // const validateOrigin = () => {
+    //   if (!RoadServiceFields.value.origen) {
+    //     OriginState.value = false
+    //     return 'Este campo es requerido'
+    //   }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(RoadServiceFields.value.origen)) {
-        OriginState.value = false
-        return 'Este campo solo puede contener letras'
-      }
+    //   if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(RoadServiceFields.value.origen)) {
+    //     OriginState.value = false
+    //     return 'Este campo solo puede contener letras'
+    //   }
 
-      if (!RoadServiceFields.value.origen.trim().length > 0) {
-        OriginState.value = false
-        return 'Este campo no puede contener espacios'
-      }
+    //   if (!RoadServiceFields.value.origen.trim().length > 0) {
+    //     OriginState.value = false
+    //     return 'Este campo no puede contener espacios'
+    //   }
 
-      OriginState.value = true
-      return true
-    }
+    //   OriginState.value = true
+    //   return true
+    // }
 
-    const validateDestination = () => {
-      if (!RoadServiceFields.value.destino) {
-        DestinationState.value = false
-        return 'Este campo es requerido'
-      }
+    // const validateDestination = () => {
+    //   if (!RoadServiceFields.value.destino) {
+    //     DestinationState.value = false
+    //     return 'Este campo es requerido'
+    //   }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(RoadServiceFields.value.destino)) {
-        DestinationState.value = false
-        return 'Este campo solo puede contener numeros'
-      }
+    //   if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(RoadServiceFields.value.destino)) {
+    //     DestinationState.value = false
+    //     return 'Este campo solo puede contener numeros'
+    //   }
 
-      if (!RoadServiceFields.value.destino.trim().length > 0) {
-        DestinationState.value = false
-        return 'Este campo no puede contener espacios'
-      }
+    //   if (!RoadServiceFields.value.destino.trim().length > 0) {
+    //     DestinationState.value = false
+    //     return 'Este campo no puede contener espacios'
+    //   }
 
-      DestinationState.value = true
-      return true
-    }
+    //   DestinationState.value = true
+    //   return true
+    // }
 
     const validateObservation = () => {
       if (!RoadServiceFields.value.obsevacion) {
@@ -269,7 +286,7 @@ export default {
       }
 
       if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(RoadServiceFields.value.obsevacion)
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ ,;:. 0-9]+$/i.test(RoadServiceFields.value.obsevacion)
       ) {
         ObservationState.value = false
         return 'Este campo solo puede contener numeros'
@@ -367,8 +384,8 @@ export default {
       addRoadService,
       RemoveRoadService,
       refreshTable,
-      validateOrigin,
-      validateDestination,
+      // validateOrigin,
+      // validateDestination,
       validateObservation,
       resetRoadServiceFields
     }

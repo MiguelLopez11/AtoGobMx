@@ -10,7 +10,7 @@
       <Form @submit="onUpdateRoadService">
         <b-row cols="2">
           <!-- 1 -->
-          <b-col>
+          <!-- <b-col>
             <b-form-group class="mt-3" label="Origen">
               <Field
                 name="OriginField"
@@ -28,9 +28,9 @@
                 name="OriginField"
               ></ErrorMessage>
             </b-form-group>
-          </b-col>
+          </b-col> -->
           <!-- 2 -->
-          <b-col>
+          <!-- <b-col>
             <b-form-group class="mt-3" label="Destino">
               <Field name="DestinationField" :rules="validateDestination" as="text">
                 <b-form-input
@@ -44,8 +44,8 @@
                 name="DestinationField"
               ></ErrorMessage>
             </b-form-group>
-          </b-col>
-          <!-- 3 -->
+          </b-col> -->
+          <!-- Agregar Observacion -->
           <b-col>
             <b-form-group class="mt-3" label="Observacion">
               <Field name="ObservationField" :rules="validateObservation" as="text">
@@ -125,45 +125,35 @@ export default {
       roadService.value = data
     })
 
-    const validateOrigin = () => {
-      if (!roadService.value.origen) {
-        validateState()
-        return 'Este campo es requerido'
-      }
+    // const validateOrigin = () => {
+    //   if (!roadService.value.origen) {
+    //     validateState()
+    //     return 'Este campo es requerido'
+    //   }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(roadService.value.origen)) {
-        OriginState.value = false
-        return 'Este campo solo puede contener letras'
-      }
+    //   if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(roadService.value.origen)) {
+    //     OriginState.value = false
+    //     return 'Este campo solo puede contener letras'
+    //   }
 
-      //   if (!roadService.value.origen.trim().length > 0) {
-      //     OriginState.value = false
-      //     return 'Este campo no puede contener espacios'
-      //   }
+    //   validateState()
+    //   return true
+    // }
 
-      validateState()
-      return true
-    }
+    // const validateDestination = () => {
+    //   if (!roadService.value.destino) {
+    //     validateState()
+    //     return 'Este campo es requerido'
+    //   }
 
-    const validateDestination = () => {
-      if (!roadService.value.destino) {
-        validateState()
-        return 'Este campo es requerido'
-      }
+    //   if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(roadService.value.destino)) {
+    //     DestinationState.value = false
+    //     return 'Este campo solo puede contener numeros'
+    //   }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(roadService.value.destino)) {
-        DestinationState.value = false
-        return 'Este campo solo puede contener numeros'
-      }
-
-      //   if (!roadService.value.destino.trim().length > 0) {
-      //     DestinationState.value = false
-      //     return 'Este campo no puede contener espacios'
-      //   }
-
-      validateState()
-      return true
-    }
+    //   validateState()
+    //   return true
+    // }
 
     const validateObservation = () => {
       if (!roadService.value.obsevacion) {
@@ -171,15 +161,10 @@ export default {
         return 'Este campo es requerido'
       }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(roadService.value.obsevacion)) {
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ ,;:. 0-9]+$/i.test(roadService.value.obsevacion)) {
         ObservationState.value = false
         return 'Este campo solo puede contener numeros'
       }
-
-      //   if (!roadService.value.obsevacion.trim().length > 0) {
-      //     ObservationState.value = false
-      //     return 'Este campo no puede contener espacios'
-      //   }
 
       validateState()
       return true
@@ -204,8 +189,8 @@ export default {
 
       onUpdateRoadService,
       validateState,
-      validateOrigin,
-      validateDestination,
+      // validateOrigin,
+      // validateDestination,
       validateObservation
     }
   }

@@ -104,7 +104,7 @@
             </b-form-group>
           </b-col>
           <!--Agregar latitud-->
-          <b-col>
+          <!-- <b-col>
             <b-form-group class="mt-3" label="Latitud">
               <Field name="LatitudeField" :rules="validateLatitude" as="number">
                 <b-form-input
@@ -117,9 +117,9 @@
                 name="LatitudeField"
               ></ErrorMessage>
             </b-form-group>
-          </b-col>
+          </b-col> -->
           <!--Agregar longitud-->
-          <b-col>
+          <!-- <b-col>
             <b-form-group class="mt-3" label="Longitud">
               <Field name="LengthField" :rules="validateLength" as="number">
                 <b-form-input
@@ -132,7 +132,7 @@
                 name="LengthField"
               ></ErrorMessage>
             </b-form-group>
-          </b-col>
+          </b-col> -->
           <!--agregar un estatus obra-->
           <b-col>
             <b-form-group class="mt-3" label="Estatus de la Obra">
@@ -220,8 +220,8 @@ export default {
     const searchValue = ref('')
     const searchField = ref('obraId')
     const NameWorksState = ref(false)
-    const LatitudeState = ref(false)
-    const LengthState = ref(false)
+    // const LatitudeState = ref(false)
+    // const LengthState = ref(false)
     const DescriptionState = ref(false)
     const WorkStatusState = ref(false)
     const breadcrumbItems = ref([
@@ -259,8 +259,8 @@ export default {
     const fields = ref([
       { value: 'obraId', text: 'ID', sortable: true },
       { value: 'nombre', text: 'Nombre de la obra' },
-      { value: 'latitud', text: 'Latitud' },
-      { value: 'longitud', text: 'Longitud' },
+      // { value: 'latitud', text: 'Latitud' },
+      // { value: 'longitud', text: 'Longitud' },
       { value: 'descripcion', text: 'Descripcion' },
       { value: 'estatusObraId', text: 'Estatus de la obra' },
       { value: 'actions', text: 'Acciones' }
@@ -272,8 +272,8 @@ export default {
         JSON.stringify(publicWorksFieldsBlank)
       )
       NameWorksState.value = false
-      LatitudeState.value = false
-      LengthState.value = false
+      // LatitudeState.value = false
+      // LengthState.value = false
       DescriptionState.value = false
       WorkStatusState.value = false
     }
@@ -312,45 +312,45 @@ export default {
       return true
     }
 
-    const validateLatitude = () => {
-      if (!publicWorksFields.value.latitud) {
-        LatitudeState.value = false
-        return 'Este campo es requerido'
-      }
+    // const validateLatitude = () => {
+    //   if (!publicWorksFields.value.latitud) {
+    //     LatitudeState.value = false
+    //     return 'Este campo es requerido'
+    //   }
 
-      if (!/^[0-9]+$/i.test(publicWorksFields.value.latitud)) {
-        LatitudeState.value = false
-        return 'Este campo solo puede contener numeros'
-      }
+    //   if (!/^[0-9]+$/i.test(publicWorksFields.value.latitud)) {
+    //     LatitudeState.value = false
+    //     return 'Este campo solo puede contener numeros'
+    //   }
 
-      if (!publicWorksFields.value.latitud.trim().length > 0) {
-        LatitudeState.value = false
-        return 'Este campo no puede contener espacios'
-      }
+    //   if (!publicWorksFields.value.latitud.trim().length > 0) {
+    //     LatitudeState.value = false
+    //     return 'Este campo no puede contener espacios'
+    //   }
 
-      LatitudeState.value = true
-      return true
-    }
+    //   LatitudeState.value = true
+    //   return true
+    // }
 
-    const validateLength = () => {
-      if (!publicWorksFields.value.longitud) {
-        LengthState.value = false
-        return 'Este campo es requerido'
-      }
+    // const validateLength = () => {
+    //   if (!publicWorksFields.value.longitud) {
+    //     LengthState.value = false
+    //     return 'Este campo es requerido'
+    //   }
 
-      if (!/^[0-9]+$/i.test(publicWorksFields.value.longitud)) {
-        LengthState.value = false
-        return 'Este campo solo puede contener numeros'
-      }
+    //   if (!/^[0-9]+$/i.test(publicWorksFields.value.longitud)) {
+    //     LengthState.value = false
+    //     return 'Este campo solo puede contener numeros'
+    //   }
 
-      if (!publicWorksFields.value.longitud.trim().length > 0) {
-        LengthState.value = false
-        return 'Este campo no puede contener espacios'
-      }
+    //   if (!publicWorksFields.value.longitud.trim().length > 0) {
+    //     LengthState.value = false
+    //     return 'Este campo no puede contener espacios'
+    //   }
 
-      LengthState.value = true
-      return true
-    }
+    //   LengthState.value = true
+    //   return true
+    // }
 
     const validateDescription = () => {
       if (!publicWorksFields.value.descripcion) {
@@ -358,10 +358,10 @@ export default {
         return 'Este campo es requerido'
       }
       if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(publicWorksFields.value.descripcion)
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ ,;:. 0-9]+$/i.test(publicWorksFields.value.descripcion)
       ) {
         DescriptionState.value = false
-        return 'La descripcion solo puede contener letras'
+        return 'La descripcion solo puede contener letras y numeros'
       }
       if (!publicWorksFields.value.descripcion.trim().length > 0) {
         DescriptionState.value = false
@@ -455,8 +455,8 @@ export default {
       publicWorksFieldsBlank,
       fields,
       NameWorksState,
-      LatitudeState,
-      LengthState,
+      // LatitudeState,
+      // LengthState,
       WorkStatusState,
       DescriptionState,
 
@@ -465,8 +465,8 @@ export default {
       refreshTable,
       RemovePublicWorks,
       validateNameWorks,
-      validateLatitude,
-      validateLength,
+      // validateLatitude,
+      // validateLength,
       validateDescription,
       validateWorkStatus,
       resetPublicWorksFields

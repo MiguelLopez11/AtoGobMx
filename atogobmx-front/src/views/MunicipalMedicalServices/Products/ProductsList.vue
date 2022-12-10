@@ -56,6 +56,14 @@
             <i class="bi bi-three-dots-vertical"></i>
           </template>
           <b-dropdown-item
+            class="m-1"
+            variant="outline-warning"
+            @click="openSupplyModal(items.productoId)"
+          >
+            <i class="bi bi-plus-square-dotted" />
+            Resurtir Producto
+          </b-dropdown-item>
+          <b-dropdown-item
             @click="RemoveProduct(items.productoId)"
             class="m-1"
             variant="outline-danger"
@@ -79,13 +87,27 @@
         <b-badge
           class="text-white"
           :variant="
-            items.cantidadDisponible === 0  ? 'danger' : '' || items.cantidadDisponible < 5  ? 'warning' : '' || items.cantidadDisponible >= 5  ? 'success' : ''
+            items.cantidadDisponible === 0
+              ? 'danger'
+              : '' || items.cantidadDisponible < 5
+              ? 'warning'
+              : '' || items.cantidadDisponible >= 5
+              ? 'success'
+              : ''
           "
         >
-        <h6 align="center">
-          <!-- {{ items.cantidadDisponible }} <br> -->
-          {{ items.cantidadDisponible === 0  ? 'Sin existencia' : '' || items.cantidadDisponible < 5  ? 'Poca existencia' : '' || items.cantidadDisponible >= 5  ? 'En existencia' : '' }}
-        </h6>
+          <h6 align="center">
+            <!-- {{ items.cantidadDisponible }} <br> -->
+            {{
+              items.cantidadDisponible === 0
+                ? 'Sin existencia'
+                : '' || items.cantidadDisponible < 5
+                ? 'Poca existencia'
+                : '' || items.cantidadDisponible >= 5
+                ? 'En existencia'
+                : ''
+            }}
+          </h6>
         </b-badge>
       </template>
     </EasyDataTable>
@@ -128,7 +150,11 @@
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Fecha de vencimiento">
-              <Field name="ExpirationDateField" :rules="validateExpirationDate" as="text">
+              <Field
+                name="ExpirationDateField"
+                :rules="validateExpirationDate"
+                as="text"
+              >
                 <Datepicker
                   v-model="productsFields.fechaVencimiento"
                   locale="es"
@@ -147,10 +173,16 @@
           <b-col>
             <b-form-group class="mt-3" label="Stock (Cantidad disponible)">
               <Field name="StockField" :rules="validateStock" as="text">
-                <b-form-input v-model="productsFields.cantidadDisponible" :state="stockState">
+                <b-form-input
+                  v-model="productsFields.cantidadDisponible"
+                  :state="stockState"
+                >
                 </b-form-input>
               </Field>
-              <ErrorMessage class="text-danger" name="StockField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="StockField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
@@ -167,6 +199,38 @@
           </b-button>
         </b-row>
       </Form>
+    </b-modal>
+    <b-modal
+      v-model="showModalSupply"
+      title="Resurtir producto"
+      centered
+      button-size="lg"
+      hide-footer
+    >
+      <b-row>
+        <b-col>
+          <b-form-group title="Cantidad">
+            <b-form-input
+              v-model="supplyAmount"
+              class="m-2"
+              placeholder="Ingresa la cantidad a resurtir"
+              type="number"
+            /> </b-form-group
+          >
+        </b-col>
+        <b-row align-h="end">
+      <b-button
+        class="w-auto m-2 text-white"
+        variant="primary"
+        @click="showModalSupply = !showModalSupply"
+      >
+        Cancelar
+      </b-button>
+      <b-button class="w-auto m-2" variant="success" @click="onSupplyProduct()">
+        Guardar
+      </b-button>
+    </b-row>
+      </b-row>
     </b-modal>
   </b-card>
 </template>
@@ -189,10 +253,17 @@ export default {
   },
   setup () {
     const swal = inject('$swal')
-    const { getMedicalProducts, createMedicalProduct, deleteMedicalProduct } =
-      MunicipalMedicalServices()
+    const {
+      getMedicalProducts,
+      createMedicalProduct,
+      deleteMedicalProduct,
+      supplyMedicalProduct
+    } = MunicipalMedicalServices()
     const medicalProducts = ref([])
+    const supplyAmount = ref()
+    const productId = ref()
     const showModal = ref(false)
+    const showModalSupply = ref(false)
     const nameState = ref(false)
     const contentState = ref(false)
     const expirationDateState = ref(false)
@@ -293,6 +364,22 @@ export default {
     const onFiltered = filteredItems => {
       currentPage.value = 1
     }
+    const openSupplyModal = productoId => {
+      productId.value = productoId
+      showModalSupply.value = !showModalSupply.value
+    }
+    const onSupplyProduct = () => {
+      supplyMedicalProduct(productId.value, supplyAmount.value, data => {
+        swal.fire({
+          title: 'Producto resurtido correctamente!',
+          text: 'El producto se ha resurtido al sistema satisfactoriamente.',
+          icon: 'success'
+        })
+        supplyAmount.value = null
+        showModalSupply.value = !showModalSupply.value
+        refreshTable()
+      })
+    }
     // VALIDATIONS
     const validateName = () => {
       if (!productsFields.value.nombre) {
@@ -336,6 +423,8 @@ export default {
     }
     return {
       medicalProducts,
+      supplyAmount,
+      productId,
       fields,
       perPage,
       currentPage,
@@ -346,6 +435,7 @@ export default {
       isloading,
       searchValue,
       showModal,
+      showModalSupply,
       searchField,
       nameState,
       contentState,
@@ -361,7 +451,9 @@ export default {
       validateContent,
       validateExpirationDate,
       validateStock,
-      resetProductsFields
+      resetProductsFields,
+      openSupplyModal,
+      onSupplyProduct
     }
   }
 }
