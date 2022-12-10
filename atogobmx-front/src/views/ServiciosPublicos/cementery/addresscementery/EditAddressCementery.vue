@@ -1,8 +1,8 @@
 <template>
-  <b-card class=" m-2 mb-4">
+  <b-card class="m-2 mb-4">
     <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
   </b-card>
-  <b-card class="m-2" >
+  <b-card class="m-2">
     <b-card>
       <div>
         <h3>Editar Direccion Cementerio</h3>
@@ -104,38 +104,39 @@
             </b-form-group>
           </b-col>
           <b-row>
-          <GMapMap
-            :center="center"
-            :zoom="17"
-            :options="{
-              zoomControl: true,
-              mapTypeControl: false,
-              scaleControl: false,
-              rotateControl: true,
-              disableDefaultUi: false
-            }"
-            style="width: 100%; height: 500px"
-          >
-            <GMapMarker
-              :zoom="20"
-              :position="center"
-              :draggable="true"
-              @drag="updateCoordinates"
-            />
-          </GMapMap>
-        </b-row>
-        <b-row align-h="end">
-          <b-button
-            class=" m-2 text-white"
-            variant="primary"
-            to="/ServiciosPublicos/DireccionCementerios/list"
-            type="reset"
-          >
-            Cancelar</b-button
-          >
-          <b-button type="success" class=" m-2" variant="success">
-            Guardar
-          </b-button>
+            <GMapMap
+              :center="center"
+              :zoom="17"
+              :options="{
+                zoomControl: true,
+                mapTypeControl: false,
+                scaleControl: false,
+                rotateControl: true,
+                disableDefaultUi: false
+              }"
+              style="width: 100%; height: 500px"
+            >
+              <GMapMarker
+                :zoom="20"
+                :position="center"
+                :draggable="true"
+                @drag="updateCoordinates"
+              />
+            </GMapMap>
+          </b-row>
+          <b-row align-h="end">
+            <b-button
+              class="m-2 text-white"
+              variant="primary"
+              to="/ServiciosPublicos/DireccionCementerios/list"
+              type="reset"
+            >
+              Cancelar</b-button
+            >
+            <b-button type="success" class="m-2" variant="success">
+              Guardar
+            </b-button>
+          </b-row>
         </b-row>
       </Form>
     </b-card>
@@ -184,7 +185,7 @@ export default {
       }
     })
     const center = ref({ lat: 0, lng: 0 })
-    const updateCoordinates = (location) => {
+    const updateCoordinates = location => {
       markers.value = {
         position: {
           lat: location.latLng.lat(),
@@ -333,12 +334,9 @@ export default {
     const validateState = () => {
       NameCementeryState.value =
         addressCementeryService.value.nombreCementerio !== ''
-      MunicipalityState.value =
-        addressCementeryService.value.municipio !== ''
-      LocationState.value =
-        addressCementeryService.value.localidad !== ''
-      StreetState.value =
-        addressCementeryService.value.calle !== ''
+      MunicipalityState.value = addressCementeryService.value.municipio !== ''
+      LocationState.value = addressCementeryService.value.localidad !== ''
+      StreetState.value = addressCementeryService.value.calle !== ''
       NumberOutsideState.value =
         addressCementeryService.value.numeroExterior !== ''
     }
