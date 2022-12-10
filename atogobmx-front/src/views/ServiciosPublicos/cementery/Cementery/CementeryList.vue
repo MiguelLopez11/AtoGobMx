@@ -89,6 +89,29 @@
     >
       <Form @submit="addCementeryService">
         <b-row cols="2">
+          <!-- Registrar el panteon de la gabeta -->
+          <b-col>
+            <b-form-group class="mt-3" label="Panteón">
+              <Field
+                name="PropietaryField"
+                :rules="validatePropietary"
+                as="text"
+              >
+                <!-- <b-form-select
+                  autofocus
+                  :options="roles"
+                  value-field="roleId"
+                  text-field="nombre"
+                  v-model="userFields.roleId"
+                  :state="roleState"
+                ></b-form-select> -->
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="PropietaryField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
           <!--Agregar propietario -->
           <b-col>
             <b-form-group class="mt-3" label="Nombre del propietario">
@@ -189,16 +212,14 @@
               >
                 <GMapMarker
                   :zoom="10"
-                  :key="index"
-                  v-for="(m, index) in markers"
-                  :position="m.position"
-                  :clickable="true"
+                  :position="center"
                   :draggable="true"
-                  @click="center = m.position"
+                  @drag="updateCoordinates"
                 />
               </GMapMap>
             </b-card>
           </b-collapse>
+          {{markers}}
         </b-row>
         <b-row align-h="end">
           <b-button
@@ -257,7 +278,6 @@ export default {
       },
       { text: 'Gabetas' }
     ])
-
     const cementeryServiceFields = ref({
       cementeriosId: 0,
       nombrePropietario: '',
@@ -283,6 +303,15 @@ export default {
     ])
 
     const center = ref({ lat: 20.5546629, lng: -102.4953904 })
+
+    const updateCoordinates = (location) => {
+      markers.value = {
+        position: {
+          lat: location.latLng.lat(),
+          lng: location.latLng.lng()
+        }
+      }
+    }
     const fields = ref([
       { value: 'nombrePropietario', text: 'Nombre de propietario' },
       { value: 'numeroEspasios', text: 'Espacios' },
@@ -486,6 +515,7 @@ export default {
       AvailableState,
       markers,
       center,
+      updateCoordinates,
 
       onFiltered,
       validatePropietary,

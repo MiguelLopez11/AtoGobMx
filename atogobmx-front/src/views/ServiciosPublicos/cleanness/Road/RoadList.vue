@@ -106,7 +106,6 @@
         </b-row>
         <b-row>
           <GoogleMap
-            api-key="AIzaSyAu9G_tPHiWvYnf-qkessxqcv4pQaJPhfY"
             style="width: 100%; height: 500px"
             :center="center"
             :zoom="20"

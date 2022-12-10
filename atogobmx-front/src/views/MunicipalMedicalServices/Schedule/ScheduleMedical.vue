@@ -6,7 +6,7 @@
     <b-row>
       <b-col>
         <vue-cal
-          style="height: 485px; width: 1000px; margin-left: 5px; margin-top: 5px"
+          style="height: 600px; width: 100%; margin-left: 2px; margin-top: 5px"
           class="vuecal--green-theme"
           active-view="week"
           locale="es"
@@ -15,7 +15,7 @@
         />
       </b-col>
       <b-col>
-        <b-card class="m-1 border border-3">
+        <b-card class="m-1 border border-3" style="height: 600px; ">
           <h2>Agendar cita</h2>
           <Form @submit="addMedicalAppointment">
             <b-row cols="1">
@@ -127,36 +127,24 @@
     title="Detalles Cita"
     size="xl"
     centered
-    ok-title="Aceptar"
-    cancel-title="Cancelar"
-    button-size="lg"
+    hide-footer
   >
-    <strong style="font-size: 30px">Detalles:</strong>
-    <ul v-if="showModal">
-      <li style="font-size: 20px">
+    <strong style="font-size: 30px">
+      Detalles:
+      <br>
+    </strong>
+    <ul v-if="showModal" style="font-size: 25px">
+      <li>
         Fecha: {{ scheduleSelected.start.format('DD/MM/YYYY') }}
       </li>
-      <li style="font-size: 20px">
+      <li>
         Desde: {{ scheduleSelected.start.formatTime() }} Hasta:
         {{ scheduleSelected.end.formatTime() }}
       </li>
-      <li style="font-size: 20px">Detalles: {{ scheduleSelected.content }}</li>
+      <li>
+      Detalles: {{ scheduleSelected.content }}
+      </li>
     </ul>
-    <b-row cols="4" align-h="center">
-      <b-col>
-        <b-button
-          variant="primary"
-          size="xl"
-          style="
-            height: 50px;
-            width: auto;
-            font-size: 18px;"
-        >
-          <i class="bi bi-pencil-fill" />
-          Modificar / Cancelar cita
-        </b-button>
-      </b-col>
-    </b-row>
   </b-modal>
 </template>
 

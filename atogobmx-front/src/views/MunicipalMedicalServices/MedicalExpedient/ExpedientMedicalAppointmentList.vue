@@ -55,7 +55,7 @@
             <i class="bi bi-three-dots-vertical"></i>
           </template>
           <b-dropdown-item
-            @click="RemoveMedicalAppointment(items.citaId)"
+            @click="RemoveMedicalAppointment(items.recetaId)"
             class="m-1"
             variant="outline-danger"
           >
@@ -63,18 +63,12 @@
               Archivar
             </i>
           </b-dropdown-item>
-          <b-dropdown-item
-            class="m-1"
-            variant="outline-warning"
-            :to="{
-              name: 'ServiciosMedicos-Cita-Edit',
-              params: { CitaId: items.citaId }
-            }"
-          >
-            <i class="bi bi-pencil-square" />
-            Editar
-          </b-dropdown-item>
         </b-dropdown>
+      </template>
+      <template #item-status="items">
+        <b-badge :variant="items.estatusReceta.nombre === 'Pendiente' ? 'warning': 'success'">
+        {{items.estatusReceta.nombre}}
+        </b-badge>
       </template>
     </EasyDataTable>
   </b-card>
@@ -84,7 +78,9 @@
 import PrescriptionServices from '@/Services/prescription.Services'
 import { ref, inject } from 'vue'
 export default {
-  components: {},
+  components: {
+
+  },
   props: {
     EmpleadoId: {
       type: Number,
@@ -95,7 +91,7 @@ export default {
     const swal = inject('$swal')
     const {
       getPrescriptionByEmpleadoId,
-      deleteMedicalAppointment
+      deletePrescription
     } = PrescriptionServices()
     const medicalAppointments = ref([])
     const perPage = ref(5)
@@ -104,24 +100,12 @@ export default {
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('marca')
-    console.log(props.EmpleadoId)
-    const medicalAppointmentFields = ref({
-      citaId: 0,
-      fechaHora: null,
-      empleadoId: null,
-      descripcion: null,
-      archivado: false
-    })
-    const weaponsFieldsBlank = ref(
-      JSON.parse(JSON.stringify(medicalAppointmentFields))
-    )
+    const searchField = ref('diagnostico')
     const fields = ref([
       { value: 'empleados.nombreCompleto', text: 'Citante' },
-      { value: 'motivo', text: 'Motivo de cita' },
-      { value: 'fechaDesde', text: 'Fecha y hora de inicio' },
-      { value: 'fechaHasta', text: 'Fecha y hora de termino' },
-      { value: 'descripcion', text: 'Descripción' },
+      { value: 'diagnostico', text: 'Diagnostico' },
+      { value: 'fechaAlta', text: 'Fecha' },
+      { value: 'status', text: 'Estado' },
       { value: 'actions', text: 'Acciones' }
     ])
     getPrescriptionByEmpleadoId(props.EmpleadoId, data => {
@@ -148,7 +132,7 @@ export default {
       })
       return 'datos recargados'
     }
-    const RemoveMedicalAppointment = citaId => {
+    const RemoveMedicalAppointment = RecetaId => {
       isloading.value = true
       swal
         .fire({
@@ -158,20 +142,20 @@ export default {
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
           cancelButtonColor: '#d33',
-          confirmButtonText: 'Si, cancelar cita!',
+          confirmButtonText: 'Si, archivar receta!',
           cancelButtonText: 'Cancelar'
         })
         .then(result => {
           if (result.isConfirmed) {
             swal
               .fire({
-                title: 'Arma archivada!',
-                text: 'El arma ha sido archivado satisfactoriamente .',
+                title: 'Receta archivada!',
+                text: 'La receta ha sido archivado satisfactoriamente .',
                 icon: 'success'
               })
               .then(result => {
                 if (result.isConfirmed) {
-                  deleteMedicalAppointment(citaId, data => {
+                  deletePrescription(RecetaId, data => {
                     refreshTable()
                   })
                 }
@@ -184,85 +168,20 @@ export default {
     const onFiltered = filteredItems => {
       currentPage.value = 1
     }
-    // VALIDATIONS
-    // const validateNomeclature = () => {
-    //   if (!medicalAppointmentFields.value.nomenclatura) {
-    //     nomenclatureState.value = false
-    //     return 'Este campo es requerido'
-    //   }
-    //   nomenclatureState.value = true
-    //   return true
-    // }
-    // const validateBrand = () => {
-    //   if (!medicalAppointmentFields.value.marca) {
-    //     brandState.value = false
-    //     return 'Este campo es requerido'
-    //   }
-    //   brandState.value = true
-    //   return true
-    // }
-    // const validateTypeWeapon = () => {
-    //   if (!medicalAppointmentFields.value.tipoArma) {
-    //     typeWeaponState.value = false
-    //     return 'Este campo es requerido'
-    //   }
-    //   typeWeaponState.value = true
-    //   return true
-    // }
-    // const validateGauge = () => {
-    //   if (!medicalAppointmentFields.value.calibre) {
-    //     gaugeState.value = false
-    //     return 'Este campo es requerido'
-    //   }
-    //   gaugeState.value = true
-    //   return true
-    // }
-    // const validateEmployee = () => {
-    //   if (!medicalAppointmentFields.value.empleadoId) {
-    //     employeeState.value = false
-    //     return 'Este campo es requerido'
-    //   }
-    //   employeeState.value = true
-    //   return true
-    // }
-    // const resetArmoryFields = () => {
-    //   nomenclatureState.value = false
-    //   brandState.value = false
-    //   typeWeaponState.value = false
-    //   gaugeState.value = false
-    //   employeeState.value = false
-    //   medicalAppointmentFields.value = JSON.parse(
-    //     JSON.stringify(weaponsFieldsBlank)
-    //   )
-    // }
     return {
       medicalAppointments,
-      //   employeesArmory,
       fields,
       perPage,
       currentPage,
       filter,
       perPageSelect,
-      weaponsFieldsBlank,
-      medicalAppointmentFields,
       isloading,
       searchValue,
       searchField,
-      //   nomenclatureState,
-      //   brandState,
-      //   typeWeaponState,
-      //   gaugeState,
-      //   employeeState,
 
       onFiltered,
       refreshTable,
       RemoveMedicalAppointment
-    //   resetArmoryFields,
-    //   validateNomeclature,
-    //   validateBrand,
-    //   validateTypeWeapon,
-    //   validateGauge,
-    //   validateEmployee
     }
   }
 }

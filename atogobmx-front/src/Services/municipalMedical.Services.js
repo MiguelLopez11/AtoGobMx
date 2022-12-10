@@ -90,6 +90,11 @@ export default function MunicipalMedicalServices () {
       callback(response.data)
     })
   }
+  const supplyMedicalProduct = (productoId, Cantidad, callback) => {
+    axios.put(`${BaseUrl}/SERMED_Productos/SurtirProducto/${productoId}/${Cantidad}`).then((response) => {
+      callback(response.data)
+    })
+  }
   const deleteMedicalProduct = (productoId, callback) => {
     axios.delete(`${BaseUrl}/SERMED_Productos/${productoId}`).then((response) => {
       callback(response.data)
@@ -115,6 +120,7 @@ export default function MunicipalMedicalServices () {
     getMedicalProduct,
     createMedicalProduct,
     updateMedicalProduct,
+    supplyMedicalProduct,
     deleteMedicalProduct
   }
 }
