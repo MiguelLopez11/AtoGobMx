@@ -133,8 +133,8 @@
                   value-field="areaId"
                   text-field="nombre"
                   :state="areaState"
-                  @input="getWorkStation(voucherControlFields.areaId)"
                 >
+                  <!-- @input="getWorkStation(voucherControlFields.areaId)" -->
                 </b-form-select>
               </Field>
               <ErrorMessage class="text-danger" name="AreaField"></ErrorMessage>
@@ -262,7 +262,7 @@
                   autofocus
                   :options="statusVoucher"
                   value-field="estatusValeId"
-                  text-field="estatusVale"
+                  text-field="nombre"
                   :state="StatusVoucherState"
                 >
                 </b-form-select>
@@ -286,7 +286,7 @@
                   autofocus
                   :options="typeVoucher"
                   value-field="tipoId"
-                  text-field="nombreVale"
+                  text-field="nombre"
                   :state="TypeVoucherState"
                 >
                 </b-form-select>
@@ -342,7 +342,7 @@ export default {
     const showModal = ref(false)
     const { getVoucherControl, createVoucherControl, deleteVoucherControl } =
       VoucherControlServices()
-    const { getAreasByDepartament } = AreaServices()
+    const { getAreas } = AreaServices()
     const { getDepartaments } = DepartamentServices()
     const { getEmployees } = EmployeeServices()
     const { getProvider } = ProviderServices()
@@ -401,18 +401,29 @@ export default {
       JSON.parse(JSON.stringify(voucherControlFields))
     )
 
-    const getAreas = departamentoId => {
-      getAreasByDepartament(departamentoId, data => {
-        areas.value = data
-        if (data.length === 0) {
-          swal.fire({
-            title: 'No se encuentran areas registradas!',
-            text: 'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
-            icon: 'warning'
-          })
-        }
-      })
-    }
+    // const getAreas = departamentoId => {
+    //   getAreasByDepartament(departamentoId, data => {
+    //     areas.value = data
+    //     if (data.length === 0) {
+    //       swal.fire({
+    //         title: 'No se encuentran areas registradas!',
+    //         text: 'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
+    //         icon: 'warning'
+    //       })
+    //     }
+    //   })
+    // }
+
+    getAreas(data => {
+      areas.value = data
+      if (data.length === 0) {
+        swal.fire({
+          title: 'No se encuentran areas registradas!',
+          text: 'No se encuentran areas registradas en el sistema, registre primero un departamento para continuar.',
+          icon: 'warning'
+        })
+      }
+    })
 
     getDepartaments(data => {
       departaments.value = data
@@ -716,7 +727,7 @@ export default {
 
       onFiltered,
       addVoucherControl,
-      getAreas,
+      // getAreas,
       refreshTable,
       RemoveVoucherControl,
       validateDateOfIssue,

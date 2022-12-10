@@ -14,7 +14,7 @@ namespace AtoGobMx.Models
         public string RepresentanteLegal { get; set; }
         public string Direccion { get; set; }
         [MaxLength(10)]
-        public int Telefono { get; set; }
+        public string Telefono { get; set; }
         public string Email { get; set; }
         public bool Archivado { get; set; }
 
