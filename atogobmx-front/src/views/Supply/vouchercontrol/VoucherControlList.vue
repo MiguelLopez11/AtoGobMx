@@ -355,8 +355,8 @@ export default {
     const departaments = ref([])
     const areas = ref([])
     const provider = ref([])
-    const productVoucher = ref([])
-    const detailVoucher = ref([])
+    // const productVoucher = ref([])
+    // const detailVoucher = ref([])
     const statusVoucher = ref([])
     const typeVoucher = ref([])
     const perPage = ref(5)
@@ -694,13 +694,13 @@ export default {
     }
     return {
       voucherControl,
-      detailVoucher,
+      // detailVoucher,
       employees,
       breadcrumbItems,
       departaments,
       areas,
       provider,
-      productVoucher,
+      // productVoucher,
       statusVoucher,
       typeVoucher,
       voucherControlFields,

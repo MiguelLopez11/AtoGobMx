@@ -1,5 +1,8 @@
 <template>
   <b-card class="m-2">
+    <b-card class="mb-4">
+      <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+    </b-card>
     <b-card>
       <div>
         <h3>Expediente Alumbrado</h3>
@@ -219,9 +222,7 @@ export default {
     const areas = ref([])
     const router = useRoute()
     const redirect = useRouter()
-    const expedienteAlumbradoId = ref(
-      parseInt(router.params.ExpedienteAlumbradoId)
-    )
+    const expedienteAlumbradoId = ref(parseInt(router.params.ExpedienteAlumbradoId))
     const isPublicPlace = ref(true)
     const PublicPlaceState = ref(false)
     const LocationState = ref(false)
@@ -230,6 +231,11 @@ export default {
     const areaState = ref(false)
     const DescriptionSolutionState = ref(false)
     const NomenclatureState = ref(false)
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      { text: 'Expediente alumbrado', to: '/ServiciosPublicos/ExpedienteAlumbrado/list' },
+      { text: 'Editar-Expediente' }
+    ])
 
     getExpedientLightingById(expedienteAlumbradoId.value, data => {
       expedientLighting.value = data
@@ -356,6 +362,7 @@ export default {
 
     return {
       expedientLighting,
+      breadcrumbItems,
       areas,
       departaments,
       PublicPlaceState,
