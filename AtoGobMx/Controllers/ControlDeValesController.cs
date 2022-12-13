@@ -24,6 +24,12 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<PROV_ControlVales>> GetControlDeVales()
         {
             var controlvale = await _context.ControlDeVales
+                .Include(i => i.Departamentos)
+                .Include(i => i.Area)
+                .Include(i => i.Empleados)
+                .Include(i => i.PROV_Proveedor)
+                .Include(i => i.PROV_EstatusVale)
+                .Include(i => i.TipoVales)
                 .OrderBy(o => o.ControlValeId)
                 .Where(w => !w.Archivado)
                 .Select(s => _mapper.Map<PROV_ControlVales>(s))
@@ -35,6 +41,12 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult> GetControlDeValesById(int ControlValeId)
         {
             var controlvale = await _context.ControlDeVales
+                .Include(i => i.Departamentos)
+                .Include(i => i.Area)
+                .Include(i => i.Empleados)
+                .Include(i => i.PROV_Proveedor)
+                .Include(i => i.PROV_EstatusVale)
+                .Include(i => i.TipoVales)
                 .FirstOrDefaultAsync(f => f.ControlValeId == ControlValeId);
             if (controlvale == null)
             {

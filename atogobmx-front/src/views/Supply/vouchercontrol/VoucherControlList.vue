@@ -146,7 +146,7 @@
               <Field
                 name="DepartamentField"
                 :rules="validateDepartament"
-                as="number"
+                as="text"
               >
                 <b-form-select
                   v-model="voucherControlFields.departamentoId"
@@ -204,50 +204,6 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!--Agregar Producto-->
-          <!-- <b-col>
-            <b-form-group class="mt-3" label="Producto: ">
-              <Field name="ProductField" :rules="validateProduct" as="text">
-                <b-form-select
-                  v-model="voucherControlFields.productoId"
-                  autofocus
-                  :options="productVoucher"
-                  value-field="productoId"
-                  text-field="nombre"
-                  :state="ProductState"
-                >
-                </b-form-select>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="ProductField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col> -->
-          <!--Agregar Detalle vale-->
-          <!-- <b-col>
-            <b-form-group class="mt-3" label="Detalle vale: ">
-              <Field
-                name="DetailVoucherField"
-                :rules="validateDetailVoucher"
-                as="text"
-              >
-                <b-form-select
-                  v-model="voucherControlFields.detalleValeId"
-                  autofocus
-                  :options="detailVoucher"
-                  value-field="detalleValeId"
-                  text-field="cantidad"
-                  :state="DetailVoucherState"
-                >
-                </b-form-select>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="DetailVoucherField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col> -->
           <!--Agregar Estatus vale-->
           <b-col>
             <b-form-group class="mt-3" label="Estatus vale: ">
@@ -345,8 +301,6 @@ export default {
     const { getDepartaments } = DepartamentServices()
     const { getEmployees } = EmployeeServices()
     const { getProvider } = ProviderServices()
-    // const { getProductVoucher } = ProductVoucherServices()
-    // const { getDetailVoucher } = DetailVoucherServices()
     const { getStatusVoucher } = StatusVoucherServices()
     const { getTypeVoucher } = TypeVoucherServices()
     const voucherControl = ref([])
@@ -385,7 +339,7 @@ export default {
       controlValeId: 0,
       fechaEmicion: null,
       fechaVigencia: null,
-      departamentoId: 0,
+      departamentoId: null,
       areaId: null,
       empleadoId: null,
       proveedorId: null,
@@ -499,11 +453,11 @@ export default {
       { value: 'fechaEmicion', text: 'Fecha emicion' },
       { value: 'fechaVigencia', text: 'Fecha vigencia' },
       { value: 'departamentos.nombre', text: 'Departamento' },
-      { value: 'areaId', text: 'Area' },
-      { value: 'empleadoId', text: 'empleado' },
-      { value: 'proveedorId', text: 'Proveedor' },
-      { value: 'estatusValeId', text: 'Proveedor' },
-      { value: 'tipoId', text: 'Tipo vale' },
+      { value: 'area.nombre', text: 'Area' },
+      { value: 'empleados.nombreCompleto', text: 'empleado' },
+      { value: 'proV_Proveedor.nombre', text: 'Proveedor' },
+      { value: 'proV_EstatusVale.nombre', text: 'Proveedor' },
+      { value: 'tipoVales.nombre', text: 'Tipo vale' },
       { value: 'actions', text: 'Acciones' }
     ])
 
@@ -580,7 +534,7 @@ export default {
         EmployeeState.value = false
         return 'Este campo es requerido'
       }
-      EmployeeState.value = false
+      EmployeeState.value = true
       return true
     }
 
@@ -589,7 +543,7 @@ export default {
         ProviderState.value = false
         return 'Este campo es requerido'
       }
-      ProviderState.value = false
+      ProviderState.value = true
       return true
     }
 
@@ -598,7 +552,7 @@ export default {
         ProductState.value = false
         return 'Este campo es requerido'
       }
-      ProductState.value = false
+      ProductState.value = true
       return true
     }
 
@@ -607,7 +561,7 @@ export default {
         DetailVoucherState.value = false
         return 'Este campo es requerido'
       }
-      DetailVoucherState.value = false
+      DetailVoucherState.value = true
       return true
     }
 
@@ -616,7 +570,7 @@ export default {
         StatusVoucherState.value = false
         return 'Este campo es requerido'
       }
-      StatusVoucherState.value = false
+      StatusVoucherState.value = true
       return true
     }
 
@@ -625,7 +579,7 @@ export default {
         TypeVoucherState.value = false
         return 'Este campo es requerido'
       }
-      TypeVoucherState.value = false
+      TypeVoucherState.value = true
       return true
     }
 
