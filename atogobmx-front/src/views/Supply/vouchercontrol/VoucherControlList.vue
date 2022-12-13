@@ -133,8 +133,8 @@
                   value-field="areaId"
                   text-field="nombre"
                   :state="areaState"
-                  @input="getWorkStation(voucherControlFields.areaId)"
                 >
+                  <!-- @input="getWorkStation(voucherControlFields.areaId)" -->
                 </b-form-select>
               </Field>
               <ErrorMessage class="text-danger" name="AreaField"></ErrorMessage>
@@ -146,7 +146,7 @@
               <Field
                 name="DepartamentField"
                 :rules="validateDepartament"
-                as="number"
+                as="text"
               >
                 <b-form-select
                   v-model="voucherControlFields.departamentoId"
@@ -155,7 +155,6 @@
                   value-field="departamentoId"
                   text-field="nombre"
                   :state="departamentState"
-                  @input="getAreas(EmployeesFields.departamentoId)"
                 >
                 </b-form-select>
               </Field>
@@ -205,50 +204,6 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!--Agregar Producto-->
-          <!-- <b-col>
-            <b-form-group class="mt-3" label="Producto: ">
-              <Field name="ProductField" :rules="validateProduct" as="text">
-                <b-form-select
-                  v-model="voucherControlFields.productoId"
-                  autofocus
-                  :options="productVoucher"
-                  value-field="productoId"
-                  text-field="nombre"
-                  :state="ProductState"
-                >
-                </b-form-select>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="ProductField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col> -->
-          <!--Agregar Detalle vale-->
-          <!-- <b-col>
-            <b-form-group class="mt-3" label="Detalle vale: ">
-              <Field
-                name="DetailVoucherField"
-                :rules="validateDetailVoucher"
-                as="text"
-              >
-                <b-form-select
-                  v-model="voucherControlFields.detalleValeId"
-                  autofocus
-                  :options="detailVoucher"
-                  value-field="detalleValeId"
-                  text-field="cantidad"
-                  :state="DetailVoucherState"
-                >
-                </b-form-select>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="DetailVoucherField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col> -->
           <!--Agregar Estatus vale-->
           <b-col>
             <b-form-group class="mt-3" label="Estatus vale: ">
@@ -262,7 +217,7 @@
                   autofocus
                   :options="statusVoucher"
                   value-field="estatusValeId"
-                  text-field="estatusVale"
+                  text-field="nombre"
                   :state="StatusVoucherState"
                 >
                 </b-form-select>
@@ -286,7 +241,7 @@
                   autofocus
                   :options="typeVoucher"
                   value-field="tipoId"
-                  text-field="nombreVale"
+                  text-field="nombre"
                   :state="TypeVoucherState"
                 >
                 </b-form-select>
@@ -342,12 +297,10 @@ export default {
     const showModal = ref(false)
     const { getVoucherControl, createVoucherControl, deleteVoucherControl } =
       VoucherControlServices()
-    const { getAreasByDepartament } = AreaServices()
+    const { getAreas } = AreaServices()
     const { getDepartaments } = DepartamentServices()
     const { getEmployees } = EmployeeServices()
     const { getProvider } = ProviderServices()
-    // const { getProductVoucher } = ProductVoucherServices()
-    // const { getDetailVoucher } = DetailVoucherServices()
     const { getStatusVoucher } = StatusVoucherServices()
     const { getTypeVoucher } = TypeVoucherServices()
     const voucherControl = ref([])
@@ -355,8 +308,8 @@ export default {
     const departaments = ref([])
     const areas = ref([])
     const provider = ref([])
-    const productVoucher = ref([])
-    const detailVoucher = ref([])
+    // const productVoucher = ref([])
+    // const detailVoucher = ref([])
     const statusVoucher = ref([])
     const typeVoucher = ref([])
     const perPage = ref(5)
@@ -401,28 +354,32 @@ export default {
       JSON.parse(JSON.stringify(voucherControlFields))
     )
 
-    const getAreas = departamentoId => {
-      getAreasByDepartament(departamentoId, data => {
-        areas.value = data
-        if (data.length === 0) {
-          swal.fire({
-            title: 'No se encuentran areas registradas!',
-            text: 'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
-            icon: 'warning'
-          })
-        }
-      })
-    }
+    // const getAreas = departamentoId => {
+    //   getAreasByDepartament(departamentoId, data => {
+    //     areas.value = data
+    //     if (data.length === 0) {
+    //       swal.fire({
+    //         title: 'No se encuentran areas registradas!',
+    //         text: 'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
+    //         icon: 'warning'
+    //       })
+    //     }
+    //   })
+    // }
 
-    getDepartaments(data => {
-      departaments.value = data
+    getAreas(data => {
+      areas.value = data
       if (data.length === 0) {
         swal.fire({
-          title: 'No se encuentran departamentos registrados!',
-          text: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
+          title: 'No se encuentran areas registradas!',
+          text: 'No se encuentran areas registradas en el sistema, registre primero un departamento para continuar.',
           icon: 'warning'
         })
       }
+    })
+
+    getDepartaments(data => {
+      departaments.value = data
     })
 
     getEmployees(data => {
@@ -495,12 +452,12 @@ export default {
       // { value: 'controlValeId', text: 'ID', sortable: true },
       { value: 'fechaEmicion', text: 'Fecha emicion' },
       { value: 'fechaVigencia', text: 'Fecha vigencia' },
-      { value: 'departamentoId', text: 'Departamento' },
-      { value: 'areaId', text: 'Area' },
-      { value: 'empleadoId', text: 'empleado' },
-      { value: 'proveedorId', text: 'Proveedor' },
-      { value: 'estatusValeId', text: 'Proveedor' },
-      { value: 'tipoId', text: 'Tipo vale' },
+      { value: 'departamentos.nombre', text: 'Departamento' },
+      { value: 'area.nombre', text: 'Area' },
+      { value: 'empleados.nombreCompleto', text: 'empleado' },
+      { value: 'proV_Proveedor.nombre', text: 'Proveedor' },
+      { value: 'proV_EstatusVale.nombre', text: 'Proveedor' },
+      { value: 'tipoVales.nombre', text: 'Tipo vale' },
       { value: 'actions', text: 'Acciones' }
     ])
 
@@ -559,7 +516,7 @@ export default {
         departamentState.value = false
         return 'Este campo es requerido'
       }
-      departamentState.value = false
+      departamentState.value = true
       return true
     }
 
@@ -577,7 +534,7 @@ export default {
         EmployeeState.value = false
         return 'Este campo es requerido'
       }
-      EmployeeState.value = false
+      EmployeeState.value = true
       return true
     }
 
@@ -586,7 +543,7 @@ export default {
         ProviderState.value = false
         return 'Este campo es requerido'
       }
-      ProviderState.value = false
+      ProviderState.value = true
       return true
     }
 
@@ -595,7 +552,7 @@ export default {
         ProductState.value = false
         return 'Este campo es requerido'
       }
-      ProductState.value = false
+      ProductState.value = true
       return true
     }
 
@@ -604,7 +561,7 @@ export default {
         DetailVoucherState.value = false
         return 'Este campo es requerido'
       }
-      DetailVoucherState.value = false
+      DetailVoucherState.value = true
       return true
     }
 
@@ -613,7 +570,7 @@ export default {
         StatusVoucherState.value = false
         return 'Este campo es requerido'
       }
-      StatusVoucherState.value = false
+      StatusVoucherState.value = true
       return true
     }
 
@@ -622,7 +579,7 @@ export default {
         TypeVoucherState.value = false
         return 'Este campo es requerido'
       }
-      TypeVoucherState.value = false
+      TypeVoucherState.value = true
       return true
     }
 
@@ -683,13 +640,11 @@ export default {
     }
     return {
       voucherControl,
-      detailVoucher,
       employees,
       breadcrumbItems,
       departaments,
       areas,
       provider,
-      productVoucher,
       statusVoucher,
       typeVoucher,
       voucherControlFields,
@@ -716,7 +671,7 @@ export default {
 
       onFiltered,
       addVoucherControl,
-      getAreas,
+      // getAreas,
       refreshTable,
       RemoveVoucherControl,
       validateDateOfIssue,

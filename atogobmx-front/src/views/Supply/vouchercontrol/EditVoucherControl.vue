@@ -7,8 +7,8 @@
       <div>
         <h3>Editar control de vale</h3>
       </div>
-      <Form @submit="onUpdateVoucherControl">
-        <b-row cols="2">
+      <Form @submit="onUpdateAddVoucherControl">
+        <b-row cols="3">
           <!--Agregar Fecha emicion-->
           <b-col>
             <b-form-group class="mt-3" label="Fecha emicion">
@@ -38,8 +38,8 @@
                   text-input
                   v-model="voucherControl.fechaVigencia"
                   :state="ExpirationDateState"
-                  @input="getAreas(voucherControl.departamentoId)"
                 ></Datepicker>
+                <!-- @input="getAreas(voucherControlFields.departamentoId)" -->
               </Field>
               <ErrorMessage name="ExpirationDateField"></ErrorMessage>
             </b-form-group>
@@ -55,8 +55,8 @@
                   value-field="areaId"
                   text-field="nombre"
                   :state="areaState"
-                  @input="getWorkStation(voucherControl.areaId)"
                 >
+                  <!-- @input="getWorkStation(voucherControlFields.areaId)" -->
                 </b-form-select>
               </Field>
               <ErrorMessage class="text-danger" name="AreaField"></ErrorMessage>
@@ -90,11 +90,7 @@
           <!--Agregar Empleado-->
           <b-col>
             <b-form-group class="mt-3" label="Empleado: ">
-              <Field
-                name="EmployeeField"
-                :rules="validateEmployee"
-                as="text"
-              >
+              <Field name="EmployeeField" :rules="validateEmployee" as="text">
                 <b-form-select
                   v-model="voucherControl.empleadoId"
                   autofocus
@@ -114,11 +110,7 @@
           <!--Agregar Proveedor-->
           <b-col>
             <b-form-group class="mt-3" label="Nombre proveedor: ">
-              <Field
-                name="ProviderField"
-                :rules="validateProvider"
-                as="text"
-              >
+              <Field name="ProviderField" :rules="validateProvider" as="text">
                 <b-form-select
                   v-model="voucherControl.proveedorId"
                   autofocus
@@ -135,54 +127,6 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!--Agregar Producto-->
-          <b-col>
-            <b-form-group class="mt-3" label="Producto: ">
-              <Field
-                name="ProductField"
-                :rules="validateProduct"
-                as="text"
-              >
-                <b-form-select
-                  v-model="voucherControl.productoId"
-                  autofocus
-                  :options="productVoucher"
-                  value-field="productoId"
-                  text-field="nombre"
-                  :state="ProductState"
-                >
-                </b-form-select>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="ProductField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!--Agregar Detalle vale-->
-          <b-col>
-            <b-form-group class="mt-3" label="Detalle vale: ">
-              <Field
-                name="DetailVoucherField"
-                :rules="validateDetailVoucher"
-                as="text"
-              >
-                <b-form-select
-                  v-model="voucherControl.detalleValeId"
-                  autofocus
-                  :options="detailVoucher"
-                  value-field="detalleValeId"
-                  text-field="cantidad"
-                  :state="DetailVoucherState"
-                >
-                </b-form-select>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="DetailVoucherField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
           <!--Agregar Estatus vale-->
           <b-col>
             <b-form-group class="mt-3" label="Estatus vale: ">
@@ -196,7 +140,7 @@
                   autofocus
                   :options="statusVoucher"
                   value-field="estatusValeId"
-                  text-field="estatusVale"
+                  text-field="nombre"
                   :state="StatusVoucherState"
                 >
                 </b-form-select>
@@ -220,7 +164,7 @@
                   autofocus
                   :options="typeVoucher"
                   value-field="tipoId"
-                  text-field="nombreVale"
+                  text-field="nombre"
                   :state="TypeVoucherState"
                 >
                 </b-form-select>
@@ -232,18 +176,19 @@
             </b-form-group>
           </b-col>
         </b-row>
+        <!-- <ProductPrescription  /> -->
+
         <b-row align-h="end">
           <b-button
-            class="col-1 m-2 text-white"
+            class="w-auto m-2 text-white"
             variant="primary"
             to="/ServiciosPublicos/ControlVale/list"
-            type="reset"
           >
             Cancelar
           </b-button>
-          <b-button type="success" class="col-1 m-2" variant="success">
-            Guardar
-          </b-button>
+          <b-button class="w-auto m-2" variant="success" type="submit"
+            >Guardar</b-button
+          >
         </b-row>
       </Form>
     </b-card>
@@ -256,38 +201,34 @@ import EmployeeServices from '@/Services/employee.Services'
 import AreaServices from '@/Services/area.Services'
 import DepartamentServices from '@/Services/departament.Services'
 import ProviderServices from '@/Services/provider.Services'
-import ProductVoucherServices from '@/Services/productvoucher.Services'
-import DetailVoucherServices from '@/Services/detailvoucher.Services'
 import StatusVoucherServices from '@/Services/statusvoucher.Services'
 import TypeVoucherServices from '@/Services/typevoucher.Services'
+import { Field, Form, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Form, Field, ErrorMessage } from 'vee-validate'
+import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
-    Form,
+    Datepicker,
     Field,
+    Form,
     ErrorMessage
   },
   setup () {
     const swal = inject('$swal')
     const { getVoucherControlById, updateVoucherControl } = VoucherControlServices()
-    const { getAreasByDepartament } = AreaServices()
-    const { getDepartaments } = DepartamentServices()
     const { getEmployees } = EmployeeServices()
+    const { getAreas } = AreaServices()
+    const { getDepartaments } = DepartamentServices()
     const { getProvider } = ProviderServices()
-    const { getProductVoucher } = ProductVoucherServices()
-    const { getDetailVoucher } = DetailVoucherServices()
     const { getStatusVoucher } = StatusVoucherServices()
     const { getTypeVoucher } = TypeVoucherServices()
     const voucherControl = ref([])
     const employees = ref([])
-    const departaments = ref([])
     const areas = ref([])
+    const departaments = ref([])
     const provider = ref([])
-    const productVoucher = ref([])
-    const detailVoucher = ref([])
     const statusVoucher = ref([])
     const typeVoucher = ref([])
     const router = useRoute()
@@ -305,21 +246,24 @@ export default {
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
       { text: 'Control de vale', to: '/ServiciosPublicos/ControlVale/list' },
-      { text: 'Editar-Control de Vale' }
+      { text: 'Editar-Control de vale' }
     ])
 
-    const getAreas = departamentoId => {
-      getAreasByDepartament(departamentoId, data => {
-        areas.value = data
-        if (data.length === 0) {
-          swal.fire({
-            title: 'No se encuentran areas registradas!',
-            text: 'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
-            icon: 'warning'
-          })
-        }
-      })
-    }
+    getVoucherControlById(router.params.ControlValeId, data => {
+      voucherControl.value = data
+      validateState()
+    })
+
+    getAreas(data => {
+      areas.value = data
+      if (data.length === 0) {
+        swal.fire({
+          title: 'No se encuentran areas registradas!',
+          text: 'No se encuentran areas registradas en el sistema, registre primero un departamento para continuar.',
+          icon: 'warning'
+        })
+      }
+    })
 
     getDepartaments(data => {
       departaments.value = data
@@ -354,28 +298,6 @@ export default {
       }
     })
 
-    getProductVoucher(data => {
-      productVoucher.value = data
-      if (data.length === 0) {
-        swal.fire({
-          title: 'No se encuentran productos registrados!',
-          text: 'No se encuentran  productos registrados en el sistema, registre primero un producto para continuar.',
-          icon: 'warning'
-        })
-      }
-    })
-
-    getDetailVoucher(data => {
-      detailVoucher.value = data
-      if (data.length === 0) {
-        swal.fire({
-          title: 'No se encuentra el detalle del vale registrados!',
-          text: 'No se encuentra el detalle del vale registrados en el sistema, registre primero un detalle de vale para continuar.',
-          icon: 'warning'
-        })
-      }
-    })
-
     getStatusVoucher(data => {
       statusVoucher.value = data
       if (data.length === 0) {
@@ -398,7 +320,7 @@ export default {
       }
     })
 
-    const onUpdateVoucherControl = () => {
+    const onUpdateAddVoucherControl = () => {
       updateVoucherControl(voucherControl.value, data => {})
       swal
         .fire({
@@ -412,10 +334,6 @@ export default {
           }
         })
     }
-
-    getVoucherControlById(router.params.ControlValeId, data => {
-      voucherControl.value = data
-    })
 
     const validateDateOfIssue = () => {
       if (!voucherControl.value.fechaEmicion) {
@@ -471,24 +389,6 @@ export default {
       return true
     }
 
-    const validateProduct = () => {
-      if (!voucherControl.value.productoId) {
-        validateState()
-        return 'Este campo es requerido'
-      }
-      validateState()
-      return true
-    }
-
-    const validateDetailVoucher = () => {
-      if (!voucherControl.value.detalleValeId) {
-        validateState()
-        return 'Este campo es requerido'
-      }
-      validateState()
-      return true
-    }
-
     const validateStatusVoucher = () => {
       if (!voucherControl.value.estatusValeId) {
         validateState()
@@ -509,25 +409,21 @@ export default {
 
     const validateState = () => {
       // eslint-disable-next-line no-unneeded-ternary
-      DateOfIssueState.value = voucherControl.value.fechaEmicion === '' ? false : true
+      DateOfIssueState.value = voucherControl.value.fechaEmicion !== ''
       // eslint-disable-next-line no-unneeded-ternary
-      ExpirationDateState.value = voucherControl.value.fechaVigencia === '' ? false : true
+      ExpirationDateState.value = voucherControl.value.fechaVigencia !== ''
       // eslint-disable-next-line no-unneeded-ternary
-      departamentState.value = voucherControl.value.departamentoId === '' ? false : true
+      departamentState.value = voucherControl.value.departamentoId !== ''
       // eslint-disable-next-line no-unneeded-ternary
-      areaState.value = voucherControl.value.areaId === '' ? false : true
+      areaState.value = voucherControl.value.areaId !== ''
       // eslint-disable-next-line no-unneeded-ternary
-      EmployeeState.value = voucherControl.value.empleadoId === '' ? false : true
+      EmployeeState.value = voucherControl.value.empleadoId !== ''
       // eslint-disable-next-line no-unneeded-ternary
-      ProviderState.value = voucherControl.value.proveedorId === '' ? false : true
+      ProviderState.value = voucherControl.value.proveedorId !== ''
       // eslint-disable-next-line no-unneeded-ternary
-      ProductState.value = voucherControl.value.productoId === '' ? false : true
+      StatusVoucherState.value = voucherControl.value.estatusValeId !== ''
       // eslint-disable-next-line no-unneeded-ternary
-      DetailVoucherState.value = voucherControl.value.detalleValeId === '' ? false : true
-      // eslint-disable-next-line no-unneeded-ternary
-      StatusVoucherState.value = voucherControl.value.estatusValeId === '' ? false : true
-      // eslint-disable-next-line no-unneeded-ternary
-      TypeVoucherState.value = voucherControl.value.tipoId === '' ? false : true
+      TypeVoucherState.value = voucherControl.value.tipoId !== ''
     }
 
     return {
@@ -535,6 +431,11 @@ export default {
       breadcrumbItems,
       DateOfIssueState,
       areas,
+      employees,
+      departaments,
+      provider,
+      statusVoucher,
+      typeVoucher,
       ExpirationDateState,
       departamentState,
       areaState,
@@ -544,20 +445,24 @@ export default {
       DetailVoucherState,
       StatusVoucherState,
       TypeVoucherState,
+      router,
 
-      onUpdateVoucherControl,
-      getAreas,
+      onUpdateAddVoucherControl,
       validateDateOfIssue,
       validateExpirationDate,
       validateDepartament,
       validateArea,
       validateEmployee,
       validateProvider,
-      validateProduct,
-      validateDetailVoucher,
       validateStatusVoucher,
       validateTypeVoucher,
       validateState
+      // validateTask,
+      // validateProblem,
+      // validateNameWork,
+      // validateAddresdescription,
+      // validateStatus,
+      // validateDomicile
     }
   }
 }

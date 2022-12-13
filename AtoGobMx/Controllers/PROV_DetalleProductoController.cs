@@ -24,6 +24,8 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<PROV_DetalleProducto>> GetDetalleProducto()
         {
             var detalleproducto = await _context.PROV_DetalleProducto
+                .Include(i => i.PROV_Producto)
+                .Include(i => i.PROV_DetalleVale)
                 .OrderBy(o => o.DetalleProductoId)
                 .Where(w => !w.Archivado)
                 .Select(s => _mapper.Map<PROV_DetalleProducto>(s))
@@ -35,6 +37,8 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult> GetDetalleProductoById(int DetalleProductoId)
         {
             var detalleproducto = await _context.PROV_DetalleProducto
+                .Include(i => i.PROV_Producto)
+                .Include(i => i.PROV_DetalleVale)
                 .FirstOrDefaultAsync(f => f.DetalleProductoId == DetalleProductoId);
             if (detalleproducto == null)
             {
