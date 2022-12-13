@@ -1,6 +1,4 @@
 using AtoGobMx.Context;
-using DinkToPdf.Contracts;
-using DinkToPdf;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
@@ -8,8 +6,6 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
-builder.Services.AddSingleton(typeof(IConverter),
-    new SynchronizedConverter(new PdfTools()));
 
 builder.Services.AddDbContext<AtoGobMxContext>(options =>
 {

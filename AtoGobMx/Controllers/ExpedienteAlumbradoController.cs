@@ -1,18 +1,12 @@
 ﻿using AtoGobMx.Context;
 using AtoGobMx.Models;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DinkToPdf;
-using DinkToPdf.Contracts;
-using System;
-using Microsoft.Win32;
-using static System.Net.Mime.MediaTypeNames;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Aspose.Pdf.Text;
-using Aspose.Pdf;
-using Table = Aspose.Pdf.Table;
+using iText.Kernel.Pdf;
+using iText.Layout.Element;
+using iText.Layout;
+using iText.Layout.Properties;
 
 namespace AtoGobMx.Controllers
 {
@@ -22,13 +16,11 @@ namespace AtoGobMx.Controllers
     {
         private readonly AtoGobMxContext _context;
         private readonly IMapper _mapper;
-        private readonly IConverter _converter;
 
-        public ExpedienteAlumbradoController(AtoGobMxContext context, IMapper mapper, IConverter converter)
+        public ExpedienteAlumbradoController(AtoGobMxContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
-            _converter = converter;
         }
 
         [HttpGet]
@@ -68,60 +60,28 @@ namespace AtoGobMx.Controllers
             return Ok(expedienteAlumbrado);
         }
         [HttpGet("Download/{ExpedienteAlumbradoId}")]
-        public async Task<ActionResult<ExpedienteAlumbrado>> DownloadExpedienteAlumbrado(int ExpedienteAlumbradoId)
+        public void DownloadExpedienteAlumbrado(int ExpedienteAlumbradoId)
         {
-            var document = new Document
-            {
-                PageInfo = new PageInfo { Margin = new MarginInfo(28, 28, 28, 42) }
-            };
+            PdfWriter writer = new PdfWriter("C:/Users/Arturo/Desktop/demo.pdf");
+            PdfDocument pdf = new PdfDocument(writer);
+            Document document = new Document(pdf);
+            Paragraph header = new Paragraph("HEADER")
+               .SetTextAlignment(TextAlignment.CENTER)
+               .SetFontSize(20);
 
-            // Step 2
-            var pdfPage = document.Pages.Add();
-
-            // Step 3
-            var textFragment = new TextFragment($"Reporte de alumbrado");
-            // ..........................................
-
-            var table = new Table
-            {
-                // Set column auto widths of the table
-                ColumnWidths = "25% 25% 25% 25%",
-                // Set cell padding
-                DefaultCellPadding = new MarginInfo(10, 5, 10, 5), // Left Bottom Right Top
-                                                                   // Set the table border color as Green
-                Border = new BorderInfo(BorderSide.All, .5f, Color.Green),
-                // Set the border for table cells as Black
-                DefaultCellBorder = new BorderInfo(BorderSide.All, .2f, Color.Green),
-            };
-            for (var rowCount = 0; rowCount < 10; rowCount++)
-            {
-                // Add row to table
-                var row = table.Rows.Add();
-                // Add table cells
-                for (int i = 0; i < 4; i++)
-                {
-                    row.Cells.Add($"Cell ({i + 1}, {rowCount + 1})");
-                }
-            }
-            // Add table object to first page of input document
-            document.Pages[1].Paragraphs.Add(table);
-
-            // Step 4
-            pdfPage.Paragraphs.Add(textFragment);
-            pdfPage.Paragraphs.Add(table);
-
-
-            // Step 5
-            using (var streamOut = new MemoryStream())
-            {
-                document.Save(streamOut);
-                return new FileContentResult(streamOut.ToArray(), "application/pdf")
-                {
-                    FileDownloadName = "tenants.pdf"
-                };
-            }
+            document.Add(header);
+            document.Close();
+            //GlobalFontSettings.FontResolver = new FontResolver();
+            //var document = new PdfDocument();
+            //var page = document.AddPage();
+            //var gfx = XGraphics.FromPdfPage(page);
+            //var font = new XFont("Arial", 20, XFontStyle.Bold);
+            //var textColor = XBrushes.Black;
+            //var layout = new XRect(20, 20, page.Width, page.Height);
+            //var format = XStringFormats.Center;
+            //gfx.DrawString("Hello World!", font, textColor, layout, format);
+            //document.Save("helloworld.pdf");
         }
-
         [HttpPost()]
         public async Task<ActionResult<ExpedienteAlumbrado>> PostExpedienteAlumbrado(ExpedienteAlumbrado expedienteAlumbrado)
         {
