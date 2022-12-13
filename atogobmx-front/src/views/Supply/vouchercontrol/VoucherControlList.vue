@@ -155,7 +155,6 @@
                   value-field="departamentoId"
                   text-field="nombre"
                   :state="departamentState"
-                  @input="getAreas(EmployeesFields.departamentoId)"
                 >
                 </b-form-select>
               </Field>
@@ -386,7 +385,7 @@ export default {
       controlValeId: 0,
       fechaEmicion: null,
       fechaVigencia: null,
-      departamentoId: null,
+      departamentoId: 0,
       areaId: null,
       empleadoId: null,
       proveedorId: null,
@@ -427,13 +426,6 @@ export default {
 
     getDepartaments(data => {
       departaments.value = data
-      if (data.length === 0) {
-        swal.fire({
-          title: 'No se encuentran departamentos registrados!',
-          text: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
-          icon: 'warning'
-        })
-      }
     })
 
     getEmployees(data => {
@@ -506,7 +498,7 @@ export default {
       // { value: 'controlValeId', text: 'ID', sortable: true },
       { value: 'fechaEmicion', text: 'Fecha emicion' },
       { value: 'fechaVigencia', text: 'Fecha vigencia' },
-      { value: 'departamentoId', text: 'Departamento' },
+      { value: 'departamentos.nombre', text: 'Departamento' },
       { value: 'areaId', text: 'Area' },
       { value: 'empleadoId', text: 'empleado' },
       { value: 'proveedorId', text: 'Proveedor' },
@@ -570,7 +562,7 @@ export default {
         departamentState.value = false
         return 'Este campo es requerido'
       }
-      departamentState.value = false
+      departamentState.value = true
       return true
     }
 
@@ -694,13 +686,11 @@ export default {
     }
     return {
       voucherControl,
-      // detailVoucher,
       employees,
       breadcrumbItems,
       departaments,
       areas,
       provider,
-      // productVoucher,
       statusVoucher,
       typeVoucher,
       voucherControlFields,

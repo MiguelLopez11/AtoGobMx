@@ -176,6 +176,7 @@
             </b-form-group>
           </b-col>
         </b-row>
+        <!-- <ProductPrescription  /> -->
 
         <b-row align-h="end">
           <b-button
