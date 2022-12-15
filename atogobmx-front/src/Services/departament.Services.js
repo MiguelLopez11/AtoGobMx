@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export default function DepartamentServices () {
-  const BaseUrl = 'https://localhost:7065/api'
+  const BaseUrl = 'http://localhost:5000/api'
   const getDepartaments = (callback) => {
     axios.get(`${BaseUrl}/Departamentos`).then((response) => {
       callback(response.data)

@@ -12,9 +12,6 @@
       menuFooterTextColor="#807e85"
       iconsColor="#807e85"
       menuItemsHoverColor="#9d94f4"
-      :profileImg="`https://localhost:7065/api/Archivos/FotoPerfil/Empleado/${empleadoId}`"
-      :profileName="employee"
-      :profileRole="`${departament}, ${area}`"
       @button-exit-clicked="removeLocalStorgare()"
     />
   <router-view></router-view>

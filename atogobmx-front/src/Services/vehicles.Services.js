@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export default function VehiclesServices () {
-  const BaseUrl = 'https://localhost:7065/api'
+  const BaseUrl = 'http://localhost:5000/api'
   const getVehicles = (callback) => {
     axios.get(`${BaseUrl}/PAT_Vehiculos`).then((response) => {
       callback(response.data)

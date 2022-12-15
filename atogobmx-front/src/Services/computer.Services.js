@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export default function ComputerServices () {
-  const BaseUrl = 'https://localhost:7065/api'
+  const BaseUrl = 'http://localhost:5000/api'
   const getComputers = (callback) => {
     axios.get(`${BaseUrl}/EquiposComputos`).then((response) => {
       callback(response.data)

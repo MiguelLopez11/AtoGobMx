@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export default function FileServices () {
-  const BaseUrl = 'https://localhost:7065/api'
+  const BaseUrl = 'http://localhost:5000/api'
   const getExpedientPhotoProfile = (ExpedienteDigitalId, callback) => {
     axios.get(`${BaseUrl}/Archivos/FotoPerfil/${ExpedienteDigitalId}`).then((response) => {
       callback(response)

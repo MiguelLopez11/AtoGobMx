@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export default function ArmoryServices () {
-  const BaseUrl = 'https://localhost:7065/api'
+  const BaseUrl = 'http://localhost:5000/api'
   const getWeapons = (callback) => {
     axios.get(`${BaseUrl}/Armeria`).then((response) => {
       callback(response.data)
