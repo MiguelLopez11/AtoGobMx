@@ -1,6 +1,8 @@
-﻿using AtoGobMx.Context;
+﻿using AtoGobMx.Auth;
+using AtoGobMx.Context;
 using AtoGobMx.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AtoGobMx.Controllers
 {
+    [Authorize(Roles = UserRoles.User)]
     [Route("api/[controller]")]
     [ApiController]
     public class AlumbradoController : ControllerBase

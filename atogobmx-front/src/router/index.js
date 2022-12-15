@@ -890,8 +890,8 @@ const router = createRouter({
 })
 router.beforeEach(async (to, from, next) => {
   const isLoggedIn = window.sessionStorage.getItem('isLogged')
-  const role = window.sessionStorage.getItem('Role')
-  const departamento = window.sessionStorage.getItem('Departamento')
+  // const role = window.sessionStorage.getItem('Role')
+  // const departamento = window.sessionStorage.getItem('Departamento')
   if (['Login'].includes(to.name) && isLoggedIn) {
     next({ name: 'Home' })
   } else if (to.meta.requiresAuth && !isLoggedIn) {
@@ -899,8 +899,6 @@ router.beforeEach(async (to, from, next) => {
       path: '/Login',
       query: { redirect: to.fullPath }
     })
-  } else if (to.meta.rol && to.meta.departamento && departamento !== to.meta.departamento && role !== 'Administrador') {
-    next({ name: 'PageNotPermission' })
   } else {
     next()
   }

@@ -28,8 +28,8 @@ namespace AtoGobMx.Models
         [ForeignKey("PuestoTrabajoId")]
         public PuestoTrabajo? PuestoTrabajo { get; set; }
 
-        [JsonIgnore]
-        public virtual IEnumerable<Usuario>? Usuarios { get; set; }
+        //[JsonIgnore]
+        //public virtual IEnumerable<Usuario>? Usuarios { get; set; }
 
         [JsonIgnore]
         public virtual IEnumerable<PAT_Armeria>? Armería { get; set; }

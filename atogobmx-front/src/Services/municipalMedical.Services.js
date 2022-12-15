@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export default function MunicipalMedicalServices () {
-  const BaseUrl = 'https://localhost:7065/api'
+  const BaseUrl = 'http://localhost:5000/api'
   // Medical Appointments
   const getMedicalAppointments = (callback) => {
     axios.get(`${BaseUrl}/SERMED_Cita`).then((response) => {

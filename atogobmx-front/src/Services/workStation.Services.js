@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export default function WorkStationServices () {
-  const BaseUrl = 'https://localhost:7065/api'
+  const BaseUrl = 'http://localhost:5000/api'
   const getWorkStations = (callback) => {
     axios.get(`${BaseUrl}/PuestoTrabajo`).then((response) => {
       callback(response.data)

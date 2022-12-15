@@ -1,13 +1,12 @@
 import axios from 'axios'
 
 export default function AreaServices () {
-  const BaseUrl = 'https://localhost:7065/api'
+  const BaseUrl = 'http://localhost:5000/api'
   const LogIn = (user, callback) => {
-    axios.get(`${BaseUrl}/Usuarios/${user.userName}/${user.password}`).then((response) => {
+    axios.post(`${BaseUrl}/Authenticate/login`, user).then((response) => {
       callback(response.data)
     }).catch((exception) => {
-      // eslint-disable-next-line node/no-callback-literal
-      callback({ message: exception.response, type: exception.response.status })
+      callback(exception)
     })
   }
   return {
