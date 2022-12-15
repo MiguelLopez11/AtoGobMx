@@ -3,10 +3,8 @@ using AtoGobMx.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using iText.Kernel.Pdf;
-using iText.Layout.Element;
-using iText.Layout;
-using iText.Layout.Properties;
+using PuppeteerSharp;
+using PuppeteerSharp.Media;
 
 namespace AtoGobMx.Controllers
 {
@@ -60,27 +58,22 @@ namespace AtoGobMx.Controllers
             return Ok(expedienteAlumbrado);
         }
         [HttpGet("Download/{ExpedienteAlumbradoId}")]
-        public void DownloadExpedienteAlumbrado(int ExpedienteAlumbradoId)
+        public async Task<IActionResult> DownloadExpedienteAlumbrado(int ExpedienteAlumbradoId)
         {
-            PdfWriter writer = new PdfWriter("C:/Users/Arturo/Desktop/demo.pdf");
-            PdfDocument pdf = new PdfDocument(writer);
-            Document document = new Document(pdf);
-            Paragraph header = new Paragraph("HEADER")
-               .SetTextAlignment(TextAlignment.CENTER)
-               .SetFontSize(20);
-
-            document.Add(header);
-            document.Close();
-            //GlobalFontSettings.FontResolver = new FontResolver();
-            //var document = new PdfDocument();
-            //var page = document.AddPage();
-            //var gfx = XGraphics.FromPdfPage(page);
-            //var font = new XFont("Arial", 20, XFontStyle.Bold);
-            //var textColor = XBrushes.Black;
-            //var layout = new XRect(20, 20, page.Width, page.Height);
-            //var format = XStringFormats.Center;
-            //gfx.DrawString("Hello World!", font, textColor, layout, format);
-            //document.Save("helloworld.pdf");
+            await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultChromiumRevision);
+            await using var browser = await Puppeteer.LaunchAsync(new LaunchOptions
+            {
+                Headless = true
+            });
+            await using var page = await browser.NewPageAsync();
+            await page.EmulateMediaTypeAsync(MediaType.Screen);
+            await page.SetContentAsync("<!DOCTYPE html>\r\n<html lang=\"en\" dir=\"ltr\">\r\n  <head>\r\n    <meta charset=\"utf-8\" />\r\n    <title></title>\r\n    <link\r\n      href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css\"\r\n      rel=\"stylesheet\"\r\n      integrity=\"sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65\"\r\n      crossorigin=\"anonymous\"\r\n    />\r\n  </head>\r\n  <body>\r\n    <table class=\"table table-dark table-striped\">\r\n      <thead>\r\n    <tr>\r\n      <th scope=\"col\">#</th>\r\n      <th scope=\"col\">First</th>\r\n      <th scope=\"col\">Last</th>\r\n      <th scope=\"col\">Handle</th>\r\n    </tr>\r\n  </thead>\r\n  <tbody>\r\n    <tr>\r\n      <th scope=\"row\">1</th>\r\n      <td>Mark</td>\r\n      <td>Otto</td>\r\n      <td>@mdo</td>\r\n    </tr>\r\n  </tbody>\r\n    </table>\r\n  </body>\r\n</html>\r\n");
+            var pdfContent = await page.PdfStreamAsync(new PdfOptions
+            {
+                Format = PaperFormat.A4,
+                PrintBackground = true
+            });
+            return File(pdfContent, "application/pdf", "converted.pdf");
         }
         [HttpPost()]
         public async Task<ActionResult<ExpedienteAlumbrado>> PostExpedienteAlumbrado(ExpedienteAlumbrado expedienteAlumbrado)
