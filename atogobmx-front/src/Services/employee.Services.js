@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export default function EmployeeServices () {
-  const BaseUrl = 'https://localhost:7065/api'
+  const BaseUrl = 'http://localhost:5000/api'
   const getEmployees = (callback) => {
     axios.get(`${BaseUrl}/Empleados`).then((response) => {
       callback(response.data)

@@ -106,13 +106,13 @@ export default {
     })
     const onLogIn = () => {
       LogIn(user.value, data => {
-        if (data.usuarioId) {
+        if (data.token) {
           window.sessionStorage.setItem('isLogged', true)
-          window.sessionStorage.setItem('Role', data.role.nombre)
-          window.sessionStorage.setItem('Departamento', data.empleado.departamentos.nombre)
-          window.sessionStorage.setItem('Area', data.empleado.area.nombre)
-          window.sessionStorage.setItem('Empleado', data.empleado.nombreCompleto)
-          window.sessionStorage.setItem('EmpleadoId', data.empleado.empleadoId)
+          // window.sessionStorage.setItem('Role', data.role.nombre)
+          // window.sessionStorage.setItem('Departamento', data.empleado.departamentos.nombre)
+          // window.sessionStorage.setItem('Area', data.empleado.area.nombre)
+          // window.sessionStorage.setItem('Empleado', data.empleado.nombreCompleto)
+          // window.sessionStorage.setItem('EmpleadoId', data.empleado.empleadoId)
           swal
             .fire({
               title: 'Inicio de sesión correcto.!',

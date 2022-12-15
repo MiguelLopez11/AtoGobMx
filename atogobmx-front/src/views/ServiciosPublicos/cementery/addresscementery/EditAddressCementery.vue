@@ -102,41 +102,41 @@
                 name="NumberOutsideField"
               ></ErrorMessage>
             </b-form-group>
-          </b-col> </b-row
-        >>
-        <b-row>
-          <GMapMap
-            :center="center"
-            :zoom="17"
-            :options="{
-              zoomControl: true,
-              mapTypeControl: false,
-              scaleControl: false,
-              rotateControl: true,
-              disableDefaultUi: false
-            }"
-            style="width: 100%; height: 500px"
-          >
-            <GMapMarker
-              :zoom="20"
-              :position="center"
-              :draggable="true"
-              @drag="updateCoordinates"
-            />
-          </GMapMap>
-        </b-row>
-        <b-row align-h="end">
-          <b-button
-            class="m-2 text-white"
-            variant="primary"
-            to="/ServiciosPublicos/DireccionCementerios/list"
-            type="reset"
-          >
-            Cancelar</b-button
-          >
-          <b-button type="success" class="m-2" variant="success">
-            Guardar
-          </b-button>
+          </b-col>
+          <b-row>
+            <GMapMap
+              :center="center"
+              :zoom="17"
+              :options="{
+                zoomControl: true,
+                mapTypeControl: false,
+                scaleControl: false,
+                rotateControl: true,
+                disableDefaultUi: false
+              }"
+              style="width: 100%; height: 500px"
+            >
+              <GMapMarker
+                :zoom="20"
+                :position="center"
+                :draggable="true"
+                @drag="updateCoordinates"
+              />
+            </GMapMap>
+          </b-row>
+          <b-row align-h="end">
+            <b-button
+              class="m-2 text-white"
+              variant="primary"
+              to="/ServiciosPublicos/DireccionCementerios/list"
+              type="reset"
+            >
+              Cancelar</b-button
+            >
+            <b-button type="success" class="m-2" variant="success">
+              Guardar
+            </b-button>
+          </b-row>
         </b-row>
       </Form>
     </b-card>

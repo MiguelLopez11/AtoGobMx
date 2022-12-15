@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export default function roleServices () {
-  const BaseUrl = 'https://localhost:7065/api'
+  const BaseUrl = 'http://localhost:5000/api'
   const getRoles = (callback) => {
     axios.get(`${BaseUrl}/Role`).then((response) => {
       callback(response.data)
