@@ -1,35 +1,34 @@
-import axios from 'axios'
-
+import { axiosPrivate } from '@/common/axiosPrivate.js'
 export default function publiclightingServices () {
   const getPublicLighting = (callback) => {
-    axios
-      .get('http://localhost:5000/api/Alumbrado')
+    axiosPrivate
+      .get('/Alumbrado')
       .then((response) => {
         callback(response.data)
       })
   }
   const getPublicLightingExpedient = (callback) => {
-    axios.get('http://localhost:5000/api/Alumbrado/ServiciosSinExpediente').then((response) => {
+    axiosPrivate.get('/Alumbrado/ServiciosSinExpediente').then((response) => {
       callback(response.data)
     })
   }
   const getPublicLightingById = (AlumbradoId, callback) => {
-    axios.get(`https://localhost:5000/api/Alumbrado/${AlumbradoId}`).then((response) => {
+    axiosPrivate.get(`/Alumbrado/${AlumbradoId}`).then((response) => {
       callback(response.data)
     })
   }
   const createPublicLighting = (data, callback) => {
-    axios.post('http://localhost:5000/api/Alumbrado', data).then((response) => {
+    axiosPrivate.post('/Alumbrado', data).then((response) => {
       callback(response.data)
     })
   }
   const updatePublicLighting = (data, callback) => {
-    axios.put(`https://localhost:5000/api/Alumbrado/${data.alumbradoId}`, data).then((response) => {
+    axiosPrivate.put(`/Alumbrado/${data.alumbradoId}`, data).then((response) => {
       callback(response.data)
     })
   }
   const deletePublicLighting = (alumbradoId, callback) => {
-    axios.delete(`https://localhost:5000/api/Alumbrado/${alumbradoId}`).then((response) => {
+    axiosPrivate.delete(`/Alumbrado/${alumbradoId}`).then((response) => {
       callback(response.data)
     })
   }

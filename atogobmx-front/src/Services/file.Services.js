@@ -1,19 +1,18 @@
-import axios from 'axios'
+import { axiosPrivate } from '@/common/axiosPrivate.js'
 
 export default function FileServices () {
-  const BaseUrl = 'http://localhost:5000/api'
   const getExpedientPhotoProfile = (ExpedienteDigitalId, callback) => {
-    axios.get(`${BaseUrl}/Archivos/FotoPerfil/${ExpedienteDigitalId}`).then((response) => {
+    axiosPrivate.get(`/Archivos/FotoPerfil/${ExpedienteDigitalId}`).then((response) => {
       callback(response)
     })
   }
   const getDocuments = (ExpedienteDigitalId, callback) => {
-    axios.get(`${BaseUrl}/Archivos/Documentos/${ExpedienteDigitalId}`).then((response) => {
+    axiosPrivate.get(`/Archivos/Documentos/${ExpedienteDigitalId}`).then((response) => {
       callback(response.data)
     })
   }
   const createExpedientPhotoProfile = (expedienteDigitalId, file, callback) => {
-    axios.post(`${BaseUrl}/Archivos/Imagen/${expedienteDigitalId}`, file).then((response) => {
+    axiosPrivate.post(`/Archivos/Imagen/${expedienteDigitalId}`, file).then((response) => {
       callback(response)
     }).catch((exception) => {
       // eslint-disable-next-line node/no-callback-literal
@@ -21,14 +20,14 @@ export default function FileServices () {
     })
   }
   const createDocuments = (expedienteDigitalId, files, callback) => {
-    axios.post(`${BaseUrl}/Archivos/Documentos/${expedienteDigitalId}`, files).then((response) => {
+    axiosPrivate.post(`/Archivos/Documentos/${expedienteDigitalId}`, files).then((response) => {
       callback(response)
     }).catch((exception) => {
       callback(exception.response.data)
     })
   }
   const deleteDocument = (ExpedienteDigitalId, ArchivoId, callback) => {
-    axios.delete(`${BaseUrl}/Archivos/Documentos/Eliminar/${ExpedienteDigitalId}/${ArchivoId}`)
+    axiosPrivate.delete(`/Archivos/Documentos/Eliminar/${ExpedienteDigitalId}/${ArchivoId}`)
       .then((response) => {
         callback(response.data)
       })

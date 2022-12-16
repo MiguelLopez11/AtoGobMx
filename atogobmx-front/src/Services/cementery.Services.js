@@ -1,32 +1,32 @@
-import axios from 'axios'
+import { axiosPrivate } from '@/common/axiosPrivate.js'
 
 export default function CementeryService () {
   const getCementery = (callback) => {
-    axios.get('http://localhost:5000/api/Cementerios').then((response) => {
+    axiosPrivate.get('/Cementerios').then((response) => {
       callback(response.data)
     })
   }
 
   const getCementeryById = (cementeriosId, callback) => {
-    axios.get(`https://localhost:5000/api/Cementerios/${cementeriosId}`).then((response) => {
+    axiosPrivate.get(`/Cementerios/${cementeriosId}`).then((response) => {
       callback(response.data)
     })
   }
 
   const createCementery = (data, callback) => {
-    axios.post('http://localhost:5000/api/Cementerios', data).then((response) => {
+    axiosPrivate.post('/Cementerios', data).then((response) => {
       callback(response.data)
     })
   }
 
   const updateCementery = (data, callback) => {
-    axios.put(`https://localhost:5000/api/Cementerios/${data.cementeriosId}`, data).then((response) => {
+    axiosPrivate.put(`/Cementerios/${data.cementeriosId}`, data).then((response) => {
       callback(response.data)
     })
   }
 
   const deleteCementery = (cementeriosId, callback) => {
-    axios.delete(`https://localhost:5000/api/Cementerios/${cementeriosId}`).then((response) => {
+    axiosPrivate.delete(`/Cementerios/${cementeriosId}`).then((response) => {
       callback(response.data)
     })
   }

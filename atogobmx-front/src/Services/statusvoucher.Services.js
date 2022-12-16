@@ -1,34 +1,34 @@
-import axios from 'axios'
+import { axiosPrivate } from '@/common/axiosPrivate.js'
 
 export default function StatusVoucherServices () {
   const getStatusVoucher = (callback) => {
-    axios.get('http://localhost:5000/api/PROV_EstatusVale').then((response) => {
+    axiosPrivate.get('/PROV_EstatusVale').then((response) => {
       callback(response.data)
     })
   }
 
   const getStatusVoucherById = (estatusValeId, callback) => {
-    axios
-      .get(`https://localhost:5000/api/PROV_EstatusVale/${estatusValeId}`)
+    axiosPrivate
+      .get(`/PROV_EstatusVale/${estatusValeId}`)
       .then((response) => {
         callback(response.data)
       })
   }
 
   const createStatusVoucher = (data, callback) => {
-    axios.post('http://localhost:5000/api/PROV_EstatusVale', data).then((response) => {
+    axiosPrivate.post('/PROV_EstatusVale', data).then((response) => {
       callback(response.data)
     })
   }
 
   const updateStatusVoucher = (data, callback) => {
-    axios.put(`https://localhost:5000/api/PROV_EstatusVale/${data.estatusValeId}`, data).then((response) => {
+    axiosPrivate.put(`/PROV_EstatusVale/${data.estatusValeId}`, data).then((response) => {
       callback(response.data)
     })
   }
 
   const deleteStatusVoucher = (estatusValeId, callback) => {
-    axios.delete(`https://localhost:5000/api/PROV_EstatusVale/${estatusValeId}`).then((response) => {
+    axiosPrivate.delete(`/PROV_EstatusVale/${estatusValeId}`).then((response) => {
       callback(response.data)
     })
   }

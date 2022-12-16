@@ -1,103 +1,102 @@
-import axios from 'axios'
+import { axiosPrivate } from '@/common/axiosPrivate.js'
 
 export default function ComputerServices () {
-  const BaseUrl = 'http://localhost:5000/api'
   const getComputers = (callback) => {
-    axios.get(`${BaseUrl}/EquiposComputos`).then((response) => {
+    axiosPrivate.get('/EquiposComputos').then((response) => {
       callback(response.data)
     })
   }
   const getComputer = (EquipoComputoId, callback) => {
-    axios.get(`${BaseUrl}/EquiposComputos/${EquipoComputoId}`).then((response) => {
+    axiosPrivate.get(`/EquiposComputos/${EquipoComputoId}`).then((response) => {
       callback(response.data)
     })
   }
   const createComputer = (data, callback) => {
-    axios.post(`${BaseUrl}/EquiposComputos`, data).then((response) => {
+    axiosPrivate.post('/EquiposComputos', data).then((response) => {
       callback(response.data)
     })
   }
   const updateComputer = (data, callback) => {
-    axios.put(`${BaseUrl}/EquiposComputos/${data.equipoComputoId}`, data).then((response) => {
+    axiosPrivate.put(`/EquiposComputos/${data.equipoComputoId}`, data).then((response) => {
       callback(response.data)
     })
   }
   const deleteComputer = (EquipoComputoId, callback) => {
-    axios.delete(`${BaseUrl}/EquiposComputos/${EquipoComputoId}`).then((response) => {
+    axiosPrivate.delete(`/EquiposComputos/${EquipoComputoId}`).then((response) => {
       callback(response.data)
     })
   }
   // ESTATUS
   const getStatus = (callback) => {
-    axios.get(`${BaseUrl}/PAT_EstatusEquipo`).then((response) => {
+    axiosPrivate.get('/PAT_EstatusEquipo').then((response) => {
       callback(response.data)
     })
   }
   const getStatusById = (estatusEquipoId, callback) => {
-    axios.get(`${BaseUrl}/PAT_EstatusEquipo/${estatusEquipoId}`).then((response) => {
+    axiosPrivate.get(`/PAT_EstatusEquipo/${estatusEquipoId}`).then((response) => {
       callback(response.data)
     })
   }
   const createStatusComputer = (data, callback) => {
-    axios.post(`${BaseUrl}/PAT_EstatusEquipo`, data).then((response) => {
+    axiosPrivate.post('/PAT_EstatusEquipo', data).then((response) => {
       callback(response.data)
     })
   }
   const updateStatusComputer = (data, callback) => {
-    axios.put(`${BaseUrl}/PAT_EstatusEquipo/${data.estatusEquipoId}`, data).then((response) => {
+    axiosPrivate.put(`/PAT_EstatusEquipo/${data.estatusEquipoId}`, data).then((response) => {
       callback(response.data)
     })
   }
   const deleteStatusComputer = (estatusEquipoId, callback) => {
-    axios.delete(`${BaseUrl}/PAT_EstatusEquipo/${estatusEquipoId}`).then((response) => {
+    axiosPrivate.delete(`/PAT_EstatusEquipo/${estatusEquipoId}`).then((response) => {
       callback(response.data)
     })
   }
   // DISPLAY
   const getDisplays = (callback) => {
-    axios.get(`${BaseUrl}/PAT_Monitor`).then((response) => {
+    axiosPrivate.get('/PAT_Monitor').then((response) => {
       callback(response.data)
     })
   }
   const createDisplay = (data, callback) => {
-    axios.post(`${BaseUrl}/PAT_Monitor`, data).then((response) => {
+    axiosPrivate.post('/PAT_Monitor', data).then((response) => {
       callback(response.data)
     })
   }
   const deleteDisplay = (monitorId, callback) => {
-    axios.delete(`${BaseUrl}/PAT_Monitor/${monitorId}`).then((response) => {
+    axiosPrivate.delete(`/PAT_Monitor/${monitorId}`).then((response) => {
       callback(response.data)
     })
   }
   // Keyboards
   const getKeyboard = (callback) => {
-    axios.get(`${BaseUrl}/PAT_Teclado`).then((response) => {
+    axiosPrivate.get('/PAT_Teclado').then((response) => {
       callback(response.data)
     })
   }
   const createKeyboard = (data, callback) => {
-    axios.post(`${BaseUrl}/PAT_Teclado`, data).then((response) => {
+    axiosPrivate.post('/PAT_Teclado', data).then((response) => {
       callback(response.data)
     })
   }
   const deleteKeyboard = (tecladoId, callback) => {
-    axios.delete(`${BaseUrl}/PAT_Teclado/${tecladoId}`).then((response) => {
+    axiosPrivate.delete(`/PAT_Teclado/${tecladoId}`).then((response) => {
       callback(response.data)
     })
   }
   // Mouse
   const getMouses = (callback) => {
-    axios.get(`${BaseUrl}/PAT_Mouse`).then((response) => {
+    axiosPrivate.get('/PAT_Mouse').then((response) => {
       callback(response.data)
     })
   }
   const createMouse = (data, callback) => {
-    axios.post(`${BaseUrl}/PAT_Mouse`, data).then((response) => {
+    axiosPrivate.post('/PAT_Mouse', data).then((response) => {
       callback(response.data)
     })
   }
   const deleteMouse = (mouseId, callback) => {
-    axios.delete(`${BaseUrl}/PAT_Mouse/${mouseId}`).then((response) => {
+    axiosPrivate.delete(`/PAT_Mouse/${mouseId}`).then((response) => {
       callback(response.data)
     })
   }

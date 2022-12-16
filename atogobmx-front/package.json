@@ -19,6 +19,7 @@
     "bootstrap-vue-3": "^0.2.14",
     "core-js": "^3.8.3",
     "leaflet": "^1.9.3",
+    "mem": "^9.0.2",
     "uploader": "^1.48.0",
     "vee-validate": "^4.6.10",
     "vue": "^3.2.37",

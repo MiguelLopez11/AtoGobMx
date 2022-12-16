@@ -1,28 +1,28 @@
-import axios from 'axios'
+import { axiosPrivate } from '@/common/axiosPrivate.js'
 
 export default function UsersServices () {
   const getUsers = (callback) => {
-    axios.get('http://localhost:5000/api/Usuarios').then((response) => {
+    axiosPrivate.get('/Usuarios').then((response) => {
       callback(response.data)
     })
   }
   const getUser = (usuarioId, callback) => {
-    axios.get(`https://localhost:5000/api/Usuarios/${usuarioId}`).then((response) => {
+    axiosPrivate.get(`/Usuarios/${usuarioId}`).then((response) => {
       callback(response.data)
     })
   }
   const createUser = (data, callback) => {
-    axios.post('http://localhost:5000/api/Usuarios', data).then((response) => {
+    axiosPrivate.post('/Usuarios', data).then((response) => {
       callback(response.data)
     })
   }
   const updateUser = (data, callback) => {
-    axios.put(`https://localhost:5000/api/Usuarios/${data.usuarioId}`, data).then((response) => {
+    axiosPrivate.put(`/Usuarios/${data.usuarioId}`, data).then((response) => {
       callback(response.data)
     })
   }
   const deleteUser = (usuarioId, callback) => {
-    axios.delete(`https://localhost:5000/api/Usuarios/${usuarioId}`).then((response) => {
+    axiosPrivate.delete(`/Usuarios/${usuarioId}`).then((response) => {
       callback(response.data)
     })
   }

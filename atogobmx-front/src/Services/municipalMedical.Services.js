@@ -1,102 +1,101 @@
-import axios from 'axios'
+import { axiosPrivate } from '@/common/axiosPrivate.js'
 
 export default function MunicipalMedicalServices () {
-  const BaseUrl = 'http://localhost:5000/api'
   // Medical Appointments
   const getMedicalAppointments = (callback) => {
-    axios.get(`${BaseUrl}/SERMED_Cita`).then((response) => {
+    axiosPrivate.get('/SERMED_Cita').then((response) => {
       callback(response.data)
     })
   }
   const getMedicalAppointment = (CitaId, callback) => {
-    axios.get(`${BaseUrl}/SERMED_Cita/${CitaId}`).then((response) => {
+    axiosPrivate.get(`/SERMED_Cita/${CitaId}`).then((response) => {
       callback(response.data)
     })
   }
   const getMedicalAppointmentByEmployee = (EmpleadoId, callback) => {
-    axios.get(`${BaseUrl}/SERMED_Cita/Empleado/${EmpleadoId}`).then((response) => {
+    axiosPrivate.get(`/SERMED_Cita/Empleado/${EmpleadoId}`).then((response) => {
       callback(response.data)
     })
   }
   const createMedicalAppointment = (data, callback) => {
-    axios.post(`${BaseUrl}/SERMED_Cita`, data).then((response) => {
+    axiosPrivate.post('/SERMED_Cita', data).then((response) => {
       callback(response.data)
     })
   }
   const updateMedicalAppointment = (data, callback) => {
-    axios.put(`${BaseUrl}/SERMED_Cita/${data.citaId}`, data).then((response) => {
+    axiosPrivate.put(`/SERMED_Cita/${data.citaId}`, data).then((response) => {
       callback(response.data)
     })
   }
   const deleteMedicalAppointment = (CitaId, callback) => {
-    axios.delete(`${BaseUrl}/SERMED_Cita/${CitaId}`).then((response) => {
+    axiosPrivate.delete(`/SERMED_Cita/${CitaId}`).then((response) => {
       callback(response.data)
     })
   }
   // Expedient Medical
   const getExpedientsMedical = (callback) => {
-    axios.get(`${BaseUrl}/SERMED_ExpedienteMedico`).then((response) => {
+    axiosPrivate.get('/SERMED_ExpedienteMedico').then((response) => {
       callback(response.data)
     })
   }
   const getExpedientMedical = (expedienteMedicoId, callback) => {
-    axios.get(`${BaseUrl}/SERMED_ExpedienteMedico/${expedienteMedicoId}`).then((response) => {
+    axiosPrivate.get(`/SERMED_ExpedienteMedico/${expedienteMedicoId}`).then((response) => {
       callback(response.data)
     })
   }
   const getExpedientMedicalByEmpleadoId = (EmpleadoId, callback) => {
-    axios.get(`${BaseUrl}/SERMED_ExpedienteMedico/Empleado/${EmpleadoId}`).then((response) => {
+    axiosPrivate.get(`/SERMED_ExpedienteMedico/Empleado/${EmpleadoId}`).then((response) => {
       callback(response.data)
     })
   }
   const createExpedientMedical = (data, callback) => {
-    axios.post(`${BaseUrl}/SERMED_ExpedienteMedico`, data).then((response) => {
+    axiosPrivate.post('/SERMED_ExpedienteMedico', data).then((response) => {
       callback(response.data)
     })
   }
   const updateExpedientMedical = (data, callback) => {
-    axios.put(`${BaseUrl}/SERMED_ExpedienteMedico/${data.expedienteMedicoId}`, data).then((response) => {
+    axiosPrivate.put(`/SERMED_ExpedienteMedico/${data.expedienteMedicoId}`, data).then((response) => {
       callback(response.data)
     })
   }
   const unfiledExpedient = (expedienteMedicoId, callback) => {
-    axios.put(`${BaseUrl}/SERMED_ExpedienteMedico/Desarchivar/${expedienteMedicoId}`).then((response) => {
+    axiosPrivate.put(`/SERMED_ExpedienteMedico/Desarchivar/${expedienteMedicoId}`).then((response) => {
       callback(response.data)
     })
   }
   const deleteExpedientMedical = (expedienteMedicoId, callback) => {
-    axios.delete(`${BaseUrl}/SERMED_ExpedienteMedico/${expedienteMedicoId}`).then((response) => {
+    axiosPrivate.delete(`/SERMED_ExpedienteMedico/${expedienteMedicoId}`).then((response) => {
       callback(response.data)
     })
   }
   // Products
   const getMedicalProducts = (callback) => {
-    axios.get(`${BaseUrl}/SERMED_Productos`).then((response) => {
+    axiosPrivate.get('/SERMED_Productos').then((response) => {
       callback(response.data)
     })
   }
   const getMedicalProduct = (productoId, callback) => {
-    axios.get(`${BaseUrl}/SERMED_Productos/${productoId}`).then((response) => {
+    axiosPrivate.get(`/SERMED_Productos/${productoId}`).then((response) => {
       callback(response.data)
     })
   }
   const createMedicalProduct = (data, callback) => {
-    axios.post(`${BaseUrl}/SERMED_Productos`, data).then((response) => {
+    axiosPrivate.post('/SERMED_Productos', data).then((response) => {
       callback(response.data)
     })
   }
   const updateMedicalProduct = (data, callback) => {
-    axios.put(`${BaseUrl}/SERMED_Productos/${data.productoId}`, data).then((response) => {
+    axiosPrivate.put(`/SERMED_Productos/${data.productoId}`, data).then((response) => {
       callback(response.data)
     })
   }
   const supplyMedicalProduct = (productoId, Cantidad, callback) => {
-    axios.put(`${BaseUrl}/SERMED_Productos/SurtirProducto/${productoId}/${Cantidad}`).then((response) => {
+    axiosPrivate.put(`/SERMED_Productos/SurtirProducto/${productoId}/${Cantidad}`).then((response) => {
       callback(response.data)
     })
   }
   const deleteMedicalProduct = (productoId, callback) => {
-    axios.delete(`${BaseUrl}/SERMED_Productos/${productoId}`).then((response) => {
+    axiosPrivate.delete(`/SERMED_Productos/${productoId}`).then((response) => {
       callback(response.data)
     })
   }
