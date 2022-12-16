@@ -1,29 +1,28 @@
-import axios from 'axios'
+import { axiosPrivate } from '@/common/axiosPrivate.js'
 
 export default function ArmoryServices () {
-  const BaseUrl = 'http://localhost:5000/api'
   const getWeapons = (callback) => {
-    axios.get(`${BaseUrl}/Armeria`).then((response) => {
+    axiosPrivate.get('/Armeria').then((response) => {
       callback(response.data)
     })
   }
   const getWeapon = (ArmaId, callback) => {
-    axios.get(`${BaseUrl}/Armeria/${ArmaId}`).then((response) => {
+    axiosPrivate.get(`/Armeria/${ArmaId}`).then((response) => {
       callback(response.data)
     })
   }
   const createWeapon = (data, callback) => {
-    axios.post(`${BaseUrl}/Armeria`, data).then((response) => {
+    axiosPrivate.post('/Armeria', data).then((response) => {
       callback(response.data)
     })
   }
   const updateWeapon = (data, callback) => {
-    axios.put(`${BaseUrl}/Armeria/${data.armaId}`, data).then((response) => {
+    axiosPrivate.put(`/Armeria/${data.armaId}`, data).then((response) => {
       callback(response.data)
     })
   }
   const deleteWeapon = (ArmaId, callback) => {
-    axios.delete(`${BaseUrl}/Armeria/${ArmaId}`).then((response) => {
+    axiosPrivate.delete(`/Armeria/${ArmaId}`).then((response) => {
       callback(response.data)
     })
   }

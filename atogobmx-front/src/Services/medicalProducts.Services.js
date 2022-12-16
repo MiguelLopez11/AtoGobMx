@@ -1,30 +1,28 @@
-import axios from 'axios'
+import { axiosPrivate } from '@/common/axiosPrivate.js'
 
 export default function MedicalProductsServices () {
-  const BaseUrl = 'http://localhost:5000/api'
-
   const getProducts = (callback) => {
-    axios.get(`${BaseUrl}/SERMED_Productos`).then((response) => {
+    axiosPrivate.get('/SERMED_Productos').then((response) => {
       callback(response.data)
     })
   }
   const getProduct = (productoId, callback) => {
-    axios.get(`${BaseUrl}/SERMED_Productos/${productoId}`).then((response) => {
+    axiosPrivate.get(`/SERMED_Productos/${productoId}`).then((response) => {
       callback(response.data)
     })
   }
   const createProduct = (data, callback) => {
-    axios.post(`${BaseUrl}/SERMED_Productos`, data).then((response) => {
+    axiosPrivate.post('/SERMED_Productos', data).then((response) => {
       callback(response.data)
     })
   }
   const updateProduct = (data, callback) => {
-    axios.put(`${BaseUrl}/SERMED_Productos/${data.productoId}`, data).then((response) => {
+    axiosPrivate.put(`/SERMED_Productos/${data.productoId}`, data).then((response) => {
       callback(response.data)
     })
   }
   const deleteProduct = (productoId, callback) => {
-    axios.delete(`${BaseUrl}/SERMED_Productos/${productoId}`).then((response) => {
+    axiosPrivate.delete(`/SERMED_Productos/${productoId}`).then((response) => {
       callback(response.data)
     })
   }

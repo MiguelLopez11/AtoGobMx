@@ -1,11 +1,13 @@
 ﻿using AtoGobMx.Context;
 using AtoGobMx.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace AtoGobMx.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class EmpleadosController : ControllerBase

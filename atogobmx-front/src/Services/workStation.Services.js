@@ -1,34 +1,33 @@
-import axios from 'axios'
+import { axiosPrivate } from '@/common/axiosPrivate.js'
 
 export default function WorkStationServices () {
-  const BaseUrl = 'http://localhost:5000/api'
   const getWorkStations = (callback) => {
-    axios.get(`${BaseUrl}/PuestoTrabajo`).then((response) => {
+    axiosPrivate.get('/PuestoTrabajo').then((response) => {
       callback(response.data)
     })
   }
   const getWorkStationByArea = (AreaId, callback) => {
-    axios.get(`${BaseUrl}/PuestoTrabajo/Area/${AreaId}`).then((response) => {
+    axiosPrivate.get(`/PuestoTrabajo/Area/${AreaId}`).then((response) => {
       callback(response.data)
     })
   }
   const getWorkStation = (puestoTrabajoId, callback) => {
-    axios.get(`${BaseUrl}/PuestoTrabajo/${puestoTrabajoId}`).then((response) => {
+    axiosPrivate.get(`/PuestoTrabajo/${puestoTrabajoId}`).then((response) => {
       callback(response.data)
     })
   }
   const createWorkStation = (data, callback) => {
-    axios.post(`${BaseUrl}/PuestoTrabajo`, data).then((response) => {
+    axiosPrivate.post('/PuestoTrabajo', data).then((response) => {
       callback(response.data)
     })
   }
   const updateWorkStation = (data, callback) => {
-    axios.put(`${BaseUrl}/PuestoTrabajo/${data.puestoTrabajoId}`, data).then((response) => {
+    axiosPrivate.put(`/PuestoTrabajo/${data.puestoTrabajoId}`, data).then((response) => {
       callback(response.data)
     })
   }
   const deleteWorkStation = (puestoTrabajoId, callback) => {
-    axios.delete(`${BaseUrl}/PuestoTrabajo/${puestoTrabajoId}`).then((response) => {
+    axiosPrivate.delete(`/PuestoTrabajo/${puestoTrabajoId}`).then((response) => {
       callback(response.data)
     })
   }

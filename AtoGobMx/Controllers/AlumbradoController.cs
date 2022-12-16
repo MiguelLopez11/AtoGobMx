@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AtoGobMx.Controllers
 {
-    [Authorize(Roles = UserRoles.User)]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AlumbradoController : ControllerBase
