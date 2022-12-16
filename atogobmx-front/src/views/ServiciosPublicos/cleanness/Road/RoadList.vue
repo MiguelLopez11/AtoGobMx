@@ -90,7 +90,11 @@
           <!-- Agregar Observacion -->
           <b-col>
             <b-form-group class="mt-3" label="Observacion">
-              <Field name="ObservationField" :rules="validateObservation" as="text">
+              <Field
+                name="ObservationField"
+                :rules="validateObservation"
+                as="text"
+              >
                 <b-form-input
                   v-model="roadService.obsevacion"
                   :state="ObservationState"
@@ -106,10 +110,11 @@
         </b-row>
         <b-row>
           <GoogleMap
+            api-key="AIzaSyCYAwe7Fk4PQLI3bBBqxUViN4IOXVGd_z0"
             style="width: 100%; height: 500px"
             :center="center"
             :zoom="20"
-            @click="() => locations.push({ lat: 20.5546629, lng: -102.4953904})"
+            @click="addMaker"
           >
             <MarkerCluster>
               <Marker
@@ -140,7 +145,7 @@
 
 <script>
 import RoadService from '@/Services/road.Services'
-import { Form } from 'vee-validate'
+import { Form, ErrorMessage, Field } from 'vee-validate'
 import { ref, inject } from 'vue'
 import { GoogleMap, Marker, MarkerCluster, Polyline } from 'vue3-google-map'
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -148,6 +153,8 @@ export default {
   components: {
     EasyDataTable: window['vue3-easy-data-table'],
     Form,
+    ErrorMessage,
+    Field,
     GoogleMap,
     Marker,
     MarkerCluster,
@@ -184,24 +191,16 @@ export default {
     })
     const locations = ref([
       {
-        lat: 20.5546629,
-        lng: -105.4953904
-      },
-      {
-        lat: 20.5546629,
-        lng: -110.4953904
-      },
-      {
-        lat: 20.5546629,
-        lng: -99.4953904
+        lat: 0,
+        lng: 0
       }
     ])
     const flightPath = ref({
-      path: locations.value,
-      geodesic: true,
-      strokeColor: '#5e50ee',
-      strokeOpacity: 1.0,
-      strokeWeight: 5
+      // path: locations.value,
+      // geodesic: true,
+      // strokeColor: '#5e50ee',
+      // strokeOpacity: 1.0,
+      // strokeWeight: 5
     })
     const RoadServiceFieldsBlank = ref(
       JSON.parse(JSON.stringify(RoadServiceFields))
@@ -213,7 +212,19 @@ export default {
       { value: 'obsevacion', text: 'Observacion' },
       { value: 'actions', text: 'Acciones' }
     ])
-
+    const addMaker = location => {
+      locations.value.push({
+        lat: location.latLng.lat(),
+        lng: location.latLng.lng()
+      })
+      flightPath.value = {
+        path: locations.value,
+        geodesic: true,
+        strokeColor: '#5e50ee',
+        strokeOpacity: 1.0,
+        strokeWeight: 5
+      }
+    }
     const resetRoadServiceFields = () => {
       showModal.value = false
       RoadServiceFields.value = JSON.parse(
@@ -286,7 +297,9 @@ export default {
       }
 
       if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ ,;:. 0-9]+$/i.test(RoadServiceFields.value.obsevacion)
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ ,;:. 0-9]+$/i.test(
+          RoadServiceFields.value.obsevacion
+        )
       ) {
         ObservationState.value = false
         return 'Este campo solo puede contener numeros'
@@ -387,7 +400,8 @@ export default {
       // validateOrigin,
       // validateDestination,
       validateObservation,
-      resetRoadServiceFields
+      resetRoadServiceFields,
+      addMaker
     }
   }
 }
