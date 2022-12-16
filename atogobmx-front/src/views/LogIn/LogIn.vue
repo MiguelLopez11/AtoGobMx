@@ -16,13 +16,6 @@
           <div class="col-lg-6 mb-5 mb-lg-0">
             <div class="card" style="background-color: #f8f9fa">
               <b-img center height="200" width="200" src="https://img.icons8.com/external-flaticons-flat-flat-icons/344/external-login-web-development-flaticons-flat-flat-icons.png"></b-img>
-              <!-- <b-avatar
-                  style="margin-left: 200px"
-                  ref="refAvatar"
-                  src="https://cdn-icons-png.flaticon.com/512/74/74235.png"
-                  size="250px"
-                /> -->
-              <!-- <span align="center" class="display-6 mb-2 mt-3 p-0">Inicio de Sesion</span> -->
               <div class="card-body py-3 px-md-5">
                 <Form @submit="onLogIn">
                   <div class="form-outline mb-4">
@@ -86,7 +79,7 @@
 <script>
 import LogInServices from '@/Services/logIn.Services'
 import { ref, inject } from 'vue'
-import { useRouter } from 'vue-router'
+// import { useRouter } from 'vue-router'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 export default {
   components: {
@@ -96,10 +89,11 @@ export default {
   },
   setup () {
     const swal = inject('$swal')
-    const redirect = useRouter()
+    // const redirect = useRouter()
     const { LogIn } = LogInServices()
     const userNameState = ref(false)
     const passwordState = ref(false)
+    window.localStorage.removeItem('session')
     const user = ref({
       userName: '',
       password: ''
@@ -108,7 +102,9 @@ export default {
       LogIn(user.value, data => {
         if (data.token) {
           window.sessionStorage.setItem('isLogged', true)
-          // window.sessionStorage.setItem('Role', data.role.nombre)
+
+          window.sessionStorage.setItem('Token', data.token)
+          window.sessionStorage.setItem('RefreshToken', data.refreshToken)
           // window.sessionStorage.setItem('Departamento', data.empleado.departamentos.nombre)
           // window.sessionStorage.setItem('Area', data.empleado.area.nombre)
           // window.sessionStorage.setItem('Empleado', data.empleado.nombreCompleto)
@@ -122,7 +118,7 @@ export default {
             })
             .then(result => {
               if (result.isConfirmed) {
-                redirect.go('/')
+                // redirect.go('/')
               }
             })
         } else {

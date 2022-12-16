@@ -1,9 +1,8 @@
-import axios from 'axios'
+import { axiosPrivate } from '@/common/axiosPrivate.js'
 
 export default function AreaServices () {
-  const BaseUrl = 'http://localhost:5000/api'
   const LogIn = (user, callback) => {
-    axios.post(`${BaseUrl}/Authenticate/login`, user).then((response) => {
+    axiosPrivate.post('/Authenticate/login', user).then((response) => {
       callback(response.data)
     }).catch((exception) => {
       callback(exception)

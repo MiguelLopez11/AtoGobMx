@@ -12,7 +12,7 @@ namespace AtoGobMx.Context
         }
         public DbSet<Area> Area { get; set; }
         public DbSet<Empleado> Empleados { get; set; }
-        //public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<Usuario> Usuarios { get; set; }
         //public DbSet<Role> Roles { get; set; }
         public DbSet<Alumbrado> Alumbrado { get; set; }
         public DbSet<ExpedienteAlumbrado> ExpedienteAlumbrado { get; set; }

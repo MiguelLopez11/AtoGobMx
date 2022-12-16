@@ -1,55 +1,54 @@
-import axios from 'axios'
+import { axiosPrivate } from '@/common/axiosPrivate.js'
 
 export default function FurnitureServices () {
-  const BaseUrl = 'http://localhost:5000/api'
   const getFurnitures = (callback) => {
-    axios.get(`${BaseUrl}/PAT_Mobiliario`).then((response) => {
+    axiosPrivate.get('/PAT_Mobiliario').then((response) => {
       callback(response.data)
     })
   }
   const getFurniture = (mobiliarioId, callback) => {
-    axios.get(`${BaseUrl}/PAT_Mobiliario/${mobiliarioId}`).then((response) => {
+    axiosPrivate.get(`/PAT_Mobiliario/${mobiliarioId}`).then((response) => {
       callback(response.data)
     })
   }
   const createFurniture = (data, callback) => {
-    axios.post(`${BaseUrl}/PAT_Mobiliario`, data).then((response) => {
+    axiosPrivate.post('/PAT_Mobiliario', data).then((response) => {
       callback(response.data)
     })
   }
   const updateFurniture = (data, callback) => {
-    axios.put(`${BaseUrl}/PAT_Mobiliario/${data.mobiliarioId}`, data).then((response) => {
+    axiosPrivate.put(`/PAT_Mobiliario/${data.mobiliarioId}`, data).then((response) => {
       callback(response.data)
     })
   }
   const deleteFurniture = (mobiliarioId, callback) => {
-    axios.delete(`${BaseUrl}/PAT_Mobiliario/${mobiliarioId}`).then((response) => {
+    axiosPrivate.delete(`/PAT_Mobiliario/${mobiliarioId}`).then((response) => {
       callback(response.data)
     })
   }
   // TYPEFURNITURES
   const getTypeFurnitures = (callback) => {
-    axios.get(`${BaseUrl}/TipoMobiliario`).then((response) => {
+    axiosPrivate.get('/TipoMobiliario').then((response) => {
       callback(response.data)
     })
   }
   const getTypeFurniture = (tipoMobiliarioId, callback) => {
-    axios.get(`${BaseUrl}/TipoMobiliario/${tipoMobiliarioId}`).then((response) => {
+    axiosPrivate.get(`/TipoMobiliario/${tipoMobiliarioId}`).then((response) => {
       callback(response.data)
     })
   }
   const createTypeFurniture = (data, callback) => {
-    axios.post(`${BaseUrl}/TipoMobiliario`, data).then((response) => {
+    axiosPrivate.post('/TipoMobiliario', data).then((response) => {
       callback(response.data)
     })
   }
   const updateTypeFurniture = (data, callback) => {
-    axios.put(`${BaseUrl}/TipoMobiliario/${data.tipoMobiliarioId}`, data).then((response) => {
+    axiosPrivate.put(`/TipoMobiliario/${data.tipoMobiliarioId}`, data).then((response) => {
       callback(response.data)
     })
   }
   const deleteTypeFurniture = (tipoMobiliarioId, callback) => {
-    axios.delete(`${BaseUrl}/TipoMobiliario/${tipoMobiliarioId}`).then((response) => {
+    axiosPrivate.delete(`/TipoMobiliario/${tipoMobiliarioId}`).then((response) => {
       callback(response.data)
     })
   }
