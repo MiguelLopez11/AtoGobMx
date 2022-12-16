@@ -3,24 +3,26 @@ import mem from 'mem'
 import { axiosPublic } from './axiosPublic'
 
 const refreshTokenFn = async () => {
-  const Token = JSON.parse(localStorage.getItem('session'))
+  const token = sessionStorage.getItem('Token')
+  const refreshTokens = sessionStorage.getItem('RefreshToken')
 
   try {
     const response = await axiosPublic.post('/Authenticate/refresh-token', {
-      accessToken: Token?.token,
-      refreshToken: Token?.refreshToken
+      accessToken: token,
+      refreshToken: refreshTokens
     })
 
-    const { accessToken } = response.data
+    const { accessToken, refreshToken } = response.data
 
-    if (!accessToken) {
+    if (!accessToken && !refreshToken) {
       sessionStorage.removeItem('Token')
       sessionStorage.removeItem('RefreshToken')
     }
 
-    sessionStorage.setItem('Token', JSON.stringify(accessToken))
+    sessionStorage.setItem('Token', accessToken)
+    sessionStorage.setItem('RefreshToken', refreshToken)
 
-    return accessToken
+    return { accessToken: accessToken, refres: refreshToken }
   } catch (error) {
     localStorage.removeItem('session')
     localStorage.removeItem('user')
