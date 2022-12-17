@@ -69,10 +69,9 @@ namespace AtoGobMx.Controllers
             }
 
             rutaAseo.RutaId = RutaId;
-            //rutaAseo.Origen = ruta.Origen;
-            //rutaAseo.Destino = ruta.Destino;
-            //rutaAseo.kilometros = ruta.kilometros;
-            rutaAseo.Obsevacion = ruta.Obsevacion;
+            rutaAseo.Nombre = ruta.Nombre;
+            rutaAseo.Horario = ruta.Horario;
+            rutaAseo.Observacion = ruta.Observacion;
             rutaAseo.Archivado = ruta.Archivado;
 
             _context.Ruta.Update(rutaAseo);
