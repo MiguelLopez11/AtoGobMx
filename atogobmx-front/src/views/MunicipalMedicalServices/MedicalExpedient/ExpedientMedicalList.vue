@@ -78,7 +78,7 @@
               Editar
             </b-dropdown-item>
           <b-dropdown-item
-            v-if="items.archivado && role === 'Administrador'"
+            v-if="items.archivado && items.puestoTrabajo.nombre === 'Administrador' || items.puestoTrabajo.nombre === 'Director'"
             class="m-1"
             variant="outline-warning"
           >
@@ -136,7 +136,6 @@ export default {
     const { getExpedientsMedical, deleteExpedientMedical, createExpedientMedical } =
       MunicipalMedicalServices()
     const { getEmployeesWithoutExpedient } = EmployeeServices()
-    const role = window.sessionStorage.getItem('Role')
     const expedients = ref([])
     const employees = ref([])
     const perPage = ref(5)
@@ -247,7 +246,6 @@ export default {
       employees,
       showModal,
       expedientFields,
-      role,
 
       onFiltered,
       RemoveExpedient,

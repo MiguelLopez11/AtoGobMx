@@ -79,7 +79,7 @@
 <script>
 import LogInServices from '@/Services/logIn.Services'
 import { ref, inject } from 'vue'
-// import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 export default {
   components: {
@@ -89,11 +89,11 @@ export default {
   },
   setup () {
     const swal = inject('$swal')
-    // const redirect = useRouter()
+    const redirect = useRouter()
     const { LogIn } = LogInServices()
     const userNameState = ref(false)
     const passwordState = ref(false)
-    window.localStorage.removeItem('session')
+    window.sessionStorage.removeItem('session')
     const user = ref({
       userName: '',
       password: ''
@@ -118,7 +118,7 @@ export default {
             })
             .then(result => {
               if (result.isConfirmed) {
-                // redirect.go('/')
+                redirect.go('/')
               }
             })
         } else {

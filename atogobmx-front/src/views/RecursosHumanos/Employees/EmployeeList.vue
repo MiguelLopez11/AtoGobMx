@@ -44,7 +44,7 @@
       </template>
       <template #item-actions="items">
         <b-dropdown
-          :disabled="items.archivado && role !== 'Administrador' || 'Director'"
+          :disabled="items.archivado && items.puestoTrabajo.nombre !== 'Administrador' || 'Director'"
           id="ActionsDropdown"
           size="lg"
           style="text-color: black"
@@ -250,7 +250,6 @@ export default {
     const { createExpedient, getExpedientByEmpleadoId } = ExpedientdigitalServices()
     const { createExpedientMedical, getExpedientMedicalByEmpleadoId } = MunicipalMedicalServices()
     const redirect = useRouter()
-    const role = window.sessionStorage.getItem('Role')
     const showModal = ref(false)
     const employees = ref([])
     const departaments = ref([])
@@ -519,7 +518,6 @@ export default {
       workStationState,
       departamentState,
       showModal,
-      role,
       expedientmedicalBlank,
 
       onFiltered,

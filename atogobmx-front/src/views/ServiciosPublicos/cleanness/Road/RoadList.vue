@@ -96,7 +96,7 @@
                 as="text"
               >
                 <b-form-input
-                  v-model="roadService.obsevacion"
+                  v-model="RoadServiceFields.observacion"
                   :state="ObservationState"
                 >
                 </b-form-input>
@@ -105,6 +105,13 @@
                 class="text-danger"
                 name="ObservationField"
               ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Marcar ruta">
+              <b-button variant="primary" @click="onAddPolyline">
+                Marcar Ruta
+              </b-button>
             </b-form-group>
           </b-col>
         </b-row>
@@ -119,12 +126,16 @@
             <MarkerCluster>
               <Marker
                 v-for="(location, i) in locations"
-                :options="{ position: location }"
+                :options="{
+                  position: location,
+                  label: `${i === 0 ? 'Inicio' : ''}`
+                }"
                 :key="i"
               />
               <Polyline :options="flightPath" />
             </MarkerCluster>
           </GoogleMap>
+          <b-row> </b-row>
         </b-row>
         <b-row align-h="end">
           <b-button
@@ -163,8 +174,7 @@ export default {
   setup () {
     const swal = inject('$swal')
     const showModal = ref(false)
-    const { getRoad, createRoad, deleteRoad } = RoadService()
-    // const $toast = useToast()
+    const { getRoad, createRoad, deleteRoad, createCoordsRoad } = RoadService()
     const roadService = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
@@ -186,29 +196,22 @@ export default {
       rutaId: 0,
       origen: null,
       destino: null,
-      obsevacion: null,
+      observacion: null,
       archivado: false
     })
-    const locations = ref([
-      {
-        lat: 0,
-        lng: 0
-      }
-    ])
+    const locations = ref([])
     const flightPath = ref({
-      // path: locations.value,
-      // geodesic: true,
-      // strokeColor: '#5e50ee',
-      // strokeOpacity: 1.0,
-      // strokeWeight: 5
+      path: [],
+      geodesic: true,
+      strokeColor: '#5e50ee',
+      strokeOpacity: 1.0,
+      strokeWeight: 5
     })
     const RoadServiceFieldsBlank = ref(
       JSON.parse(JSON.stringify(RoadServiceFields))
     )
     const center = ref({ lat: 20.5546629, lng: -102.4953904 })
     const fields = ref([
-      // { value: 'origen', text: 'Latitud' },
-      // { value: 'destino', text: 'Longitud' },
       { value: 'obsevacion', text: 'Observacion' },
       { value: 'actions', text: 'Acciones' }
     ])
@@ -217,6 +220,11 @@ export default {
         lat: location.latLng.lat(),
         lng: location.latLng.lng()
       })
+    }
+    const onAddPolyline = () => {
+      if (flightPath.value.path.length > 0) {
+        flightPath.value.path = []
+      }
       flightPath.value = {
         path: locations.value,
         geodesic: true,
@@ -250,62 +258,12 @@ export default {
       currentPage.value = 1
     }
 
-    // const validateOrigin = () => {
-    //   if (!RoadServiceFields.value.origen) {
-    //     OriginState.value = false
-    //     return 'Este campo es requerido'
-    //   }
-
-    //   if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(RoadServiceFields.value.origen)) {
-    //     OriginState.value = false
-    //     return 'Este campo solo puede contener letras'
-    //   }
-
-    //   if (!RoadServiceFields.value.origen.trim().length > 0) {
-    //     OriginState.value = false
-    //     return 'Este campo no puede contener espacios'
-    //   }
-
-    //   OriginState.value = true
-    //   return true
-    // }
-
-    // const validateDestination = () => {
-    //   if (!RoadServiceFields.value.destino) {
-    //     DestinationState.value = false
-    //     return 'Este campo es requerido'
-    //   }
-
-    //   if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(RoadServiceFields.value.destino)) {
-    //     DestinationState.value = false
-    //     return 'Este campo solo puede contener numeros'
-    //   }
-
-    //   if (!RoadServiceFields.value.destino.trim().length > 0) {
-    //     DestinationState.value = false
-    //     return 'Este campo no puede contener espacios'
-    //   }
-
-    //   DestinationState.value = true
-    //   return true
-    // }
-
     const validateObservation = () => {
-      if (!RoadServiceFields.value.obsevacion) {
+      if (!RoadServiceFields.value.observacion) {
         ObservationState.value = false
         return 'Este campo es requerido'
       }
-
-      if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ ,;:. 0-9]+$/i.test(
-          RoadServiceFields.value.obsevacion
-        )
-      ) {
-        ObservationState.value = false
-        return 'Este campo solo puede contener numeros'
-      }
-
-      if (!RoadServiceFields.value.obsevacion.trim().length > 0) {
+      if (!RoadServiceFields.value.observacion.trim().length > 0) {
         ObservationState.value = false
         return 'Este campo no puede contener espacios'
       }
@@ -331,6 +289,11 @@ export default {
     }
 
     const addRoadService = () => {
+      for (let i = 0; i < locations.value.length; i++) {
+        const coords = locations[i]
+        createCoordsRoad(coords, data => {
+        })
+      }
       createRoad(RoadServiceFields.value, data => {
         refreshTable()
         swal.fire({
@@ -401,7 +364,8 @@ export default {
       // validateDestination,
       validateObservation,
       resetRoadServiceFields,
-      addMaker
+      addMaker,
+      onAddPolyline
     }
   }
 }

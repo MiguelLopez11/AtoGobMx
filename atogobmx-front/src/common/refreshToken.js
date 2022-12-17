@@ -13,7 +13,6 @@ const refreshTokenFn = async () => {
     })
 
     const { accessToken, refreshToken } = response.data
-
     if (!accessToken && !refreshToken) {
       sessionStorage.removeItem('Token')
       sessionStorage.removeItem('RefreshToken')
@@ -24,12 +23,12 @@ const refreshTokenFn = async () => {
 
     return { accessToken: accessToken, refres: refreshToken }
   } catch (error) {
-    localStorage.removeItem('session')
-    localStorage.removeItem('user')
+    sessionStorage.removeItem('session')
+    sessionStorage.removeItem('user')
   }
 }
 
-const maxAge = 10000
+const maxAge = 1000000
 
 export const memoizedRefreshToken = mem(refreshTokenFn, {
   maxAge
