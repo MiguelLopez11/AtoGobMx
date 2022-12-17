@@ -8,10 +8,9 @@ namespace AtoGobMx.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int RutaId { get; set; }
-        public string Origen { get; set; }
-        public string Destino { get; set; }
-        //public int kilometros { get; set; }
-        public string Obsevacion { get; set; }
+        public string Nombre { get; set; }
+        public string Horario { get; set; } 
+        public string Observacion { get; set; }
         public bool Archivado { get; set; }
     }
 }

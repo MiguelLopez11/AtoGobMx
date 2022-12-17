@@ -23,6 +23,7 @@ namespace AtoGobMx.Context
         public DbSet<VehiculosAlumbrado> VehiculosAlumbrado { get; set; }
         public DbSet<Aseo> Aseo { get; set; }
         public DbSet<Ruta> Ruta { get; set; }
+        public DbSet<Coordenadas_Rutas> Coordenadas_Ruta { get; set; }
         public DbSet<Zona> Zona { get; set; }
         public DbSet<Cementerios> Cementerios { get; set; }
         public DbSet<DireccionCementerio> DireccionCementerio { get; set; }

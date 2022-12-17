@@ -30,12 +30,47 @@ export default function RoadService () {
       callback(response.data)
     })
   }
+  // Coords Road
+  const getCoordsRoad = (callback) => {
+    axiosPrivate.get('/CoordenadaRuta').then((response) => {
+      callback(response.data)
+    })
+  }
+
+  const getCoordsRoadById = (CoordenadaRutaId, callback) => {
+    axiosPrivate.get(`/CoordenadaRuta/${CoordenadaRutaId}`).then((response) => {
+      callback(response.data)
+    })
+  }
+
+  const createCoordsRoad = (data, callback) => {
+    axiosPrivate.post('/CoordenadaRuta', data).then((response) => {
+      callback(response.data)
+    })
+  }
+
+  const updateCoordsRoad = (data, callback) => {
+    axiosPrivate.put(`/CoordenadaRuta/${data.coordenadaId}`, data).then((response) => {
+      callback(response.data)
+    })
+  }
+
+  const deleteCoordsRoad = (CoordenadaRutaId, callback) => {
+    axiosPrivate.delete(`/CoordenadaRuta/${CoordenadaRutaId}`).then((response) => {
+      callback(response.data)
+    })
+  }
 
   return {
     getRoad,
     getRoadById,
     createRoad,
     updateRoad,
-    deleteRoad
+    deleteRoad,
+    getCoordsRoad,
+    getCoordsRoadById,
+    createCoordsRoad,
+    updateCoordsRoad,
+    deleteCoordsRoad
   }
 }

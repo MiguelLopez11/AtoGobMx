@@ -31,11 +31,11 @@ export default {
     const swal = inject('$swal')
     const background = ref(LogoAtogobMx)
     const isLogged = window.sessionStorage.getItem('isLogged')
-    const departament = window.sessionStorage.getItem('Departamento')
-    const role = window.sessionStorage.getItem('Role')
-    const area = window.sessionStorage.getItem('Area')
-    const employee = window.sessionStorage.getItem('Empleado')
-    const empleadoId = window.sessionStorage.getItem('EmpleadoId')
+    // const departament = window.sessionStorage.getItem('Departamento')
+    // const role = window.sessionStorage.getItem('Role')
+    // const area = window.sessionStorage.getItem('Area')
+    // const employee = window.sessionStorage.getItem('Empleado')
+    // const empleadoId = window.sessionStorage.getItem('EmpleadoId')
     const menu = ref([
       { link: '/', name: 'Inicio', icon: 'bi bi-house' },
       { link: '/RecursosHumanos', name: 'Recursos Humanos', icon: 'bi bi-people-fill' },
@@ -61,12 +61,12 @@ export default {
     return {
       background,
       isLogged,
-      departament,
-      role,
-      area,
+      // departament,
+      // role,
+      // area,
       menu,
-      employee,
-      empleadoId,
+      // employee,
+      // empleadoId,
 
       removeLocalStorgare
     }

@@ -14,8 +14,8 @@ const routes = [
     name: 'RecursosHumanos',
     component: () => import('../components/ResourcesHumanRoutes'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado'
+      requiresAuth: true
+      // rol: 'Empleado'
     }
   },
   {
@@ -23,8 +23,8 @@ const routes = [
     name: 'ServiciosPublicos',
     component: () => import('../components/PublicServicesRoutes'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado'
+      requiresAuth: true
+      // rol: 'Empleado'
     }
   },
   {
@@ -32,8 +32,8 @@ const routes = [
     name: 'Obras',
     component: () => import('../components/PublickWorks'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado'
+      requiresAuth: true
+      // rol: 'Empleado'
     }
   },
   {
@@ -41,8 +41,8 @@ const routes = [
     name: 'Proveeduria',
     component: () => import('../components/SupplyRoutes'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado'
+      requiresAuth: true
+      // rol: 'Empleado'
     }
   },
   {
@@ -50,8 +50,8 @@ const routes = [
     name: 'PatrimonioMunicipal',
     component: () => import('../components/PatrimonyMunicipalRoutes'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado'
+      requiresAuth: true
+      // rol: 'Empleado'
     }
   },
   {
@@ -59,8 +59,8 @@ const routes = [
     name: 'ServiciosMedicosMunicipales',
     component: () => import('../components/MedicalServicesRoutes'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado'
+      requiresAuth: true
+      // rol: 'Empleado'
     }
   },
   {
@@ -68,8 +68,8 @@ const routes = [
     name: 'Administrador',
     component: () => import('../components/AdministratorRoutes'),
     meta: {
-      requiresAuth: true,
-      rol: 'Administrador'
+      requiresAuth: true
+      // rol: 'Administrador'
     }
   },
   {
@@ -77,8 +77,8 @@ const routes = [
     name: 'PageNotPermission',
     component: () => import('../views/PageNotPermission/PageNotPermission.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado'
+      requiresAuth: true
+      // rol: 'Empleado'
     }
   },
   {
@@ -86,8 +86,8 @@ const routes = [
     name: 'Home',
     component: () => import('../views/Home/HomePage.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado'
+      requiresAuth: true
+      // rol: 'Empleado'
     }
   },
   {
@@ -95,9 +95,9 @@ const routes = [
     name: 'Areas',
     component: () => import('../views/RecursosHumanos/areas/AreaList.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Recursos Humanos'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Recursos Humanos'
 
     }
   },
@@ -106,9 +106,9 @@ const routes = [
     name: 'Area-Edit',
     component: () => import('../views/RecursosHumanos/areas/AreaEdit.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Recursos Humanos'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Recursos Humanos'
     }
   },
   {
@@ -116,9 +116,9 @@ const routes = [
     name: 'Empleados',
     component: () => import('@/views/RecursosHumanos/Employees/EmployeeList.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Recursos Humanos'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Recursos Humanos'
     }
   },
   {
@@ -126,9 +126,9 @@ const routes = [
     name: 'Empleados-Edit',
     component: () => import('@/views/RecursosHumanos/Employees/EmployeeEdit.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Recursos Humanos'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Recursos Humanos'
     }
   },
   {
@@ -136,9 +136,9 @@ const routes = [
     name: 'ExpedientesDigitales',
     component: () => import('@/views/RecursosHumanos/ExpedienteDigital/ExpedientDigitalList.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Recursos Humanos'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Recursos Humanos'
     }
   },
   {
@@ -146,9 +146,9 @@ const routes = [
     name: 'ExpedienteDigital-edit',
     component: () => import('@/views/RecursosHumanos/ExpedienteDigital/ExpedientDigitalEdit.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Recursos Humanos'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Recursos Humanos'
     }
   },
   // modulos arturo
@@ -157,8 +157,8 @@ const routes = [
     name: 'AlumbradoPublico',
     component: () => import('@/components/PublicLighting.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado'
+      requiresAuth: true
+      // rol: 'Empleado'
     }
   },
   {
@@ -166,8 +166,8 @@ const routes = [
     name: 'CementeriosPublicos',
     component: () => import('@/components/PublicCementery.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado'
+      requiresAuth: true
+      // rol: 'Empleado'
     }
   },
   {
@@ -175,8 +175,8 @@ const routes = [
     name: 'AseoPublico',
     component: () => import('@/components/PublicCleaning.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado'
+      requiresAuth: true
+      // rol: 'Empleado'
     }
   },
   {
@@ -185,8 +185,8 @@ const routes = [
     component: () => import('@/views/ServiciosPublicos/streetLighting/publiclighting/PublicLightingList.vue'),
     meta: {
       requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Servicios Publicos'
+      rol: 'Empleado'
+      // departamento: 'Servicios Publicos'
     }
   },
   {
@@ -195,8 +195,8 @@ const routes = [
     component: () => import('@/views/ServiciosPublicos/streetLighting/publiclighting/EditLighting.vue'),
     meta: {
       requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Servicios Publicos'
+      rol: 'Empleado'
+      // departamento: 'Servicios Publicos'
     }
   },
   {
@@ -205,8 +205,8 @@ const routes = [
     component: () => import('@/views/ServiciosPublicos/streetLighting/statuslighting/StatusLightingList.vue'),
     meta: {
       requiresAuth: true,
-      rol: 'Administrador',
-      departamento: 'Servicios Publicos'
+      rol: 'Administrador'
+      // departamento: 'Servicios Publicos'
     }
   },
   {
@@ -215,8 +215,8 @@ const routes = [
     component: () => import('@/views/ServiciosPublicos/streetLighting/statuslighting/EditStatusLighting.vue'),
     meta: {
       requiresAuth: true,
-      rol: 'Administrador',
-      departamento: 'Servicios Publicos'
+      rol: 'Administrador'
+      // departamento: 'Servicios Publicos'
     }
   },
   {
@@ -225,8 +225,8 @@ const routes = [
     component: () => import('@/views/ServiciosPublicos/streetLighting/expedientlighting/ExpedientLightingList.vue'),
     meta: {
       requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Servicios Publicos'
+      rol: 'Empleado'
+      // departamento: 'Servicios Publicos'
     }
   },
   {
@@ -235,8 +235,8 @@ const routes = [
     component: () => import('@/views/ServiciosPublicos/streetLighting/expedientlighting/EditExpedientLighting.vue'),
     meta: {
       requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Servicios Publicos'
+      rol: 'Empleado'
+      // departamento: 'Servicios Publicos'
     }
   },
   // {
@@ -261,8 +261,8 @@ const routes = [
     component: () => import('@/views/ServiciosPublicos/streetLighting/typetasklighting/TaskTypeLightingList.vue'),
     meta: {
       requiresAuth: true,
-      rol: 'Administrador',
-      departamento: 'Servicios Publicos'
+      rol: 'Administrador'
+      // departamento: 'Servicios Publicos'
     }
   },
   {
@@ -271,8 +271,8 @@ const routes = [
     component: () => import('@/views/ServiciosPublicos/streetLighting/typetasklighting/EditTaskTypeLighting.vue'),
     meta: {
       requiresAuth: true,
-      rol: 'Administrador',
-      departamento: 'Servicios Publicos'
+      rol: 'Administrador'
+      // departamento: 'Servicios Publicos'
     }
   },
   {
@@ -281,8 +281,8 @@ const routes = [
     component: () => import('@/views/ServiciosPublicos/cementery/Cementery/CementeryList.vue'),
     meta: {
       requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Servicios Publicos'
+      rol: 'Empleado'
+      // departamento: 'Servicios Publicos'
     }
   },
   {
@@ -291,8 +291,8 @@ const routes = [
     component: () => import('@/views/ServiciosPublicos/cementery/Cementery/EditCementery.vue'),
     meta: {
       requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Servicios Publicos'
+      rol: 'Empleado'
+      // departamento: 'Servicios Publicos'
     }
   },
   {
@@ -301,8 +301,8 @@ const routes = [
     component: () => import('@/views/ServiciosPublicos/cementery/addresscementery/AddressCementeryList.vue'),
     meta: {
       requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Servicios Publicos'
+      rol: 'Empleado'
+      // departamento: 'Servicios Publicos'
     }
   },
   {
@@ -311,8 +311,8 @@ const routes = [
     component: () => import('@/views/ServiciosPublicos/cementery/addresscementery/EditAddressCementery.vue'),
     meta: {
       requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Servicios Publicos'
+      rol: 'Empleado'
+      // departamento: 'Servicios Publicos'
     }
   },
   {
@@ -320,9 +320,9 @@ const routes = [
     name: 'Aseo',
     component: () => import('@/views/ServiciosPublicos/cleanness/Cleanness/CleannessList.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Servicios Publicos'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Servicios Publicos'
     }
   },
   {
@@ -330,9 +330,9 @@ const routes = [
     name: 'Aseo-Edit',
     component: () => import('@/views/ServiciosPublicos/cleanness/Cleanness/EditCleanness.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Servicios Publicos'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Servicios Publicos'
     }
   },
   {
@@ -340,9 +340,9 @@ const routes = [
     name: 'Ruta',
     component: () => import('@/views/ServiciosPublicos/cleanness/Road/RoadList.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Servicios Publicos'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Servicios Publicos'
     }
   },
   {
@@ -350,9 +350,9 @@ const routes = [
     name: 'Ruta-Edit',
     component: () => import('@/views/ServiciosPublicos/cleanness/Road/EditRoad.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Servicios Publicos'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Servicios Publicos'
     }
   },
   // {
@@ -386,9 +386,9 @@ const routes = [
     name: 'ObrasPublicas',
     component: () => import('@/views/ServiciosPublicos/publicworks/publicWorks/PublicWorksList.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Obras Publicas'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Obras Publicas'
     }
   },
   {
@@ -396,9 +396,9 @@ const routes = [
     name: 'ObrasPublicas-Edit',
     component: () => import('@/views/ServiciosPublicos/publicworks/publicWorks/EditPublicWorks.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Obras Publicas'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Obras Publicas'
     }
   },
   {
@@ -406,9 +406,9 @@ const routes = [
     name: 'EstatusOP',
     component: () => import('@/views/ServiciosPublicos/publicworks/worksStatus/WorksStatusList.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Administrador',
-      departamento: 'Obras Publicas'
+      requiresAuth: true
+      // rol: 'Administrador',
+      // departamento: 'Obras Publicas'
     }
   },
   {
@@ -416,9 +416,9 @@ const routes = [
     name: 'EstatusOP-Edit',
     component: () => import('@/views/ServiciosPublicos/publicworks/worksStatus/EditWorksStatus.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Administrador',
-      departamento: 'Obras Publicas'
+      requiresAuth: true
+      // rol: 'Administrador',
+      // departamento: 'Obras Publicas'
     }
   },
   {
@@ -426,9 +426,9 @@ const routes = [
     name: 'DetalleProducto',
     component: () => import('@/views/Supply/detailproduct/DetailProductList.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Control de vales'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Control de vales'
     }
   },
   {
@@ -436,9 +436,9 @@ const routes = [
     name: 'DetalleProducto-Edit',
     component: () => import('@/views/Supply/detailproduct/EditDetailProduct.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Control de vales'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Control de vales'
     }
   },
   {
@@ -446,9 +446,9 @@ const routes = [
     name: 'DetalleVale',
     component: () => import('@/views/Supply/detailvoucher/DetailVoucherList.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Control de vales'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Control de vales'
     }
   },
   {
@@ -456,9 +456,9 @@ const routes = [
     name: 'DetalleVale-Edit',
     component: () => import('@/views/Supply/detailvoucher/EditDetailVoucher.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Control de vales'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Control de vales'
     }
   },
   {
@@ -466,9 +466,9 @@ const routes = [
     name: 'Producto',
     component: () => import('@/views/Supply/productvoucher/ProductVoucherList.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Control de vales'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Control de vales'
     }
   },
   {
@@ -476,9 +476,9 @@ const routes = [
     name: 'Producto-Edit',
     component: () => import('@/views/Supply/productvoucher/EditProductVoucher.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Control de vales'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Control de vales'
     }
   },
   {
@@ -486,9 +486,9 @@ const routes = [
     name: 'Proveedor',
     component: () => import('@/views/Supply/provider/ProviderList.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Control de vales'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Control de vales'
     }
   },
   {
@@ -496,9 +496,9 @@ const routes = [
     name: 'Proveedor-Edit',
     component: () => import('@/views/Supply/provider/EditProvider.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Control de vales'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Control de vales'
     }
   },
   {
@@ -506,9 +506,9 @@ const routes = [
     name: 'EstatusVale',
     component: () => import('@/views/Supply/statusvoucher/StatusVoucherList.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Administrador',
-      departamento: 'Control de vales'
+      requiresAuth: true
+      // rol: 'Administrador',
+      // departamento: 'Control de vales'
     }
   },
   {
@@ -516,9 +516,9 @@ const routes = [
     name: 'EstatusVale-Edit',
     component: () => import('@/views/Supply/statusvoucher/EditStatusVoucher.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Administrador',
-      departamento: 'Control de vales'
+      requiresAuth: true
+      // rol: 'Administrador',
+      // departamento: 'Control de vales'
     }
   },
   {
@@ -526,9 +526,9 @@ const routes = [
     name: 'TipoVale',
     component: () => import('@/views/Supply/typevoucher/TypeVoucherList.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Administardor',
-      departamento: 'Control de vales'
+      requiresAuth: true
+      // rol: 'Administardor',
+      // departamento: 'Control de vales'
     }
   },
   {
@@ -536,9 +536,9 @@ const routes = [
     name: 'TipoVale-Edit',
     component: () => import('@/views/Supply/typevoucher/EditTypeVoucher.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Administrador',
-      departamento: 'Control de vales'
+      requiresAuth: true
+      // rol: 'Administrador',
+      // departamento: 'Control de vales'
     }
   },
   {
@@ -546,9 +546,9 @@ const routes = [
     name: 'ControlVale',
     component: () => import('@/views/Supply/vouchercontrol/VoucherControlList.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Control de vales'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Control de vales'
     }
   },
   {
@@ -556,9 +556,9 @@ const routes = [
     name: 'ControlVale-Edit',
     component: () => import('@/views/Supply/vouchercontrol/EditVoucherControl.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Control de vales'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Control de vales'
     }
   },
   // termino modulos arturo
@@ -567,9 +567,9 @@ const routes = [
     name: 'Usuarios',
     component: () => import('@/views/Users/UserList.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Dirección de Sistemas y Tecnologías de la Comunicación'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Dirección de Sistemas y Tecnologías de la Comunicación'
     }
   },
   {
@@ -577,9 +577,9 @@ const routes = [
     name: 'Usuarios-Edit',
     component: () => import('@/views/Users/UserEdit.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Dirección de Sistemas y Tecnologías de la Comunicación'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Dirección de Sistemas y Tecnologías de la Comunicación'
     }
   },
   {
@@ -587,9 +587,9 @@ const routes = [
     name: 'Roles',
     component: () => import('@/views/Roles/RoleList.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Dirección de Sistemas y Tecnologías de la Comunicación'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Dirección de Sistemas y Tecnologías de la Comunicación'
     }
   },
   {
@@ -597,9 +597,9 @@ const routes = [
     name: 'Roles-Edit',
     component: () => import('@/views/Roles/RoleEdit.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Dirección de Sistemas y Tecnologías de la Comunicación'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Dirección de Sistemas y Tecnologías de la Comunicación'
     }
   },
   {
@@ -607,9 +607,9 @@ const routes = [
     name: 'Departamentos',
     component: () => import('@/views/RecursosHumanos/Departaments/DepartamentList.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Recursos Humanos'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Recursos Humanos'
     }
   },
   {
@@ -617,9 +617,9 @@ const routes = [
     name: 'Departamentos-Edit',
     component: () => import('@/views/RecursosHumanos/Departaments/DepartamentEdit.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Recursos Humanos'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Recursos Humanos'
     }
   },
   {
@@ -627,9 +627,9 @@ const routes = [
     name: 'PuestosTrabajos',
     component: () => import('@/views/RecursosHumanos/WorkStation/WorkStationList.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Recursos Humanos'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Recursos Humanos'
     }
   },
   {
@@ -637,9 +637,9 @@ const routes = [
     name: 'PuestoTrabajo-Edit',
     component: () => import('@/views/RecursosHumanos/WorkStation/WorkStationEdit.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Recursos Humanos'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Recursos Humanos'
     }
   },
   {
@@ -647,9 +647,9 @@ const routes = [
     name: 'EquiposComputo',
     component: () => import('@/views/Patrimony/Computers/Computer/ComputerList.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Patrimonio'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Patrimonio'
     }
   },
   {
@@ -657,9 +657,9 @@ const routes = [
     name: 'EquiposComputo-Edit',
     component: () => import('@/views/Patrimony/Computers/Computer/ComputerEdit.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Patrimonio'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Patrimonio'
     }
   },
   {
@@ -667,9 +667,9 @@ const routes = [
     name: 'EstatusEquipo',
     component: () => import('@/views/Patrimony/Computers/StatusComputer/StatusComputerList.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Administrador',
-      departamento: 'Patrimonio'
+      requiresAuth: true
+      // rol: 'Administrador',
+      // departamento: 'Patrimonio'
     }
   },
   {
@@ -677,9 +677,9 @@ const routes = [
     name: 'EstatusEquipo-edit',
     component: () => import('@/views/Patrimony/Computers/StatusComputer/StatusComputerEdit.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Administrador',
-      departamento: 'Patrimonio'
+      requiresAuth: true
+      // rol: 'Administrador',
+      // departamento: 'Patrimonio'
     }
   },
   {
@@ -687,9 +687,9 @@ const routes = [
     name: 'Vehiculos',
     component: () => import('@/views/Patrimony/Vehicles/VehiclesList.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Patrimonio'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Patrimonio'
     }
   },
   {
@@ -697,9 +697,9 @@ const routes = [
     name: 'Vehiculos-Edit',
     component: () => import('@/views/Patrimony/Vehicles/VehicleEdit.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Patrimonio'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Patrimonio'
     }
   },
   {
@@ -707,9 +707,9 @@ const routes = [
     name: 'Mobiliarios',
     component: () => import('@/views/Patrimony/Furnitures/FurnitureList.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Patrimonio'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Patrimonio'
     }
   },
   {
@@ -717,9 +717,9 @@ const routes = [
     name: 'Mobiliarios-Edit',
     component: () => import('@/views/Patrimony/Furnitures/FurnitureEdit.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Patrimonio'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Patrimonio'
     }
   },
   {
@@ -727,9 +727,9 @@ const routes = [
     name: 'CategoriasMobiliario',
     component: () => import('@/views/Patrimony/Furnitures/TypeFurnitures/TypeFurnitureList.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Patrimonio'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Patrimonio'
     }
   },
   {
@@ -737,9 +737,9 @@ const routes = [
     name: 'CategoriasMobiliario-Edit',
     component: () => import('@/views/Patrimony/Furnitures/TypeFurnitures/TypeFurnitureEdit.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Patrimonio'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Patrimonio'
     }
   },
   {
@@ -747,9 +747,9 @@ const routes = [
     name: 'EstatusVehiculo',
     component: () => import('@/views/Patrimony/Vehicles/StatusVehicles/StatusVehicleList.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Administrador',
-      departamento: 'Patrimonio'
+      requiresAuth: true
+      // rol: 'Administrador',
+      // departamento: 'Patrimonio'
     }
   },
   {
@@ -757,9 +757,9 @@ const routes = [
     name: 'EstatusVehiculo-Edit',
     component: () => import('@/views/Patrimony/Vehicles/StatusVehicles/StatusVehicleEdit.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Administrador',
-      departamento: 'Patrimonio'
+      requiresAuth: true
+      // rol: 'Administrador',
+      // departamento: 'Patrimonio'
     }
   },
   {
@@ -767,9 +767,9 @@ const routes = [
     name: 'Armeria',
     component: () => import('@/views/Patrimony/Armory/ArmoryList.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Patrimonio'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Patrimonio'
     }
   },
   {
@@ -777,9 +777,9 @@ const routes = [
     name: 'Armeria-Edit',
     component: () => import('@/views/Patrimony/Armory/ArmoryEdit.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Patrimonio'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Patrimonio'
     }
   },
   {
@@ -787,9 +787,9 @@ const routes = [
     name: 'ServiciosMedicos-Cita',
     component: () => import('@/views/MunicipalMedicalServices/MedicalAppointment/MedicalAppointmentList.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Direccion de servicios medicos municipales'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Direccion de servicios medicos municipales'
     }
   },
   {
@@ -797,9 +797,9 @@ const routes = [
     name: 'ServiciosMedicos-Cita-Edit',
     component: () => import('@/views/MunicipalMedicalServices/MedicalAppointment/MedicalAppointmentEdit.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Direccion de servicios medicos municipales'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Direccion de servicios medicos municipales'
     }
   },
   {
@@ -807,9 +807,9 @@ const routes = [
     name: 'ServiciosMedicos-Agenda',
     component: () => import('@/views/MunicipalMedicalServices/Schedule/ScheduleMedical.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Direccion de servicios medicos municipales'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Direccion de servicios medicos municipales'
     }
   },
   {
@@ -817,9 +817,9 @@ const routes = [
     name: 'ServiciosMedicos-ExpedienteMedico-List',
     component: () => import('@/views/MunicipalMedicalServices/MedicalExpedient/ExpedientMedicalList'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Direccion de servicios medicos municipales'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Direccion de servicios medicos municipales'
     }
   },
   {
@@ -827,9 +827,9 @@ const routes = [
     name: 'ServiciosMedicos-ExpedienteMedico-Edit',
     component: () => import('@/views/MunicipalMedicalServices/MedicalExpedient/ExpedientMedicalEdit'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Direccion de servicios medicos municipales'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Direccion de servicios medicos municipales'
     }
   },
   {
@@ -837,9 +837,9 @@ const routes = [
     name: 'ServiciosMedicos-Receta-List',
     component: () => import('@/views/MunicipalMedicalServices/Prescription/PrescriptionList.vue'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Direccion de servicios medicos municipales'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Direccion de servicios medicos municipales'
     }
   },
   {
@@ -847,9 +847,9 @@ const routes = [
     name: 'ServiciosMedicos-Receta-Edit',
     component: () => import('@/views/MunicipalMedicalServices/Prescription/PrescriptionEdit'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Direccion de servicios medicos municipales'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Direccion de servicios medicos municipales'
     }
   },
   {
@@ -857,9 +857,9 @@ const routes = [
     name: 'ServiciosMedicos-Productos-List',
     component: () => import('@/views/MunicipalMedicalServices/Products/ProductsList'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Direccion de servicios medicos municipales'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Direccion de servicios medicos municipales'
     }
   },
   {
@@ -867,9 +867,9 @@ const routes = [
     name: 'ServiciosMedicos-Productos-Edit',
     component: () => import('@/views/MunicipalMedicalServices/Products/ProductsEdit'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Direccion de servicios medicos municipales'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Direccion de servicios medicos municipales'
     }
   },
   {
@@ -877,9 +877,9 @@ const routes = [
     name: 'ServiciosMedicos-Farmacia',
     component: () => import('@/views/MunicipalMedicalServices/Farmacy/FarmacyList'),
     meta: {
-      requiresAuth: true,
-      rol: 'Empleado',
-      departamento: 'Direccion de servicios medicos municipales'
+      requiresAuth: true
+      // rol: 'Empleado',
+      // departamento: 'Direccion de servicios medicos municipales'
     }
   }
 ]
@@ -890,8 +890,6 @@ const router = createRouter({
 })
 router.beforeEach(async (to, from, next) => {
   const isLoggedIn = window.sessionStorage.getItem('isLogged')
-  // const role = window.sessionStorage.getItem('Role')
-  // const departamento = window.sessionStorage.getItem('Departamento')
   if (['Login'].includes(to.name) && isLoggedIn) {
     next({ name: 'Home' })
   } else if (to.meta.requiresAuth && !isLoggedIn) {
