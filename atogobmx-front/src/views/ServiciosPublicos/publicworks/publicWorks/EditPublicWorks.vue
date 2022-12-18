@@ -25,44 +25,6 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!--Agregar latitud-->
-          <!-- <b-col>
-            <b-form-group class="mt-3" label="Latitud">
-              <Field
-                name="LatitudeField"
-                :rules="validateLatitude"
-                as="number"
-              >
-                <b-form-input
-                  v-model="publicWorks.latitud"
-                  :state="LatitudeState"
-                ></b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="LatitudeField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col> -->
-          <!--Agregar longitud-->
-          <!-- <b-col>
-            <b-form-group class="mt-3" label="Longitud">
-              <Field
-                name="LengthField"
-                :rules="validateLength"
-                as="number"
-              >
-                <b-form-input
-                  v-model="publicWorks.longitud"
-                  :state="LengthState"
-                ></b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="LengthField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col> -->
           <!--Descripcion-->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion">
