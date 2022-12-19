@@ -1,18 +1,15 @@
 <template>
-  <b-card class="m-2">
-    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
-  </b-card>
-  <b-card class="m-2">
+  <b-card>
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
         style="width: 350px"
         v-model="searchValue"
         type="search"
-        placeholder="Buscar detalle producto..."
-      ></b-form-input>
+        placeholder="Buscar..."
+      >
+      </b-form-input>
       <b-button
-        variant="primary"
         style="
           background-color: rgb(94, 80, 238);
           height: 50px;
@@ -24,13 +21,13 @@
         @click="showModal = !showModal"
         type="submit"
       >
-        <i class="bi bi-person-plus-fill"></i>
-        Detalle producto
+        <i class="bi bi-car-front-fill" />
+        Agregar
       </b-button>
     </b-row>
     <EasyDataTable
       rows-per-page-message="registros por pagina"
-      empty-message="No se encontro ningun registro"
+      empty-message="No se encuentran registros"
       table-class-name="customize-table"
       buttons-pagination
       border-cell
@@ -62,55 +59,22 @@
             @click="RemoveDetailProduct(items.detalleProductoId)"
             class="m-1"
             variant="outline-danger"
-            ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
           >
-          <b-dropdown-item
-            class="m-1"
-            variant="outline-warning"
-            :to="{
-              name: 'DetalleProducto-Edit',
-              params: { DetalleProductoId: items.detalleProductoId }
-            }"
-            ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
-          >
+            <i class="bi bi-trash3"> Eliminar </i>
+          </b-dropdown-item>
         </b-dropdown>
       </template>
     </EasyDataTable>
     <b-modal
-      id="modal-detailProduct"
-      title="Agregar detalle producto"
       v-model="showModal"
+      title="Registrar detalle producto"
       size="xl"
-      hide-footer
+      centered
       button-size="lg"
-      lazy
+      hide-footer
     >
       <Form @submit="addDetailProduct">
         <b-row cols="2">
-          <!--Agregar Detalle vale-->
-          <b-col>
-            <b-form-group class="mt-3" label="Detalle vale: ">
-              <Field
-                name="DetailVoucherField"
-                :rules="validateDetailVoucher"
-                as="text"
-              >
-                <b-form-select
-                  v-model="detailProductFields.detalleValeId"
-                  autofocus
-                  :options="detailVoucher"
-                  value-field="detalleValeId"
-                  text-field="cantidad"
-                  :state="DetailVoucherState"
-                >
-                </b-form-select>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="DetailVoucherField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
           <!--Agregar Producto-->
           <b-col>
             <b-form-group class="mt-3" label="Producto: ">
@@ -118,7 +82,7 @@
                 <b-form-select
                   v-model="detailProductFields.productoId"
                   autofocus
-                  :options="productVoucher"
+                  :options="a"
                   value-field="productoId"
                   text-field="nombre"
                   :state="ProductState"
@@ -136,7 +100,7 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            @click="resetDetailProductFields"
+            @click="resetDetailProductFields()"
           >
             Cancelar
           </b-button>
@@ -151,92 +115,60 @@
 
 <script>
 import DetailProductServices from '@/Services/detailproduct.Services'
-import DetailVoucherServices from '@/Services/detailvoucher.Services'
-import ProductVoucherServices from '@/Services/productvoucher.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
-    EasyDataTable: window['vue3-easy-data-table'],
     Form,
     Field,
-    ErrorMessage
+    ErrorMessage,
+    EasyDataTable: window['vue3-easy-data-table']
   },
-  setup () {
+  props: {
+    DetalleValeId: {
+      type: Number,
+      required: true
+    }
+  },
+  setup (props) {
     const swal = inject('$swal')
-    const showModal = ref(false)
-    const { getDetailProduct, createDetailProduct, deleteDetailProduct } =
-      DetailProductServices()
-    const { getDetailVoucher } = DetailVoucherServices()
-    const { getProductVoucher } = ProductVoucherServices()
+    const {
+      getProductsPrescriptionByRecetaId,
+      createProductPrescription,
+      deleteProductPrescription
+    } = DetailProductServices()
+    // const { getProducts } = MedicalProductsServices()
+    // const redirect = useRouter()
     const detailProduct = ref([])
-    const detailVoucher = ref([])
-    const productVoucher = ref([])
+    // const products = ref([])
+    const productState = ref(false)
+    const amountState = ref(false)
     const perPage = ref(5)
     const currentPage = ref(1)
     const filter = ref(null)
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('agregardato para busqueda')
-    const DetailVoucherState = ref(false)
-    const ProductState = ref(false)
-    const breadcrumbItems = ref([
-      { text: 'Inicio', to: '/' },
-      { text: 'Proveeduria', to: '/Proveeduria' },
-      { text: 'Detalle producto' }
-    ])
-
-    const detailProductFields = ref({
+    const searchField = ref('marca')
+    const showModal = ref(false)
+    const productPrescriptionFields = ref({
       detalleProductoId: 0,
+      detalleValeId: props.DetalleValeId,
       productoId: null,
-      detalleValeId: null,
       archivado: false
     })
-
-    getDetailVoucher(data => {
-      detailVoucher.value = data
-      if (data.length === 0) {
-        swal.fire({
-          title: 'No se encuentra un tipo de detalle registrado!',
-          text: 'No se encuentra tipo de detalle registrado en el departamento seleccionado, registre primero un tipo de detalle vale para continuar',
-          icon: 'warning'
-        })
-      }
-    })
-
-    getProductVoucher(data => {
-      productVoucher.value = data
-      if (data.length === 0) {
-        swal.fire({
-          title: 'No se encuentra un tipo de producto registrado!',
-          text: 'No se encuentra tipo de producto registrado en el departamento seleccionado, registre primero un tipo de producto vale para continuar',
-          icon: 'warning'
-        })
-      }
-    })
-
-    const detailProductFieldsBlank = ref(
-      JSON.parse(JSON.stringify(detailProductFields))
+    const productPrescriptionFieldsBlank = ref(
+      JSON.parse(JSON.stringify(productPrescriptionFields.value))
     )
     const fields = ref([
-      { value: 'detalleProductoId', text: 'ID', sortable: true },
-      { value: 'proV_DetalleVale.cantidad', text: 'Cantidad' },
-      { value: 'proV_Producto.nombre', text: 'Producto' },
+      { value: 'producto.nombre', text: 'Medicamento' },
+      { value: 'producto.contenido', text: 'Contenido' },
+      { value: 'cantidad', text: 'cantidad' },
+      { value: 'descripcion', text: 'Sugerencias' },
       { value: 'actions', text: 'Acciones' }
     ])
-
-    const resetDetailProductFields = () => {
-      showModal.value = false
-      detailProductFields.value = JSON.parse(
-        JSON.stringify(detailProductFieldsBlank)
-      )
-      DetailVoucherState.value = false
-      ProductState.value = false
-    }
-
-    getDetailProduct(data => {
+    getProductsPrescriptionByRecetaId(props.RecetaId, data => {
       detailProduct.value = data
       if (detailProduct.value.length > 0) {
         isloading.value = false
@@ -246,33 +178,19 @@ export default {
         }
       }
     })
-
-    const onFiltered = filteredItems => {
-      currentPage.value = 1
-    }
-
-    const validateProduct = () => {
-      if (!detailProductFields.value.productoId) {
-        ProductState.value = false
-        return 'Este campo es requerido'
-      }
-      ProductState.value = false
-      return true
-    }
-
-    const validateDetailVoucher = () => {
-      if (!detailProductFields.value.detalleValeId) {
-        DetailVoucherState.value = false
-        return 'Este campo es requerido'
-      }
-      DetailVoucherState.value = false
-      return true
-    }
-
-    // pone mis cambios de mis campos vacios de nuevo
+    // getProducts(data => {
+    //   products.value = data
+    //   if (data.length === 0) {
+    //     swal.fire({
+    //       title: '¡No se encuentran Productos!',
+    //       text: 'Registre un producto al sistema para continuar',
+    //       icon: 'warning'
+    //     })
+    //   }
+    // })
     const refreshTable = () => {
       isloading.value = true
-      getDetailProduct(data => {
+      getProductsPrescriptionByRecetaId(props.RecetaId, data => {
         detailProduct.value = data
         if (detailProduct.value.length > 0) {
           isloading.value = false
@@ -284,21 +202,31 @@ export default {
       })
       return 'datos recargados'
     }
-
     const addDetailProduct = () => {
-      createDetailProduct(detailProductFields.value, data => {
-        refreshTable()
-        swal.fire({
-          title: '¡Detalle producto registrado correctamente!',
-          text: 'El detalle producto se ha registrado al sistema satisfactoriamente.',
-          icon: 'success'
-        })
+      createProductPrescription(productPrescriptionFields.value, data => {
+        swal
+          .fire({
+            title: 'Producto registrado correctamente!',
+            text: 'El producto se ha registrado al sistema satisfactoriamente.',
+            icon: 'success'
+          })
+          .then(result => {
+            if (result.isConfirmed) {
+              resetDetailProductFields()
+              refreshTable()
+            }
+          })
       })
-      showModal.value = false
-      resetDetailProductFields()
     }
-
-    const RemoveDetailProduct = WorksStatusId => {
+    const resetDetailProductFields = () => {
+      productPrescriptionFields.value = JSON.parse(
+        JSON.stringify(productPrescriptionFieldsBlank.value)
+      )
+      showModal.value = false
+      productState.value = false
+      amountState.value = false
+    }
+    const RemoveDetailProduct = productPrescriptionId => {
       isloading.value = true
       swal
         .fire({
@@ -308,51 +236,87 @@ export default {
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
           cancelButtonColor: '#d33',
-          confirmButtonText: 'Si, Archivar detalle producto!',
+          confirmButtonText: 'Si, eliminar producto!',
           cancelButtonText: 'Cancelar'
         })
         .then(result => {
           if (result.isConfirmed) {
-            deleteDetailProduct(WorksStatusId, data => {
-              refreshTable()
-            })
-            swal.fire({
-              title: '¡Detalle producto archivado!',
-              text: 'El detalle producto ha sido archivado satisfactoriamente .',
-              icon: 'success'
-            })
+            swal
+              .fire({
+                title: 'Producto archivado!',
+                text: 'El producto ha sido archivado satisfactoriamente .',
+                icon: 'success'
+              })
+              .then(result => {
+                if (result.isConfirmed) {
+                  deleteProductPrescription(
+                    props.RecetaId,
+                    productPrescriptionId,
+                    data => {
+                      refreshTable()
+                    }
+                  )
+                }
+              })
           } else {
             isloading.value = false
           }
         })
     }
-
+    const onFiltered = filteredItems => {
+      currentPage.value = 1
+    }
+    // VALIDATIONS
+    const validateProduct = () => {
+      if (!productPrescriptionFields.value.productoId) {
+        validateState()
+        return 'Este campo es requerido'
+      }
+      validateState()
+      return true
+    }
+    const validateAmount = () => {
+      if (!productPrescriptionFields.value.cantidad) {
+        validateState()
+        return 'Este campo es requerido'
+      }
+      if (productPrescriptionFields.value.cantidad < 1) {
+        validateState()
+        return 'Se necesita al menos 1'
+      }
+      validateState()
+      return true
+    }
+    const validateState = () => {
+      productState.value = productPrescriptionFields.value.productoId !== null
+      amountState.value =
+        productPrescriptionFields.value.cantidad !== null &&
+        productPrescriptionFields.value.cantidad > 0
+    }
     return {
       detailProduct,
-      detailVoucher,
-      productVoucher,
-      breadcrumbItems,
-      detailProductFields,
-      showModal,
+      // products,
+      productState,
+      amountState,
+      fields,
       perPage,
       currentPage,
       filter,
       perPageSelect,
+      productPrescriptionFieldsBlank,
+      productPrescriptionFields,
       isloading,
       searchValue,
       searchField,
-      detailProductFieldsBlank,
-      fields,
-      DetailVoucherState,
-      ProductState,
+      showModal,
 
       onFiltered,
       addDetailProduct,
       refreshTable,
       RemoveDetailProduct,
+      resetDetailProductFields,
       validateProduct,
-      validateDetailVoucher,
-      resetDetailProductFields
+      validateAmount
     }
   }
 }

@@ -5,78 +5,94 @@
     </b-card>
     <b-card>
       <div>
-        <h3>Editar Obras Publicas </h3>
+        <h3>Editar Obras Publicas</h3>
       </div>
-      <Form @submit="onUpdatePublicWorks">
-        <b-row cols="2">
-          <!--Agregar nombre de obra-->
-          <b-col>
-            <b-form-group class="mt-3" label="Nombre obra">
-              <Field name="NameWorksField" :rules="validateNameWorks" as="text">
-                <b-form-input
-                  v-model="publicWorks.nombre"
-                  :state="NameWorksState"
+      <b-tabs content-class="mt-3">
+        <b-tab title="Obras publicas" active>
+          <b-card>
+            <Form @submit="onUpdatePublicWorks">
+              <b-row cols="2">
+                <!--Agregar nombre de obra-->
+                <b-col>
+                  <b-form-group class="mt-3" label="Nombre obra">
+                    <Field
+                      name="NameWorksField"
+                      :rules="validateNameWorks"
+                      as="text"
+                    >
+                      <b-form-input
+                        v-model="publicWorks.nombre"
+                        :state="NameWorksState"
+                      >
+                      </b-form-input>
+                    </Field>
+                    <ErrorMessage
+                      class="text-danger"
+                      name="NameWorksField"
+                    ></ErrorMessage>
+                  </b-form-group>
+                </b-col>
+                <!--Descripcion-->
+                <b-col>
+                  <b-form-group class="mt-3" label="Descripcion">
+                    <Field
+                      name="DescriptionField"
+                      :rules="validateDescription"
+                      as="text"
+                    >
+                      <b-form-textarea
+                        v-model="publicWorks.descripcion"
+                        :state="DescriptionState"
+                        rows="4"
+                      ></b-form-textarea>
+                    </Field>
+                    <ErrorMessage
+                      class="text-danger"
+                      name="DescriptionField"
+                    ></ErrorMessage>
+                  </b-form-group>
+                </b-col>
+                <!--agregar un estatus obra-->
+                <b-col>
+                  <b-form-group class="mt-3" label="Estatus de la Obra">
+                    <Field
+                      name="WorkStatusField"
+                      :rules="validateWorkStatus"
+                      as="text"
+                    >
+                      <b-form-select
+                        v-model="publicWorks.estatusObraId"
+                        autofocus
+                        :state="WorkStatusState"
+                        :options="worksStatus"
+                        value-field="estatusObraId"
+                        text-field="nombreEstatus"
+                      ></b-form-select>
+                    </Field>
+                    <ErrorMessage class="text-danger" name="WorkStatusField" />
+                  </b-form-group>
+                </b-col>
+              </b-row>
+              <b-row align-h="end">
+                <b-button
+                  class="col-1 m-2 text-white"
+                  variant="primary"
+                  to="/ServiciosPublicos/ObrasPublicas/list"
+                  type="reset"
                 >
-                </b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="NameWorksField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!--Descripcion-->
-          <b-col>
-            <b-form-group class="mt-3" label="Descripcion">
-              <Field
-                name="DescriptionField"
-                :rules="validateDescription"
-                as="text"
-              >
-                <b-form-textarea
-                  v-model="publicWorks.descripcion"
-                  :state="DescriptionState"
-                  rows="4"
-                ></b-form-textarea>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="DescriptionField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!--agregar un estatus obra-->
-          <b-col>
-            <b-form-group class="mt-3" label="Estatus de la Obra">
-              <Field name="WorkStatusField" :rules="validateWorkStatus" as="text">
-                <b-form-select
-                  v-model="publicWorks.estatusObraId"
-                  autofocus
-                  :state="WorkStatusState"
-                  :options="worksStatus"
-                  value-field="estatusObraId"
-                  text-field="nombreEstatus"
-                ></b-form-select>
-              </Field>
-              <ErrorMessage class="text-danger" name="WorkStatusField"/>
-            </b-form-group>
-          </b-col>
-
-        </b-row>
-        <b-row align-h="end">
-          <b-button
-            class="col-1 m-2 text-white"
-            variant="primary"
-            to="/ServiciosPublicos/ObrasPublicas/list"
-            type="reset"
-          >
-            Cancelar
-            </b-button>
-          <b-button type="success" class="col-1 m-2" variant="success">
-            Guardar
-          </b-button>
-        </b-row>
-      </Form>
+                  Cancelar
+                </b-button>
+                <b-button type="success" class="col-1 m-2" variant="success">
+                  Guardar
+                </b-button>
+              </b-row>
+            </Form>
+          </b-card>
+        </b-tab>
+        <b-tab>
+          <publicWorksEmployeeService :ObraId="obraId"/>
+        </b-tab>
+      </b-tabs>
     </b-card>
   </b-card>
 </template>
@@ -84,6 +100,7 @@
 <script>
 import PublicWorksServices from '@/Services/publickworks.Services'
 import worksStatusServices from '@/Services/worksstatus.Services'
+import publicWorksEmployeeService from '@/views/ServiciosPublicos/publicworks/publicworksemployee/PublicWorksEmployeeList.vue'
 import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 // import { useToast } from 'vue-toast-notification'
@@ -93,7 +110,8 @@ export default {
   components: {
     Form,
     Field,
-    ErrorMessage
+    ErrorMessage,
+    publicWorksEmployeeService
   },
   setup () {
     const swal = inject('$swal')
@@ -101,6 +119,7 @@ export default {
     const { getWorksStatus } = worksStatusServices()
     const publicWorks = ref([])
     const worksStatus = ref([])
+    // const obraId = ref(parseInt(router.params.ObraId))
     const router = useRoute()
     const redirect = useRouter()
     const NameWorksState = ref(false)
@@ -119,26 +138,27 @@ export default {
       if (data.length === 0) {
         swal.fire({
           title: 'No se encuentra un tipo de obra publica registrado!',
-          text:
-            'No se encuentra tipo de obra publica registrado en el departamento seleccionado, registre primero un tipo de obra publica para continuar',
+          text: 'No se encuentra tipo de obra publica registrado en el departamento seleccionado, registre primero un tipo de obra publica para continuar',
           icon: 'warning'
         })
       }
     })
 
     const onUpdatePublicWorks = () => {
-      updatePublicWorks(publicWorks.value, (data) => {})
-      swal.fire({
-        title: '¡Obras publicas modificado correctamente!',
-        text: 'Las obras publicas se ha modificado  satisfactoriamente.',
-        icon: 'success'
-      }).then(result => {
-        if (result.isConfirmed) {
-          redirect.push('/ServiciosPublicos/ObrasPublicas/list')
-        }
-      })
+      updatePublicWorks(publicWorks.value, data => {})
+      swal
+        .fire({
+          title: '¡Obras publicas modificado correctamente!',
+          text: 'Las obras publicas se ha modificado  satisfactoriamente.',
+          icon: 'success'
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            redirect.push('/ServiciosPublicos/ObrasPublicas/list')
+          }
+        })
     }
-    getPublicWorksById(router.params.ObraId, (data) => {
+    getPublicWorksById(router.params.ObraId, data => {
       publicWorks.value = data
     })
 
@@ -147,8 +167,7 @@ export default {
       if (data.length === 0) {
         swal.fire({
           title: 'No se encuentra un estatus_OP registrado!',
-          text:
-            'No se encuentra estatus_OP registrado en el departamento seleccionado, registre primero un tipo de estatus_OP para continuar',
+          text: 'No se encuentra estatus_OP registrado en el departamento seleccionado, registre primero un tipo de estatus_OP para continuar',
           icon: 'warning'
         })
       }
@@ -200,7 +219,11 @@ export default {
         validateState()
         return 'Este campo es requerido'
       }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ ,;:. 0-9]+$/i.test(publicWorks.value.descripcion)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ ,;:. 0-9]+$/i.test(
+          publicWorks.value.descripcion
+        )
+      ) {
         validateState()
         return 'La descripcion solo puede contener letras y nnumeros'
       }
@@ -218,11 +241,16 @@ export default {
     }
 
     const validateState = () => {
-      NameWorksState.value = publicWorks.value.nombre !== '' || publicWorks.value.nombre !== null
+      NameWorksState.value =
+        publicWorks.value.nombre !== '' || publicWorks.value.nombre !== null
       // LatitudeState.value = publicWorks.value.latitud !== '' || publicWorks.value.latitud !== null
       // LengthState.value = publicWorks.value.longitud !== '' || publicWorks.value.longitud !== null
-      DescriptionState.value = publicWorks.value.descripcion !== '' || publicWorks.value.descripcion !== null
-      WorkStatusState.value = publicWorks.value.estatusObraId !== '' || publicWorks.value.estatusObraId !== null
+      DescriptionState.value =
+        publicWorks.value.descripcion !== '' ||
+        publicWorks.value.descripcion !== null
+      WorkStatusState.value =
+        publicWorks.value.estatusObraId !== '' ||
+        publicWorks.value.estatusObraId !== null
     }
 
     return {
@@ -247,6 +275,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>
