@@ -58,7 +58,6 @@
                   value-field="departamentoId"
                   text-field="nombre"
                   :state="departamentState"
-                  @input="getAreas(furnituresFields.departamentoId)"
                 >
                 </b-form-select>
               </Field>
@@ -66,22 +65,6 @@
                 class="text-danger"
                 name="DepartamentField"
               ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Area">
-              <Field name="AreaField" :rules="validateArea" as="number">
-                <b-form-select
-                  v-model="furniture.areaId"
-                  autofocus
-                  :options="areas"
-                  value-field="areaId"
-                  text-field="nombre"
-                  :state="areaState"
-                >
-                </b-form-select>
-              </Field>
-              <ErrorMessage class="text-danger" name="AreaField"></ErrorMessage>
             </b-form-group>
           </b-col>
            <b-col>
@@ -123,7 +106,6 @@
 
 <script>
 import FurnitureServices from '@/Services/furniture.Services'
-import AreasServices from '@/Services/area.Services'
 import DepartamentServices from '@/Services/departament.Services'
 import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -144,9 +126,7 @@ export default {
       updateFurniture,
       getTypeFurnitures
     } = FurnitureServices()
-    const { getAreasByDepartament } = AreasServices()
     const { getDepartaments } = DepartamentServices()
-    const areas = ref([])
     const furniture = ref([])
     const typeFurnitures = ref([])
     const departaments = ref([])
@@ -155,7 +135,6 @@ export default {
     const folioState = ref(false)
     const typeFurnitureState = ref(false)
     const descriptionState = ref(false)
-    const areaState = ref(false)
     const departamentState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
@@ -188,22 +167,8 @@ export default {
         })
       }
     })
-    const getAreas = departamentoId => {
-      getAreasByDepartament(departamentoId, data => {
-        areas.value = data
-        if (data.length === 0) {
-          swal.fire({
-            title: 'No se encuentran areas registradas!',
-            text:
-              'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
-            icon: 'error'
-          })
-        }
-      })
-    }
     getFurniture(router.params.MobiliarioId, data => {
       furniture.value = data
-      getAreas(data.departamentoId)
       validateState()
     })
     getTypeFurnitures(data => {
@@ -247,19 +212,10 @@ export default {
       validateState()
       return true
     }
-    const validateArea = () => {
-      if (!furniture.value.areaId) {
-        validateState()
-        return 'Este campo es requerido'
-      }
-      validateState()
-      return true
-    }
     const validateState = () => {
       departamentState.value = furniture.value.departamentoId !== null
       typeFurnitureState.value = furniture.value.tipoMobiliarioId !== null
       descriptionState.value = furniture.value.descripción !== null && furniture.value.descripción !== ''
-      areaState.value = furniture.value.areaId !== null
       folioState.value = furniture.value.codigoInventario !== null && /^(?=.*\d)(?=.*[a-zA-Z])([A-ZñÑáéíóúÁÉÍÓÚ])[A-Z0-9]+$/i.test(furniture.value.codigoInventario)
       return ''
     }
@@ -267,19 +223,15 @@ export default {
       furniture,
       typeFurnitures,
       breadcrumbItems,
-      areas,
       departaments,
       folioState,
       departamentState,
       typeFurnitureState,
       descriptionState,
-      areaState,
       //   router
 
       onUpdateWorkStation,
       validateDepartament,
-      validateArea,
-      getAreas,
       validateTypeFurniture,
       validateDescription,
       validateState,

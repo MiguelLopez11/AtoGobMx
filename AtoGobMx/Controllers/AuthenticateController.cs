@@ -3,6 +3,7 @@ using AtoGobMx.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -27,6 +28,23 @@ namespace JWTRefreshToken.NET6._0.Controllers
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
+        }
+        [HttpGet("/api/Usuarios")]
+        public IActionResult Get()
+        {
+            List<object> usuarios = new List<object>();
+            var user = _userManager.Users.ToArray();
+            foreach (var usuario in user)
+            {
+                var userObject = new
+                {
+                    NombreUsuario = usuario.UserName,
+                    Email = usuario.Email,
+                    NumeroTelefono = usuario.PhoneNumber
+                };
+                usuarios.Add(userObject);
+            }
+            return Ok(usuarios);
         }
 
         [HttpPost]
@@ -68,28 +86,30 @@ namespace JWTRefreshToken.NET6._0.Controllers
             }
             return Unauthorized();
         }
-
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
             var userExists = await _userManager.FindByNameAsync(model.Username);
             if (userExists != null)
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
+                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "El usuario ya existe" });
 
             Usuario user = new()
             {
-                //Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = model.Username
+                UserName = model.Username,
+                PhoneNumber =  model.PhoneNumber,
+                Email = model.Email
             };
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." });
 
-            return Ok(new Response { Status = "Success", Message = "User created successfully!" });
+            return Ok(new Response { Status = "Success", Message = "Usuario registrado correctamente!" });
         }
 
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpPost]
         [Route("register-admin")]
         public async Task<IActionResult> RegisterAdmin([FromBody] RegisterModel model)
@@ -100,9 +120,10 @@ namespace JWTRefreshToken.NET6._0.Controllers
 
             Usuario user = new()
             {
-                //Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = model.Username
+                UserName = model.Username,
+                PhoneNumber = model.PhoneNumber,
+                Email = model.Email
             };
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
@@ -121,9 +142,9 @@ namespace JWTRefreshToken.NET6._0.Controllers
             {
                 await _userManager.AddToRoleAsync(user, UserRoles.User);
             }
-            return Ok(new Response { Status = "Success", Message = "User created successfully!" });
+            return Ok(new Response { Status = "Success", Message = "usuario creado correctamente!" });
         }
-
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpPost]
         [Route("refresh-token")]
         public async Task<IActionResult> RefreshToken(TokenModel tokenModel)
@@ -168,7 +189,7 @@ namespace JWTRefreshToken.NET6._0.Controllers
             });
         }
 
-        [Authorize]
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpPost]
         [Route("revoke/{username}")]
         public async Task<IActionResult> Revoke(string username)
@@ -182,7 +203,7 @@ namespace JWTRefreshToken.NET6._0.Controllers
             return NoContent();
         }
 
-        [Authorize]
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpPost]
         [Route("revoke-all")]
         public async Task<IActionResult> RevokeAll()
@@ -193,6 +214,19 @@ namespace JWTRefreshToken.NET6._0.Controllers
                 user.RefreshToken = null;
                 await _userManager.UpdateAsync(user);
             }
+
+            return NoContent();
+        }
+        [Authorize(Roles = UserRoles.Admin)]
+        [HttpDelete("{userName}")]
+        public async Task<IActionResult> DeleteUser(string userName)
+        {
+            var user =  await _userManager.Users
+                .FirstOrDefaultAsync(w => w.UserName == userName);
+            if (user == null) { 
+                return BadRequest(); 
+            }
+            await _userManager.DeleteAsync(user);
 
             return NoContent();
         }

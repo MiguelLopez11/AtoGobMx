@@ -114,33 +114,12 @@
                         value-field="departamentoId"
                         text-field="nombre"
                         :state="departamentState"
-                        @input="getAreas(employee.departamentoId)"
                       >
                       </b-form-select>
                     </Field>
                     <ErrorMessage name="DepartamentField">
                       <span class="text-danger">Este campo es requerido </span>
                       <i class="bi bi-exclamation-circle"></i
-                    ></ErrorMessage>
-                  </b-form-group>
-                </b-col>
-                <!--Area-->
-                <b-col v-if="!isPublicPlace">
-                  <b-form-group class="mt-3" label="Area">
-                    <Field name="AreaField" :rules="validateArea" as="number">
-                      <b-form-select
-                        v-model="expedientLighting.areaId"
-                        autofocus
-                        :options="areas"
-                        value-field="areaId"
-                        text-field="nombre"
-                        :state="areaState"
-                      >
-                      </b-form-select>
-                    </Field>
-                    <ErrorMessage
-                      class="text-danger"
-                      name="AreaField"
                     ></ErrorMessage>
                   </b-form-group>
                 </b-col>
@@ -193,7 +172,6 @@
 
 <script>
 import ExpedientlightingServices from '@/Services/expedientlighting.Services'
-import AreaServices from '@/Services/area.Services'
 import DepartamentServices from '@/Services/departament.Services'
 import EmployeeLighting from '@/views/ServiciosPublicos/streetLighting/lightingEmployee/LightingEmployeeList.vue'
 import VehiclesLighting from '@/views/ServiciosPublicos/streetLighting/lightingvehicle/LightingVehicleList.vue'
@@ -213,13 +191,11 @@ export default {
   },
   setup (props) {
     const swal = inject('$swal')
-    const { getAreas } = AreaServices()
     const { getDepartaments } = DepartamentServices()
     const { getExpedientLightingById, updatExpedientLighting } =
       ExpedientlightingServices()
     const expedientLighting = ref([])
     const departaments = ref([])
-    const areas = ref([])
     const router = useRoute()
     const redirect = useRouter()
     const expedienteAlumbradoId = ref(parseInt(router.params.ExpedienteAlumbradoId))
@@ -228,7 +204,6 @@ export default {
     const LocationState = ref(false)
     const HighDateState = ref(false)
     const departamentState = ref(false)
-    const areaState = ref(false)
     const DescriptionSolutionState = ref(false)
     const NomenclatureState = ref(false)
     const breadcrumbItems = ref([
@@ -258,17 +233,6 @@ export default {
 
     getDepartaments(data => {
       departaments.value = data
-      if (data.length === 0) {
-        swal.fire({
-          title: 'No se encuentran departamentos registrados!',
-          text: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
-          icon: 'error'
-        })
-      }
-    })
-
-    getAreas(data => {
-      areas.value = data
       if (data.length === 0) {
         swal.fire({
           title: 'No se encuentran departamentos registrados!',
@@ -316,15 +280,6 @@ export default {
       return true
     }
 
-    const validateArea = () => {
-      if (!expedientLighting.value.areaId) {
-        validateState()
-        return 'Este campo es requerido'
-      }
-      validateState()
-      return true
-    }
-
     const validateDescriptionSolution = () => {
       if (!expedientLighting.value.descripcionSolucion) {
         validateState()
@@ -355,21 +310,17 @@ export default {
       // eslint-disable-next-line no-unneeded-ternary
       DescriptionSolutionState.value = expedientLighting.value.descripcionSolucion !== null
       // eslint-disable-next-line no-unneeded-ternary
-      areaState.value = expedientLighting.value.areaId !== null
-      // eslint-disable-next-line no-unneeded-ternary
       NomenclatureState.value = expedientLighting.value.nomenclatura !== null
     }
 
     return {
       expedientLighting,
       breadcrumbItems,
-      areas,
       departaments,
       PublicPlaceState,
       HighDateState,
       LocationState,
       departamentState,
-      areaState,
       NomenclatureState,
       router,
       DescriptionSolutionState,
@@ -380,11 +331,9 @@ export default {
       validatePublicPlace,
       validateLocation,
       validateDepartament,
-      validateArea,
       validateDescriptionSolution,
       validateHighDate,
-      validateNomenclature,
-      getAreas
+      validateNomenclature
     }
   }
 }

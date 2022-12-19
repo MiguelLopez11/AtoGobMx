@@ -38,14 +38,14 @@
                   value-field="departamentoId"
                   text-field="nombre"
                   :state="departamentState"
-                  @input="getAreas(employee.departamentoId)"
+                  @input="getWorkStation(employee.departamentoId)"
                 >
                 </b-form-select>
               </Field>
               <ErrorMessage class="text-danger" name="DepartamentField"></ErrorMessage>
             </b-form-group>
           </b-col>
-          <b-col>
+          <!-- <b-col>
             <b-form-group class="mt-3" label="Area">
               <Field
                 name="AreaField"
@@ -65,7 +65,7 @@
               </Field>
               <ErrorMessage class="text-danger" name="AreaField"></ErrorMessage>
             </b-form-group>
-          </b-col>
+          </b-col> -->
           <b-col>
             <b-form-group class="mt-3" label="Puesto de trabajo">
               <Field
@@ -126,7 +126,7 @@
 
 <script>
 import EmployeeServices from '@/Services/employee.Services'
-import AreaServices from '@/Services/area.Services'
+// import AreaServices from '@/Services/area.Services'
 import DepartamentServices from '@/Services/departament.Services'
 import workStationServices from '@/Services/workStation.Services'
 import { Field, Form, ErrorMessage } from 'vee-validate'
@@ -145,12 +145,12 @@ export default {
   setup () {
     const swal = inject('$swal')
     const { getEmployee, updateEmployee } = EmployeeServices()
-    const { getAreasByDepartament } = AreaServices()
+    // const { getAreasByDepartament } = AreaServices()
     const { getDepartaments } = DepartamentServices()
-    const { getWorkStationByArea } = workStationServices()
+    const { getWorkStationByDepartament } = workStationServices()
     // const $toast = useToast()
     const employee = ref([])
-    const areas = ref([])
+    // const areas = ref([])
     const departaments = ref([])
     const workStations = ref([])
     const router = useRoute()
@@ -167,8 +167,8 @@ export default {
     ])
     getEmployee(router.params.EmpleadoId, (data) => {
       employee.value = data
-      getAreas(data.departamentoId)
-      getWorkStation(data.areaId)
+      // getAreas(data.departamentoId)
+      getWorkStation(data.departamentoId)
       validateState()
     })
     getDepartaments(data => {
@@ -182,23 +182,23 @@ export default {
       }
     })
 
-    const getAreas = (departamentoId) => {
-      if (departamentoId) {
-        getAreasByDepartament(departamentoId, data => {
-          areas.value = data
-          if (data.length === 0) {
-            swal.fire({
-              title: 'No se encuentran areas registradas!',
-              text: 'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
-              icon: 'error'
-            })
-          }
-        })
-      }
-    }
+    // const getAreas = (departamentoId) => {
+    //   if (departamentoId) {
+    //     getAreasByDepartament(departamentoId, data => {
+    //       areas.value = data
+    //       if (data.length === 0) {
+    //         swal.fire({
+    //           title: 'No se encuentran areas registradas!',
+    //           text: 'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
+    //           icon: 'error'
+    //         })
+    //       }
+    //     })
+    //   }
+    // }
     const getWorkStation = (departamentoId) => {
       if (departamentoId) {
-        getWorkStationByArea(departamentoId, data => {
+        getWorkStationByDepartament(departamentoId, data => {
           workStations.value = data
           if (data.length === 0) {
             swal.fire({
@@ -235,14 +235,14 @@ export default {
       validateState()
       return true
     }
-    const validateArea = () => {
-      if (!employee.value.areaId) {
-        validateState()
-        return 'Este campo es requerido'
-      }
-      validateState()
-      return true
-    }
+    // const validateArea = () => {
+    //   if (!employee.value.areaId) {
+    //     validateState()
+    //     return 'Este campo es requerido'
+    //   }
+    //   validateState()
+    //   return true
+    // }
     const validateDepartament = () => {
       if (!employee.value.departamentoId) {
         validateState()
@@ -269,7 +269,7 @@ export default {
     }
     const validateState = () => {
       nameState.value = employee.value.nombreCompleto !== ''
-      areaState.value = employee.value.areaId !== null
+      // areaState.value = employee.value.areaId !== null
       departamentState.value = employee.value.departamentoId !== null
       workStationState.value = employee.value.puestoTrabajoId !== null
       dateWorkState.value = employee.value.fechaAlta !== null
@@ -278,7 +278,7 @@ export default {
 
     return {
       employee,
-      areas,
+      // areas,
       workStations,
       departaments,
       breadcrumbItems,
@@ -291,9 +291,9 @@ export default {
       redirect,
       onUpdateEmployee,
       validateName,
-      validateArea,
+      // validateArea,
       validateState,
-      getAreas,
+      // getAreas,
       getWorkStation,
       validateDepartament,
       validateWorkSation,

@@ -56,19 +56,10 @@
             <i class="bi bi-three-dots-vertical"></i>
           </template>
           <b-dropdown-item
-            @click="RemoveUser(items.usuarioId)"
+            @click="RemoveUser(items.nombreUsuario)"
             class="m-1"
             variant="outline-danger"
             ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
-          >
-          <b-dropdown-item
-            class="m-1"
-            variant="outline-warning"
-            :to="{
-              name: 'Usuarios-Edit',
-              params: { usuarioId: items.usuarioId }
-            }"
-            ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
           >
         </b-dropdown>
       </template>
@@ -89,7 +80,7 @@
               <Field name="userNameField" :rules="validateUserName" as="text">
                 <b-form-input
                   type="text"
-                  v-model="userFields.nombreUsuario"
+                  v-model="userFields.username"
                   :state="userNameState"
                 >
                 </b-form-input>
@@ -102,7 +93,7 @@
               <Field name="passwordField" :rules="validatePassword" as="text">
                 <b-form-input
                   type="password"
-                  v-model="userFields.contraseña"
+                  v-model="userFields.password"
                   :state="passwordState"
                 />
               </Field>
@@ -110,50 +101,26 @@
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="Confirmar Contraseña">
-              <Field
-                name="ConfirmPasswordField"
-                :rules="validateConfirmPassword"
-                as="text"
-              >
-                <b-form-input
-                  type="password"
-                  v-model="userFields.confirmarContraseña"
-                  :state="confirmPasswordState"
-                >
-                </b-form-input>
-              </Field>
-              <ErrorMessage name="ConfirmPasswordField" />
+            <b-form-group class="mt-3" label="CorreoElectronico">
+              <b-form-input
+                  type="email"
+                  v-model="userFields.email"
+                />
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="Role">
-              <Field name="roleField" :rules="validateRole" as="text">
-                <b-form-select
-                  autofocus
-                  :options="roles"
-                  value-field="roleId"
-                  text-field="nombre"
-                  v-model="userFields.roleId"
-                  :state="roleState"
-                ></b-form-select>
-              </Field>
-              <ErrorMessage name="roleField" />
+            <b-form-group class="mt-3" label="Numero de telefono">
+                 <b-form-input
+                  v-model="userFields.phoneNumber"
+                />
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="Empleado">
-              <Field name="employeeField" :rules="validateEmployee" as="text">
-                <b-form-select
-                  autofocus
-                  :options="employees"
-                  value-field="empleadoId"
-                  text-field="nombreCompleto"
-                  v-model="userFields.empleadoId"
-                  :state="employeeState"
-                ></b-form-select>
-              </Field>
-              <ErrorMessage name="employeeField" />
+            <b-form-group class="mt-3" label="Administrador">
+                 <b-form-checkbox
+                  size="lg"
+                  v-model="isAdmin"
+                />
             </b-form-group>
           </b-col>
         </b-row>
@@ -176,8 +143,6 @@
 
 <script>
 import UsersServices from '@/Services/users.Services'
-import RoleServices from '@/Services/role.Services'
-import EmployeeServices from '@/Services/employee.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -191,19 +156,13 @@ export default {
   setup () {
     const swal = inject('$swal')
     // Services
-    const { getEmployees } = EmployeeServices()
-    const { getUsers, deleteUser, createUser } = UsersServices()
-    const { getRoles } = RoleServices()
+    const { getUsers, deleteUser, createUser, createAdminUser } = UsersServices()
     // Data
     const showModal = ref(false)
     const users = ref([])
-    const roles = ref([])
-    const employees = ref([])
     const userNameState = ref(false)
     const passwordState = ref(false)
-    const confirmPasswordState = ref(false)
-    const roleState = ref(false)
-    const employeeState = ref(false)
+    const isAdmin = ref(false)
     const perPage = ref(5)
     const currentPage = ref(1)
     const filter = ref(null)
@@ -215,35 +174,19 @@ export default {
     const confirmErrorMessage = ref('')
     // Fields
     const userFields = ref({
-      usuarioId: 0,
-      nombreUsuario: '',
-      contraseña: null,
-      confirmarContraseña: null,
-      archivado: false,
-      roleId: 0,
-      empleadoId: 0
+      username: null,
+      email: null,
+      phoneNumber: null,
+      password: null
     })
     const areasFieldsBlank = ref(JSON.parse(JSON.stringify(userFields)))
     const fields = ref([
       { value: 'nombreUsuario', text: 'Nombre de usuario' },
-      { value: 'role.nombre', text: 'Role' },
+      { value: 'email', text: 'Correo electronico' },
+      { value: 'numeroTelefono', text: 'Numero de telefono' },
       { value: 'actions', text: 'Acciones' }
     ])
     // Methods
-    getRoles(data => {
-      roles.value = data
-      if (data.length === 0) {
-        swal.fire({
-          title: 'No se encuentran roles registrados en el sistema!',
-          text:
-            'No se encuentran roles registrados en el sistema, registre primero un departamento para continuar.',
-          icon: 'warning'
-        })
-      }
-    })
-    getEmployees(data => {
-      employees.value = data
-    })
     getUsers(data => {
       users.value = data
       if (users.value.length > 0) {
@@ -262,9 +205,6 @@ export default {
       userFields.value = JSON.parse(JSON.stringify(areasFieldsBlank))
       userNameState.value = false
       passwordState.value = false
-      confirmPasswordState.value = false
-      roleState.value = false
-      employeeState.value = false
     }
     const refreshTable = () => {
       isloading.value = true
@@ -282,17 +222,29 @@ export default {
       return 'datos recargados'
     }
     const addUser = () => {
-      createUser(userFields.value, data => {
-        refreshTable()
-        resetRoleFields()
-        swal.fire({
-          title: 'Usuario registrado correctamente!',
-          text: 'El Usuario se ha registrado al sistema satisfactoriamente.',
-          icon: 'success'
+      if (isAdmin.value) {
+        createAdminUser(userFields.value, data => {
+          refreshTable()
+          resetRoleFields()
+          swal.fire({
+            title: 'Usuario registrado correctamente!',
+            text: 'El Usuario se ha registrado al sistema satisfactoriamente.',
+            icon: 'success'
+          })
         })
-      })
+      } else {
+        createUser(userFields.value, data => {
+          refreshTable()
+          resetRoleFields()
+          swal.fire({
+            title: 'Usuario registrado correctamente!',
+            text: 'El Usuario se ha registrado al sistema satisfactoriamente.',
+            icon: 'success'
+          })
+        })
+      }
     }
-    const RemoveUser = areaId => {
+    const RemoveUser = UserName => {
       isloading.value = true
       swal
         .fire({
@@ -302,20 +254,20 @@ export default {
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
           cancelButtonColor: '#d33',
-          confirmButtonText: 'Si, archivar departamento!',
+          confirmButtonText: 'Si, eliminar usuario!',
           cancelButtonText: 'Cancelar'
         })
         .then(result => {
           if (result.isConfirmed) {
             swal
               .fire({
-                title: 'Departamento archivado!',
-                text: 'El departamento ha sido archivado satisfactoriamente .',
+                title: 'Usuario eliminado!',
+                text: 'El usuario ha sido eliminado satisfactoriamente .',
                 icon: 'success'
               })
               .then(result => {
                 if (result.isConfirmed) {
-                  deleteUser(areaId, data => {
+                  deleteUser(UserName, data => {
                     refreshTable()
                     resetRoleFields()
                   })
@@ -328,75 +280,28 @@ export default {
     }
     // Validations
     const validateUserName = () => {
-      if (!userFields.value.nombreUsuario) {
-        validateState()
+      if (!userFields.value.username) {
+        userNameState.value = false
         return 'Este campo es requerido'
       }
-      validateState()
-      return true
-    }
-    const validateRole = () => {
-      if (!userFields.value.roleId) {
-        validateState()
-        return 'Este campo es requerido'
-      }
-      validateState()
-      return true
-    }
-    const validateEmployee = value => {
-      if (!userFields.value.empleadoId) {
-        validateState()
-      }
-      validateState()
+      userNameState.value = true
       return true
     }
     const validatePassword = () => {
-      if (!userFields.value.contraseña) {
+      if (!userFields.value.password) {
         passwordState.value = false
         return 'Este campo es requerido '
       }
       if (
-        !/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{8,}$/.test(userFields.value.contraseña)
+        !/^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{8,16}$/.test(userFields.value.password)
       ) {
         passwordState.value = false
         errorMessage.value =
-          'La contraseña debe de contener minimo 8 Caracteres, minusculas y mayusculas '
+          'La contraseña debe de contener minimo 8 Caracteres, minusculas y mayusculas y mínimo un simbolo '
         return errorMessage.value
       }
       passwordState.value = true
       return true
-    }
-    const validateConfirmPassword = () => {
-      if (!userFields.value.confirmarContraseña) {
-        confirmPasswordState.value = false
-        return 'Este campo es requerido '
-      }
-      if (
-        userFields.value.contraseña !== userFields.value.confirmarContraseña
-      ) {
-        confirmPasswordState.value = false
-        return 'Las contraseñas no coinciden '
-      }
-      if (
-        !/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{8,}$/.test(
-          userFields.value.confirmarContraseña
-        )
-      ) {
-        confirmPasswordState.value = false
-        return 'La contraseña debe de contener minimo 8 Caracteres, minusculas y mayusculas '
-      }
-      confirmPasswordState.value = true
-      return true
-    }
-    const validateState = () => {
-      // eslint-disable-next-line no-unneeded-ternary
-      userNameState.value = userFields.value.nombreUsuario === '' ? false : true
-      // eslint-disable-next-line no-unneeded-ternary
-      roleState.value = userFields.value.roleId === 0 ? false : true
-      // eslint-disable-next-line no-unneeded-ternary
-      employeeState.value = userFields.value.empleadoId === 0 ? false : true
-
-      return ''
     }
     return {
       fields,
@@ -405,21 +310,17 @@ export default {
       filter,
       perPageSelect,
       users,
-      roles,
-      employees,
       areasFieldsBlank,
       userFields,
       userNameState,
       passwordState,
-      confirmPasswordState,
-      roleState,
-      employeeState,
       isloading,
       searchValue,
       searchField,
       errorMessage,
       confirmErrorMessage,
       showModal,
+      isAdmin,
 
       onFiltered,
       addUser,
@@ -427,11 +328,10 @@ export default {
       RemoveUser,
       resetRoleFields,
       validateUserName,
-      validateRole,
-      validateEmployee,
-      validateState,
-      validatePassword,
-      validateConfirmPassword
+      // validateRole,
+      // validateEmployee,
+      // validateState,
+      validatePassword
     }
   }
 }

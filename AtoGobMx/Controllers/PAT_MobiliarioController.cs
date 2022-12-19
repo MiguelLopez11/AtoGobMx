@@ -22,7 +22,7 @@ namespace AtoGobMx.Controllers
         {
             var mobiliarios = await _context.Mobiliario
                 .Include(i => i.Departamentos)
-                .Include(i => i.Area)
+                //.Include(i => i.Area)
                 .Include(i => i.TipoMobiliario)
                 .Where(w => !w.Archivado)
                 .ToListAsync();
@@ -34,7 +34,7 @@ namespace AtoGobMx.Controllers
         {
             var mobiliario = await _context.Mobiliario
                 .Include(i => i.Departamentos)
-                .Include(i => i.Area)
+                //.Include(i => i.Area)
                 .Include(i => i.TipoMobiliario)
                 .FirstOrDefaultAsync(f => f.MobiliarioId == MobiliarioId);
 
@@ -67,7 +67,7 @@ namespace AtoGobMx.Controllers
             PAT_Mobiliario.MobiliarioId = mobiliario.MobiliarioId;
             PAT_Mobiliario.CodigoInventario = mobiliario.CodigoInventario;
             PAT_Mobiliario.Descripción = mobiliario.Descripción;
-            PAT_Mobiliario.AreaId = mobiliario.AreaId;
+            //PAT_Mobiliario.AreaId = mobiliario.AreaId;
             PAT_Mobiliario.DepartamentoId = mobiliario.DepartamentoId;
             PAT_Mobiliario.TipoMobiliarioId = mobiliario.TipoMobiliarioId;
             PAT_Mobiliario.Archivado = mobiliario.Archivado;
