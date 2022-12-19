@@ -119,7 +119,7 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <b-col>
+          <!-- <b-col>
             <b-form-group class="mt-3" label="Area">
               <Field name="AreaField" :rules="validateArea" as="number">
                 <b-form-select
@@ -134,7 +134,7 @@
               </Field>
               <ErrorMessage class="text-danger" name="AreaField"></ErrorMessage>
             </b-form-group>
-          </b-col>
+          </b-col> -->
         </b-row>
         <b-row align-h="end">
           <b-button
@@ -205,7 +205,7 @@ export default {
     const fields = ref([
       { value: 'nombre', text: 'Nombre' },
       { value: 'departamentos.nombre', text: 'Departamento' },
-      { value: 'area.nombre', text: 'Area' },
+      // { value: 'area.nombre', text: 'Area' },
       { value: 'actions', text: 'Acciones' }
     ])
     getWorkStations(data => {

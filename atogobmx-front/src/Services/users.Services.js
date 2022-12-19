@@ -6,31 +6,37 @@ export default function UsersServices () {
       callback(response.data)
     })
   }
-  const getUser = (usuarioId, callback) => {
-    axiosPrivate.get(`/Usuarios/${usuarioId}`).then((response) => {
-      callback(response.data)
-    })
-  }
+  // const getUser = (usuarioId, callback) => {
+  //   axiosPrivate.get(`/Usuarios/${usuarioId}`).then((response) => {
+  //     callback(response.data)
+  //   })
+  // }
   const createUser = (data, callback) => {
-    axiosPrivate.post('/Usuarios', data).then((response) => {
+    axiosPrivate.post('/Authenticate/register', data).then((response) => {
       callback(response.data)
     })
   }
-  const updateUser = (data, callback) => {
-    axiosPrivate.put(`/Usuarios/${data.usuarioId}`, data).then((response) => {
+  const createAdminUser = (data, callback) => {
+    axiosPrivate.post('/Authenticate/register-admin', data).then((response) => {
       callback(response.data)
     })
   }
-  const deleteUser = (usuarioId, callback) => {
-    axiosPrivate.delete(`/Usuarios/${usuarioId}`).then((response) => {
+  // const updateUser = (data, callback) => {
+  //   axiosPrivate.put(`/Usuarios/${data.usuarioId}`, data).then((response) => {
+  //     callback(response.data)
+  //   })
+  // }
+  const deleteUser = (UserName, callback) => {
+    axiosPrivate.delete(`/Authenticate/${UserName}`).then((response) => {
       callback(response.data)
     })
   }
   return {
     getUsers,
-    getUser,
+    // getUser,
     createUser,
-    updateUser,
+    createAdminUser,
+    // updateUser,
     deleteUser
   }
 }

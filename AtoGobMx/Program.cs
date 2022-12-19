@@ -42,43 +42,13 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ClockSkew = TimeSpan.Zero,
+        ClockSkew = TimeSpan.MaxValue,
 
         ValidAudience = configuration["JWT:ValidAudience"],
         ValidIssuer = configuration["JWT:ValidIssuer"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
     };
 });
-////builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-////    .AddEntityFrameworkStores<AtoGobMxContext>()
-////    .AddDefaultTokenProviders();
-
-//// Adding Authentication
-//builder.Services.AddAuthentication(options =>
-//{
-//    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-//    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-//    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-//})
-
-//// Adding Jwt Bearer
-//.AddJwtBearer(options =>
-//{
-//    options.SaveToken = true;
-//    options.RequireHttpsMetadata = false;
-//    options.TokenValidationParameters = new TokenValidationParameters()
-//    {
-//        ValidateIssuer = true,
-//        ValidateAudience = true,
-//        ValidateLifetime = true,
-//        ValidateIssuerSigningKey = true,
-//        ClockSkew = TimeSpan.Zero,
-
-//        ValidAudience = configuration["JWT:ValidAudience"],
-//        ValidIssuer = configuration["JWT:ValidIssuer"],
-//        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
-//    };
-//});
 
 builder.Services.AddCors(options =>
 {
@@ -96,12 +66,6 @@ builder.Services.AddCors(options =>
                           policy.AllowAnyMethod();
                       });
 });
-//builder.Services.Configure<FormOptions>(o =>
-//{
-//    o.ValueLengthLimit = int.MaxValue;
-//    o.MultipartBodyLengthLimit = int.MaxValue;
-//    o.MemoryBufferThreshold = int.MaxValue;
-//});
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddEndpointsApiExplorer();

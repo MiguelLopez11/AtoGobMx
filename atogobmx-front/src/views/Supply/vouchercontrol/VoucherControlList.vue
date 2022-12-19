@@ -122,24 +122,6 @@
               <ErrorMessage name="ExpirationDateField"></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!--Agregar area-->
-          <b-col>
-            <b-form-group class="mt-3" label="Area">
-              <Field name="AreaField" :rules="validateArea" as="number">
-                <b-form-select
-                  v-model="voucherControlFields.areaId"
-                  autofocus
-                  :options="areas"
-                  value-field="areaId"
-                  text-field="nombre"
-                  :state="areaState"
-                >
-                  <!-- @input="getWorkStation(voucherControlFields.areaId)" -->
-                </b-form-select>
-              </Field>
-              <ErrorMessage class="text-danger" name="AreaField"></ErrorMessage>
-            </b-form-group>
-          </b-col>
           <!--Agregar Departamento-->
           <b-col>
             <b-form-group class="mt-3" label="Departamento: ">
@@ -273,7 +255,6 @@
 <script>
 import VoucherControlServices from '@/Services/vouchercontrol.Services'
 import EmployeeServices from '@/Services/employee.Services'
-import AreaServices from '@/Services/area.Services'
 import DepartamentServices from '@/Services/departament.Services'
 import ProviderServices from '@/Services/provider.Services'
 // import ProductVoucherServices from '@/Services/productvoucher.Services'
@@ -297,7 +278,6 @@ export default {
     const showModal = ref(false)
     const { getVoucherControl, createVoucherControl, deleteVoucherControl } =
       VoucherControlServices()
-    const { getAreas } = AreaServices()
     const { getDepartaments } = DepartamentServices()
     const { getEmployees } = EmployeeServices()
     const { getProvider } = ProviderServices()
@@ -306,7 +286,6 @@ export default {
     const voucherControl = ref([])
     const employees = ref([])
     const departaments = ref([])
-    const areas = ref([])
     const provider = ref([])
     // const productVoucher = ref([])
     // const detailVoucher = ref([])
@@ -322,7 +301,6 @@ export default {
     const DateOfIssueState = ref(false)
     const ExpirationDateState = ref(false)
     const departamentState = ref(false)
-    const areaState = ref(false)
     const EmployeeState = ref(false)
     const ProviderState = ref(false)
     const ProductState = ref(false)
@@ -340,7 +318,6 @@ export default {
       fechaEmicion: null,
       fechaVigencia: null,
       departamentoId: null,
-      areaId: null,
       empleadoId: null,
       proveedorId: null,
       estatusValeId: null,
@@ -366,17 +343,6 @@ export default {
     //     }
     //   })
     // }
-
-    getAreas(data => {
-      areas.value = data
-      if (data.length === 0) {
-        swal.fire({
-          title: 'No se encuentran areas registradas!',
-          text: 'No se encuentran areas registradas en el sistema, registre primero un departamento para continuar.',
-          icon: 'warning'
-        })
-      }
-    })
 
     getDepartaments(data => {
       departaments.value = data
@@ -469,7 +435,6 @@ export default {
       DateOfIssueState.value = false
       ExpirationDateState.value = false
       departamentState.value = false
-      areaState.value = false
       EmployeeState.value = false
       ProviderState.value = false
       ProductState.value = false
@@ -517,15 +482,6 @@ export default {
         return 'Este campo es requerido'
       }
       departamentState.value = true
-      return true
-    }
-
-    const validateArea = () => {
-      if (!voucherControlFields.value.areaId) {
-        areaState.value = false
-        return 'Este campo es requerido'
-      }
-      areaState.value = true
       return true
     }
 
@@ -643,7 +599,6 @@ export default {
       employees,
       breadcrumbItems,
       departaments,
-      areas,
       provider,
       statusVoucher,
       typeVoucher,
@@ -661,7 +616,6 @@ export default {
       DateOfIssueState,
       ExpirationDateState,
       departamentState,
-      areaState,
       EmployeeState,
       ProviderState,
       ProductState,
@@ -677,7 +631,6 @@ export default {
       validateDateOfIssue,
       validateExpirationDate,
       validateDepartament,
-      validateArea,
       validateEmployee,
       validateProvider,
       validateProduct,

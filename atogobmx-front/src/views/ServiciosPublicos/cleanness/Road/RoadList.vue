@@ -86,7 +86,7 @@
       lazy
     >
       <Form @submit="addRoadService">
-        <b-row cols="2">
+        <b-row cols="3">
           <!-- Agregar Observacion -->
           <b-col>
             <b-form-group class="mt-3" label="Observacion">
@@ -108,11 +108,14 @@
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="Marcar ruta">
-              <b-button variant="primary" @click="onAddPolyline">
+              <b-button class="mt-5 w-100" variant="primary" @click="onAddPolyline">
                 Marcar Ruta
               </b-button>
-            </b-form-group>
+          </b-col>
+          <b-col>
+              <b-button class="mt-5 w-100" variant="primary" @click="ResetPolyline">
+                Reiniciar ruta
+              </b-button>
           </b-col>
         </b-row>
         <b-row>
@@ -199,6 +202,13 @@ export default {
       observacion: null,
       archivado: false
     })
+    const CoordsRoadFields = ref({
+      coordenadaId: 0,
+      latitud: '',
+      longitud: '',
+      rutaId: 0,
+      ordenCoordenada: null
+    })
     const locations = ref([])
     const flightPath = ref({
       path: [],
@@ -212,7 +222,7 @@ export default {
     )
     const center = ref({ lat: 20.5546629, lng: -102.4953904 })
     const fields = ref([
-      { value: 'obsevacion', text: 'Observacion' },
+      { value: 'observacion', text: 'Observacion' },
       { value: 'actions', text: 'Acciones' }
     ])
     const addMaker = location => {
@@ -227,6 +237,16 @@ export default {
       }
       flightPath.value = {
         path: locations.value,
+        geodesic: true,
+        strokeColor: '#5e50ee',
+        strokeOpacity: 1.0,
+        strokeWeight: 5
+      }
+    }
+    const ResetPolyline = () => {
+      locations.value = []
+      flightPath.value = {
+        path: [],
         geodesic: true,
         strokeColor: '#5e50ee',
         strokeOpacity: 1.0,
@@ -289,21 +309,27 @@ export default {
     }
 
     const addRoadService = () => {
-      for (let i = 0; i < locations.value.length; i++) {
-        const coords = locations[i]
-        createCoordsRoad(coords, data => {
-        })
-      }
       createRoad(RoadServiceFields.value, data => {
-        refreshTable()
-        swal.fire({
-          title: '¡Ruta agregada correctamente!',
-          text: 'Ruta registrado satisfactoriamente',
-          icon: 'success'
-        })
+        console.log(data)
+        for (let i = 0; i < locations.value.length; i++) {
+          createCoordsRoad({
+            coordenadaId: 0,
+            latitud: locations.value[i].lat,
+            longitud: locations.value[i].lng,
+            rutaId: data.rutaId,
+            ordenCoordenada: i
+          }, data => {
+          })
+          refreshTable()
+          showModal.value = false
+          resetRoadServiceFields()
+          swal.fire({
+            title: '¡Ruta agregada correctamente!',
+            text: 'Ruta registrado satisfactoriamente',
+            icon: 'success'
+          })
+        }
       })
-      showModal.value = false
-      resetRoadServiceFields()
     }
 
     const RemoveRoadService = routeId => {
@@ -338,6 +364,7 @@ export default {
     return {
       roadService,
       RoadServiceFields,
+      CoordsRoadFields,
       breadcrumbItems,
       perPage,
       currentPage,
@@ -365,7 +392,8 @@ export default {
       validateObservation,
       resetRoadServiceFields,
       addMaker,
-      onAddPolyline
+      onAddPolyline,
+      ResetPolyline
     }
   }
 }

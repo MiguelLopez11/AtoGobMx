@@ -6,8 +6,8 @@ export default function WorkStationServices () {
       callback(response.data)
     })
   }
-  const getWorkStationByArea = (AreaId, callback) => {
-    axiosPrivate.get(`/PuestoTrabajo/Area/${AreaId}`).then((response) => {
+  const getWorkStationByDepartament = (DepartamentoId, callback) => {
+    axiosPrivate.get(`/PuestoTrabajo/Departamento/${DepartamentoId}`).then((response) => {
       callback(response.data)
     })
   }
@@ -33,7 +33,7 @@ export default function WorkStationServices () {
   }
   return {
     getWorkStations,
-    getWorkStationByArea,
+    getWorkStationByDepartament,
     getWorkStation,
     createWorkStation,
     updateWorkStation,

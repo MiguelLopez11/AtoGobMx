@@ -137,7 +137,6 @@
                   value-field="departamentoId"
                   text-field="nombre"
                   :state="departamentState"
-                  @input="getAreas(furnituresFields.departamentoId)"
                 >
                 </b-form-select>
               </Field>
@@ -145,22 +144,6 @@
                 class="text-danger"
                 name="DepartamentField"
               ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Area">
-              <Field name="AreaField" :rules="validateArea" as="number">
-                <b-form-select
-                  v-model="furnituresFields.areaId"
-                  autofocus
-                  :options="areas"
-                  value-field="areaId"
-                  text-field="nombre"
-                  :state="areaState"
-                >
-                </b-form-select>
-              </Field>
-              <ErrorMessage class="text-danger" name="AreaField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -202,7 +185,6 @@
 
 <script>
 import FurnitureServices from '@/Services/furniture.Services'
-import AreaServices from '@/Services/area.Services'
 import DepartamentServices from '@/Services/departament.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
@@ -222,7 +204,6 @@ export default {
       getTypeFurnitures
     } = FurnitureServices()
     const swal = inject('$swal')
-    const { getAreasByDepartament } = AreaServices()
     const { getDepartaments } = DepartamentServices()
     const showModal = ref(false)
     const furnitures = ref([])
@@ -239,13 +220,11 @@ export default {
     const typeFurnitureState = ref(false)
     const descriptionState = ref(false)
     const folioState = ref(false)
-    const areaState = ref(false)
     const departamentState = ref(false)
     const furnituresFields = ref({
       mobiliarioId: 0,
       codigoInventario: null,
       descripción: '',
-      areaId: null,
       tipoMobiliarioId: null,
       departamentoId: null,
       archivado: false
@@ -253,19 +232,6 @@ export default {
     const furnituresFieldsBlank = ref(
       JSON.parse(JSON.stringify(furnituresFields))
     )
-    const getAreas = departamentoId => {
-      getAreasByDepartament(departamentoId, data => {
-        areas.value = data
-        if (data.length === 0) {
-          swal.fire({
-            title: 'No se encuentran areas registradas!',
-            text:
-              'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
-            icon: 'warning'
-          })
-        }
-      })
-    }
     getDepartaments(data => {
       departaments.value = data
       if (data.length === 0) {
@@ -281,7 +247,6 @@ export default {
       { value: 'codigoInventario', text: 'Nomenclatura', sortable: true },
       { value: 'descripción', text: 'Nombre' },
       { value: 'departamentos.nombre', text: 'Departamento' },
-      { value: 'area.nombre', text: 'Area de Trabajo' },
       { value: 'actions', text: 'Acciones' }
     ])
     const resetFurnitureFields = () => {
@@ -289,7 +254,6 @@ export default {
       furnituresFields.value = JSON.parse(JSON.stringify(furnituresFieldsBlank))
       typeFurnitureState.value = false
       descriptionState.value = false
-      areaState.value = false
       folioState.value = false
       departamentState.value = false
     }
@@ -414,14 +378,6 @@ export default {
       descriptionState.value = true
       return true
     }
-    const validateArea = () => {
-      if (!furnituresFields.value.areaId) {
-        areaState.value = false
-        return 'Este campo es requerido'
-      }
-      areaState.value = true
-      return true
-    }
     return {
       furnitures,
       typeFurnitures,
@@ -439,7 +395,6 @@ export default {
       searchField,
       typeFurnitureState,
       descriptionState,
-      areaState,
       departamentState,
       folioState,
       showModal,
@@ -449,11 +404,9 @@ export default {
       refreshTable,
       RemoveFurniture,
       validateTypeFurniture,
-      validateArea,
       validateDescription,
       validateDepartament,
       validateFolio,
-      getAreas,
       resetFurnitureFields
     }
   }

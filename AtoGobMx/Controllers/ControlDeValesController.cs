@@ -27,7 +27,7 @@ namespace AtoGobMx.Controllers
         {
             var controlvale = await _context.ControlDeVales
                 .Include(i => i.Departamentos)
-                .Include(i => i.Area)
+                //.Include(i => i.Area)
                 .Include(i => i.Empleados)
                 .Include(i => i.PROV_Proveedor)
                 .Include(i => i.PROV_EstatusVale)
@@ -44,7 +44,7 @@ namespace AtoGobMx.Controllers
         {
             var controlvale = await _context.ControlDeVales
                 .Include(i => i.Departamentos)
-                .Include(i => i.Area)
+                //.Include(i => i.Area)
                 .Include(i => i.Empleados)
                 .Include(i => i.PROV_Proveedor)
                 .Include(i => i.PROV_EstatusVale)

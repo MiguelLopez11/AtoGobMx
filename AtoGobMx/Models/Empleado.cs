@@ -18,11 +18,11 @@ namespace AtoGobMx.Models
         [Required]
         public bool Archivado { get; set; }
         public bool TieneExpediente { get; set; }
-        public int? AreaId { get; set; }
+        //public int? AreaId { get; set; }
         public int? DepartamentoId { get; set; }
         public int? PuestoTrabajoId { get; set; }
-        [ForeignKey("AreaId")]
-        public Area? Area { get; set; }
+        //[ForeignKey("AreaId")]
+        //public Area? Area { get; set; }
         [ForeignKey("DepartamentoId")]
         public Departamentos? Departamentos { get; set; }
         [ForeignKey("PuestoTrabajoId")]

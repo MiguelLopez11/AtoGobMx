@@ -24,20 +24,20 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<PuestoTrabajo>> GetPuestosTrabajo()
         {
             var puestosTrabajo = await _context.PuestoTrabajo
-                .Include(i => i.Area)
+                //.Include(i => i.Area)
                 .Include(i => i.Departamentos)
                 .Where(w => !w.Archivado)
                 .OrderBy(o => o.PuestoTrabajoId)
                 .ToListAsync();
             return Ok(puestosTrabajo);
         }
-        [HttpGet("Area/{AreaId}")]
-        public async Task<ActionResult<PuestoTrabajo>> GetPuestosTrabajoDepartamento(int AreaId)
+        [HttpGet("Departamento/{DepartamentoId}")]
+        public async Task<ActionResult<PuestoTrabajo>> GetPuestosTrabajoDepartamento(int DepartamentoId)
         {
             var puestosTrabajo = await _context.PuestoTrabajo
-                .Include(i => i.Area)
+                //.Include(i => i.Area)
                 .Where(w => !w.Archivado)
-                .Where(w => w.AreaId == AreaId)
+                .Where(w => w.DepartamentoId == DepartamentoId)
                 .OrderBy(o => o.PuestoTrabajoId)
                 .ToListAsync();
             return Ok(puestosTrabajo);
@@ -46,7 +46,7 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult> GetPuestoTrabajoById(int PuestoTrabajoId)
         {
             var puestoTrabajo = await _context.PuestoTrabajo
-                .Include(i => i.Area)
+                //.Include(i => i.Area)
                 .Include(i => i.Departamentos)
                 .FirstOrDefaultAsync(f => f.PuestoTrabajoId == PuestoTrabajoId);
             if (puestoTrabajo == null)
@@ -77,7 +77,7 @@ namespace AtoGobMx.Controllers
             }
             puesto.PuestoTrabajoId = puestoTrabajo.PuestoTrabajoId;
             puesto.Nombre = puestoTrabajo.Nombre;
-            puesto.AreaId = puestoTrabajo.AreaId;
+            //puesto.AreaId = puestoTrabajo.AreaId;
             puesto.DepartamentoId = puestoTrabajo.DepartamentoId;
 
             _context.PuestoTrabajo.Update(puesto);

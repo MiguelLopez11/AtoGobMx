@@ -14,14 +14,14 @@ namespace AtoGobMx.Models
         public string MemoriaRAM { get; set; }
         public string Almacenamiento { get; set; }
         public string Procesador { get; set; }
-        public int AreaId { get; set; }
+        //public int AreaId { get; set; }
         public int DepartamentoId { get; set; }
         public int EstatusEquipoId { get; set; }
         public bool Archivado { get; set; }
 
 
-        [ForeignKey("AreaId")]
-        public Area? Area { get; set; }
+        //[ForeignKey("AreaId")]
+        //public Area? Area { get; set; }
         [ForeignKey("DepartamentoId")]
         public Departamentos? Departamentos { get; set; }
 

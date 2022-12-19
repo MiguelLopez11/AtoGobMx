@@ -171,7 +171,6 @@
                   value-field="departamentoId"
                   text-field="nombre"
                   :state="departamentState"
-                  @input="getAreas(computerFields.departamentoId)"
                 >
                 </b-form-select>
               </Field>
@@ -179,22 +178,6 @@
                 class="text-danger"
                 name="DepartamentField"
               ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-form-group class="mt-3" label="Area">
-              <Field name="AreaField" :rules="validateArea" as="number">
-                <b-form-select
-                  v-model="computerFields.areaId"
-                  autofocus
-                  :options="areas"
-                  value-field="areaId"
-                  text-field="nombre"
-                  :state="areaState"
-                >
-                </b-form-select>
-              </Field>
-              <ErrorMessage class="text-danger" name="AreaField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -233,7 +216,6 @@
 
 <script>
 import ComputerServices from '@/Services/computer.Services'
-import AreaServices from '@/Services/area.Services'
 import DepartamentServices from '@/Services/departament.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
@@ -249,11 +231,9 @@ export default {
   setup () {
     const swal = inject('$swal')
     const { getComputers, createComputer, deleteComputer, getStatus } = ComputerServices()
-    const { getAreasByDepartament } = AreaServices()
     const { getDepartaments } = DepartamentServices()
     // const $toast = useToast()
     const Computers = ref([])
-    const areas = ref([])
     const departaments = ref([])
     const statusComputers = ref([])
     const perPage = ref(5)
@@ -280,7 +260,6 @@ export default {
       almacenamiento: null,
       procesador: null,
       departamentoId: null,
-      areaId: null,
       estatusEquipoId: null,
       archivado: false
     })
@@ -291,7 +270,6 @@ export default {
       { value: 'memoriaRAM', text: 'Memoria RAM' },
       { value: 'almacenamiento', text: 'Almacenamiento' },
       { value: 'procesador', text: 'Procesador' },
-      { value: 'area.nombre', text: 'Area' },
       { value: 'inventarioEstatus', text: 'Estatus' },
       { value: 'actions', text: 'Acciones' }
     ])
@@ -330,19 +308,6 @@ export default {
         })
       }
     })
-    const getAreas = departamentoId => {
-      getAreasByDepartament(departamentoId, data => {
-        areas.value = data
-        if (data.length === 0) {
-          swal.fire({
-            title: 'No se encuentran areas registradas!',
-            text:
-              'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
-            icon: 'warning'
-          })
-        }
-      })
-    }
     const validateFolio = () => {
       if (!computerFields.value.codigoInventario) {
         folioState.value = false
@@ -520,7 +485,6 @@ export default {
       areaState,
       stateComputerState,
       showModal,
-      areas,
       departaments,
       statusComputers,
       folioState,
@@ -533,8 +497,7 @@ export default {
       validateDepartament,
       validateArea,
       validateStateComputer,
-      validateFolio,
-      getAreas
+      validateFolio
     }
   }
 }

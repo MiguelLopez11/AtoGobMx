@@ -1,12 +1,14 @@
 ﻿using AtoGobMx.Context;
 using AtoGobMx.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace AtoGobMx.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CoordenadaRutaController : ControllerBase
@@ -18,16 +20,18 @@ namespace AtoGobMx.Controllers
         }
 
         [HttpGet("{RutaId}")]
-        public async Task<ActionResult<Coordenadas_Rutas>> GetRuta(int RutaId)
+        public async Task<ActionResult<Coordenadas_Rutas>> GetCoordenadasRuta(int RutaId)
         {
-            var Ruta = await _context.Coordenadas_Ruta
+            var coordenadas = await _context.Coordenadas_Ruta
+                .Where(w => !w.Archivado)
                 .Where(w => w.RutaId == RutaId)
+                .OrderBy(o => o.OrdenCoordenada)
                 .ToListAsync();
-            return Ok(Ruta);
+            return Ok(coordenadas);
         }
 
-        [HttpGet("{CoordenadaId}")]
-        public async Task<ActionResult> GetRutaById(int CoordenadaId)
+        [HttpGet("Coordenada/{CoordenadaId}")]
+        public async Task<ActionResult> GetCoordenadaRutaById(int CoordenadaId)
         {
             var coordenadas = await _context.Coordenadas_Ruta
                 .FirstOrDefaultAsync(f => f.CoordenadaId == CoordenadaId);
@@ -39,15 +43,15 @@ namespace AtoGobMx.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Ruta>> PostRuta(Coordenadas_Rutas coordenadas_Rutas)
+        public async Task<ActionResult<Ruta>> PostCoordenadaRuta(Coordenadas_Rutas coordenadas_Rutas)
         {
-            object value = _context.Coordenadas_Ruta.Add(coordenadas_Rutas);
+            _context.Coordenadas_Ruta.Add(coordenadas_Rutas);
             await _context.SaveChangesAsync();
-            return Ok("coordenadas creadas correctamente");
+            return CreatedAtAction("GetCoordenadaRutaById", new { CoordenadaId = coordenadas_Rutas.CoordenadaId }, coordenadas_Rutas);
         }
 
         [HttpPut("{CoordenadaId}")]
-        public async Task<ActionResult> PutRuta(int CoordenadaId, Coordenadas_Rutas coordenadas_Ruta)
+        public async Task<ActionResult> PutCoordenadasRuta(int CoordenadaId, Coordenadas_Rutas coordenadas_Ruta)
         {
             if (coordenadas_Ruta.RutaId != CoordenadaId)
             {
@@ -72,7 +76,7 @@ namespace AtoGobMx.Controllers
         }
 
         [HttpDelete("{CoordenadaId}")]
-        public async Task<IActionResult> DeleteRuta(int CoordenadaId)
+        public async Task<IActionResult> DeleteCoordenadasRuta(int CoordenadaId)
         {
             var RutaAseo = _context.Coordenadas_Ruta
                 .FirstOrDefault(f => f.CoordenadaId == CoordenadaId);

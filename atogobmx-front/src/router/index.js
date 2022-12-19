@@ -91,27 +91,6 @@ const routes = [
     }
   },
   {
-    path: '/RecursosHumanos/Areas/List',
-    name: 'Areas',
-    component: () => import('../views/RecursosHumanos/areas/AreaList.vue'),
-    meta: {
-      requiresAuth: true
-      // rol: 'Empleado',
-      // departamento: 'Recursos Humanos'
-
-    }
-  },
-  {
-    path: '/RecursosHumanos/Areas/:AreaId',
-    name: 'Area-Edit',
-    component: () => import('../views/RecursosHumanos/areas/AreaEdit.vue'),
-    meta: {
-      requiresAuth: true
-      // rol: 'Empleado',
-      // departamento: 'Recursos Humanos'
-    }
-  },
-  {
     path: '/RecursosHumanos/Empleados/list',
     name: 'Empleados',
     component: () => import('@/views/RecursosHumanos/Employees/EmployeeList.vue'),
@@ -582,26 +561,26 @@ const routes = [
       // departamento: 'Dirección de Sistemas y Tecnologías de la Comunicación'
     }
   },
-  {
-    path: '/Administrador/Roles/list',
-    name: 'Roles',
-    component: () => import('@/views/Roles/RoleList.vue'),
-    meta: {
-      requiresAuth: true
-      // rol: 'Empleado',
-      // departamento: 'Dirección de Sistemas y Tecnologías de la Comunicación'
-    }
-  },
-  {
-    path: '/Administrador/Roles/:RoleId',
-    name: 'Roles-Edit',
-    component: () => import('@/views/Roles/RoleEdit.vue'),
-    meta: {
-      requiresAuth: true
-      // rol: 'Empleado',
-      // departamento: 'Dirección de Sistemas y Tecnologías de la Comunicación'
-    }
-  },
+  // {
+  //   path: '/Administrador/Roles/list',
+  //   name: 'Roles',
+  //   component: () => import('@/views/Roles/RoleList.vue'),
+  //   meta: {
+  //     requiresAuth: true
+  //     // rol: 'Empleado',
+  //     // departamento: 'Dirección de Sistemas y Tecnologías de la Comunicación'
+  //   }
+  // },
+  // {
+  //   path: '/Administrador/Roles/:RoleId',
+  //   name: 'Roles-Edit',
+  //   component: () => import('@/views/Roles/RoleEdit.vue'),
+  //   meta: {
+  //     requiresAuth: true
+  //     // rol: 'Empleado',
+  //     // departamento: 'Dirección de Sistemas y Tecnologías de la Comunicación'
+  //   }
+  // },
   {
     path: '/RecursosHumanos/Departamentos/list',
     name: 'Departamentos',
