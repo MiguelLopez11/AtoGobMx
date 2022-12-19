@@ -18,7 +18,7 @@ namespace AtoGobMx.Models
         public bool Archivado { get; set; }
         public int? AlumbradoId { get; set; }
         public int? DepartamentoId { get; set; }
-        public int? AreaId { get; set; }
+        //public int? AreaId { get; set; }
 
         [ForeignKey("AlumbradoId")]
         public Alumbrado? Alumbrado { get; set; }
@@ -26,8 +26,8 @@ namespace AtoGobMx.Models
         [ForeignKey("DepartamentoId")]
         public Departamentos? Departamentos { get; set; }
 
-        [ForeignKey("AreaId")]
-        public Area? Area { get; set; }
+        //[ForeignKey("AreaId")]
+        //public Area? Area { get; set; }
         [JsonIgnore]
         public virtual IEnumerable<EmpleadosAlumbrado>? EmpleadosAlumbrado { get; set; }
         [JsonIgnore]

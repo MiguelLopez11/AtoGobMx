@@ -24,7 +24,7 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<Empleado>> GetEmpleados()
         {
             var empleados = await _context.Empleados
-                .Include(i => i.Area)
+                //.Include(i => i.Area)
                 .Include(i => i.Departamentos)
                 .Include(i => i.PuestoTrabajo)
                 .OrderBy(o => o.EmpleadoId)
@@ -35,7 +35,7 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<Empleado>> GetEmpleadosSinArchivar()
         {
             var empleados = await _context.Empleados
-                .Include(i => i.Area)
+                //.Include(i => i.Area)
                 .Include(i => i.Departamentos)
                 .Include(i => i.PuestoTrabajo)
                 //.Include(i => i.usuario)
@@ -48,7 +48,7 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<Empleado>> GetEmpleadosSinExpedientes()
         {
             var empleados = await _context.Empleados
-                .Include(i => i.Area)
+                //.Include(i => i.Area)
                 .Include(i => i.Departamentos)
                 .Include(i => i.PuestoTrabajo)
                 .Where(w => w.TieneExpediente == false)
@@ -56,42 +56,12 @@ namespace AtoGobMx.Controllers
                 .ToListAsync();
             return Ok(empleados);
         }
-        //[HttpGet("AlumbradoPublico/{ExpedienteAlumbradoPublicoId}")]
-        //public async Task<ActionResult<Empleado>> GetEmpleadosAlumbradoPublico(int ExpedienteAlumbradoPublicoId)
-        //{
-        //    List<Empleado> empleados = new List<Empleado>();
-        //    //Empleados Registrados en alumbrado 
-        //    var empleadosAlumbrado = await _context.EmpleadosAlumbrado
-        //        .Where(w => !w.Archivado)
-        //        .Where(w => w.ExpedienteAlumbradoId == ExpedienteAlumbradoPublicoId)
-        //        .ToListAsync();
-        //    //todos los empleados
-        //    var emp = await _context.Empleados
-        //            .Include(i => i.Area)
-        //            .Include(i => i.Departamentos)
-        //            .Include(i => i.PuestoTrabajo)
-        //            .Where(w => !w.Archivado)
-        //            .ToListAsync();
-            //si esta vacio, retorna todos los empleados
-            //for (int i = 0; i <= emp.Count; i++)
-            //{
-            //    for (int j =0; j <= empleadosAlumbrado.Count; j++)
-            //    {
-            //        if (emp[i].EmpleadoId != empleadosAlumbrado[j].EmpleadoId)
-            //        {
-            //            empleados.Add(emp[i]);
-            //        }
-            //    }
-            //}
-                //return Ok(empleados);
-            
-        //}
 
         [HttpGet("{EmpleadoId}")]
         public async Task<ActionResult> GetEmpleadosById(int EmpleadoId)
         {
             var Empleado = await _context.Empleados
-                .Include(i => i.Area)
+                //.Include(i => i.Area)
                 .Include(i => i.Departamentos)
                 .FirstOrDefaultAsync(f => f.EmpleadoId == EmpleadoId);
             if (Empleado == null)
@@ -100,33 +70,6 @@ namespace AtoGobMx.Controllers
             }
             return Ok(Empleado);
         }
-        //[HttpGet("EmpleadoExpedientes")]
-        //public async Task<ActionResult> GetEmpleadoExpedientes()
-        //{
-        //    var Empleado = await _context.Empleados
-        //        .Include(i => i.Area)
-        //        .Include(i => i.Departamentos)
-        //        .Where(w => w.expedienteDigitalId != null)
-        //        .ToListAsync();
-        //    if (Empleado == null)
-        //    {
-        //        return BadRequest();
-        //    }
-        //    return Ok(Empleado);
-        //}
-        //[HttpGet("EmpleadosSinExpedientes")]
-        //public async Task<ActionResult> GetEmpleadosSinExpediente()
-        //{
-        //    var Empleado = await _context.Empleados
-        //        .Include(i => i.Area)
-        //        .Where(w => w.expedienteDigitalId == null)
-        //        .ToListAsync();
-        //    if (Empleado == null)
-        //    {
-        //        return BadRequest();
-        //    }
-        //    return Ok(Empleado);
-        //}
         [HttpPost]
         public async Task<ActionResult<Empleado>> PostEmpleados(Empleado Empleado)
         {
@@ -151,7 +94,7 @@ namespace AtoGobMx.Controllers
             emp.NombreCompleto = empleado.NombreCompleto;
             emp.FechaAlta = empleado.FechaAlta;
             emp.FechaBaja = empleado.FechaBaja;
-            emp.AreaId = empleado.AreaId;
+            //emp.AreaId = empleado.AreaId;
             emp.DepartamentoId = empleado.DepartamentoId;
             emp.PuestoTrabajoId = empleado.PuestoTrabajoId;
             emp.Archivado = empleado.Archivado;
@@ -180,6 +123,12 @@ namespace AtoGobMx.Controllers
                     .FirstOrDefaultAsync(f => f.EmpleadoId == empleadoId);
 
                 expediente.Archivado = true;
+                var expedienteMedico = await _context.ExpedienteMedico
+                    .FirstOrDefaultAsync(f => f.EmpleadoId == empleadoId);
+
+                expedienteMedico.Archivado = true;
+                _context.ExpedienteMedico.Update(expedienteMedico);
+                _context.ExpedienteDigital.Update(expediente);
                 _context.Empleados.Update(empleado);
                 await _context.SaveChangesAsync();
                 return Ok("Empleado archivado");

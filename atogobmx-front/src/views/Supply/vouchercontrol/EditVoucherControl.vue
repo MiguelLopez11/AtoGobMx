@@ -44,24 +44,6 @@
               <ErrorMessage name="ExpirationDateField"></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!--Agregar area-->
-          <b-col>
-            <b-form-group class="mt-3" label="Area">
-              <Field name="AreaField" :rules="validateArea" as="number">
-                <b-form-select
-                  v-model="voucherControl.areaId"
-                  autofocus
-                  :options="areas"
-                  value-field="areaId"
-                  text-field="nombre"
-                  :state="areaState"
-                >
-                  <!-- @input="getWorkStation(voucherControlFields.areaId)" -->
-                </b-form-select>
-              </Field>
-              <ErrorMessage class="text-danger" name="AreaField"></ErrorMessage>
-            </b-form-group>
-          </b-col>
           <!--Agregar Departamento-->
           <b-col>
             <b-form-group class="mt-3" label="Departamento: ">
@@ -77,7 +59,6 @@
                   value-field="departamentoId"
                   text-field="nombre"
                   :state="departamentState"
-                  @input="getAreas(EmployeesFields.departamentoId)"
                 >
                 </b-form-select>
               </Field>
@@ -198,7 +179,6 @@
 <script>
 import VoucherControlServices from '@/Services/vouchercontrol.Services'
 import EmployeeServices from '@/Services/employee.Services'
-import AreaServices from '@/Services/area.Services'
 import DepartamentServices from '@/Services/departament.Services'
 import ProviderServices from '@/Services/provider.Services'
 import StatusVoucherServices from '@/Services/statusvoucher.Services'
@@ -219,14 +199,12 @@ export default {
     const swal = inject('$swal')
     const { getVoucherControlById, updateVoucherControl } = VoucherControlServices()
     const { getEmployees } = EmployeeServices()
-    const { getAreas } = AreaServices()
     const { getDepartaments } = DepartamentServices()
     const { getProvider } = ProviderServices()
     const { getStatusVoucher } = StatusVoucherServices()
     const { getTypeVoucher } = TypeVoucherServices()
     const voucherControl = ref([])
     const employees = ref([])
-    const areas = ref([])
     const departaments = ref([])
     const provider = ref([])
     const statusVoucher = ref([])
@@ -236,7 +214,6 @@ export default {
     const DateOfIssueState = ref(false)
     const ExpirationDateState = ref(false)
     const departamentState = ref(false)
-    const areaState = ref(false)
     const EmployeeState = ref(false)
     const ProviderState = ref(false)
     const ProductState = ref(false)
@@ -252,17 +229,6 @@ export default {
     getVoucherControlById(router.params.ControlValeId, data => {
       voucherControl.value = data
       validateState()
-    })
-
-    getAreas(data => {
-      areas.value = data
-      if (data.length === 0) {
-        swal.fire({
-          title: 'No se encuentran areas registradas!',
-          text: 'No se encuentran areas registradas en el sistema, registre primero un departamento para continuar.',
-          icon: 'warning'
-        })
-      }
     })
 
     getDepartaments(data => {
@@ -362,15 +328,6 @@ export default {
       return true
     }
 
-    const validateArea = () => {
-      if (!voucherControl.value.areaId) {
-        validateState()
-        return 'Este campo es requerido'
-      }
-      validateState()
-      return true
-    }
-
     const validateEmployee = () => {
       if (!voucherControl.value.empleadoId) {
         validateState()
@@ -415,8 +372,6 @@ export default {
       // eslint-disable-next-line no-unneeded-ternary
       departamentState.value = voucherControl.value.departamentoId !== ''
       // eslint-disable-next-line no-unneeded-ternary
-      areaState.value = voucherControl.value.areaId !== ''
-      // eslint-disable-next-line no-unneeded-ternary
       EmployeeState.value = voucherControl.value.empleadoId !== ''
       // eslint-disable-next-line no-unneeded-ternary
       ProviderState.value = voucherControl.value.proveedorId !== ''
@@ -430,7 +385,6 @@ export default {
       voucherControl,
       breadcrumbItems,
       DateOfIssueState,
-      areas,
       employees,
       departaments,
       provider,
@@ -438,7 +392,6 @@ export default {
       typeVoucher,
       ExpirationDateState,
       departamentState,
-      areaState,
       EmployeeState,
       ProviderState,
       ProductState,
@@ -451,7 +404,6 @@ export default {
       validateDateOfIssue,
       validateExpirationDate,
       validateDepartament,
-      validateArea,
       validateEmployee,
       validateProvider,
       validateStatusVoucher,

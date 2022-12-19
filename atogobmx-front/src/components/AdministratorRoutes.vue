@@ -23,7 +23,7 @@
           <p>Usuarios</p>
         </b-button>
       </b-col>
-      <b-col>
+      <!-- <b-col>
         <b-button
           variant="outline-secondary"
           class="border border-2 border-secundary w-75 mt-3"
@@ -46,7 +46,7 @@
           </svg>
           <p>Roles</p>
         </b-button>
-      </b-col>
+      </b-col> -->
     </b-row>
   </b-card>
 </template>

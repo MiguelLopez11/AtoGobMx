@@ -35,12 +35,9 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult> GetRutaById(int RutaId)
         {
             var rutaaseo = await _context.Ruta
-                //.Include(i => i.TareaTipoAlumbrado)
-                //.Include(i => i.Estatus)
                 .FirstOrDefaultAsync(f => f.RutaId == RutaId);
             if (rutaaseo == null)
             {
-                //Ok($"No se encuentra la falla con el ID: {FallasId}");
                 return NotFound();
             }
             return Ok(rutaaseo);
@@ -49,9 +46,9 @@ namespace AtoGobMx.Controllers
         [HttpPost]
         public async Task<ActionResult<Ruta>> PostRuta(Ruta ruta)
         {
-            object value = _context.Ruta.Add(ruta);
+            _context.Ruta.Add(ruta);
             await _context.SaveChangesAsync();
-            return Ok("Rutas aseo creado correctamente");
+            return CreatedAtAction("GetRutaById", new { RutaId = ruta.RutaId }, ruta);
         }
 
         [HttpPut("{RutaId}")]
@@ -88,7 +85,14 @@ namespace AtoGobMx.Controllers
             {
                 return NotFound();
             }
-
+            var coordenadas = await _context.Coordenadas_Ruta
+                .Where(f => f.RutaId == RutaId)
+                .ToListAsync();
+            foreach(var coord in coordenadas)
+            {
+                coord.Archivado = true;
+                _context.Coordenadas_Ruta.Update(coord);
+            }
             RutaAseo.Archivado = true;
             _context.Ruta.Update(RutaAseo);
             await _context.SaveChangesAsync();

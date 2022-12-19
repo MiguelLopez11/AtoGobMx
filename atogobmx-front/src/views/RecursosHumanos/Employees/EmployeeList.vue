@@ -134,7 +134,7 @@
                   value-field="departamentoId"
                   text-field="nombre"
                   :state="departamentState"
-                  @input="getAreas(EmployeesFields.departamentoId)"
+                  @input="getWorkStation(EmployeesFields.departamentoId)"
                 >
                 </b-form-select>
               </Field>
@@ -144,7 +144,7 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <b-col>
+          <!-- <b-col>
             <b-form-group class="mt-3" label="Area">
               <Field name="AreaField" :rules="validateArea" as="number">
                 <b-form-select
@@ -160,7 +160,7 @@
               </Field>
               <ErrorMessage class="text-danger" name="AreaField"></ErrorMessage>
             </b-form-group>
-          </b-col>
+          </b-col> -->
           <b-col>
             <b-form-group class="mt-3" label="Puesto de trabajo">
               <Field
@@ -222,7 +222,7 @@
 
 <script>
 import EmployeeServices from '@/Services/employee.Services'
-import AreaServices from '@/Services/area.Services'
+// import AreaServices from '@/Services/area.Services'
 import DepartamentServices from '@/Services/departament.Services'
 import workStationServices from '@/Services/workStation.Services'
 import ExpedientdigitalServices from '@/Services/expedientdigital.Services'
@@ -244,9 +244,9 @@ export default {
   setup () {
     const { getEmployees, createEmployee, deleteEmployee } = EmployeeServices()
     const swal = inject('$swal')
-    const { getAreasByDepartament } = AreaServices()
+    // const { getAreasByDepartament } = AreaServices()
     const { getDepartaments } = DepartamentServices()
-    const { getWorkStationByArea } = workStationServices()
+    const { getWorkStationByDepartament } = workStationServices()
     const { createExpedient, getExpedientByEmpleadoId } = ExpedientdigitalServices()
     const { createExpedientMedical, getExpedientMedicalByEmpleadoId } = MunicipalMedicalServices()
     const redirect = useRouter()
@@ -265,7 +265,7 @@ export default {
     const nameState = ref(false)
     const dateState = ref(false)
     const dateWorkState = ref(false)
-    const areaState = ref(false)
+    // const areaState = ref(false)
     const workStationState = ref(false)
     const departamentState = ref(false)
     const expedientFieldBlank = ref({
@@ -283,7 +283,7 @@ export default {
       nombreCompleto: '',
       archivado: false,
       tieneExpediente: true,
-      areaId: null,
+      // areaId: null,
       usuarioId: null,
       departamentoId: null,
       expedienteDigitalId: null,
@@ -292,21 +292,21 @@ export default {
     const EmployeesFieldsBlank = ref(
       JSON.parse(JSON.stringify(EmployeesFields))
     )
-    const getAreas = departamentoId => {
-      getAreasByDepartament(departamentoId, data => {
-        areas.value = data
-        if (data.length === 0) {
-          swal.fire({
-            title: 'No se encuentran areas registradas!',
-            text:
-              'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
-            icon: 'warning'
-          })
-        }
-      })
-    }
+    // const getAreas = departamentoId => {
+    //   getAreasByDepartament(departamentoId, data => {
+    //     areas.value = data
+    //     if (data.length === 0) {
+    //       swal.fire({
+    //         title: 'No se encuentran areas registradas!',
+    //         text:
+    //           'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
+    //         icon: 'warning'
+    //       })
+    //     }
+    //   })
+    // }
     const getWorkStation = departamentoId => {
-      getWorkStationByArea(departamentoId, data => {
+      getWorkStationByDepartament(departamentoId, data => {
         workStations.value = data
         if (data.length === 0) {
           swal.fire({
@@ -387,14 +387,14 @@ export default {
       dateWorkState.value = true
       return true
     }
-    const validateArea = () => {
-      if (!EmployeesFields.value.areaId) {
-        areaState.value = false
-        return 'Este campo es requerido'
-      }
-      areaState.value = true
-      return true
-    }
+    // const validateArea = () => {
+    //   if (!EmployeesFields.value.areaId) {
+    //     areaState.value = false
+    //     return 'Este campo es requerido'
+    //   }
+    //   areaState.value = true
+    //   return true
+    // }
     const validateWorkSation = () => {
       if (!EmployeesFields.value.puestoTrabajoId) {
         workStationState.value = false
@@ -406,7 +406,7 @@ export default {
     const fields = ref([
       { value: 'nombreCompleto', text: 'Nombre' },
       { value: 'departamentos.nombre', text: 'Departamento' },
-      { value: 'area.nombre', text: 'Area de Trabajo' },
+      // { value: 'area.nombre', text: 'Area de Trabajo' },
       { value: 'puestoTrabajo.nombre', text: 'Puesto de Trabajo' },
       { value: 'fechaAlta', text: 'Fecha de contratación' },
       { value: 'status', text: 'Estado' },
@@ -418,7 +418,7 @@ export default {
       nameState.value = false
       dateState.value = false
       dateWorkState.value = false
-      areaState.value = false
+      // areaState.value = false
       departamentState.value = false
       workStationState.value = false
     }
@@ -514,7 +514,7 @@ export default {
       nameState,
       dateState,
       dateWorkState,
-      areaState,
+      // areaState,
       workStationState,
       departamentState,
       showModal,
@@ -525,12 +525,12 @@ export default {
       refreshTable,
       RemoveEmployee,
       validateName,
-      validateArea,
+      // validateArea,
       validateDate,
       validateWorkDate,
       validateDepartament,
       validateWorkSation,
-      getAreas,
+      // getAreas,
       getWorkStation,
       resetEmployeesFields,
       onClickExpedient,

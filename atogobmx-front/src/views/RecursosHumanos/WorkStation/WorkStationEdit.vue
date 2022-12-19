@@ -36,14 +36,14 @@
                   value-field="departamentoId"
                   text-field="nombre"
                   :state="departamentState"
-                  @input="getAreas(workStation.departamentoId)"
                 >
+                  <!-- @input="getAreas(workStation.departamentoId)" -->
                 </b-form-select>
               </Field>
               <ErrorMessage class="text-danger" name="DepartamentField"></ErrorMessage>
             </b-form-group>
           </b-col>
-          <b-col>
+          <!-- <b-col>
             <b-form-group class="mt-3" label="Area">
               <Field
                 name="AreaField"
@@ -62,7 +62,7 @@
               </Field>
               <ErrorMessage class="text-danger" name="AreaField"></ErrorMessage>
             </b-form-group>
-          </b-col>
+          </b-col> -->
         </b-row>
         <b-row align-h="end">
           <b-button
@@ -84,7 +84,7 @@
 
 <script>
 import workStationServices from '@/Services/workStation.Services'
-import AreasServices from '@/Services/area.Services'
+// import AreasServices from '@/Services/area.Services'
 import DepartamentServices from '@/Services/departament.Services'
 import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -100,16 +100,16 @@ export default {
   setup () {
     const swal = inject('$swal')
     const { getWorkStation, updateWorkStation } = workStationServices()
-    const { getAreasByDepartament } = AreasServices()
+    // const { getAreasByDepartament } = AreasServices()
     const { getDepartaments } = DepartamentServices()
     // const $toast = useToast()
     const workStation = ref([])
-    const areas = ref([])
+    // const areas = ref([])
     const departaments = ref([])
     const router = useRoute()
     const redirect = useRouter()
     const nameState = ref(false)
-    const areaState = ref(false)
+    // const areaState = ref(false)
     const departamentState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
@@ -139,35 +139,36 @@ export default {
         })
       }
     })
-    const getAreas = (departamentoId) => {
-      getAreasByDepartament(departamentoId, data => {
-        areas.value = data
-        if (data.length === 0) {
-          swal.fire({
-            title: 'No se encuentran areas registradas!',
-            text: 'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
-            icon: 'error'
-          })
-        }
-      })
-    }
+    // const getAreas = (departamentoId) => {
+    //   getAreasByDepartament(departamentoId, data => {
+    //     areas.value = data
+    //     if (data.length === 0) {
+    //       swal.fire({
+    //         title: 'No se encuentran areas registradas!',
+    //         text: 'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
+    //         icon: 'error'
+    //       })
+    //     }
+    //   })
+    // }
     getWorkStation(router.params.puestoTrabajoId, data => {
       workStation.value = data
-      nameState.value = data.nombre !== null
-      departamentState.value = data.departamentoId !== null
-      areaState.value = data.areaId !== null
-      getAreas(data.departamentoId)
+      validateState()
+      // nameState.value = data.nombre !== null
+      // departamentState.value = data.departamentoId !== null
+      // areaState.value = data.areaId !== null
+      // getAreas(data.departamentoId)
     })
     const validateName = () => {
       if (!workStation.value.nombre) {
-        nameState.value = false
+        validateState()
         return 'Este campo es requerido'
       }
       if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(workStation.value.nombre)) {
-        nameState.value = false
+        validateState()
         return 'El nombre solo puede contener letras'
       }
-      nameState.value = true
+      validateState()
       return true
     }
     const validateDepartament = () => {
@@ -187,18 +188,18 @@ export default {
       return true
     }
     const validateState = () => {
-      departamentState.value = workStation.value.nombre !== null && workStation.value.nombre !== '' && /^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(workStation.value.nombre)
+      nameState.value = workStation.value.nombre !== null && workStation.value.nombre !== '' && /^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(workStation.value.nombre)
       departamentState.value = workStation.value.departamentoId !== null
-      areaState.value = workStation.value.areaId !== null
+      // areaState.value = workStation.value.areaId !== null
       return ''
     }
     return {
       workStation,
       breadcrumbItems,
-      areas,
+      // areas,
       departaments,
       departamentState,
-      areaState,
+      // areaState,
       nameState,
       //   router
 
@@ -206,8 +207,8 @@ export default {
       validateName,
       validateState,
       validateDepartament,
-      validateArea,
-      getAreas
+      validateArea
+      // getAreas
     }
   }
 }

@@ -108,32 +108,12 @@
                       value-field="departamentoId"
                       text-field="nombre"
                       :state="departamentState"
-                      @input="getAreas(computer.departamentoId)"
                     >
                     </b-form-select>
                   </Field>
                   <ErrorMessage
                     class="text-danger"
                     name="DepartamentField"
-                  ></ErrorMessage>
-                </b-form-group>
-              </b-col>
-              <b-col>
-                <b-form-group class="mt-3" label="Area">
-                  <Field name="AreaField" :rules="validateArea" as="number">
-                    <b-form-select
-                      v-model="computer.areaId"
-                      autofocus
-                      :options="areas"
-                      value-field="areaId"
-                      text-field="nombre"
-                      :state="areaState"
-                    >
-                    </b-form-select>
-                  </Field>
-                  <ErrorMessage
-                    class="text-danger"
-                    name="AreaField"
                   ></ErrorMessage>
                 </b-form-group>
               </b-col>
@@ -194,7 +174,6 @@ import DisplayCrud from '@/views/Patrimony/Computers/Display/DisplayCrud.vue'
 import KeyboardCrud from '@/views/Patrimony/Computers/Keyboards/KeyboardCrud.vue'
 import MouseCrud from '@/views/Patrimony/Computers/Mouse/MouseCrud.vue'
 import ComputerServices from '@/Services/computer.Services'
-import AreaServices from '@/Services/area.Services'
 import DepartamentServices from '@/Services/departament.Services'
 import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -212,7 +191,6 @@ export default {
   },
   setup () {
     const { getComputer, updateComputer, getStatus } = ComputerServices()
-    const { getAreasByDepartament } = AreaServices()
     const { getDepartaments } = DepartamentServices()
     const swal = inject('$swal')
     // const $toast = useToast()
@@ -228,7 +206,6 @@ export default {
     const storageState = ref(false)
     const processorState = ref(false)
     const departamentState = ref(false)
-    const areaState = ref(false)
     const stateComputerState = ref(false)
     const computerId = ref(parseInt(router.params.EquipoComputoId))
     const breadcrumbItems = ref([
@@ -253,7 +230,6 @@ export default {
     }
     getComputer(computerId.value, data => {
       computer.value = data
-      getAreas(data.departamentoId)
       validateState()
     })
     getStatus(data => {
@@ -278,19 +254,6 @@ export default {
         })
       }
     })
-    const getAreas = departamentoId => {
-      getAreasByDepartament(departamentoId, data => {
-        areas.value = data
-        if (data.length === 0) {
-          swal.fire({
-            title: 'No se encuentran areas registradas!',
-            text:
-              'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
-            icon: 'warning'
-          })
-        }
-      })
-    }
     // VALIDATIONS
     const validateFolio = () => {
       if (!computer.value.codigoInventario) {
@@ -349,14 +312,6 @@ export default {
       validateState()
       return true
     }
-    const validateArea = () => {
-      if (!computer.value.areaId) {
-        validateState()
-        return 'Este campo es requerido'
-      }
-      validateState()
-      return true
-    }
     const validateStateComputer = () => {
       if (!computer.value.estatusEquipoId) {
         stateComputerState.value = false
@@ -379,8 +334,6 @@ export default {
         computer.value.procesador !== '' && computer.value.procesador !== null
       departamentState.value =
         computer.value.departament !== 0 && computer.value.departament !== null
-      areaState.value =
-        computer.value.areaId !== 0 && computer.value.areaId !== null
       stateComputerState.value =
         computer.value.estatusEquipoId !== 0 &&
         computer.value.estatusEquipoId !== null
@@ -395,7 +348,6 @@ export default {
       storageState,
       processorState,
       departamentState,
-      areaState,
       areas,
       departaments,
       computerId,
@@ -408,10 +360,8 @@ export default {
       validateStorage,
       validateProcessor,
       validateDepartament,
-      validateArea,
       onUpdateComputer,
       validateState,
-      getAreas,
       validateStateComputer,
       validateFolio
     }

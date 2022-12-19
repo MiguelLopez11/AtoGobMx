@@ -65,7 +65,7 @@ namespace AtoGobMx.Controllers
             var expefalla = await _context.ExpedienteAlumbrado
                 .Include(i => i.Alumbrado)
                 .Include(i => i.Departamentos)
-                .Include(i => i.Area)
+                //.Include(i => i.Area)
                 .Where(w => !w.Archivado)
                 .FirstOrDefaultAsync(f => f.ExpedienteAlumbradoId == ExpedienteAlumbradoId);
 
@@ -118,7 +118,7 @@ namespace AtoGobMx.Controllers
             expedientalumbra.LugarPublico = expedienteAlumbrado.LugarPublico;
             expedientalumbra.Localidad = expedienteAlumbrado.Localidad;
             expedientalumbra.DepartamentoId = expedienteAlumbrado.DepartamentoId;
-            expedientalumbra.AreaId = expedienteAlumbrado.AreaId;
+            //expedientalumbra.AreaId = expedienteAlumbrado.AreaId;
 
             _context.ExpedienteAlumbrado.Update(expedientalumbra);
             await _context.SaveChangesAsync();
