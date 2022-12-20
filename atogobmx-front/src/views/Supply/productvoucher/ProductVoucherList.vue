@@ -64,15 +64,15 @@
             variant="outline-danger"
             ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
           >
-          <b-dropdown-item
+          <!-- <b-dropdown-item
             class="m-1"
             variant="outline-warning"
             :to="{
               name: 'DetalleProducto-Edit',
-              params: { ProductoId: items.productoId }
+              params: { DetalleProductoId: items.productoId }
             }"
             ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
-          >
+          > -->
         </b-dropdown>
       </template>
     </EasyDataTable>

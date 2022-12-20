@@ -15,6 +15,12 @@ export default function VoucherControlServices () {
       })
   }
 
+  const getVoucherControls = (DetalleValeId, callback) => {
+    axiosPrivate.get(`/ControlDeVales/${DetalleValeId}`).then((response) => {
+      callback(response.data)
+    })
+  }
+
   const createVoucherControl = (data, callback) => {
     axiosPrivate.post('/ControlDeVales', data).then((response) => {
       callback(response.data)
@@ -36,6 +42,7 @@ export default function VoucherControlServices () {
   return {
     getVoucherControl,
     getVoucherControlById,
+    getVoucherControls,
     createVoucherControl,
     updateVoucherControl,
     deleteVoucherControl

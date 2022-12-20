@@ -14,8 +14,6 @@ namespace AtoGobMx.Models
         public bool Archivado { get; set; }
 
         [JsonIgnore]
-        public virtual IEnumerable<PROV_DetalleProducto>? PROV_DetalleProducto { get; set; }
-        [JsonIgnore]
         public virtual IEnumerable<PROV_DetalleVale>? PROV_DetalleVale { get; set; }
 
     }

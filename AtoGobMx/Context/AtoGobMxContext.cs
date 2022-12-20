@@ -34,7 +34,7 @@ namespace AtoGobMx.Context
         public DbSet<PROV_ControlVales> ControlDeVales { get; set; }
         public DbSet<PROV_EstatusVale> PROV_EstatusVale { get; set; }
         public DbSet<PROV_TipoVales> TipoVales { get; set; }
-        public DbSet<PROV_DetalleProducto> PROV_DetalleProducto { get; set; }
+        //public DbSet<PROV_DetalleProducto> PROV_DetalleProducto { get; set; }
         public DbSet<PROV_DetalleVale> PROV_DetalleVale { get; set; }
         public DbSet<PROV_Producto> PROV_Producto { get; set; }
         public DbSet<PROV_Proveedor> PROV_Proveedor { get; set; }

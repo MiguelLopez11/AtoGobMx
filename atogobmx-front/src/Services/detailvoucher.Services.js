@@ -1,8 +1,8 @@
 import { axiosPrivate } from '@/common/axiosPrivate.js'
 
 export default function DetailVoucherServices () {
-  const getDetailVoucher = (callback) => {
-    axiosPrivate.get('/PROV_DetalleVale').then((response) => {
+  const getDetailVoucher = (ControlValeId, callback) => {
+    axiosPrivate.get(`/PROV_DetalleVale/ControlVale/${ControlValeId}`).then((response) => {
       callback(response.data)
     })
   }

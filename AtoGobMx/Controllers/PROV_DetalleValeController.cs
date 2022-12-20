@@ -22,13 +22,15 @@ namespace AtoGobMx.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<PROV_DetalleVale>> GetDetalleVale()
+        [HttpGet("ControlVale/{ControlValeId}")]
+        public async Task<ActionResult<PROV_DetalleVale>> GetDetalleVale(int ControlValeId)
         {
             var detallevale = await _context.PROV_DetalleVale
+                .Include(i => i.PROV_Producto)
+                .Include(i => i.PROV_ControlVale)
                 .OrderBy(o => o.DetalleValeId)
                 .Where(w => !w.Archivado)
-                .Select(s => _mapper.Map<PROV_DetalleVale>(s))
+                .Where(w => w.ControlValeId == ControlValeId)
                 .ToArrayAsync();
             return Ok(detallevale);
         }
@@ -73,7 +75,7 @@ namespace AtoGobMx.Controllers
             detallevale.Cantidad = detalleVale.Cantidad;
             //detallevale.Precio = detalleVale.Precio;
             detallevale.Total = detalleVale.Total;
-            detallevale.IVA = detalleVale.IVA;
+            detallevale.Importe = detalleVale.Importe;
             //detallevale.ControlValeId = detalleVale.ControlValeId;
             detallevale.Archivado = detalleVale.Archivado;
 
