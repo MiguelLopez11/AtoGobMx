@@ -14,11 +14,17 @@ export default function UsersServices () {
   const createUser = (data, callback) => {
     axiosPrivate.post('/Authenticate/register', data).then((response) => {
       callback(response.data)
+    }).catch(({ response }) => {
+      console.log(response.status)
+      callback(response)
     })
   }
   const createAdminUser = (data, callback) => {
     axiosPrivate.post('/Authenticate/register-admin', data).then((response) => {
+      console.log(response)
       callback(response.data)
+    }).catch(({ response }) => {
+      callback(response)
     })
   }
   // const updateUser = (data, callback) => {

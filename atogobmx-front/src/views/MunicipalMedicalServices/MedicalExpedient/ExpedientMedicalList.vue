@@ -78,7 +78,7 @@
               Editar
             </b-dropdown-item>
           <b-dropdown-item
-            v-if="items.archivado && items.puestoTrabajo.nombre === 'Administrador' || items.puestoTrabajo.nombre === 'Director'"
+            v-if="items.archivado && items.empleados.puestoTrabajo.nombre === 'Administrador' || items.empleados.puestoTrabajo.nombre === 'Director'"
             class="m-1"
             variant="outline-warning"
           >

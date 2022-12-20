@@ -3,7 +3,7 @@
     <abbr title="Cambiar Foto de perfil">
       <b-avatar
         :src="
-          `https://localhost:5000/api/Archivos/FotoPerfil/${expedienteDigitalId}`
+          `http://localhost:5000/api/Archivos/FotoPerfil/${expedienteDigitalId}`
         "
         size="170px"
         style="cursor: pointer; margin-bottom: 30px"

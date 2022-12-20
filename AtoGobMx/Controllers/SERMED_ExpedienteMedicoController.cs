@@ -22,7 +22,8 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<IEnumerable<SERMED_ExpedienteMedico>>> GetExpedientesMedicos()
         {
             var expedientesMedicos = await _context.ExpedienteMedico
-                .Include(i => i.Empleados)
+                .Include(i => i.Empleados.Departamentos)
+                .Include(i => i.Empleados.PuestoTrabajo)
                 .ToListAsync();
             if (expedientesMedicos == null)
             {
