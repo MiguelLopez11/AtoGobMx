@@ -69,6 +69,9 @@ csharp_style_allow_blank_line_after_colon_in_constructor_initializer_experimenta
 csharp_prefer_simple_using_statement = true:suggestion
 csharp_prefer_braces = true:silent
 
+# SYSLIB0014: El tipo o el miembro están obsoletos
+dotnet_diagnostic.SYSLIB0014.severity = none
+
 [*.vb]
 #### Estilos de nomenclatura ####
 

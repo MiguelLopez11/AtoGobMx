@@ -7,10 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using System.IO.Compression;
+using System.Net;
 
 namespace AtoGobMx.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ArchivosController : ControllerBase
@@ -22,6 +22,7 @@ namespace AtoGobMx.Controllers
             _context = Context;
             _mapper = mapper;
         }
+        //Traer imagen de empleado 
         [HttpGet("FotoPerfil/{expedienteDigitalId}")]
         public async Task<IActionResult> GetImagenPerfil(int expedienteDigitalId)
         {
@@ -143,6 +144,39 @@ namespace AtoGobMx.Controllers
             return File(zipFileMemoryStream, "application/octet-stream", $"Documentos_{DateOnly.FromDateTime(DateTime.Now)}_{expediente.Empleados.NombreCompleto}.zip");
 
         }
+        [HttpPost("PruebaFTP")]
+        public async Task<IActionResult> UploadPhotoFTP(IFormFile file)
+        {
+            try
+            {
+                string uploadUrl = String.Format("ftp://{0}/{1}/{2}", "digital.atogobmx.com", "Files", "RecursosHumanos", "Empleado", file.FileName);
+                var request = (FtpWebRequest)WebRequest.Create(uploadUrl);
+                request.Method = WebRequestMethods.Ftp.UploadFile;
+                request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+                byte[] buffer = new byte[1024];
+                var stream = file.OpenReadStream();
+                byte[] fileContents;
+                using (var ms = new MemoryStream())
+                {
+                    int read;
+                    while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+                    {
+                        ms.Write(buffer, 0, read);
+                    }
+                    fileContents = ms.ToArray();
+                }
+                using (Stream requestStream = await request.GetRequestStreamAsync())
+                {
+                    requestStream.Write(fileContents, 0, fileContents.Length);
+                }
+                FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+                return Ok("Upload Successfuly.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Upload Failed: " + ex.Message);
+            }
+        }
         [HttpPost("Imagen/{expedienteDigitalId}/")]
         public async Task<IActionResult> UploadPhotoProfile(IFormFile file, int expedienteDigitalId)
         {
@@ -173,15 +207,37 @@ namespace AtoGobMx.Controllers
                     .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expedienteDigitalId);
                 if (archivoExpediente == null)
                 {
-                    var pathFolder = $@"Files/images/{expediente.Empleados.NombreCompleto}";
-                    if (!Directory.Exists(pathFolder))
+                    string uploadUrl = String.Format("ftp://{0}/{1}/{2}/{3}", "digital.atogobmx.com", "Files", "RecursosHumanos", file.FileName);
+                    var request = (FtpWebRequest)WebRequest.Create(uploadUrl);
+                    request.Method = WebRequestMethods.Ftp.MakeDirectory;
+                    request.Method = WebRequestMethods.Ftp.UploadFile;
+                    request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+                    byte[] buffer = new byte[1024];
+                    var stream = file.OpenReadStream();
+                    byte[] fileContents;
+                    using (var ms = new MemoryStream())
                     {
-                        Directory.CreateDirectory(pathFolder);
+                        int read;
+                        while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+                        {
+                            ms.Write(buffer, 0, read);
+                        }
+                        fileContents = ms.ToArray();
                     }
-                    var path = Path.Combine(Directory.GetCurrentDirectory(), pathFolder, file.FileName);
-                    var stream = new FileStream(path, FileMode.Create);
-                    await file.CopyToAsync(stream);
-                    stream.Close();
+                    using (Stream requestStream = await request.GetRequestStreamAsync())
+                    {
+                        requestStream.Write(fileContents, 0, fileContents.Length);
+                    }
+                    FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+                    //var pathFolder = $@"Files/images/{expediente.Empleados.NombreCompleto}";
+                    //if (!Directory.Exists(pathFolder))
+                    //{
+                    //    Directory.CreateDirectory(pathFolder);
+                    //}
+                    //var path = Path.Combine(Directory.GetCurrentDirectory(), pathFolder, file.FileName);
+                    //var stream = new FileStream(path, FileMode.Create);
+                    //await file.CopyToAsync(stream);
+                    //stream.Close();
                     var archivo = new Archivos()
                     {
                         ArchivoId = 0,

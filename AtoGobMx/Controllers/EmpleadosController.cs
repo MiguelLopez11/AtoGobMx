@@ -4,6 +4,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace AtoGobMx.Controllers
 {
@@ -73,10 +74,24 @@ namespace AtoGobMx.Controllers
         [HttpPost]
         public async Task<ActionResult<Empleado>> PostEmpleados(Empleado Empleado)
         {
+            #region
+            string uploadUrl = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/{5}", "digital.atogobmx.com", "Files", "RecursosHumanos","Empleado", Empleado.NombreCompleto, "Documentos");
+            var request = (FtpWebRequest)WebRequest.Create(uploadUrl);
+
+            request.Method = WebRequestMethods.Ftp.MakeDirectory;
+            request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+            FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+
+            //using (var resp = (FtpWebResponse)request.GetResponse()) // Exception occurs here
+            //{
+            //    return Ok(resp.StatusCode.ToString());
+            //}
+            #endregion
             Empleado.FechaAlta = DateTime.Today;
             _context.Empleados.Add(Empleado);
             await _context.SaveChangesAsync();
             return CreatedAtAction("GetEmpleadosById", new { EmpleadoId = Empleado.EmpleadoId }, Empleado);
+     
         }
         [HttpPut("{EmpleadoId}")]
         public async Task<ActionResult> PutEmpleado(int EmpleadoId, Empleado empleado)
