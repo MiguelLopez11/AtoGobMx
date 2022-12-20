@@ -25,7 +25,7 @@
         type="submit"
       >
         <i class="bi bi-person-plus-fill"></i>
-        Consulta de vales
+        Crear nuevo vale
       </b-button>
     </b-row>
     <EasyDataTable
@@ -419,7 +419,6 @@ export default {
       { value: 'fechaEmicion', text: 'Fecha emicion' },
       { value: 'fechaVigencia', text: 'Fecha vigencia' },
       { value: 'departamentos.nombre', text: 'Departamento' },
-      { value: 'area.nombre', text: 'Area' },
       { value: 'empleados.nombreCompleto', text: 'empleado' },
       { value: 'proV_Proveedor.nombre', text: 'Proveedor' },
       { value: 'proV_EstatusVale.nombre', text: 'Proveedor' },

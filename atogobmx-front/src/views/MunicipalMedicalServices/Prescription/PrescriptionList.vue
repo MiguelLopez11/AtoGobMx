@@ -105,7 +105,7 @@
                   :key="option.ID"
                   :value="option.empleadoId"
                 >
-                  {{ option.nombreCompleto }}, {{ option.departamentos.nombre }}, {{option.area.nombre}}
+                  {{ option.nombreCompleto }}, {{ option.departamentos.nombre }}
                 </option>
               </b-form-select>
             </b-form-group>

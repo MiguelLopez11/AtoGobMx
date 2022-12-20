@@ -1,16 +1,5 @@
 <template>
-  <b-card class="m-2">
-    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
-  </b-card>
-  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
-      <b-form-input
-        size="lg"
-        style="width: 350px"
-        v-model="searchValue"
-        type="search"
-        placeholder="Buscar detalle vale..."
-      ></b-form-input>
       <b-button
         variant="primary"
         style="
@@ -25,7 +14,7 @@
         type="submit"
       >
         <i class="bi bi-person-plus-fill"></i>
-        Detalle vale
+        Agregar Producto
       </b-button>
     </b-row>
     <EasyDataTable
@@ -64,7 +53,7 @@
             variant="outline-danger"
             ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
           >
-          <b-dropdown-item
+          <!-- <b-dropdown-item
             class="m-1"
             variant="outline-warning"
             :to="{
@@ -72,13 +61,13 @@
               params: { DetalleValeId: items.detalleValeId }
             }"
             ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
-          >
+          > -->
         </b-dropdown>
       </template>
     </EasyDataTable>
     <b-modal
       id="modal-detailVoucher"
-      title="Agregar detalle vale"
+      title="Agregar Producto"
       v-model="showModal"
       size="xl"
       hide-footer
@@ -87,6 +76,20 @@
     >
       <Form @submit="addDetailVoucher">
         <b-row cols="2">
+          <!--Agregar Producto-->
+          <b-col>
+            <b-form-group class="mt-3" label="Producto: ">
+                <b-form-select
+                  v-model="detailVoucherFields.productoId"
+                  autofocus
+                  :options="productVoucher"
+                  value-field="productoId"
+                  text-field="nombre"
+                  :state="ProductState"
+                >
+                </b-form-select>
+            </b-form-group>
+          </b-col>
           <!--Agregar cantidad -->
           <b-col>
             <b-form-group class="mt-3" label="Cantidad">
@@ -94,6 +97,7 @@
                 <b-form-input
                   v-model="detailVoucherFields.cantidad"
                   :state="QuantityState"
+                  min="1"
                   type="number"
                 >
                 </b-form-input>
@@ -106,70 +110,22 @@
           </b-col>
           <!--Agregar Precio -->
           <b-col>
-            <b-form-group class="mt-3" label="Precio">
-              <Field name="PriceField" :rules="validatePrice" as="number">
+            <b-form-group class="mt-3" label="Importe">
                 <b-form-input
-                  v-model="detailVoucherFields.precio"
-                  :state="PriceState"
+                  v-model="detailVoucherFields.importe"
                   type="number"
                 >
                 </b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="PriceField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!--Agregar IVA-->
-          <b-col>
-            <b-form-group class="mt-3" label="IVA">
-              <Field name="IVAField" :rules="validateIVA" as="number">
-                <b-form-input
-                  v-model="detailVoucherFields.iva"
-                  :state="IVAState"
-                  type="number"
-                >
-                </b-form-input>
-              </Field>
-              <ErrorMessage class="text-danger" name="IVAField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <!--Agregar subtotal -->
           <b-col>
             <b-form-group class="mt-3" label="Total">
-              <Field name="TotalField" :rules="validateTotal" as="number">
                 <b-form-input
                   v-model="detailVoucherFields.subtotal"
-                  :state="TotalState"
                   type="number"
                 >
                 </b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="TotalField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!--Agregar Producto-->
-          <b-col>
-            <b-form-group class="mt-3" label="Producto: ">
-              <Field name="ProductField" :rules="validateProduct" as="text">
-                <b-form-select
-                  v-model="detailVoucherFields.productoId"
-                  autofocus
-                  :options="productVoucher"
-                  value-field="productoId"
-                  text-field="nombre"
-                  :state="ProductState"
-                >
-                </b-form-select>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="ProductField"
-              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <!--termino de cada campo a registrar-->
@@ -188,7 +144,6 @@
         </b-row>
       </Form>
     </b-modal>
-  </b-card>
 </template>
 
 <script>
@@ -198,13 +153,19 @@ import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
+  props: {
+    ControlValeId: {
+      type: Number,
+      required: true
+    }
+  },
   components: {
     EasyDataTable: window['vue3-easy-data-table'],
     Form,
     Field,
     ErrorMessage
   },
-  setup () {
+  setup (props) {
     const swal = inject('$swal')
     const showModal = ref(false)
     const { getDetailVoucher, createDetailVoucher, deleteDetailVoucher } =
@@ -218,11 +179,8 @@ export default {
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('agregardato para busqueda')
+    const searchField = ref('agregar dato para busqueda')
     const QuantityState = ref(false)
-    const PriceState = ref(false)
-    const IVAState = ref(false)
-    const TotalState = ref(false)
     const ProductState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
@@ -232,11 +190,11 @@ export default {
 
     const detailVoucherFields = ref({
       detalleValeId: 0,
-      cantidad: null,
-      iva: null,
-      precio: null,
-      subtotal: null,
       productoId: null,
+      importe: null,
+      cantidad: null,
+      total: null,
+      controlValeId: props.ControlValeId,
       archivado: false
     })
 
@@ -244,8 +202,8 @@ export default {
       productVoucher.value = data
       if (data.length === 0) {
         swal.fire({
-          title: 'No se encuentra un tipo de producto registrado!',
-          text: 'No se encuentra tipo de producto registrado en el departamento seleccionado, registre primero un tipo de producto vale para continuar',
+          title: 'No se encuentran productos registrados!',
+          text: 'No se encuentran productos registrados en el sistema, registre primero un producto para continuar.',
           icon: 'warning'
         })
       }
@@ -270,13 +228,10 @@ export default {
         JSON.stringify(detailVoucherFieldsBlank)
       )
       QuantityState.value = false
-      PriceState.value = false
-      IVAState.value = false
-      TotalState.value = false
       ProductState.value = false
     }
 
-    getDetailVoucher(data => {
+    getDetailVoucher(props.ControlValeId, data => {
       detailVoucher.value = data
       if (detailVoucher.value.length > 0) {
         isloading.value = false
@@ -296,54 +251,7 @@ export default {
         QuantityState.value = false
         return 'Este campo es requerido'
       }
-
-      if (!/^[0-9]+$/i.test(detailVoucherFields.value.cantidad)) {
-        QuantityState.value = false
-        return 'Este campo solo puede contener numeros'
-      }
       QuantityState.value = false
-      return true
-    }
-
-    const validatePrice = () => {
-      if (!detailVoucherFields.value.precio) {
-        PriceState.value = false
-        return 'Este campo es requerido'
-      }
-
-      if (!/^[0-9]+$/i.test(detailVoucherFields.value.precio)) {
-        PriceState.value = false
-        return 'Este campo solo puede contener numeros'
-      }
-      PriceState.value = false
-      return true
-    }
-
-    const validateIVA = () => {
-      if (!detailVoucherFields.value.iva) {
-        IVAState.value = false
-        return 'Este campo es requerido'
-      }
-
-      if (!/^[0-9]+$/i.test(detailVoucherFields.value.iva)) {
-        IVAState.value = false
-        return 'Este campo solo puede contener numeros'
-      }
-      IVAState.value = false
-      return true
-    }
-
-    const validateTotal = () => {
-      if (!detailVoucherFields.value.subtotal) {
-        TotalState.value = false
-        return 'Este campo es requerido'
-      }
-
-      if (!/^[0-9]+$/i.test(detailVoucherFields.value.subtotal)) {
-        TotalState.value = false
-        return 'Este campo solo puede contener numeros'
-      }
-      TotalState.value = false
       return true
     }
 
@@ -427,9 +335,6 @@ export default {
       detailVoucherFieldsBlank,
       fields,
       QuantityState,
-      PriceState,
-      IVAState,
-      TotalState,
       ProductState,
 
       onFiltered,
@@ -437,9 +342,6 @@ export default {
       refreshTable,
       RemoveDetailVoucher,
       validateQuantity,
-      validatePrice,
-      validateIVA,
-      validateTotal,
       validateProduct,
       resetDetailVoucherFields
     }

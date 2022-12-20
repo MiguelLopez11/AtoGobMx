@@ -8,7 +8,7 @@
         <h3>Editar control de vale</h3>
       </div>
       <Form @submit="onUpdateAddVoucherControl">
-        <b-row cols="3">
+        <b-row cols="4">
           <!--Agregar Fecha emicion-->
           <b-col>
             <b-form-group class="mt-3" label="Fecha emicion">
@@ -157,21 +157,22 @@
             </b-form-group>
           </b-col>
         </b-row>
-        <!-- <ProductPrescription  /> -->
-
-        <b-row align-h="end">
-          <b-button
-            class="w-auto m-2 text-white"
-            variant="primary"
-            to="/ServiciosPublicos/ControlVale/list"
-          >
-            Cancelar
-          </b-button>
-          <b-button class="w-auto m-2" variant="success" type="submit"
-            >Guardar</b-button
-          >
-        </b-row>
       </Form>
+      <b-card class="mb-4">
+        <product-voucher-service :ControlValeId="controlValeId"/>
+      </b-card>
+      <b-row align-h="end">
+        <b-button
+          class="w-auto m-2 text-white"
+          variant="primary"
+          to="/ServiciosPublicos/ControlVale/list"
+        >
+          Cancelar
+        </b-button>
+        <b-button class="w-auto m-2" variant="success" type="submit"
+          >Guardar</b-button
+        >
+      </b-row>
     </b-card>
   </b-card>
 </template>
@@ -183,6 +184,7 @@ import DepartamentServices from '@/Services/departament.Services'
 import ProviderServices from '@/Services/provider.Services'
 import StatusVoucherServices from '@/Services/statusvoucher.Services'
 import TypeVoucherServices from '@/Services/typevoucher.Services'
+import ProductVoucherService from '@/views/Supply/detailvoucher/DetailVoucherList.vue'
 import { Field, Form, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -193,11 +195,13 @@ export default {
     Datepicker,
     Field,
     Form,
-    ErrorMessage
+    ErrorMessage,
+    ProductVoucherService
   },
   setup () {
     const swal = inject('$swal')
-    const { getVoucherControlById, updateVoucherControl } = VoucherControlServices()
+    const { getVoucherControlById, updateVoucherControl } =
+      VoucherControlServices()
     const { getEmployees } = EmployeeServices()
     const { getDepartaments } = DepartamentServices()
     const { getProvider } = ProviderServices()
@@ -211,6 +215,7 @@ export default {
     const typeVoucher = ref([])
     const router = useRoute()
     const redirect = useRouter()
+    // const controlValeId = ref(parseInt(router.params.DetalleValeId))
     const DateOfIssueState = ref(false)
     const ExpirationDateState = ref(false)
     const departamentState = ref(false)
@@ -220,6 +225,7 @@ export default {
     const DetailVoucherState = ref(false)
     const StatusVoucherState = ref(false)
     const TypeVoucherState = ref(false)
+    const controlValeId = ref(parseInt(router.params.ControlValeId))
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
       { text: 'Control de vale', to: '/ServiciosPublicos/ControlVale/list' },
@@ -386,6 +392,7 @@ export default {
       breadcrumbItems,
       DateOfIssueState,
       employees,
+      controlValeId,
       departaments,
       provider,
       statusVoucher,

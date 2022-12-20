@@ -1,11 +1,8 @@
 <template>
   <b-card class="m-2">
-    <b-card class="mb-4">
-      <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
-    </b-card>
     <b-card>
       <div>
-        <h3>Editar detalle vale</h3>
+        <h3>Editar vale</h3>
       </div>
       <Form @submit="onUpdateDetailVoucher">
         <b-row cols="2">
@@ -171,13 +168,13 @@ export default {
 
     getProductVoucher(data => {
       productVoucher.value = data
-      if (data.length === 0) {
-        swal.fire({
-          title: 'No se encuentra un tipo de producto registrado!',
-          text: 'No se encuentra tipo de producto registrado en el departamento seleccionado, registre primero un tipo de producto vale para continuar',
-          icon: 'warning'
-        })
-      }
+      // if (data.length === 0) {
+      //   swal.fire({
+      //     title: 'No se encuentra un tipo de producto registrado!',
+      //     text: 'No se encuentra tipo de producto registrado en el departamento seleccionado, registre primero un tipo de producto vale para continuar',
+      //     icon: 'warning'
+      //   })
+      // }
     })
 
     const validateQuantity = () => {

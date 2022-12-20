@@ -400,26 +400,26 @@ const routes = [
       // departamento: 'Obras Publicas'
     }
   },
-  {
-    path: '/ServiciosPublicos/DetalleProducto/list',
-    name: 'DetalleProducto',
-    component: () => import('@/views/Supply/detailproduct/DetailProductList.vue'),
-    meta: {
-      requiresAuth: true
-      // rol: 'Empleado',
-      // departamento: 'Control de vales'
-    }
-  },
-  {
-    path: '/ServiciosPublicos/DetalleProducto/:DetalleProductoId',
-    name: 'DetalleProducto-Edit',
-    component: () => import('@/views/Supply/detailproduct/EditDetailProduct.vue'),
-    meta: {
-      requiresAuth: true
-      // rol: 'Empleado',
-      // departamento: 'Control de vales'
-    }
-  },
+  // {
+  //   path: '/ServiciosPublicos/DetalleProducto/list',
+  //   name: 'DetalleProducto',
+  //   component: () => import('@/views/Supply/detailproduct/DetailProductList.vue'),
+  //   meta: {
+  //     requiresAuth: true
+  //     // rol: 'Empleado',
+  //     // departamento: 'Control de vales'
+  //   }
+  // },
+  // {
+  //   path: '/ServiciosPublicos/DetalleProducto/:DetalleProductoId',
+  //   name: 'DetalleProducto-Edit',
+  //   component: () => import('@/views/Supply/detailproduct/EditDetailProduct.vue'),
+  //   meta: {
+  //     requiresAuth: true
+  //     // rol: 'Empleado',
+  //     // departamento: 'Control de vales'
+  //   }
+  // },
   {
     path: '/ServiciosPublicos/DetalleVale/list',
     name: 'DetalleVale',
