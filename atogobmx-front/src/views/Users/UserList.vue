@@ -228,23 +228,43 @@ export default {
     const addUser = () => {
       if (isAdmin.value) {
         createAdminUser(userFields.value, data => {
-          refreshTable()
-          resetRoleFields()
-          swal.fire({
-            title: 'Usuario registrado correctamente!',
-            text: 'El Usuario se ha registrado al sistema satisfactoriamente.',
-            icon: 'success'
-          })
+          if (data.status) {
+            refreshTable()
+            resetRoleFields()
+            swal.fire({
+              title: 'Usuario Sin permiso!',
+              text: 'No tiene permiso para realizar esta acción.',
+              icon: 'error'
+            })
+          } else {
+            refreshTable()
+            resetRoleFields()
+            swal.fire({
+              title: 'Usuario registrado correctamente!',
+              text: 'El Usuario se ha registrado al sistema satisfactoriamente.',
+              icon: 'success'
+            })
+          }
         })
       } else {
         createUser(userFields.value, data => {
-          refreshTable()
-          resetRoleFields()
-          swal.fire({
-            title: 'Usuario registrado correctamente!',
-            text: 'El Usuario se ha registrado al sistema satisfactoriamente.',
-            icon: 'success'
-          })
+          if (data.status) {
+            refreshTable()
+            resetRoleFields()
+            swal.fire({
+              title: 'Usuario Sin permiso!',
+              text: 'No tiene permiso para realizar esta acción.',
+              icon: 'error'
+            })
+          } else {
+            refreshTable()
+            resetRoleFields()
+            swal.fire({
+              title: 'Usuario registrado correctamente!',
+              text: 'El Usuario se ha registrado al sistema satisfactoriamente.',
+              icon: 'success'
+            })
+          }
         })
       }
     }

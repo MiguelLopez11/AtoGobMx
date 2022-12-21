@@ -4,10 +4,10 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace AtoGobMx.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class EmpleadosController : ControllerBase
@@ -73,10 +73,24 @@ namespace AtoGobMx.Controllers
         [HttpPost]
         public async Task<ActionResult<Empleado>> PostEmpleados(Empleado Empleado)
         {
+            var employeeName = Empleado.NombreCompleto.ToString();
+            var host = "ftp://digital.atogobmx.com/Files/RecursosHumanos/Empleados/";
+            #region Create directory employee
+            WebRequest request = WebRequest.Create(host + employeeName);
+            request.Method = WebRequestMethods.Ftp.MakeDirectory;
+            request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+            using (var resp = (FtpWebResponse)request.GetResponse())
+            {
+                request.Abort();
+                resp.Close();
+            }
+            #endregion
+            var documentPath = CreateDocument(host + employeeName);
             Empleado.FechaAlta = DateTime.Today;
             _context.Empleados.Add(Empleado);
             await _context.SaveChangesAsync();
             return CreatedAtAction("GetEmpleadosById", new { EmpleadoId = Empleado.EmpleadoId }, Empleado);
+     
         }
         [HttpPut("{EmpleadoId}")]
         public async Task<ActionResult> PutEmpleado(int EmpleadoId, Empleado empleado)
@@ -136,6 +150,28 @@ namespace AtoGobMx.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
+            }
+
+        }
+        private static bool CreateDocument(string url)
+        {
+            try
+            {
+                var pathDocument = "/Documentos";
+                WebRequest request = WebRequest.Create(url + pathDocument);
+                request.Method = WebRequestMethods.Ftp.MakeDirectory;
+                request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+                using (var resp = (FtpWebResponse)request.GetResponse())
+                {
+                    request.Abort();
+                    resp.Close();
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
             }
         }
     }

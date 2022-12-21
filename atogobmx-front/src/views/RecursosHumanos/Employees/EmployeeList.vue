@@ -346,17 +346,19 @@ export default {
     })
     const onClickExpedient = empleadoId => {
       getExpedientByEmpleadoId(empleadoId, data => {
+        console.log(data)
         redirect.push({
           name: 'ExpedienteDigital-edit',
-          params: { ExpedienteDigitalId: empleadoId }
+          params: { ExpedienteDigitalId: data.expedienteDigitalId }
         })
       })
     }
     const onClickMedicalExpedient = empleadoId => {
       getExpedientMedicalByEmpleadoId(empleadoId, data => {
+        console.log(data)
         redirect.push({
           name: 'ServiciosMedicos-ExpedienteMedico-Edit',
-          params: { ExpedienteMedicoId: empleadoId }
+          params: { ExpedienteMedicoId: data[0].expedienteMedicoId, EmpleadoId: empleadoId }
         })
       })
     }
