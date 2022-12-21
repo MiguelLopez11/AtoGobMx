@@ -1,5 +1,8 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
@@ -11,7 +14,7 @@
       </b-form-input>
       <b-button
         style="
-          background-color: rgb(94,80,238);
+          background-color: rgb(94, 80, 238);
           height: 50px;
           width: auto;
           font-size: 18px;
@@ -60,9 +63,7 @@
             class="m-1"
             variant="outline-danger"
           >
-            <i class="bi bi-trash3">
-                Archivar
-            </i>
+            <i class="bi bi-trash3"> Archivar </i>
           </b-dropdown-item>
           <b-dropdown-item
             class="m-1"
@@ -70,10 +71,10 @@
             :to="{
               name: 'Armeria-Edit',
               params: { ArmaId: items.armaId }
-              }"
-            >
-            <i class="bi bi-pencil-square"/>
-              Editar
+            }"
+          >
+            <i class="bi bi-pencil-square" />
+            Editar
           </b-dropdown-item>
         </b-dropdown>
       </template>
@@ -90,7 +91,11 @@
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nomenclatura">
-              <Field name="NomenclatureField" :rules="validateNomeclature" as="text">
+              <Field
+                name="NomenclatureField"
+                :rules="validateNomeclature"
+                as="text"
+              >
                 <b-form-input
                   placeholder="Ingresa una nomenclatura"
                   v-model="weaponsFields.nomenclatura"
@@ -223,6 +228,14 @@ export default {
     const gaugeState = ref(false)
     const employeeState = ref(false)
     const showModal = ref(false)
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      {
+        text: 'Patrimonio publico',
+        to: '/PatrimonioMunicipal'
+      },
+      { text: 'Armeria' }
+    ])
     const weaponsFields = ref({
       armaId: 0,
       nomenclatura: null,
@@ -256,8 +269,7 @@ export default {
       if (data.length === 0) {
         swal.fire({
           title: '¡No se encuentran empleados!',
-          text:
-            'Registre un empleado al que se pueda asignar un arma',
+          text: 'Registre un empleado al que se pueda asignar un arma',
           icon: 'warning'
         })
       }
@@ -281,8 +293,7 @@ export default {
         refreshTable()
         swal.fire({
           title: 'Arma registrada correctamente!',
-          text:
-            'El arma se ha registrado al sistema satisfactoriamente.',
+          text: 'El arma se ha registrado al sistema satisfactoriamente.',
           icon: 'success'
         })
       })
@@ -306,8 +317,7 @@ export default {
             swal
               .fire({
                 title: 'Arma archivada!',
-                text:
-                  'El arma ha sido archivado satisfactoriamente .',
+                text: 'El arma ha sido archivado satisfactoriamente .',
                 icon: 'success'
               })
               .then(result => {
@@ -378,6 +388,7 @@ export default {
     return {
       weapons,
       employeesArmory,
+      breadcrumbItems,
       fields,
       perPage,
       currentPage,

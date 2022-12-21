@@ -1,5 +1,8 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
@@ -170,6 +173,15 @@ export default {
     const searchField = ref('marca')
     const showModal = ref(false)
     const recetaId = ref()
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      {
+        text: 'Servicios medicos',
+        to: '/ServiciosMedicosMunicipales'
+      },
+      { text: 'Farmacia' }
+    ])
+
     const prescriptionFields = ref({
       recetaId: 0,
       empleadoId: null,
@@ -283,6 +295,7 @@ export default {
       prescriptions,
       employees,
       recetaId,
+      breadcrumbItems,
       fields,
       perPage,
       currentPage,

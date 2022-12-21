@@ -1,5 +1,8 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
@@ -43,8 +46,8 @@
         {{ header.text }}
       </template>
       <template #item-status="items">
-        <b-badge :variant="items.archivado === false ? 'success': 'danger'">
-        {{items.archivado === false ? 'Activo' : 'Archivado'}}
+        <b-badge :variant="items.archivado === false ? 'success' : 'danger'">
+          {{ items.archivado === false ? 'Activo' : 'Archivado' }}
         </b-badge>
       </template>
       <template #item-actions="items">
@@ -71,20 +74,27 @@
             variant="outline-warning"
             :to="{
               name: 'ServiciosMedicos-ExpedienteMedico-Edit',
-              params: { ExpedienteMedicoId: items.expedienteMedicoId, EmpleadoId: items.empleados.empleadoId }
+              params: {
+                ExpedienteMedicoId: items.expedienteMedicoId,
+                EmpleadoId: items.empleados.empleadoId
+              }
             }"
           >
             <i class="bi bi-pencil-square" />
-              Editar
-            </b-dropdown-item>
+            Editar
+          </b-dropdown-item>
           <b-dropdown-item
-            v-if="items.archivado && items.puestoTrabajo.nombre === 'Administrador' || items.puestoTrabajo.nombre === 'Director'"
+            v-if="
+              (items.archivado &&
+                items.puestoTrabajo.nombre === 'Administrador') ||
+              items.puestoTrabajo.nombre === 'Director'
+            "
             class="m-1"
             variant="outline-warning"
           >
             <i class="bi bi-back" />
-              Desarchivar
-            </b-dropdown-item>
+            Desarchivar
+          </b-dropdown-item>
         </b-dropdown>
       </template>
     </EasyDataTable>
@@ -133,8 +143,11 @@ export default {
   setup () {
     const showModal = ref(false)
     const swal = inject('$swal')
-    const { getExpedientsMedical, deleteExpedientMedical, createExpedientMedical } =
-      MunicipalMedicalServices()
+    const {
+      getExpedientsMedical,
+      deleteExpedientMedical,
+      createExpedientMedical
+    } = MunicipalMedicalServices()
     const { getEmployeesWithoutExpedient } = EmployeeServices()
     const expedients = ref([])
     const employees = ref([])
@@ -145,6 +158,14 @@ export default {
     const isloading = ref(true)
     const searchValue = ref('')
     const searchField = ref('empleados.nombreCompleto')
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      {
+        text: 'Servicios medicos',
+        to: '/ServiciosMedicosMunicipales'
+      },
+      { text: 'Expediente medico' }
+    ])
     const expedientFields = ref({
       expedienteDigitalId: 0,
       empleadoId: null,
@@ -236,6 +257,7 @@ export default {
     return {
       fields,
       perPage,
+      breadcrumbItems,
       currentPage,
       filter,
       perPageSelect,

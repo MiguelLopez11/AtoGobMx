@@ -1,5 +1,8 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
@@ -11,7 +14,7 @@
       </b-form-input>
       <b-button
         style="
-          background-color: rgb(94,80,238);
+          background-color: rgb(94, 80, 238);
           height: 50px;
           width: auto;
           font-size: 18px;
@@ -97,30 +100,22 @@
                   :state="passwordState"
                 />
               </Field>
-             <ErrorMessage name="passwordField" />
+              <ErrorMessage name="passwordField" />
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="CorreoElectronico">
-              <b-form-input
-                  type="email"
-                  v-model="userFields.email"
-                />
+              <b-form-input type="email" v-model="userFields.email" />
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Numero de telefono">
-                 <b-form-input
-                  v-model="userFields.phoneNumber"
-                />
+              <b-form-input v-model="userFields.phoneNumber" />
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Administrador">
-                 <b-form-checkbox
-                  size="lg"
-                  v-model="isAdmin"
-                />
+              <b-form-checkbox size="lg" v-model="isAdmin" />
             </b-form-group>
           </b-col>
         </b-row>
@@ -156,7 +151,8 @@ export default {
   setup () {
     const swal = inject('$swal')
     // Services
-    const { getUsers, deleteUser, createUser, createAdminUser } = UsersServices()
+    const { getUsers, deleteUser, createUser, createAdminUser } =
+      UsersServices()
     // Data
     const showModal = ref(false)
     const users = ref([])
@@ -173,6 +169,14 @@ export default {
     const errorMessage = ref('')
     const confirmErrorMessage = ref('')
     // Fields
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      {
+        text: 'Administrador',
+        to: '/Administrador'
+      },
+      { text: 'Usuarios' }
+    ])
     const userFields = ref({
       username: null,
       email: null,
@@ -293,7 +297,9 @@ export default {
         return 'Este campo es requerido '
       }
       if (
-        !/^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{8,16}$/.test(userFields.value.password)
+        !/^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{8,16}$/.test(
+          userFields.value.password
+        )
       ) {
         passwordState.value = false
         errorMessage.value =
@@ -305,6 +311,7 @@ export default {
     }
     return {
       fields,
+      breadcrumbItems,
       perPage,
       currentPage,
       filter,
