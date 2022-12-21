@@ -1,5 +1,8 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
@@ -44,7 +47,7 @@
       </template>
       <template #item-empleados="items">
         <span v-if="items.empleados !== null">
-        {{ items.empleados.nombreCompleto  }}
+          {{ items.empleados.nombreCompleto }}
         </span>
       </template>
       <template #item-actions="items">
@@ -65,7 +68,7 @@
             class="m-1"
             variant="outline-danger"
           >
-            <i class="bi bi-trash3"/>
+            <i class="bi bi-trash3" />
             Archivar
           </b-dropdown-item>
           <b-dropdown-item
@@ -82,8 +85,12 @@
         </b-dropdown>
       </template>
       <template #item-status="items">
-        <b-badge :variant="items.estatusReceta.nombre === 'Pendiente' ? 'warning': 'success'">
-        {{items.estatusReceta.nombre}}
+        <b-badge
+          :variant="
+            items.estatusReceta.nombre === 'Pendiente' ? 'warning' : 'success'
+          "
+        >
+          {{ items.estatusReceta.nombre }}
         </b-badge>
       </template>
     </EasyDataTable>
@@ -160,6 +167,14 @@ export default {
     const isloading = ref(true)
     const searchValue = ref('')
     const searchField = ref('marca')
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      {
+        text: 'Servicios medicos',
+        to: '/ServiciosMedicosMunicipales'
+      },
+      { text: 'Recetas' }
+    ])
     const prescriptionFields = ref({
       recetaId: 0,
       empleadoId: null,
@@ -314,6 +329,7 @@ export default {
       employees,
       fields,
       perPage,
+      breadcrumbItems,
       currentPage,
       filter,
       perPageSelect,

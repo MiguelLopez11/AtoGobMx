@@ -1,5 +1,8 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
@@ -11,7 +14,7 @@
       </b-form-input>
       <b-button
         style="
-          background-color: rgb(94,80,238);
+          background-color: rgb(94, 80, 238);
           height: 50px;
           width: auto;
           font-size: 18px;
@@ -134,11 +137,8 @@ export default {
   },
   setup () {
     const swal = inject('$swal')
-    const {
-      getTypeFurnitures,
-      createTypeFurniture,
-      deleteTypeFurniture
-    } = FurnitureServices()
+    const { getTypeFurnitures, createTypeFurniture, deleteTypeFurniture } =
+      FurnitureServices()
     // const $toast = useToast()
     const typeFurnitures = ref([])
     const perPage = ref(5)
@@ -150,6 +150,14 @@ export default {
     const searchField = ref('nombre')
     const nameState = ref(false)
     const showModal = ref(false)
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      {
+        text: 'Patrimonio publico ',
+        to: '/PatrimonioMunicipal'
+      },
+      { text: 'Categoria moviliario' }
+    ])
     const typeFurnitureFields = ref({
       nombre: null,
       descripcion: null,
@@ -208,8 +216,7 @@ export default {
         refreshTable()
         swal.fire({
           title: 'Categoría mobiliario registrado correctamente!',
-          text:
-            'El categoría mobiliario se ha registrado al sistema satisfactoriamente.',
+          text: 'El categoría mobiliario se ha registrado al sistema satisfactoriamente.',
           icon: 'success'
         })
       })
@@ -257,6 +264,7 @@ export default {
     }
     return {
       typeFurnitures,
+      breadcrumbItems,
       fields,
       perPage,
       currentPage,

@@ -1,5 +1,8 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
@@ -44,8 +47,8 @@
         {{ header.text }}
       </template>
       <template #item-status="items">
-        <b-badge :variant="items.archivado === false ? 'success': 'danger'">
-        {{items.archivado === false ? 'Activo' : 'Archivado'}}
+        <b-badge :variant="items.archivado === false ? 'success' : 'danger'">
+          {{ items.archivado === false ? 'Activo' : 'Archivado' }}
         </b-badge>
       </template>
       <template #item-actions="items">
@@ -76,8 +79,8 @@
             }"
           >
             <i class="bi bi-pencil-square" />
-              Editar
-            </b-dropdown-item>
+            Editar
+          </b-dropdown-item>
         </b-dropdown>
       </template>
     </EasyDataTable>
@@ -138,6 +141,14 @@ export default {
     const isloading = ref(true)
     const searchValue = ref('')
     const searchField = ref('empleados.nombreCompleto')
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      {
+        text: 'Recursos humanos',
+        to: '/RecursosHumanos'
+      },
+      { text: 'Expediente digital' }
+    ])
     const expedientFields = ref({
       expedienteDigitalId: 0,
       empleadoId: null,
@@ -229,6 +240,7 @@ export default {
     }
     return {
       fields,
+      breadcrumbItems,
       perPage,
       currentPage,
       filter,

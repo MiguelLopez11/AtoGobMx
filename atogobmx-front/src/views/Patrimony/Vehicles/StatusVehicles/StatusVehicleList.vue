@@ -1,5 +1,8 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
@@ -11,7 +14,7 @@
       </b-form-input>
       <b-button
         style="
-          background-color: rgb(94,80,238);
+          background-color: rgb(94, 80, 238);
           height: 50px;
           width: auto;
           font-size: 18px;
@@ -43,7 +46,15 @@
         {{ header.text }}
       </template>
       <template #item-actions="items">
-        <b-dropdown id="ActionsDropdown" size="lg" style="text-color: black" variant="link" toggle-class="text-decoration-none" dropright no-caret>
+        <b-dropdown
+          id="ActionsDropdown"
+          size="lg"
+          style="text-color: black"
+          variant="link"
+          toggle-class="text-decoration-none"
+          dropright
+          no-caret
+        >
           <template #button-content>
             <i class="bi bi-three-dots-vertical"></i>
           </template>
@@ -126,11 +137,8 @@ export default {
   },
   setup () {
     const swal = inject('$swal')
-    const {
-      getEstatusVehicles,
-      createEstatusVehicle,
-      deleteEstatusVehicle
-    } = VehiclesServices()
+    const { getEstatusVehicles, createEstatusVehicle, deleteEstatusVehicle } =
+      VehiclesServices()
     // const $toast = useToast()
     const statusVehicles = ref([])
     const perPage = ref(5)
@@ -143,6 +151,14 @@ export default {
     const searchField = ref('nombre')
     const nameState = ref(false)
     const showModal = ref(false)
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      {
+        text: 'Patrimonio publico',
+        to: '/PatrimonioMunicipal'
+      },
+      { text: 'Estatus vehiculo' }
+    ])
     const statusComputerFields = ref({
       estatusVehiculoId: 0,
       nombre: null,
@@ -253,6 +269,7 @@ export default {
     }
     return {
       statusVehicles,
+      breadcrumbItems,
       fields,
       perPage,
       currentPage,

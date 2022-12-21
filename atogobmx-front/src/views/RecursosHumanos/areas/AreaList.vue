@@ -1,5 +1,8 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
@@ -11,7 +14,7 @@
       </b-form-input>
       <b-button
         style="
-          background-color: rgb(94,80,238);
+          background-color: rgb(94, 80, 238);
           height: 50px;
           width: auto;
           font-size: 18px;
@@ -170,6 +173,14 @@ export default {
     const searchField = ref('nombre')
     const nameState = ref(false)
     const departamentState = ref(false)
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      {
+        text: 'Recursos humanos',
+        to: '/RecursosHumanos'
+      },
+      { text: 'Area' }
+    ])
     const areaFields = ref({
       areaId: 0,
       nombre: null,
@@ -181,8 +192,7 @@ export default {
       if (values.length === 0) {
         swal.fire({
           title: 'No se encuentran departamentos registrados!',
-          text:
-            'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
+          text: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
           icon: 'warning'
         })
       }
@@ -249,8 +259,7 @@ export default {
       createArea(areaFields.value, data => {
         swal.fire({
           title: '¡Area de trabajo registrado correctamente!',
-          text:
-            'El Area de trabajo se ha registrado al sistema satisfactoriamente.',
+          text: 'El Area de trabajo se ha registrado al sistema satisfactoriamente.',
           icon: 'success'
         })
         refreshTable()
@@ -281,8 +290,7 @@ export default {
             swal
               .fire({
                 title: 'Area de trabajo archivado!',
-                text:
-                  'El Area de trabajo ha sido archivado satisfactoriamente .',
+                text: 'El Area de trabajo ha sido archivado satisfactoriamente .',
                 icon: 'success'
               })
               .then(result => {
@@ -299,6 +307,7 @@ export default {
     }
     return {
       departaments,
+      breadcrumbItems,
       refAreaModal,
       fields,
       perPage,

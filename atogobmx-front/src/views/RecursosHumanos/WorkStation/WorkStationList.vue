@@ -1,5 +1,8 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
@@ -11,7 +14,7 @@
       </b-form-input>
       <b-button
         style="
-          background-color: rgb(94,80,238);
+          background-color: rgb(94, 80, 238);
           height: 50px;
           width: auto;
           font-size: 18px;
@@ -170,11 +173,8 @@ export default {
   },
   setup () {
     const swal = inject('$swal')
-    const {
-      getWorkStations,
-      createWorkStation,
-      deleteWorkStation
-    } = workStationServices()
+    const { getWorkStations, createWorkStation, deleteWorkStation } =
+      workStationServices()
     const { getAreasByDepartament } = AreasServices()
     const { getDepartaments } = DepartamentServices()
     const showModal = ref(false)
@@ -192,6 +192,14 @@ export default {
     const nameState = ref(false)
     const areaState = ref(false)
     const departamentState = ref(false)
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      {
+        text: 'Recursos humanos',
+        to: '/RecursosHumanos'
+      },
+      { text: 'Puestos de trabajo' }
+    ])
     const workStationFields = ref({
       puestoTrabajoId: 0,
       nombre: '',
@@ -223,8 +231,7 @@ export default {
       if (data.length === 0) {
         swal.fire({
           title: 'No se encuentran departamentos registrados!',
-          text:
-            'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
+          text: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
           icon: 'error'
         })
       }
@@ -236,8 +243,7 @@ export default {
           if (data.length === 0) {
             swal.fire({
               title: 'No se encuentran areas registradas!',
-              text:
-                'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
+              text: 'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
               icon: 'error'
             })
           }
@@ -295,8 +301,7 @@ export default {
       createWorkStation(workStationFields.value, data => {
         swal.fire({
           title: '¡Puesto de trabajo registrado correctamente!',
-          text:
-            'El puesto de trabajo se ha registrado al sistema satisfactoriamente.',
+          text: 'El puesto de trabajo se ha registrado al sistema satisfactoriamente.',
           icon: 'success'
         })
         refreshTable()
@@ -330,8 +335,7 @@ export default {
             swal
               .fire({
                 title: 'Puesto de trabajo archivado!',
-                text:
-                  'El Puesto de trabajo ha sido archivado satisfactoriamente .',
+                text: 'El Puesto de trabajo ha sido archivado satisfactoriamente .',
                 icon: 'success'
               })
               .then(result => {
@@ -348,6 +352,7 @@ export default {
     }
     return {
       workStations,
+      breadcrumbItems,
       departaments,
       showModal,
       fields,

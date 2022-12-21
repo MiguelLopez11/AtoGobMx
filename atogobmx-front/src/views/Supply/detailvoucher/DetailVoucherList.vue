@@ -108,7 +108,7 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!--Agregar Precio -->
+          <!--Agregar importe -->
           <b-col>
             <b-form-group class="mt-3" label="Importe">
                 <b-form-input
@@ -118,11 +118,11 @@
                 </b-form-input>
             </b-form-group>
           </b-col>
-          <!--Agregar subtotal -->
+          <!--Agregar Total -->
           <b-col>
             <b-form-group class="mt-3" label="Total">
                 <b-form-input
-                  v-model="detailVoucherFields.subtotal"
+                  v-model="detailVoucherFields.total"
                   type="number"
                 >
                 </b-form-input>
@@ -215,9 +215,9 @@ export default {
     const fields = ref([
       { value: 'detalleValeId', text: 'ID', sortable: true },
       { value: 'cantidad', text: 'Cantidad' },
-      { value: 'precio', text: 'Precio' },
-      { value: 'iva', text: 'IVA' },
-      { value: 'subtotal', text: 'Subtotal' },
+      // { value: 'precio', text: 'Precio' },
+      { value: 'importe', text: 'Importe' },
+      { value: 'total', text: 'Total' },
       { value: 'proV_Producto.nombre', text: 'Nombre del producto' },
       { value: 'actions', text: 'Acciones' }
     ])

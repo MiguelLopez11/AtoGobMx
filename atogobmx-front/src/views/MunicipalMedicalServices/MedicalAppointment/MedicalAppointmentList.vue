@@ -1,5 +1,8 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
@@ -11,7 +14,7 @@
       </b-form-input>
       <b-button
         style="
-          background-color: rgb(94,80,238);
+          background-color: rgb(94, 80, 238);
           height: 50px;
           width: auto;
           font-size: 18px;
@@ -59,9 +62,7 @@
             class="m-1"
             variant="outline-danger"
           >
-            <i class="bi bi-trash3">
-              Archivar
-            </i>
+            <i class="bi bi-trash3"> Archivar </i>
           </b-dropdown-item>
           <b-dropdown-item
             class="m-1"
@@ -87,10 +88,8 @@ import { ref, inject } from 'vue'
 export default {
   setup () {
     const swal = inject('$swal')
-    const {
-      getMedicalAppointments,
-      deleteMedicalAppointment
-    } = MunicipalMedicalServices()
+    const { getMedicalAppointments, deleteMedicalAppointment } =
+      MunicipalMedicalServices()
     const { getEmployeesUnfiled } = EmployeeServices()
     const medicalAppointments = ref([])
     const employees = ref([])
@@ -101,6 +100,14 @@ export default {
     const isloading = ref(true)
     const searchValue = ref('')
     const searchField = ref('marca')
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      {
+        text: 'Servicios medicos',
+        to: '/ServiciosMedicosMunicipales'
+      },
+      { text: 'Citas' }
+    ])
     const medicalAppointmentFields = ref({
       citaId: 0,
       fechaHora: null,
@@ -194,6 +201,7 @@ export default {
       employees,
       //   employeesArmory,
       fields,
+      breadcrumbItems,
       perPage,
       currentPage,
       filter,

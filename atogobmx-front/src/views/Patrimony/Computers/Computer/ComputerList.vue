@@ -1,5 +1,8 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
@@ -11,7 +14,7 @@
       </b-form-input>
       <b-button
         style="
-          background-color: rgb(94,80,238);
+          background-color: rgb(94, 80, 238);
           height: 50px;
           width: auto;
           font-size: 18px;
@@ -43,31 +46,50 @@
         {{ header.text }}
       </template>
       <template #item-actions="items">
-        <b-dropdown id="ActionsDropdown" size="lg" style="text-color: black" variant="link" toggle-class="text-decoration-none" dropright no-caret>
+        <b-dropdown
+          id="ActionsDropdown"
+          size="lg"
+          style="text-color: black"
+          variant="link"
+          toggle-class="text-decoration-none"
+          dropright
+          no-caret
+        >
           <template #button-content>
             <i class="bi bi-three-dots-vertical"></i>
           </template>
           <b-dropdown-item
             @click="RemoveComputer(items.equipoComputoId)"
             class="m-1"
-            variant="outline-danger">
+            variant="outline-danger"
+          >
             <i class="bi bi-trash3" />
             Archivar
-            </b-dropdown-item>
+          </b-dropdown-item>
           <b-dropdown-item
             class="m-1"
             variant="outline-warning"
             :to="{
-            name: 'EquiposComputo-Edit',
-            params: { EquipoComputoId: items.equipoComputoId},
+              name: 'EquiposComputo-Edit',
+              params: { EquipoComputoId: items.equipoComputoId }
             }"
             ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
           >
         </b-dropdown>
       </template>
       <template #item-inventarioEstatus="items">
-        <b-badge :variant="items.estatusEquipo.nombre === 'En Funcionamiento' ? 'success': '' || items.estatusEquipo.nombre === 'En Mantenimiento' ? 'warning': '' || items.estatusEquipo.nombre === 'Dado de baja' ? 'danger': ''">
-        {{items.estatusEquipo.nombre}}
+        <b-badge
+          :variant="
+            items.estatusEquipo.nombre === 'En Funcionamiento'
+              ? 'success'
+              : '' || items.estatusEquipo.nombre === 'En Mantenimiento'
+              ? 'warning'
+              : '' || items.estatusEquipo.nombre === 'Dado de baja'
+              ? 'danger'
+              : ''
+          "
+        >
+          {{ items.estatusEquipo.nombre }}
         </b-badge>
       </template>
     </EasyDataTable>
@@ -83,14 +105,17 @@
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Nomenclatura">
-              <Field
-                name="FolioField"
-                :rules="validateFolio"
-                as="text"
-              >
-                <b-form-input v-model="computerFields.codigoInventario" :state="folioState"> </b-form-input>
+              <Field name="FolioField" :rules="validateFolio" as="text">
+                <b-form-input
+                  v-model="computerFields.codigoInventario"
+                  :state="folioState"
+                >
+                </b-form-input>
               </Field>
-              <ErrorMessage class="text-danger" name="FolioField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="FolioField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
@@ -182,7 +207,11 @@
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Estatus">
-              <Field name="StatusField" :rules="validateStateComputer" as="number">
+              <Field
+                name="StatusField"
+                :rules="validateStateComputer"
+                as="number"
+              >
                 <b-form-select
                   v-model="computerFields.estatusEquipoId"
                   autofocus
@@ -193,7 +222,10 @@
                 >
                 </b-form-select>
               </Field>
-              <ErrorMessage class="text-danger" name="StatusField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="StatusField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
@@ -230,7 +262,8 @@ export default {
   },
   setup () {
     const swal = inject('$swal')
-    const { getComputers, createComputer, deleteComputer, getStatus } = ComputerServices()
+    const { getComputers, createComputer, deleteComputer, getStatus } =
+      ComputerServices()
     const { getDepartaments } = DepartamentServices()
     // const $toast = useToast()
     const Computers = ref([])
@@ -252,6 +285,14 @@ export default {
     const folioState = ref(false)
     const stateComputerState = ref(false)
     const showModal = ref(false)
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      {
+        text: 'Patrimonio publico',
+        to: '/PatrimonioMunicipal'
+      },
+      { text: 'Equipos de computo' }
+    ])
     const computerFields = ref({
       equipoComputoId: 0,
       codigoInventario: null,
@@ -291,8 +332,7 @@ export default {
       if (data.length === 0) {
         swal.fire({
           title: 'No se encuentran departamentos registrados!',
-          text:
-            'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
+          text: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
           icon: 'warning'
         })
       }
@@ -302,8 +342,7 @@ export default {
       if (data.length === 0) {
         swal.fire({
           title: 'No se encuentran estatus registrados!',
-          text:
-            'No se encuentran estatus registrados en el sistema, registre primero un estatus para continuar.',
+          text: 'No se encuentran estatus registrados en el sistema, registre primero un estatus para continuar.',
           icon: 'warning'
         })
       }
@@ -314,7 +353,11 @@ export default {
         return 'Este campo es requerido'
       }
       // eslint-disable-next-line no-useless-escape
-      if (!/^(?=.*\d)(?=.*[a-zA-Z])([A-ZñÑáéíóúÁÉÍÓÚ])[A-Z0-9]+$/i.test(computerFields.value.codigoInventario)) {
+      if (
+        !/^(?=.*\d)(?=.*[a-zA-Z])([A-ZñÑáéíóúÁÉÍÓÚ])[A-Z0-9]+$/i.test(
+          computerFields.value.codigoInventario
+        )
+      ) {
         folioState.value = false
         return 'El nombre del area solo puede contener letras'
       }
@@ -415,8 +458,7 @@ export default {
         refreshTable()
         swal.fire({
           title: 'Equipo registrado correctamente!',
-          text:
-            'El equipo de computo se ha registrado al sistema satisfactoriamente.',
+          text: 'El equipo de computo se ha registrado al sistema satisfactoriamente.',
           icon: 'success'
         })
       })
@@ -445,8 +487,7 @@ export default {
             swal
               .fire({
                 title: 'Equipo archivado!',
-                text:
-                  'El Equipo de computo ha sido archivado satisfactoriamente .',
+                text: 'El Equipo de computo ha sido archivado satisfactoriamente .',
                 icon: 'success'
               })
               .then(result => {
@@ -464,6 +505,7 @@ export default {
     return {
       Computers,
       fields,
+      breadcrumbItems,
       perPage,
       currentPage,
       filter,
