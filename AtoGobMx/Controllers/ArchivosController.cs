@@ -29,18 +29,24 @@ namespace AtoGobMx.Controllers
             var expediente = await _context.ExpedienteDigital
                 .Include(i => i.Empleados)
                 .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expedienteDigitalId);
-            if (expediente == null)
-            {
-                return NotFound("El ID del expediente no existe.");
-            }
             var fotoPerfil = await _context.Archivos.FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expedienteDigitalId);
-            if (fotoPerfil == null)
+            if (fotoPerfil == null || expediente == null)
             {
                 var perfil = System.IO.File.OpenRead($"Files/images/blank-profile.jpg");
                 return File(perfil, "image/jpeg");
             }
-            var image = System.IO.File.OpenRead($"Files/images/{expediente.Empleados.NombreCompleto}/{fotoPerfil.Nombre}");
-            return File(image, "image/jpeg");
+            var serverPath = "ftp://digital.atogobmx.com/Files/RecursosHumanos/Empleados/";
+            var empleado = expediente.Empleados.NombreCompleto.ToString();
+            var filePath = fotoPerfil.Nombre.ToString();
+            var ftpRequest = (FtpWebRequest)FtpWebRequest.Create(serverPath + empleado + "/" + filePath);
+            ftpRequest.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+            ftpRequest.UseBinary = true;
+            ftpRequest.UsePassive = true;
+            ftpRequest.KeepAlive = true;
+            ftpRequest.Method = WebRequestMethods.Ftp.DownloadFile;
+            var ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
+            var ftpStream = ftpResponse.GetResponseStream();
+            return File(ftpStream, "image/jpeg");
 
         }
         [HttpGet("FotoPerfil/Empleado/{EmpleadoId}")]
@@ -49,18 +55,24 @@ namespace AtoGobMx.Controllers
             var expediente = await _context.ExpedienteDigital
                 .Include(i => i.Empleados)
                 .FirstOrDefaultAsync(f => f.EmpleadoId == EmpleadoId);
-            if (expediente == null)
-            {
-                return NotFound("El ID del expediente no existe.");
-            }
             var fotoPerfil = await _context.Archivos.FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expediente.ExpedienteDigitalId);
-            if (fotoPerfil == null)
+            if (fotoPerfil == null || expediente == null)
             {
                 var perfil = System.IO.File.OpenRead($"Files/images/blank-profile.jpg");
                 return File(perfil, "image/jpeg");
             }
-            var image = System.IO.File.OpenRead($"Files/images/{expediente.Empleados.NombreCompleto}/{fotoPerfil.Nombre}");
-            return File(image, "image/jpeg");
+            var serverPath = "ftp://digital.atogobmx.com/Files/RecursosHumanos/Empleados/";
+            var empleado = expediente.Empleados.NombreCompleto.ToString();
+            var filePath = fotoPerfil.Nombre.ToString();
+            var ftpRequest = (FtpWebRequest)FtpWebRequest.Create(serverPath + empleado + "/" + filePath);
+            ftpRequest.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+            ftpRequest.UseBinary = true;
+            ftpRequest.UsePassive = true;
+            ftpRequest.KeepAlive = true;
+            ftpRequest.Method = WebRequestMethods.Ftp.DownloadFile;
+            var ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
+            var ftpStream = ftpResponse.GetResponseStream();
+            return File(ftpStream, "image/jpeg");
 
         }
         [HttpGet("Documentos/Descargar/{ExpedienteDigitalId}/{ArchivoId}")]
@@ -83,19 +95,28 @@ namespace AtoGobMx.Controllers
                 {
                     return NotFound("No se encuentra Archivo");
                 }
-                var filePath = $"Files/Documentos/{expediente.Empleados.NombreCompleto}/{documento.Nombre}";
+                var serverPath = "ftp://digital.atogobmx.com/Files/RecursosHumanos/Empleados/";
+                var empleado = expediente.Empleados.NombreCompleto.ToString();
+                var filePath = documento.Nombre.ToString();
+                var ftpRequest = (FtpWebRequest)FtpWebRequest.Create(serverPath + empleado + "/Documentos/" + filePath);
+                var url = serverPath + empleado + "/Documentos/" + filePath;
+                ftpRequest.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+                ftpRequest.UseBinary = true;
+                ftpRequest.UsePassive = true;
+                ftpRequest.KeepAlive = true;
+                ftpRequest.Method = WebRequestMethods.Ftp.DownloadFile;
+                var ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
+                var ftpStream = ftpResponse.GetResponseStream();
                 var provider = new FileExtensionContentTypeProvider();
-                if (!provider.TryGetContentType(filePath, out var contentType))
+                if (!provider.TryGetContentType(url, out var contentType))
                 {
                     contentType = "application/octet-stream";
                 }
+                return File(ftpStream, contentType, Path.GetFileName(url));
 
-                var bytes = await System.IO.File.ReadAllBytesAsync(filePath);
-                return File(bytes, contentType, Path.GetFileName(filePath));
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
                 return NoContent();
             }
 
@@ -144,39 +165,6 @@ namespace AtoGobMx.Controllers
             return File(zipFileMemoryStream, "application/octet-stream", $"Documentos_{DateOnly.FromDateTime(DateTime.Now)}_{expediente.Empleados.NombreCompleto}.zip");
 
         }
-        [HttpPost("PruebaFTP")]
-        public async Task<IActionResult> UploadPhotoFTP(IFormFile file)
-        {
-            try
-            {
-                string uploadUrl = String.Format("ftp://{0}/{1}/{2}", "digital.atogobmx.com", "Files", "RecursosHumanos", "Empleado", file.FileName);
-                var request = (FtpWebRequest)WebRequest.Create(uploadUrl);
-                request.Method = WebRequestMethods.Ftp.UploadFile;
-                request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
-                byte[] buffer = new byte[1024];
-                var stream = file.OpenReadStream();
-                byte[] fileContents;
-                using (var ms = new MemoryStream())
-                {
-                    int read;
-                    while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
-                    {
-                        ms.Write(buffer, 0, read);
-                    }
-                    fileContents = ms.ToArray();
-                }
-                using (Stream requestStream = await request.GetRequestStreamAsync())
-                {
-                    requestStream.Write(fileContents, 0, fileContents.Length);
-                }
-                FtpWebResponse response = (FtpWebResponse)request.GetResponse();
-                return Ok("Upload Successfuly.");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("Upload Failed: " + ex.Message);
-            }
-        }
         [HttpPost("Imagen/{expedienteDigitalId}/")]
         public async Task<IActionResult> UploadPhotoProfile(IFormFile file, int expedienteDigitalId)
         {
@@ -187,6 +175,7 @@ namespace AtoGobMx.Controllers
                     .Include(i => i.Empleados)
                     .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expedienteDigitalId);
 
+                string uploadUrl = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/{5}", "digital.atogobmx.com", "Files", "RecursosHumanos", "Empleados", expediente.Empleados.NombreCompleto, file.FileName);
                 if (expediente == null)
                 {
                     return NotFound("No se encuentra el expediente digital");
@@ -207,9 +196,7 @@ namespace AtoGobMx.Controllers
                     .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expedienteDigitalId);
                 if (archivoExpediente == null)
                 {
-                    string uploadUrl = String.Format("ftp://{0}/{1}/{2}/{3}", "digital.atogobmx.com", "Files", "RecursosHumanos", file.FileName);
                     var request = (FtpWebRequest)WebRequest.Create(uploadUrl);
-                    request.Method = WebRequestMethods.Ftp.MakeDirectory;
                     request.Method = WebRequestMethods.Ftp.UploadFile;
                     request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
                     byte[] buffer = new byte[1024];
@@ -229,15 +216,6 @@ namespace AtoGobMx.Controllers
                         requestStream.Write(fileContents, 0, fileContents.Length);
                     }
                     FtpWebResponse response = (FtpWebResponse)request.GetResponse();
-                    //var pathFolder = $@"Files/images/{expediente.Empleados.NombreCompleto}";
-                    //if (!Directory.Exists(pathFolder))
-                    //{
-                    //    Directory.CreateDirectory(pathFolder);
-                    //}
-                    //var path = Path.Combine(Directory.GetCurrentDirectory(), pathFolder, file.FileName);
-                    //var stream = new FileStream(path, FileMode.Create);
-                    //await file.CopyToAsync(stream);
-                    //stream.Close();
                     var archivo = new Archivos()
                     {
                         ArchivoId = 0,
@@ -251,20 +229,40 @@ namespace AtoGobMx.Controllers
                 }
                 else
                 {
-                    var path = $@"Files/images/{expediente.Empleados.NombreCompleto}/{archivoExpediente.Nombre}";
-
-                    System.IO.File.Delete(path);
-                    var pathFolder = $@"Files/images/{expediente.Empleados.NombreCompleto}";
-                    var newPath = Path.Combine(Directory.GetCurrentDirectory(), pathFolder, file.FileName);
-                    var stream = new FileStream(newPath, FileMode.Create);
-                    await file.CopyToAsync(stream);
-                    stream.Close();
-                    archivoExpediente.Nombre = file.FileName;
-                    _context.Archivos.Update(archivoExpediente);
-                    await _context.SaveChangesAsync();
-
-
-                    return Ok("Foto de perfil registrada correctamente.");
+                    string Url = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/{5}", "digital.atogobmx.com", "Files", "RecursosHumanos", "Empleados", expediente.Empleados.NombreCompleto, archivoExpediente.Nombre);
+                    //string uploadUrl = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/{5}", "digital.atogobmx.com", "Files", "RecursosHumanos", "Empleados", expediente.Empleados.NombreCompleto, file.FileName);
+                    var delete = DeleteImage(Url);
+                    if (delete)
+                    {
+                        var request = (FtpWebRequest)WebRequest.Create(uploadUrl);
+                        request.Method = WebRequestMethods.Ftp.UploadFile;
+                        request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+                        byte[] buffer = new byte[1024];
+                        var stream = file.OpenReadStream();
+                        byte[] fileContents;
+                        using (var ms = new MemoryStream())
+                        {
+                            int read;
+                            while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+                            {
+                                ms.Write(buffer, 0, read);
+                            }
+                            fileContents = ms.ToArray();
+                        }
+                        using (Stream requestStream = await request.GetRequestStreamAsync())
+                        {
+                            requestStream.Write(fileContents, 0, fileContents.Length);
+                        }
+                        FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+                        archivoExpediente.Nombre = file.FileName;
+                        _context.Archivos.Update(archivoExpediente);
+                        await _context.SaveChangesAsync();
+                        return Ok("Foto de perfil registrada correctamente.");
+                    }
+                    else
+                    {
+                        return BadRequest();
+                    }
                 }
             }
             catch
@@ -279,11 +277,13 @@ namespace AtoGobMx.Controllers
             #region Cargar Archivos
             try
             {
+
                 #region Comprobar si el expediente existe
                 var expediente = await _context.ExpedienteDigital
                     .Include(i => i.Empleados)
                     .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expedienteDigitalId);
 
+                string serverPath = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/{5}", "digital.atogobmx.com", "Files", "RecursosHumanos", "Empleados", expediente.Empleados.NombreCompleto, "Documentos");
                 if (expediente == null)
                 {
                     return NotFound("No se encuentra el expediente digital");
@@ -293,26 +293,37 @@ namespace AtoGobMx.Controllers
                 {
                     foreach (var file in Files)
                     {
-                        #region Comprobar que el archivo sea una imagen
+                        #region Comprobar que el archivo sea un documento
                         var fileName = file.FileName;
                         var fileExtension = Path.GetExtension(fileName);
                         if (fileExtension != ".pdf" && fileExtension != ".docx")
                         {
-                            return BadRequest("El tipo de archivo no es válido para foto de perfil");
+                            return BadRequest("El tipo de archivo no es válido");
                         }
 
                         #endregion
 
                         #region Comprobar si ya existe una imagen registrada al expediente, crearlo
-                        var pathFolder = $@"Files/Documentos/{expediente.Empleados.NombreCompleto}";
-                        if (!Directory.Exists(pathFolder))
+                        var request = (FtpWebRequest)WebRequest.Create(serverPath + "/" + file.FileName);
+                        request.Method = WebRequestMethods.Ftp.UploadFile;
+                        request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+                        byte[] buffer = new byte[1024];
+                        var stream = file.OpenReadStream();
+                        byte[] fileContents;
+                        using (var ms = new MemoryStream())
                         {
-                            Directory.CreateDirectory(pathFolder);
+                            int read;
+                            while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+                            {
+                                ms.Write(buffer, 0, read);
+                            }
+                            fileContents = ms.ToArray();
                         }
-                        var path = Path.Combine(Directory.GetCurrentDirectory(), pathFolder, file.FileName);
-                        var stream = new FileStream(path, FileMode.Create);
-                        await file.CopyToAsync(stream);
-                        stream.Close();
+                        using (Stream requestStream = await request.GetRequestStreamAsync())
+                        {
+                            requestStream.Write(fileContents, 0, fileContents.Length);
+                        }
+                        FtpWebResponse response = (FtpWebResponse)request.GetResponse();
                         var archivo = new Archivos()
                         {
                             ArchivoId = 0,
@@ -369,6 +380,25 @@ namespace AtoGobMx.Controllers
             _context.Archivos.Update(Archivo);
             await _context.SaveChangesAsync();
             return Ok("Documento archivado correctamente.");
+        }
+        private static bool DeleteImage(string url)
+        {
+            try
+            {
+
+                WebRequest request = WebRequest.Create(url);
+                request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+                request.Method = WebRequestMethods.Ftp.DeleteFile;
+                FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+
+                response.Close();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
     }
 }
