@@ -25,6 +25,7 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<OP_Obras>> GetObrasPublicas()
         {
             var obraspublicas = await _context.ObrasPublicas
+                .Include(i => i.OP_EstatusObras)
                 .OrderBy(o => o.ObraId)
                 .Where(w => !w.Archivado)
                 .Select(s => _mapper.Map<OP_Obras>(s))

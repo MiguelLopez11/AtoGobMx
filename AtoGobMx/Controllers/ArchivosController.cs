@@ -143,6 +143,8 @@ namespace AtoGobMx.Controllers
                 .Include(i => i.Empleados)
                 .Where(w => !w.Archivado)
                 .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == ExpedienteDigitalId);
+            var employeeName = expediente.Empleados.NombreCompleto.ToString();
+            var host = "ftp://digital.atogobmx.com/Files/RecursosHumanos/Empleados/";
 
             var FolderPath = Path.Combine(Directory.GetCurrentDirectory(), $"Files/Documentos/{expediente.Empleados.NombreCompleto}");
             var FilePaths = Directory.GetFiles(FolderPath);
@@ -231,7 +233,7 @@ namespace AtoGobMx.Controllers
                 {
                     string Url = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/{5}", "digital.atogobmx.com", "Files", "RecursosHumanos", "Empleados", expediente.Empleados.NombreCompleto, archivoExpediente.Nombre);
                     //string uploadUrl = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/{5}", "digital.atogobmx.com", "Files", "RecursosHumanos", "Empleados", expediente.Empleados.NombreCompleto, file.FileName);
-                    var delete = DeleteImage(Url);
+                    var delete = DeleteFile(Url);
                     if (delete)
                     {
                         var request = (FtpWebRequest)WebRequest.Create(uploadUrl);
@@ -366,22 +368,32 @@ namespace AtoGobMx.Controllers
             {
                 return NotFound($"No se encuentra el documento con el ID {ArchivoId}");
             }
-            var path = $@"Files/Documentos/{Expediente.Empleados.NombreCompleto}/{Archivo.Nombre}";
-            FileInfo file = new FileInfo(path);
-            if (file.Exists)
+            var serverPath = "ftp://digital.atogobmx.com/Files/RecursosHumanos/Empleados/";
+            var empleado = Expediente.Empleados.NombreCompleto.ToString();
+            var filePath = Archivo.Nombre.ToString();
+            var Url = $"{serverPath + empleado + "/" + filePath}";
+            var result = DeleteFile(Url);
+            if (result)
             {
-                file.Delete();
                 Archivo.Archivado = true;
                 _context.Archivos.Update(Archivo);
                 await _context.SaveChangesAsync();
                 return Ok("Documento archivado correctamente.");
             }
-            Archivo.Archivado = true;
-            _context.Archivos.Update(Archivo);
-            await _context.SaveChangesAsync();
-            return Ok("Documento archivado correctamente.");
+            return BadRequest("Error");
+            //var path = $@"Files/Documentos/{Expediente.Empleados.NombreCompleto}/{Archivo.Nombre}";
+            //FileInfo file = new FileInfo(path);
+            //if (file.Exists)
+            //{
+            //    file.Delete();
+            //    Archivo.Archivado = true;
+            //    _context.Archivos.Update(Archivo);
+            //    await _context.SaveChangesAsync();
+            //    return Ok("Documento archivado correctamente.");
+            //}
+           
         }
-        private static bool DeleteImage(string url)
+        private static bool DeleteFile(string url)
         {
             try
             {

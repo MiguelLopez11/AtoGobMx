@@ -262,7 +262,7 @@ export default {
       // { value: 'latitud', text: 'Latitud' },
       // { value: 'longitud', text: 'Longitud' },
       { value: 'descripcion', text: 'Descripcion' },
-      { value: 'PROV_Estatus.estatusObraId', text: 'Estatus de la obra' },
+      { value: 'oP_EstatusObras.estatusObraId', text: 'Estatus de la obra' },
       { value: 'actions', text: 'Acciones' }
     ])
 
