@@ -72,6 +72,9 @@ csharp_prefer_braces = true:silent
 # SYSLIB0014: El tipo o el miembro están obsoletos
 dotnet_diagnostic.SYSLIB0014.severity = none
 
+# CS8604: Posible argumento de referencia nulo
+dotnet_diagnostic.CS8604.severity = none
+
 [*.vb]
 #### Estilos de nomenclatura ####
 
