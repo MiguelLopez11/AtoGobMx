@@ -3,7 +3,8 @@ using AtoGobMx.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
+using PuppeteerSharp;
+using PuppeteerSharp.Media;
 
 namespace AtoGobMx.Controllers
 {
@@ -31,6 +32,33 @@ namespace AtoGobMx.Controllers
                 return BadRequest("No se encuentran citas registradas");
             }
             return Ok(Recetas);
+        }
+        [HttpGet("/SERMER_Receta/Download/{RecetaId}")]
+        public async Task<ActionResult<IEnumerable<SERMED_Receta>>> DownloadReceta()
+        {
+            var Recetas = await _context.Receta
+                .Include(i => i.Empleados)
+                .Include(i => i.EstatusReceta)
+                .Where(w => !w.Archivado)
+                .ToListAsync();
+            if (Recetas == null)
+            {
+                return BadRequest("No se encuentran citas registradas");
+            }
+            await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultChromiumRevision);
+            await using var browser = await Puppeteer.LaunchAsync(new LaunchOptions
+            {
+                Headless = true
+            });
+            await using var page = await browser.NewPageAsync();
+            await page.EmulateMediaTypeAsync(MediaType.Screen);
+            await page.SetContentAsync("");
+            var pdfContent = await page.PdfStreamAsync(new PdfOptions
+            {
+                Format = PaperFormat.A4,
+                PrintBackground = true
+            });
+            return File(pdfContent, "application/pdf", "converted.pdf");
         }
         [HttpGet("Pendientes")]
         public async Task<ActionResult<IEnumerable<SERMED_Receta>>> GetRecetasPendientes()
