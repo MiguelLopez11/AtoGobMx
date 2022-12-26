@@ -119,6 +119,7 @@ namespace AtoGobMx.Controllers
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return NoContent();
             }
 
@@ -293,6 +294,7 @@ namespace AtoGobMx.Controllers
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return NoContent();
             }
 
@@ -650,6 +652,7 @@ namespace AtoGobMx.Controllers
             }
             catch (Exception ex)
             {
+                Console.Write(ex.Message);
                 return false;
             }
         }
