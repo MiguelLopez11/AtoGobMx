@@ -648,10 +648,18 @@ namespace AtoGobMx.Controllers
                 await _context.SaveChangesAsync();
                 return Ok("Documento archivado correctamente.");
             }
-            Archivo.Archivado = true;
-            _context.Archivos.Update(Archivo);
-            await _context.SaveChangesAsync();
-            return Ok("Documento archivado correctamente.");
+            return BadRequest("Error");
+            //var path = $@"Files/Documentos/{Expediente.Empleados.NombreCompleto}/{Archivo.Nombre}";
+            //FileInfo file = new FileInfo(path);
+            //if (file.Exists)
+            //{
+            //    file.Delete();
+            //    Archivo.Archivado = true;
+            //    _context.Archivos.Update(Archivo);
+            //    await _context.SaveChangesAsync();
+            //    return Ok("Documento archivado correctamente.");
+            //}
+           
         }
         private static bool DeleteFile(string url)
         {
