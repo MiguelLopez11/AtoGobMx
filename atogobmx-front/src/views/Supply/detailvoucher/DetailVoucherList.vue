@@ -1,59 +1,59 @@
 <template>
-    <b-row align-h="end" class="mb-3 mr-1">
-      <b-button
-        variant="primary"
-        style="
-          background-color: rgb(94, 80, 238);
-          height: 50px;
-          width: auto;
-          font-size: 18px;
-          margin-right: 15px;
-          margin-left: 20px;
-        "
-        @click="showModal = !showModal"
-        type="submit"
-      >
-        <i class="bi bi-person-plus-fill"></i>
-        Agregar Producto
-      </b-button>
-    </b-row>
-    <EasyDataTable
-      rows-per-page-message="registros por pagina"
-      empty-message="No se encontro ningun registro"
-      table-class-name="customize-table"
-      buttons-pagination
-      border-cell
-      :loading="isloading"
-      :headers="fields"
-      :items="detailVoucher"
-      :rows-per-page="5"
-      :search-field="searchField"
-      :search-value="searchValue"
-      theme-color="#7367f0"
+  <b-row align-h="end" class="mb-3 mr-1">
+    <b-button
+      variant="primary"
+      style="
+        background-color: rgb(94, 80, 238);
+        height: 50px;
+        width: auto;
+        font-size: 18px;
+        margin-right: 15px;
+        margin-left: 20px;
+      "
+      @click="showModal = !showModal"
+      type="submit"
     >
-      <template #header-actions="header">
-        {{ header.text }}
-      </template>
-      <template #item-actions="items">
-        <b-dropdown
-          id="ActionsDropdown"
-          size="lg"
-          style="text-color: black"
-          variant="link"
-          toggle-class="text-decoration-none"
-          dropright
-          no-caret
+      <i class="bi bi-person-plus-fill"></i>
+      Agregar Producto
+    </b-button>
+  </b-row>
+  <EasyDataTable
+    rows-per-page-message="registros por pagina"
+    empty-message="No se encontro ningun registro"
+    table-class-name="customize-table"
+    buttons-pagination
+    border-cell
+    :loading="isloading"
+    :headers="fields"
+    :items="detailVoucher"
+    :rows-per-page="5"
+    :search-field="searchField"
+    :search-value="searchValue"
+    theme-color="#7367f0"
+  >
+    <template #header-actions="header">
+      {{ header.text }}
+    </template>
+    <template #item-actions="items">
+      <b-dropdown
+        id="ActionsDropdown"
+        size="lg"
+        style="text-color: black"
+        variant="link"
+        toggle-class="text-decoration-none"
+        dropright
+        no-caret
+      >
+        <template #button-content>
+          <i class="bi bi-three-dots-vertical"></i>
+        </template>
+        <b-dropdown-item
+          @click="RemoveDetailVoucher(items.detalleValeId)"
+          class="m-1"
+          variant="outline-danger"
+          ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
         >
-          <template #button-content>
-            <i class="bi bi-three-dots-vertical"></i>
-          </template>
-          <b-dropdown-item
-            @click="RemoveDetailVoucher(items.detalleValeId)"
-            class="m-1"
-            variant="outline-danger"
-            ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
-          >
-          <!-- <b-dropdown-item
+        <!-- <b-dropdown-item
             class="m-1"
             variant="outline-warning"
             :to="{
@@ -108,7 +108,7 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!--Agregar importe -->
+          <!--Agregar Precio -->
           <b-col>
             <b-form-group class="mt-3" label="Importe">
                 <b-form-input
@@ -118,11 +118,11 @@
                 </b-form-input>
             </b-form-group>
           </b-col>
-          <!--Agregar Total -->
+          <!--Agregar subtotal -->
           <b-col>
             <b-form-group class="mt-3" label="Total">
                 <b-form-input
-                  v-model="detailVoucherFields.total"
+                  v-model="detailVoucherFields.subtotal"
                   type="number"
                 >
                 </b-form-input>
@@ -251,7 +251,7 @@ export default {
         QuantityState.value = false
         return 'Este campo es requerido'
       }
-      QuantityState.value = false
+      QuantityState.value = true
       return true
     }
 
@@ -260,14 +260,14 @@ export default {
         ProductState.value = false
         return 'Este campo es requerido'
       }
-      ProductState.value = false
+      ProductState.value = true
       return true
     }
 
     // pone mis cambios de mis campos vacios de nuevo
     const refreshTable = () => {
       isloading.value = true
-      getDetailVoucher(data => {
+      getDetailVoucher(props.ControlValeId, data => {
         detailVoucher.value = data
         if (detailVoucher.value.length > 0) {
           isloading.value = false

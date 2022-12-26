@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AtoGobMx.Models
@@ -14,5 +15,8 @@ namespace AtoGobMx.Models
         public string Objetivo { get; set; }
         public bool Archivado { get; set; }
         //public int? RutaId { get; set; }
+
+        [JsonIgnore]
+        public virtual IEnumerable<ArchivosAseo> ArchivosAseo { get; set; }
     }
 }
