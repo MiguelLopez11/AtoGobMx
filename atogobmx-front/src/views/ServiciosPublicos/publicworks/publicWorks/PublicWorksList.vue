@@ -103,36 +103,6 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!--Agregar latitud-->
-          <!-- <b-col>
-            <b-form-group class="mt-3" label="Latitud">
-              <Field name="LatitudeField" :rules="validateLatitude" as="number">
-                <b-form-input
-                  v-model="publicWorksFields.latitud"
-                  :state="LatitudeState"
-                ></b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="LatitudeField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col> -->
-          <!--Agregar longitud-->
-          <!-- <b-col>
-            <b-form-group class="mt-3" label="Longitud">
-              <Field name="LengthField" :rules="validateLength" as="number">
-                <b-form-input
-                  v-model="publicWorksFields.longitud"
-                  :state="LengthState"
-                ></b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="LengthField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col> -->
           <!--agregar un estatus obra-->
           <b-col>
             <b-form-group class="mt-3" label="Estatus de la Obra">
@@ -147,7 +117,7 @@
                   :state="WorkStatusState"
                   :options="worksStatus"
                   value-field="estatusObraId"
-                  text-field="nombreEstatus"
+                  text-field="nombre"
                 ></b-form-select>
               </Field>
               <ErrorMessage class="text-danger" name="WorkStatusField" />
@@ -259,10 +229,8 @@ export default {
     const fields = ref([
       { value: 'obraId', text: 'ID', sortable: true },
       { value: 'nombre', text: 'Nombre de la obra' },
-      // { value: 'latitud', text: 'Latitud' },
-      // { value: 'longitud', text: 'Longitud' },
       { value: 'descripcion', text: 'Descripcion' },
-      { value: 'estatusObraId', text: 'Estatus de la obra' },
+      { value: 'oP_EstatusObras.nombre', text: 'Estatus de la obra' },
       { value: 'actions', text: 'Acciones' }
     ])
 
@@ -376,7 +344,7 @@ export default {
         WorkStatusState.value = false
         return 'Este campo es requerido'
       }
-      WorkStatusState.value = false
+      WorkStatusState.value = true
       return true
     }
 

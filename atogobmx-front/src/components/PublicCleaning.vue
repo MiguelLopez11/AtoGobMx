@@ -2,7 +2,7 @@
   <b-card class="m-2">
     <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
   </b-card>
-  <b-card class="m-3" align="center">
+  <b-card class="m-2" align="center">
     <b-row cols="3">
       <b-col>
         <b-button

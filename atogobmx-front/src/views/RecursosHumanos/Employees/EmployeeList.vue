@@ -1,5 +1,8 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
@@ -11,7 +14,7 @@
       </b-form-input>
       <b-button
         style="
-          background-color: rgb(94,80,238);
+          background-color: rgb(94, 80, 238);
           height: 50px;
           width: auto;
           font-size: 18px;
@@ -44,7 +47,11 @@
       </template>
       <template #item-actions="items">
         <b-dropdown
-          :disabled="items.archivado && items.puestoTrabajo.nombre !== 'Administrador' || 'Director'"
+          :disabled="
+            (items.archivado &&
+              items.puestoTrabajo.nombre !== 'Administrador') ||
+            'Director'
+          "
           id="ActionsDropdown"
           size="lg"
           style="text-color: black"
@@ -70,8 +77,8 @@
               params: { EmpleadoId: items.empleadoId }
             }"
           >
-              <i class="bi bi-pencil-square" />
-              Editar
+            <i class="bi bi-pencil-square" />
+            Editar
           </b-dropdown-item>
           <b-dropdown-item
             class="m-1"
@@ -92,8 +99,8 @@
         </b-dropdown>
       </template>
       <template #item-status="items">
-        <b-badge :variant="items.archivado === false ? 'success': 'danger'">
-        {{items.archivado === false ? 'Activo' : 'Archivado'}}
+        <b-badge :variant="items.archivado === false ? 'success' : 'danger'">
+          {{ items.archivado === false ? 'Activo' : 'Archivado' }}
         </b-badge>
       </template>
     </EasyDataTable>
@@ -247,8 +254,10 @@ export default {
     // const { getAreasByDepartament } = AreaServices()
     const { getDepartaments } = DepartamentServices()
     const { getWorkStationByDepartament } = workStationServices()
-    const { createExpedient, getExpedientByEmpleadoId } = ExpedientdigitalServices()
-    const { createExpedientMedical, getExpedientMedicalByEmpleadoId } = MunicipalMedicalServices()
+    const { createExpedient, getExpedientByEmpleadoId } =
+      ExpedientdigitalServices()
+    const { createExpedientMedical, getExpedientMedicalByEmpleadoId } =
+      MunicipalMedicalServices()
     const redirect = useRouter()
     const showModal = ref(false)
     const employees = ref([])
@@ -268,6 +277,14 @@ export default {
     // const areaState = ref(false)
     const workStationState = ref(false)
     const departamentState = ref(false)
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      {
+        text: 'Recursos humanos',
+        to: '/RecursosHumanos'
+      },
+      { text: 'Empleados' }
+    ])
     const expedientFieldBlank = ref({
       expedienteDigitalId: 0,
       empleadoId: null,
@@ -311,8 +328,7 @@ export default {
         if (data.length === 0) {
           swal.fire({
             title: 'No se encuentran puestos de trabajo registrados!',
-            text:
-              'No se encuentran puestos de trabajo registrados en el area seleccionado, registre primero un puesto de trabajo para continuar.',
+            text: 'No se encuentran puestos de trabajo registrados en el area seleccionado, registre primero un puesto de trabajo para continuar.',
             icon: 'warning'
           })
         }
@@ -323,13 +339,12 @@ export default {
       if (data.length === 0) {
         swal.fire({
           title: 'No se encuentran departamentos registrados!',
-          text:
-            'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
+          text: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
           icon: 'warning'
         })
       }
     })
-    const onClickExpedient = (empleadoId) => {
+    const onClickExpedient = empleadoId => {
       getExpedientByEmpleadoId(empleadoId, data => {
         console.log(data)
         redirect.push({
@@ -338,7 +353,7 @@ export default {
         })
       })
     }
-    const onClickMedicalExpedient = (empleadoId) => {
+    const onClickMedicalExpedient = empleadoId => {
       getExpedientMedicalByEmpleadoId(empleadoId, data => {
         console.log(data)
         redirect.push({
@@ -500,6 +515,7 @@ export default {
     return {
       employees,
       departaments,
+      breadcrumbItems,
       fields,
       perPage,
       currentPage,

@@ -1,5 +1,8 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
@@ -11,7 +14,7 @@
       </b-form-input>
       <b-button
         style="
-          background-color: rgb(94,80,238);
+          background-color: rgb(94, 80, 238);
           height: 50px;
           width: auto;
           font-size: 18px;
@@ -234,11 +237,7 @@
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Estado">
-              <Field
-                name="StateField"
-                :rules="validateState"
-                as="number"
-              >
+              <Field name="StateField" :rules="validateState" as="number">
                 <b-form-select
                   v-model="vehiclesFields.estatusVehiculoId"
                   autofocus
@@ -288,7 +287,8 @@ export default {
   },
   setup () {
     const swal = inject('$swal')
-    const { getVehicles, createVehicle, deleteVehicle, getEstatusVehicles } = VehiclesServices()
+    const { getVehicles, createVehicle, deleteVehicle, getEstatusVehicles } =
+      VehiclesServices()
     // const $toast = useToast()
     const vehicles = ref([])
     const statusVehicles = ref([])
@@ -314,6 +314,14 @@ export default {
     const doorsState = ref(false)
     const transmissionState = ref(false)
     const showModal = ref(false)
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      {
+        text: 'Patrimonio publico',
+        to: '/PatrimonioMunicipal'
+      },
+      { text: 'Vehiculos' }
+    ])
     const vehiclesFields = ref({
       vehiculoId: 0,
       marca: null,
@@ -471,8 +479,7 @@ export default {
         refreshTable()
         swal.fire({
           title: 'Vehiculo registrado correctamente!',
-          text:
-            'El vehiculo de computo se ha registrado al sistema satisfactoriamente.',
+          text: 'El vehiculo de computo se ha registrado al sistema satisfactoriamente.',
           icon: 'success'
         })
       })
@@ -509,8 +516,7 @@ export default {
             swal
               .fire({
                 title: 'Vehículo archivado!',
-                text:
-                  'El vehículo de computo ha sido archivado satisfactoriamente .',
+                text: 'El vehículo de computo ha sido archivado satisfactoriamente .',
                 icon: 'success'
               })
               .then(result => {
@@ -528,6 +534,7 @@ export default {
     return {
       vehicles,
       statusVehicles,
+      breadcrumbItems,
       fields,
       perPage,
       currentPage,

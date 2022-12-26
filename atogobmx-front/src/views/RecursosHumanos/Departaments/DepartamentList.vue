@@ -1,5 +1,8 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
@@ -11,7 +14,7 @@
       </b-form-input>
       <b-button
         style="
-          background-color: rgb(94,80,238);
+          background-color: rgb(94, 80, 238);
           height: 50px;
           width: auto;
           font-size: 18px;
@@ -135,11 +138,8 @@ export default {
   },
   setup () {
     const swal = inject('$swal')
-    const {
-      getDepartaments,
-      createDepartament,
-      deleteDepartament
-    } = DepartamentServices()
+    const { getDepartaments, createDepartament, deleteDepartament } =
+      DepartamentServices()
     // const $toast = useToast()
     const departaments = ref([])
     const perPage = ref(5)
@@ -152,6 +152,14 @@ export default {
     const searchField = ref('nombre')
     const nameState = ref(false)
     const showModal = ref(false)
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      {
+        text: 'Recursos humanos',
+        to: '/RecursosHumanos'
+      },
+      { text: 'Departamento' }
+    ])
     const departamentFields = ref({
       departamentoId: 0,
       nombre: null,
@@ -212,8 +220,7 @@ export default {
         refreshTable()
         swal.fire({
           title: 'Departamento registrado correctamente!',
-          text:
-            'El departamento se ha registrado al sistema satisfactoriamente.',
+          text: 'El departamento se ha registrado al sistema satisfactoriamente.',
           icon: 'success'
         })
       })
@@ -261,6 +268,7 @@ export default {
     }
     return {
       departaments,
+      breadcrumbItems,
       fields,
       perPage,
       currentPage,

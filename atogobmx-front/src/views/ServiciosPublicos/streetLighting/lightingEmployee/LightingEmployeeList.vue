@@ -175,7 +175,7 @@ export default {
     const fields = ref([
       { value: 'alumbradoEmpleadoId', text: 'ID', sortable: true },
       { value: 'empleados.nombreCompleto', text: 'Nombre empleado' },
-      { value: 'actions', text: 'Acc iones' }
+      { value: 'actions', text: 'Acciones' }
     ])
 
     const resetLightingEmployeeServiceFields = () => {

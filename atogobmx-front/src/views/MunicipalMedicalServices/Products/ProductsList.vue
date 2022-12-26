@@ -1,5 +1,8 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
@@ -215,21 +218,25 @@
               class="m-2"
               placeholder="Ingresa la cantidad a resurtir"
               type="number"
-            /> </b-form-group
-          >
+            />
+          </b-form-group>
         </b-col>
         <b-row align-h="end">
-      <b-button
-        class="w-auto m-2 text-white"
-        variant="primary"
-        @click="showModalSupply = !showModalSupply"
-      >
-        Cancelar
-      </b-button>
-      <b-button class="w-auto m-2" variant="success" @click="onSupplyProduct()">
-        Guardar
-      </b-button>
-    </b-row>
+          <b-button
+            class="w-auto m-2 text-white"
+            variant="primary"
+            @click="showModalSupply = !showModalSupply"
+          >
+            Cancelar
+          </b-button>
+          <b-button
+            class="w-auto m-2"
+            variant="success"
+            @click="onSupplyProduct()"
+          >
+            Guardar
+          </b-button>
+        </b-row>
       </b-row>
     </b-modal>
   </b-card>
@@ -275,6 +282,14 @@ export default {
     const isloading = ref(true)
     const searchValue = ref('')
     const searchField = ref('marca')
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      {
+        text: 'Servicios medicos',
+        to: '/ServiciosMedicosMunicipales'
+      },
+      { text: 'Productos' }
+    ])
     const productsFields = ref({
       productoId: 0,
       nombre: '',
@@ -424,6 +439,7 @@ export default {
     return {
       medicalProducts,
       supplyAmount,
+      breadcrumbItems,
       productId,
       fields,
       perPage,

@@ -1,5 +1,8 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-card class="m-1 border border-3">
       <h3>Agenda Municipal</h3>
     </b-card>
@@ -15,7 +18,7 @@
         />
       </b-col>
       <b-col>
-        <b-card class="m-1 border border-3" style="height: 600px; ">
+        <b-card class="m-1 border border-3" style="height: 600px">
           <h2>Agendar cita</h2>
           <Form @submit="addMedicalAppointment">
             <b-row cols="1">
@@ -107,7 +110,7 @@
             <b-button
               type="success"
               style="
-                background-color: rgb(94,80,238);
+                background-color: rgb(94, 80, 238);
                 height: 50px;
                 width: auto;
                 font-size: 18px;
@@ -131,19 +134,15 @@
   >
     <strong style="font-size: 30px">
       Detalles:
-      <br>
+      <br />
     </strong>
     <ul v-if="showModal" style="font-size: 25px">
-      <li>
-        Fecha: {{ scheduleSelected.start.format('DD/MM/YYYY') }}
-      </li>
+      <li>Fecha: {{ scheduleSelected.start.format('DD/MM/YYYY') }}</li>
       <li>
         Desde: {{ scheduleSelected.start.formatTime() }} Hasta:
         {{ scheduleSelected.end.formatTime() }}
       </li>
-      <li>
-      Detalles: {{ scheduleSelected.content }}
-      </li>
+      <li>Detalles: {{ scheduleSelected.content }}</li>
     </ul>
   </b-modal>
 </template>
@@ -169,10 +168,8 @@ export default {
   setup () {
     const swal = inject('$swal')
     const { getEmployeesUnfiled } = EmployeeServices()
-    const {
-      getMedicalAppointments,
-      createMedicalAppointment
-    } = MunicipalMedicalServices()
+    const { getMedicalAppointments, createMedicalAppointment } =
+      MunicipalMedicalServices()
     const redirect = useRouter()
     const date = ref([])
     const employees = ref([])
@@ -183,6 +180,14 @@ export default {
     const dateState = ref(false)
     const descriptionState = ref(false)
     const showModal = ref(false)
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      {
+        text: 'Servicios medicos',
+        to: '/ServiciosMedicosMunicipales'
+      },
+      { text: 'Agenda' }
+    ])
     const schedulesFields = ref({
       citaId: 0,
       motivo: '',
@@ -292,6 +297,7 @@ export default {
       // DATA
       employees,
       schedules,
+      breadcrumbItems,
       schedulesFields,
       scheduleSelected,
       schedulesFieldsBlank,

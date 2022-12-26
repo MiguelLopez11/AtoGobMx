@@ -1,5 +1,8 @@
 <template>
   <b-card class="m-2">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
@@ -11,7 +14,7 @@
       </b-form-input>
       <b-button
         style="
-          background-color: rgb(94,80,238);
+          background-color: rgb(94, 80, 238);
           height: 50px;
           width: auto;
           font-size: 18px;
@@ -221,6 +224,14 @@ export default {
     const descriptionState = ref(false)
     const folioState = ref(false)
     const departamentState = ref(false)
+    const breadcrumbItems = ref([
+      { text: 'Inicio', to: '/' },
+      {
+        text: 'Patrimonio publico',
+        to: '/PatrimonioMunicipal'
+      },
+      { text: 'Mobiliario' }
+    ])
     const furnituresFields = ref({
       mobiliarioId: 0,
       codigoInventario: null,
@@ -237,8 +248,7 @@ export default {
       if (data.length === 0) {
         swal.fire({
           title: 'No se encuentran departamentos registrados!',
-          text:
-            'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
+          text: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
           icon: 'warning'
         })
       }
@@ -383,6 +393,7 @@ export default {
       typeFurnitures,
       departaments,
       fields,
+      breadcrumbItems,
       perPage,
       currentPage,
       filter,

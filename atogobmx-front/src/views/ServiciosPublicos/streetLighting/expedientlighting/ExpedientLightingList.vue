@@ -74,6 +74,12 @@
             }"
             ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
           >
+          <b-dropdown-item
+            :href="`http://localhost:5000/api/ExpedienteAlumbrado/ExpedienteAlumbrado/Download/${items.expedienteAlumbradoId}`"
+          >
+            <i class="bi bi-download"></i>
+            Generar Expediente PDF
+          </b-dropdown-item>
         </b-dropdown>
       </template>
     </EasyDataTable>
