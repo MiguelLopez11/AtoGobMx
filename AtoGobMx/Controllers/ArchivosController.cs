@@ -142,13 +142,9 @@ namespace AtoGobMx.Controllers
         public async Task<IActionResult> DownloadFilesZip(int ExpedienteDigitalId)
         {
             var expediente = await _context.ExpedienteDigital
-                 .Include(i => i.Empleados)
-                 .Where(w => !w.Archivado)
-                 .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == ExpedienteDigitalId);
-            var UrlHost = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/", "digital.atogobmx.com", "Files", "RecursosHumanos", "Empleados", expediente.Empleados.NombreCompleto);
-            var result = GetListFiles(expediente.Empleados.NombreCompleto.ToString());
-            foreach (string line in result)
-            {
+                .Include(i => i.Empleados)
+                .Where(w => !w.Archivado)
+                .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == ExpedienteDigitalId);
 
                 FtpWebRequest downloadRequest = (FtpWebRequest)WebRequest.Create(UrlHost + line);
                 downloadRequest.UsePassive = true;
@@ -652,8 +648,10 @@ namespace AtoGobMx.Controllers
                 await _context.SaveChangesAsync();
                 return Ok("Documento archivado correctamente.");
             }
-            return BadRequest("Error");
-
+            Archivo.Archivado = true;
+            _context.Archivos.Update(Archivo);
+            await _context.SaveChangesAsync();
+            return Ok("Documento archivado correctamente.");
         }
         private static bool DeleteFile(string url)
         {

@@ -230,7 +230,7 @@ export default {
       { value: 'obraId', text: 'ID', sortable: true },
       { value: 'nombre', text: 'Nombre de la obra' },
       { value: 'descripcion', text: 'Descripcion' },
-      { value: 'oP_EstatusObras.nombre', text: 'Estatus de la obra' },
+      { value: 'estatusObraId', text: 'Estatus de la obra' },
       { value: 'actions', text: 'Acciones' }
     ])
 
