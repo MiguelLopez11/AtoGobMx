@@ -63,7 +63,7 @@
                 </b-col>
                 <!--Lugar publico-->
                 <b-col v-if="isPublicPlace">
-                  <b-form-group class="mt-3" label="Lugar Publico">
+                  <b-form-group class="mt-3" label="Direccion">
                     <Field
                       name="PublicPlaceField"
                       :rules="validatePublicPlace"

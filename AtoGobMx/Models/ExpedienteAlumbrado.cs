@@ -13,7 +13,8 @@ namespace AtoGobMx.Models
         public DateTime? FechaAlta { get; set; }
         public string? DescripcionSolucion { get; set; }
         public string? Nomenclatura { get; set; }
-        public string? LugarPublico { get; set; }
+        public string? Direccion { get; set; }
+
         public string? Localidad { get; set; }
         public bool Archivado { get; set; }
         public int? AlumbradoId { get; set; }

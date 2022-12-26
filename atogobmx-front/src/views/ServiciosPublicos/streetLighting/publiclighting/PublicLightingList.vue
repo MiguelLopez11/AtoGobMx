@@ -427,7 +427,7 @@ export default {
       { value: 'aalumbradoId', text: 'ID', sortable: true },
       { value: 'estatus.nombreEstatus', text: 'Estatus' },
       { value: 'tareaTipoAlumbrado.nombreTarea', text: 'Tipo de tarea' },
-      { value: 'nombreObra', text: 'nombre de Obra Alumbrado' },
+      { value: 'nombreObra', text: 'Nombre de obra alumbrado' },
       { value: 'descripcionProblema', text: 'Descripcion del problema' },
       { value: 'domicilio', text: 'Domicilio' },
       { value: 'descripcionDomicilio', text: 'Descripcion Domicilio' },

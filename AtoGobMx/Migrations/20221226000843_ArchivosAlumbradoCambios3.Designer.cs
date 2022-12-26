@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20221226000843_ArchivosAlumbradoCambios3")]
+    partial class ArchivosAlumbradoCambios3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,6 +45,9 @@ namespace AtoGobMx.Migrations
                     b.Property<int?>("EstatusId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("InventarioAlumbradoId")
+                        .HasColumnType("int");
+
                     b.Property<string>("NombreObra")
                         .HasColumnType("longtext");
 
@@ -55,6 +60,8 @@ namespace AtoGobMx.Migrations
                     b.HasKey("AlumbradoId");
 
                     b.HasIndex("EstatusId");
+
+                    b.HasIndex("InventarioAlumbradoId");
 
                     b.HasIndex("TareaTipoId");
 
@@ -101,6 +108,7 @@ namespace AtoGobMx.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Nombre")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("TipoArchivo")
@@ -365,20 +373,11 @@ namespace AtoGobMx.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Antigüedad")
-                        .HasColumnType("longtext");
-
                     b.Property<bool>("Archivado")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("CódigoEmpleado")
-                        .HasColumnType("longtext");
-
                     b.Property<int?>("DepartamentoId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Estatus")
-                        .HasColumnType("longtext");
 
                     b.Property<DateTime?>("FechaAlta")
                         .HasColumnType("datetime(6)");
@@ -394,13 +393,7 @@ namespace AtoGobMx.Migrations
                     b.Property<int?>("PuestoTrabajoId")
                         .HasColumnType("int");
 
-                    b.Property<float?>("SueldoQuincenal")
-                        .HasColumnType("float");
-
                     b.Property<bool>("TieneExpediente")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("TieneExpedienteMédico")
                         .HasColumnType("tinyint(1)");
 
                     b.HasKey("EmpleadoId");
@@ -417,11 +410,10 @@ namespace AtoGobMx.Migrations
                             EmpleadoId = 1,
                             Archivado = false,
                             DepartamentoId = 1,
-                            FechaAlta = new DateTime(2022, 12, 20, 0, 0, 0, 0, DateTimeKind.Local),
+                            FechaAlta = new DateTime(2022, 12, 25, 0, 0, 0, 0, DateTimeKind.Local),
                             NombreCompleto = "Administrador",
                             PuestoTrabajoId = 1,
-                            TieneExpediente = true,
-                            TieneExpedienteMédico = false
+                            TieneExpediente = true
                         });
                 });
 
@@ -1695,11 +1687,17 @@ namespace AtoGobMx.Migrations
                         .WithMany("Alumbrado")
                         .HasForeignKey("EstatusId");
 
+                    b.HasOne("AtoGobMx.Models.InventarioAlumbrado", "InventarioAlumbrado")
+                        .WithMany("Alumbrado")
+                        .HasForeignKey("InventarioAlumbradoId");
+
                     b.HasOne("AtoGobMx.Models.TareaTipoAlumbrado", "TareaTipoAlumbrado")
                         .WithMany("Alumbrado")
                         .HasForeignKey("TareaTipoId");
 
                     b.Navigation("Estatus");
+
+                    b.Navigation("InventarioAlumbrado");
 
                     b.Navigation("TareaTipoAlumbrado");
                 });
@@ -2186,6 +2184,11 @@ namespace AtoGobMx.Migrations
             modelBuilder.Entity("AtoGobMx.Models.ExpedienteDigital", b =>
                 {
                     b.Navigation("Archivos");
+                });
+
+            modelBuilder.Entity("AtoGobMx.Models.InventarioAlumbrado", b =>
+                {
+                    b.Navigation("Alumbrado");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.OP_EstatusObras", b =>

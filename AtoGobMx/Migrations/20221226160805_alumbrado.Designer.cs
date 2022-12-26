@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20221226160805_alumbrado")]
+    partial class alumbrado
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -365,20 +367,11 @@ namespace AtoGobMx.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Antigüedad")
-                        .HasColumnType("longtext");
-
                     b.Property<bool>("Archivado")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("CódigoEmpleado")
-                        .HasColumnType("longtext");
-
                     b.Property<int?>("DepartamentoId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Estatus")
-                        .HasColumnType("longtext");
 
                     b.Property<DateTime?>("FechaAlta")
                         .HasColumnType("datetime(6)");
@@ -394,13 +387,7 @@ namespace AtoGobMx.Migrations
                     b.Property<int?>("PuestoTrabajoId")
                         .HasColumnType("int");
 
-                    b.Property<float?>("SueldoQuincenal")
-                        .HasColumnType("float");
-
                     b.Property<bool>("TieneExpediente")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("TieneExpedienteMédico")
                         .HasColumnType("tinyint(1)");
 
                     b.HasKey("EmpleadoId");
@@ -417,11 +404,10 @@ namespace AtoGobMx.Migrations
                             EmpleadoId = 1,
                             Archivado = false,
                             DepartamentoId = 1,
-                            FechaAlta = new DateTime(2022, 12, 20, 0, 0, 0, 0, DateTimeKind.Local),
+                            FechaAlta = new DateTime(2022, 12, 26, 0, 0, 0, 0, DateTimeKind.Local),
                             NombreCompleto = "Administrador",
                             PuestoTrabajoId = 1,
-                            TieneExpediente = true,
-                            TieneExpedienteMédico = false
+                            TieneExpediente = true
                         });
                 });
 
@@ -566,20 +552,6 @@ namespace AtoGobMx.Migrations
                             Archivado = false,
                             EmpleadoId = 1
                         });
-                });
-
-            modelBuilder.Entity("AtoGobMx.Models.InventarioAlumbrado", b =>
-                {
-                    b.Property<int>("InventarioAlumbradoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Archivado")
-                        .HasColumnType("tinyint(1)");
-
-                    b.HasKey("InventarioAlumbradoId");
-
-                    b.ToTable("InventarioAlumbrado");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.OP_Empleados", b =>

@@ -37,6 +37,7 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult> GetObrasPublicasById(int ObraId)
         {
             var obraspublicas = await _context.ObrasPublicas
+                .Include(i => i.OP_EstatusObras)
                 .FirstOrDefaultAsync(f => f.ObraId == ObraId);
             if (obraspublicas == null)
             {
@@ -46,9 +47,9 @@ namespace AtoGobMx.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<OP_Obras>> PostObrasPublicas(OP_Obras obrasPublicas)
+        public async Task<ActionResult<OP_Obras>> PostObrasPublicas(OP_Obras op_ObrasPublicas)
         {
-            _context.ObrasPublicas.Add(obrasPublicas);
+            object value = _context.ObrasPublicas.Add(op_ObrasPublicas);
             await _context.SaveChangesAsync();
             return Ok("Tipo de obra creada correctamente");
         }

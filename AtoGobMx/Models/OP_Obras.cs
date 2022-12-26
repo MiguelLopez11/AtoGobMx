@@ -21,6 +21,8 @@ namespace AtoGobMx.Models
 
         [JsonIgnore]
         public virtual IEnumerable<OP_Empleados>? OP_Empleados { get; set; }
+        [JsonIgnore]
+        public virtual IEnumerable<ArchivosObras>? ArchivosObras { get; set; }
 
     }
 }

@@ -142,13 +142,9 @@ namespace AtoGobMx.Controllers
         public async Task<IActionResult> DownloadFilesZip(int ExpedienteDigitalId)
         {
             var expediente = await _context.ExpedienteDigital
-                 .Include(i => i.Empleados)
-                 .Where(w => !w.Archivado)
-                 .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == ExpedienteDigitalId);
-            var UrlHost = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/", "digital.atogobmx.com", "Files", "RecursosHumanos", "Empleados", expediente.Empleados.NombreCompleto);
-            var result = GetListFiles(expediente.Empleados.NombreCompleto.ToString());
-            foreach (string line in result)
-            {
+                .Include(i => i.Empleados)
+                .Where(w => !w.Archivado)
+                .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == ExpedienteDigitalId);
 
                 FtpWebRequest downloadRequest = (FtpWebRequest)WebRequest.Create(UrlHost + line);
                 downloadRequest.UsePassive = true;
@@ -224,6 +220,224 @@ namespace AtoGobMx.Controllers
 
 
         }
+
+        //Metodos creados en mis espacios
+        [HttpGet("Documents/AlumbradoPublico/{AlumbradoId}")]
+        public async Task<IActionResult> GetDocumentosAlumbrado(int AlumbradoId)
+        {
+            var Documentos = await _context.ArchivosAlumbrado
+                .Where(w => w.AlumbradoId == AlumbradoId)
+                .Where(w => w.TipoArchivo == ".pdf" || w.TipoArchivo == ".docx")
+                .Where(w => !w.Archivado)
+                .ToListAsync();
+            if (Documentos == null)
+            {
+                return BadRequest("No se encuentran documentos registrados, ");
+            }
+            return Ok(Documentos);
+        }
+
+        [HttpGet("Documents/DireccionCementerio/{DireccionCementerioId}")]
+        public async Task<IActionResult> GetDocumentosCementerios(int DireccionCementerioId)
+        {
+            var Documentos = await _context.ArchivosCementerios
+                .Where(w => w.DireccionId == DireccionCementerioId)
+                .Where(w => w.TipoArchivo == ".pdf" || w.TipoArchivo == ".docx")
+                .Where(w => !w.Archivado)
+                .ToListAsync();
+            if (Documentos == null)
+            {
+                return BadRequest("No se encuentran documentos registrados, ");
+            }
+            return Ok(Documentos);
+        }
+
+        [HttpGet("Documents/Aseo/{AseoId}")]
+        public async Task<IActionResult> GetDocumentosAseo(int AseoId)
+        {
+            var Documentos = await _context.ArchivosAseo
+                .Where(w => w.AseoId == AseoId)
+                .Where(w => w.TipoArchivo == ".pdf" || w.TipoArchivo == ".docx")
+                .Where(w => !w.Archivado)
+                .ToListAsync();
+            if (Documentos == null)
+            {
+                return BadRequest("No se encuentran documentos registrados, ");
+            }
+            return Ok(Documentos);
+        }
+
+        [HttpGet("Documents/ObrasPublicas/{ObraId}")]
+        public async Task<IActionResult> GetDocumentosObras(int ObraId)
+        {
+            var Documentos = await _context.ArchivosObras
+                .Where(w => w.ObraId == ObraId)
+                .Where(w => w.TipoArchivo == ".pdf" || w.TipoArchivo == ".docx")
+                .Where(w => !w.Archivado)
+                .ToListAsync();
+            if (Documentos == null)
+            {
+                return BadRequest("No se encuentran documentos registrados, ");
+            }
+            return Ok(Documentos);
+        }
+        //-------Descarga de uno en uno decada documento cargado al sistema---------//
+        [HttpGet("Documents/Dowload/{AlumbradoId}/{ArchivoAlumbradoId}")]
+        public async Task<IActionResult> DownloadFileAlumbrado(int AlumbradoId, int ArchivoAlumbradoId)
+        {
+            try
+            {
+                var alumbrado = await _context.Alumbrado
+                    .Include(i => i.ArchivosAlumbrado)
+                    .FirstOrDefaultAsync(f => f.AlumbradoId == AlumbradoId);
+                if (alumbrado == null)
+                {
+                    return NotFound();
+                }
+                var documento = await _context.ArchivosAlumbrado
+                    .Where(w => w.TipoArchivo == ".pdf" || w.TipoArchivo == ".docx")
+                    .FirstOrDefaultAsync(f => f.ArchivoAlumbradoId == ArchivoAlumbradoId);
+                if (documento == null)
+                {
+                    return NotFound("No se encuentra Archivo");
+                }
+                var serverPath = "ftp://digital.atogobmx.com/Files/ServiciosPublicos/AlumbradoPublico/";
+                var NombreObra = alumbrado.NombreObra.ToString();
+                var filePath = documento.Nombre.ToString();
+                var ftpRequest = (FtpWebRequest)FtpWebRequest.Create(serverPath + NombreObra + "/" + filePath);
+                var url = serverPath + NombreObra + "/" + filePath;
+                ftpRequest.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+                ftpRequest.UseBinary = true;
+                ftpRequest.UsePassive = true;
+                ftpRequest.KeepAlive = true;
+                ftpRequest.Method = WebRequestMethods.Ftp.DownloadFile;
+                var ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
+                var ftpStream = ftpResponse.GetResponseStream();
+                var provider = new FileExtensionContentTypeProvider();
+                if (!provider.TryGetContentType(url, out var contentType))
+                {
+                    contentType = "application/octet-stream";
+                }
+                return File(ftpStream, contentType, Path.GetFileName(url));
+
+            }
+            catch (Exception e)
+            {
+                return NoContent();
+            }
+
+        }
+        [HttpPost("Documents/AlumbradoPublico/{AlumbradoId}/")]
+        public async Task<IActionResult> UploadDocumentsAlumbrado(List<IFormFile> Files, int AlumbradoId)
+        {
+            #region Cargar Archivos
+            try
+            {
+
+                #region Comprobar si el expediente existe
+                var alumbrado = await _context.Alumbrado
+                    .Include(i => i.TareaTipoAlumbrado)
+                    .FirstOrDefaultAsync(f => f.AlumbradoId == AlumbradoId);
+
+                if (alumbrado == null)
+                {
+                    return NotFound();
+                }
+                string serverPath = String.Format("ftp://{0}/{1}/{2}/{3}/{4}", "digital.atogobmx.com", "Files", "ServiciosPublicos", "AlumbradoPublico", alumbrado.NombreObra);
+                #endregion
+                if (Files.Count > 0)
+                {
+                    foreach (var file in Files)
+                    {
+                        #region Comprobar que el archivo sea un documento
+                        var fileName = file.FileName;
+                        var fileExtension = Path.GetExtension(fileName);
+                        if (fileExtension != ".pdf" && fileExtension != ".docx")
+                        {
+                            return BadRequest("El tipo de archivo no es válido");
+                        }
+
+                        #endregion
+
+                        #region Comprobar si ya existe una imagen registrada al expediente, crearlo
+                        var request = (FtpWebRequest)WebRequest.Create(serverPath + "/" + file.FileName);
+                        request.Method = WebRequestMethods.Ftp.UploadFile;
+                        request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+                        byte[] buffer = new byte[1024];
+                        var stream = file.OpenReadStream();
+                        byte[] fileContents;
+                        using (var ms = new MemoryStream())
+                        {
+                            int read;
+                            while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+                            {
+                                ms.Write(buffer, 0, read);
+                            }
+                            fileContents = ms.ToArray();
+                        }
+                        using (Stream requestStream = await request.GetRequestStreamAsync())
+                        {
+                            requestStream.Write(fileContents, 0, fileContents.Length);
+                        }
+                        FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+                        var archivo = new ArchivosAlumbrado()
+                        {
+                            ArchivoAlumbradoId = 0,
+                            Nombre = file.FileName,
+                            TipoArchivo = fileExtension,
+                            AlumbradoId = AlumbradoId
+                        };
+                        _context.ArchivosAlumbrado.Add(archivo);
+                        await _context.SaveChangesAsync();
+                    }
+                    return Ok("Documento registrado correctamente.");
+                    #endregion
+                }
+                else
+                {
+                    return BadRequest("No se ingresó ningun documento");
+                }
+            }
+            catch
+            {
+                return BadRequest("Ah ocurrido un error inesperado");
+            }
+            #endregion
+        }
+        [HttpDelete("Documents/AlumbradoPublico/Eliminar/{AlumbradoId}/{ArchivoId}")]
+        public async Task<IActionResult> DeleteDocumentsAlumbrado(int AlumbradoId, int ArchivoId)
+        {
+            var alumbrado = await _context.Alumbrado
+                .FirstOrDefaultAsync(f => f.AlumbradoId == AlumbradoId);
+
+            if (alumbrado == null)
+            {
+                return NotFound($"No se encuentra expediente con el ID {AlumbradoId}");
+            }
+            var Archivo = await _context.ArchivosAlumbrado
+                .FirstOrDefaultAsync(f => f.ArchivoAlumbradoId == ArchivoId);
+
+            if (Archivo == null)
+            {
+                return NotFound($"No se encuentra el documento con el ID {ArchivoId}");
+            }
+            var serverPath = "ftp://digital.atogobmx.com/Files/ServiciosPublicos/AlumbradoPublico/";
+            var NombreObra = alumbrado.NombreObra.ToString();
+            var filePath = Archivo.Nombre.ToString();
+            var Url = $"{serverPath + NombreObra + "/" + filePath}";
+            var result = DeleteFile(Url);
+            if (result)
+            {
+                Archivo.Archivado = true;
+                _context.ArchivosAlumbrado.Update(Archivo);
+                await _context.SaveChangesAsync();
+                return Ok("Documento archivado correctamente.");
+            }
+            return BadRequest("Error");
+
+        }
+        //-------------------------------------------------------------------------//
+
         [HttpPost("Imagen/{expedienteDigitalId}/")]
         public async Task<IActionResult> UploadPhotoProfile(IFormFile file, int expedienteDigitalId)
         {
@@ -448,7 +662,7 @@ namespace AtoGobMx.Controllers
             //    await _context.SaveChangesAsync();
             //    return Ok("Documento archivado correctamente.");
             //}
-
+           
         }
         private static bool DeleteFile(string url)
         {
