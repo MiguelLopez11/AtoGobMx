@@ -142,9 +142,13 @@ namespace AtoGobMx.Controllers
         public async Task<IActionResult> DownloadFilesZip(int ExpedienteDigitalId)
         {
             var expediente = await _context.ExpedienteDigital
-                .Include(i => i.Empleados)
-                .Where(w => !w.Archivado)
-                .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == ExpedienteDigitalId);
+                 .Include(i => i.Empleados)
+                 .Where(w => !w.Archivado)
+                 .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == ExpedienteDigitalId);
+            var UrlHost = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/", "digital.atogobmx.com", "Files", "RecursosHumanos", "Empleados", expediente.Empleados.NombreCompleto);
+            var result = GetListFiles(expediente.Empleados.NombreCompleto.ToString());
+            foreach (string line in result)
+            {
 
                 FtpWebRequest downloadRequest = (FtpWebRequest)WebRequest.Create(UrlHost + line);
                 downloadRequest.UsePassive = true;
@@ -184,40 +188,13 @@ namespace AtoGobMx.Controllers
             }
 
             zipFileMemoryStream.Seek(0, SeekOrigin.Begin);
+            var dir = new DirectoryInfo("Files/Documentos");
+            dir.Attributes = dir.Attributes & ~FileAttributes.ReadOnly;
+            dir.Delete(true);
             //Directory.Delete("Files/Documentos");
             return File(zipFileMemoryStream, "application/octet-stream", $"Documentos_{DateOnly.FromDateTime(DateTime.Now)}_{expediente.Empleados.NombreCompleto}.zip");
 
-            //    using (ZipArchive archive = new ZipArchive(zipFileMemoryStream, ZipArchiveMode.Update, leaveOpen: true))
-            //    {
-            //        ftpResponse.op
-            //        await ftpStream.CopyToAsync(zipFileMemoryStream);
-            //    }
-            //    zipFileMemoryStream.Seek(0, SeekOrigin.Begin);
-            //return File(zipFileMemoryStream, "application/octet-stream", $"Documentos_{DateOnly.FromDateTime(DateTime.Now)}_{expediente.Empleados.NombreCompleto}.zip");
-
-            //}
-            //return Ok("Directorio copiado");
-            //var FolderPath = Path.Combine(Directory.GetCurrentDirectory(), $"Files/Documentos/{expediente.Empleados.NombreCompleto}");
-            //var FilePaths = Directory.GetFiles(FolderPath);
-            //var zipFileMemoryStream = new MemoryStream();
-            //using (ZipArchive archive = new ZipArchive(zipFileMemoryStream, ZipArchiveMode.Update, leaveOpen: true))
-            //{
-            //    foreach (var FilePath in reader.ReadToEnd())
-            //    {
-            //        var FileName = Path.GetFileName(FilePath.ToString());
-            //        var entry = archive.CreateEntry(FileName);
-            //        using (var entryStream = entry.Open())
-            //        using (var fileStream = System.IO.File.OpenRead(FilePath.ToString()))
-            //        {
-            //            await fileStream.CopyToAsync(entryStream);
-            //        }
-            //    }
-            //}
-
-
-
         }
-
         //Metodos creados en mis espacios
         [HttpGet("Documents/AlumbradoPublico/{AlumbradoId}")]
         public async Task<IActionResult> GetDocumentosAlumbrado(int AlumbradoId)

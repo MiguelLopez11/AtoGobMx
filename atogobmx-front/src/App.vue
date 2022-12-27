@@ -12,6 +12,9 @@
       menuFooterTextColor="#807e85"
       iconsColor="#807e85"
       menuItemsHoverColor="#9d94f4"
+      :profileImg="ImageProfile"
+      :profileName="null"
+      :profileRole="null"
       @button-exit-clicked="removeLocalStorgare()"
     />
   <router-view></router-view>
@@ -19,6 +22,7 @@
 <script>
 import { ref, inject } from 'vue'
 import LogoAtogobMx from '@/Images/Icon.png'
+import AtogobMx from '@/Images/AtoGobMx-removebg-preview.png'
 import { useRouter } from 'vue-router'
 import VueSidebarMenuAkahon from 'vue-sidebar-menu-akahon'
 
@@ -30,6 +34,7 @@ export default {
     const router = useRouter()
     const swal = inject('$swal')
     const background = ref(LogoAtogobMx)
+    const ImageProfile = ref(AtogobMx)
     const isLogged = window.sessionStorage.getItem('isLogged')
     // const departament = window.sessionStorage.getItem('Departamento')
     // const role = window.sessionStorage.getItem('Role')
@@ -60,6 +65,7 @@ export default {
     }
     return {
       background,
+      ImageProfile,
       isLogged,
       // departament,
       // role,

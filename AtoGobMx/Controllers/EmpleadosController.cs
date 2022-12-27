@@ -56,6 +56,18 @@ namespace AtoGobMx.Controllers
                 .ToListAsync();
             return Ok(empleados);
         }
+        [HttpGet("SinExpedienteMedico")]
+        public async Task<ActionResult<Empleado>> GetEmpleadosSinExpedienteMédico()
+        {
+            var empleados = await _context.Empleados
+                //.Include(i => i.Area)
+                .Include(i => i.Departamentos)
+                .Include(i => i.PuestoTrabajo)
+                .Where(w => w.TieneExpedienteMédico == false)
+                .Where(w => !w.Archivado)
+                .ToListAsync();
+            return Ok(empleados);
+        }
 
         [HttpGet("{EmpleadoId}")]
         public async Task<ActionResult> GetEmpleadosById(int EmpleadoId)
