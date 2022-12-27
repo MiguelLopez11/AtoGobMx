@@ -194,7 +194,37 @@ namespace AtoGobMx.Controllers
             dir.Delete(true);
             //Directory.Delete("Files/Documentos");
             return File(zipFileMemoryStream, "application/octet-stream", $"Documentos_{DateOnly.FromDateTime(DateTime.Now)}_{expediente.Empleados.NombreCompleto}.zip");
+        }
 
+        //Metodos creados en mis espacios
+        [HttpGet("Documents/AlumbradoPublico/{AlumbradoId}")]
+        public async Task<IActionResult> GetDocumentosAlumbrado(int AlumbradoId)
+        {
+            var Documentos = await _context.ArchivosAlumbrado
+                .Where(w => w.AlumbradoId == AlumbradoId)
+                .Where(w => w.TipoArchivo == ".pdf" || w.TipoArchivo == ".docx")
+                .Where(w => !w.Archivado)
+                .ToListAsync();
+            if (Documentos == null)
+            {
+                return BadRequest("No se encuentran documentos registrados, ");
+            }
+            return Ok(Documentos);
+        }
+
+        [HttpGet("Documents/DireccionCementerio/{DireccionCementerioId}")]
+        public async Task<IActionResult> GetDocumentosCementerios(int DireccionCementerioId)
+        {
+            var Documentos = await _context.ArchivosCementerios
+                .Where(w => w.DireccionId == DireccionCementerioId)
+                .Where(w => w.TipoArchivo == ".pdf" || w.TipoArchivo == ".docx")
+                .Where(w => !w.Archivado)
+                .ToListAsync();
+            if (Documentos == null)
+            {
+                return BadRequest("No se encuentran documentos registrados, ");
+            }
+            return Ok(Documentos);
         }
 
         [HttpGet("Documents/Aseo/{AseoId}")]
