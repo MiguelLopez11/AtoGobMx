@@ -15,9 +15,11 @@ namespace AtoGobMx.Models
         public string? TipoArchivo { get; set; }
         public bool Archivado { get; set; }
         public int ExpedienteDigitalId { get; set; }
+        //public int ExpedienteAlumbradoId { get; set; }
 
         [ForeignKey("ExpedienteDigitalId")]
         public ExpedienteDigital? expedienteDigital { get; set; }
+        //[ForeignKey("")]
 
         //[JsonIgnore]
         //public virtual IEnumerable<ExpedienteDigital>? ExpedienteDigital { get; set; }

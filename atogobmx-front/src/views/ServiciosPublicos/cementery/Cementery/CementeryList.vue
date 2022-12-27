@@ -169,7 +169,7 @@
           </b-col>
           <!--Agregar espacios -->
           <b-col>
-            <b-form-group class="mt-3" label="Espacios Disponibles">
+            <b-form-group class="mt-3" label="Espacios disponibles">
               <Field
                 name="AvailableField"
                 :rules="validateAvailable"
@@ -316,7 +316,7 @@ export default {
       { value: 'nombrePropietario', text: 'Nombre de propietario' },
       { value: 'numeroEspasios', text: 'Espacios' },
       { value: 'metrosCorrespondientes', text: 'Metros' },
-      { value: 'espaciosDisponibles', text: 'Espacios Disponibles' },
+      { value: 'espaciosDisponibles', text: 'Espacios disponibles' },
       { value: 'actions', text: 'Acciones' }
     ])
 

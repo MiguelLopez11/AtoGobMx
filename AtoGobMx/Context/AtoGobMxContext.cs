@@ -15,10 +15,13 @@ namespace AtoGobMx.Context
         public DbSet<Usuario> Usuarios { get; set; }
         //public DbSet<Role> Roles { get; set; }
         public DbSet<Alumbrado> Alumbrado { get; set; }
+        public DbSet<ArchivosAlumbrado> ArchivosAlumbrado  { get; set; }
+        public DbSet<ArchivosCementerios> ArchivosCementerios { get; set; }
+        public DbSet<ArchivosAseo> ArchivosAseo { get; set; }
+        public DbSet<ArchivosObras> ArchivosObras { get; set; }
         public DbSet<ExpedienteAlumbrado> ExpedienteAlumbrado { get; set; }
         public DbSet<EstatusAlumbrado> EstatusAlumbrado { get; set; }
         public DbSet<TareaTipoAlumbrado> TareaTipoAlumbrado { get; set; }
-        public DbSet<InventarioAlumbrado> InventarioAlumbrado { get; set; }
         public DbSet<EmpleadosAlumbrado> EmpleadosAlumbrado { get; set; }
         public DbSet<VehiculosAlumbrado> VehiculosAlumbrado { get; set; }
         public DbSet<Aseo> Aseo { get; set; }

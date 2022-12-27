@@ -83,8 +83,8 @@
             <i class="bi bi-pencil-square" />
             Editar
           </b-dropdown-item>
+            <!-- v-if="items.archivado && items.puestoTrabajo.nombre === 'Administrador' || items.puestoTrabajo.nombre === 'Director'" -->
           <b-dropdown-item
-            v-if="items.archivado && items.puestoTrabajo.nombre === 'Administrador' || items.puestoTrabajo.nombre === 'Director'"
             class="m-1"
             variant="outline-warning"
           >

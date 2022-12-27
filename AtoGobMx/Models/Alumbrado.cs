@@ -17,7 +17,6 @@ namespace AtoGobMx.Models
         public bool Archivado { get; set; }
         public bool TieneExpediente { get; set; }
         public int? EstatusId { get; set; }
-        public int? InventarioAlumbradoId { get; set; }
         public int? TareaTipoId { get; set; }
 
         [ForeignKey("EstatusId")]
@@ -26,12 +25,10 @@ namespace AtoGobMx.Models
         [ForeignKey("TareaTipoId")]
         public TareaTipoAlumbrado? TareaTipoAlumbrado { get; set; }
 
-        [ForeignKey("InventarioAlumbradoId")]
-        public InventarioAlumbrado? InventarioAlumbrado { get; set; }
-
         [JsonIgnore]
         public virtual IEnumerable<ExpedienteAlumbrado>? ExpedienteAlumbrado { get; set; }
-
+        [JsonIgnore]
+        public virtual IEnumerable<ArchivosAlumbrado>? ArchivosAlumbrado { get; set; }
 
         //public string Tarea { get; set; }
         //public string DescripcionSolucion { get; set; }

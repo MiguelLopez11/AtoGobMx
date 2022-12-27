@@ -1,8 +1,8 @@
 <template>
-  <b-row align-h="end" class="mb-3 mr-1">
+  <b-row cols="3" align-h="end" class="mb-3">
     <b-form-input
       size="xl"
-      style="width: 350px"
+      class="w-25"
       v-model="searchValue"
       type="search"
       placeholder="Buscar Documento..."
@@ -35,7 +35,7 @@
         text-align: center;
       "
       type="submit"
-      :href="`https://localhost:5000/api/Archivos/Documentos/${expedienteDigitalId}/Zip`"
+      :href="`http://localhost:5000/api/Archivos/Documentos/${expedienteDigitalId}/Zip`"
     >
       <i class="bi bi-download"></i>
       Descargar Documentos
@@ -72,7 +72,7 @@
       <b-button
         class="m-1"
         variant="outline-warning"
-        :href="`https://localhost:5000/api/Archivos/Documentos/Descargar/${expedienteDigitalId}/${items.archivoId}`"
+        :href="`http://localhost:5000/api/Archivos/Documentos/Descargar/${expedienteDigitalId}/${items.archivoId}`"
       >
         <i class="bi bi-download"></i>
       </b-button>
@@ -217,7 +217,7 @@ export default {
             }
           })
       })
-      refFile.value.files = []
+      // refFile.value.files = []
     }
     const RemoveDocument = archivoId => {
       swal

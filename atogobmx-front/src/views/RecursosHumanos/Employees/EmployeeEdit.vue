@@ -10,12 +10,19 @@
       <Form @submit="onUpdateEmployee">
         <b-row cols="3">
           <b-col>
+            <b-form-group class="mt-3" label="Codigo de empleado">
+              <Field name="nameField" :rules="validateCodeEmployee" as="text">
+                <b-form-input
+                  v-model="employee.códigoEmpleado"
+                  :state="codeEmployeeState"
+                />
+              </Field>
+              <ErrorMessage class="text-danger" name="nameField"></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <b-col>
             <b-form-group class="mt-3" label="Nombre Completo">
-              <Field
-                name="nameField"
-                :rules="validateName"
-                as="text"
-              >
+              <Field name="nameField" :rules="validateName" as="text">
                 <b-form-input
                   v-model="employee.nombreCompleto"
                   :state="nameState"
@@ -38,34 +45,51 @@
                   value-field="departamentoId"
                   text-field="nombre"
                   :state="departamentState"
-                  @input="getWorkStation(employee.departamentoId)"
+                  @input="getWorkStation(EmployeesFields.departamentoId)"
                 >
                 </b-form-select>
               </Field>
-              <ErrorMessage class="text-danger" name="DepartamentField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="DepartamentField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!-- <b-col>
-            <b-form-group class="mt-3" label="Area">
+          <b-col>
+            <b-form-group class="mt-3" label="Estatus">
               <Field
-                name="AreaField"
-                :rules="validateArea"
+                name="statusField"
+                :rules="validateEstatus"
                 as="number"
               >
                 <b-form-select
-                  v-model="employee.areaId"
+                  v-model="employee.estatus"
                   autofocus
-                  :options="areas"
-                  value-field="areaId"
+                  :state="estatusEmployeeState"
+                  value-field="nombre"
                   text-field="nombre"
-                  :state="areaState"
-                  @input="getWorkStation(employee.areaId)"
+                  :options="EstatusEmployee"
                 >
                 </b-form-select>
               </Field>
-              <ErrorMessage class="text-danger" name="AreaField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="statusField"
+              ></ErrorMessage>
             </b-form-group>
-          </b-col> -->
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Sueldo Quincenal">
+              <Field name="salaryField" :rules="validateSalary" as="text">
+                <b-form-input
+                  v-model="employee.sueldoQuincenal"
+                  :state="salaryeState"
+                  type="number"
+                />
+              </Field>
+              <ErrorMessage class="text-danger" name="salaryField"></ErrorMessage>
+            </b-form-group>
+          </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Puesto de trabajo">
               <Field
@@ -83,16 +107,15 @@
                 >
                 </b-form-select>
               </Field>
-              <ErrorMessage class="text-danger" name="workStationField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="workStationField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Fecha de Contratación">
-              <Field
-                name="DateWorkField"
-                :rules="validateWorkDate"
-                as="date"
-              >
+              <Field name="DateWorkField" :rules="validateWorkDate" as="text">
                 <Datepicker
                   v-model="employee.fechaAlta"
                   locale="es"
@@ -102,20 +125,22 @@
                 >
                 </Datepicker>
               </Field>
-              <ErrorMessage class="text-danger" name="DateWorkField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="DateWorkField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
         </b-row>
         <b-row align-h="end">
           <b-button
-            class="col-1 m-2 text-white"
+            class="w-auto m-2 text-white"
             variant="primary"
             to="/RecursosHumanos/Empleados/list"
-            type="reset"
           >
-            Cancelar</b-button
-          >
-          <b-button type="success" class="col-1 m-2" variant="success">
+            Cancelar
+          </b-button>
+          <b-button class="w-auto m-2" variant="success" type="submit">
             Guardar
           </b-button>
         </b-row>
@@ -145,14 +170,16 @@ export default {
   setup () {
     const swal = inject('$swal')
     const { getEmployee, updateEmployee } = EmployeeServices()
-    // const { getAreasByDepartament } = AreaServices()
     const { getDepartaments } = DepartamentServices()
     const { getWorkStationByDepartament } = workStationServices()
-    // const $toast = useToast()
     const employee = ref([])
-    // const areas = ref([])
     const departaments = ref([])
     const workStations = ref([])
+    const EstatusEmployee = ref([
+      { id: 1, nombre: 'Eventual' },
+      { id: 2, nombre: 'Base' },
+      { id: 2, nombre: 'Confianza' }
+    ])
     const router = useRoute()
     const redirect = useRouter()
     const nameState = ref(false)
@@ -160,6 +187,9 @@ export default {
     const dateWorkState = ref(false)
     const workStationState = ref(false)
     const departamentState = ref(false)
+    const codeEmployeeState = ref(false)
+    const estatusEmployeeState = ref(false)
+    const salaryeState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
       { text: 'Empleados', to: '/RecursosHumanos/Empleados/list' },
@@ -167,9 +197,7 @@ export default {
     ])
     getEmployee(router.params.EmpleadoId, (data) => {
       employee.value = data
-      // getAreas(data.departamentoId)
       getWorkStation(data.departamentoId)
-      validateState()
     })
     getDepartaments(data => {
       departaments.value = data
@@ -181,21 +209,6 @@ export default {
         })
       }
     })
-
-    // const getAreas = (departamentoId) => {
-    //   if (departamentoId) {
-    //     getAreasByDepartament(departamentoId, data => {
-    //       areas.value = data
-    //       if (data.length === 0) {
-    //         swal.fire({
-    //           title: 'No se encuentran areas registradas!',
-    //           text: 'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
-    //           icon: 'error'
-    //         })
-    //       }
-    //     })
-    //   }
-    // }
     const getWorkStation = (departamentoId) => {
       if (departamentoId) {
         getWorkStationByDepartament(departamentoId, data => {
@@ -228,21 +241,33 @@ export default {
         validateState()
         return 'Este campo es requerido'
       }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(employee.value.nombreCompleto)) {
-        nameState.value = false
-        return 'El nombre solo puede contener letras'
+      validateState()
+      return true
+    }
+    const validateCodeEmployee = () => {
+      if (!employee.value.códigoEmpleado) {
+        validateState()
+        return 'Este campo es requerido'
       }
       validateState()
       return true
     }
-    // const validateArea = () => {
-    //   if (!employee.value.areaId) {
-    //     validateState()
-    //     return 'Este campo es requerido'
-    //   }
-    //   validateState()
-    //   return true
-    // }
+    const validateEstatus = () => {
+      if (!employee.value.estatus) {
+        validateState()
+        return 'Este campo es requerido'
+      }
+      validateState()
+      return true
+    }
+    const validateSalary = () => {
+      if (!employee.value.sueldoQuincenal) {
+        validateState()
+        return 'Este campo es requerido'
+      }
+      validateState()
+      return true
+    }
     const validateDepartament = () => {
       if (!employee.value.departamentoId) {
         validateState()
@@ -269,10 +294,12 @@ export default {
     }
     const validateState = () => {
       nameState.value = employee.value.nombreCompleto !== ''
-      // areaState.value = employee.value.areaId !== null
       departamentState.value = employee.value.departamentoId !== null
       workStationState.value = employee.value.puestoTrabajoId !== null
       dateWorkState.value = employee.value.fechaAlta !== null
+      codeEmployeeState.value = employee.value.códigoEmpleado !== null
+      estatusEmployeeState.value = employee.value.estatus !== null
+      salaryeState.value = employee.value.salarioQuincenal !== null
       return ''
     }
 
@@ -281,6 +308,7 @@ export default {
       // areas,
       workStations,
       departaments,
+      EstatusEmployee,
       breadcrumbItems,
       router,
       nameState,
@@ -288,16 +316,20 @@ export default {
       departamentState,
       workStationState,
       dateWorkState,
+      codeEmployeeState,
+      estatusEmployeeState,
+      salaryeState,
       redirect,
       onUpdateEmployee,
       validateName,
-      // validateArea,
       validateState,
-      // getAreas,
       getWorkStation,
       validateDepartament,
       validateWorkSation,
-      validateWorkDate
+      validateWorkDate,
+      validateEstatus,
+      validateSalary,
+      validateCodeEmployee
     }
   }
 }

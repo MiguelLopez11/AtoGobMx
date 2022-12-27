@@ -117,6 +117,17 @@
       <Form @submit="addEmployee">
         <b-row cols="3">
           <b-col>
+            <b-form-group class="mt-3" label="Codigo de empleado">
+              <Field name="nameField" :rules="validateCodeEmployee" as="text">
+                <b-form-input
+                  v-model="EmployeesFields.códigoEmpleado"
+                  :state="codeEmployeeState"
+                />
+              </Field>
+              <ErrorMessage class="text-danger" name="nameField"></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <b-col>
             <b-form-group class="mt-3" label="Nombre Completo">
               <Field name="nameField" :rules="validateName" as="text">
                 <b-form-input
@@ -151,23 +162,41 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!-- <b-col>
-            <b-form-group class="mt-3" label="Area">
-              <Field name="AreaField" :rules="validateArea" as="number">
+          <b-col>
+            <b-form-group class="mt-3" label="Estatus">
+              <Field
+                name="statusField"
+                :rules="validateEstatus"
+                as="number"
+              >
                 <b-form-select
-                  v-model="EmployeesFields.areaId"
+                  v-model="EmployeesFields.estatus"
                   autofocus
-                  :options="areas"
-                  value-field="areaId"
+                  :state="estatusEmployeeState"
+                  value-field="nombre"
                   text-field="nombre"
-                  :state="areaState"
-                  @input="getWorkStation(EmployeesFields.areaId)"
+                  :options="EstatusEmployee"
                 >
                 </b-form-select>
               </Field>
-              <ErrorMessage class="text-danger" name="AreaField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="statusField"
+              ></ErrorMessage>
             </b-form-group>
-          </b-col> -->
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Sueldo Quincenal">
+              <Field name="salaryField" :rules="validateSalary" as="text">
+                <b-form-input
+                  v-model="EmployeesFields.sueldoQuincenal"
+                  :state="salaryeState"
+                  type="number"
+                />
+              </Field>
+              <ErrorMessage class="text-danger" name="salaryField"></ErrorMessage>
+            </b-form-group>
+          </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Puesto de trabajo">
               <Field
@@ -264,6 +293,11 @@ export default {
     const departaments = ref([])
     const areas = ref([])
     const workStations = ref([])
+    const EstatusEmployee = ref([
+      { id: 1, nombre: 'Eventual' },
+      { id: 2, nombre: 'Base' },
+      { id: 2, nombre: 'Confianza' }
+    ])
     const perPage = ref(5)
     const currentPage = ref(1)
     const filter = ref(null)
@@ -277,6 +311,9 @@ export default {
     // const areaState = ref(false)
     const workStationState = ref(false)
     const departamentState = ref(false)
+    const codeEmployeeState = ref(false)
+    const estatusEmployeeState = ref(false)
+    const salaryeState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
       {
@@ -298,9 +335,13 @@ export default {
     const EmployeesFields = ref({
       empleadoId: 0,
       nombreCompleto: '',
+      códigoEmpleado: null,
+      estatus: null,
+      antigüedad: null,
+      sueldoQuincenal: 0,
       archivado: false,
       tieneExpediente: true,
-      // areaId: null,
+      tieneExpedienteMédico: true,
       usuarioId: null,
       departamentoId: null,
       expedienteDigitalId: null,
@@ -309,19 +350,6 @@ export default {
     const EmployeesFieldsBlank = ref(
       JSON.parse(JSON.stringify(EmployeesFields))
     )
-    // const getAreas = departamentoId => {
-    //   getAreasByDepartament(departamentoId, data => {
-    //     areas.value = data
-    //     if (data.length === 0) {
-    //       swal.fire({
-    //         title: 'No se encuentran areas registradas!',
-    //         text:
-    //           'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
-    //         icon: 'warning'
-    //       })
-    //     }
-    //   })
-    // }
     const getWorkStation = departamentoId => {
       getWorkStationByDepartament(departamentoId, data => {
         workStations.value = data
@@ -355,7 +383,6 @@ export default {
     }
     const onClickMedicalExpedient = empleadoId => {
       getExpedientMedicalByEmpleadoId(empleadoId, data => {
-        console.log(data)
         redirect.push({
           name: 'ServiciosMedicos-ExpedienteMedico-Edit',
           params: { ExpedienteMedicoId: data[0].expedienteMedicoId, EmpleadoId: empleadoId }
@@ -378,6 +405,42 @@ export default {
         return 'El nombre solo puede contener letras'
       }
       nameState.value = true
+      return true
+    }
+    const validateCodeEmployee = () => {
+      if (!EmployeesFields.value.códigoEmpleado) {
+        codeEmployeeState.value = false
+        return 'Este campo es requerido'
+      }
+      if (!EmployeesFields.value.códigoEmpleado.trim().length > 0) {
+        codeEmployeeState.value = false
+        return 'Este campo no puede contener solo espacios'
+      }
+      codeEmployeeState.value = true
+      return true
+    }
+    const validateEstatus = () => {
+      if (!EmployeesFields.value.estatus) {
+        estatusEmployeeState.value = false
+        return 'Este campo es requerido'
+      }
+      if (!EmployeesFields.value.estatus.trim().length > 0) {
+        estatusEmployeeState.value = false
+        return 'Este campo no puede contener solo espacios'
+      }
+      estatusEmployeeState.value = true
+      return true
+    }
+    const validateSalary = () => {
+      if (!EmployeesFields.value.sueldoQuincenal) {
+        salaryeState.value = false
+        return 'Este campo es requerido'
+      }
+      if (!EmployeesFields.value.sueldoQuincenal.trim().length > 0) {
+        salaryeState.value = false
+        return 'Este campo no puede contener solo espacios'
+      }
+      salaryeState.value = true
       return true
     }
     const validateDepartament = () => {
@@ -404,14 +467,6 @@ export default {
       dateWorkState.value = true
       return true
     }
-    // const validateArea = () => {
-    //   if (!EmployeesFields.value.areaId) {
-    //     areaState.value = false
-    //     return 'Este campo es requerido'
-    //   }
-    //   areaState.value = true
-    //   return true
-    // }
     const validateWorkSation = () => {
       if (!EmployeesFields.value.puestoTrabajoId) {
         workStationState.value = false
@@ -421,11 +476,14 @@ export default {
       return true
     }
     const fields = ref([
+      { value: 'códigoEmpleado', text: 'Código empleado' },
       { value: 'nombreCompleto', text: 'Nombre' },
       { value: 'departamentos.nombre', text: 'Departamento' },
-      // { value: 'area.nombre', text: 'Area de Trabajo' },
       { value: 'puestoTrabajo.nombre', text: 'Puesto de Trabajo' },
       { value: 'fechaAlta', text: 'Fecha de contratación' },
+      { value: 'estatus', text: 'Estatus' },
+      { value: 'antigüedad', text: 'Antigüedad' },
+      { value: 'sueldoQuincenal', text: 'Sueldo quincenal' },
       { value: 'status', text: 'Estado' },
       { value: 'actions', text: 'Acciones' }
     ])
@@ -468,6 +526,7 @@ export default {
     }
 
     const addEmployee = () => {
+      isloading.value = true
       createEmployee(EmployeesFields.value, data => {
         expedientFieldBlank.value.empleadoId = data.empleadoId
         createExpedient(expedientFieldBlank.value, data => {})
@@ -481,6 +540,7 @@ export default {
         })
       })
       showModal.value = false
+      isloading.value = false
       resetEmployeesFields()
     }
 
@@ -523,6 +583,7 @@ export default {
       perPageSelect,
       areas,
       workStations,
+      EstatusEmployee,
       expedientFieldBlank,
       EmployeesFieldsBlank,
       EmployeesFields,
@@ -532,9 +593,12 @@ export default {
       nameState,
       dateState,
       dateWorkState,
+      salaryeState,
       // areaState,
       workStationState,
       departamentState,
+      codeEmployeeState,
+      estatusEmployeeState,
       showModal,
       expedientmedicalBlank,
 
@@ -543,11 +607,13 @@ export default {
       refreshTable,
       RemoveEmployee,
       validateName,
-      // validateArea,
+      validateCodeEmployee,
       validateDate,
       validateWorkDate,
       validateDepartament,
       validateWorkSation,
+      validateEstatus,
+      validateSalary,
       // getAreas,
       getWorkStation,
       resetEmployeesFields,

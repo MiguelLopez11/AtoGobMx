@@ -1,10 +1,13 @@
 ﻿using AtoGobMx.Context;
+using AtoGobMx.Migrations;
 using AtoGobMx.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
+using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
 namespace AtoGobMx.Controllers
 {
@@ -48,6 +51,16 @@ namespace AtoGobMx.Controllers
         [HttpPost]
         public async Task<ActionResult> PostDireccionCementerios(DireccionCementerio direccioncementerio)
         {
+            var obra = direccioncementerio.NombreCementerio.ToString();
+            var host = "ftp://digital.atogobmx.com/Files/ServiciosPublicos/CementerioPublico/";
+            WebRequest request = WebRequest.Create(host + obra);
+            request.Method = WebRequestMethods.Ftp.MakeDirectory;
+            request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+            using (var resp = (FtpWebResponse)request.GetResponse())
+            {
+                request.Abort();
+                resp.Close();
+            }
             _context.DireccionCementerio.Add(direccioncementerio);
             await _context.SaveChangesAsync();
             return Ok("Direccion cementerio creada correcta mente");

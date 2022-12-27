@@ -6,11 +6,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
+using System.Net;
 
 namespace AtoGobMx.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AlumbradoController : ControllerBase
@@ -62,9 +61,20 @@ namespace AtoGobMx.Controllers
             }
             return Ok(alumbrado);
         }
+
         [HttpPost]
         public async Task<ActionResult<Alumbrado>> PostAlumbrado(Alumbrado alumbrado)
         {
+            var obra = alumbrado.NombreObra.ToString();
+            var host = "ftp://digital.atogobmx.com/Files/ServiciosPublicos/AlumbradoPublico/";
+            WebRequest request = WebRequest.Create(host + obra);
+            request.Method = WebRequestMethods.Ftp.MakeDirectory;
+            request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+            using (var resp = (FtpWebResponse)request.GetResponse())
+            {
+                request.Abort();
+                resp.Close();
+            }
             _context.Alumbrado.Add(alumbrado);
             await _context.SaveChangesAsync();
             return CreatedAtAction("GetAlumbradoById", new { AlumbradoId = alumbrado.AlumbradoId }, alumbrado);

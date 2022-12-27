@@ -1,10 +1,12 @@
 ﻿using AtoGobMx.Context;
+using AtoGobMx.Migrations;
 using AtoGobMx.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
 namespace AtoGobMx.Controllers
 {
@@ -92,7 +94,16 @@ namespace AtoGobMx.Controllers
             {
                 return NotFound();
             }
-
+            //var expediente = await _context.ExpedienteAlumbrado
+            //    .FirstOrDefaultAsync(f => f.AlumbradoId == Id);
+            //if (expediente == null)
+            //{
+            //    cementeri.Archivado = true;
+            //    _context.Cementerios.Update(cementeri);
+            //    await _context.SaveChangesAsync();
+            //    return Ok("No existe el expediente de la tarea, se archivo la tarea");
+            //}
+            //expediente.Archivado = true;
             cementeri.Archivado = true;
             _context.Cementerios.Update(cementeri);
             await _context.SaveChangesAsync();

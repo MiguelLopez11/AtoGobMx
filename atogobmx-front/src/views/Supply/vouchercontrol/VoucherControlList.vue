@@ -9,7 +9,7 @@
         style="width: 350px"
         v-model="searchValue"
         type="search"
-        placeholder="Buscar Vale..."
+        placeholder="Buscar vale..."
       ></b-form-input>
       <b-button
         variant="primary"
@@ -419,7 +419,7 @@ export default {
       { value: 'fechaEmicion', text: 'Fecha emicion' },
       { value: 'fechaVigencia', text: 'Fecha vigencia' },
       { value: 'departamentos.nombre', text: 'Departamento' },
-      { value: 'empleados.nombreCompleto', text: 'empleado' },
+      { value: 'empleados.nombreCompleto', text: 'Empleado' },
       { value: 'proV_Proveedor.nombre', text: 'Proveedor' },
       { value: 'proV_EstatusVale.nombre', text: 'Proveedor' },
       { value: 'tipoVales.nombre', text: 'Tipo vale' },

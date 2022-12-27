@@ -20,5 +20,7 @@ namespace AtoGobMx.Models
 
         [JsonIgnore]
         public virtual IEnumerable<Cementerios>? Cementerios { get; set; }
+        [JsonIgnore]
+        public virtual IEnumerable<ArchivosCementerios> ArchivosCementerios { get; set; }
     }
 }

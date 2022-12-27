@@ -9,7 +9,7 @@
         style="width: 350px"
         v-model="searchValue"
         type="search"
-        placeholder="Buscar Estatus de obras publicas..."
+        placeholder="Buscar estatus de obras publicas..."
       ></b-form-input>
       <b-button
         variant="primary"

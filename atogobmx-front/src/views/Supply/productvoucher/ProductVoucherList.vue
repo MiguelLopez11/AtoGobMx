@@ -9,7 +9,7 @@
         style="width: 350px"
         v-model="searchValue"
         type="search"
-        placeholder="Buscar Producto vale..."
+        placeholder="Buscar producto vale..."
       ></b-form-input>
       <b-button
         variant="primary"

@@ -369,6 +369,10 @@ export default {
         PhoneState.value = false
         return 'Este campo solo puede contener numeros'
       }
+      // if (!providerFields.value.telefono.trim().length > 10) {
+      //   PhoneState.value = false
+      //   return 'Este campo puede tener maximo 10 numeros'
+      // }
 
       if (!providerFields.value.telefono.trim().length > 0) {
         PhoneState.value = false
