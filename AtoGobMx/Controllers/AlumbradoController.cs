@@ -61,6 +61,7 @@ namespace AtoGobMx.Controllers
             }
             return Ok(alumbrado);
         }
+
         [HttpPost]
         public async Task<ActionResult<Alumbrado>> PostAlumbrado(Alumbrado alumbrado)
         {
