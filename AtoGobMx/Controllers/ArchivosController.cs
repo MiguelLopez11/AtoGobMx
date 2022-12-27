@@ -195,65 +195,6 @@ namespace AtoGobMx.Controllers
             //Directory.Delete("Files/Documentos");
             return File(zipFileMemoryStream, "application/octet-stream", $"Documentos_{DateOnly.FromDateTime(DateTime.Now)}_{expediente.Empleados.NombreCompleto}.zip");
 
-            //    using (ZipArchive archive = new ZipArchive(zipFileMemoryStream, ZipArchiveMode.Update, leaveOpen: true))
-            //    {
-            //        ftpResponse.op
-            //        await ftpStream.CopyToAsync(zipFileMemoryStream);
-            //    }
-            //    zipFileMemoryStream.Seek(0, SeekOrigin.Begin);
-            //return File(zipFileMemoryStream, "application/octet-stream", $"Documentos_{DateOnly.FromDateTime(DateTime.Now)}_{expediente.Empleados.NombreCompleto}.zip");
-
-            //}
-            //return Ok("Directorio copiado");
-            //var FolderPath = Path.Combine(Directory.GetCurrentDirectory(), $"Files/Documentos/{expediente.Empleados.NombreCompleto}");
-            //var FilePaths = Directory.GetFiles(FolderPath);
-            //var zipFileMemoryStream = new MemoryStream();
-            //using (ZipArchive archive = new ZipArchive(zipFileMemoryStream, ZipArchiveMode.Update, leaveOpen: true))
-            //{
-            //    foreach (var FilePath in reader.ReadToEnd())
-            //    {
-            //        var FileName = Path.GetFileName(FilePath.ToString());
-            //        var entry = archive.CreateEntry(FileName);
-            //        using (var entryStream = entry.Open())
-            //        using (var fileStream = System.IO.File.OpenRead(FilePath.ToString()))
-            //        {
-            //            await fileStream.CopyToAsync(entryStream);
-            //        }
-            //    }
-            //}
-
-
-
-        }
-        //Metodos creados en mis espacios
-        [HttpGet("Documents/AlumbradoPublico/{AlumbradoId}")]
-        public async Task<IActionResult> GetDocumentosAlumbrado(int AlumbradoId)
-        {
-            var Documentos = await _context.ArchivosAlumbrado
-                .Where(w => w.AlumbradoId == AlumbradoId)
-                .Where(w => w.TipoArchivo == ".pdf" || w.TipoArchivo == ".docx")
-                .Where(w => !w.Archivado)
-                .ToListAsync();
-            if (Documentos == null)
-            {
-                return BadRequest("No se encuentran documentos registrados, ");
-            }
-            return Ok(Documentos);
-        }
-
-        [HttpGet("Documents/DireccionCementerio/{DireccionId}")]
-        public async Task<IActionResult> GetDocumentosCementerios(int DireccionId)
-        {
-            var Documentos = await _context.ArchivosCementerios
-                .Where(w => w.DireccionId == DireccionId)
-                .Where(w => w.TipoArchivo == ".pdf" || w.TipoArchivo == ".docx")
-                .Where(w => !w.Archivado)
-                .ToListAsync();
-            if (Documentos == null)
-            {
-                return BadRequest("No se encuentran documentos registrados, ");
-            }
-            return Ok(Documentos);
         }
 
         [HttpGet("Documents/Aseo/{AseoId}")]
