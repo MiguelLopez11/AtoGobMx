@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace AtoGobMx.Controllers
 {
@@ -49,9 +50,21 @@ namespace AtoGobMx.Controllers
         [HttpPost]
         public async Task<ActionResult<OP_Obras>> PostObrasPublicas(OP_Obras op_ObrasPublicas)
         {
-            object value = _context.ObrasPublicas.Add(op_ObrasPublicas);
+            //object value = _context.ObrasPublicas.Add(op_ObrasPublicas);
+            var obras = op_ObrasPublicas.Nombre.ToString();
+            var host = "ftp://digital.atogobmx.com/Files/ServiciosPublicos/AseoPublico/";
+            WebRequest request = WebRequest.Create(host + obras);
+            request.Method = WebRequestMethods.Ftp.MakeDirectory;
+            request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+            using (var resp = (FtpWebResponse)request.GetResponse())
+            {
+                request.Abort();
+                resp.Close();
+            }
+            _context.ObrasPublicas.Add(op_ObrasPublicas);
             await _context.SaveChangesAsync();
-            return Ok("Tipo de obra creada correctamente");
+            return CreatedAtAction("GetObrasPublicasById", new { ObraId  = op_ObrasPublicas.ObraId }, op_ObrasPublicas);
+            //return Ok("Tipo de obra creada correctamente");
         }
 
         [HttpPut("{ObraId}")]

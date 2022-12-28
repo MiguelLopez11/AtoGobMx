@@ -3,126 +3,145 @@
     <b-card class="mb-4">
       <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
     </b-card>
-    <b-card>
-      <div>
+    <b-tabs content-class="mt-3">
+      <b-tab title="Reporte Alumbrado" active>
+        <b-card>
+          <!-- <div>
         <h3>Reporte Alumbrado</h3>
-      </div>
-      <Form @submit="onUpdatePublicLighting">
-        <b-row cols="3">
-          <!--Tipo de tarea a agregar-->
-          <b-col>
-            <b-form-group class="mt-3" label="Tipo de Tarea">
-              <Field name="TaskField" :rules="validateTask" as="text">
-                <b-form-select
-                  v-model="publicLighting.tareaTipoId"
-                  autofocus
-                  :state="TaskState"
-                  :options="typeTaskLighting"
-                  value-field="tareaTipoId"
-                  text-field="nombreTarea"
-                ></b-form-select>
-              </Field>
-              <ErrorMessage class="text-danger" name="TaskField"></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!--agregar un estatus-->
-          <b-col>
-            <b-form-group class="mt-3" label="Estatus">
-              <Field name="StatusField" :rules="validateStatus" as="text">
-                <b-form-select
-                  v-model="publicLighting.estatusId"
-                  autofocus
-                  :state="StatusState"
-                  :options="statusPublicLighting"
-                  value-field="estatusAlumbradoId"
-                  text-field="nombreEstatus"
-                ></b-form-select>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="StatusField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!--agregar nombreobra-->
-          <b-col>
-            <b-form-group class="mt-3" label="Obra o servicio de alumbrado">
-              <Field name="NameWorkField" :rules="validateNameWork" as="text">
-                <b-form-input
-                  v-model="publicLighting.nombreObra"
-                  :state="NameWorkState"
-                ></b-form-input>
-              </Field>
-              <ErrorMessage class="text-danger" name="NameWorkField" />
-            </b-form-group>
-          </b-col>
-          <!--agregar domicilio-->
-          <b-col>
-            <b-form-group class="mt-3" label="Domicilio">
-              <Field name="DomicileField" :rules="validateDomicile" as="text">
-                <b-form-input
-                  v-model="publicLighting.domicilio"
-                  :state="DomicileState"
-                ></b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="DomicileField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!--agregar descripcion de un domicilio-->
-          <b-col>
-            <b-form-group class="mt-3" label="Descripcion Domicilio">
-              <Field
-                name="addresdescriptionField"
-                :rules="validateAddresdescription"
-                as="text"
-              >
-                <b-form-textarea
-                  v-model="publicLighting.descripcionDomicilio"
-                  :state="addresdescriptionState"
-                  rows="4"
-                ></b-form-textarea>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="addresdescriptionField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!--Agregar una descripcion del problema-->
-          <b-col>
-            <b-form-group class="mt-3" label="Descripcion del problema">
-              <Field name="ProblemField" :rules="validateProblem" as="text">
-                <b-form-textarea
-                  v-model="publicLighting.descripcionProblema"
-                  :state="ProblemState"
-                  rows="4"
-                ></b-form-textarea>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="ProblemField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-        </b-row>
+      </div> -->
+          <Form @submit="onUpdatePublicLighting">
+            <b-row cols="3">
+              <!--Tipo de tarea a agregar-->
+              <b-col>
+                <b-form-group class="mt-3" label="Tipo de Tarea">
+                  <Field name="TaskField" :rules="validateTask" as="text">
+                    <b-form-select
+                      v-model="publicLighting.tareaTipoId"
+                      autofocus
+                      :state="TaskState"
+                      :options="typeTaskLighting"
+                      value-field="tareaTipoId"
+                      text-field="nombreTarea"
+                    ></b-form-select>
+                  </Field>
+                  <ErrorMessage
+                    class="text-danger"
+                    name="TaskField"
+                  ></ErrorMessage>
+                </b-form-group>
+              </b-col>
+              <!--agregar un estatus-->
+              <b-col>
+                <b-form-group class="mt-3" label="Estatus">
+                  <Field name="StatusField" :rules="validateStatus" as="text">
+                    <b-form-select
+                      v-model="publicLighting.estatusId"
+                      autofocus
+                      :state="StatusState"
+                      :options="statusPublicLighting"
+                      value-field="estatusAlumbradoId"
+                      text-field="nombreEstatus"
+                    ></b-form-select>
+                  </Field>
+                  <ErrorMessage
+                    class="text-danger"
+                    name="StatusField"
+                  ></ErrorMessage>
+                </b-form-group>
+              </b-col>
+              <!--agregar nombreobra-->
+              <b-col>
+                <b-form-group class="mt-3" label="Obra o servicio de alumbrado">
+                  <Field
+                    name="NameWorkField"
+                    :rules="validateNameWork"
+                    as="text"
+                  >
+                    <b-form-input
+                      v-model="publicLighting.nombreObra"
+                      :state="NameWorkState"
+                    ></b-form-input>
+                  </Field>
+                  <ErrorMessage class="text-danger" name="NameWorkField" />
+                </b-form-group>
+              </b-col>
+              <!--agregar domicilio-->
+              <b-col>
+                <b-form-group class="mt-3" label="Domicilio">
+                  <Field
+                    name="DomicileField"
+                    :rules="validateDomicile"
+                    as="text"
+                  >
+                    <b-form-input
+                      v-model="publicLighting.domicilio"
+                      :state="DomicileState"
+                    ></b-form-input>
+                  </Field>
+                  <ErrorMessage
+                    class="text-danger"
+                    name="DomicileField"
+                  ></ErrorMessage>
+                </b-form-group>
+              </b-col>
+              <!--agregar descripcion de un domicilio-->
+              <b-col>
+                <b-form-group class="mt-3" label="Descripcion Domicilio">
+                  <Field
+                    name="addresdescriptionField"
+                    :rules="validateAddresdescription"
+                    as="text"
+                  >
+                    <b-form-textarea
+                      v-model="publicLighting.descripcionDomicilio"
+                      :state="addresdescriptionState"
+                      rows="4"
+                    ></b-form-textarea>
+                  </Field>
+                  <ErrorMessage
+                    class="text-danger"
+                    name="addresdescriptionField"
+                  ></ErrorMessage>
+                </b-form-group>
+              </b-col>
+              <!--Agregar una descripcion del problema-->
+              <b-col>
+                <b-form-group class="mt-3" label="Descripcion del problema">
+                  <Field name="ProblemField" :rules="validateProblem" as="text">
+                    <b-form-textarea
+                      v-model="publicLighting.descripcionProblema"
+                      :state="ProblemState"
+                      rows="4"
+                    ></b-form-textarea>
+                  </Field>
+                  <ErrorMessage
+                    class="text-danger"
+                    name="ProblemField"
+                  ></ErrorMessage>
+                </b-form-group>
+              </b-col>
+            </b-row>
 
-        <b-row align-h="end">
-          <b-button
-            class="w-auto m-2 text-white"
-            variant="primary"
-            to="/ServiciosPublicos/Alumbrado/list"
-          >
-            Cancelar
-          </b-button>
-          <b-button class="w-auto m-2" variant="success" type="submit"
-            >Guardar</b-button
-          >
-        </b-row>
-      </Form>
-    </b-card>
+            <b-row align-h="end">
+              <b-button
+                class="w-auto m-2 text-white"
+                variant="primary"
+                to="/ServiciosPublicos/Alumbrado/list"
+              >
+                Cancelar
+              </b-button>
+              <b-button class="w-auto m-2" variant="success" type="submit"
+                >Guardar</b-button
+              >
+            </b-row>
+          </Form>
+        </b-card>
+      </b-tab>
+      <b-tab title="Documentos">
+          <ExpedientDocumentsLighting
+            :AlumbradoId="alumbradoId"
+          />
+    </b-tabs>
   </b-card>
 </template>
 
@@ -131,6 +150,7 @@ import StreetlightingServices from '@/Services/publiclighting.Services'
 // import ExpedientPublic from '@/views/ServiciosPublicos/streetLighting/expedientlighting/EditExpedientLighting.vue'
 import StatusLightingServices from '@/Services/statuslighting.Services'
 import TypeTaskLightingServices from '@/Services/tasktypelighting.Services'
+import ExpedientDocumentsLighting from '@/views/ServiciosPublicos/streetLighting/publiclighting/DocumentsLighting.vue'
 import { Field, Form, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -142,15 +162,14 @@ export default {
     // Datepicker,
     Field,
     Form,
-    ErrorMessage
+    ErrorMessage,
+    ExpedientDocumentsLighting
     // ExpedientPublic
   },
   setup () {
     const swal = inject('$swal')
-    const {
-      getPublicLightingById,
-      updatePublicLighting
-    } = StreetlightingServices()
+    const { getPublicLightingById, updatePublicLighting } =
+      StreetlightingServices()
     const { getStatus } = StatusLightingServices()
     const { getTaskTypeLighting } = TypeTaskLightingServices()
     const publicLighting = ref([])
@@ -180,8 +199,7 @@ export default {
       if (data.length === 0) {
         swal.fire({
           title: 'No se encuentra un tipo de tare registrada!',
-          text:
-            'No se encuentra tipo de tarea registradas en el departamento seleccionado, registre primero un tipo de tarea para continuar',
+          text: 'No se encuentra tipo de tarea registradas en el departamento seleccionado, registre primero un tipo de tarea para continuar',
           icon: 'warning'
         })
       }
@@ -192,8 +210,7 @@ export default {
       if (data.length === 0) {
         swal.fire({
           title: 'No se encuentra un estatus registrado!',
-          text:
-            'No se encuentra estatus registrado en el departamento seleccionado, registre primero un tipo de estatus para continuar',
+          text: 'No se encuentra estatus registrado en el departamento seleccionado, registre primero un tipo de estatus para continuar',
           icon: 'warning'
         })
       }
@@ -311,11 +328,19 @@ export default {
     const validateState = () => {
       TaskState.value = publicLighting.value.tareaTipoId !== null
       StatusState.value = publicLighting.value.estatusId !== null
-      NameWorkState.value = publicLighting.value.nombreObra !== '' || publicLighting.value.nombreObra !== null
-      DomicileState.value = publicLighting.value.domicilio !== '' || publicLighting.value.domicilio !== null
-      addresdescriptionState.value = publicLighting.value.descripcionDomicilio !== '' || publicLighting.value.descripcionDomicilio !== null
+      NameWorkState.value =
+        publicLighting.value.nombreObra !== '' ||
+        publicLighting.value.nombreObra !== null
+      DomicileState.value =
+        publicLighting.value.domicilio !== '' ||
+        publicLighting.value.domicilio !== null
+      addresdescriptionState.value =
+        publicLighting.value.descripcionDomicilio !== '' ||
+        publicLighting.value.descripcionDomicilio !== null
       // eslint-disable-next-line no-unneeded-ternary
-      ProblemState.value = publicLighting.value.descripcionProblema !== '' || publicLighting.value.descripcionProblema !== null
+      ProblemState.value =
+        publicLighting.value.descripcionProblema !== '' ||
+        publicLighting.value.descripcionProblema !== null
     }
 
     return {
