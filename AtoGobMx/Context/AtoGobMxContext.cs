@@ -45,8 +45,8 @@ namespace AtoGobMx.Context
         public DbSet<Departamentos> Departamentos { get; set; }
         public DbSet<PuestoTrabajo> PuestoTrabajo { get; set; }
         public DbSet<PAT_EquipoComputo> EquipoComputo { get; set; }
-        public DbSet<PAT_Monitor> Monitor { get; set; }
-        //public DbSet<PAT_Mouse> Mouse { get; set; }
+        //public DbSet<PAT_Monitor> Monitor { get; set; }
+        public DbSet<PAT_AccesorioComputo> AccesorioComputo { get; set; }
         //public DbSet<PAT_Teclado> Teclado { get; set; }
         public DbSet<PAT_Vehiculo> Vehiculo { get; set; }
         public DbSet<PAT_Mobiliario> Mobiliario { get; set; }

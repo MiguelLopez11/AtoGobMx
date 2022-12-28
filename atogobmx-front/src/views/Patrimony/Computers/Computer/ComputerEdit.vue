@@ -1,15 +1,15 @@
 <template>
-  <b-card class="m-2">
-    <b-card class="mb-4">
-      <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
-    </b-card>
+  <b-container fluid>
     <b-card>
-      <div>
-        <h3>Editar Equipo</h3>
-      </div>
-      <b-tabs>
-        <b-tab title="Datos generales del Equipo">
-          <Form @submit="onUpdateComputer()">
+      <b-card class="mb-4">
+        <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+      </b-card>
+      <b-card>
+        <div>
+          <h3>Editar Equipo</h3>
+        </div>
+        <Form @submit="onUpdateComputer()">
+          <b-container fluid>
             <b-row cols="3">
               <b-col>
                 <b-form-group class="mt-3" label="Nomenclatura">
@@ -27,64 +27,71 @@
                 </b-form-group>
               </b-col>
               <b-col>
-                <b-form-group class="mt-3" label="Marca">
-                  <Field name="BrandField" :rules="validateBrand" as="text">
-                    <b-form-input
-                      placeholder="Ingresa la marca y/o modelo del equipo"
-                      v-model="computer.marca"
-                      :state="brandState"
+                <b-form-group class="mt-3" label="Descripción/Caracteristicas">
+                  <Field
+                    name="DescriptionField"
+                    :rules="validateDescription"
+                    as="text"
+                  >
+                    <b-form-textarea
+                      placeholder="Ingresa las Caracteristicas del equipo"
+                      v-model="computer.caracteristicas"
+                      :state="DescriptionState"
+                      rows="4"
                     >
-                    </b-form-input>
+                    </b-form-textarea>
                   </Field>
                   <ErrorMessage
                     class="text-danger"
-                    name="BrandField"
+                    name="DescriptionField"
                   ></ErrorMessage>
                 </b-form-group>
               </b-col>
               <b-col>
-                <b-form-group class="mt-3" label="Memoria RAM">
-                  <Field name="memoryField" :rules="validateMemory" as="text">
-                    <b-form-input
-                      placeholder="Ingresa la cantidad de memoria que contiene el equipo"
-                      v-model="computer.memoriaRAM"
-                      :state="memoryState"
+                <b-form-group class="mt-3" label="Fecha de Adquisición">
+                  <Field name="DateField" :rules="validateDate" as="datetime">
+                    <Datepicker
+                      v-model="computer.fechaAdquisicion"
+                      locale="es"
+                      autoApply
+                      :enableTimePicker="false"
+                      :state="dateState"
                     >
-                    </b-form-input>
+                    </Datepicker>
                   </Field>
                   <ErrorMessage
                     class="text-danger"
-                    name="memoryField"
+                    name="DateField"
                   ></ErrorMessage>
                 </b-form-group>
               </b-col>
               <b-col>
-                <b-form-group class="mt-3" label="Almacenamiento">
-                  <Field name="StorageField" :rules="validateStorage" as="text">
+                <b-form-group class="mt-3" label="Costo de adquisición">
+                  <Field name="CostField" :rules="validateCost" as="text">
                     <b-form-input
                       placeholder="Describe brevemente el almacenamiento que tiene el equipo"
-                      v-model="computer.almacenamiento"
-                      :state="storageState"
+                      v-model="computer.costo"
+                      :state="costState"
                     >
                     </b-form-input>
                   </Field>
                   <ErrorMessage
                     class="text-danger"
-                    name="StorageField"
+                    name="CostField"
                   ></ErrorMessage>
                 </b-form-group>
               </b-col>
               <b-col>
-                <b-form-group class="mt-3" label="Procesador">
+                <b-form-group class="mt-3" label="Numero de serie">
                   <Field
                     name="ProcessorField"
-                    :rules="validateProcessor"
+                    :rules="validateSerialNumber"
                     as="text"
                   >
                     <b-form-input
-                      placeholder="Ingresa los datos del procesador que tiene el equipo"
-                      v-model="computer.procesador"
-                      :state="processorState"
+                      placeholder="Ingresa el numero de serie del equipo"
+                      v-model="computer.numeroSerie"
+                      :state="serialNumberState"
                     >
                     </b-form-input>
                   </Field>
@@ -153,30 +160,19 @@
                 Guardar
               </b-button>
             </b-row>
-          </Form>
-        </b-tab>
-        <b-tab title="Monitor">
-          <DisplayCrud :EquipoComputoId="computerId" />
-        </b-tab>
-        <!-- <b-tab title="Teclado">
-          <KeyboardCrud :EquipoComputoId="computerId" />
-        </b-tab>
-        <b-tab title="Mouse">
-          <MouseCrud :EquipoComputoId="computerId" />
-        </b-tab> -->
-      </b-tabs>
+          </b-container>
+        </Form>
+      </b-card>
     </b-card>
-  </b-card>
+  </b-container>
 </template>
 
 <script>
-import DisplayCrud from '@/views/Patrimony/Computers/Display/DisplayCrud.vue'
-// import KeyboardCrud from '@/views/Patrimony/Computers/Keyboards/KeyboardCrud.vue'
-// import MouseCrud from '@/views/Patrimony/Computers/Mouse/MouseCrud.vue'
 import ComputerServices from '@/Services/computer.Services'
 import DepartamentServices from '@/Services/departament.Services'
 import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import Datepicker from '@vuepic/vue-datepicker'
 // import { useToast } from 'vue-toast-notification'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -185,15 +181,12 @@ export default {
     Form,
     Field,
     ErrorMessage,
-    DisplayCrud
-    // KeyboardCrud,
-    // MouseCrud
+    Datepicker
   },
   setup () {
     const { getComputer, updateComputer, getStatus } = ComputerServices()
     const { getDepartaments } = DepartamentServices()
     const swal = inject('$swal')
-    // const $toast = useToast()
     const computer = ref([])
     const areas = ref([])
     const departaments = ref([])
@@ -201,16 +194,19 @@ export default {
     const router = useRoute()
     const redirect = useRouter()
     const folioState = ref(false)
-    const brandState = ref(false)
-    const memoryState = ref(false)
-    const storageState = ref(false)
-    const processorState = ref(false)
+    const DescriptionState = ref(false)
+    const dateState = ref(false)
+    const costState = ref(false)
+    const serialNumberState = ref(false)
     const departamentState = ref(false)
     const stateComputerState = ref(false)
     const computerId = ref(parseInt(router.params.EquipoComputoId))
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Equipos de computo', to: '/PatrimonioMunicipal/EquiposComputo/list' },
+      {
+        text: 'Equipos de computo',
+        to: '/PatrimonioMunicipal/EquiposComputo/list'
+      },
       { text: 'Editar-Equipo' }
     ])
     const onUpdateComputer = () => {
@@ -237,8 +233,7 @@ export default {
       if (data.length === 0) {
         swal.fire({
           title: 'No se encuentran estatus registrados!',
-          text:
-            'No se encuentran estatus registrados en el sistema, registre primero un estatus para continuar.',
+          text: 'No se encuentran estatus registrados en el sistema, registre primero un estatus para continuar.',
           icon: 'warning'
         })
       }
@@ -248,8 +243,7 @@ export default {
       if (data.length === 0) {
         swal.fire({
           title: 'No se encuentran departamentos registrados!',
-          text:
-            'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
+          text: 'No se encuentran departamentos registrados en el sistema, registre primero un departamento para continuar.',
           icon: 'warning'
         })
       }
@@ -261,43 +255,43 @@ export default {
         return 'Este campo es requerido'
       }
       // eslint-disable-next-line no-useless-escape
-      if (!/^(?=.*\d)(?=.*[a-zA-Z])([A-ZñÑáéíóúÁÉÍÓÚ])[A-Z0-9]+$/i.test(computer.value.codigoInventario)) {
+      if (
+        !/^(?=.*\d)(?=.*[a-zA-Z])([A-ZñÑáéíóúÁÉÍÓÚ])[A-Z0-9]+$/i.test(
+          computer.value.codigoInventario
+        )
+      ) {
         validateState()
-        return 'El nombre del area solo puede contener letras'
+        return 'El nombre del area solo puede contener letras y numeros'
       }
       validateState()
       return true
     }
-    const validateBrand = () => {
-      if (!computer.value.marca) {
-        validateState()
-        return 'Este campo es requerido'
-      }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(computer.value.marca)) {
-        validateState()
-        return 'El campo no puede contener solo espacios'
-      }
-      validateState()
-      return true
-    }
-    const validateMemory = () => {
-      if (!computer.value.memoriaRAM) {
+    const validateDescription = () => {
+      if (!computer.value.caracteristicas) {
         validateState()
         return 'Este campo es requerido'
       }
       validateState()
       return true
     }
-    const validateStorage = () => {
-      if (!computer.value.almacenamiento) {
+    const validateDate = () => {
+      if (!computer.value.fechaAdquisicion) {
         validateState()
         return 'Este campo es requerido'
       }
       validateState()
       return true
     }
-    const validateProcessor = () => {
-      if (!computer.value.procesador) {
+    const validateCost = () => {
+      if (!computer.value.costo) {
+        validateState()
+        return 'Este campo es requerido'
+      }
+      validateState()
+      return true
+    }
+    const validateSerialNumber = () => {
+      if (!computer.value.numeroSerie) {
         validateState()
         return 'Este campo es requerido'
       }
@@ -314,55 +308,58 @@ export default {
     }
     const validateStateComputer = () => {
       if (!computer.value.estatusEquipoId) {
-        stateComputerState.value = false
+        validateState()
         return 'Este campo es requerido'
       }
-      stateComputerState.value = true
+      validateState()
       return true
     }
     const validateState = () => {
-      brandState.value =
-        computer.value.marca !== '' &&
-        computer.value.marca !== null &&
-        /^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(computer.value.marca)
-      memoryState.value =
-        computer.value.memoriaRAM !== '' && computer.value.memoriaRAM !== null
-      storageState.value =
-        computer.value.almacenamiento !== '' &&
-        computer.value.almacenamiento !== null
-      processorState.value =
-        computer.value.procesador !== '' && computer.value.procesador !== null
+      costState.value =
+        computer.value.costo !== '' && computer.value.costo !== null
+      dateState.value =
+        computer.value.fechaAdquisicion !== '' &&
+        computer.value.fechaAdquisicion !== null
+      DescriptionState.value =
+        computer.value.caracteristicas !== '' &&
+        computer.value.caracteristicas !== null
+      serialNumberState.value =
+        computer.value.numeroSerie !== '' && computer.value.numeroSerie !== null
       departamentState.value =
         computer.value.departament !== 0 && computer.value.departament !== null
       stateComputerState.value =
         computer.value.estatusEquipoId !== 0 &&
         computer.value.estatusEquipoId !== null
-      folioState.value = computer.value.codigoInventario !== null && /^(?=.*\d)(?=.*[a-zA-Z])([A-ZñÑáéíóúÁÉÍÓÚ])[A-Z0-9]+$/i.test(computer.value.codigoInventario)
+      folioState.value =
+        computer.value.codigoInventario !== null &&
+        /^(?=.*\d)(?=.*[a-zA-Z])([A-ZñÑáéíóúÁÉÍÓÚ])[A-Z0-9]+$/i.test(
+          computer.value.codigoInventario
+        )
       return ''
     }
     return {
       computer,
       breadcrumbItems,
-      brandState,
-      memoryState,
-      storageState,
-      processorState,
+      costState,
+      DescriptionState,
+      serialNumberState,
       departamentState,
+      dateState,
+      stateComputerState,
       areas,
       departaments,
       computerId,
       statusComputers,
-      stateComputerState,
       folioState,
 
-      validateBrand,
-      validateMemory,
-      validateStorage,
-      validateProcessor,
+      validateDescription,
+      validateDate,
+      validateSerialNumber,
+      validateCost,
       validateDepartament,
+      validateStateComputer,
       onUpdateComputer,
       validateState,
-      validateStateComputer,
       validateFolio
     }
   }
