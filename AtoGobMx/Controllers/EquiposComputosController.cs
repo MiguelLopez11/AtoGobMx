@@ -65,10 +65,10 @@ namespace AtoGobMx.Controllers
             }
             equipo.EquipoComputoId = equipoComputo.EquipoComputoId;
             equipo.CodigoInventario = equipoComputo.CodigoInventario;
-            equipo.Marca = equipoComputo.Marca;
-            equipo.MemoriaRAM = equipoComputo.MemoriaRAM;
-            equipo.Almacenamiento = equipoComputo.Almacenamiento;
-            equipo.Procesador = equipoComputo.Procesador;
+            equipo.Caracteristicas = equipoComputo.Caracteristicas;
+            equipo.fechaAdquisicion = equipoComputo.fechaAdquisicion;
+            equipo.Costo = equipoComputo.Costo;
+            equipo.NumeroSerie = equipoComputo.NumeroSerie;
             equipo.EstatusEquipoId = equipoComputo.EstatusEquipoId;
             //equipo.AreaId = equipoComputo.AreaId;
             equipo.Archivado = equipoComputo.Archivado;

@@ -12,6 +12,7 @@ using System.Text;
 
 namespace JWTRefreshToken.NET6._0.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
     public class AuthenticateController : ControllerBase
@@ -86,6 +87,7 @@ namespace JWTRefreshToken.NET6._0.Controllers
             }
             return Unauthorized();
         }
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
@@ -107,7 +109,7 @@ namespace JWTRefreshToken.NET6._0.Controllers
 
             return Ok(new Response { Status = "Success", Message = "Usuario registrado correctamente!" });
         }
-
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpPost]
         [Route("register-admin")]
         public async Task<IActionResult> RegisterAdmin([FromBody] RegisterModel model)
@@ -142,6 +144,7 @@ namespace JWTRefreshToken.NET6._0.Controllers
             }
             return Ok(new Response { Status = "Success", Message = "usuario creado correctamente!" });
         }
+
         [HttpPost]
         [Route("refresh-token")]
         public async Task<IActionResult> RefreshToken(TokenModel tokenModel)

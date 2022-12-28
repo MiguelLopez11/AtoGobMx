@@ -29,6 +29,21 @@ namespace AtoGobMx.Controllers
                 .Include(i => i.PuestoTrabajo)
                 .OrderBy(o => o.EmpleadoId)
                 .ToListAsync();
+            foreach (var empleado in empleados)
+            {
+                DateTime currentDate = Convert.ToDateTime(DateTime.Today.ToString());
+                DateTime date = Convert.ToDateTime(empleado.FechaAlta.ToString());
+                int difFechas = Math.Abs((currentDate.Month - date.Month) + 12 * (currentDate.Year - date.Year));
+                empleado.Antigüedad = difFechas.ToString() + "Meses";
+                if (difFechas == 0)
+                {
+                    TimeSpan diference = currentDate - date;
+                    int days = diference.Days;
+                    empleado.Antigüedad = days.ToString() + " Días";
+                }
+                _context.Empleados.Update(empleado);
+                await _context.SaveChangesAsync();
+            }
             return Ok(empleados);
         }
         [HttpGet("SinArchivar")]
@@ -85,6 +100,10 @@ namespace AtoGobMx.Controllers
         [HttpPost]
         public async Task<ActionResult<Empleado>> PostEmpleados(Empleado Empleado)
         {
+            if (Empleado == null)
+            {
+                return BadRequest();
+            }
             var employeeName = Empleado.NombreCompleto.ToString();
             var host = "ftp://digital.atogobmx.com/Files/RecursosHumanos/Empleados/";
             #region Create directory employee
@@ -98,7 +117,16 @@ namespace AtoGobMx.Controllers
             }
             #endregion
             var documentPath = CreateDocument(host + employeeName);
-            Empleado.FechaAlta = DateTime.Today;
+            DateTime currentDate = Convert.ToDateTime(DateTime.Today.ToString());
+            DateTime date = Convert.ToDateTime(Empleado.FechaAlta.ToString());
+            int difFechas = Math.Abs((currentDate.Month - date.Month) + 12 * (currentDate.Year - date.Year));
+            Empleado.Antigüedad = difFechas.ToString() + "Meses";
+            if (difFechas == 0)
+            {
+                TimeSpan diference = currentDate - date;
+                int days = diference.Days;
+                Empleado.Antigüedad = days.ToString() + " Días";
+            }
             _context.Empleados.Add(Empleado);
             await _context.SaveChangesAsync();
             return CreatedAtAction("GetEmpleadosById", new { EmpleadoId = Empleado.EmpleadoId }, Empleado);
@@ -118,9 +146,11 @@ namespace AtoGobMx.Controllers
             }
             emp.EmpleadoId = empleado.EmpleadoId;
             emp.NombreCompleto = empleado.NombreCompleto;
+            emp.CódigoEmpleado = empleado.CódigoEmpleado;
+            emp.Estatus = empleado.Estatus;
+            emp.SueldoQuincenal = empleado.SueldoQuincenal;
             emp.FechaAlta = empleado.FechaAlta;
             emp.FechaBaja = empleado.FechaBaja;
-            //emp.AreaId = empleado.AreaId;
             emp.DepartamentoId = empleado.DepartamentoId;
             emp.PuestoTrabajoId = empleado.PuestoTrabajoId;
             emp.Archivado = empleado.Archivado;
@@ -183,6 +213,7 @@ namespace AtoGobMx.Controllers
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return false;
             }
         }

@@ -50,6 +50,7 @@ namespace AtoGobMx.Controllers
             await using var browser = await Puppeteer.LaunchAsync(
                 new LaunchOptions { Headless = true }
             );
+            var htmlContent = $"";
             await using var page = await browser.NewPageAsync();
             await page.EmulateMediaTypeAsync(MediaType.Screen);
             await page.SetContentAsync($"");
