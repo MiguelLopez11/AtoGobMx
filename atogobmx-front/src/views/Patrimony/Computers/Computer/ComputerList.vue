@@ -25,7 +25,7 @@
         type="submit"
       >
         <i class="bi bi-pc-display-horizontal"></i>
-        Agregar Computadora
+        Agregar equipo
       </b-button>
     </b-row>
     <EasyDataTable
@@ -120,13 +120,14 @@
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Descripción/Caracteristicas">
-              <Field name="BrandField" :rules="validateBrand" as="text">
-                <b-form-input
+              <Field name="DescriptionField" :rules="validateDescription" as="text">
+                <b-form-textarea
                   placeholder="Ingresa las Caracteristicas del equipo"
                   v-model="computerFields.caracteristicas"
-                  :state="brandState"
+                  :state="DescriptionState"
+                  rows="4"
                 >
-                </b-form-input>
+                </b-form-textarea>
               </Field>
               <ErrorMessage
                 class="text-danger"
@@ -136,13 +137,13 @@
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Fecha de Adquisición">
-              <Field name="memoryField" :rules="validateMemory" as="text">
+              <Field name="memoryField" :rules="validateDate" as="text">
                 <Datepicker
                   v-model="computerFields.fechaAdquisicion"
                   locale="es"
                   autoApply
                   :enableTimePicker="false"
-                  :state="dateWorkState"
+                  :state="dateState"
                 >
                 </Datepicker>
               </Field>
@@ -154,27 +155,27 @@
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Costo de adquisición">
-              <Field name="StorageField" :rules="validateStorage" as="text">
+              <Field name="CostField" :rules="validateCost" as="text">
                 <b-form-input
                   placeholder="Describe brevemente el almacenamiento que tiene el equipo"
                   v-model="computerFields.costo"
-                  :state="storageState"
+                  :state="costState"
                 >
                 </b-form-input>
               </Field>
               <ErrorMessage
                 class="text-danger"
-                name="StorageField"
+                name="CostField"
               ></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group class="mt-3" label="Numero de serie">
-              <Field name="ProcessorField" :rules="validateProcessor" as="text">
+              <Field name="ProcessorField" :rules="validateSerialNumber" as="text">
                 <b-form-input
                   placeholder="Ingresa el numero de serie del equipo"
                   v-model="computerFields.numeroSerie"
-                  :state="processorState"
+                  :state="serialNumberState"
                 >
                 </b-form-input>
               </Field>
@@ -254,7 +255,6 @@ import DepartamentServices from '@/Services/departament.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
 import Datepicker from '@vuepic/vue-datepicker'
-// import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
@@ -279,14 +279,13 @@ export default {
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('marca')
-    const brandState = ref(false)
-    const memoryState = ref(false)
-    const storageState = ref(false)
-    const processorState = ref(false)
-    const departamentState = ref(false)
-    const areaState = ref(false)
+    const searchField = ref(['codigoInventario', 'numeroSerie'])
     const folioState = ref(false)
+    const DescriptionState = ref(false)
+    const dateState = ref(false)
+    const costState = ref(false)
+    const serialNumberState = ref(false)
+    const departamentState = ref(false)
     const stateComputerState = ref(false)
     const showModal = ref(false)
     const breadcrumbItems = ref([
@@ -368,55 +367,45 @@ export default {
       folioState.value = true
       return true
     }
-    const validateBrand = () => {
-      if (!computerFields.value.marca) {
-        brandState.value = false
+    const validateDescription = () => {
+      if (!computerFields.value.caracteristicas) {
+        DescriptionState.value = false
+        return 'Este campo es requerido'
+      }
+      DescriptionState.value = true
+      return true
+    }
+    const validateDate = () => {
+      if (!computerFields.value.fechaAdquisicion) {
+        dateState.value = false
+        return 'Este campo es requerido'
+      }
+      dateState.value = true
+      return true
+    }
+    const validateCost = () => {
+      if (!computerFields.value.costo) {
+        costState.value = false
         return 'Este campo es requerido'
       }
       // eslint-disable-next-line no-useless-escape
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(computerFields.value.marca)) {
-        brandState.value = false
+      if (!computerFields.value.costo.trim() > 0) {
+        costState.value = false
         return 'El campo no puede contener solo espacios'
       }
-      brandState.value = true
+      costState.value = true
       return true
     }
-    const validateMemory = () => {
-      if (!computerFields.value.memoriaRAM) {
-        memoryState.value = false
+    const validateSerialNumber = () => {
+      if (!computerFields.value.numeroSerie) {
+        serialNumberState.value = false
         return 'Este campo es requerido'
       }
-      // eslint-disable-next-line no-useless-escape
-      if (!computerFields.value.memoriaRAM.trim() > 0) {
-        processorState.value = false
+      if (!computerFields.value.numeroSerie.trim() > 0) {
+        serialNumberState.value = false
         return 'El campo no puede contener solo espacios'
       }
-      memoryState.value = true
-      return true
-    }
-    const validateStorage = () => {
-      if (!computerFields.value.almacenamiento) {
-        storageState.value = false
-        return 'Este campo es requerido'
-      }
-      // eslint-disable-next-line no-useless-escape
-      if (!computerFields.value.almacenamiento.trim() > 0) {
-        processorState.value = false
-        return 'El campo no puede contener solo espacios'
-      }
-      storageState.value = true
-      return true
-    }
-    const validateProcessor = () => {
-      if (!computerFields.value.procesador) {
-        processorState.value = false
-        return 'Este campo es requerido'
-      }
-      if (!computerFields.value.procesador.trim() > 0) {
-        processorState.value = false
-        return 'El campo no puede contener solo espacios'
-      }
-      processorState.value = true
+      serialNumberState.value = true
       return true
     }
     const validateDepartament = () => {
@@ -425,14 +414,6 @@ export default {
         return 'Este campo es requerido'
       }
       departamentState.value = true
-      return true
-    }
-    const validateArea = () => {
-      if (!computerFields.value.areaId) {
-        areaState.value = false
-        return 'Este campo es requerido'
-      }
-      areaState.value = true
       return true
     }
     const validateStateComputer = () => {
@@ -471,7 +452,6 @@ export default {
     const resetRoleFields = () => {
       showModal.value = false
       computerFields.value = JSON.parse(JSON.stringify(computerFieldsBlank))
-      brandState.value = false
     }
     const RemoveComputer = equipoComputoId => {
       isloading.value = true
@@ -523,25 +503,23 @@ export default {
       addComputer,
       refreshTable,
       RemoveComputer,
-      brandState,
-      memoryState,
-      storageState,
-      processorState,
+      costState,
+      DescriptionState,
+      serialNumberState,
       departamentState,
-      areaState,
+      dateState,
       stateComputerState,
       showModal,
       departaments,
       statusComputers,
       folioState,
 
-      validateBrand,
-      validateMemory,
-      validateStorage,
-      validateProcessor,
+      validateDescription,
+      validateDate,
+      validateSerialNumber,
+      validateCost,
       resetRoleFields,
       validateDepartament,
-      validateArea,
       validateStateComputer,
       validateFolio
     }
