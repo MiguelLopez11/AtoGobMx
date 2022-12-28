@@ -3,148 +3,157 @@
     <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
   </b-card>
   <b-card class="m-2">
-    <b-card>
-      <div>
-        <h3>Editar Direccion Cementerio</h3>
-      </div>
-      <Form @submit="onUpdateAddressCementeryService">
-        <b-row cols="2">
-          <!-- Agregar nombre -->
-          <b-col>
-            <b-form-group class="mt-3" label="Nombre del cementerio">
-              <Field
-                name="NameCementeryField"
-                :rules="validateNameCementery"
-                as="text"
-              >
-                <b-form-input
-                  v-model="addressCementeryService.nombreCementerio"
-                  :state="NameCementeryState"
+    <b-tabs content-class="mt-3">
+      <b-tab title="Direccion Cementerios" active>
+        <b-card>
+          <Form @submit="onUpdateAddressCementeryService">
+            <b-row cols="2">
+              <!-- Agregar nombre -->
+              <b-col>
+                <b-form-group class="mt-3" label="Nombre del cementerio">
+                  <Field
+                    name="NameCementeryField"
+                    :rules="validateNameCementery"
+                    as="text"
+                  >
+                    <b-form-input
+                      v-model="addressCementeryService.nombreCementerio"
+                      :state="NameCementeryState"
+                    >
+                    </b-form-input>
+                  </Field>
+                  <ErrorMessage
+                    class="text-danger"
+                    name="NameCementeryField"
+                  ></ErrorMessage>
+                </b-form-group>
+              </b-col>
+              <!-- Agregar municipio -->
+              <b-col>
+                <b-form-group class="mt-3" label="Municipio">
+                  <Field
+                    name="MunicipalityField"
+                    :rules="validateMunicipality"
+                    as="text"
+                  >
+                    <b-form-input
+                      v-model="addressCementeryService.municipio"
+                      :state="MunicipalityState"
+                    >
+                    </b-form-input>
+                  </Field>
+                  <ErrorMessage
+                    class="text-danger"
+                    name="MunicipalityField"
+                  ></ErrorMessage>
+                </b-form-group>
+              </b-col>
+              <!-- Agregar localidad -->
+              <b-col>
+                <b-form-group class="mt-3" label="Localidad">
+                  <Field
+                    name="LocationField"
+                    :rules="validateLocation"
+                    as="text"
+                  >
+                    <b-form-input
+                      v-model="addressCementeryService.localidad"
+                      :state="LocationState"
+                    >
+                    </b-form-input>
+                  </Field>
+                  <ErrorMessage
+                    class="text-danger"
+                    name="LocationField"
+                  ></ErrorMessage>
+                </b-form-group>
+              </b-col>
+              <!-- Agregar calle -->
+              <b-col>
+                <b-form-group class="mt-3" label="Calle">
+                  <Field name="StreetField" :rules="validateStreet" as="text">
+                    <b-form-input
+                      v-model="addressCementeryService.calle"
+                      :state="StreetState"
+                      type="text"
+                    >
+                    </b-form-input>
+                  </Field>
+                  <ErrorMessage
+                    class="text-danger"
+                    name="StreetField"
+                  ></ErrorMessage>
+                </b-form-group>
+              </b-col>
+              <!-- Agregar numero exterior -->
+              <b-col>
+                <b-form-group class="mt-3" label="Numero exterior">
+                  <Field
+                    name="NumberOutsideField"
+                    :rules="validateNumberOutside"
+                    as="text"
+                  >
+                    <b-form-input
+                      v-model="addressCementeryService.numeroExterior"
+                      :state="NumberOutsideState"
+                      type="number"
+                    >
+                    </b-form-input>
+                  </Field>
+                  <ErrorMessage
+                    class="text-danger"
+                    name="NumberOutsideField"
+                  ></ErrorMessage>
+                </b-form-group>
+              </b-col>
+              <b-row>
+                <GMapMap
+                  :center="center"
+                  :zoom="17"
+                  :options="{
+                    zoomControl: true,
+                    mapTypeControl: false,
+                    scaleControl: false,
+                    rotateControl: true,
+                    disableDefaultUi: false
+                  }"
+                  style="width: 100%; height: 500px"
                 >
-                </b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="NameCementeryField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!-- Agregar municipio -->
-          <b-col>
-            <b-form-group class="mt-3" label="Municipio">
-              <Field
-                name="MunicipalityField"
-                :rules="validateMunicipality"
-                as="text"
-              >
-                <b-form-input
-                  v-model="addressCementeryService.municipio"
-                  :state="MunicipalityState"
+                  <GMapMarker
+                    :zoom="20"
+                    :position="center"
+                    :draggable="true"
+                    @drag="updateCoordinates"
+                  />
+                </GMapMap>
+              </b-row>
+              <b-row align-h="end">
+                <b-button
+                  class="m-2 text-white"
+                  variant="primary"
+                  to="/ServiciosPublicos/DireccionCementerios/list"
+                  type="reset"
                 >
-                </b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="MunicipalityField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!-- Agregar localidad -->
-          <b-col>
-            <b-form-group class="mt-3" label="Localidad">
-              <Field name="LocationField" :rules="validateLocation" as="text">
-                <b-form-input
-                  v-model="addressCementeryService.localidad"
-                  :state="LocationState"
+                  Cancelar</b-button
                 >
-                </b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="LocationField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!-- Agregar calle -->
-          <b-col>
-            <b-form-group class="mt-3" label="Calle">
-              <Field name="StreetField" :rules="validateStreet" as="text">
-                <b-form-input
-                  v-model="addressCementeryService.calle"
-                  :state="StreetState"
-                  type="text"
-                >
-                </b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="StreetField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!-- Agregar numero exterior -->
-          <b-col>
-            <b-form-group class="mt-3" label="Numero exterior">
-              <Field
-                name="NumberOutsideField"
-                :rules="validateNumberOutside"
-                as="text"
-              >
-                <b-form-input
-                  v-model="addressCementeryService.numeroExterior"
-                  :state="NumberOutsideState"
-                  type="number"
-                >
-                </b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="NumberOutsideField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <b-row>
-            <GMapMap
-              :center="center"
-              :zoom="17"
-              :options="{
-                zoomControl: true,
-                mapTypeControl: false,
-                scaleControl: false,
-                rotateControl: true,
-                disableDefaultUi: false
-              }"
-              style="width: 100%; height: 500px"
-            >
-              <GMapMarker
-                :zoom="20"
-                :position="center"
-                :draggable="true"
-                @drag="updateCoordinates"
-              />
-            </GMapMap>
-          </b-row>
-          <b-row align-h="end">
-            <b-button
-              class="m-2 text-white"
-              variant="primary"
-              to="/ServiciosPublicos/DireccionCementerios/list"
-              type="reset"
-            >
-              Cancelar</b-button
-            >
-            <b-button type="success" class="m-2" variant="success">
-              Guardar
-            </b-button>
-          </b-row>
-        </b-row>
-      </Form>
-    </b-card>
+                <b-button type="success" class="m-2" variant="success">
+                  Guardar
+                </b-button>
+              </b-row>
+            </b-row>
+          </Form>
+        </b-card>
+      </b-tab>
+      <b-tab title="Documentos">
+        <ExpedientDocumentsDirectionCementery :DireccionId="direccionId" />
+      </b-tab>
+    </b-tabs>
   </b-card>
 </template>
 
 <script>
 import AddressCementeryService from '@/Services/addresscementery.Services'
+import ExpedientDocumentsDirectionCementery from '@/views/ServiciosPublicos/cementery/addresscementery/DocumentsAddressCementery.vue'
 import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 // import { useToast } from 'vue-toast-notification'
@@ -154,7 +163,8 @@ export default {
   components: {
     Form,
     Field,
-    ErrorMessage
+    ErrorMessage,
+    ExpedientDocumentsDirectionCementery
   },
   setup () {
     const swal = inject('$swal')
@@ -169,6 +179,7 @@ export default {
     const LocationState = ref(false)
     const StreetState = ref(false)
     const NumberOutsideState = ref(false)
+    const direccionId = ref(parseInt(router.params.DireccionId))
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
       {
@@ -350,6 +361,7 @@ export default {
       StreetState,
       NumberOutsideState,
       markers,
+      direccionId,
       center,
       //   router
 

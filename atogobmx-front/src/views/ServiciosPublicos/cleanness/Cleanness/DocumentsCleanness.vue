@@ -1,8 +1,8 @@
 <template>
-  <b-row cols="3" align-h="end" class="mb-3">
+  <b-row align-h="end" class="mb-3 mr-1">
     <b-form-input
       size="xl"
-      class="w-25"
+      style="width: 350px"
       v-model="searchValue"
       type="search"
       placeholder="Buscar Documento..."
@@ -24,7 +24,6 @@
       Agregar Documento
     </b-button>
     <b-button
-      :disabled="disableButtonDownload"
       v-if="documents.length > 0"
       variant="primary"
       style="
@@ -36,9 +35,8 @@
         text-align: center;
       "
       type="submit"
-      @click="onDownloadFiles"
     >
-      <!-- :href="`http://localhost:5000/api/Archivos/Documentos/${expedienteDigitalId}/Zip`" -->
+      <!-- :href="`https://localhost:5000/api/Archivos/Documentos/${expedienteDigitalId}/Zip`" -->
       <i class="bi bi-download"></i>
       Descargar Documentos
     </b-button>
@@ -65,17 +63,14 @@
     </template>
     <template #item-actions="items">
       <b-button
-        @click="RemoveDocument(items.archivoId)"
+        @click="RemoveDocumentCleanness(items.AseoId)"
         class="m-1"
         variant="outline-danger"
       >
         <i class="bi bi-trash3"></i>
       </b-button>
-      <b-button
-        class="m-1"
-        variant="outline-warning"
-        :href="`http://localhost:5000/api/Archivos/Documentos/Descargar/${expedienteDigitalId}/${items.archivoId}`"
-      >
+      <b-button class="m-1" variant="outline-warning">
+        <!-- :href="`https://localhost:5000/api/Archivos/Documentos/Descargar/${expedienteDigitalId}/${items.archivoId}`" -->
         <i class="bi bi-download"></i>
       </b-button>
     </template>
@@ -94,7 +89,7 @@
       <input
         type="file"
         class="form-control"
-        v-on:change="onChangeFile"
+        v-on:change="onChangeFileLighting"
         ref="refFile"
         id="file"
         multiple
@@ -103,7 +98,7 @@
       <b-button
         :disabled="disableButton"
         variant="outline-primary"
-        @click="submitFiles()"
+        @click="submitFilesCleanness()"
         >Cargar Archivo(s)</b-button
       >
     </div>
@@ -113,15 +108,10 @@
 <script>
 import { ref, inject } from 'vue'
 import FileServices from '@/Services/file.Services'
-import { axiosPrivate } from '@/common/axiosPrivate.js'
 export default {
   props: {
-    ExpedientDigitalId: {
+    AseoId: {
       type: Number,
-      required: true
-    },
-    Employee: {
-      type: Object,
       required: true
     }
   },
@@ -129,11 +119,11 @@ export default {
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup (props) {
-    const { getDocuments, deleteDocument, createDocuments } = FileServices()
+    const { getDocumentsAseo, deleteDocumentsAseo, createDocumentsAseo } =
+      FileServices()
     const showModal = ref(false)
     const refFile = ref()
     const disableButton = ref(true)
-    const disableButtonDownload = ref(false)
     const DocumentModal = ref()
     const swal = inject('$swal')
     const documents = ref([])
@@ -144,15 +134,15 @@ export default {
     const isloading = ref(true)
     const searchValue = ref('')
     const searchField = ref('nombre')
-    const expedienteDigitalId = ref(props.ExpedientDigitalId)
+    const aseoId = ref(props.AseoId)
     const formData = new FormData()
     const fields = ref([
-      { value: 'archivoId', text: 'ID', sortable: true },
       { value: 'nombre', text: 'Nombre Documento', sortable: true },
       { value: 'tipoArchivo', text: 'Tipo Documento', sortable: true },
       { value: 'actions', text: 'Acciones' }
     ])
-    getDocuments(props.ExpedientDigitalId, data => {
+
+    getDocumentsAseo(props.AseoId, data => {
       documents.value = data
       if (documents.value.length > 0) {
         isloading.value = false
@@ -162,9 +152,10 @@ export default {
         }
       }
     })
+
     const refreshTable = () => {
       isloading.value = true
-      getDocuments(props.ExpedientDigitalId, data => {
+      getDocumentsAseo(props.AseoId, data => {
         documents.value = data
         if (documents.value.length > 0) {
           isloading.value = false
@@ -176,9 +167,11 @@ export default {
       })
       return 'datos recargados'
     }
+
     const onFiltered = () => {
       currentPage.value = 1
     }
+
     const onChangeFile = () => {
       for (const file of refFile.value.files) {
         formData.append('files', file, file.name)
@@ -193,22 +186,9 @@ export default {
             disableButton.value = true
           }
         })
-        if (
-          file.type === 'image/jpeg' ||
-          file.type === 'image/png' ||
-          file.type === 'image/jpg'
-        ) {
-          swal.fire({
-            title: 'Documento no válido!',
-            text: 'Se ha seleccionado un documento que no es valido, revise e intentelo de nuevo.',
-            icon: 'error'
-          })
-          disableButton.value = true
-        }
       }
     }
-    const submitFiles = () => {
-      disableButton.value = false
+    const submitFilesCleanness = () => {
       if (refFile.value.files.length === 0) {
         swal.fire({
           title: 'Documento no seleccionado!',
@@ -217,7 +197,7 @@ export default {
         })
         return ''
       }
-      createDocuments(props.ExpedientDigitalId, formData, data => {
+      createDocumentsAseo(props.AseoId, formData, data => {
         showModal.value = false
         swal
           .fire({
@@ -231,29 +211,9 @@ export default {
             }
           })
       })
-      disableButton.value = true
-      // refFile.value.files = []
+      refFile.value.files = []
     }
-    const onDownloadFiles = () => {
-      isloading.value = true
-      disableButtonDownload.value = true
-      axiosPrivate({
-        url: `http://localhost:5000/api/Archivos/Documentos/${expedienteDigitalId.value}/Zip`,
-        method: 'GET',
-        responseType: 'blob' // important
-      }).then(response => {
-        const url = window.URL.createObjectURL(new Blob([response.data]))
-        const link = document.createElement('a')
-        link.href = url
-        link.setAttribute('download', `Expediente_${props.Employee.empleados.NombreCompleto}.zip`)
-        document.body.appendChild(link)
-        link.click()
-      }).then(result => {
-        isloading.value = false
-        disableButtonDownload.value = false
-      })
-    }
-    const RemoveDocument = archivoId => {
+    const RemoveDocumentCleanness = archivoId => {
       swal
         .fire({
           title: '¿Estas seguro?',
@@ -267,20 +227,20 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            deleteDocument(props.ExpedientDigitalId, archivoId, data => {
-              swal
-                .fire({
-                  title: 'Documento Eliminado!',
-                  text: 'Tu documento ha sido eliminado.',
-                  icon: 'success'
-                })
-                .then(result => {
-                  if (result.isConfirmed) {
+            swal
+              .fire({
+                title: 'Documento Eliminado!',
+                text: 'Tu documento ha sido eliminado.',
+                icon: 'success'
+              })
+              .then(result => {
+                if (result.isConfirmed) {
+                  deleteDocumentsAseo(props.AseoId, archivoId, data => {
                     showModal.value = false
                     refreshTable()
-                  }
-                })
-            })
+                  })
+                }
+              })
           }
         })
     }
@@ -296,17 +256,15 @@ export default {
       searchValue,
       searchField,
       documents,
-      expedienteDigitalId,
+      aseoId,
       showModal,
       disableButton,
-      disableButtonDownload,
 
       onFiltered,
-      RemoveDocument,
+      RemoveDocumentCleanness,
       refreshTable,
       onChangeFile,
-      submitFiles,
-      onDownloadFiles
+      submitFilesCleanness
     }
   }
 }

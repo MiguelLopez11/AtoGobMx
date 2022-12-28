@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace AtoGobMx.Controllers
 {
@@ -50,9 +51,21 @@ namespace AtoGobMx.Controllers
         [HttpPost]
         public async Task<ActionResult<Aseo>> PostAseo(Aseo aseo)
         {
-            object value = _context.Aseo.Add(aseo);
+            //object value = _context.Aseo.Add(aseo);
+            var aseopublico = aseo.NombreServicio.ToString();
+            var host = "ftp://digital.atogobmx.com/Files/ServiciosPublicos/AseoPublico/";
+            WebRequest request = WebRequest.Create(host + aseopublico);
+            request.Method = WebRequestMethods.Ftp.MakeDirectory;
+            request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+            using (var resp = (FtpWebResponse)request.GetResponse())
+            {
+                request.Abort();
+                resp.Close();
+            }
+            _context.Aseo.Add(aseo);
             await _context.SaveChangesAsync();
-            return Ok("Aseo creado correctamente");
+            return CreatedAtAction("GetAseoById", new { AseoId = aseo.AseoId }, aseo);
+            //return Ok("Aseo creado correctamente");
         }
 
         [HttpPut("{AseoId}")]
