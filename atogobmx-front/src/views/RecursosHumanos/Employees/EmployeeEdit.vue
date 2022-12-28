@@ -197,6 +197,7 @@ export default {
     ])
     getEmployee(router.params.EmpleadoId, (data) => {
       employee.value = data
+      validateState()
       getWorkStation(data.departamentoId)
     })
     getDepartaments(data => {
@@ -293,13 +294,13 @@ export default {
       return true
     }
     const validateState = () => {
-      nameState.value = employee.value.nombreCompleto !== ''
+      nameState.value = employee.value.nombreCompleto !== '' && employee.value.nombreCompleto !== null
       departamentState.value = employee.value.departamentoId !== null
       workStationState.value = employee.value.puestoTrabajoId !== null
-      dateWorkState.value = employee.value.fechaAlta !== null
-      codeEmployeeState.value = employee.value.códigoEmpleado !== null
-      estatusEmployeeState.value = employee.value.estatus !== null
-      salaryeState.value = employee.value.salarioQuincenal !== null
+      dateWorkState.value = employee.value.fechaAlta !== null && employee.value.fechaAlta !== ''
+      codeEmployeeState.value = employee.value.códigoEmpleado !== null && employee.value.códigoEmpleado !== ''
+      estatusEmployeeState.value = employee.value.estatus !== null && employee.value.estatus !== ''
+      salaryeState.value = employee.value.sueldoQuincenal !== null && employee.value.sueldoQuincenal !== ''
       return ''
     }
 

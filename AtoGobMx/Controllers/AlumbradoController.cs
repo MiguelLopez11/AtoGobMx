@@ -10,6 +10,7 @@ using System.Net;
 
 namespace AtoGobMx.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AlumbradoController : ControllerBase

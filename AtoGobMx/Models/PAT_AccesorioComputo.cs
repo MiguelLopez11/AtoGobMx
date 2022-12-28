@@ -3,21 +3,18 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AtoGobMx.Models
 {
-    public class PAT_Monitor
+    public class PAT_AccesorioComputo
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int MonitorId { get; set; }
-        public string? Marca { get; set; }
-        public int? Pulgadas { get; set; }
-        public double? Costo { get; set; }
-        public string? NumeroSerie { get; set; }
-        public string? Descripcion { get; set; }
-        public int? EquipoComputoId { get; set; }
+        public int AccesorioId { get; set; }
+        public string Nombre { get; set; }
+        public string Descripcion { get; set; }
+        public double Costo { get; set; }
+        public DateTime FechaAdquisicion { get; set; }
+        public int EquipoComputoId { get; set; }
         public bool Archivado { get; set; }
-
         [ForeignKey("EquipoComputoId")]
         public PAT_EquipoComputo? EquipoComputo { get; set; }
-
     }
 }
