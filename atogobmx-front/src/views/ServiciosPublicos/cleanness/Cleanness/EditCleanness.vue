@@ -3,106 +3,118 @@
     <b-card class="mb-4">
       <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
     </b-card>
-    <b-card>
-      <div>
-        <h3>Editar Direccion Cementerio</h3>
-      </div>
-      <Form @submit="onUpdateCleannessService">
-        <b-row cols="2">
-          <!-- Agregar nombre del servicios -->
-          <b-col>
-            <b-form-group class="mt-3" label="Nombre del servicio">
-              <Field
-                name="NameServiceField"
-                :rules="validateNameService"
-                as="text"
+    <b-tabs content-class="mt-3">
+      <b-tab title="Editar Direccion Cementerio" active>
+        <b-card>
+          <Form @submit="onUpdateCleannessService">
+            <b-row cols="2">
+              <!-- Agregar nombre del servicios -->
+              <b-col>
+                <b-form-group class="mt-3" label="Nombre del servicio">
+                  <Field
+                    name="NameServiceField"
+                    :rules="validateNameService"
+                    as="text"
+                  >
+                    <b-form-input
+                      v-model="cleannessService.nombreServicio"
+                      :state="NameServiceState"
+                    >
+                    </b-form-input>
+                  </Field>
+                  <ErrorMessage
+                    class="text-danger"
+                    name="NameServiceField"
+                  ></ErrorMessage>
+                </b-form-group>
+              </b-col>
+              <!--Agregar Establecimiento publico -->
+              <b-col>
+                <b-form-group class="mt-3" label="Establecimiento publico">
+                  <Field
+                    name="PublicEstablishmentField"
+                    :rules="validatePublicEstablishment"
+                    as="text"
+                  >
+                    <b-form-input
+                      v-model="cleannessService.establecimientoPublico"
+                      :state="PublicEstablishmentState"
+                    >
+                    </b-form-input>
+                  </Field>
+                  <ErrorMessage
+                    class="text-danger"
+                    name="PublicEstablishmentField"
+                  ></ErrorMessage>
+                </b-form-group>
+              </b-col>
+              <!-- Agregar Domicilio -->
+              <b-col>
+                <b-form-group class="mt-3" label="Domicilio">
+                  <Field
+                    name="DomicileField"
+                    :rules="validateDomicile"
+                    as="text"
+                  >
+                    <b-form-input
+                      v-model="cleannessService.domicilio"
+                      :state="DomicileState"
+                    >
+                    </b-form-input>
+                  </Field>
+                  <ErrorMessage
+                    class="text-danger"
+                    name="DomicileField"
+                  ></ErrorMessage>
+                </b-form-group>
+              </b-col>
+              <!-- Agregar Objetivo -->
+              <b-col>
+                <b-form-group class="mt-3" label="Objetivo">
+                  <Field
+                    name="ObjectiveField"
+                    :rules="validateObjective"
+                    as="text"
+                  >
+                    <b-form-input
+                      v-model="cleannessService.objetivo"
+                      :state="ObjectiveState"
+                    >
+                    </b-form-input>
+                  </Field>
+                  <ErrorMessage
+                    class="text-danger"
+                    name="ObjectiveField"
+                  ></ErrorMessage>
+                </b-form-group>
+              </b-col>
+            </b-row>
+            <b-row align-h="end">
+              <b-button
+                class="col-1 m-2 text-white"
+                variant="primary"
+                to="/ServiciosPublicos/Aseo/list"
+                type="reset"
               >
-                <b-form-input
-                  v-model="cleannessService.nombreServicio"
-                  :state="NameServiceState"
-                >
-                </b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="NameServiceField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!--Agregar Establecimiento publico -->
-          <b-col>
-            <b-form-group class="mt-3" label="Establecimiento publico">
-              <Field name="PublicEstablishmentField" :rules="validatePublicEstablishment" as="text">
-                <b-form-input
-                  v-model="cleannessService.establecimientoPublico"
-                  :state="PublicEstablishmentState"
-                >
-                </b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="PublicEstablishmentField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!-- Agregar Domicilio -->
-          <b-col>
-            <b-form-group class="mt-3" label="Domicilio">
-              <Field name="DomicileField" :rules="validateDomicile" as="text">
-                <b-form-input
-                  v-model="cleannessService.domicilio"
-                  :state="DomicileState"
-                >
-                </b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="DomicileField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!-- Agregar Objetivo -->
-          <b-col>
-            <b-form-group class="mt-3" label="Objetivo">
-              <Field
-                name="ObjectiveField"
-                :rules="validateObjective"
-                as="text"
+                Cancelar</b-button
               >
-                <b-form-input
-                  v-model="cleannessService.objetivo"
-                  :state="ObjectiveState"
-                >
-                </b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="ObjectiveField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-
-        </b-row>
-        <b-row align-h="end">
-          <b-button
-            class="col-1 m-2 text-white"
-            variant="primary"
-            to="/ServiciosPublicos/Aseo/list"
-            type="reset"
-          >
-            Cancelar</b-button
-          >
-          <b-button type="success" class="col-1 m-2" variant="success">
-            Guardar
-          </b-button>
-        </b-row>
-      </Form>
-    </b-card>
+              <b-button type="success" class="col-1 m-2" variant="success">
+                Guardar
+              </b-button>
+            </b-row>
+          </Form>
+        </b-card>
+      </b-tab>
+      <b-tab title="Documentos">
+        <ExpedientDocumentsCleanness :AseoId="aseoId" />
+      </b-tab>
+    </b-tabs>
   </b-card>
 </template>
 
 <script>
 import CleannessService from '@/Services/cleanness.Services'
+import ExpedientDocumentsCleanness from '@/views/ServiciosPublicos/cleanness/Cleanness/DocumentsCleanness.vue'
 import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 // import { useToast } from 'vue-toast-notification'
@@ -112,7 +124,8 @@ export default {
   components: {
     Form,
     Field,
-    ErrorMessage
+    ErrorMessage,
+    ExpedientDocumentsCleanness
   },
   setup () {
     const swal = inject('$swal')
@@ -125,24 +138,27 @@ export default {
     const PublicEstablishmentState = ref(false)
     const DomicileState = ref(false)
     const ObjectiveState = ref(false)
+    const aseoId = ref(parseInt(router.params.AseoId))
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
       { text: 'Aseo publico', to: '/ServiciosPublicos/Aseo/list' },
       { text: 'Editar-aseo' }
     ])
     const onUpdateCleannessService = () => {
-      updateCleanness(cleannessService.value, (data) => {})
-      swal.fire({
-        title: '¡Aseo modificado correctamente!',
-        text: 'El aseo se ha modificado  satisfactoriamente.',
-        icon: 'success'
-      }).then(result => {
-        if (result.isConfirmed) {
-          redirect.push('/ServiciosPublicos/Aseo/list')
-        }
-      })
+      updateCleanness(cleannessService.value, data => {})
+      swal
+        .fire({
+          title: '¡Aseo modificado correctamente!',
+          text: 'El aseo se ha modificado  satisfactoriamente.',
+          icon: 'success'
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            redirect.push('/ServiciosPublicos/Aseo/list')
+          }
+        })
     }
-    getCleannessById(router.params.AseoId, (data) => {
+    getCleannessById(router.params.AseoId, data => {
       cleannessService.value = data
     })
 
@@ -152,7 +168,9 @@ export default {
         return 'Este campo es requerido'
       }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(cleannessService.value.nombreServicio)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(cleannessService.value.nombreServicio)
+      ) {
         NameServiceState.value = false
         return 'Este campo solo puede contener letras'
       }
@@ -172,7 +190,11 @@ export default {
         return 'Este campo es requerido'
       }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(cleannessService.value.establecimientoPublico)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+          cleannessService.value.establecimientoPublico
+        )
+      ) {
         PublicEstablishmentState.value = false
         return 'Este campo solo puede contener numeros'
       }
@@ -243,6 +265,7 @@ export default {
       NameServiceState,
       PublicEstablishmentState,
       DomicileState,
+      aseoId,
       ObjectiveState,
       //   router
 
@@ -257,6 +280,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

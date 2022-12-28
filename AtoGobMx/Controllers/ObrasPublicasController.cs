@@ -48,11 +48,11 @@ namespace AtoGobMx.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<OP_Obras>> PostObrasPublicas(OP_Obras op_ObrasPublicas)
+        public async Task<ActionResult<OP_Obras>> PostObrasPublicas(OP_Obras op_Obras)
         {
             //object value = _context.ObrasPublicas.Add(op_ObrasPublicas);
-            var obras = op_ObrasPublicas.Nombre.ToString();
-            var host = "ftp://digital.atogobmx.com/Files/ServiciosPublicos/AseoPublico/";
+            var obras = op_Obras.Nombre.ToString();
+            var host = "ftp://digital.atogobmx.com/Files/ObrasPublicas/";
             WebRequest request = WebRequest.Create(host + obras);
             request.Method = WebRequestMethods.Ftp.MakeDirectory;
             request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
@@ -61,9 +61,9 @@ namespace AtoGobMx.Controllers
                 request.Abort();
                 resp.Close();
             }
-            _context.ObrasPublicas.Add(op_ObrasPublicas);
+            _context.ObrasPublicas.Add(op_Obras);
             await _context.SaveChangesAsync();
-            return CreatedAtAction("GetObrasPublicasById", new { ObraId  = op_ObrasPublicas.ObraId }, op_ObrasPublicas);
+            return CreatedAtAction("GetObrasPublicasById", new { ObraId  = op_Obras.ObraId }, op_Obras);
             //return Ok("Tipo de obra creada correctamente");
         }
 

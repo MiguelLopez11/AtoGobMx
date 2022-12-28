@@ -51,7 +51,7 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult> PostDireccionCementerios(DireccionCementerio direccioncementerio)
         {
             var direccioncementerios = direccioncementerio.NombreCementerio.ToString();
-            var host = "ftp://digital.atogobmx.com/Files/ServiciosPublicos/DireccionCementerioPublico/";
+            var host = "ftp://digital.atogobmx.com/Files/ServiciosPublicos/CementerioPublico/";
             WebRequest request = WebRequest.Create(host + direccioncementerios);
             request.Method = WebRequestMethods.Ftp.MakeDirectory;
             request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
@@ -63,7 +63,6 @@ namespace AtoGobMx.Controllers
             _context.DireccionCementerio.Add(direccioncementerio);
             await _context.SaveChangesAsync();
             return CreatedAtAction("GetDireccionCementeriosById", new { DireccionId = direccioncementerio.DireccionId }, direccioncementerio);
-            //return Ok("Direccion cementerio creada correcta mente");
         }
 
         [HttpPut("{DireccionId}")]

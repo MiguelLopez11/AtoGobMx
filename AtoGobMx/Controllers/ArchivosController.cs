@@ -12,7 +12,6 @@ using System.Net;
 
 namespace AtoGobMx.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ArchivosController : ControllerBase
@@ -322,7 +321,7 @@ namespace AtoGobMx.Controllers
                 {
                     return NotFound("No se encuentra Archivo");
                 }
-                var serverPath = "ftp://digital.atogobmx.com/Files/ServiciosPublicos/DireccionCementerioPublico/";
+                var serverPath = "ftp://digital.atogobmx.com/Files/ServiciosPublicos/CementerioPublico/";
                 var NombreCementerio = cementerio.NombreCementerio.ToString();
                 var filePath = documento.Nombre.ToString();
                 var ftpRequest = (FtpWebRequest)FtpWebRequest.Create(serverPath + NombreCementerio + "/" + filePath);
@@ -414,7 +413,7 @@ namespace AtoGobMx.Controllers
                 {
                     return NotFound("No se encuentra Archivo");
                 }
-                var serverPath = "ftp://digital.atogobmx.com/Files/ServiciosPublicos/AseoPublico/";
+                var serverPath = "ftp://digital.atogobmx.com/Files/ObrasPublicas/";
                 var Nombre = ObraPublica.Nombre.ToString();
                 var filePath = documento.Nombre.ToString();
                 var ftpRequest = (FtpWebRequest)FtpWebRequest.Create(serverPath + Nombre + "/" + filePath);
@@ -865,7 +864,7 @@ namespace AtoGobMx.Controllers
             {
                 return NotFound($"No se encuentra el documento con el ID {ArchivoId}");
             }
-            var serverPath = "ftp://digital.atogobmx.com/Files/ServiciosPublicos/ObrasPublicas/";
+            var serverPath = "ftp://digital.atogobmx.com/Files/ObrasPublicas/";
             var Nombre = obraspublicas.Nombre.ToString();
             var filePath = Archivo.Nombre.ToString();
             var Url = $"{serverPath + Nombre + "/" + filePath}";

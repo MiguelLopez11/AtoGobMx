@@ -184,7 +184,7 @@
             </b-form-group>
           </b-col>
         </b-row>
-        <b-row>
+        <!-- <b-row>
           <GMapMap
             :center="center"
             :zoom="15"
@@ -204,7 +204,7 @@
               @drag="updateCoordinates"
             />
           </GMapMap>
-        </b-row>
+        </b-row> -->
         <b-row align-h="end">
           <b-button
             class="w-auto m-2 text-white"

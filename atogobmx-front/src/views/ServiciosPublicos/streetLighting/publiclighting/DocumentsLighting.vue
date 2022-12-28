@@ -93,7 +93,6 @@
         ref="refFile"
         id="file"
         multiple
-        accept=".doc, .docx,.pdf"
       />
       <b-button
         :disabled="disableButton"
@@ -110,7 +109,7 @@ import { ref, inject } from 'vue'
 import FileServices from '@/Services/file.Services'
 export default {
   props: {
-    ExpedientDigitalId: {
+    AlumbradoId: {
       type: Number,
       required: true
     }
@@ -137,7 +136,7 @@ export default {
     const isloading = ref(true)
     const searchValue = ref('')
     const searchField = ref('nombre')
-    const expedienteDigitalId = ref(props.ExpedientDigitalId)
+    const alumbradoId = ref(props.AlumbradoId)
     const formData = new FormData()
     const fields = ref([
       { value: 'nombre', text: 'Nombre Documento', sortable: true },
@@ -145,7 +144,7 @@ export default {
       { value: 'actions', text: 'Acciones' }
     ])
 
-    getDocumentsAlumbrado(props.ExpedientDigitalId, data => {
+    getDocumentsAlumbrado(props.AlumbradoId, data => {
       documents.value = data
       if (documents.value.length > 0) {
         isloading.value = false
@@ -158,7 +157,7 @@ export default {
 
     const refreshTable = () => {
       isloading.value = true
-      getDocumentsAlumbrado(props.ExpedientDigitalId, data => {
+      getDocumentsAlumbrado(props.AlumbradoId, data => {
         documents.value = data
         if (documents.value.length > 0) {
           isloading.value = false
@@ -175,8 +174,9 @@ export default {
       currentPage.value = 1
     }
 
-    const onChangeFile = () => {
+    const onChangeFileLighting = () => {
       for (const file of refFile.value.files) {
+        console.log(refFile.value.files)
         formData.append('files', file, file.name)
         disableButton.value = false
         documents.value.forEach(element => {
@@ -189,18 +189,6 @@ export default {
             disableButton.value = true
           }
         })
-        // if (
-        //   file.type === 'image/jpeg' ||
-        //   file.type === 'image/png' ||
-        //   file.type === 'image/jpg'
-        // ) {
-        //   swal.fire({
-        //     title: 'Documento no válido!',
-        //     text: 'Se ha seleccionado un documento que no es valido, revise e intentelo de nuevo.',
-        //     icon: 'error'
-        //   })
-        //   disableButton.value = true
-        // }
       }
     }
     const submitFilesLighting = () => {
@@ -212,7 +200,7 @@ export default {
         })
         return ''
       }
-      createDocumentsAlumbrado(props.ExpedientDigitalId, formData, data => {
+      createDocumentsAlumbrado(props.AlumbradoId, formData, data => {
         showModal.value = false
         swal
           .fire({
@@ -275,14 +263,14 @@ export default {
       searchValue,
       searchField,
       documents,
-      expedienteDigitalId,
+      alumbradoId,
       showModal,
       disableButton,
 
       onFiltered,
       RemoveDocumentLighting,
       refreshTable,
-      onChangeFile,
+      onChangeFileLighting,
       submitFilesLighting
     }
   }

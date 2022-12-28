@@ -92,6 +92,9 @@
         <b-tab>
           <publicWorksEmployeeService :ObraId="obraId"/>
         </b-tab>
+        <b-tab title="Documentos">
+        <ExpedientDocumentsPublickWorks :ObraId="obraId" />
+      </b-tab>
       </b-tabs>
     </b-card>
   </b-card>
@@ -101,6 +104,7 @@
 import PublicWorksServices from '@/Services/publickworks.Services'
 import worksStatusServices from '@/Services/worksstatus.Services'
 import publicWorksEmployeeService from '@/views/ServiciosPublicos/publicworks/publicworksemployee/PublicWorksEmployeeList.vue'
+import ExpedientDocumentsPublickWorks from '@/views/ServiciosPublicos/publicworks/publicWorks/DocumentsPublicworks.vue'
 import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 // import { useToast } from 'vue-toast-notification'
@@ -111,7 +115,8 @@ export default {
     Form,
     Field,
     ErrorMessage,
-    publicWorksEmployeeService
+    publicWorksEmployeeService,
+    ExpedientDocumentsPublickWorks
   },
   setup () {
     const swal = inject('$swal')
@@ -127,6 +132,7 @@ export default {
     // const LengthState = ref(false)
     const DescriptionState = ref(false)
     const WorkStatusState = ref(false)
+    const obraId = ref(parseInt(router.params.ObraId))
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
       { text: 'Obras publicas', to: '/ServiciosPublicos/ObrasPublicas/list' },
@@ -258,6 +264,7 @@ export default {
       breadcrumbItems,
       worksStatus,
       NameWorksState,
+      obraId,
       // LatitudeState,
       // LengthState,
       DescriptionState,

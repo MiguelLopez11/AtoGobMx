@@ -6,9 +6,6 @@
     <b-tabs content-class="mt-3">
       <b-tab title="Reporte Alumbrado" active>
         <b-card>
-          <!-- <div>
-        <h3>Reporte Alumbrado</h3>
-      </div> -->
           <Form @submit="onUpdatePublicLighting">
             <b-row cols="3">
               <!--Tipo de tarea a agregar-->
@@ -138,9 +135,8 @@
         </b-card>
       </b-tab>
       <b-tab title="Documentos">
-          <ExpedientDocumentsLighting
-            :AlumbradoId="alumbradoId"
-          />
+        <ExpedientDocumentsLighting :AlumbradoId="alumbradoId" />
+      </b-tab>
     </b-tabs>
   </b-card>
 </template>
@@ -183,6 +179,7 @@ export default {
     const DomicileState = ref(false)
     const ProblemState = ref(false)
     const StatusState = ref(false)
+    const alumbradoId = ref(parseInt(router.params.AlumbradoId))
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
       { text: 'Alumbrado', to: '/ServiciosPublicos/Alumbrado/list' },
@@ -355,6 +352,7 @@ export default {
       DomicileState,
       StatusState,
       ProblemState,
+      alumbradoId,
       onUpdatePublicLighting,
       validateTask,
       validateProblem,

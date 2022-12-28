@@ -109,17 +109,18 @@
 import { ref, inject } from 'vue'
 import FileServices from '@/Services/file.Services'
 export default {
-  // props: {
-  //   ExpedientDigitalId: {
-  //     type: Number,
-  //     required: true
-  //   }
-  // },
+  props: {
+    AseoId: {
+      type: Number,
+      required: true
+    }
+  },
   components: {
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup (props) {
-    const { getDocumentsAseo, deleteDocumentsAseo, createDocumentsAseo } = FileServices()
+    const { getDocumentsAseo, deleteDocumentsAseo, createDocumentsAseo } =
+      FileServices()
     const showModal = ref(false)
     const refFile = ref()
     const disableButton = ref(true)
@@ -133,7 +134,7 @@ export default {
     const isloading = ref(true)
     const searchValue = ref('')
     const searchField = ref('nombre')
-    // const expedienteDigitalId = ref(props.ExpedientDigitalId)
+    const aseoId = ref(props.AseoId)
     const formData = new FormData()
     const fields = ref([
       { value: 'nombre', text: 'Nombre Documento', sortable: true },
@@ -141,7 +142,7 @@ export default {
       { value: 'actions', text: 'Acciones' }
     ])
 
-    getDocumentsAseo(props.ExpedientDigitalId, data => {
+    getDocumentsAseo(props.AseoId, data => {
       documents.value = data
       if (documents.value.length > 0) {
         isloading.value = false
@@ -154,7 +155,7 @@ export default {
 
     const refreshTable = () => {
       isloading.value = true
-      getDocumentsAseo(props.ExpedientDigitalId, data => {
+      getDocumentsAseo(props.AseoId, data => {
         documents.value = data
         if (documents.value.length > 0) {
           isloading.value = false
@@ -185,18 +186,6 @@ export default {
             disableButton.value = true
           }
         })
-        // if (
-        //   file.type === 'image/jpeg' ||
-        //   file.type === 'image/png' ||
-        //   file.type === 'image/jpg'
-        // ) {
-        //   swal.fire({
-        //     title: 'Documento no válido!',
-        //     text: 'Se ha seleccionado un documento que no es valido, revise e intentelo de nuevo.',
-        //     icon: 'error'
-        //   })
-        //   disableButton.value = true
-        // }
       }
     }
     const submitFilesCleanness = () => {
@@ -208,7 +197,7 @@ export default {
         })
         return ''
       }
-      createDocumentsAseo(props.ExpedientDigitalId, formData, data => {
+      createDocumentsAseo(props.AseoId, formData, data => {
         showModal.value = false
         swal
           .fire({
@@ -246,7 +235,7 @@ export default {
               })
               .then(result => {
                 if (result.isConfirmed) {
-                  deleteDocumentsAseo(props.ExpedientDigitalId, archivoId, data => {
+                  deleteDocumentsAseo(props.AseoId, archivoId, data => {
                     showModal.value = false
                     refreshTable()
                   })
@@ -267,7 +256,7 @@ export default {
       searchValue,
       searchField,
       documents,
-      //   alumbradoId,
+      aseoId,
       showModal,
       disableButton,
 

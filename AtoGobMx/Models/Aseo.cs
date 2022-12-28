@@ -17,6 +17,6 @@ namespace AtoGobMx.Models
         //public int? RutaId { get; set; }
 
         [JsonIgnore]
-        public virtual IEnumerable<ArchivosAseo> ArchivosAseo { get; set; }
+        public virtual IEnumerable<ArchivosAseo>? ArchivosAseo { get; set; }
     }
 }
