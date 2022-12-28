@@ -146,6 +146,7 @@
         <b-tab title="Documentos">
           <ExpedientDocuments
             :ExpedientDigitalId="expedienteDigitalId"
+            :Employee="expedient"
           />
         </b-tab>
       </b-tabs>

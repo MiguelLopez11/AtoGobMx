@@ -1,7 +1,6 @@
 ﻿using AtoGobMx.Context;
 using AtoGobMx.Models;
 using AutoMapper;
-using FluentFTP;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +12,7 @@ using System.Net;
 
 namespace AtoGobMx.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ArchivosController : ControllerBase
@@ -150,26 +150,26 @@ namespace AtoGobMx.Controllers
             var result = GetListFiles(expediente.Empleados.NombreCompleto.ToString());
             foreach (string line in result)
             {
-
-                FtpWebRequest downloadRequest = (FtpWebRequest)WebRequest.Create(UrlHost + line);
-                downloadRequest.UsePassive = true;
-                downloadRequest.UseBinary = true;
-                downloadRequest.Method = WebRequestMethods.Ftp.DownloadFile;
-                downloadRequest.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
-                downloadRequest.UseBinary = true;
-                downloadRequest.UsePassive = true;
-                downloadRequest.KeepAlive = true;
-                var ftpResponse = (FtpWebResponse)downloadRequest.GetResponse();
-                var ftpStream = ftpResponse.GetResponseStream();
-                var fileName = @"Files/" + line;
-                Directory.CreateDirectory(Path.GetDirectoryName(fileName));
-                FileStream file = System.IO.File.Create(fileName);
-                byte[] buffer = new byte[1024];
-                int read;
-                while ((read = ftpStream.Read(buffer, 0, buffer.Length)) > 0) { file.Write(buffer, 0, read); }
-                file.Close();
-                ftpStream.Close();
-                ftpResponse.Close();
+                copyFile(UrlHost, line);
+                //FtpWebRequest downloadRequest = (FtpWebRequest)WebRequest.Create(UrlHost + line);
+                //downloadRequest.UsePassive = true;
+                //downloadRequest.UseBinary = true;
+                //downloadRequest.Method = WebRequestMethods.Ftp.DownloadFile;
+                //downloadRequest.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+                //downloadRequest.UseBinary = true;
+                //downloadRequest.UsePassive = true;
+                //downloadRequest.KeepAlive = true;
+                //var ftpResponse = (FtpWebResponse)downloadRequest.GetResponse();
+                //var ftpStream = ftpResponse.GetResponseStream();
+                //var fileName = @"Files/" + line;
+                //Directory.CreateDirectory(Path.GetDirectoryName(fileName));
+                //FileStream file = System.IO.File.Create(fileName);
+                //byte[] buffer = new byte[1024];
+                //int read;
+                //while ((read = ftpStream.Read(buffer, 0, buffer.Length)) > 0) { file.Write(buffer, 0, read); }
+                //file.Close();
+                //ftpStream.Close();
+                //ftpResponse.Close();
             }
             var FolderPath = Path.Combine(Directory.GetCurrentDirectory(), $"Files/Documentos");
             var FilePaths = Directory.GetFiles(FolderPath);
@@ -1128,25 +1128,40 @@ namespace AtoGobMx.Controllers
                 return false;
             }
         }
+        private static bool copyFile(string url,string line)
+        {
+            try
+            {
+                FtpWebRequest downloadRequest = (FtpWebRequest)WebRequest.Create(url + line);
+                downloadRequest.UsePassive = true;
+                downloadRequest.UseBinary = true;
+                downloadRequest.Method = WebRequestMethods.Ftp.DownloadFile;
+                downloadRequest.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+                downloadRequest.UseBinary = true;
+                downloadRequest.UsePassive = true;
+                downloadRequest.KeepAlive = true;
+                var ftpResponse = (FtpWebResponse)downloadRequest.GetResponse();
+                var ftpStream = ftpResponse.GetResponseStream();
+                var fileName = @"Files/" + line;
+                Directory.CreateDirectory(Path.GetDirectoryName(fileName));
+                FileStream file = System.IO.File.Create(fileName);
+                byte[] buffer = new byte[1024];
+                int read;
+                while ((read = ftpStream.Read(buffer, 0, buffer.Length)) > 0) { file.Write(buffer, 0, read); }
+                file.Close();
+                ftpStream.Close();
+                ftpResponse.Close();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex.Message);
+                return false;
+            }
+        }
         private static List<String> GetListFiles(string name)
         {
             string Url = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/{5}", "digital.atogobmx.com", "Files", "RecursosHumanos", "Empleados", name, "Documentos");
-
-            //FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://www.contoso.com/");
-            //request.Method = WebRequestMethods.Ftp.ListDirectoryDetails;
-
-            //// This example assumes the FTP site uses anonymous logon.
-            //request.Credentials = new NetworkCredential("anonymous", "janeDoe@contoso.com");
-
-            //FtpWebResponse response = (FtpWebResponse)request.GetResponse();
-
-            //Stream responseStream = response.GetResponseStream();
-            //StreamReader reader = new StreamReader(responseStream);
-            //Console.WriteLine(reader.ReadToEnd());
-
-            //Console.WriteLine($"Directory List Complete, status {response.StatusDescription}");
-
-
             FtpWebRequest request = (FtpWebRequest)WebRequest.Create(Url);
             request.Method = WebRequestMethods.Ftp.ListDirectory;
             request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");

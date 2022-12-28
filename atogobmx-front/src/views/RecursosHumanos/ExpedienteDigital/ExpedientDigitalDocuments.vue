@@ -24,6 +24,7 @@
       Agregar Documento
     </b-button>
     <b-button
+      :disabled="disableButtonDownload"
       v-if="documents.length > 0"
       variant="primary"
       style="
@@ -35,8 +36,9 @@
         text-align: center;
       "
       type="submit"
-      :href="`http://localhost:5000/api/Archivos/Documentos/${expedienteDigitalId}/Zip`"
+      @click="onDownloadFiles"
     >
+      <!-- :href="`http://localhost:5000/api/Archivos/Documentos/${expedienteDigitalId}/Zip`" -->
       <i class="bi bi-download"></i>
       Descargar Documentos
     </b-button>
@@ -111,10 +113,15 @@
 <script>
 import { ref, inject } from 'vue'
 import FileServices from '@/Services/file.Services'
+import { axiosPrivate } from '@/common/axiosPrivate.js'
 export default {
   props: {
     ExpedientDigitalId: {
       type: Number,
+      required: true
+    },
+    Employee: {
+      type: Object,
       required: true
     }
   },
@@ -126,6 +133,7 @@ export default {
     const showModal = ref(false)
     const refFile = ref()
     const disableButton = ref(true)
+    const disableButtonDownload = ref(false)
     const DocumentModal = ref()
     const swal = inject('$swal')
     const documents = ref([])
@@ -139,6 +147,7 @@ export default {
     const expedienteDigitalId = ref(props.ExpedientDigitalId)
     const formData = new FormData()
     const fields = ref([
+      { value: 'archivoId', text: 'ID', sortable: true },
       { value: 'nombre', text: 'Nombre Documento', sortable: true },
       { value: 'tipoArchivo', text: 'Tipo Documento', sortable: true },
       { value: 'actions', text: 'Acciones' }
@@ -184,7 +193,11 @@ export default {
             disableButton.value = true
           }
         })
-        if (file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg') {
+        if (
+          file.type === 'image/jpeg' ||
+          file.type === 'image/png' ||
+          file.type === 'image/jpg'
+        ) {
           swal.fire({
             title: 'Documento no válido!',
             text: 'Se ha seleccionado un documento que no es valido, revise e intentelo de nuevo.',
@@ -195,6 +208,7 @@ export default {
       }
     }
     const submitFiles = () => {
+      disableButton.value = false
       if (refFile.value.files.length === 0) {
         swal.fire({
           title: 'Documento no seleccionado!',
@@ -217,7 +231,28 @@ export default {
             }
           })
       })
+      disableButton.value = true
       // refFile.value.files = []
+    }
+    const onDownloadFiles = () => {
+      isloading.value = true
+      disableButtonDownload.value = true
+      axiosPrivate({
+        url: `http://localhost:5000/api/Archivos/Documentos/${expedienteDigitalId.value}/Zip`,
+        method: 'GET',
+        responseType: 'blob' // important
+      }).then(response => {
+        console.log(response)
+        const url = window.URL.createObjectURL(new Blob([response.data]))
+        const link = document.createElement('a')
+        link.href = url
+        link.setAttribute('download', `Expediente_${props.Employee.empleados.NombreCompleto}.zip`)
+        document.body.appendChild(link)
+        link.click()
+      }).then(result => {
+        isloading.value = false
+        disableButtonDownload.value = false
+      })
     }
     const RemoveDocument = archivoId => {
       swal
@@ -233,20 +268,20 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            swal
-              .fire({
-                title: 'Documento Eliminado!',
-                text: 'Tu documento ha sido eliminado.',
-                icon: 'success'
-              })
-              .then(result => {
-                if (result.isConfirmed) {
-                  deleteDocument(props.ExpedientDigitalId, archivoId, data => {
+            deleteDocument(props.ExpedientDigitalId, archivoId, data => {
+              swal
+                .fire({
+                  title: 'Documento Eliminado!',
+                  text: 'Tu documento ha sido eliminado.',
+                  icon: 'success'
+                })
+                .then(result => {
+                  if (result.isConfirmed) {
                     showModal.value = false
                     refreshTable()
-                  })
-                }
-              })
+                  }
+                })
+            })
           }
         })
     }
@@ -265,12 +300,14 @@ export default {
       expedienteDigitalId,
       showModal,
       disableButton,
+      disableButtonDownload,
 
       onFiltered,
       RemoveDocument,
       refreshTable,
       onChangeFile,
-      submitFiles
+      submitFiles,
+      onDownloadFiles
     }
   }
 }

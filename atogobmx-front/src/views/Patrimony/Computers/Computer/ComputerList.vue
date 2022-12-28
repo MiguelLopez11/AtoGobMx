@@ -119,11 +119,11 @@
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="Marca">
+            <b-form-group class="mt-3" label="Descripción/Caracteristicas">
               <Field name="BrandField" :rules="validateBrand" as="text">
                 <b-form-input
-                  placeholder="Ingresa la marca y/o modelo del equipo"
-                  v-model="computerFields.marca"
+                  placeholder="Ingresa las Caracteristicas del equipo"
+                  v-model="computerFields.caracteristicas"
                   :state="brandState"
                 >
                 </b-form-input>
@@ -135,14 +135,16 @@
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="Memoria RAM">
+            <b-form-group class="mt-3" label="Fecha de Adquisición">
               <Field name="memoryField" :rules="validateMemory" as="text">
-                <b-form-input
-                  placeholder="Ingresa la cantidad de memoria que contiene el equipo"
-                  v-model="computerFields.memoriaRAM"
-                  :state="memoryState"
+                <Datepicker
+                  v-model="computerFields.fechaAdquisicion"
+                  locale="es"
+                  autoApply
+                  :enableTimePicker="false"
+                  :state="dateWorkState"
                 >
-                </b-form-input>
+                </Datepicker>
               </Field>
               <ErrorMessage
                 class="text-danger"
@@ -151,11 +153,11 @@
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="Almacenamiento">
+            <b-form-group class="mt-3" label="Costo de adquisición">
               <Field name="StorageField" :rules="validateStorage" as="text">
                 <b-form-input
                   placeholder="Describe brevemente el almacenamiento que tiene el equipo"
-                  v-model="computerFields.almacenamiento"
+                  v-model="computerFields.costo"
                   :state="storageState"
                 >
                 </b-form-input>
@@ -167,11 +169,11 @@
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="Procesador">
+            <b-form-group class="mt-3" label="Numero de serie">
               <Field name="ProcessorField" :rules="validateProcessor" as="text">
                 <b-form-input
-                  placeholder="Ingresa los datos del procesador que tiene el equipo"
-                  v-model="computerFields.procesador"
+                  placeholder="Ingresa el numero de serie del equipo"
+                  v-model="computerFields.numeroSerie"
                   :state="processorState"
                 >
                 </b-form-input>
@@ -251,6 +253,7 @@ import ComputerServices from '@/Services/computer.Services'
 import DepartamentServices from '@/Services/departament.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
+import Datepicker from '@vuepic/vue-datepicker'
 // import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
@@ -258,6 +261,7 @@ export default {
     Form,
     Field,
     ErrorMessage,
+    Datepicker,
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup () {
@@ -296,10 +300,10 @@ export default {
     const computerFields = ref({
       equipoComputoId: 0,
       codigoInventario: null,
-      marca: null,
-      memoriaRAM: null,
-      almacenamiento: null,
-      procesador: null,
+      caracteristicas: null,
+      fechaAdquisicion: null,
+      costo: null,
+      numeroSerie: null,
       departamentoId: null,
       estatusEquipoId: null,
       archivado: false
@@ -307,10 +311,10 @@ export default {
     const computerFieldsBlank = ref(JSON.parse(JSON.stringify(computerFields)))
     const fields = ref([
       { value: 'codigoInventario', text: 'Nomenclatura', sortable: true },
-      { value: 'marca', text: 'Marca' },
-      { value: 'memoriaRAM', text: 'Memoria RAM' },
-      { value: 'almacenamiento', text: 'Almacenamiento' },
-      { value: 'procesador', text: 'Procesador' },
+      { value: 'caracteristicas', text: 'Descripción/Caracteristicas' },
+      { value: 'fechaAdquisicion', text: 'Fecha de Adquisición' },
+      { value: 'costo', text: 'Costo' },
+      { value: 'numeroSerie', text: 'Numero de Serie' },
       { value: 'inventarioEstatus', text: 'Estatus' },
       { value: 'actions', text: 'Acciones' }
     ])

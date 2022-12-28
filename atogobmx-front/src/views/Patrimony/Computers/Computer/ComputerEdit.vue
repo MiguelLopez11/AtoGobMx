@@ -158,12 +158,12 @@
         <b-tab title="Monitor">
           <DisplayCrud :EquipoComputoId="computerId" />
         </b-tab>
-        <b-tab title="Teclado">
+        <!-- <b-tab title="Teclado">
           <KeyboardCrud :EquipoComputoId="computerId" />
         </b-tab>
         <b-tab title="Mouse">
           <MouseCrud :EquipoComputoId="computerId" />
-        </b-tab>
+        </b-tab> -->
       </b-tabs>
     </b-card>
   </b-card>
@@ -171,8 +171,8 @@
 
 <script>
 import DisplayCrud from '@/views/Patrimony/Computers/Display/DisplayCrud.vue'
-import KeyboardCrud from '@/views/Patrimony/Computers/Keyboards/KeyboardCrud.vue'
-import MouseCrud from '@/views/Patrimony/Computers/Mouse/MouseCrud.vue'
+// import KeyboardCrud from '@/views/Patrimony/Computers/Keyboards/KeyboardCrud.vue'
+// import MouseCrud from '@/views/Patrimony/Computers/Mouse/MouseCrud.vue'
 import ComputerServices from '@/Services/computer.Services'
 import DepartamentServices from '@/Services/departament.Services'
 import { ref, inject } from 'vue'
@@ -185,9 +185,9 @@ export default {
     Form,
     Field,
     ErrorMessage,
-    DisplayCrud,
-    KeyboardCrud,
-    MouseCrud
+    DisplayCrud
+    // KeyboardCrud,
+    // MouseCrud
   },
   setup () {
     const { getComputer, updateComputer, getStatus } = ComputerServices()
