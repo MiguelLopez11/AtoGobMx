@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20221228222948_equiposComputacion")]
+    partial class equiposComputacion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -417,7 +419,7 @@ namespace AtoGobMx.Migrations
                             EmpleadoId = 1,
                             Archivado = false,
                             DepartamentoId = 1,
-                            FechaAlta = new DateTime(2022, 12, 29, 0, 0, 0, 0, DateTimeKind.Local),
+                            FechaAlta = new DateTime(2022, 12, 28, 0, 0, 0, 0, DateTimeKind.Local),
                             NombreCompleto = "Administrador",
                             PuestoTrabajoId = 1,
                             TieneExpediente = true,
@@ -627,10 +629,6 @@ namespace AtoGobMx.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Encargado")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<int?>("EstatusObraId")
                         .HasColumnType("int");
 
@@ -641,14 +639,6 @@ namespace AtoGobMx.Migrations
                         .HasColumnType("float");
 
                     b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("OperadorObra")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("OperadorVehiculo")
                         .IsRequired()
                         .HasColumnType("longtext");
 
