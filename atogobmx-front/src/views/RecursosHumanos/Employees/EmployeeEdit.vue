@@ -11,13 +11,13 @@
         <b-row cols="3">
           <b-col>
             <b-form-group class="mt-3" label="Codigo de empleado">
-              <Field name="nameField" :rules="validateCodeEmployee" as="text">
+              <Field name="CodeField" :rules="validateCodeEmployee" as="text">
                 <b-form-input
                   v-model="employee.códigoEmpleado"
                   :state="codeEmployeeState"
                 />
               </Field>
-              <ErrorMessage class="text-danger" name="nameField"></ErrorMessage>
+              <ErrorMessage class="text-danger" name="CodeField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <b-col>

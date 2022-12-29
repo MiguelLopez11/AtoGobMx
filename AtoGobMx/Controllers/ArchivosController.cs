@@ -688,7 +688,7 @@ namespace AtoGobMx.Controllers
                 {
                     return NotFound();
                 }
-                string serverPath = String.Format("ftp://{0}/{1}/{2}/{3}/{4}", "digital.atogobmx.com", "Files", "ObrasPublicas", obraspublicas.Nombre);
+                string serverPath = String.Format("ftp://{0}/{1}/{2}/{3}", "digital.atogobmx.com", "Files", "ObrasPublicas", obraspublicas.Nombre);
                 #endregion
                 if (Files.Count > 0)
                 {

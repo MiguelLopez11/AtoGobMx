@@ -103,8 +103,17 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!--Agregar encargado de obra-->
           <b-col>
+            <b-form-group class="mt-3" label="¿Contrató una agencia de operaciones?">
+                <b-form-checkbox
+                  v-model="isAgency"
+                  :state="NameWorksState"
+                >
+                </b-form-checkbox>
+            </b-form-group>
+          </b-col>
+          <!--Agregar encargado de obra-->
+          <b-col v-if="isAgency == false">
             <b-form-group class="mt-3" label="Encargado obra">
               <Field name="InChargeField" :rules="validateInCharge" as="text">
                 <b-form-input
@@ -120,7 +129,7 @@
             </b-form-group>
           </b-col>
           <!--Agregar operador de obra-->
-          <b-col>
+          <b-col v-if="isAgency == false">
             <b-form-group class="mt-3" label="Operador de la obra">
               <Field name="SiteOperatorField" :rules="validateSiteOperator" as="text">
                 <b-form-input
@@ -136,7 +145,7 @@
             </b-form-group>
           </b-col>
           <!--Agregar operador de vehiculo-->
-          <b-col>
+          <b-col v-if="isAgency == false">
             <b-form-group class="mt-3" label="Operador del vehiculo">
               <Field name="VehicleOperatorField" :rules="validateVehicleOperator" as="text">
                 <b-form-input
@@ -238,10 +247,12 @@ export default {
     const searchValue = ref('')
     const searchField = ref('obraId')
     const NameWorksState = ref(false)
-    // const LatitudeState = ref(false)
-    // const LengthState = ref(false)
+    const InChargeState = ref(false)
+    const SiteOperatorState = ref(false)
+    const VehicleOperatorState = ref(false)
     const DescriptionState = ref(false)
     const WorkStatusState = ref(false)
+    const isAgency = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
       { text: 'Obras publicas', to: '/Obras' },
@@ -280,6 +291,9 @@ export default {
     const fields = ref([
       { value: 'obraId', text: 'ID', sortable: true },
       { value: 'nombre', text: 'Nombre de la obra' },
+      { value: 'encargado', text: 'Encargado obra' },
+      { value: 'operadorObra', text: 'Operador de la obra' },
+      { value: 'operadorVehiculo', text: 'Operador del vehiculo' },
       { value: 'descripcion', text: 'Descripcion' },
       { value: 'estatusObraId', text: 'Estatus de la obra' },
       { value: 'actions', text: 'Acciones' }
@@ -291,8 +305,9 @@ export default {
         JSON.stringify(publicWorksFieldsBlank)
       )
       NameWorksState.value = false
-      // LatitudeState.value = false
-      // LengthState.value = false
+      InChargeState.value = false
+      SiteOperatorState.value = false
+      VehicleOperatorState.value = false
       DescriptionState.value = false
       WorkStatusState.value = false
     }
@@ -310,7 +325,6 @@ export default {
     })
 
     const onFiltered = filteredItems => {
-      // rows.value = filteredItems.length
       currentPage.value = 1
     }
 
@@ -331,45 +345,22 @@ export default {
       return true
     }
 
-    // const validateLatitude = () => {
-    //   if (!publicWorksFields.value.latitud) {
-    //     LatitudeState.value = false
-    //     return 'Este campo es requerido'
-    //   }
-
-    //   if (!/^[0-9]+$/i.test(publicWorksFields.value.latitud)) {
-    //     LatitudeState.value = false
-    //     return 'Este campo solo puede contener numeros'
-    //   }
-
-    //   if (!publicWorksFields.value.latitud.trim().length > 0) {
-    //     LatitudeState.value = false
-    //     return 'Este campo no puede contener espacios'
-    //   }
-
-    //   LatitudeState.value = true
-    //   return true
-    // }
-
-    // const validateLength = () => {
-    //   if (!publicWorksFields.value.longitud) {
-    //     LengthState.value = false
-    //     return 'Este campo es requerido'
-    //   }
-
-    //   if (!/^[0-9]+$/i.test(publicWorksFields.value.longitud)) {
-    //     LengthState.value = false
-    //     return 'Este campo solo puede contener numeros'
-    //   }
-
-    //   if (!publicWorksFields.value.longitud.trim().length > 0) {
-    //     LengthState.value = false
-    //     return 'Este campo no puede contener espacios'
-    //   }
-
-    //   LengthState.value = true
-    //   return true
-    // }
+    const validateInCharge = () => {
+      if (!publicWorksFields.value.encargado) {
+        InChargeState.value = false
+        return 'Este campo es requerido'
+      }
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(publicWorksFields.value.encargado)) {
+        InChargeState.value = false
+        return 'El nombre del encargado solo puede contener letras'
+      }
+      if (!publicWorksFields.value.encargado.trim().length > 0) {
+        InChargeState.value = false
+        return 'Este campo no puede contener espacios'
+      }
+      InChargeState.value = true
+      return true
+    }
 
     const validateDescription = () => {
       if (!publicWorksFields.value.descripcion) {
@@ -404,7 +395,6 @@ export default {
       isloading.value = true
       getPublicWorks(data => {
         publicWorks.value = data
-        // rows.value = data.length
         if (publicWorks.value.length > 0) {
           isloading.value = false
         } else {
@@ -474,18 +464,16 @@ export default {
       publicWorksFieldsBlank,
       fields,
       NameWorksState,
-      // LatitudeState,
-      // LengthState,
       WorkStatusState,
       DescriptionState,
+      isAgency,
 
       onFiltered,
       addPublicWorks,
       refreshTable,
       RemovePublicWorks,
       validateNameWorks,
-      // validateLatitude,
-      // validateLength,
+      validateInCharge,
       validateDescription,
       validateWorkStatus,
       resetPublicWorksFields

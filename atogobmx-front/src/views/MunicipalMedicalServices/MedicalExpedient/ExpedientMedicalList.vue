@@ -3,30 +3,33 @@
     <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
   </b-card>
   <b-card class="m-2">
-    <b-row align-h="end" class="mb-3 mr-1">
+    <b-row cols="3" align-h="end" class="mb-3 mr-1">
+      <b-col>
       <b-form-input
         size="lg"
-        style="width: 350px"
+        class="w-100"
         v-model="searchValue"
         type="search"
         placeholder="Buscar Expediente médico..."
       >
       </b-form-input>
+      </b-col>
+      <b-col>
+
       <b-button
         style="
           background-color: #7367f0;
           height: 50px;
-          width: auto;
           font-size: 18px;
-          margin-right: 15px;
-          margin-left: 20px;
         "
+        class="w-100"
         @click="showModal = !showModal"
         type="submit"
       >
         <i class="bi bi-folder-fill m-1" />
         Agregar Expediente Médico
       </b-button>
+      </b-col>
     </b-row>
     <EasyDataTable
       rows-per-page-message="registros por pagina"
@@ -85,6 +88,7 @@
           </b-dropdown-item>
             <!-- v-if="items.archivado && items.puestoTrabajo.nombre === 'Administrador' || items.puestoTrabajo.nombre === 'Director'" -->
           <b-dropdown-item
+            v-if="items.archivado"
             class="m-1"
             variant="outline-warning"
           >
@@ -241,8 +245,8 @@ export default {
               getEmployees()
             })
             swal.fire({
-              title: '¡Empleado archivado!',
-              text: 'El empleado ha sido archivado satisfactoriamente .',
+              title: 'Expediente médico archivado!',
+              text: 'El Expediente médico ha sido archivado satisfactoriamente .',
               icon: 'success'
             })
           } else {
