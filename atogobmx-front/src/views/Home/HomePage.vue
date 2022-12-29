@@ -1,9 +1,6 @@
 <template>
-  <b-card
-    no-body
-  >
-
-  </b-card>
+  <b-container fluid="xl">
+  </b-container>
 </template>
 
 <script>
@@ -22,5 +19,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

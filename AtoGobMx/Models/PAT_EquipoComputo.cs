@@ -24,7 +24,5 @@ namespace AtoGobMx.Models
 
         [ForeignKey("EstatusEquipoId")]
         public PAT_EstatusEquipo? EstatusEquipo { get; set; }
-        [JsonIgnore]
-        public virtual IEnumerable<PAT_AccesorioComputo>? AccesorioComputo { get; set; }
     }
 }

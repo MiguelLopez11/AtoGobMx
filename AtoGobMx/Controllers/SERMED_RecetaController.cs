@@ -25,7 +25,6 @@ namespace AtoGobMx.Controllers
             var Recetas = await _context.Receta
                 .Include(i => i.Empleados)
                 .Include(i => i.EstatusReceta)
-                .Where(w => !w.Archivado)
                 .ToListAsync();
             if (Recetas == null)
             {
@@ -41,7 +40,6 @@ namespace AtoGobMx.Controllers
                 .Include(i => i.Empleados)
                 .Include(i => i.EstatusReceta)
                 .Include(i => i.ProductosReceta)
-                .Where(w => !w.Archivado)
                 .FirstOrDefaultAsync(f => f.RecetaId == RecetaId);
             if (Receta == null)
             {

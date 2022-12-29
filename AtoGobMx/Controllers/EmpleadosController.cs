@@ -120,7 +120,7 @@ namespace AtoGobMx.Controllers
             DateTime currentDate = Convert.ToDateTime(DateTime.Today.ToString());
             DateTime date = Convert.ToDateTime(Empleado.FechaAlta.ToString());
             int difFechas = Math.Abs((currentDate.Month - date.Month) + 12 * (currentDate.Year - date.Year));
-            Empleado.Antigüedad = difFechas.ToString() + "Meses";
+            Empleado.Antigüedad = difFechas.ToString() + " Meses";
             if (difFechas == 0)
             {
                 TimeSpan diference = currentDate - date;
@@ -156,6 +156,22 @@ namespace AtoGobMx.Controllers
             emp.Archivado = empleado.Archivado;
 
             _context.Empleados.Update(emp);
+            await _context.SaveChangesAsync();
+            return Ok("Empleado actualizado correctamente");
+        }
+        [HttpPut("DesArchivar/{EmpleadoId}")]
+        public async Task<ActionResult> DesArchivarEmpleado(int EmpleadoId)
+        {
+            
+            var empleado = await _context.Empleados.FirstOrDefaultAsync(f => f.EmpleadoId == EmpleadoId);
+            if (empleado == null)
+            {
+                return BadRequest("El empledo no existe");
+            }
+            
+            empleado.Archivado = false;
+
+            _context.Empleados.Update(empleado);
             await _context.SaveChangesAsync();
             return Ok("Empleado actualizado correctamente");
         }

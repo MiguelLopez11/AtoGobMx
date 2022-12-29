@@ -84,13 +84,22 @@
           </b-dropdown-item>
         </b-dropdown>
       </template>
-      <template #item-status="items">
+      <template #item-estado="items">
         <b-badge
           :variant="
             items.estatusReceta.nombre === 'Pendiente' ? 'warning' : 'success'
           "
         >
           {{ items.estatusReceta.nombre }}
+        </b-badge>
+      </template>
+      <template #item-status="items">
+        <b-badge
+          :variant="
+            items.archivado === true ? 'danger' : 'success'
+          "
+        >
+          {{ items.archivado === false ? 'Activo' : 'Archivado' }}
         </b-badge>
       </template>
     </EasyDataTable>
@@ -188,7 +197,8 @@ export default {
       { value: 'empleados', text: 'Empleado' },
       { value: 'diagnostico', text: 'Diagnostico' },
       { value: 'fechaAlta', text: 'Fecha' },
-      { value: 'status', text: 'Estado' },
+      { value: 'estado', text: 'Estado' },
+      { value: 'status', text: 'Estatus' },
       { value: 'actions', text: 'Acciones' }
     ])
     getPrescriptions(data => {

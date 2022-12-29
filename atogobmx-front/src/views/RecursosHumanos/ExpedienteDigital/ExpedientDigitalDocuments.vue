@@ -278,6 +278,7 @@ export default {
                   if (result.isConfirmed) {
                     showModal.value = false
                     refreshTable()
+                    refFile.value = null
                   }
                 })
             })
