@@ -64,8 +64,8 @@ export default function FileServices () {
       callback(response.data)
     })
   }
-  const deleteDocumentsCementerios = (DireccionId, ArchivoId, callback) => {
-    axiosPrivate.delete(`/Archivos/Documents12/Cementerios/Eliminar/${DireccionId}/${ArchivoId}`)
+  const deleteDocumentsCementerios = (DireccionId, ArchivosCementerioId, callback) => {
+    axiosPrivate.delete(`/Archivos/Documents12/Cementerios/Eliminar/${DireccionId}/${ArchivosCementerioId}`)
       .then((response) => {
         callback(response.data)
       })
@@ -86,8 +86,8 @@ export default function FileServices () {
       callback(response.data)
     })
   }
-  const deleteDocumentsAseo = (AseoId, ArchivoId, callback) => {
-    axiosPrivate.delete(`/Archivos/Documents13/Aseo/Eliminar/${AseoId}/${ArchivoId}`)
+  const deleteDocumentsAseo = (AseoId, ArchivosAseoId, callback) => {
+    axiosPrivate.delete(`/Archivos/Documents13/Aseo/Eliminar/${AseoId}/${ArchivosAseoId}`)
       .then((response) => {
         callback(response.data)
       })
@@ -108,8 +108,8 @@ export default function FileServices () {
       callback(response.data)
     })
   }
-  const deleteDocumentsObrasPublicas = (ObraId, ArchivoId, callback) => {
-    axiosPrivate.delete(`/Archivos/Documents14/ObrasPublicas/Eliminar/${ObraId}/${ArchivoId}`)
+  const deleteDocumentsObrasPublicas = (ObraId, ArchivosObrasId, callback) => {
+    axiosPrivate.delete(`/Archivos/Documents14/ObrasPublicas/Eliminar/${ObraId}/${ArchivosObrasId}`)
       .then((response) => {
         callback(response.data)
       })

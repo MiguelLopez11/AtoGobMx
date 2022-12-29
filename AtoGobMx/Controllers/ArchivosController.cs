@@ -784,7 +784,7 @@ namespace AtoGobMx.Controllers
 
         }
         [HttpDelete("Documents12/Cementerios/Eliminar/{DireccionId}/{ArchivoId}")]
-        public async Task<IActionResult> DeleteDocumentsCementerio(int DireccionId, int ArchivoId)
+        public async Task<IActionResult> DeleteDocumentsCementerio(int DireccionId, int ArchivosCementerioId)
         {
             var cementerio = await _context.DireccionCementerio
                 .FirstOrDefaultAsync(f => f.DireccionId == DireccionId);
@@ -794,11 +794,11 @@ namespace AtoGobMx.Controllers
                 return NotFound($"No se encuentra expediente con el ID {DireccionId}");
             }
             var Archivo = await _context.ArchivosCementerios
-                .FirstOrDefaultAsync(f => f.ArchivosCementerioId == ArchivoId);
+                .FirstOrDefaultAsync(f => f.ArchivosCementerioId == ArchivosCementerioId);
 
             if (Archivo == null)
             {
-                return NotFound($"No se encuentra el documento con el ID {ArchivoId}");
+                return NotFound($"No se encuentra el documento con el ID {ArchivosCementerioId}");
             }
             var serverPath = "ftp://digital.atogobmx.com/Files/ServiciosPublicos/CementerioPublico/";
             var NombreCementerio = cementerio.NombreCementerio.ToString();
@@ -816,7 +816,7 @@ namespace AtoGobMx.Controllers
 
         }
         [HttpDelete("Documents13/Aseo/Eliminar/{AseoId}/{ArchivoId}")]
-        public async Task<IActionResult> DeleteDocumentsAseo(int AseoId, int ArchivoId)
+        public async Task<IActionResult> DeleteDocumentsAseo(int AseoId, int ArchivosAseoId)
         {
             var aseo = await _context.Aseo
                 .FirstOrDefaultAsync(f => f.AseoId == AseoId);
@@ -826,11 +826,11 @@ namespace AtoGobMx.Controllers
                 return NotFound($"No se encuentra expediente con el ID {AseoId}");
             }
             var Archivo = await _context.ArchivosAseo
-                .FirstOrDefaultAsync(f => f.ArchivosAseoId == ArchivoId);
+                .FirstOrDefaultAsync(f => f.ArchivosAseoId == ArchivosAseoId);
 
             if (Archivo == null)
             {
-                return NotFound($"No se encuentra el documento con el ID {ArchivoId}");
+                return NotFound($"No se encuentra el documento con el ID {ArchivosAseoId}");
             }
             var serverPath = "ftp://digital.atogobmx.com/Files/ServiciosPublicos/AseoPublico/";
             var NombreServicio = aseo.NombreServicio.ToString();
@@ -848,7 +848,7 @@ namespace AtoGobMx.Controllers
 
         }
         [HttpDelete("Documents14/ObrasPublicas/Eliminar/{ObraId}/{ArchivoId}")]
-        public async Task<IActionResult> DeleteDocumentsObrasPublicas(int ObraId, int ArchivoId)
+        public async Task<IActionResult> DeleteDocumentsObrasPublicas(int ObraId, int ArchivosObrasId)
         {
             var obraspublicas = await _context.ObrasPublicas
                 .FirstOrDefaultAsync(f => f.ObraId == ObraId);
@@ -858,11 +858,11 @@ namespace AtoGobMx.Controllers
                 return NotFound($"No se encuentra expediente con el ID {ObraId}");
             }
             var Archivo = await _context.ArchivosObras
-                .FirstOrDefaultAsync(f => f.ArchivosObrasId == ArchivoId);
+                .FirstOrDefaultAsync(f => f.ArchivosObrasId == ArchivosObrasId);
 
             if (Archivo == null)
             {
-                return NotFound($"No se encuentra el documento con el ID {ArchivoId}");
+                return NotFound($"No se encuentra el documento con el ID {ArchivosObrasId}");
             }
             var serverPath = "ftp://digital.atogobmx.com/Files/ObrasPublicas/";
             var Nombre = obraspublicas.Nombre.ToString();

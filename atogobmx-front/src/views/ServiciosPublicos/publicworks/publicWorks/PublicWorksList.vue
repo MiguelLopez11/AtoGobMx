@@ -345,22 +345,22 @@ export default {
       return true
     }
 
-    const validateInCharge = () => {
-      if (!publicWorksFields.value.encargado) {
-        InChargeState.value = false
-        return 'Este campo es requerido'
-      }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(publicWorksFields.value.encargado)) {
-        InChargeState.value = false
-        return 'El nombre del encargado solo puede contener letras'
-      }
-      if (!publicWorksFields.value.encargado.trim().length > 0) {
-        InChargeState.value = false
-        return 'Este campo no puede contener espacios'
-      }
-      InChargeState.value = true
-      return true
-    }
+    // const validateInCharge = () => {
+    //   if (!publicWorksFields.value.encargado) {
+    //     InChargeState.value = false
+    //     return 'Este campo es requerido'
+    //   }
+    //   if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(publicWorksFields.value.encargado)) {
+    //     InChargeState.value = false
+    //     return 'El nombre del encargado solo puede contener letras'
+    //   }
+    //   if (!publicWorksFields.value.encargado.trim().length > 0) {
+    //     InChargeState.value = false
+    //     return 'Este campo no puede contener espacios'
+    //   }
+    //   InChargeState.value = true
+    //   return true
+    // }
 
     const validateDescription = () => {
       if (!publicWorksFields.value.descripcion) {
@@ -473,7 +473,7 @@ export default {
       refreshTable,
       RemovePublicWorks,
       validateNameWorks,
-      validateInCharge,
+      // validateInCharge,
       validateDescription,
       validateWorkStatus,
       resetPublicWorksFields
