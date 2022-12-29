@@ -1,5 +1,4 @@
 <template>
-<b-container class="bv-example-row">
 
     <VueSidebarMenuAkahon
       v-if="isLogged"
@@ -20,7 +19,6 @@
       @button-exit-clicked="removeLocalStorgare()"
     />
   <router-view></router-view>
-</b-container>
 </template>
 <script>
 import { ref, inject } from 'vue'

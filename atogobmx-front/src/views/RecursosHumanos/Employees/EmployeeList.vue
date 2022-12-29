@@ -82,7 +82,6 @@
           </b-dropdown-item>
           <b-dropdown-item
             class="m-1"
-            variant="outline-warning"
             @click="onClickExpedient(items.empleadoId)"
           >
             <i class="bi bi-archive-fill" />
@@ -90,11 +89,19 @@
           </b-dropdown-item>
           <b-dropdown-item
             class="m-1"
-            variant="outline-warning"
             @click="onClickMedicalExpedient(items.empleadoId)"
           >
             <i class="bi bi-journal-medical" />
             Expediente médico
+          </b-dropdown-item>
+          <b-dropdown-item
+            v-if="items.archivado"
+            :disabled="items.puestoTrabajo.nombre !== 'Administrador'"
+            class="m-1"
+            @click="onUnFileEmployee(items.empleadoId)"
+          >
+            <i class="bi bi-journal-medical" />
+            Desarchivar
           </b-dropdown-item>
         </b-dropdown>
       </template>
@@ -278,7 +285,7 @@ export default {
     ErrorMessage
   },
   setup () {
-    const { getEmployees, createEmployee, deleteEmployee } = EmployeeServices()
+    const { getEmployees, createEmployee, deleteEmployee, UnFileEmployee } = EmployeeServices()
     const swal = inject('$swal')
     // const { getAreasByDepartament } = AreaServices()
     const { getDepartaments } = DepartamentServices()
@@ -338,7 +345,7 @@ export default {
       códigoEmpleado: null,
       estatus: null,
       antigüedad: null,
-      sueldoQuincenal: 0,
+      sueldoQuincenal: null,
       archivado: false,
       tieneExpediente: true,
       tieneExpedienteMédico: true,
@@ -374,7 +381,6 @@ export default {
     })
     const onClickExpedient = empleadoId => {
       getExpedientByEmpleadoId(empleadoId, data => {
-        console.log(data)
         redirect.push({
           name: 'ExpedienteDigital-edit',
           params: { ExpedienteDigitalId: data.expedienteDigitalId }
@@ -387,6 +393,16 @@ export default {
           name: 'ServiciosMedicos-ExpedienteMedico-Edit',
           params: { ExpedienteMedicoId: data[0].expedienteMedicoId, EmpleadoId: empleadoId }
         })
+      })
+    }
+    const onUnFileEmployee = (EmpleadoId) => {
+      UnFileEmployee(EmpleadoId, data => {
+        swal.fire({
+          title: '¡Empleado desarchivado!',
+          text: 'El empelado ha sido desarchivado correctamente.',
+          icon: 'success'
+        })
+        refreshTable()
       })
     }
     const validateName = () => {
@@ -493,7 +509,6 @@ export default {
       nameState.value = false
       dateState.value = false
       dateWorkState.value = false
-      // areaState.value = false
       departamentState.value = false
       workStationState.value = false
     }
@@ -618,7 +633,8 @@ export default {
       getWorkStation,
       resetEmployeesFields,
       onClickExpedient,
-      onClickMedicalExpedient
+      onClickMedicalExpedient,
+      onUnFileEmployee
     }
   }
 }
