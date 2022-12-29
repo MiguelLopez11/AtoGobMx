@@ -3,7 +3,7 @@
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
-        style="width: 350px"
+        class="w-25"
         v-model="searchValue"
         type="search"
         placeholder="Buscar..."
@@ -18,10 +18,10 @@
           margin-right: 15px;
           margin-left: 20px;
         "
-        to="/ServiciosMedicos/Agenda"
+        to="/ServiciosMedicos/Receta/list"
       >
         <i class="bi bi-car-front-fill" />
-        Agendar Cita
+        Nueva Receta
       </b-button>
     </b-row>
     <EasyDataTable

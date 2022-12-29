@@ -36,6 +36,11 @@ export default function EmployeeServices () {
       callback(response.data)
     })
   }
+  const UnFileEmployee = (empleadoId, callback) => {
+    axiosPrivate.put(`/Empleados/DesArchivar/${empleadoId}`).then((response) => {
+      callback(response.data)
+    })
+  }
   const deleteEmployee = (employeeId, callback) => {
     axiosPrivate.delete(`/Empleados/${employeeId}`).then((response) => {
       callback(response.data)
@@ -49,6 +54,7 @@ export default function EmployeeServices () {
     getEmployee,
     createEmployee,
     updateEmployee,
+    UnFileEmployee,
     deleteEmployee
   }
 }

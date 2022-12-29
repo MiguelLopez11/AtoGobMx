@@ -150,25 +150,6 @@ namespace AtoGobMx.Controllers
             foreach (string line in result)
             {
                 copyFile(UrlHost, line);
-                //FtpWebRequest downloadRequest = (FtpWebRequest)WebRequest.Create(UrlHost + line);
-                //downloadRequest.UsePassive = true;
-                //downloadRequest.UseBinary = true;
-                //downloadRequest.Method = WebRequestMethods.Ftp.DownloadFile;
-                //downloadRequest.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
-                //downloadRequest.UseBinary = true;
-                //downloadRequest.UsePassive = true;
-                //downloadRequest.KeepAlive = true;
-                //var ftpResponse = (FtpWebResponse)downloadRequest.GetResponse();
-                //var ftpStream = ftpResponse.GetResponseStream();
-                //var fileName = @"Files/" + line;
-                //Directory.CreateDirectory(Path.GetDirectoryName(fileName));
-                //FileStream file = System.IO.File.Create(fileName);
-                //byte[] buffer = new byte[1024];
-                //int read;
-                //while ((read = ftpStream.Read(buffer, 0, buffer.Length)) > 0) { file.Write(buffer, 0, read); }
-                //file.Close();
-                //ftpStream.Close();
-                //ftpResponse.Close();
             }
             var FolderPath = Path.Combine(Directory.GetCurrentDirectory(), $"Files/Documentos");
             var FilePaths = Directory.GetFiles(FolderPath);
@@ -1144,7 +1125,7 @@ namespace AtoGobMx.Controllers
             var serverPath = "ftp://digital.atogobmx.com/Files/RecursosHumanos/Empleados/";
             var empleado = Expediente.Empleados.NombreCompleto.ToString();
             var filePath = Archivo.Nombre.ToString();
-            var Url = $"{serverPath + empleado + "/" + filePath}";
+            var Url = $"{serverPath + empleado + "/" + "Documentos/"+ filePath}";
             var result = DeleteFile(Url);
             if (result)
             {
