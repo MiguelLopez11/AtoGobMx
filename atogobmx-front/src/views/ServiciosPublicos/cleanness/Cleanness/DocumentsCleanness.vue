@@ -24,6 +24,7 @@
       Agregar Documento
     </b-button>
     <b-button
+    :disabled="disableButtonDownload"
       v-if="documents.length > 0"
       variant="primary"
       style="
@@ -35,6 +36,7 @@
         text-align: center;
       "
       type="submit"
+      @click="onDownloadFiles"
     >
       <!-- :href="`https://localhost:5000/api/Archivos/Documentos/${expedienteDigitalId}/Zip`" -->
       <i class="bi bi-download"></i>
@@ -69,7 +71,11 @@
       >
         <i class="bi bi-trash3"></i>
       </b-button>
-      <b-button class="m-1" variant="outline-warning">
+      <b-button
+      class="m-1"
+      variant="outline-warning"
+      :href="`http://localhost:5000/api/Archivos/Documents/Dowload3/${aseoId}/${items.archivosAseoId}`"
+      >
         <!-- :href="`https://localhost:5000/api/Archivos/Documentos/Descargar/${expedienteDigitalId}/${items.archivoId}`" -->
         <i class="bi bi-download"></i>
       </b-button>
@@ -89,11 +95,10 @@
       <input
         type="file"
         class="form-control"
-        v-on:change="onChangeFileLighting"
+        v-on:change="onChangeFileCleanness"
         ref="refFile"
         id="file"
         multiple
-        accept=".doc, .docx,.pdf"
       />
       <b-button
         :disabled="disableButton"
@@ -107,6 +112,7 @@
 
 <script>
 import { ref, inject } from 'vue'
+import { axiosPrivate } from '@/common/axiosPrivate.js'
 import FileServices from '@/Services/file.Services'
 export default {
   props: {
@@ -114,14 +120,22 @@ export default {
       type: Number,
       required: true
     }
+    // Employee: {
+    //   type: Object,
+    //   required: true
+    // }
   },
   components: {
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup (props) {
-    const { getDocumentsAseo, deleteDocumentsAseo, createDocumentsAseo } =
-      FileServices()
+    const {
+      getDocumentsAseo,
+      deleteDocumentsAseo,
+      createDocumentsAseo
+    } = FileServices()
     const showModal = ref(false)
+    const disableButtonDownload = ref(false)
     const refFile = ref()
     const disableButton = ref(true)
     const DocumentModal = ref()
@@ -137,6 +151,7 @@ export default {
     const aseoId = ref(props.AseoId)
     const formData = new FormData()
     const fields = ref([
+      { value: 'archivosAseoId', text: 'ID', sortable: true },
       { value: 'nombre', text: 'Nombre Documento', sortable: true },
       { value: 'tipoArchivo', text: 'Tipo Documento', sortable: true },
       { value: 'actions', text: 'Acciones' }
@@ -172,8 +187,9 @@ export default {
       currentPage.value = 1
     }
 
-    const onChangeFile = () => {
+    const onChangeFileCleanness = () => {
       for (const file of refFile.value.files) {
+        console.log(refFile.value.files)
         formData.append('files', file, file.name)
         disableButton.value = false
         documents.value.forEach(element => {
@@ -213,7 +229,26 @@ export default {
       })
       refFile.value.files = []
     }
-    const RemoveDocumentCleanness = archivoId => {
+    const onDownloadFiles = () => {
+      isloading.value = true
+      disableButtonDownload.value = true
+      axiosPrivate({
+        // url: `http://localhost:5000/api/Archivos/Documentos/${expedienteDigitalId.value}/Zip`,
+        method: 'GET',
+        responseType: 'blob' // important
+      }).then(response => {
+        const url = window.URL.createObjectURL(new Blob([response.data]))
+        const link = document.createElement('a')
+        link.href = url
+        // link.setAttribute('download', `Expediente_${props.Employee.empleados.NombreCompleto}.zip`)
+        document.body.appendChild(link)
+        link.click()
+      }).then(result => {
+        isloading.value = false
+        disableButtonDownload.value = false
+      })
+    }
+    const RemoveDocumentCleanness = archivosAseoId => {
       swal
         .fire({
           title: '¿Estas seguro?',
@@ -235,10 +270,14 @@ export default {
               })
               .then(result => {
                 if (result.isConfirmed) {
-                  deleteDocumentsAseo(props.AseoId, archivoId, data => {
-                    showModal.value = false
-                    refreshTable()
-                  })
+                  deleteDocumentsAseo(
+                    props.aseoId,
+                    archivosAseoId,
+                    data => {
+                      showModal.value = false
+                      refreshTable()
+                    }
+                  )
                 }
               })
           }
@@ -259,12 +298,14 @@ export default {
       aseoId,
       showModal,
       disableButton,
+      disableButtonDownload,
 
       onFiltered,
       RemoveDocumentCleanness,
       refreshTable,
-      onChangeFile,
-      submitFilesCleanness
+      onChangeFileCleanness,
+      submitFilesCleanness,
+      onDownloadFiles
     }
   }
 }

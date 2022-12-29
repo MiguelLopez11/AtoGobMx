@@ -89,12 +89,12 @@
             </Form>
           </b-card>
         </b-tab>
-        <b-tab>
-          <publicWorksEmployeeService :ObraId="obraId"/>
+        <b-tab title="Empleados">
+          <publicWorksEmployeeService :ObraId="obraId" />
         </b-tab>
         <b-tab title="Documentos">
-        <ExpedientDocumentsPublickWorks :ObraId="obraId" />
-      </b-tab>
+          <ExpedientDocumentsPublickWorks :ObraId="obraId" />
+        </b-tab>
       </b-tabs>
     </b-card>
   </b-card>

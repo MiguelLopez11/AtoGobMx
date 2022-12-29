@@ -24,6 +24,7 @@
       Agregar Documento
     </b-button>
     <b-button
+    :disabled="disableButtonDownload"
       v-if="documents.length > 0"
       variant="primary"
       style="
@@ -35,6 +36,7 @@
         text-align: center;
       "
       type="submit"
+      @click="onDownloadFiles"
     >
       <!-- :href="`https://localhost:5000/api/Archivos/Documentos/${expedienteDigitalId}/Zip`" -->
       <i class="bi bi-download"></i>
@@ -69,7 +71,11 @@
       >
         <i class="bi bi-trash3"></i>
       </b-button>
-      <b-button class="m-1" variant="outline-warning">
+      <b-button
+      class="m-1"
+      variant="outline-warning"
+      :href="`http://localhost:5000/api/Archivos/Documents/Dowload/${alumbradoId}/${items.archivoAlumbradoId}`"
+      >
         <!-- :href="`https://localhost:5000/api/Archivos/Documentos/Descargar/${expedienteDigitalId}/${items.archivoId}`" -->
         <i class="bi bi-download"></i>
       </b-button>
@@ -106,6 +112,7 @@
 
 <script>
 import { ref, inject } from 'vue'
+import { axiosPrivate } from '@/common/axiosPrivate.js'
 import FileServices from '@/Services/file.Services'
 export default {
   props: {
@@ -113,6 +120,10 @@ export default {
       type: Number,
       required: true
     }
+    // Employee: {
+    //   type: Object,
+    //   required: true
+    // }
   },
   components: {
     EasyDataTable: window['vue3-easy-data-table']
@@ -124,6 +135,7 @@ export default {
       createDocumentsAlumbrado
     } = FileServices()
     const showModal = ref(false)
+    const disableButtonDownload = ref(false)
     const refFile = ref()
     const disableButton = ref(true)
     const DocumentModal = ref()
@@ -139,6 +151,7 @@ export default {
     const alumbradoId = ref(props.AlumbradoId)
     const formData = new FormData()
     const fields = ref([
+      { value: 'archivoAlumbradoId', text: 'ID', sortable: true },
       { value: 'nombre', text: 'Nombre Documento', sortable: true },
       { value: 'tipoArchivo', text: 'Tipo Documento', sortable: true },
       { value: 'actions', text: 'Acciones' }
@@ -216,7 +229,26 @@ export default {
       })
       refFile.value.files = []
     }
-    const RemoveDocumentLighting = archivoId => {
+    const onDownloadFiles = () => {
+      isloading.value = true
+      disableButtonDownload.value = true
+      axiosPrivate({
+        // url: `http://localhost:5000/api/Archivos/Documentos/${expedienteDigitalId.value}/Zip`,
+        method: 'GET',
+        responseType: 'blob' // important
+      }).then(response => {
+        const url = window.URL.createObjectURL(new Blob([response.data]))
+        const link = document.createElement('a')
+        link.href = url
+        // link.setAttribute('download', `Expediente_${props.Employee.empleados.NombreCompleto}.zip`)
+        document.body.appendChild(link)
+        link.click()
+      }).then(result => {
+        isloading.value = false
+        disableButtonDownload.value = false
+      })
+    }
+    const RemoveDocumentLighting = archivoAlumbradoId => {
       swal
         .fire({
           title: '¿Estas seguro?',
@@ -239,8 +271,8 @@ export default {
               .then(result => {
                 if (result.isConfirmed) {
                   deleteDocumentsAlumbrado(
-                    props.ExpedientDigitalId,
-                    archivoId,
+                    props.alumbradoId,
+                    archivoAlumbradoId,
                     data => {
                       showModal.value = false
                       refreshTable()
@@ -266,12 +298,14 @@ export default {
       alumbradoId,
       showModal,
       disableButton,
+      disableButtonDownload,
 
       onFiltered,
       RemoveDocumentLighting,
       refreshTable,
       onChangeFileLighting,
-      submitFilesLighting
+      submitFilesLighting,
+      onDownloadFiles
     }
   }
 }

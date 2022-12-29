@@ -424,7 +424,7 @@ export default {
     )
 
     const fields = ref([
-      { value: 'aalumbradoId', text: 'ID', sortable: true },
+      { value: 'alumbradoId', text: 'ID', sortable: true },
       { value: 'estatus.nombreEstatus', text: 'Estatus' },
       { value: 'tareaTipoAlumbrado.nombreTarea', text: 'Tipo de tarea' },
       { value: 'nombreObra', text: 'Nombre de obra alumbrado' },
