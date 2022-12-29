@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20221229070318_CambiosObras1")]
+    partial class CambiosObras1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -645,10 +647,6 @@ namespace AtoGobMx.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("OperadorObra")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("OperadorVehiculo")
                         .IsRequired()
                         .HasColumnType("longtext");
 

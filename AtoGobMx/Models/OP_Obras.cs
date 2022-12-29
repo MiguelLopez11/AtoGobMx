@@ -10,6 +10,9 @@ namespace AtoGobMx.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ObraId { get; set; }
         public string Nombre { get; set; }
+        public string Encargado { get; set; }
+        public string OperadorObra { get; set; }
+        public string OperadorVehiculo { get; set; }
         public float? Latitud { get; set; }
         public float? Longitud { get; set; }
         public string Descripcion { get; set; }

@@ -42,8 +42,8 @@ export default function FileServices () {
       callback(response.data)
     })
   }
-  const deleteDocumentsAlumbrado = (AlumbradoId, ArchivoId, callback) => {
-    axiosPrivate.delete(`/Archivos/Documents/AlumbradoPublico/Eliminar/${AlumbradoId}/${ArchivoId}`)
+  const deleteDocumentsAlumbrado = (AlumbradoId, ArchivoAlumbradoId, callback) => {
+    axiosPrivate.delete(`/Archivos/Documents11/AlumbradoPublico/Eliminar/${AlumbradoId}/${ArchivoAlumbradoId}`)
       .then((response) => {
         callback(response.data)
       })
@@ -65,7 +65,7 @@ export default function FileServices () {
     })
   }
   const deleteDocumentsCementerios = (DireccionId, ArchivoId, callback) => {
-    axiosPrivate.delete(`/Archivos/Documents/Cementerios/Eliminar/${DireccionId}/${ArchivoId}`)
+    axiosPrivate.delete(`/Archivos/Documents12/Cementerios/Eliminar/${DireccionId}/${ArchivoId}`)
       .then((response) => {
         callback(response.data)
       })
@@ -87,7 +87,7 @@ export default function FileServices () {
     })
   }
   const deleteDocumentsAseo = (AseoId, ArchivoId, callback) => {
-    axiosPrivate.delete(`/Archivos/Documents/Aseo/${AseoId}/${ArchivoId}`)
+    axiosPrivate.delete(`/Archivos/Documents13/Aseo/Eliminar/${AseoId}/${ArchivoId}`)
       .then((response) => {
         callback(response.data)
       })
@@ -96,7 +96,7 @@ export default function FileServices () {
       })
   }
   const createDocumentsAseo = (AseoId, files, callback) => {
-    axiosPrivate.post(`/Archivos/Documents/Aseo/Eliminar/${AseoId}`, files).then((response) => {
+    axiosPrivate.post(`/Archivos/Documents/Aseo/${AseoId}`, files).then((response) => {
       callback(response)
     }).catch((exception) => {
       callback(exception.response.data)
@@ -109,7 +109,7 @@ export default function FileServices () {
     })
   }
   const deleteDocumentsObrasPublicas = (ObraId, ArchivoId, callback) => {
-    axiosPrivate.delete(`/Archivos/Documents/ObrasPublicas/Eliminar/${ObraId}/${ArchivoId}`)
+    axiosPrivate.delete(`/Archivos/Documents14/ObrasPublicas/Eliminar/${ObraId}/${ArchivoId}`)
       .then((response) => {
         callback(response.data)
       })

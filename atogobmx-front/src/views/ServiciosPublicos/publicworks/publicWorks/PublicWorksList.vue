@@ -103,6 +103,54 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
+          <!--Agregar encargado de obra-->
+          <b-col>
+            <b-form-group class="mt-3" label="Encargado obra">
+              <Field name="InChargeField" :rules="validateInCharge" as="text">
+                <b-form-input
+                  v-model="publicWorksFields.encargado"
+                  :state="InChargeState"
+                >
+                </b-form-input>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="InChargeField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <!--Agregar operador de obra-->
+          <b-col>
+            <b-form-group class="mt-3" label="Operador de la obra">
+              <Field name="SiteOperatorField" :rules="validateSiteOperator" as="text">
+                <b-form-input
+                  v-model="publicWorksFields.operadorObra"
+                  :state="SiteOperatorState"
+                >
+                </b-form-input>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="SiteOperatorField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <!--Agregar operador de vehiculo-->
+          <b-col>
+            <b-form-group class="mt-3" label="Operador del vehiculo">
+              <Field name="VehicleOperatorField" :rules="validateVehicleOperator" as="text">
+                <b-form-input
+                  v-model="publicWorksFields.operadorVehiculo"
+                  :state="VehicleOperatorState"
+                >
+                </b-form-input>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="VehicleOperatorField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
           <!--agregar un estatus obra-->
           <b-col>
             <b-form-group class="mt-3" label="Estatus de la Obra">
@@ -203,6 +251,9 @@ export default {
     const publicWorksFields = ref({
       obraId: 0,
       nombre: null,
+      encargado: null,
+      operadorObra: null,
+      operadorVehiculo: null,
       latitud: null,
       longitud: null,
       descripcion: null,
