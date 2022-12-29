@@ -40,23 +40,49 @@ namespace AtoGobMx.Controllers
             var Receta = await _context.Receta
                 .Include(i => i.Empleados)
                 .Include(i => i.EstatusReceta)
+                .Include(i => i.ProductosReceta)
                 .Where(w => !w.Archivado)
                 .FirstOrDefaultAsync(f => f.RecetaId == RecetaId);
             if (Receta == null)
             {
                 return BadRequest("No se encuentran citas registradas");
             }
+            var products = await _context.ProductoReceta
+                .Include(i => i.Producto)
+                .Where(w => w.RecetaId == RecetaId)
+                .ToListAsync();
+            if(products == null)
+            {
+                return BadRequest("Receta vacía");
+            }
             await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultChromiumRevision);
             await using var browser = await Puppeteer.LaunchAsync(
                 new LaunchOptions { Headless = true }
             );
-            var htmlContent = $"";
+            var htmlContent = $"<!doctype html>\r\n<html lang=\"en\">\r\n\r\n<head>\r\n    <meta charset=\"utf-8\">\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\r\n    <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css\" rel=\"stylesheet\"\r\n        integrity=\"sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65\" crossorigin=\"anonymous\">\r\n</head>\r\n<style type=\"text/css\">\r\n    footer {{\r\n        display: block;\r\n        text-align: center;\r\n        margin-top: 100px;\r\n    }}\r\n\r\n    #Fecha {{\r\n        float: right;\r\n    }}\r\n\r\n    body {{\r\n        height: auto;\r\n    }}\r\n</style>\r\n\r\n<body>\r\n    <div class=\"container-fluid text-center\">\r\n        <div>\r\n\r\n            <div>\r\n                <table class=\"table w-25\" id=\"Fecha\">\r\n                    <thead>\r\n                        <tr>\r\n                            <th scope=\"col\">Fecha:</th>\r\n                            <td>{Receta.FechaAlta}</td>\r\n                        </tr>\r\n                    </thead>\r\n                </table>\r\n            </div>\r\n            <div>\r\n                <div class=\"row\">\r\n                    <div class=\"col\">\r\n                        <table class=\"table w-50 mt-5\">\r\n                            <thead>\r\n                                <tr>\r\n                                    <th scope=\"col\">Nombre:</th>\r\n                                    <td>{Receta.Empleados.NombreCompleto}</td>\r\n                                </tr>\r\n                            </thead>\r\n                        </table>\r\n                    </div>\r\n                </div>\r\n                <div class=\"row\">\r\n                    <div class=\"col\">\r\n                        <table class=\"table mt-4\">\r\n                            <thead>\r\n                                <tr>\r\n                                    <th scope=\"col\">Diagnostico</th>\r\n                                </tr>\r\n                            </thead>\r\n                            <tbody>\r\n                                <tr>\r\n                                    <td>{Receta.diagnostico}</td>\r\n                                </tr>\r\n                            </tbody>\r\n                        </table>\r\n                    </div>\r\n                </div>\r\n                <div class=\"row\">\r\n                    <div class=\"col\">\r\n                        <table class=\"table mt-4\">\r\n                            <thead>\r\n                                <tr>\r\n                                    <th scope=\"col\">Medicamento</th>\r\n                                    <th scope=\"col\">Contenido</th>\r\n                                    <th scope=\"col\">Cantidad</th>\r\n                                    <th scope=\"col\">Sugerencias</th>\r\n                                </tr>\r\n                            </thead>\r\n                            <tbody>";
+            var productosContent = "";
+            foreach (var product in products)
+            {
+                productosContent += $" <tr>\r\n                                    <td>{product.Producto.Nombre}</td>\r\n                                    <td> {product.Producto.Contenido}</td>\r\n                                    <td>{product.cantidad}</td>\r\n                                    <td>{product.Descripcion}</td>\r\n                                </tr>";
+            }
+            htmlContent += productosContent;
+            htmlContent += " </tbody>\r\n                        </table>\r\n                    </div>\r\n                </div>\r\n                <div class=\"row\">\r\n                    <div class=\"col\">\r\n                        <div id=\"Firma\">\r\n\r\n\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </div>\r\n        <footer>\r\n            <hr class=\"\">\r\n            <p>Firma</p>\r\n        </footer>\r\n    </div>\r\n</body>\r\n\r\n</html>";
             await using var page = await browser.NewPageAsync();
             await page.EmulateMediaTypeAsync(MediaType.Screen);
-            await page.SetContentAsync($"");
+            await page.SetContentAsync(htmlContent + "<hr>" + htmlContent);
             var pdfContent = await page.PdfStreamAsync(
-                new PdfOptions { Format = PaperFormat.A4, PrintBackground = true }
-            );
+                new PdfOptions
+                {
+                    Format = PaperFormat.A4,
+                    PrintBackground = true,
+                    MarginOptions = new MarginOptions
+                    {
+                        Top = "20px",
+                        Right = "20px",
+                        Bottom = "40px",
+                        Left = "20px"
+                    }
+                });
             return File(pdfContent, "application/pdf", "converted.pdf");
         }
 

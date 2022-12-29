@@ -124,7 +124,7 @@ export default {
     ErrorMessage
   },
   props: {
-    expedienteAlumbradoId: {
+    ObraId: {
       type: Number,
       required: true
     }
@@ -151,9 +151,9 @@ export default {
     const NameState = ref(false)
     const publicWorksEmployeeFields = ref({
       empleadoObrasId: 0,
-      expedienteAlumbradoId: props.expedienteAlumbradoId,
+      ObraId: props.ObraId,
       empleadoId: 0,
-      obraId: 0,
+      // obraId: 0,
       archivado: false
     })
 

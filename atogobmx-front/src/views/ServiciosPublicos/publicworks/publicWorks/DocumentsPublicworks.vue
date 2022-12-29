@@ -63,14 +63,17 @@
     </template>
     <template #item-actions="items">
       <b-button
-        @click="RemoveDocumentPublicworks(items.ObraId)"
+        @click="RemoveDocumentPublicWorks(items.ObraId)"
         class="m-1"
         variant="outline-danger"
       >
         <i class="bi bi-trash3"></i>
       </b-button>
-      <b-button class="m-1" variant="outline-warning">
-        <!-- :href="`https://localhost:5000/api/Archivos/Documentos/Descargar/${expedienteDigitalId}/${items.archivoId}`" -->
+      <b-button
+        class="m-1"
+        variant="outline-warning"
+        :href="`http://localhost:5000/api/Archivos/Documents/Dowload4/${obraId}/${items.archivosObrasId}`"
+      >
         <i class="bi bi-download"></i>
       </b-button>
     </template>
@@ -89,11 +92,10 @@
       <input
         type="file"
         class="form-control"
-        v-on:change="onChangeFileLighting"
+        v-on:change="onChangeFilePublicWorks"
         ref="refFile"
         id="file"
         multiple
-        accept=".doc, .docx,.pdf"
       />
       <b-button
         :disabled="disableButton"
@@ -140,6 +142,7 @@ export default {
     const obraId = ref(props.ObraId)
     const formData = new FormData()
     const fields = ref([
+      { value: 'archivosObrasId', text: 'ID', sortable: true },
       { value: 'nombre', text: 'Nombre Documento', sortable: true },
       { value: 'tipoArchivo', text: 'Tipo Documento', sortable: true },
       { value: 'actions', text: 'Acciones' }
@@ -175,8 +178,9 @@ export default {
       currentPage.value = 1
     }
 
-    const onChangeFile = () => {
+    const onChangeFilePublicWorks = () => {
       for (const file of refFile.value.files) {
+        console.log(refFile.value.files)
         formData.append('files', file, file.name)
         disableButton.value = false
         documents.value.forEach(element => {
@@ -216,7 +220,7 @@ export default {
       })
       refFile.value.files = []
     }
-    const RemoveDocumentPublicworks = archivoId => {
+    const RemoveDocumentPublicWorks = archivosObrasId => {
       swal
         .fire({
           title: '¿Estas seguro?',
@@ -239,8 +243,8 @@ export default {
               .then(result => {
                 if (result.isConfirmed) {
                   deleteDocumentsObrasPublicas(
-                    props.ObraId,
-                    archivoId,
+                    props.obraId,
+                    archivosObrasId,
                     data => {
                       showModal.value = false
                       refreshTable()
@@ -268,9 +272,9 @@ export default {
       disableButton,
 
       onFiltered,
-      RemoveDocumentPublicworks,
+      RemoveDocumentPublicWorks,
       refreshTable,
-      onChangeFile,
+      onChangeFilePublicWorks,
       submitFilesPublicWorks
     }
   }
