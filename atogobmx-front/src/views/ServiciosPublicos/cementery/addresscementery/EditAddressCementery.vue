@@ -5,7 +5,6 @@
   <b-card class="m-2">
     <b-tabs content-class="mt-3">
       <b-tab title="Direccion Cementerios" active>
-        <b-card>
           <Form @submit="onUpdateAddressCementeryService">
             <b-row cols="2">
               <!-- Agregar nombre -->
@@ -106,43 +105,60 @@
                   ></ErrorMessage>
                 </b-form-group>
               </b-col>
-              <b-row>
-                <GMapMap
-                  :center="center"
-                  :zoom="17"
-                  :options="{
-                    zoomControl: true,
-                    mapTypeControl: false,
-                    scaleControl: false,
-                    rotateControl: true,
-                    disableDefaultUi: false
-                  }"
-                  style="width: 100%; height: 500px"
-                >
-                  <GMapMarker
-                    :zoom="20"
-                    :position="center"
-                    :draggable="true"
-                    @drag="updateCoordinates"
-                  />
-                </GMapMap>
               </b-row>
-              <b-row align-h="end">
+              <b-row cols="1">
+                <b-button v-b-toggle.collapse-1 variant="primary">
+                  Mapa
+                </b-button>
+                <b-collapse id="collapse-1" class="mt-2">
+                  <b-card>
+                    <b-alert variant="warning" dismissible show
+                      >Arrastra el punto del mapa al lugar donde se encuentra su
+                      gabeta.</b-alert
+                    >
+                    <GMapMap
+                      :center="center"
+                      map-type-id="satellite"
+                      :zoom="20"
+                      :options="{
+                        zoomControl: true,
+                        mapTypeControl: false,
+                        scaleControl: false,
+                        rotateControl: true,
+                        disableDefaultUi: false
+                      }"
+                      style="width: 100%; height: 500px"
+                    >
+                      <GMapMarker
+                        :zoom="10"
+                        :position="center"
+                        :draggable="true"
+                        @drag="updateCoordinates"
+                      />
+                    </GMapMap>
+                  </b-card>
+                </b-collapse>
+              </b-row>
+              <b-row cols="2" align-h="end">
+                <b-col>
+
                 <b-button
-                  class="m-2 text-white"
+                  class=" w-75 m-2 text-white"
                   variant="primary"
                   to="/ServiciosPublicos/DireccionCementerios/list"
                   type="reset"
                 >
                   Cancelar</b-button
                 >
-                <b-button type="success" class="m-2" variant="success">
+                </b-col>
+                <b-col>
+
+                <b-button type="success" class="w-75 m-2" variant="success">
                   Guardar
                 </b-button>
+                </b-col>
               </b-row>
-            </b-row>
           </Form>
-        </b-card>
       </b-tab>
       <b-tab title="Documentos">
         <ExpedientDocumentsDirectionCementery :DireccionId="direccionId" />
@@ -189,13 +205,17 @@ export default {
       { text: 'Editar-Estatus Alumbrado' }
     ])
 
-    const markers = ref({
-      position: {
-        lat: 0,
-        lng: 0
+    const markers = ref([
+      {
+        position: {
+          lat: 0,
+          lng: 0
+        }
       }
-    })
+    ])
+
     const center = ref({ lat: 0, lng: 0 })
+
     const updateCoordinates = location => {
       markers.value = {
         position: {
@@ -203,8 +223,8 @@ export default {
           lng: location.latLng.lng()
         }
       }
-      addressCementeryService.value.latitud = markers.value.position.lat
-      addressCementeryService.value.longitud = markers.value.position.lng
+      addressCementeryService.value.latitud = location.latLng.lat()
+      addressCementeryService.value.longitud = location.latLng.lng()
     }
 
     const onUpdateAddressCementeryService = () => {

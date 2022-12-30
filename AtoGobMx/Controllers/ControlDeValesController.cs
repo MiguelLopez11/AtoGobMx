@@ -88,6 +88,8 @@ namespace AtoGobMx.Controllers
             controlvale.FechaEmicion = controlDeVales.FechaEmicion;
             controlvale.FechaVigencia = controlDeVales.FechaVigencia;
             //controlvale.TipoCombustible = controlDeVales.TipoCombustible;
+            controlvale.Usuario = controlDeVales.Usuario;
+            controlvale.UsuarioAutoriza = controlDeVales.UsuarioAutoriza;
             controlvale.DepartamentoId = controlDeVales.DepartamentoId;
             controlvale.EmpleadoId = controlDeVales.EmpleadoId;
             controlvale.ProveedorId = controlDeVales.ProveedorId;

@@ -341,6 +341,6 @@ export default {
 
 <style scoped>
 .form-check {
-    display: inline-block
+    display: inline-block;
     }
 </style>

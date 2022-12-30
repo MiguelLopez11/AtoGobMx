@@ -184,27 +184,38 @@
             </b-form-group>
           </b-col>
         </b-row>
-        <!-- <b-row>
-          <GMapMap
-            :center="center"
-            :zoom="15"
-            :options="{
-              zoomControl: true,
-              mapTypeControl: false,
-              scaleControl: false,
-              rotateControl: true,
-              disableDefaultUi: false
-            }"
-            style="width: 100%; height: 500px"
-          >
-            <GMapMarker
-              :zoom="10"
-              :position="center"
-              :draggable="true"
-              @drag="updateCoordinates"
-            />
-          </GMapMap>
-        </b-row> -->
+        <b-row cols="1" align-h="center">
+          <b-button v-b-toggle.collapse-1 variant="primary"> Mapa </b-button>
+          <b-collapse id="collapse-1" class="mt-2">
+            <b-card>
+              <b-alert variant="warning" dismissible show
+                >Arrastra el punto del mapa al lugar donde se encuentra su
+                gabeta.</b-alert
+              >
+              <GMapMap
+                :center="center"
+                map-type-id="satellite"
+                :zoom="20"
+                :options="{
+                  zoomControl: true,
+                  mapTypeControl: false,
+                  scaleControl: false,
+                  rotateControl: true,
+                  disableDefaultUi: false
+                }"
+                style="width: 100%; height: 50%"
+              >
+                <GMapMarker
+                  :zoom="10"
+                  :position="center"
+                  :draggable="true"
+                  @drag="updateCoordinates"
+                />
+              </GMapMap>
+            </b-card>
+          </b-collapse>
+          <!-- {{markers}} -->
+        </b-row>
         <b-row align-h="end">
           <b-button
             class="w-auto m-2 text-white"
@@ -281,15 +292,16 @@ export default {
       JSON.parse(JSON.stringify(addressCementeryServiceFields))
     )
 
-    const markers = ref(
+    const markers = ref([
       {
         position: {
-          lat: 20.550345,
-          lng: -102.509211
+          lat: 20.5546629,
+          lng: -102.4953904
         }
       }
-    )
-    const center = ref({ lat: 20.550345, lng: -102.509211 })
+    ])
+
+    const center = ref({ lat: 20.5546629, lng: -102.4953904 })
 
     const updateCoordinates = (location) => {
       markers.value = {
@@ -299,6 +311,7 @@ export default {
         }
       }
     }
+
     const fields = ref([
       { value: 'nombreCementerio', text: 'Nombre Cementerio' },
       { value: 'municipio', text: 'Municipio' },

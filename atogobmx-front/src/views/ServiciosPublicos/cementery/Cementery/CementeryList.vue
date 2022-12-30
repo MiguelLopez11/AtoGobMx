@@ -91,25 +91,22 @@
         <b-row cols="2">
           <!-- Registrar el panteon de la gabeta -->
           <b-col>
-            <b-form-group class="mt-3" label="Panteón">
+            <b-form-group class="mt-3" label="Nombre cementerio">
               <Field
                 name="PropietaryField"
                 :rules="validatePropietary"
                 as="text"
               >
-                <!-- <b-form-select
+                <b-form-select
+                  v-model="cementeryServiceFields.DireccionId"
                   autofocus
-                  :options="roles"
-                  value-field="roleId"
-                  text-field="nombre"
-                  v-model="userFields.roleId"
-                  :state="roleState"
-                ></b-form-select> -->
+                  :state="PropietaryState"
+                  :options="addressCementeryService"
+                  value-field="direccionId"
+                  text-field="nombreCementerio"
+                ></b-form-select>
               </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="PropietaryField"
-              ></ErrorMessage>
+              <ErrorMessage class="text-danger" name="StatusField" />
             </b-form-group>
           </b-col>
           <!--Agregar propietario -->
@@ -219,7 +216,7 @@
               </GMapMap>
             </b-card>
           </b-collapse>
-          {{markers}}
+          <!-- {{markers}} -->
         </b-row>
         <b-row align-h="end">
           <b-button
@@ -241,6 +238,7 @@
 
 <script>
 import CementeryService from '@/Services/cementery.Services'
+import AddressCementeryService from '@/Services/addresscementery.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
 // import { useToast } from 'vue-toast-notification'
@@ -257,8 +255,9 @@ export default {
     const showModal = ref(false)
     const { getCementery, createCementery, deleteCementery } =
       CementeryService()
-    // const $toast = useToast()
+    const { getAddressCementery } = AddressCementeryService()
     const cementeryService = ref([])
+    const addressCementeryService = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
     const filter = ref(null)
@@ -266,10 +265,10 @@ export default {
     const isloading = ref(true)
     const searchValue = ref('')
     const searchField = ref('nombrePropietario')
-    const PropietaryState = ref(false)
     const SpacesState = ref(false)
     const MeterState = ref(false)
     const AvailableState = ref(false)
+    const PropietaryState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
       {
@@ -284,35 +283,38 @@ export default {
       numeroEspasios: null,
       metrosCorrespondientes: null,
       espaciosDisponibles: null,
+      direccionId: null,
       latitud: null,
       longitud: null,
       archivado: false
+    })
+
+    getAddressCementery(data => {
+      addressCementeryService.value = data
+      if (data.length === 0) {
+        swal.fire({
+          title: 'No se encuentra un cementerio registrado!',
+          text: 'No se encuentra un cementerio registrado en el departamento seleccionado, registre primero un tipo de cementerio para continuar',
+          icon: 'warning'
+        })
+      }
     })
 
     const CementeryServiceFieldsBlank = ref(
       JSON.parse(JSON.stringify(cementeryServiceFields))
     )
 
-    const markers = ref([
-      {
-        position: {
-          lat: 20.5546629,
-          lng: -102.4953904
-        }
-      }
-    ])
-
     const center = ref({ lat: 20.5546629, lng: -102.4953904 })
 
-    const updateCoordinates = (location) => {
-      markers.value = {
-        position: {
-          lat: location.latLng.lat(),
-          lng: location.latLng.lng()
-        }
-      }
+    const updateCoordinates = location => {
+      cementeryServiceFields.value.latitud = location.latLng.lat()
+      cementeryServiceFields.value.longitud = location.latLng.lng()
     }
     const fields = ref([
+      {
+        value: 'direccionCementerio.nombreCementerio',
+        text: 'Nombre del cementerio'
+      },
       { value: 'nombrePropietario', text: 'Nombre de propietario' },
       { value: 'numeroEspasios', text: 'Espacios' },
       { value: 'metrosCorrespondientes', text: 'Metros' },
@@ -345,6 +347,15 @@ export default {
 
     const onFiltered = filteredItems => {
       currentPage.value = 1
+    }
+
+    const validateStatus = () => {
+      if (!cementeryServiceFields.value.direccionId) {
+        PropietaryState.value = false
+        return 'Este campo es requerido'
+      }
+      PropietaryState.value = true
+      return true
     }
 
     const validatePropietary = () => {
@@ -452,8 +463,6 @@ export default {
     }
 
     const addCementeryService = () => {
-      cementeryServiceFields.value.latitud = markers.value[0].position.lat
-      cementeryServiceFields.value.longitud = markers.value[0].position.lng
       createCementery(cementeryServiceFields.value, data => {
         refreshTable()
         swal.fire({
@@ -498,6 +507,7 @@ export default {
     return {
       cementeryService,
       cementeryServiceFields,
+      addressCementeryService,
       breadcrumbItems,
       perPage,
       currentPage,
@@ -513,7 +523,6 @@ export default {
       SpacesState,
       MeterState,
       AvailableState,
-      markers,
       center,
       updateCoordinates,
 
@@ -522,6 +531,7 @@ export default {
       validateSpaces,
       validateMeter,
       validateAvailable,
+      validateStatus,
       addCementeryService,
       RemoveCementeryService,
       refreshTable,

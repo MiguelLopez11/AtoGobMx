@@ -104,12 +104,18 @@
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="¿Contrató una agencia de operaciones?">
-                <b-form-checkbox
-                  v-model="isAgency"
-                  :state="NameWorksState"
-                >
-                </b-form-checkbox>
+            <b-form-group
+              horizontal
+              class="mt-3"
+              label="¿Contrató una agencia de operaciones?"
+            >
+              <b-form-checkbox
+                style=""
+                v-model="isAgency"
+                size="lg"
+                :state="NameWorksState"
+              >
+              </b-form-checkbox>
             </b-form-group>
           </b-col>
           <!--Agregar encargado de obra-->
@@ -131,7 +137,11 @@
           <!--Agregar operador de obra-->
           <b-col v-if="isAgency == false">
             <b-form-group class="mt-3" label="Operador de la obra">
-              <Field name="SiteOperatorField" :rules="validateSiteOperator" as="text">
+              <Field
+                name="SiteOperatorField"
+                :rules="validateSiteOperator"
+                as="text"
+              >
                 <b-form-input
                   v-model="publicWorksFields.operadorObra"
                   :state="SiteOperatorState"
@@ -147,7 +157,11 @@
           <!--Agregar operador de vehiculo-->
           <b-col v-if="isAgency == false">
             <b-form-group class="mt-3" label="Operador del vehiculo">
-              <Field name="VehicleOperatorField" :rules="validateVehicleOperator" as="text">
+              <Field
+                name="VehicleOperatorField"
+                :rules="validateVehicleOperator"
+                as="text"
+              >
                 <b-form-input
                   v-model="publicWorksFields.operadorVehiculo"
                   :state="VehicleOperatorState"
@@ -247,9 +261,9 @@ export default {
     const searchValue = ref('')
     const searchField = ref('obraId')
     const NameWorksState = ref(false)
-    const InChargeState = ref(false)
-    const SiteOperatorState = ref(false)
-    const VehicleOperatorState = ref(false)
+    // const InChargeState = ref(false)
+    // const SiteOperatorState = ref(false)
+    // const VehicleOperatorState = ref(false)
     const DescriptionState = ref(false)
     const WorkStatusState = ref(false)
     const isAgency = ref(false)
@@ -305,9 +319,9 @@ export default {
         JSON.stringify(publicWorksFieldsBlank)
       )
       NameWorksState.value = false
-      InChargeState.value = false
-      SiteOperatorState.value = false
-      VehicleOperatorState.value = false
+      // InChargeState.value = false
+      // SiteOperatorState.value = false
+      // VehicleOperatorState.value = false
       DescriptionState.value = false
       WorkStatusState.value = false
     }
@@ -368,7 +382,9 @@ export default {
         return 'Este campo es requerido'
       }
       if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ ,;:. 0-9]+$/i.test(publicWorksFields.value.descripcion)
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ ,;:. 0-9]+$/i.test(
+          publicWorksFields.value.descripcion
+        )
       ) {
         DescriptionState.value = false
         return 'La descripcion solo puede contener letras y numeros'
@@ -482,4 +498,8 @@ export default {
 }
 </script>
 
-<style></style>
+<style scoped>
+.form-check {
+    display: inline-block;
+    }
+</style>

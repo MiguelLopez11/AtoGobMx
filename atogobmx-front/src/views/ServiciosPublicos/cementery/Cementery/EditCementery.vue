@@ -83,7 +83,16 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <GMapMap
+        </b-row>
+        <b-row cols="1" align-h="center">
+          <b-button v-b-toggle.collapse-1 variant="primary"> Mapa </b-button>
+          <b-collapse id="collapse-1" class="mt-2">
+            <b-card>
+              <b-alert variant="warning" dismissible show
+                >Arrastra el punto del mapa al lugar donde se encuentra su
+                gabeta.</b-alert
+              >
+              <GMapMap
                 :center="center"
                 map-type-id="satellite"
                 :zoom="20"
@@ -98,15 +107,13 @@
               >
                 <GMapMarker
                   :zoom="10"
-                  :key="index"
-                  v-for="(m, index) in markers"
-                  :position="m.position"
-                  :clickable="true"
+                  :position="center"
                   :draggable="true"
-                  @click="center = m.position"
+                  @drag="updateCoordinates"
                 />
               </GMapMap>
-
+            </b-card>
+          </b-collapse>
         </b-row>
         <b-row align-h="end">
           <b-button
@@ -155,16 +162,17 @@ export default {
       { text: 'Cementerios', to: '/ServiciosPublicos/Cementerios/list' },
       { text: 'Editar-cementerios' }
     ])
+    const center = ref({ lat: 0, lng: 0 })
+    getCementeryById(router.params.CementeriosId, (data) => {
+      cementeryService.value = data
+      center.value.lat = data.latitud
+      center.value.lng = data.longitud
+    })
 
-    const markers = ref([
-      {
-        position: {
-          lat: 20.5546629,
-          lng: -102.4953904
-        }
-      }
-    ])
-    const center = ref({ lat: 20.5546629, lng: -102.4953904 })
+    const updateCoordinates = (location) => {
+      cementeryService.value.latitud = location.latLng.lat()
+      cementeryService.value.longitud = location.latLng.lng()
+    }
 
     const onUpdateCementeryService = () => {
       updateCementery(cementeryService.value, (data) => {})
@@ -179,10 +187,6 @@ export default {
       })
     }
 
-    getCementeryById(router.params.CementeriosId, (data) => {
-      cementeryService.value = data
-    })
-
     const validatePropietary = () => {
       if (!cementeryService.value.nombrePropietario) {
         validateState()
@@ -193,11 +197,6 @@ export default {
         PropietaryState.value = false
         return 'Este campo solo puede contener letras'
       }
-
-      // if (!cementeryService.value.nombrePropietario.trim().length > 0) {
-      //   PropietaryState.value = false
-      //   return 'Este campo no puede contener espacios'
-      // }
 
       validateState()
       return true
@@ -214,11 +213,6 @@ export default {
         return 'Este campo solo puede contener numeros'
       }
 
-      // if (!cementeryService.value.numeroEspasios.trim().length > 0) {
-      //   SpacesState.value = false
-      //   return 'Este campo no puede contener espacios'
-      // }
-
       validateState()
       return true
     }
@@ -234,11 +228,6 @@ export default {
         return 'Este campo solo puede contener numeros'
       }
 
-      // if (!cementeryService.value.metrosCorrespondientes.trim().length > 0) {
-      //   MeterState.value = false
-      //   return 'Este campo no puede contener espacios'
-      // }
-
       validateState()
       return true
     }
@@ -253,11 +242,6 @@ export default {
         AvailableState.value = false
         return 'Este campo solo puede contener numeros'
       }
-
-      // if (!cementeryService.value.espaciosDisponibles.trim().length > 0) {
-      //   AvailableState.value = false
-      //   return 'Este campo no puede contener espacios'
-      // }
 
       validateState()
       return true
@@ -281,11 +265,11 @@ export default {
       SpacesState,
       MeterState,
       AvailableState,
-      markers,
       center,
       //   router
 
       onUpdateCementeryService,
+      updateCoordinates,
       validateState,
       validatePropietary,
       validateSpaces,
