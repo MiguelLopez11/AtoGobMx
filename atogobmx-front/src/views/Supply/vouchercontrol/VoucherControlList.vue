@@ -86,7 +86,7 @@
       lazy
     >
       <Form @submit="addVoucherControl">
-        <b-row cols="2">
+        <b-row cols="3">
           <!--Agregar Fecha emicion-->
           <b-col>
             <b-form-group class="mt-3" label="Fecha emicion">
@@ -100,6 +100,56 @@
                 ></Datepicker>
               </Field>
               <ErrorMessage name="DateOfIssueField"></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <!--Checkbox-->
+          <b-col>
+            <b-form-group horizontal class="mt-3" label="¿Autorizacion?">
+              <b-form-checkbox
+                style=""
+                size="lg"
+                v-model="isAgency"
+                :state="departamentState"
+              />
+            </b-form-group>
+          </b-col>
+          <!--Agregar usuario-->
+          <b-col v-if="isAgency == false">
+            <b-form-group class="mt-3" label="Usuario">
+              <Field
+                name="UserNameField"
+                :rules="validateUserName"
+                as="text"
+              >
+                <b-form-input
+                  v-model="voucherControlFields.usuario"
+                  :state="UserNameState"
+                ></b-form-input>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="UserNameField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <!--Agregar usuario autorizado-->
+          <b-col v-if="isUserName == false">
+            <b-form-group class="mt-3" label="Autorizado">
+              <Field
+                name="AuthorizedUserField"
+                :rules="validateAuthorizedUser"
+                as="text"
+              >
+                <b-form-input
+                  v-model="voucherControlFields.usuarioAutoriza"
+                  :state="AuthorizedUserState"
+                >
+                </b-form-input>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="AuthorizedUserField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <!--Agregar Fecha vigencia-->
@@ -317,6 +367,8 @@ export default {
       controlValeId: 0,
       fechaEmicion: null,
       fechaVigencia: null,
+      usuario: null,
+      usuarioAutoriza: null,
       departamentoId: null,
       empleadoId: null,
       proveedorId: null,
@@ -418,6 +470,8 @@ export default {
       // { value: 'controlValeId', text: 'ID', sortable: true },
       { value: 'fechaEmicion', text: 'Fecha emicion' },
       { value: 'fechaVigencia', text: 'Fecha vigencia' },
+      { value: 'usuario', text: 'Usuario' },
+      { value: 'usuarioAutoriza', text: 'Autorizado por:' },
       { value: 'departamentos.nombre', text: 'Departamento' },
       { value: 'empleados.nombreCompleto', text: 'Empleado' },
       { value: 'proV_Proveedor.nombre', text: 'Proveedor' },

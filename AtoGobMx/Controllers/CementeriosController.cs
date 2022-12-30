@@ -27,6 +27,7 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<Cementerios>> GetCementerios()
         {
             var Cementerios = await _context.Cementerios
+                .Include(i => i.DireccionCementerio)
                 //.OrderBy(o => o.NombrePropietario)
                 .Where(w => !w.Archivado)
                 .Select(s => _mapper.Map<Cementerios>(s))
@@ -38,7 +39,7 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult> GetCementeriosById(int CementeriosId)
         {
             var cementerios = await _context.Cementerios
-            //.Include(i => i.TareaTipoAlumbrado)
+            .Include(i => i.DireccionCementerio)
             //.Include(i => i.Estatus)
                 .FirstOrDefaultAsync(f => f.CementeriosId == CementeriosId);
             if (cementerios == null)
@@ -76,6 +77,8 @@ namespace AtoGobMx.Controllers
             cementeri.NumeroEspasios = cementerios.NumeroEspasios;
             cementeri.MetrosCorrespondientes = cementerios.MetrosCorrespondientes;
             cementeri.DireccionId = cementerios.DireccionId;
+            cementeri.Latitud = cementerios.Latitud;
+            cementeri.Longitud = cementerios.Longitud;
             cementeri.EspaciosDisponibles = cementerios.EspaciosDisponibles;
 
             _context.Cementerios.Update(cementeri);

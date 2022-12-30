@@ -24,6 +24,56 @@
               <ErrorMessage name="DateOfIssueField"></ErrorMessage>
             </b-form-group>
           </b-col>
+          <!--Checkbox-->
+          <b-col>
+            <b-form-group horizontal class="mt-3" label="¿Autorizacion?">
+              <b-form-checkbox
+                style=""
+                size="lg"
+                v-model="isAgency"
+                :state="departamentState"
+              />
+            </b-form-group>
+          </b-col>
+          <!--Agregar usuario-->
+          <b-col v-if="isAgency == false">
+            <b-form-group class="mt-3" label="Usuario">
+              <Field
+                name="UserNameField"
+                :rules="validateUserName"
+                as="text"
+              >
+                <b-form-input
+                  v-model="voucherControl.usuario"
+                  :state="UserNameState"
+                ></b-form-input>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="UserNameField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <!--Agregar usuario autorizado-->
+          <b-col v-if="isUserName == false">
+            <b-form-group class="mt-3" label="Autorizado">
+              <Field
+                name="AuthorizedUserField"
+                :rules="validateAuthorizedUser"
+                as="text"
+              >
+                <b-form-input
+                  v-model="voucherControl.usuarioAutoriza"
+                  :state="AuthorizedUserState"
+                >
+                </b-form-input>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="AuthorizedUserField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
           <!--Agregar Fecha vigencia-->
           <b-col>
             <b-form-group class="mt-3" label="Fecha vigencia">

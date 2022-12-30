@@ -32,6 +32,22 @@
                     ></ErrorMessage>
                   </b-form-group>
                 </b-col>
+                <!--Checkbox-->
+                <b-col>
+                  <b-form-group
+                    horizontal
+                    class="mt-3"
+                    label="¿Contrató una agencia de operaciones?"
+                  >
+                    <b-form-checkbox
+                      style=""
+                      v-model="isAgency"
+                      size="lg"
+                      :state="NameWorksState"
+                    >
+                    </b-form-checkbox>
+                  </b-form-group>
+                </b-col>
                 <!--Descripcion-->
                 <b-col>
                   <b-form-group class="mt-3" label="Descripcion">

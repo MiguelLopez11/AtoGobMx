@@ -9,46 +9,14 @@
       </div>
       <Form @submit="onUpdateRoadService">
         <b-row cols="2">
-          <!-- 1 -->
-          <!-- <b-col>
-            <b-form-group class="mt-3" label="Origen">
-              <Field
-                name="OriginField"
-                :rules="validateOrigin"
-                as="text"
-              >
-                <b-form-input
-                  v-model="roadService.origen"
-                  :state="OriginState"
-                >
-                </b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="OriginField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col> -->
-          <!-- 2 -->
-          <!-- <b-col>
-            <b-form-group class="mt-3" label="Destino">
-              <Field name="DestinationField" :rules="validateDestination" as="text">
-                <b-form-input
-                  v-model="roadService.destino"
-                  :state="DestinationState"
-                >
-                </b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="DestinationField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col> -->
           <!-- Agregar Observacion -->
           <b-col>
             <b-form-group class="mt-3" label="Observacion">
-              <Field name="ObservationField" :rules="validateObservation" as="text">
+              <Field
+                name="ObservationField"
+                :rules="validateObservation"
+                as="text"
+              >
                 <b-form-input
                   v-model="roadService.obsevacion"
                   :state="ObservationState"
@@ -61,20 +29,63 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-
+          <b-col>
+            <b-button
+              class="mt-5 w-100"
+              variant="primary"
+              @click="onAddPolyline"
+            >
+              Marcar Ruta
+            </b-button>
+          </b-col>
+          <b-col>
+            <b-button
+              class="mt-5 w-100"
+              variant="primary"
+              @click="ResetPolyline"
+            >
+              Reiniciar ruta
+            </b-button>
+          </b-col>
+        </b-row>
+        <b-row>
+          <GoogleMap
+            api-key="AIzaSyCYAwe7Fk4PQLI3bBBqxUViN4IOXVGd_z0"
+            style="width: 100%; height: 500px"
+            :center="center"
+            :zoom="20"
+            @click="addMaker"
+          >
+            <MarkerCluster>
+              <Marker
+                v-for="(location, i) in locations"
+                :options="{
+                  position: location,
+                  label: `${i === 0 ? 'Inicio' : ''}`
+                }"
+                :key="i"
+              />
+              <Polyline :options="flightPath" />
+            </MarkerCluster>
+          </GoogleMap>
+          <b-row> </b-row>
         </b-row>
         <b-row align-h="end">
+          <b-col>
           <b-button
-            class="col-1 m-2 text-white"
+            class=" w-75 col-1 m-2 text-white"
             variant="primary"
             to="/ServiciosPublicos/Ruta/list"
             type="reset"
           >
             Cancelar</b-button
           >
-          <b-button type="success" class="col-1 m-2" variant="success">
+          </b-col>
+          <b-col>
+          <b-button type="success" class="w-75 col-1 m-2" variant="success">
             Guardar
           </b-button>
+          </b-col>
         </b-row>
       </Form>
     </b-card>
@@ -85,6 +96,7 @@
 import RoadService from '@/Services/road.Services'
 import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { GoogleMap, Marker, MarkerCluster, Polyline } from 'vue3-google-map'
 // import { useToast } from 'vue-toast-notification'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -92,7 +104,11 @@ export default {
   components: {
     Form,
     Field,
-    ErrorMessage
+    ErrorMessage,
+    GoogleMap,
+    Marker,
+    MarkerCluster,
+    Polyline
   },
   setup () {
     const swal = inject('$swal')
@@ -109,19 +125,69 @@ export default {
       { text: 'Ruta', to: '/ServiciosPublicos/Ruta/list' },
       { text: 'Editar-ruta' }
     ])
-    const onUpdateRoadService = () => {
-      updateRoad(roadService.value, (data) => {})
-      swal.fire({
-        title: '¡Ruta modificado correctamente!',
-        text: 'La ruta se ha modificado  satisfactoriamente.',
-        icon: 'success'
-      }).then(result => {
-        if (result.isConfirmed) {
-          redirect.push('/ServiciosPublicos/Ruta/list')
-        }
+    const CoordsRoadFields = ref({
+      coordenadaId: 0,
+      latitud: '',
+      longitud: '',
+      rutaId: 0,
+      ordenCoordenada: null
+    })
+    const locations = ref([])
+    const flightPath = ref({
+      path: [],
+      geodesic: true,
+      strokeColor: '#5e50ee',
+      strokeOpacity: 1.0,
+      strokeWeight: 5
+    })
+    const center = ref({ lat: 20.5546629, lng: -102.4953904 })
+    const fields = ref([
+      { value: 'observacion', text: 'Observacion' },
+      { value: 'actions', text: 'Acciones' }
+    ])
+    const addMaker = location => {
+      locations.value.push({
+        lat: location.latLng.lat(),
+        lng: location.latLng.lng()
       })
     }
-    getRoadById(router.params.RutaId, (data) => {
+    const onAddPolyline = () => {
+      if (flightPath.value.path.length > 0) {
+        flightPath.value.path = []
+      }
+      flightPath.value = {
+        path: locations.value,
+        geodesic: true,
+        strokeColor: '#5e50ee',
+        strokeOpacity: 1.0,
+        strokeWeight: 5
+      }
+    }
+    const ResetPolyline = () => {
+      locations.value = []
+      flightPath.value = {
+        path: [],
+        geodesic: true,
+        strokeColor: '#5e50ee',
+        strokeOpacity: 1.0,
+        strokeWeight: 5
+      }
+    }
+    const onUpdateRoadService = () => {
+      updateRoad(roadService.value, data => {})
+      swal
+        .fire({
+          title: '¡Ruta modificado correctamente!',
+          text: 'La ruta se ha modificado  satisfactoriamente.',
+          icon: 'success'
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            redirect.push('/ServiciosPublicos/Ruta/list')
+          }
+        })
+    }
+    getRoadById(router.params.RutaId, data => {
       roadService.value = data
     })
 
@@ -161,7 +227,9 @@ export default {
         return 'Este campo es requerido'
       }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ ,;:. 0-9]+$/i.test(roadService.value.obsevacion)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ ,;:. 0-9]+$/i.test(roadService.value.obsevacion)
+      ) {
         ObservationState.value = false
         return 'Este campo solo puede contener numeros'
       }
@@ -182,21 +250,25 @@ export default {
     return {
       roadService,
       breadcrumbItems,
+      CoordsRoadFields,
       OriginState,
       DestinationState,
       ObservationState,
+      fields,
+      center,
       //   router
 
       onUpdateRoadService,
       validateState,
       // validateOrigin,
       // validateDestination,
-      validateObservation
+      validateObservation,
+      addMaker,
+      onAddPolyline,
+      ResetPolyline
     }
   }
 }
 </script>
 
-<style>
-
-</style>
+<style></style>
