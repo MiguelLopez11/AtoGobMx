@@ -20,5 +20,7 @@ namespace AtoGobMx.Models
 
         [JsonIgnore]
         public virtual IEnumerable<PROV_ControlVales>? ControlDeVales { get; set; }
+        [JsonIgnore]
+        public virtual IEnumerable<PAT_Vehiculo>? PAT_Vehiculo { get; set; }
     }
 }

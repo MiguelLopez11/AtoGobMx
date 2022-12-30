@@ -24,7 +24,6 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<Empleado>> GetEmpleados()
         {
             var empleados = await _context.Empleados
-                //.Include(i => i.Area)
                 .Include(i => i.Departamentos)
                 .Include(i => i.PuestoTrabajo)
                 .OrderBy(o => o.EmpleadoId)
@@ -34,7 +33,7 @@ namespace AtoGobMx.Controllers
                 DateTime currentDate = Convert.ToDateTime(DateTime.Today.ToString());
                 DateTime date = Convert.ToDateTime(empleado.FechaAlta.ToString());
                 int difFechas = Math.Abs((currentDate.Month - date.Month) + 12 * (currentDate.Year - date.Year));
-                empleado.Antigüedad = difFechas.ToString() + "Meses";
+                empleado.Antigüedad = difFechas.ToString() + " Meses";
                 if (difFechas == 0)
                 {
                     TimeSpan diference = currentDate - date;
@@ -50,10 +49,8 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<Empleado>> GetEmpleadosSinArchivar()
         {
             var empleados = await _context.Empleados
-                //.Include(i => i.Area)
                 .Include(i => i.Departamentos)
                 .Include(i => i.PuestoTrabajo)
-                //.Include(i => i.usuario)
                 .Where(w => !w.Archivado)
                 .OrderBy(o => o.EmpleadoId)
                 .ToListAsync();
@@ -63,7 +60,6 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<Empleado>> GetEmpleadosSinExpedientes()
         {
             var empleados = await _context.Empleados
-                //.Include(i => i.Area)
                 .Include(i => i.Departamentos)
                 .Include(i => i.PuestoTrabajo)
                 .Where(w => w.TieneExpediente == false)
@@ -75,7 +71,6 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<Empleado>> GetEmpleadosSinExpedienteMédico()
         {
             var empleados = await _context.Empleados
-                //.Include(i => i.Area)
                 .Include(i => i.Departamentos)
                 .Include(i => i.PuestoTrabajo)
                 .Where(w => w.TieneExpedienteMédico == false)
@@ -88,7 +83,6 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult> GetEmpleadosById(int EmpleadoId)
         {
             var Empleado = await _context.Empleados
-                //.Include(i => i.Area)
                 .Include(i => i.Departamentos)
                 .FirstOrDefaultAsync(f => f.EmpleadoId == EmpleadoId);
             if (Empleado == null)
@@ -100,10 +94,6 @@ namespace AtoGobMx.Controllers
         [HttpPost]
         public async Task<ActionResult<Empleado>> PostEmpleados(Empleado Empleado)
         {
-            if (Empleado == null)
-            {
-                return BadRequest();
-            }
             var employeeName = Empleado.NombreCompleto.ToString();
             var host = "ftp://digital.atogobmx.com/Files/RecursosHumanos/Empleados/";
             #region Create directory employee

@@ -39,6 +39,8 @@ namespace AtoGobMx.Context
         public DbSet<PROV_Producto> PROV_Producto { get; set; }
         public DbSet<PROV_Proveedor> PROV_Proveedor { get; set; }
         public DbSet<Archivos> Archivos { get; set; }
+        public DbSet<ArchivosEquipoComputo> ArchivosEquipoComputos { get; set; }
+        public DbSet<ArchivosVehiculos> archivosVehiculos { get; set; }
         public DbSet<Departamentos> Departamentos { get; set; }
         public DbSet<PuestoTrabajo> PuestoTrabajo { get; set; }
         public DbSet<PAT_EquipoComputo> EquipoComputo { get; set; }

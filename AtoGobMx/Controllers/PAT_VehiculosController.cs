@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace AtoGobMx.Controllers
 {
@@ -42,6 +43,19 @@ namespace AtoGobMx.Controllers
         [HttpPost]
         public async Task<ActionResult<PAT_Vehiculo>> PostMonitor(PAT_Vehiculo vehiculo)
         {
+            var Nomenclatura = vehiculo.Nomenclatura.ToString();
+            var host = "ftp://digital.atogobmx.com/Files/Patrimonio/ParqueVehicular/";
+            #region Create directory patrimonio
+            WebRequest request = WebRequest.Create(host + Nomenclatura);
+            request.Method = WebRequestMethods.Ftp.MakeDirectory;
+            request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+            using (var resp = (FtpWebResponse)request.GetResponse())
+            {
+                request.Abort();
+                resp.Close();
+            }
+            #endregion
+            CreateDocument(host + Nomenclatura);
             _context.Vehiculo.Add(vehiculo);
             await _context.SaveChangesAsync();
             return StatusCode(200, "Se ha credo exitosamente");
@@ -59,6 +73,9 @@ namespace AtoGobMx.Controllers
                 return NotFound();
             }
             Vehiculo.VehiculoId = vehiculo.VehiculoId;
+            Vehiculo.Nomenclatura = vehiculo.Nomenclatura;
+            Vehiculo.ProveedorId = vehiculo.ProveedorId;
+            Vehiculo.NumeroFactura = vehiculo.NumeroFactura;
             Vehiculo.Marca = vehiculo.Marca;
             Vehiculo.Modelo = vehiculo.Modelo;
             Vehiculo.Color = vehiculo.Color;
@@ -67,6 +84,9 @@ namespace AtoGobMx.Controllers
             Vehiculo.AñoLanzamiento = vehiculo.AñoLanzamiento;
             Vehiculo.Puertas = vehiculo.Puertas;
             Vehiculo.Transmisión = vehiculo.Transmisión;
+            Vehiculo.Version = vehiculo.Version;
+            Vehiculo.Cilindros = vehiculo.Cilindros;
+            Vehiculo.Observaciones = vehiculo.Observaciones;
             Vehiculo.Archivado = vehiculo.Archivado;
 
             _context.Vehiculo.Update(Vehiculo);
@@ -86,6 +106,28 @@ namespace AtoGobMx.Controllers
             _context.Vehiculo.Update(vehiculo);
             await _context.SaveChangesAsync();
             return Ok("Producto archivado");
+        }
+        private static bool CreateDocument(string url)
+        {
+            try
+            {
+                var pathDocument = "/Documentos";
+                WebRequest request = WebRequest.Create(url + pathDocument);
+                request.Method = WebRequestMethods.Ftp.MakeDirectory;
+                request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+                using (var resp = (FtpWebResponse)request.GetResponse())
+                {
+                    request.Abort();
+                    resp.Close();
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
         }
     }
 }

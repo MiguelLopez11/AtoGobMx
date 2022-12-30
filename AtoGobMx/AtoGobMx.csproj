@@ -30,7 +30,10 @@
 
 	<ItemGroup>
 		<!--<Folder Include="Files\Images\" />-->
-		<Folder Include="Files\" />
+		<Folder Include="Files\Documentos\" />
+		<Folder Include="Files\Documentos\" />
+		<Folder Include="Files\Documentos\" />
+		<Folder Include="Files\Documentos\" />
 		<Folder Include="Migrations\" />
 	</ItemGroup>
 

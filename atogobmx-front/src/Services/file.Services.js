@@ -35,6 +35,28 @@ export default function FileServices () {
         callback(exception.response)
       })
   }
+  // Documentos Equipos Computo
+  const getDocumentsEquipmentComputer = (EquipoComputoId, callback) => {
+    axiosPrivate.get(`/Archivos/DocumentosEquiposComputo/${EquipoComputoId}`).then((response) => {
+      callback(response.data)
+    })
+  }
+  const createDocumentsEquipmentComputer = (EquipoComputoId, files, callback) => {
+    axiosPrivate.post(`/Archivos/DocumentosEquiposComputo/${EquipoComputoId}`, files).then((response) => {
+      callback(response)
+    }).catch((exception) => {
+      callback(exception.response.data)
+    })
+  }
+  const deleteDocumentEquipmentComputer = (EquipoComputoId, ArchivoId, callback) => {
+    axiosPrivate.delete(`/Archivos/DocumentosEquiposComputo/Eliminar/${EquipoComputoId}/${ArchivoId}`)
+      .then((response) => {
+        callback(response.data)
+      })
+      .catch((exception) => {
+        callback(exception.response)
+      })
+  }
   // Servicios creados para la carga de archivos arturo
   // ----------- Alumbrado ---------------- //
   const getDocumentsAlumbrado = (AlumbradoId, callback) => {
@@ -131,6 +153,10 @@ export default function FileServices () {
     createExpedientPhotoProfile,
     createDocuments,
     deleteDocument,
+    // EquipoComputo
+    getDocumentsEquipmentComputer,
+    createDocumentsEquipmentComputer,
+    deleteDocumentEquipmentComputer,
     // -------Arturo--------- //
     getDocumentsAlumbrado,
     deleteDocumentsAlumbrado,

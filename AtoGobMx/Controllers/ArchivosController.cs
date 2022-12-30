@@ -145,8 +145,12 @@ namespace AtoGobMx.Controllers
                  .Include(i => i.Empleados)
                  .Where(w => !w.Archivado)
                  .FirstOrDefaultAsync(f => f.ExpedienteDigitalId == ExpedienteDigitalId);
+            if (expediente == null)
+            {
+                return NotFound();
+            }
             var UrlHost = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/", "digital.atogobmx.com", "Files", "RecursosHumanos", "Empleados", expediente.Empleados.NombreCompleto);
-            var result = GetListFiles(expediente.Empleados.NombreCompleto.ToString());
+            var result = GetListFiles(UrlHost + "Documentos");
             foreach (string line in result)
             {
                 copyFile(UrlHost, line);
@@ -175,7 +179,419 @@ namespace AtoGobMx.Controllers
             //Directory.Delete("Files/Documentos");
             return File(zipFileMemoryStream, "application/octet-stream", $"Documentos_{DateOnly.FromDateTime(DateTime.Now)}_{expediente.Empleados.NombreCompleto}.zip");
         }
+        //EquiposComputo 
+        [HttpGet("DocumentosEquiposComputo/{EquipoComputoId}")]
+        public async Task<IActionResult> GetDocumentosEquiposComputo(int EquipoComputoId)
+        {
+            var Documentos = await _context.ArchivosEquipoComputos
+                .Include(i => i.EquipoComputo)
+                .Where(w => w.EquipoComputoId == EquipoComputoId)
+                .Where(w => w.TipoArchivo == ".pdf" || w.TipoArchivo == ".docx")
+                .Where(w => !w.Archivado)
+                .ToListAsync();
+            if (Documentos == null)
+            {
+                return BadRequest("No se encuentran documentos registrados, ");
+            }
+            return Ok(Documentos);
+        }
+        [HttpGet("DocumentosEquiposComputo/Descargar/{EquipoComputoId}/{ArchivoComputoId}")]
+        public async Task<IActionResult> DownloadFileEquiposComputo(int EquipoComputoId, int ArchivoComputoId)
+        {
+            try
+            {
 
+                var equipoComputo = await _context.EquipoComputo
+                    .FirstOrDefaultAsync(f => f.EquipoComputoId == EquipoComputoId);
+                if (equipoComputo == null)
+                {
+                    return NotFound();
+                }
+                var documento = await _context.ArchivosEquipoComputos
+                    .Where(w => w.TipoArchivo == ".pdf" || w.TipoArchivo == ".docx")
+                    .FirstOrDefaultAsync(f => f.ArchivoEquipoId == ArchivoComputoId);
+                if (documento == null)
+                {
+                    return NotFound("No se encuentra Archivo");
+                }
+                var serverPath = "ftp://digital.atogobmx.com/Files/Patrimonio/EquiposComputacion/";
+                var nomenclaturaEquipo = equipoComputo.CodigoInventario.ToString();
+                var filePath = documento.Nombre.ToString();
+                var ftpRequest = (FtpWebRequest)FtpWebRequest.Create(serverPath + nomenclaturaEquipo + "/Documentos/" + filePath);
+                var url = serverPath + nomenclaturaEquipo + "/Documentos/" + filePath;
+                ftpRequest.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+                ftpRequest.UseBinary = true;
+                ftpRequest.UsePassive = true;
+                ftpRequest.KeepAlive = true;
+                ftpRequest.Method = WebRequestMethods.Ftp.DownloadFile;
+                var ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
+                var ftpStream = ftpResponse.GetResponseStream();
+                var provider = new FileExtensionContentTypeProvider();
+                if (!provider.TryGetContentType(url, out var contentType))
+                {
+                    contentType = "application/octet-stream";
+                }
+                return File(ftpStream, contentType, Path.GetFileName(url));
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return NoContent();
+            }
+
+        }
+        [HttpGet("DocumentosEquiposComputo/{EquipoComputoId}/Zip")]
+        public async Task<IActionResult> DownloadFilesEquiposComputoZip(int EquipoComputoId)
+        {
+            var equipoComputo = await _context.EquipoComputo
+                 .Where(w => !w.Archivado)
+                 .FirstOrDefaultAsync(f => f.EquipoComputoId == EquipoComputoId);
+            var UrlHost = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/{5}", "digital.atogobmx.com", "Files", "Patrimonio", "EquiposComputacion", equipoComputo.CodigoInventario, "Documentos");
+            var result = GetListFiles(UrlHost);
+            foreach (string line in result)
+            {
+                copyFile(String.Format("ftp://{0}/{1}/{2}/{3}/{4}", "digital.atogobmx.com", "Files", "Patrimonio", "EquiposComputacion", equipoComputo.CodigoInventario) + "/" , line);
+            }
+            var FolderPath = Path.Combine(Directory.GetCurrentDirectory(), $"Files/Documentos/");
+            var FilePaths = Directory.GetFiles(FolderPath);
+            var zipFileMemoryStream = new MemoryStream();
+            using (ZipArchive archive = new ZipArchive(zipFileMemoryStream, ZipArchiveMode.Update, leaveOpen: true))
+            {
+                foreach (var FilePath in FilePaths)
+                {
+                    var FileName = Path.GetFileName(FilePath);
+                    var entry = archive.CreateEntry(FileName);
+                    using (var entryStream = entry.Open())
+                    using (var fileStream = System.IO.File.OpenRead(FilePath))
+                    {
+                        await fileStream.CopyToAsync(entryStream);
+                    }
+                }
+            }
+
+            zipFileMemoryStream.Seek(0, SeekOrigin.Begin);
+            var dir = new DirectoryInfo("Files/Documentos/");
+            dir.Attributes = dir.Attributes & ~FileAttributes.ReadOnly;
+            dir.Delete(true);
+            return File(zipFileMemoryStream, "application/octet-stream", $"Documentos_{DateOnly.FromDateTime(DateTime.Now)}_.zip");
+        }
+        [HttpPost("DocumentosEquiposComputo/{EquipoComputoId}/")]
+        public async Task<IActionResult> UploadDocumentsEquipocomputo(List<IFormFile> Files, int EquipoComputoId)
+        {
+            #region Cargar Archivos
+            try
+            {
+
+                #region Comprobar si el expediente existe
+                var equipo = await _context.EquipoComputo
+                    .FirstOrDefaultAsync(f => f.EquipoComputoId == EquipoComputoId);
+                if (equipo == null)
+                {
+                    return NotFound("No se encuentra el expediente digital");
+                }
+
+                #endregion
+                string serverPath = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/{5}", "digital.atogobmx.com", "Files", "Patrimonio", "EquiposComputacion", equipo.CodigoInventario, "Documentos");
+                if (Files.Count > 0)
+                {
+                    foreach (var file in Files)
+                    {
+                        #region Comprobar que el archivo sea un documento
+                        var fileName = file.FileName;
+                        var fileExtension = Path.GetExtension(fileName);
+                        if (fileExtension != ".pdf" && fileExtension != ".docx")
+                        {
+                            return BadRequest("El tipo de archivo no es válido");
+                        }
+
+                        #endregion
+
+                        #region crear documento al servidor
+                        var request = (FtpWebRequest)WebRequest.Create(serverPath + "/" + file.FileName);
+                        request.Method = WebRequestMethods.Ftp.UploadFile;
+                        request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+                        byte[] buffer = new byte[1024];
+                        var stream = file.OpenReadStream();
+                        byte[] fileContents;
+                        using (var ms = new MemoryStream())
+                        {
+                            int read;
+                            while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+                            {
+                                ms.Write(buffer, 0, read);
+                            }
+                            fileContents = ms.ToArray();
+                        }
+                        using (Stream requestStream = await request.GetRequestStreamAsync())
+                        {
+                            requestStream.Write(fileContents, 0, fileContents.Length);
+                        }
+                        FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+                        var archivo = new ArchivosEquipoComputo()
+                        {
+                            ArchivoEquipoId = 0,
+                            Nombre = file.FileName,
+                            TipoArchivo = fileExtension,
+                            EquipoComputoId = EquipoComputoId
+                        };
+                        _context.ArchivosEquipoComputos.Add(archivo);
+                        await _context.SaveChangesAsync();
+                    }
+                    return Ok("Documento registrado correctamente.");
+                    #endregion
+                }
+                else
+                {
+                    return BadRequest("No se ingresó ningun documento");
+                }
+            }
+            catch
+            {
+                return BadRequest("Ah ocurrido un error inesperado");
+            }
+            #endregion
+        }
+
+        [HttpDelete("DocumentosEquiposComputo/Eliminar/{EquipoComputoId}/{ArchivoId}")]
+        public async Task<IActionResult> DeleteDocumentsEquiposComputo(int EquipoComputoId, int ArchivoId)
+        {
+            var equipo = await _context.EquipoComputo
+                .FirstOrDefaultAsync(f => f.EquipoComputoId == EquipoComputoId);
+
+            if (equipo == null)
+            {
+                return NotFound();
+            }
+            var Archivo = await _context.ArchivosEquipoComputos
+                .FirstOrDefaultAsync(f => f.ArchivoEquipoId == ArchivoId);
+
+            if (Archivo == null)
+            {
+                return NotFound();
+            }
+            var serverPath = "ftp://digital.atogobmx.com/Files/Patrimonio/EquiposComputacion/";
+            var Nomenclatura = equipo.CodigoInventario.ToString();
+            var filePath = Archivo.Nombre.ToString();
+            var Url = $"{serverPath + Nomenclatura + "/" + "Documentos/" + filePath}";
+            var result = DeleteFile(Url);
+            if (result)
+            {
+                Archivo.Archivado = true;
+                _context.ArchivosEquipoComputos.Update(Archivo);
+                await _context.SaveChangesAsync();
+                return Ok("Documento archivado correctamente.");
+            }
+            return BadRequest("Error");
+
+        }
+        //Vehiculos
+        [HttpGet("DocumentosVehiculo/{VehiculoId}")]
+        public async Task<IActionResult> GetDocumentosVehiculos(int VehiculoId)
+        {
+            var Documentos = await _context.archivosVehiculos
+                .Include(i => i.Vehiculo)
+                .Where(w => w.VehiculoId == VehiculoId)
+                .Where(w => w.TipoArchivo == ".pdf" || w.TipoArchivo == ".docx")
+                .Where(w => !w.Archivado)
+                .ToListAsync();
+            if (Documentos == null)
+            {
+                return BadRequest("No se encuentran documentos registrados, ");
+            }
+            return Ok(Documentos);
+        }
+        [HttpGet("DocumentosVehiculo/Descargar/{VehiculoId}/{ArchivoVehiculoId}")]
+        public async Task<IActionResult> DownloadFileVehiculos(int VehiculoId, int ArchivoVehiculoId)
+        {
+            try
+            {
+
+                var vehiculo = await _context.Vehiculo
+                    .FirstOrDefaultAsync(f => f.VehiculoId == VehiculoId);
+                if (vehiculo == null)
+                {
+                    return NotFound();
+                }
+                var documento = await _context.archivosVehiculos
+                    .Include(i => i.Vehiculo)
+                    .Where(w => w.TipoArchivo == ".pdf" || w.TipoArchivo == ".docx")
+                    .FirstOrDefaultAsync(f => f.ArchivoVehiculoId == ArchivoVehiculoId);
+                if (documento == null)
+                {
+                    return NotFound("No se encuentra Archivo");
+                }
+                var serverPath = "ftp://digital.atogobmx.com/Files/Patrimonio/ParqueVehicular/";
+                var nomenclaturaEquipo = vehiculo.Nomenclatura.ToString();
+                var filePath = documento.Nombre.ToString();
+                var ftpRequest = (FtpWebRequest)FtpWebRequest.Create(serverPath + nomenclaturaEquipo + "/Documentos/" + filePath);
+                var url = serverPath + nomenclaturaEquipo + "/Documentos/" + filePath;
+                ftpRequest.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+                ftpRequest.UseBinary = true;
+                ftpRequest.UsePassive = true;
+                ftpRequest.KeepAlive = true;
+                ftpRequest.Method = WebRequestMethods.Ftp.DownloadFile;
+                var ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
+                var ftpStream = ftpResponse.GetResponseStream();
+                var provider = new FileExtensionContentTypeProvider();
+                if (!provider.TryGetContentType(url, out var contentType))
+                {
+                    contentType = "application/octet-stream";
+                }
+                return File(ftpStream, contentType, Path.GetFileName(url));
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return NoContent();
+            }
+
+        }
+        [HttpGet("DocumentosVehiculo/{VehiculoId}/Zip")]
+        public async Task<IActionResult> DownloadFilesVehiculosZip(int VehiculoId)
+        {
+            var vehiculo = await _context.Vehiculo
+                 .Where(w => !w.Archivado)
+                 .FirstOrDefaultAsync(f => f.VehiculoId == VehiculoId);
+            var UrlHost = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/{5}", "digital.atogobmx.com", "Files", "Patrimonio", "ParqueVehicular", vehiculo.Nomenclatura, "Documentos");
+            var result = GetListFiles(UrlHost);
+            foreach (string line in result)
+            {
+                copyFile(String.Format("ftp://{0}/{1}/{2}/{3}/{4}", "digital.atogobmx.com", "Files", "Patrimonio", "ParqueVehicular", vehiculo.Nomenclatura) + "/", line);
+            }
+            var FolderPath = Path.Combine(Directory.GetCurrentDirectory(), $"Files/Documentos/");
+            var FilePaths = Directory.GetFiles(FolderPath);
+            var zipFileMemoryStream = new MemoryStream();
+            using (ZipArchive archive = new ZipArchive(zipFileMemoryStream, ZipArchiveMode.Update, leaveOpen: true))
+            {
+                foreach (var FilePath in FilePaths)
+                {
+                    var FileName = Path.GetFileName(FilePath);
+                    var entry = archive.CreateEntry(FileName);
+                    using (var entryStream = entry.Open())
+                    using (var fileStream = System.IO.File.OpenRead(FilePath))
+                    {
+                        await fileStream.CopyToAsync(entryStream);
+                    }
+                }
+            }
+
+            zipFileMemoryStream.Seek(0, SeekOrigin.Begin);
+            var dir = new DirectoryInfo("Files/Documentos/");
+            dir.Attributes = dir.Attributes & ~FileAttributes.ReadOnly;
+            dir.Delete(true);
+            return File(zipFileMemoryStream, "application/octet-stream", $"Documentos_{DateOnly.FromDateTime(DateTime.Now)}_.zip");
+        }
+        [HttpPost("DocumentosVehiculo/{VehiculoId}/")]
+        public async Task<IActionResult> UploadDocumentsVehiculo(List<IFormFile> Files, int VehiculoId)
+        {
+            #region Cargar Archivos
+            try
+            {
+
+                #region Comprobar si el expediente existe
+                var vehiculo = await _context.Vehiculo
+                    .FirstOrDefaultAsync(f => f.VehiculoId == VehiculoId);
+                if (vehiculo == null)
+                {
+                    return NotFound("No se encuentra el expediente digital");
+                }
+
+                #endregion
+                string serverPath = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/{5}", "digital.atogobmx.com", "Files", "Patrimonio", "ParqueVehicular", vehiculo.Nomenclatura, "Documentos");
+                if (Files.Count > 0)
+                {
+                    foreach (var file in Files)
+                    {
+                        #region Comprobar que el archivo sea un documento
+                        var fileName = file.FileName;
+                        var fileExtension = Path.GetExtension(fileName);
+                        if (fileExtension != ".pdf" && fileExtension != ".docx")
+                        {
+                            return BadRequest("El tipo de archivo no es válido");
+                        }
+
+                        #endregion
+
+                        #region crear documento al servidor
+                        var request = (FtpWebRequest)WebRequest.Create(serverPath + "/" + file.FileName);
+                        request.Method = WebRequestMethods.Ftp.UploadFile;
+                        request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+                        byte[] buffer = new byte[1024];
+                        var stream = file.OpenReadStream();
+                        byte[] fileContents;
+                        using (var ms = new MemoryStream())
+                        {
+                            int read;
+                            while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+                            {
+                                ms.Write(buffer, 0, read);
+                            }
+                            fileContents = ms.ToArray();
+                        }
+                        using (Stream requestStream = await request.GetRequestStreamAsync())
+                        {
+                            requestStream.Write(fileContents, 0, fileContents.Length);
+                        }
+                        FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+                        var archivo = new ArchivosVehiculos()
+                        {
+                            ArchivoVehiculoId = 0,
+                            Nombre = file.FileName,
+                            TipoArchivo = fileExtension,
+                            VehiculoId = VehiculoId
+                        };
+                        _context.archivosVehiculos.Add(archivo);
+                        await _context.SaveChangesAsync();
+                    }
+                    return Ok("Documento registrado correctamente.");
+                    #endregion
+                }
+                else
+                {
+                    return BadRequest("No se ingresó ningun documento");
+                }
+            }
+            catch
+            {
+                return BadRequest("Ah ocurrido un error inesperado");
+            }
+            #endregion
+        }
+
+        [HttpDelete("DocumentosVehiculo/Eliminar/{VehiculoId}/{ArchivoId}")]
+        public async Task<IActionResult> DeleteDocumentsVehiculos(int VehiculoId, int ArchivoId)
+        {
+            var vehiculo = await _context.Vehiculo
+                .FirstOrDefaultAsync(f => f.VehiculoId == VehiculoId);
+
+            if (vehiculo == null)
+            {
+                return NotFound();
+            }
+            var Archivo = await _context.archivosVehiculos
+                .FirstOrDefaultAsync(f => f.ArchivoVehiculoId == ArchivoId);
+
+            if (Archivo == null)
+            {
+                return NotFound();
+            }
+            var serverPath = "ftp://digital.atogobmx.com/Files/Patrimonio/ParqueVehicular/";
+            var Nomenclatura = vehiculo.Nomenclatura.ToString();
+            var filePath = Archivo.Nombre.ToString();
+            var Url = $"{serverPath + Nomenclatura + "/" + "Documentos/" + filePath}";
+            var result = DeleteFile(Url);
+            if (result)
+            {
+                Archivo.Archivado = true;
+                _context.archivosVehiculos.Update(Archivo);
+                await _context.SaveChangesAsync();
+                return Ok("Documento archivado correctamente.");
+            }
+            return BadRequest("Error");
+
+        }
         //Metodos creados en mis espacios
         [HttpGet("Documents/AlumbradoPublico/{AlumbradoId}")]
         public async Task<IActionResult> GetDocumentosAlumbrado(int AlumbradoId)
@@ -1135,16 +1551,6 @@ namespace AtoGobMx.Controllers
                 return Ok("Documento archivado correctamente.");
             }
             return BadRequest("Error");
-            //var path = $@"Files/Documentos/{Expediente.Empleados.NombreCompleto}/{Archivo.Nombre}";
-            //FileInfo file = new FileInfo(path);
-            //if (file.Exists)
-            //{
-            //    file.Delete();
-            //    Archivo.Archivado = true;
-            //    _context.Archivos.Update(Archivo);
-            //    await _context.SaveChangesAsync();
-            //    return Ok("Documento archivado correctamente.");
-            //}
            
         }
         private static bool DeleteFile(string url)
@@ -1198,9 +1604,8 @@ namespace AtoGobMx.Controllers
                 return false;
             }
         }
-        private static List<String> GetListFiles(string name)
+        private static List<String> GetListFiles(string Url)
         {
-            string Url = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/{5}", "digital.atogobmx.com", "Files", "RecursosHumanos", "Empleados", name, "Documentos");
             FtpWebRequest request = (FtpWebRequest)WebRequest.Create(Url);
             request.Method = WebRequestMethods.Ftp.ListDirectory;
             request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");

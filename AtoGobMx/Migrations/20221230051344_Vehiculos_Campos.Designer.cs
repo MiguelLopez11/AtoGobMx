@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20221230051344_Vehiculos_Campos")]
+    partial class Vehiculos_Campos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -220,33 +222,6 @@ namespace AtoGobMx.Migrations
                     b.HasIndex("ObraId");
 
                     b.ToTable("ArchivosObras");
-                });
-
-            modelBuilder.Entity("AtoGobMx.Models.ArchivosVehiculos", b =>
-                {
-                    b.Property<int>("ArchivoVehiculoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Archivado")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Nombre")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("TipoArchivo")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<int>("VehiculoId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ArchivoVehiculoId");
-
-                    b.HasIndex("VehiculoId");
-
-                    b.ToTable("archivosVehiculos");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Aseo", b =>
@@ -885,10 +860,6 @@ namespace AtoGobMx.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("Modelo")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Nomenclatura")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("NumeroFactura")
@@ -1736,17 +1707,6 @@ namespace AtoGobMx.Migrations
                         .IsRequired();
 
                     b.Navigation("OP_Obras");
-                });
-
-            modelBuilder.Entity("AtoGobMx.Models.ArchivosVehiculos", b =>
-                {
-                    b.HasOne("AtoGobMx.Models.PAT_Vehiculo", "Vehiculo")
-                        .WithMany()
-                        .HasForeignKey("VehiculoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Vehiculo");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Cementerios", b =>

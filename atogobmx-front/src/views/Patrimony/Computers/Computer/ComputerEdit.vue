@@ -1,13 +1,13 @@
 <template>
-  <b-container fluid>
-    <b-card>
-      <b-card class="mb-4">
-        <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
-      </b-card>
-      <b-card>
-        <div>
-          <h3>Editar Equipo</h3>
-        </div>
+  <b-card class="m-2">
+    <b-card class="mb-4">
+      <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+    </b-card>
+    <div>
+      <h3>Editar Equipo</h3>
+    </div>
+    <b-tabs>
+      <b-tab title="Equipo">
         <Form @submit="onUpdateComputer()">
           <b-container fluid>
             <b-row cols="3">
@@ -162,14 +162,20 @@
             </b-row>
           </b-container>
         </Form>
-      </b-card>
-    </b-card>
-  </b-container>
+      </b-tab>
+      <b-tab
+        title="Documentos"
+      >
+      <ComputerDocuments :EquipoId="computerId" :EquipoComputo="computer"/>
+      </b-tab>
+    </b-tabs>
+  </b-card>
 </template>
 
 <script>
 import ComputerServices from '@/Services/computer.Services'
 import DepartamentServices from '@/Services/departament.Services'
+import ComputerDocuments from './ComputerDocuments.vue'
 import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Datepicker from '@vuepic/vue-datepicker'
@@ -181,7 +187,8 @@ export default {
     Form,
     Field,
     ErrorMessage,
-    Datepicker
+    Datepicker,
+    ComputerDocuments
   },
   setup () {
     const { getComputer, updateComputer, getStatus } = ComputerServices()

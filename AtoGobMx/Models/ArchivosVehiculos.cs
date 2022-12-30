@@ -1,22 +1,20 @@
-﻿
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
 namespace AtoGobMx.Models
 {
-    public class Archivos
+    public class ArchivosVehiculos
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ArchivoId { get; set; }
+        public int ArchivoVehiculoId { get; set; }
         [MaxLength(100)]
         public string? Nombre { get; set; }
         [MaxLength(100)]
         public string? TipoArchivo { get; set; }
         public bool Archivado { get; set; }
-        public int ExpedienteDigitalId { get; set; }
+        public int VehiculoId { get; set; }
 
-        [ForeignKey("ExpedienteDigitalId")]
-        public ExpedienteDigital? expedienteDigital { get; set; }
+        [ForeignKey("VehiculoId")]
+        public PAT_Vehiculo? Vehiculo { get; set; }
     }
 }

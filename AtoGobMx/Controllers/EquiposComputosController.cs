@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace AtoGobMx.Controllers
 {
@@ -47,6 +48,19 @@ namespace AtoGobMx.Controllers
         [HttpPost]
         public async Task<ActionResult<PAT_EquipoComputo>> PostEquipoComputo(PAT_EquipoComputo equipoComputo)
         {
+            var Nomenclatura = equipoComputo.CodigoInventario.ToString();
+            var host = "ftp://digital.atogobmx.com/Files/Patrimonio/EquiposComputacion/";
+            #region Create directory patrimonio
+            WebRequest request = WebRequest.Create(host + Nomenclatura);
+            request.Method = WebRequestMethods.Ftp.MakeDirectory;
+            request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+            using (var resp = (FtpWebResponse)request.GetResponse())
+            {
+                request.Abort();
+                resp.Close();
+            }
+            CreateDocument(host + Nomenclatura);
+            #endregion
             _context.EquipoComputo.Add(equipoComputo);
             await _context.SaveChangesAsync();
             return StatusCode(200, "Se ha credo exitosamente");
@@ -70,7 +84,6 @@ namespace AtoGobMx.Controllers
             equipo.Costo = equipoComputo.Costo;
             equipo.NumeroSerie = equipoComputo.NumeroSerie;
             equipo.EstatusEquipoId = equipoComputo.EstatusEquipoId;
-            //equipo.AreaId = equipoComputo.AreaId;
             equipo.Archivado = equipoComputo.Archivado;
 
             _context.EquipoComputo.Update(equipo);
@@ -83,6 +96,7 @@ namespace AtoGobMx.Controllers
             try
             {
                 var equipo = await _context.EquipoComputo
+                    .Include(i => i.EstatusEquipo)
                 .FirstOrDefaultAsync(f => f.EquipoComputoId == EquipoComputoId);
                 if (equipo == null)
                 {
@@ -98,6 +112,28 @@ namespace AtoGobMx.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
+            }
+        }
+        private static bool CreateDocument(string url)
+        {
+            try
+            {
+                var pathDocument = "/Documentos";
+                WebRequest request = WebRequest.Create(url + pathDocument);
+                request.Method = WebRequestMethods.Ftp.MakeDirectory;
+                request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+                using (var resp = (FtpWebResponse)request.GetResponse())
+                {
+                    request.Abort();
+                    resp.Close();
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
             }
         }
     }
