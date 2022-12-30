@@ -95,7 +95,7 @@
     </EasyDataTable>
     <b-modal
       v-model="showModal"
-      title="Agregar Departamento"
+      title="Agregar Equipo"
       size="xl"
       centered
       button-size="lg"
@@ -279,7 +279,7 @@ export default {
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref(['codigoInventario', 'numeroSerie'])
+    const searchField = ref('codigoInventario')
     const folioState = ref(false)
     const DescriptionState = ref(false)
     const dateState = ref(false)
@@ -439,14 +439,13 @@ export default {
       return 'datos recargados'
     }
     const addComputer = () => {
-      createComputer(computerFields.value, data => {
-        refreshTable()
-        swal.fire({
-          title: 'Equipo registrado correctamente!',
-          text: 'El equipo de computo se ha registrado al sistema satisfactoriamente.',
-          icon: 'success'
-        })
+      createComputer(computerFields.value, data => {})
+      swal.fire({
+        title: 'Equipo registrado correctamente!',
+        text: 'El equipo de computo se ha registrado al sistema satisfactoriamente.',
+        icon: 'success'
       })
+      refreshTable()
       resetRoleFields()
     }
     const resetRoleFields = () => {

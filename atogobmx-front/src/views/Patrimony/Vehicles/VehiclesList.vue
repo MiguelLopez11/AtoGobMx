@@ -78,7 +78,7 @@
     </EasyDataTable>
     <b-modal
       v-model="showModal"
-      title="Agregar Departamento"
+      title="Agregar Vehiculo"
       size="xl"
       centered
       button-size="lg"
