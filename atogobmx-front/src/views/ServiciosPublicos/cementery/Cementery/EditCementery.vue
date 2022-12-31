@@ -1,140 +1,175 @@
 <template>
+  <b-card class="m-2 mb-4">
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
   <b-card class="m-2">
-    <b-card class="mb-4">
-      <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
-    </b-card>
-    <b-card>
-      <div>
-        <h3>Editar Direccion Cementerio</h3>
-      </div>
-      <Form @submit="onUpdateCementeryService">
-        <b-row cols="2">
-          <!--Agregar Nombre del propietario -->
-          <b-col>
-            <b-form-group class="mt-3" label="Nombre del propietario">
-              <Field
-                name="PropietaryField"
-                :rules="validatePropietary"
-                as="text"
-              >
-                <b-form-input
-                  v-model="cementeryService.nombrePropietario"
-                  :state="PropietaryState"
+    <b-tabs content-class="mt-3">
+      <b-tab title="Cementerios" active>
+          <Form @submit="onUpdateCementeryService">
+            <b-row cols="2">
+              <!-- Agregar nombre -->
+              <b-col>
+                <b-form-group class="mt-3" label="Nombre del cementerio">
+                  <Field
+                    name="NameCementeryField"
+                    :rules="validateNameCementery"
+                    as="text"
+                  >
+                    <b-form-input
+                      v-model="cementeryService.nombreCementerio"
+                      :state="NameCementeryState"
+                    >
+                    </b-form-input>
+                  </Field>
+                  <ErrorMessage
+                    class="text-danger"
+                    name="NameCementeryField"
+                  ></ErrorMessage>
+                </b-form-group>
+              </b-col>
+              <!-- Agregar comunidad -->
+              <b-col>
+                <b-form-group class="mt-3" label="Comunidad">
+                  <Field
+                    name="MunicipalityField"
+                    :rules="validateMunicipality"
+                    as="text"
+                  >
+                    <b-form-input
+                      v-model="cementeryService.comunidad"
+                      :state="MunicipalityState"
+                    >
+                    </b-form-input>
+                  </Field>
+                  <ErrorMessage
+                    class="text-danger"
+                    name="MunicipalityField"
+                  ></ErrorMessage>
+                </b-form-group>
+              </b-col>
+              <!-- Agregar localidad -->
+              <b-col>
+                <b-form-group class="mt-3" label="Localidad">
+                  <Field
+                    name="LocationField"
+                    :rules="validateLocation"
+                    as="text"
+                  >
+                    <b-form-input
+                      v-model="cementeryService.localidad"
+                      :state="LocationState"
+                    >
+                    </b-form-input>
+                  </Field>
+                  <ErrorMessage
+                    class="text-danger"
+                    name="LocationField"
+                  ></ErrorMessage>
+                </b-form-group>
+              </b-col>
+              <!-- Agregar calle -->
+              <b-col>
+                <b-form-group class="mt-3" label="Calle">
+                  <Field name="StreetField" :rules="validateStreet" as="text">
+                    <b-form-input
+                      v-model="cementeryService.calle"
+                      :state="StreetState"
+                      type="text"
+                    >
+                    </b-form-input>
+                  </Field>
+                  <ErrorMessage
+                    class="text-danger"
+                    name="StreetField"
+                  ></ErrorMessage>
+                </b-form-group>
+              </b-col>
+              <!-- Agregar numero exterior -->
+              <b-col>
+                <b-form-group class="mt-3" label="Numero exterior">
+                  <Field
+                    name="NumberOutsideField"
+                    :rules="validateNumberOutside"
+                    as="text"
+                  >
+                    <b-form-input
+                      v-model="cementeryService.numeroExterior"
+                      :state="NumberOutsideState"
+                      type="number"
+                    >
+                    </b-form-input>
+                  </Field>
+                  <ErrorMessage
+                    class="text-danger"
+                    name="NumberOutsideField"
+                  ></ErrorMessage>
+                </b-form-group>
+              </b-col>
+              </b-row>
+              <b-row cols="1">
+                <b-button v-b-toggle.collapse-1 variant="primary">
+                  Mapa
+                </b-button>
+                <b-collapse id="collapse-1" class="mt-2">
+                  <b-card>
+                    <b-alert variant="warning" dismissible show
+                      >Arrastra el punto del mapa al lugar donde se encuentra su
+                      gabeta.</b-alert
+                    >
+                    <GMapMap
+                      :center="center"
+                      map-type-id="satellite"
+                      :zoom="20"
+                      :options="{
+                        zoomControl: true,
+                        mapTypeControl: false,
+                        scaleControl: false,
+                        rotateControl: true,
+                        disableDefaultUi: false
+                      }"
+                      style="width: 100%; height: 500px"
+                    >
+                      <GMapMarker
+                        :zoom="10"
+                        :position="center"
+                        :draggable="true"
+                        @drag="updateCoordinates"
+                      />
+                    </GMapMap>
+                  </b-card>
+                </b-collapse>
+              </b-row>
+              <b-row cols="2" align-h="end">
+                <b-col>
+
+                <b-button
+                  class=" w-75 m-2 text-white"
+                  variant="primary"
+                  to="/ServiciosPublicos/Cementerios/list"
+                  type="reset"
                 >
-                </b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="PropietaryField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!--Agregar numero de espacios -->
-          <b-col>
-            <b-form-group class="mt-3" label="Numero de espacios">
-              <Field name="SpacesField" :rules="validateSpaces" as="number">
-                <b-form-input
-                  v-model="cementeryService.numeroEspasios"
-                  :state="SpacesState"
-                  type="number"
+                  Cancelar</b-button
                 >
-                </b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="SpacesField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!--Agregar Metros correspondientes -->
-          <b-col>
-            <b-form-group class="mt-3" label="Metros correspondientes">
-              <Field name="MeterField" :rules="validateMeter" as="number">
-                <b-form-input
-                  v-model="cementeryService.metrosCorrespondientes"
-                  :state="MeterState"
-                >
-                </b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="MeterField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!--Agregar espacios disponibles -->
-          <b-col>
-            <b-form-group class="mt-3" label="Espacios Disponibles">
-              <Field
-                name="AvailableField"
-                :rules="validateAvailable"
-                as="number"
-              >
-                <b-form-input
-                  v-model="cementeryService.espaciosDisponibles"
-                  :state="AvailableState"
-                  type="number"
-                >
-                </b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="AvailableField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-        </b-row>
-        <b-row cols="1" align-h="center">
-          <b-button v-b-toggle.collapse-1 variant="primary"> Mapa </b-button>
-          <b-collapse id="collapse-1" class="mt-2">
-            <b-card>
-              <b-alert variant="warning" dismissible show
-                >Arrastra el punto del mapa al lugar donde se encuentra su
-                gabeta.</b-alert
-              >
-              <GMapMap
-                :center="center"
-                map-type-id="satellite"
-                :zoom="20"
-                :options="{
-                  zoomControl: true,
-                  mapTypeControl: false,
-                  scaleControl: false,
-                  rotateControl: true,
-                  disableDefaultUi: false
-                }"
-                style="width: 100%; height: 500px"
-              >
-                <GMapMarker
-                  :zoom="10"
-                  :position="center"
-                  :draggable="true"
-                  @drag="updateCoordinates"
-                />
-              </GMapMap>
-            </b-card>
-          </b-collapse>
-        </b-row>
-        <b-row align-h="end">
-          <b-button
-            class="col-1 m-2 text-white"
-            variant="primary"
-            to="/ServiciosPublicos/Cementerios/list"
-            type="reset"
-          >
-            Cancelar</b-button
-          >
-          <b-button type="success" class="col-1 m-2" variant="success">
-            Guardar
-          </b-button>
-        </b-row>
-      </Form>
-    </b-card>
+                </b-col>
+                <b-col>
+
+                <b-button type="success" class="w-75 m-2" variant="success">
+                  Guardar
+                </b-button>
+                </b-col>
+              </b-row>
+          </Form>
+      </b-tab>
+      <b-tab title="Documentos">
+        <ExpedientDocumentsCementery :CementerioId="cementerioId" />
+      </b-tab>
+    </b-tabs>
   </b-card>
 </template>
 
 <script>
 import CementeryService from '@/Services/cementery.Services'
+import ExpedientDocumentsCementery from '@/views/ServiciosPublicos/cementery/cementery/DocumentsCementery.vue'
 import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 // import { useToast } from 'vue-toast-notification'
@@ -144,142 +179,221 @@ export default {
   components: {
     Form,
     Field,
-    ErrorMessage
+    ErrorMessage,
+    ExpedientDocumentsCementery
   },
   setup () {
     const swal = inject('$swal')
-    const { getCementeryById, updateCementery } = CementeryService()
+    const { getCementeryById, updateCementery } =
+      CementeryService()
     // const $toast = useToast()
     const cementeryService = ref([])
     const router = useRoute()
     const redirect = useRouter()
-    const PropietaryState = ref(false)
-    const SpacesState = ref(false)
-    const MeterState = ref(false)
-    const AvailableState = ref(false)
+    const NameCementeryState = ref(false)
+    const MunicipalityState = ref(false)
+    const LocationState = ref(false)
+    const StreetState = ref(false)
+    const NumberOutsideState = ref(false)
+    const cementerioId = ref(parseInt(router.params.CementerioId))
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
-      { text: 'Cementerios', to: '/ServiciosPublicos/Cementerios/list' },
-      { text: 'Editar-cementerios' }
+      {
+        text: 'Direccion cementerio',
+        to: '/ServiciosPublicos/Cementerios/list'
+      },
+      { text: 'Editar-Estatus Alumbrado' }
     ])
-    const center = ref({ lat: 0, lng: 0 })
-    getCementeryById(router.params.CementeriosId, (data) => {
-      cementeryService.value = data
-      center.value.lat = data.latitud
-      center.value.lng = data.longitud
-    })
 
-    const updateCoordinates = (location) => {
+    const markers = ref([
+      {
+        position: {
+          lat: 0,
+          lng: 0
+        }
+      }
+    ])
+
+    const center = ref({ lat: 0, lng: 0 })
+
+    const updateCoordinates = location => {
+      markers.value = {
+        position: {
+          lat: location.latLng.lat(),
+          lng: location.latLng.lng()
+        }
+      }
       cementeryService.value.latitud = location.latLng.lat()
       cementeryService.value.longitud = location.latLng.lng()
     }
 
     const onUpdateCementeryService = () => {
-      updateCementery(cementeryService.value, (data) => {})
-      swal.fire({
-        title: '¡Cementerio modificado correctamente!',
-        text: 'La cementerio se ha modificado  satisfactoriamente.',
-        icon: 'success'
-      }).then(result => {
-        if (result.isConfirmed) {
-          redirect.push('/ServiciosPublicos/Cementerios/list')
-        }
-      })
+      updateCementery(cementeryService.value, data => {})
+      swal
+        .fire({
+          title: '¡Direccion cementerio modificado correctamente!',
+          text: 'La direccion cementerio se ha modificado  satisfactoriamente.',
+          icon: 'success'
+        })
+        .then(result => {
+          if (result.isConfirmed) {
+            redirect.push('/ServiciosPublicos/Cementerios/list')
+          }
+        })
     }
 
-    const validatePropietary = () => {
-      if (!cementeryService.value.nombrePropietario) {
+    getCementeryById(router.params.CementerioId, data => {
+      cementeryService.value = data
+      center.value = { lat: data.latitud, lng: data.longitud }
+      markers.value.position = { lat: data.latitud, lng: data.longitud }
+    })
+
+    const validateNameCementery = () => {
+      if (!cementeryService.value.nombreCementerio) {
         validateState()
         return 'Este campo es requerido'
       }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(cementeryService.value.nombrePropietario)) {
-        PropietaryState.value = false
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+          cementeryService.value.nombreCementerio
+        )
+      ) {
+        NameCementeryState.value = false
         return 'Este campo solo puede contener letras'
       }
 
-      validateState()
-      return true
-    }
-
-    const validateSpaces = () => {
-      if (!cementeryService.value.numeroEspasios) {
-        validateState()
-        return 'Este campo es requerido'
-      }
-
-      if (!/^[0-9]+$/i.test(cementeryService.value.numeroEspasios)) {
-        SpacesState.value = false
-        return 'Este campo solo puede contener numeros'
-      }
+      // if (!cementeryService.value.nombreCementerio.trim().length > 0) {
+      //   NameCementeryState.value = false
+      //   return 'Este campo no puede contener espacios'
+      // }
 
       validateState()
       return true
     }
 
-    const validateMeter = () => {
-      if (!cementeryService.value.metrosCorrespondientes) {
+    const validateMunicipality = () => {
+      if (!cementeryService.value.comunidad) {
         validateState()
         return 'Este campo es requerido'
       }
 
-      if (!/^\d*\.\d+$/i.test(cementeryService.value.metrosCorrespondientes)) {
-        MeterState.value = false
-        return 'Este campo solo puede contener numeros'
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+          cementeryService.value.comunidad
+        )
+      ) {
+        MunicipalityState.value = false
+        return 'Este campo solo puede contener letras'
       }
+
+      // if (!cementeryService.value.comunidad.trim().length > 0) {
+      //   MunicipalityState.value = false
+      //   return 'Este campo no puede contener espacios'
+      // }
 
       validateState()
       return true
     }
 
-    const validateAvailable = () => {
-      if (!cementeryService.value.espaciosDisponibles) {
+    const validateLocation = () => {
+      if (!cementeryService.value.localidad) {
         validateState()
         return 'Este campo es requerido'
       }
 
-      if (!/^[0-9]+$/i.test(cementeryService.value.espaciosDisponibles)) {
-        AvailableState.value = false
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+          cementeryService.value.localidad
+        )
+      ) {
+        LocationState.value = false
+        return 'Este campo solo puede contener letras'
+      }
+
+      // if (!cementeryService.value.localidad.trim().length > 0) {
+      //   LocationState.value = false
+      //   return 'Este campo no puede contener espacios'
+      // }
+
+      validateState()
+      return true
+    }
+
+    const validateStreet = () => {
+      if (!cementeryService.value.calle) {
+        validateState()
+        return 'Este campo es requerido'
+      }
+
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(cementeryService.value.calle)
+      ) {
+        StreetState.value = false
+        return 'Este campo solo puede contener letras'
+      }
+
+      // if (!cementeryService.value.calle.trim().length > 0) {
+      //   StreetState.value = false
+      //   return 'Este campo no puede contener espacios'
+      // }
+
+      validateState()
+      return true
+    }
+
+    const validateNumberOutside = () => {
+      if (!cementeryService.value.numeroExterior) {
+        validateState()
+        return 'Este campo es requerido'
+      }
+
+      if (!/^[0-9]+$/i.test(cementeryService.value.numeroExterior)) {
+        NumberOutsideState.value = false
         return 'Este campo solo puede contener numeros'
       }
+
+      // if (!cementeryService.value.numeroExterior.trim().length > 0) {
+      //   NumberOutsideState.value = false
+      //   return 'Este campo no puede contener espacios'
+      // }
 
       validateState()
       return true
     }
 
     const validateState = () => {
-      // eslint-disable-next-line no-unneeded-ternary
-      PropietaryState.value = cementeryService.value.nombrePropietario === '' ? false : true
-      // eslint-disable-next-line no-unneeded-ternary
-      SpacesState.value = cementeryService.value.numeroEspasios === '' ? false : true
-      // eslint-disable-next-line no-unneeded-ternary
-      MeterState.value = cementeryService.value.metrosCorrespondientes === '' ? false : true
-      // eslint-disable-next-line no-unneeded-ternary
-      AvailableState.value = cementeryService.value.espaciosDisponibles === '' ? false : true
+      NameCementeryState.value = cementeryService.value.nombreCementerio !== ''
+      MunicipalityState.value = cementeryService.value.comunidad !== ''
+      LocationState.value = cementeryService.value.localidad !== ''
+      StreetState.value = cementeryService.value.calle !== ''
+      NumberOutsideState.value = cementeryService.value.numeroExterior !== ''
     }
 
     return {
       cementeryService,
       breadcrumbItems,
-      PropietaryState,
-      SpacesState,
-      MeterState,
-      AvailableState,
+      NameCementeryState,
+      MunicipalityState,
+      LocationState,
+      StreetState,
+      NumberOutsideState,
+      markers,
+      cementerioId,
       center,
       //   router
 
       onUpdateCementeryService,
-      updateCoordinates,
       validateState,
-      validatePropietary,
-      validateSpaces,
-      validateMeter,
-      validateAvailable
+      validateNameCementery,
+      validateMunicipality,
+      validateLocation,
+      validateStreet,
+      validateNumberOutside,
+      updateCoordinates
     }
   }
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

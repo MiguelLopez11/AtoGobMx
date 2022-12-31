@@ -5,13 +5,13 @@ using System.Text.Json.Serialization;
 
 namespace AtoGobMx.Models
 {
-    public class DireccionCementerio
+    public class Cementerio
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int DireccionId { get; set; }
+        public int CementerioId { get; set; }
         public string NombreCementerio { get; set; }
-        public string Municipio { get; set; }
+        public string Comunidad { get; set; }
         public string Localidad { get; set; }
         public string Calle { get; set; }
         public int NumeroExterior { get; set; }
@@ -20,7 +20,7 @@ namespace AtoGobMx.Models
         public bool Archivado { get; set; }
 
         [JsonIgnore]
-        public virtual IEnumerable<Cementerios>? Cementerios { get; set; }
+        public virtual IEnumerable<Gabetas>? Gabetas { get; set; }
         [JsonIgnore]
         public virtual IEnumerable<ArchivosCementerios>? ArchivosCementerios { get; set; }
     }

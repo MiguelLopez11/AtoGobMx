@@ -11,10 +11,10 @@ namespace AtoGobMx.Models
         public string Nombre { get; set; }
         public string TipoArchivo { get; set; }
         public bool Archivado { get; set; }
-        public int DireccionId { get; set; }
+        public int CementerioId { get; set; }
 
-        [ForeignKey("DireccionId")]
-        public DireccionCementerio? DireccionCementerio { get; set; }
+        [ForeignKey("CementerioId")]
+        public Cementerio? Cementerio { get; set; }
 
     }
 }

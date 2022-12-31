@@ -192,11 +192,11 @@ namespace AtoGobMx.Controllers
             return Ok(Documentos);
         }
 
-        [HttpGet("Documents/DireccionCementerio/{DireccionId}")]
-        public async Task<IActionResult> GetDocumentosCementerios(int DireccionId)
+        [HttpGet("Documents/Cementerio/{CementerioId}")]
+        public async Task<IActionResult> GetDocumentosCementerios(int CementerioId)
         {
             var Documentos = await _context.ArchivosCementerios
-                .Where(w => w.DireccionId == DireccionId)
+                .Where(w => w.CementerioId == CementerioId)
                 .Where(w => w.TipoArchivo == ".pdf" || w.TipoArchivo == ".docx")
                 .Where(w => !w.Archivado)
                 .ToListAsync();
@@ -283,14 +283,14 @@ namespace AtoGobMx.Controllers
             }
 
         }
-        [HttpGet("Documents/Dowload2/{DireccionId}/{ArchivosCementerioId}")]
-        public async Task<IActionResult> DownloadFileCementerios(int DireccionId, int ArchivosCementerioId)
+        [HttpGet("Documents/Dowload2/{CementerioId}/{ArchivosCementerioId}")]
+        public async Task<IActionResult> DownloadFileCementerios(int CementerioId, int ArchivosCementerioId)
         {
             try
             {
-                var cementerio = await _context.DireccionCementerio
+                var cementerio = await _context.Cementerio
                     .Include(i => i.ArchivosCementerios)
-                    .FirstOrDefaultAsync(f => f.DireccionId == DireccionId);
+                    .FirstOrDefaultAsync(f => f.CementerioId == CementerioId);
                 if (cementerio == null)
                 {
                     return NotFound("El ID del alumbrado no existe");
@@ -500,17 +500,17 @@ namespace AtoGobMx.Controllers
             }
             #endregion
         }
-        [HttpPost("Documents/DireccionCementerio/{DireccionId}/")]
-        public async Task<IActionResult> UploadDocumentsCementerio(List<IFormFile> Files, int DireccionId)
+        [HttpPost("Documents/Cementerio/{CementerioId}/")]
+        public async Task<IActionResult> UploadDocumentsCementerio(List<IFormFile> Files, int CementerioId)
         {
             #region Cargar Archivos
             try
             {
 
                 #region Comprobar si el expediente existe
-                var direccioncementerio = await _context.DireccionCementerio
+                var direccioncementerio = await _context.Cementerio
                     //.Include(i => i.TareaTipoAlumbrado)
-                    .FirstOrDefaultAsync(f => f.DireccionId == DireccionId);
+                    .FirstOrDefaultAsync(f => f.CementerioId == CementerioId);
 
                 string serverPath = String.Format("ftp://{0}/{1}/{2}/{3}/{4}", "digital.atogobmx.com", "Files", "ServiciosPublicos", "CementerioPublico", direccioncementerio.NombreCementerio);
 
@@ -560,7 +560,7 @@ namespace AtoGobMx.Controllers
                             ArchivosCementerioId = 0,
                             Nombre = file.FileName,
                             TipoArchivo = fileExtension,
-                            DireccionId = DireccionId
+                            CementerioId = CementerioId
                         };
                         _context.ArchivosCementerios.Add(archivo);
                         await _context.SaveChangesAsync();
@@ -772,15 +772,15 @@ namespace AtoGobMx.Controllers
             return BadRequest("Error");
 
         }
-        [HttpDelete("Documents12/Cementerios/Eliminar/{DireccionId}/{ArchivoId}")]
-        public async Task<IActionResult> DeleteDocumentsCementerio(int DireccionId, int ArchivosCementerioId)
+        [HttpDelete("Documents12/Cementerios/Eliminar/{CementerioId}/{ArchivoId}")]
+        public async Task<IActionResult> DeleteDocumentsCementerio(int CementerioId, int ArchivosCementerioId)
         {
-            var cementerio = await _context.DireccionCementerio
-                .FirstOrDefaultAsync(f => f.DireccionId == DireccionId);
+            var cementerio = await _context.Cementerio
+                .FirstOrDefaultAsync(f => f.CementerioId == CementerioId);
 
             if (cementerio == null)
             {
-                return NotFound($"No se encuentra expediente con el ID {DireccionId}");
+                return NotFound($"No se encuentra expediente con el ID {CementerioId}");
             }
             var Archivo = await _context.ArchivosCementerios
                 .FirstOrDefaultAsync(f => f.ArchivosCementerioId == ArchivosCementerioId);
@@ -926,13 +926,13 @@ namespace AtoGobMx.Controllers
             //Directory.Delete("Files/Documentos");
             return File(zipFileMemoryStream, "application/octet-stream", $"Documentos_{DateOnly.FromDateTime(DateTime.Now)}_{alumbrado.NombreObra}.zip");
         }
-        [HttpGet("Documentos22/{DireccionId}/Zip")]
-        public async Task<IActionResult> DownloadFilesDireccionCementerio(int DireccionId)
+        [HttpGet("Documentos22/{CementerioId}/Zip")]
+        public async Task<IActionResult> DownloadFilesDireccionCementerio(int CementerioId)
         {
-            var direccioncementerio = await _context.DireccionCementerio
+            var direccioncementerio = await _context.Cementerio
                  //.Include(i => i.ArchivosAlumbrado)
                  .Where(w => !w.Archivado)
-                 .FirstOrDefaultAsync(f => f.DireccionId == DireccionId);
+                 .FirstOrDefaultAsync(f => f.CementerioId == CementerioId);
             var UrlHost = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/", "digital.atogobmx.com", "Files", "ServiciosPublicos", "CementerioPublico", direccioncementerio.NombreCementerio);
             var result = GetListFiles(direccioncementerio.NombreCementerio.ToString());
             foreach (string line in result)

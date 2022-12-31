@@ -59,13 +59,13 @@ export default function FileServices () {
     })
   }
   // ----------- Cementerios ---------------- //
-  const getDocumentsCementerios = (DireccionId, callback) => {
-    axiosPrivate.get(`/Archivos/Documents/DireccionCementerio/${DireccionId}`).then((response) => {
+  const getDocumentsCementerios = (CementerioId, callback) => {
+    axiosPrivate.get(`/Archivos/Documents/Cementerio/${CementerioId}`).then((response) => {
       callback(response.data)
     })
   }
-  const deleteDocumentsCementerios = (DireccionId, ArchivosCementerioId, callback) => {
-    axiosPrivate.delete(`/Archivos/Documents12/Cementerios/Eliminar/${DireccionId}/${ArchivosCementerioId}`)
+  const deleteDocumentsCementerios = (CementerioId, ArchivosCementerioId, callback) => {
+    axiosPrivate.delete(`/Archivos/Documents12/Cementerios/Eliminar/${CementerioId}/${ArchivosCementerioId}`)
       .then((response) => {
         callback(response.data)
       })
@@ -73,8 +73,8 @@ export default function FileServices () {
         callback(exception.response)
       })
   }
-  const createDocumentsCementerios = (DireccionId, files, callback) => {
-    axiosPrivate.post(`/Archivos/Documents/DireccionCementerio/${DireccionId}`, files).then((response) => {
+  const createDocumentsCementerios = (CementerioId, files, callback) => {
+    axiosPrivate.post(`/Archivos/Documents/Cementerio/${CementerioId}`, files).then((response) => {
       callback(response)
     }).catch((exception) => {
       callback(exception.response.data)
