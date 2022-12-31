@@ -10,8 +10,8 @@
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="140"
-            height="150"
+            width="75%"
+            height="75%"
             fill="currentColor"
             class="bi bi-pc-display"
             viewBox="0 0 16 16"
@@ -31,8 +31,8 @@
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="140"
-            height="150"
+            width="75%"
+            height="75%"
             fill="currentColor"
             class="bi bi-card-checklist"
             viewBox="0 0 16 16"
@@ -55,8 +55,8 @@
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="140"
-            height="150"
+            width="75%"
+            height="75%"
             fill="currentColor"
             class="bi bi-car-front"
             viewBox="0 0 16 16"
@@ -79,8 +79,8 @@
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="140"
-            height="150"
+            width="75%"
+            height="75%"
             fill="currentColor"
             class="bi bi-bar-chart-steps"
             viewBox="0 0 16 16"
@@ -100,8 +100,8 @@
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="140"
-            height="150"
+            width="75%"
+            height="75%"
             fill="currentColor"
             class="bi bi-lamp"
             viewBox="0 0 16 16"
@@ -125,8 +125,8 @@
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="140"
-            height="150"
+            width="75%"
+            height="75%"
             fill="currentColor"
             class="bi bi-columns-gap"
             viewBox="0 0 16 16"
@@ -146,8 +146,8 @@
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="140"
-            height="150"
+            width="75%"
+            height="75%"
             fill="currentColor"
             class="bi bi-award"
             viewBox="0 0 16 16"

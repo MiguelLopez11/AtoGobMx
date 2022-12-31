@@ -10,8 +10,8 @@
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="140"
-            height="150"
+            width="75%"
+            height="75%"
             fill="currentColor"
             class="bi bi-clipboard-pulse"
             viewBox="0 0 16 16"
@@ -33,8 +33,8 @@
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="140"
-            height="150"
+            width="75%"
+            height="75%"
             fill="currentColor"
             class="bi bi-graph-up"
             viewBox="0 0 16 16"
@@ -55,8 +55,8 @@
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="140"
-            height="150"
+            width="75%"
+            height="75%"
             fill="currentColor"
             class="bi bi-box-seam"
             viewBox="0 0 16 16"
@@ -76,8 +76,8 @@
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="140"
-            height="150"
+            width="75%"
+            height="75%"
             fill="currentColor"
             class="bi bi-buildings"
             viewBox="0 0 16 16"
@@ -100,8 +100,8 @@
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="140"
-            height="150"
+            width="75%"
+            height="75%"
             fill="currentColor"
             class="bi bi-activity"
             viewBox="0 0 16 16"

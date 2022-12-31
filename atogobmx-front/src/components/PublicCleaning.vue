@@ -13,8 +13,8 @@
         >
           <svg
             version="1.1"
-            width="140"
-            height="150"
+            width="75%"
+            height="75%"
             fill="currentColor"
             id="Capa_1"
             xmlns="http://www.w3.org/2000/svg"
@@ -97,8 +97,8 @@
           <svg
             id="Layer_1"
             data-name="Layer 1"
-            width="140"
-            height="150"
+            width="75%"
+            height="75%"
             fill="currentColor"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 50.46 50.46"

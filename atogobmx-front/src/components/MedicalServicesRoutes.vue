@@ -10,8 +10,8 @@
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="140"
-            height="150"
+            width="75%"
+            height="75%"
             fill="currentColor"
             class="bi bi-calendar-week"
             viewBox="0 0 16 16"
@@ -34,8 +34,8 @@
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="140"
-            height="150"
+            width="75%"
+            height="75%"
             fill="currentColor"
             class="bi bi-journal-medical"
             viewBox="0 0 16 16"
@@ -62,8 +62,8 @@
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="140"
-            height="150"
+            width="75%"
+            height="75%"
             fill="currentColor"
             class="bi bi-clipboard2-plus-fill"
             viewBox="0 0 16 16"
@@ -86,8 +86,8 @@
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="140"
-            height="150"
+            width="75%"
+            height="75%"
             fill="currentColor"
             class="bi bi-prescription2"
             viewBox="0 0 16 16"
@@ -108,8 +108,8 @@
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="140"
-            height="150"
+            width="75%"
+            height="75%"
             fill="currentColor"
             class="bi bi-capsule"
             viewBox="0 0 16 16"
@@ -129,8 +129,8 @@
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="140"
-            height="150"
+            width="75%"
+            height="75%"
             fill="currentColor"
             class="bi bi-hospital-fill"
             viewBox="0 0 16 16"
