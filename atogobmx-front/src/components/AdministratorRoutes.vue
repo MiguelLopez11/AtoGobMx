@@ -10,8 +10,8 @@
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="140"
-            height="150"
+            width="75%"
+            height="75%"
             fill="currentColor"
             class="bi bi-person-lock"
             viewBox="0 0 16 16"

@@ -11,8 +11,8 @@
           <svg
             id="Layer_1"
             data-name="Layer 1"
-             width="140"
-            height="150"
+             width="75%"
+            height="75%"
             fill="currentColor"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 50.46 50.46"
@@ -74,8 +74,8 @@
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="140"
-            height="150"
+            width="75%"
+            height="75%"
             fill="currentColor"
             class="bi bi-graph-up"
             viewBox="0 0 16 16"

@@ -168,6 +168,46 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Fecha de adquisicion">
+              <Field
+                name="DateField"
+                :rules="validateDate"
+                as="number"
+              >
+                <Datepicker
+                  v-model="computerFields.fechaAdquisicion"
+                  locale="es"
+                  autoApply
+                  :enableTimePicker="false"
+                  :state="dateState"
+                >
+                </Datepicker>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="DateField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Costo">
+              <Field
+                name="DescriptionField"
+                :rules="validateCost"
+                as="number"
+              >
+                <b-form-input
+                  v-model="furnituresFields.costo"
+                  :state="costState"
+                />
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="DescriptionField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
         </b-row>
         <b-row align-h="end">
           <b-button
@@ -189,6 +229,7 @@
 <script>
 import FurnitureServices from '@/Services/furniture.Services'
 import DepartamentServices from '@/Services/departament.Services'
+import Datepicker from '@vuepic/vue-datepicker'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -197,7 +238,8 @@ export default {
     EasyDataTable: window['vue3-easy-data-table'],
     Form,
     Field,
-    ErrorMessage
+    ErrorMessage,
+    Datepicker
   },
   setup () {
     const {

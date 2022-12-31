@@ -67,7 +67,8 @@ namespace AtoGobMx.Controllers
             PAT_Mobiliario.MobiliarioId = mobiliario.MobiliarioId;
             PAT_Mobiliario.CodigoInventario = mobiliario.CodigoInventario;
             PAT_Mobiliario.Descripción = mobiliario.Descripción;
-            //PAT_Mobiliario.AreaId = mobiliario.AreaId;
+            PAT_Mobiliario.FechaAdquisición = mobiliario.FechaAdquisición;
+            PAT_Mobiliario.Costo = mobiliario.Costo;
             PAT_Mobiliario.DepartamentoId = mobiliario.DepartamentoId;
             PAT_Mobiliario.TipoMobiliarioId = mobiliario.TipoMobiliarioId;
             PAT_Mobiliario.Archivado = mobiliario.Archivado;
