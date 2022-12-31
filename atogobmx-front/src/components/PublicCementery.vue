@@ -8,7 +8,7 @@
         <b-button
           variant="outline-secondary"
           class="border border-2 border-secundary w-75 mt-3"
-          to="/ServiciosPublicos/Cementerios/list"
+          to="/ServiciosPublicos/Gabetas/list"
           style="border-size: 2px"
         >
           <svg
@@ -36,7 +36,7 @@
         <b-button
           variant="outline-secondary"
           class="border border-2 border-secundary w-75 mt-3"
-          to="/ServiciosPublicos/DireccionCementerios/list"
+          to="/ServiciosPublicos/Cementerios/list"
           style="border-size: 2px"
         >
           <svg

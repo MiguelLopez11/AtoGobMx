@@ -256,6 +256,8 @@ export default {
       ObservationState,
       fields,
       center,
+      locations,
+      flightPath,
       //   router
 
       onUpdateRoadService,
