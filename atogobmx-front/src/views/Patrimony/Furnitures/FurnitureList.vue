@@ -76,6 +76,11 @@
           >
         </b-dropdown>
       </template>
+      <template #item-status="items">
+        <b-badge :variant="items.archivado === false ? 'success' : 'danger'">
+          {{ items.archivado === false ? 'Activo' : 'Dado de baja' }}
+        </b-badge>
+      </template>
     </EasyDataTable>
     <b-modal
       id="modal-employee"
@@ -176,7 +181,7 @@
                 as="number"
               >
                 <Datepicker
-                  v-model="computerFields.fechaAdquisicion"
+                  v-model="furnituresFields.fechaAdquisición"
                   locale="es"
                   autoApply
                   :enableTimePicker="false"
@@ -265,6 +270,8 @@ export default {
     const typeFurnitureState = ref(false)
     const descriptionState = ref(false)
     const folioState = ref(false)
+    const dateState = ref(false)
+    const costState = ref(false)
     const departamentState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
@@ -276,8 +283,10 @@ export default {
     ])
     const furnituresFields = ref({
       mobiliarioId: 0,
-      codigoInventario: null,
+      codigoInventario: '',
       descripción: '',
+      fechaAdquisición: null,
+      costo: null,
       tipoMobiliarioId: null,
       departamentoId: null,
       archivado: false
@@ -299,6 +308,9 @@ export default {
       { value: 'codigoInventario', text: 'Nomenclatura', sortable: true },
       { value: 'descripción', text: 'Nombre' },
       { value: 'departamentos.nombre', text: 'Departamento' },
+      { value: 'fechaAdquisición', text: 'Fecha de adquisición' },
+      { value: 'costo', text: 'Costo' },
+      { value: 'status', text: 'Estado' },
       { value: 'actions', text: 'Acciones' }
     ])
     const resetFurnitureFields = () => {
@@ -430,6 +442,22 @@ export default {
       descriptionState.value = true
       return true
     }
+    const validateDate = () => {
+      if (!furnituresFields.value.descripción) {
+        dateState.value = false
+        return 'Este campo es requerido'
+      }
+      dateState.value = true
+      return true
+    }
+    const validateCost = () => {
+      if (!furnituresFields.value.descripción) {
+        costState.value = false
+        return 'Este campo es requerido'
+      }
+      costState.value = true
+      return true
+    }
     return {
       furnitures,
       typeFurnitures,
@@ -450,6 +478,8 @@ export default {
       descriptionState,
       departamentState,
       folioState,
+      dateState,
+      costState,
       showModal,
 
       onFiltered,
@@ -460,6 +490,8 @@ export default {
       validateDescription,
       validateDepartament,
       validateFolio,
+      validateDate,
+      validateCost,
       resetFurnitureFields
     }
   }

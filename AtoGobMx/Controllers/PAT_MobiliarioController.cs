@@ -24,7 +24,6 @@ namespace AtoGobMx.Controllers
                 .Include(i => i.Departamentos)
                 //.Include(i => i.Area)
                 .Include(i => i.TipoMobiliario)
-                .Where(w => !w.Archivado)
                 .ToListAsync();
             return Ok(mobiliarios);
         }
