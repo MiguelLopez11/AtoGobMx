@@ -9,7 +9,7 @@
         style="width: 350px"
         v-model="searchValue"
         type="search"
-        placeholder="Buscar cementerio..."
+        placeholder="Buscar Gabetas..."
       ></b-form-input>
       <b-button
         variant="primary"
@@ -26,7 +26,7 @@
       >
         <!-- v-b-modal.modal-cementery -->
         <i class="bi bi-person-plus-fill"></i>
-        Agregar Cementerio
+        Agregar Gabeta
       </b-button>
     </b-row>
     <EasyDataTable
@@ -37,7 +37,7 @@
       border-cell
       :loading="isloading"
       :headers="fields"
-      :items="cementeryService"
+      :items="drawerService"
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
@@ -60,7 +60,7 @@
             <i class="bi bi-three-dots-vertical"></i>
           </template>
           <b-dropdown-item
-            @click="RemoveCementeryService(items.cementerioId)"
+            @click="RemoveDrawerService(items.gabetaId)"
             class="m-1"
             variant="outline-danger"
             ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
@@ -69,8 +69,8 @@
             class="m-1"
             variant="outline-warning"
             :to="{
-              name: 'Cementerios-Edit',
-              params: { CementerioId: items.cementerioId }
+              name: 'Gabetas-Edit',
+              params: { GabetaId: items.gabetaId }
             }"
             ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
           >
@@ -79,107 +79,109 @@
     </EasyDataTable>
 
     <b-modal
-      id="modal-Cementery"
-      tittle="Agregar Cementerios"
+      id="modal-drawer"
+      tittle="Agregar Gabeta"
       v-model="showModal"
       size="xl"
       hide-footer
       button-size="lg"
       lazy
     >
-      <Form @submit="addCementeryService">
+      <Form @submit="addDrawerService">
         <b-row cols="2">
-          <!--Agregar Nombre Cementerio -->
+          <!-- Registrar el panteon de la gabeta -->
           <b-col>
-            <b-form-group class="mt-3" label="Nombre del cementerio">
+            <b-form-group class="mt-3" label="Nombre cementerio">
               <Field
-                name="NameCementeryField"
-                :rules="validateNameCementery"
+                name="PropietaryField"
+                :rules="validatePropietary"
+                as="text"
+              >
+                <b-form-select
+                  v-model="drawerServiceFields.cementerioId"
+                  autofocus
+                  :state="PropietaryState"
+                  :options="cementeryService"
+                  value-field="cementerioId"
+                  text-field="nombreCementerio"
+                ></b-form-select>
+              </Field>
+              <ErrorMessage class="text-danger" name="StatusField" />
+            </b-form-group>
+          </b-col>
+          <!--Agregar propietario -->
+          <b-col>
+            <b-form-group class="mt-3" label="Nombre del propietario">
+              <Field
+                name="PropietaryField"
+                :rules="validatePropietary"
                 as="text"
               >
                 <b-form-input
-                  v-model="cementeryServiceFields.nombreCementerio"
-                  :state="NameCementeryState"
+                  v-model="drawerServiceFields.nombrePropietario"
+                  :state="PropietaryState"
                 >
                 </b-form-input>
               </Field>
               <ErrorMessage
                 class="text-danger"
-                name="NameCementeryField"
+                name="PropietaryField"
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!--Agregar comunidad -->
+          <!--Agregar espacios -->
           <b-col>
-            <b-form-group class="mt-3" label="Comunidad">
-              <Field
-                name="MunicipalityField"
-                :rules="validateMunicipality"
-                as="text"
-              >
+            <b-form-group class="mt-3" label="Numero de espacios">
+              <Field name="SpacesField" :rules="validateSpaces" as="number">
                 <b-form-input
-                  v-model="cementeryServiceFields.comunidad"
-                  :state="MunicipalityState"
-                >
-                </b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="MunicipalityField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!--Agregar Localidad -->
-          <b-col>
-            <b-form-group class="mt-3" label="Localidad">
-              <Field name="LocationField" :rules="validateLocation" as="text">
-                <b-form-input
-                  v-model="cementeryServiceFields.localidad"
-                  :state="LocationState"
-                >
-                </b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="LocationField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!--Agregar Calle -->
-          <b-col>
-            <b-form-group class="mt-3" label="Calle">
-              <Field name="StreetField" :rules="validateStreet" as="text">
-                <b-form-input
-                  v-model="cementeryServiceFields.calle"
-                  :state="StreetState"
-                  type="text"
-                >
-                </b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="StreetField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!--Agregar Numero Exterior -->
-          <b-col>
-            <b-form-group class="mt-3" label="Numero exterior">
-              <Field
-                name="NumberOutsideField"
-                :rules="validateNumberOutside"
-                as="text"
-              >
-                <b-form-input
-                  v-model="cementeryServiceFields.numeroExterior"
-                  :state="NumberOutsideState"
+                  v-model="drawerServiceFields.numeroEspasios"
+                  :state="SpacesState"
                   type="number"
                 >
                 </b-form-input>
               </Field>
               <ErrorMessage
                 class="text-danger"
-                name="NumberOutsideField"
+                name="SpacesField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <!--Agregar metros correspondientes -->
+          <b-col>
+            <b-form-group class="mt-3" label="Metros correspondientes">
+              <Field name="MeterField" :rules="validateMeter" as="number">
+                <b-form-input
+                  v-model="drawerServiceFields.metrosCorrespondientes"
+                  :state="MeterState"
+                  type="number"
+                  min="1"
+                >
+                </b-form-input>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="MeterField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <!--Agregar espacios -->
+          <b-col>
+            <b-form-group class="mt-3" label="Espacios disponibles">
+              <Field
+                name="AvailableField"
+                :rules="validateAvailable"
+                as="number"
+              >
+                <b-form-input
+                  v-model="drawerServiceFields.espaciosDisponibles"
+                  :state="AvailableState"
+                  type="number"
+                >
+                </b-form-input>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="AvailableField"
               ></ErrorMessage>
             </b-form-group>
           </b-col>
@@ -220,7 +222,7 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            @click="resetCementeryServiceFields"
+            @click="resetDrawerServiceFields"
           >
             <!-- v-b-modal.modal-cementery -->
             Cancelar
@@ -235,9 +237,11 @@
 </template>
 
 <script>
+import DrawerService from '@/Services/drawer.Services'
 import CementeryService from '@/Services/cementery.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
+// import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
@@ -249,11 +253,10 @@ export default {
   setup () {
     const swal = inject('$swal')
     const showModal = ref(false)
-    const {
-      getCementery,
-      createCementery,
-      deleteCementery
-    } = CementeryService()
+    const { getDrawer, createDrawer, deleteDrawer } =
+      DrawerService()
+    const { getCementery } = CementeryService()
+    const drawerService = ref([])
     const cementeryService = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
@@ -261,85 +264,79 @@ export default {
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('nombreCementerio')
-    const NameCementeryState = ref(false)
-    const MunicipalityState = ref(false)
-    const LocationState = ref(false)
-    const StreetState = ref(false)
-    const NumberOutsideState = ref(false)
+    const searchField = ref('nombrePropietario')
+    const SpacesState = ref(false)
+    const MeterState = ref(false)
+    const AvailableState = ref(false)
+    const PropietaryState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
       {
         text: 'Cementerios',
         to: '/ServiciosPublicos/CementeriosPublicos/list'
       },
-      { text: 'Cementerios' }
+      { text: 'Gabetas' }
     ])
-
-    const cementeryServiceFields = ref({
-      cementerioId: 0,
-      nombreCementerio: null,
-      comunidad: null,
-      localidad: null,
-      calle: null,
-      numeroExterior: null,
-      latitud: 0,
-      longitud: 0,
+    const drawerServiceFields = ref({
+      gabetaId: 0,
+      nombrePropietario: '',
+      numeroEspasios: null,
+      metrosCorrespondientes: null,
+      espaciosDisponibles: null,
+      cementerioId: null,
+      latitud: null,
+      longitud: null,
       archivado: false
     })
 
-    const CementeryServiceFieldsBlank = ref(
-      JSON.parse(JSON.stringify(cementeryServiceFields))
-    )
-
-    const markers = ref([
-      {
-        position: {
-          lat: 20.5546629,
-          lng: -102.4953904
-        }
+    getCementery(data => {
+      cementeryService.value = data
+      if (data.length === 0) {
+        swal.fire({
+          title: 'No se encuentra un cementerio registrado!',
+          text: 'No se encuentra un cementerio registrado en el departamento seleccionado, registre primero un tipo de cementerio para continuar',
+          icon: 'warning'
+        })
       }
-    ])
+    })
+
+    const DrawerServiceFieldsBlank = ref(
+      JSON.parse(JSON.stringify(drawerServiceFields))
+    )
 
     const center = ref({ lat: 20.5546629, lng: -102.4953904 })
 
-    const updateCoordinates = (location) => {
-      markers.value = {
-        position: {
-          lat: location.latLng.lat(),
-          lng: location.latLng.lng()
-        }
-      }
+    const updateCoordinates = location => {
+      drawerServiceFields.value.latitud = location.latLng.lat()
+      drawerServiceFields.value.longitud = location.latLng.lng()
     }
-
     const fields = ref([
-      { value: 'nombreCementerio', text: 'Nombre cementerio' },
-      { value: 'comunidad', text: 'Comunidad' },
-      { value: 'localidad', text: 'Localidad' },
-      { value: 'calle', text: 'Calle' },
-      { value: 'numeroExterior', text: 'Numero exterior' },
+      { value: 'cementerio.nombreCementerio', text: 'Nombre del cementerio' },
+      { value: 'nombrePropietario', text: 'Nombre de propietario' },
+      { value: 'numeroEspasios', text: 'Espacios' },
+      { value: 'metrosCorrespondientes', text: 'Metros' },
+      { value: 'espaciosDisponibles', text: 'Espacios disponibles' },
       { value: 'actions', text: 'Acciones' }
     ])
 
-    const resetCementeryServiceFields = () => {
+    const resetDrawerServiceFields = () => {
       showModal.value = false
-      cementeryServiceFields.value = JSON.parse(
-        JSON.stringify(CementeryServiceFieldsBlank)
+      drawerServiceFields.value = JSON.parse(
+        JSON.stringify(DrawerServiceFieldsBlank)
       )
-      NameCementeryState.value = false
-      MunicipalityState.value = false
-      LocationState.value = false
-      StreetState.value = false
-      NumberOutsideState.value = false
+      PropietaryState.value = false
+      SpacesState.value = false
+      MeterState.value = false
+      AvailableState.value = false
     }
 
-    getCementery(data => {
-      cementeryService.value = data
+    getDrawer(data => {
+      drawerService.value = data
 
-      if (cementeryService.value.length > 0) {
+      if (drawerService.value.length > 0) {
         isloading.value = false
       } else {
-        if (cementeryService.value.length <= 0) {
+        if (drawerService.value.length <= 0) {
           isloading.value = false
         }
       }
@@ -349,137 +346,112 @@ export default {
       currentPage.value = 1
     }
 
-    const validateNameCementery = () => {
-      if (!cementeryServiceFields.value.nombreCementerio) {
-        NameCementeryState.value = false
+    const validateStatus = () => {
+      if (!drawerServiceFields.value.cementerioId) {
+        PropietaryState.value = false
+        return 'Este campo es requerido'
+      }
+      PropietaryState.value = true
+      return true
+    }
+
+    const validatePropietary = () => {
+      if (!drawerServiceFields.value.nombrePropietario) {
+        PropietaryState.value = false
         return 'Este campo es requerido'
       }
 
       if (
         !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
-          cementeryServiceFields.value.nombreCementerio
+          drawerServiceFields.value.nombrePropietario
         )
       ) {
-        NameCementeryState.value = false
+        PropietaryState.value = false
         return 'Este campo solo puede contener letras'
       }
 
-      if (
-        !cementeryServiceFields.value.nombreCementerio.trim().length > 0
-      ) {
-        NameCementeryState.value = false
+      if (!drawerServiceFields.value.nombrePropietario.trim().length > 0) {
+        PropietaryState.value = false
         return 'Este campo no puede contener espacios'
       }
 
-      NameCementeryState.value = true
+      PropietaryState.value = true
       return true
     }
 
-    const validateMunicipality = () => {
-      if (!cementeryServiceFields.value.comunidad) {
-        MunicipalityState.value = false
+    const validateSpaces = () => {
+      if (!drawerServiceFields.value.numeroEspasios) {
+        SpacesState.value = false
+        return 'Este campo es requerido'
+      }
+
+      if (!/^[0-9]+$/i.test(drawerServiceFields.value.numeroEspasios)) {
+        SpacesState.value = false
+        return 'Este campo solo puede contener numeros'
+      }
+
+      if (!drawerServiceFields.value.numeroEspasios.trim().length > 0) {
+        SpacesState.value = false
+        return 'Este campo no puede contener espacios'
+      }
+
+      SpacesState.value = true
+      return true
+    }
+
+    const validateMeter = () => {
+      if (!drawerServiceFields.value.metrosCorrespondientes) {
+        MeterState.value = false
         return 'Este campo es requerido'
       }
 
       if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
-          cementeryServiceFields.value.comunidad
-        )
+        !/^\d*\.\d+$/i.test(drawerServiceFields.value.metrosCorrespondientes)
       ) {
-        MunicipalityState.value = false
-        return 'Este campo solo puede contener letras'
-      }
-
-      if (!cementeryServiceFields.value.comunidad.trim().length > 0) {
-        MunicipalityState.value = false
-        return 'Este campo no puede contener espacios'
-      }
-
-      MunicipalityState.value = true
-      return true
-    }
-
-    const validateLocation = () => {
-      if (!cementeryServiceFields.value.localidad) {
-        LocationState.value = false
-        return 'Este campo es requerido'
-      }
-
-      if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
-          cementeryServiceFields.value.localidad
-        )
-      ) {
-        LocationState.value = false
-        return 'Este campo solo puede contener letras'
-      }
-
-      if (!cementeryServiceFields.value.localidad.trim().length > 0) {
-        LocationState.value = false
-        return 'Este campo no puede contener espacios'
-      }
-
-      LocationState.value = true
-      return true
-    }
-
-    const validateStreet = () => {
-      if (!cementeryServiceFields.value.calle) {
-        StreetState.value = false
-        return 'Este campo es requerido'
-      }
-
-      if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
-          cementeryServiceFields.value.calle
-        )
-      ) {
-        StreetState.value = false
-        return 'Este campo solo puede contener letras'
-      }
-
-      if (!cementeryServiceFields.value.calle.trim().length > 0) {
-        StreetState.value = false
-        return 'Este campo no puede contener espacios'
-      }
-
-      StreetState.value = true
-      return true
-    }
-
-    const validateNumberOutside = () => {
-      if (!cementeryServiceFields.value.numeroExterior) {
-        NumberOutsideState.value = false
-        return 'Este campo es requerido'
-      }
-
-      if (
-        !/^[0-9]+$/i.test(cementeryServiceFields.value.numeroExterior)
-      ) {
-        NumberOutsideState.value = false
+        MeterState.value = false
         return 'Este campo solo puede contener numeros'
       }
 
       if (
-        !cementeryServiceFields.value.numeroExterior.trim().length > 0
+        !drawerServiceFields.value.metrosCorrespondientes.trim().length > 0
       ) {
-        NumberOutsideState.value = false
+        MeterState.value = false
         return 'Este campo no puede contener espacios'
       }
 
-      NumberOutsideState.value = true
+      MeterState.value = true
+      return true
+    }
+
+    const validateAvailable = () => {
+      if (!drawerServiceFields.value.espaciosDisponibles) {
+        AvailableState.value = false
+        return 'Este campo es requerido'
+      }
+
+      if (!/^[0-9]+$/i.test(drawerServiceFields.value.espaciosDisponibles)) {
+        AvailableState.value = false
+        return 'Este campo solo puede contener numeros'
+      }
+
+      if (!drawerServiceFields.value.espaciosDisponibles.trim().length > 0) {
+        AvailableState.value = false
+        return 'Este campo no puede contener espacios'
+      }
+
+      AvailableState.value = true
       return true
     }
 
     const refreshTable = () => {
       isloading.value = true
-      getCementery(data => {
-        cementeryService.value = data
+      getDrawer(data => {
+        drawerService.value = data
 
-        if (cementeryService.value.length > 0) {
+        if (drawerService.value.length > 0) {
           isloading.value = false
         } else {
-          if (cementeryService.value.length <= 0) {
+          if (drawerService.value.length <= 0) {
             isloading.value = false
           }
         }
@@ -487,22 +459,20 @@ export default {
       return 'datos recargados'
     }
 
-    const addCementeryService = () => {
-      cementeryServiceFields.value.latitud = markers.value.position.lat
-      cementeryServiceFields.value.longitud = markers.value.position.lng
-      createCementery(cementeryServiceFields.value, data => {
+    const addDrawerService = () => {
+      createDrawer(drawerServiceFields.value, data => {
         refreshTable()
         swal.fire({
-          title: '¡Direccion cementerios agregado correctamente!',
-          text: 'Direccion cementerios registrado satisfactoriamente',
+          title: '¡Cementerios agregado correctamente!',
+          text: 'Cementerios registrado satisfactoriamente',
           icon: 'success'
         })
       })
       showModal.value = false
-      resetCementeryServiceFields()
+      resetDrawerServiceFields()
     }
 
-    const RemoveCementeryService = CementeryId => {
+    const RemoveDrawerService = drawerId => {
       isloading.value = true
       swal
         .fire({
@@ -512,17 +482,17 @@ export default {
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
           cancelButtonColor: '#d33',
-          confirmButtonText: 'Si, Archivar Direccion Cementerios!',
+          confirmButtonText: 'Si, Archivar Cementerios!',
           cancelButtonText: 'Cancelar'
         })
         .then(result => {
           if (result.isConfirmed) {
-            deleteCementery(CementeryId, data => {
+            deleteDrawer(drawerId, data => {
               refreshTable()
             })
             swal.fire({
-              title: '¡Direccion cementerios archivado!',
-              text: 'El direccion de cementerios ha sido archivado satisfactoriamente.',
+              title: '¡Cementerio archivado!',
+              text: 'El cementerio ha sido archivado satisfactoriamente.',
               icon: 'success'
             })
           } else {
@@ -532,38 +502,40 @@ export default {
     }
 
     return {
-      showModal,
+      drawerService,
+      drawerServiceFields,
       cementeryService,
-      cementeryServiceFields,
       breadcrumbItems,
       perPage,
       currentPage,
       filter,
+      showModal,
       perPageSelect,
       isloading,
       searchValue,
       searchField,
+      DrawerServiceFieldsBlank,
       fields,
-      NameCementeryState,
-      MunicipalityState,
-      LocationState,
-      StreetState,
-      NumberOutsideState,
-      markers,
+      PropietaryState,
+      SpacesState,
+      MeterState,
+      AvailableState,
       center,
+      updateCoordinates,
 
-      resetCementeryServiceFields,
       onFiltered,
+      validatePropietary,
+      validateSpaces,
+      validateMeter,
+      validateAvailable,
+      validateStatus,
+      addDrawerService,
+      RemoveDrawerService,
       refreshTable,
-      addCementeryService,
-      RemoveCementeryService,
-      validateNameCementery,
-      validateMunicipality,
-      validateLocation,
-      validateStreet,
-      validateNumberOutside,
-      updateCoordinates
+      resetDrawerServiceFields
     }
   }
 }
 </script>
+
+<style></style>

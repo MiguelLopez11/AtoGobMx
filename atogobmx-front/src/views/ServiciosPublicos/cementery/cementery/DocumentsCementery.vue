@@ -65,7 +65,7 @@
     </template>
     <template #item-actions="items">
       <b-button
-        @click="RemoveDocumentAddressCementery(items.DireccionId)"
+        @click="RemoveDocumentAddressCementery(items.CementerioId)"
         class="m-1"
         variant="outline-danger"
       >
@@ -74,7 +74,7 @@
       <b-button
       class="m-1"
       variant="outline-warning"
-      :href="`http://localhost:5000/api/Archivos/Documents/Dowload2/${direccionId}/${items.archivosCementerioId}`"
+      :href="`http://localhost:5000/api/Archivos/Documents/Dowload2/${cementerioId}/${items.archivosCementerioId}`"
       >
         <!-- :href="`https://localhost:5000/api/Archivos/Documentos/Descargar/${expedienteDigitalId}/${items.archivoId}`" -->
         <i class="bi bi-download"></i>
@@ -116,14 +116,10 @@ import { axiosPrivate } from '@/common/axiosPrivate.js'
 import FileServices from '@/Services/file.Services'
 export default {
   props: {
-    DireccionId: {
+    CementerioId: {
       type: Number,
       required: true
     }
-    // Employee: {
-    //   type: Object,
-    //   required: true
-    // }
   },
   components: {
     EasyDataTable: window['vue3-easy-data-table']
@@ -148,7 +144,7 @@ export default {
     const isloading = ref(true)
     const searchValue = ref('')
     const searchField = ref('nombre')
-    const direccionId = ref(props.DireccionId)
+    const cementerioId = ref(props.CementerioId)
     const formData = new FormData()
     const fields = ref([
       { value: 'archivosCementerioId', text: 'ID', sortable: true },
@@ -157,7 +153,7 @@ export default {
       { value: 'actions', text: 'Acciones' }
     ])
 
-    getDocumentsCementerios(props.DireccionId, data => {
+    getDocumentsCementerios(props.CementerioId, data => {
       documents.value = data
       if (documents.value.length > 0) {
         isloading.value = false
@@ -170,7 +166,7 @@ export default {
 
     const refreshTable = () => {
       isloading.value = true
-      getDocumentsCementerios(props.DireccionId, data => {
+      getDocumentsCementerios(props.CementerioId, data => {
         documents.value = data
         if (documents.value.length > 0) {
           isloading.value = false
@@ -213,7 +209,7 @@ export default {
         })
         return ''
       }
-      createDocumentsCementerios(props.DireccionId, formData, data => {
+      createDocumentsCementerios(props.CementerioId, formData, data => {
         showModal.value = false
         swal
           .fire({
@@ -271,7 +267,7 @@ export default {
               .then(result => {
                 if (result.isConfirmed) {
                   deleteDocumentsCementerios(
-                    props.direccionId,
+                    props.cementerioId,
                     archivosCementerioId,
                     data => {
                       showModal.value = false
@@ -295,7 +291,7 @@ export default {
       searchValue,
       searchField,
       documents,
-      direccionId,
+      cementerioId,
       showModal,
       disableButton,
       disableButtonDownload,

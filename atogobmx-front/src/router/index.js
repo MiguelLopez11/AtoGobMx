@@ -255,6 +255,26 @@ const routes = [
     }
   },
   {
+    path: '/ServiciosPublicos/Gabetas/list',
+    name: 'Gabetas',
+    component: () => import('@/views/ServiciosPublicos/cementery/Drawer/DrawerList.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado'
+      // departamento: 'Servicios Publicos'
+    }
+  },
+  {
+    path: '/ServiciosPublicos/Gabetas/:GabetaId',
+    name: 'Gabetas-Edit',
+    component: () => import('@/views/ServiciosPublicos/cementery/Drawer/EditDrawer.vue'),
+    meta: {
+      requiresAuth: true,
+      rol: 'Empleado'
+      // departamento: 'Servicios Publicos'
+    }
+  },
+  {
     path: '/ServiciosPublicos/Cementerios/list',
     name: 'Cementerios',
     component: () => import('@/views/ServiciosPublicos/cementery/Cementery/CementeryList.vue'),
@@ -265,29 +285,9 @@ const routes = [
     }
   },
   {
-    path: '/ServiciosPublicos/Cementerios/:CementeriosId',
+    path: '/ServiciosPublicos/Cementerios/:CementerioId',
     name: 'Cementerios-Edit',
     component: () => import('@/views/ServiciosPublicos/cementery/Cementery/EditCementery.vue'),
-    meta: {
-      requiresAuth: true,
-      rol: 'Empleado'
-      // departamento: 'Servicios Publicos'
-    }
-  },
-  {
-    path: '/ServiciosPublicos/DireccionCementerios/list',
-    name: 'DireccionCementerios',
-    component: () => import('@/views/ServiciosPublicos/cementery/addresscementery/AddressCementeryList.vue'),
-    meta: {
-      requiresAuth: true,
-      rol: 'Empleado'
-      // departamento: 'Servicios Publicos'
-    }
-  },
-  {
-    path: '/ServiciosPublicos/DireccionCementerios/:DireccionId',
-    name: 'DireccionCementerios-Edit',
-    component: () => import('@/views/ServiciosPublicos/cementery/addresscementery/EditAddressCementery.vue'),
     meta: {
       requiresAuth: true,
       rol: 'Empleado'
