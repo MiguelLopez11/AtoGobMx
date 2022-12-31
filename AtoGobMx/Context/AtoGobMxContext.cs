@@ -26,8 +26,8 @@ namespace AtoGobMx.Context
         public DbSet<Ruta> Ruta { get; set; }
         public DbSet<Coordenadas_Rutas> Coordenadas_Ruta { get; set; }
         public DbSet<Zona> Zona { get; set; }
-        public DbSet<Cementerios> Cementerios { get; set; }
-        public DbSet<DireccionCementerio> DireccionCementerio { get; set; }
+        public DbSet<Gabetas> Gabetas { get; set; }
+        public DbSet<Cementerio> Cementerio { get; set; }
         public DbSet<ExpedienteDigital> ExpedienteDigital { get; set; }
         public DbSet<OP_Empleados> OP_Empleados { get; set; }
         public DbSet<OP_Obras> ObrasPublicas { get; set; }
