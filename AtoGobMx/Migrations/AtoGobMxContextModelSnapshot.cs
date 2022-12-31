@@ -1728,7 +1728,6 @@ namespace AtoGobMx.Migrations
                         .HasForeignKey("EquipoComputoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                        .OnDelete(DeleteBehavior.Cascade)
                     b.Navigation("DireccionCementerio");
 
                     b.Navigation("EquipoComputo");

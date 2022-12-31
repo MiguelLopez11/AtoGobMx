@@ -10,9 +10,9 @@ namespace AtoGobMx.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ObraId { get; set; }
         public string Nombre { get; set; }
-        public string Encargado { get; set; }
-        public string OperadorObra { get; set; }
-        public string OperadorVehiculo { get; set; }
+        public string? Encargado { get; set; }
+        public string? OperadorObra { get; set; }
+        public string? OperadorVehiculo { get; set; }
         public float? Latitud { get; set; }
         public float? Longitud { get; set; }
         public string Descripcion { get; set; }
@@ -26,6 +26,8 @@ namespace AtoGobMx.Models
         public virtual IEnumerable<OP_Empleados>? OP_Empleados { get; set; }
         [JsonIgnore]
         public virtual IEnumerable<ArchivosObras>? ArchivosObras { get; set; }
+        [JsonIgnore]
+        public virtual IEnumerable<OP_Vehiculos>? OP_Vehiculos { get; set; }
 
     }
 }

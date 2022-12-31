@@ -48,6 +48,27 @@
                     </b-form-checkbox>
                   </b-form-group>
                 </b-col>
+                <!--Agregar encargado de obra-->
+                <b-col v-if="isAgency == false">
+                  <b-form-group class="mt-3" label="Encargado obra">
+                    <b-form-input v-model="publicWorks.encargado">
+                    </b-form-input>
+                  </b-form-group>
+                </b-col>
+                <!--Agregar operador de obra-->
+                <b-col v-if="isAgency == false">
+                  <b-form-group class="mt-3" label="Operador de la obra">
+                    <b-form-input v-model="publicWorks.operadorObra">
+                    </b-form-input>
+                  </b-form-group>
+                </b-col>
+                <!--Agregar operador de vehiculo-->
+                <b-col v-if="isAgency == false">
+                  <b-form-group class="mt-3" label="Operador del vehiculo">
+                    <b-form-input v-model="publicWorks.operadorVehiculo">
+                    </b-form-input>
+                  </b-form-group>
+                </b-col>
                 <!--Descripcion-->
                 <b-col>
                   <b-form-group class="mt-3" label="Descripcion">
@@ -148,6 +169,7 @@ export default {
     // const LengthState = ref(false)
     const DescriptionState = ref(false)
     const WorkStatusState = ref(false)
+    const isAgency = ref(false)
     const obraId = ref(parseInt(router.params.ObraId))
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
@@ -279,6 +301,7 @@ export default {
       publicWorks,
       breadcrumbItems,
       worksStatus,
+      isAgency,
       NameWorksState,
       obraId,
       // LatitudeState,

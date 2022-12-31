@@ -23,6 +23,8 @@ namespace AtoGobMx.Context
         public DbSet<EmpleadosAlumbrado> EmpleadosAlumbrado { get; set; }
         public DbSet<VehiculosAlumbrado> VehiculosAlumbrado { get; set; }
         public DbSet<Aseo> Aseo { get; set; }
+        public DbSet<AseoVehiculo> AseoVehiculo { get; set; }
+        public DbSet<AseoEmpleado> AseoEmpleado { get; set; }
         public DbSet<Ruta> Ruta { get; set; }
         public DbSet<Coordenadas_Rutas> Coordenadas_Ruta { get; set; }
         public DbSet<Zona> Zona { get; set; }
@@ -30,9 +32,11 @@ namespace AtoGobMx.Context
         public DbSet<Cementerio> Cementerio { get; set; }
         public DbSet<ExpedienteDigital> ExpedienteDigital { get; set; }
         public DbSet<OP_Empleados> OP_Empleados { get; set; }
+        public DbSet<OP_Vehiculos> OP_Vehiculos { get; set; }
         public DbSet<OP_Obras> ObrasPublicas { get; set; }
         public DbSet<OP_EstatusObras> OP_EstatusObras { get; set; }
         public DbSet<PROV_ControlVales> ControlDeVales { get; set; }
+        public DbSet<PROV_Vehiculo> PROV_Vehiculo { get; set; }
         public DbSet<PROV_EstatusVale> PROV_EstatusVale { get; set; }
         public DbSet<PROV_TipoVales> TipoVales { get; set; }
         public DbSet<PROV_DetalleVale> PROV_DetalleVale { get; set; }

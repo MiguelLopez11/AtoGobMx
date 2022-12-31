@@ -36,6 +36,12 @@ namespace AtoGobMx.Models
 
         [JsonIgnore]
         public virtual IEnumerable<VehiculosAlumbrado>? VehiculosAlumbrado { get; set; }
+        [JsonIgnore]
+        public virtual IEnumerable<OP_Vehiculos>? OP_Vehiculos { get; set; }
+        [JsonIgnore]
+        public virtual IEnumerable<PROV_Vehiculo>? PROV_Vehiculo { get; set; }
+        [JsonIgnore]
+        public virtual IEnumerable<AseoVehiculo>? AseoVehiculo { get; set; }
 
     }
 }

@@ -33,5 +33,7 @@ namespace AtoGobMx.Models
 
         [JsonIgnore]
         public virtual IEnumerable<PROV_DetalleVale>? PROV_DetalleVales { get; set; }
+        [JsonIgnore]
+        public virtual IEnumerable<PROV_Vehiculo>? PROV_Vehiculo { get; set; }
     }
 }

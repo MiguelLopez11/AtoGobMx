@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace AtoGobMx.Models
 {
@@ -12,5 +13,10 @@ namespace AtoGobMx.Models
         public string? Horario { get; set; } 
         public string? Observacion { get; set; }
         public bool Archivado { get; set; }
+
+        [JsonIgnore]
+        public virtual IEnumerable<AseoVehiculo>? AseoVehiculo { get; set; }
+        [JsonIgnore]
+        public virtual IEnumerable<AseoEmpleado>? AseoEmpleado { get; set; }
     }
 }
