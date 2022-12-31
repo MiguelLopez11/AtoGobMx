@@ -313,9 +313,11 @@ namespace AtoGobMx.Migrations
                     b.Property<int>("NumeroExterior")
                         .HasColumnType("int");
 
-                    b.HasKey("CementerioId");
+                    b.HasKey("CementeriosId");
 
-                    b.ToTable("Cementerio");
+                    b.HasIndex("DireccionId");
+
+                    b.ToTable("Cementerios");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Coordenadas_Rutas", b =>
@@ -1706,8 +1708,6 @@ namespace AtoGobMx.Migrations
 
             modelBuilder.Entity("AtoGobMx.Models.ArchivosCementerios", b =>
                 {
-                    b.HasOne("AtoGobMx.Models.Cementerio", "Cementerio")
-                        .WithMany("ArchivosCementerios")
                         .HasForeignKey("CementerioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1720,10 +1720,12 @@ namespace AtoGobMx.Migrations
                     b.HasOne("AtoGobMx.Models.PAT_EquipoComputo", "EquipoComputo")
                         .WithMany()
                         .HasForeignKey("EquipoComputoId")
+                        .WithMany("ArchivosCementerios")
+                        .HasForeignKey("DireccionId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("DireccionCementerio");
 
-                    b.Navigation("EquipoComputo");
+                    b.Navigation("DireccionCementerio");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.ArchivosObras", b =>
@@ -1735,15 +1737,6 @@ namespace AtoGobMx.Migrations
                         .IsRequired();
 
                     b.Navigation("OP_Obras");
-                });
-
-            modelBuilder.Entity("AtoGobMx.Models.Cementerios", b =>
-                {
-                    b.HasOne("AtoGobMx.Models.DireccionCementerio", "DireccionCementerio")
-                        .WithMany("Cementerios")
-                        .HasForeignKey("DireccionId");
-
-                    b.Navigation("DireccionCementerio");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Coordenadas_Rutas", b =>
