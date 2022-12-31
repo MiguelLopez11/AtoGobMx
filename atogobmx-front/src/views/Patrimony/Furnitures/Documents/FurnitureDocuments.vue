@@ -63,7 +63,7 @@
       </template>
       <template #item-actions="items">
         <b-button
-          @click="RemoveDocument(items.archivoVehiculoId)"
+          @click="RemoveDocument(items.archivoMobiliarioId)"
           class="m-1"
           variant="outline-danger"
         >
@@ -74,7 +74,6 @@
           variant="outline-warning"
           @click="onDownloadFile(items)"
         >
-          <!-- :href="`http://localhost:5000/api/Archivos/DocumentosEquipoComputo/Descargar/${equipoComputoId}/${}`" -->
           <i class="bi bi-download"></i>
         </b-button>
       </template>
@@ -116,12 +115,8 @@ import FileServices from '@/Services/file.Services'
 import { axiosPrivate } from '@/common/axiosPrivate.js'
 export default {
   props: {
-    VehiculoId: {
+    MobiliarioId: {
       type: Number,
-      required: true
-    },
-    Vehiculo: {
-      type: Object,
       required: true
     }
   },
@@ -130,9 +125,9 @@ export default {
   },
   setup (props) {
     const {
-      getDocumentsVehicle,
-      deleteDocumentVehicle,
-      createDocumentsVehicle
+      getDocumentsFurniture,
+      deleteDocumentFurniture,
+      createDocumentsFurniture
     } = FileServices()
     const showModal = ref(false)
     const refFile = ref()
@@ -148,14 +143,13 @@ export default {
     const isloading = ref(true)
     const searchValue = ref('')
     const searchField = ref('nombre')
-    const equipoComputoId = ref(props.VehiculoId)
     const formData = new FormData()
     const fields = ref([
       { value: 'nombre', text: 'Nombre Documento', sortable: true },
       { value: 'tipoArchivo', text: 'Tipo Documento', sortable: true },
       { value: 'actions', text: 'Acciones' }
     ])
-    getDocumentsVehicle(props.VehiculoId, data => {
+    getDocumentsFurniture(props.MobiliarioId, data => {
       documents.value = data
       if (documents.value.length > 0) {
         isloading.value = false
@@ -167,7 +161,7 @@ export default {
     })
     const refreshTable = () => {
       isloading.value = true
-      getDocumentsVehicle(props.VehiculoId, data => {
+      getDocumentsFurniture(props.MobiliarioId, data => {
         documents.value = data
         if (documents.value.length > 0) {
           isloading.value = false
@@ -222,7 +216,7 @@ export default {
         })
         return ''
       }
-      createDocumentsVehicle(props.VehiculoId, formData, data => {
+      createDocumentsFurniture(props.MobiliarioId, formData, data => {
         showModal.value = false
         swal
           .fire({
@@ -236,15 +230,15 @@ export default {
             }
           })
       })
-      refFile.value = null
       disableButton.value = true
+      refFile.value = null
       // refFile.value.files = []
     }
     const onDownloadFiles = () => {
       isloading.value = true
       disableButtonDownload.value = true
       axiosPrivate({
-        url: `/Archivos/DocumentosVehiculo/${props.VehiculoId}/Zip`,
+        url: `/Archivos/DocumentosMobiliario/${props.MobiliarioId}/Zip`,
         method: 'GET',
         responseType: 'blob' // important
       })
@@ -254,7 +248,7 @@ export default {
           link.href = url
           link.setAttribute(
             'download',
-            'Vehiculo_Documentos.zip'
+            'Equipo_Documentos.zip'
           )
           document.body.appendChild(link)
           link.click()
@@ -264,11 +258,11 @@ export default {
           disableButtonDownload.value = false
         })
     }
-    const onDownloadFile = (Vehiculo) => {
+    const onDownloadFile = (archivoMobiliario) => {
       isloading.value = true
       disableButtonDownload.value = true
       axiosPrivate({
-        url: `/Archivos/DocumentosVehiculo/Descargar/${props.VehiculoId}/${Vehiculo.archivoVehiculoId}`,
+        url: `/Archivos/DocumentosMobiliario/Descargar/${props.MobiliarioId}/${archivoMobiliario.archivoMobiliarioId}`,
         method: 'GET',
         responseType: 'blob' // important
       })
@@ -278,7 +272,7 @@ export default {
           link.href = url
           link.setAttribute(
             'download',
-            `${Vehiculo.nombre}${Vehiculo.tipoArchivo}`
+            `${archivoMobiliario.nombre}${archivoMobiliario.tipoArchivo}`
           )
           document.body.appendChild(link)
           link.click()
@@ -302,21 +296,20 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            deleteDocumentVehicle(props.VehiculoId, archivoId, data => {
-              swal
-                .fire({
-                  title: 'Documento Eliminado!',
-                  text: 'Tu documento ha sido eliminado.',
-                  icon: 'success'
-                })
-                .then(result => {
-                  if (result.isConfirmed) {
-                    showModal.value = false
-                    refreshTable()
-                    refFile.value = null
-                  }
-                })
-            })
+            deleteDocumentFurniture(props.MobiliarioId, archivoId, data => {})
+            swal
+              .fire({
+                title: 'Documento Eliminado!',
+                text: 'Tu documento ha sido eliminado.',
+                icon: 'success'
+              })
+              .then(result => {
+                if (result.isConfirmed) {
+                  showModal.value = false
+                  refreshTable()
+                  refFile.value = null
+                }
+              })
           }
         })
     }
@@ -332,7 +325,6 @@ export default {
       searchValue,
       searchField,
       documents,
-      equipoComputoId,
       showModal,
       disableButton,
       disableButtonDownload,

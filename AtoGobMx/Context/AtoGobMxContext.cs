@@ -41,6 +41,7 @@ namespace AtoGobMx.Context
         public DbSet<Archivos> Archivos { get; set; }
         public DbSet<ArchivosEquipoComputo> ArchivosEquipoComputos { get; set; }
         public DbSet<ArchivosVehiculos> archivosVehiculos { get; set; }
+        public DbSet<ArchivosMobiliario> ArchivosMobiliarios { get; set; }
         public DbSet<Departamentos> Departamentos { get; set; }
         public DbSet<PuestoTrabajo> PuestoTrabajo { get; set; }
         public DbSet<PAT_EquipoComputo> EquipoComputo { get; set; }
