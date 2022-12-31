@@ -173,6 +173,10 @@ namespace AtoGobMx.Controllers
             }
 
             zipFileMemoryStream.Seek(0, SeekOrigin.Begin);
+            if (!Directory.Exists("Files/Documentos/"))
+            {
+                Directory.CreateDirectory("Files/Documentos/");
+            }
             var dir = new DirectoryInfo("Files/Documentos");
             dir.Attributes = dir.Attributes & ~FileAttributes.ReadOnly;
             dir.Delete(true);
@@ -271,6 +275,10 @@ namespace AtoGobMx.Controllers
             }
 
             zipFileMemoryStream.Seek(0, SeekOrigin.Begin);
+            if (!Directory.Exists("Files/Documentos/"))
+            {
+                Directory.CreateDirectory("Files/Documentos/");
+            }
             var dir = new DirectoryInfo("Files/Documentos/");
             dir.Attributes = dir.Attributes & ~FileAttributes.ReadOnly;
             dir.Delete(true);
@@ -478,6 +486,10 @@ namespace AtoGobMx.Controllers
             }
 
             zipFileMemoryStream.Seek(0, SeekOrigin.Begin);
+            if (!Directory.Exists("Files/Documentos/"))
+            {
+                Directory.CreateDirectory("Files/Documentos/");
+            }
             var dir = new DirectoryInfo("Files/Documentos/");
             dir.Attributes = dir.Attributes & ~FileAttributes.ReadOnly;
             dir.Delete(true);

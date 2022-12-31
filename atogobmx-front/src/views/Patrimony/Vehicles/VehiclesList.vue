@@ -87,6 +87,61 @@
       <Form @submit="addVehicle">
         <b-row cols="3">
           <b-col>
+            <b-form-group class="mt-3" label="Nomenclatura">
+              <Field name="NomenclatureField" :rules="validateNomenclature" as="text">
+                <b-form-input
+                  placeholder="Ingresa la marca y/o modelo del equipo"
+                  v-model="vehiclesFields.nomenclatura"
+                  :state="NomenclatureState"
+                >
+                </b-form-input>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="NomenclatureField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Proveedor">
+              <Field
+                name="VendorField"
+                :rules="validateVendor"
+                as="number"
+              >
+                <b-form-select
+                  v-model="vehiclesFields.proveedorId"
+                  autofocus
+                  :state="vendorState"
+                  value-field="proveedorId"
+                  text-field="nombre"
+                  :options="providers"
+                >
+                </b-form-select>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="VendorField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="No. Factura">
+              <Field name="InvoiceNumberField" :rules="validateInvoiceNumber" as="text">
+                <b-form-input
+                  placeholder="Ingresa el numero de factura"
+                  v-model="vehiclesFields.numeroFactura"
+                  :state="invoiceNumberState"
+                >
+                </b-form-input>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="InvoiceNumberField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <b-col>
             <b-form-group class="mt-3" label="Marca">
               <Field name="BrandField" :rules="validateBrand" as="text">
                 <b-form-input
@@ -236,6 +291,40 @@
             </b-form-group>
           </b-col>
           <b-col>
+            <b-form-group class="mt-3" label="Cilindros">
+              <Field name="CylinderField" :rules="validateCylinder" as="number">
+                <b-form-input
+                  placeholder="Ingresa la cantidad de cilindros que cuenta el vehiculo"
+                  v-model="vehiclesFields.cilindros"
+                  type="number"
+                  :state="cylinderState"
+                >
+                </b-form-input>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="CylinderField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Version">
+                <b-form-input
+                  placeholder="Ingresa la cantidad de puertas que cuenta el vehiculo"
+                  v-model="vehiclesFields.version"
+                >
+                </b-form-input>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Observaciones">
+                <b-form-input
+                  v-model="vehiclesFields.observaciones"
+                >
+                </b-form-input>
+            </b-form-group>
+          </b-col>
+          <b-col>
             <b-form-group class="mt-3" label="Estado">
               <Field name="StateField" :rules="validateState" as="number">
                 <b-form-select
@@ -274,6 +363,7 @@
 
 <script>
 import VehiclesServices from '@/Services/vehicles.Services'
+import ProviderServices from '@/Services/provider.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
 // import { useToast } from 'vue-toast-notification'
@@ -289,8 +379,10 @@ export default {
     const swal = inject('$swal')
     const { getVehicles, createVehicle, deleteVehicle, getEstatusVehicles } =
       VehiclesServices()
+    const { getProvider } = ProviderServices()
     // const $toast = useToast()
     const vehicles = ref([])
+    const providers = ref([])
     const statusVehicles = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
@@ -303,6 +395,9 @@ export default {
     const isloading = ref(true)
     const searchValue = ref('')
     const searchField = ref('marca')
+    const NomenclatureState = ref(false)
+    const vendorState = ref(false)
+    const invoiceNumberState = ref(false)
     const brandState = ref(false)
     const modelState = ref(false)
     const colorState = ref(false)
@@ -310,9 +405,9 @@ export default {
     const serialNumberState = ref(false)
     const releaseYearState = ref(false)
     const vehicleState = ref(false)
-    // const stateComputerState = ref(false)
     const doorsState = ref(false)
     const transmissionState = ref(false)
+    const cylinderState = ref(false)
     const showModal = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
@@ -324,27 +419,29 @@ export default {
     ])
     const vehiclesFields = ref({
       vehiculoId: 0,
+      nomenclatura: null,
+      proveedorId: 0,
+      numeroFactura: null,
       marca: null,
       modelo: null,
       color: null,
       placa: null,
       numeroSerie: null,
-      añoLanzamiento: null,
-      puertas: null,
+      añoLanzamiento: 0,
+      puertas: 0,
       transmisión: null,
-      estatusVehiculoId: null,
+      version: null,
+      cilindros: 0,
+      observaciones: null,
+      estatusVehiculoId: 0,
       archivado: false
     })
     const vehiclesFieldsBlank = ref(JSON.parse(JSON.stringify(vehiclesFields)))
     const fields = ref([
       { value: 'marca', text: 'Marca' },
       { value: 'modelo', text: 'Submarca' },
-      { value: 'color', text: 'Color' },
       { value: 'placa', text: 'Placa' },
       { value: 'numeroSerie', text: 'No. Serie' },
-      { value: 'añoLanzamiento', text: 'Modelo' },
-      { value: 'puertas', text: 'Cantidad de puertas' },
-      { value: 'transmisión', text: 'Tipo de transmision' },
       { value: 'actions', text: 'Acciones' }
     ])
     getVehicles(data => {
@@ -360,10 +457,53 @@ export default {
     getEstatusVehicles(data => {
       statusVehicles.value = data
     })
+    getProvider(data => {
+      providers.value = data
+    })
     const onFiltered = filteredItems => {
       currentPage.value = 1
     }
     // VALIDATIONS
+    const validateNomenclature = () => {
+      if (!vehiclesFields.value.nomenclatura) {
+        NomenclatureState.value = false
+        return 'Este campo es requerido'
+      }
+      if (
+        !/^[a-zA]+[A-Z0-9.-]+$/i.test(
+          vehiclesFields.value.nomenclatura
+        )
+      ) {
+        NomenclatureState.value = false
+        return 'Este campo solo acepta mayusculas y numeros'
+      }
+      NomenclatureState.value = true
+      return true
+    }
+    const validateVendor = () => {
+      if (!vehiclesFields.value.proveedorId) {
+        vendorState.value = false
+        return 'Este campo es requerido'
+      }
+      vendorState.value = true
+      return true
+    }
+    const validateInvoiceNumber = () => {
+      if (!vehiclesFields.value.numeroFactura) {
+        invoiceNumberState.value = false
+        return 'Este campo es requerido'
+      }
+      if (
+        !/^[a-zA]+[A-Z0-9.-]+$/i.test(
+          vehiclesFields.value.numeroFactura
+        )
+      ) {
+        invoiceNumberState.value = false
+        return 'Este campo solo acepta mayusculas y numeros'
+      }
+      invoiceNumberState.value = true
+      return true
+    }
     const validateBrand = () => {
       if (!vehiclesFields.value.marca) {
         brandState.value = false
@@ -393,10 +533,7 @@ export default {
         licensePlateState.value = false
         return 'Este campo es requerido'
       }
-      if (
-        !/^(?=.*\d)(?=.*[a-zA-Z])([A-ZñÑáéíóúÁÉÍÓÚ])[A-Z0-9]{5,6}$/.test(
-          vehiclesFields.value.placa
-        )
+      if (!/^(?=.*\d)(?=.*[a-zA-Z])([A-ZñÑáéíóúÁÉÍÓÚ])[A-Z0-9]{5,6}$/.test(vehiclesFields.value.placa)
       ) {
         licensePlateState.value = false
         return 'Este campo solo acepta mayusculas y numeros y no acepta mas de 6 caracteres'
@@ -410,7 +547,7 @@ export default {
         return 'Este campo es requerido'
       }
       if (
-        !/^(?=.*\d)(?=.*[a-zA-Z])([A-ZñÑáéíóúÁÉÍÓÚ])[A-Z0-9]{17,17}$/.test(
+        !/^(?=.*\d)(?=.*[a-zA-Z])([A-ZñÑáéíóúÁÉÍÓÚ])[A-Z0-9]{17,25}$/.test(
           vehiclesFields.value.numeroSerie
         )
       ) {
@@ -452,6 +589,15 @@ export default {
       transmissionState.value = true
       return true
     }
+    const validateCylinder = () => {
+      if (!vehiclesFields.value.cilindros) {
+        cylinderState.value = false
+        return 'Este campo es requerido'
+      }
+      cylinderState.value = true
+      return true
+    }
+
     const validateState = () => {
       if (!vehiclesFields.value.estatusVehiculoId) {
         vehicleState.value = false
@@ -475,15 +621,15 @@ export default {
       return 'datos recargados'
     }
     const addVehicle = () => {
-      createVehicle(vehiclesFields.value, data => {
-        refreshTable()
-        swal.fire({
-          title: 'Vehiculo registrado correctamente!',
-          text: 'El vehiculo de computo se ha registrado al sistema satisfactoriamente.',
-          icon: 'success'
-        })
+      isloading.value = true
+      createVehicle(vehiclesFields.value, data => {})
+      swal.fire({
+        title: 'Vehiculo registrado correctamente!',
+        text: 'El vehiculo de computo se ha registrado al sistema satisfactoriamente.',
+        icon: 'success'
       })
       resetVehicleFields()
+      refreshTable()
     }
     const resetVehicleFields = () => {
       showModal.value = false
@@ -493,7 +639,6 @@ export default {
       licensePlateState.value = false
       serialNumberState.value = false
       releaseYearState.value = false
-      // stateComputerState.value = false
       doorsState.value = false
       transmissionState.value = false
       vehiclesFields.value = JSON.parse(JSON.stringify(vehiclesFieldsBlank))
@@ -533,6 +678,7 @@ export default {
     }
     return {
       vehicles,
+      providers,
       statusVehicles,
       breadcrumbItems,
       fields,
@@ -545,10 +691,9 @@ export default {
       isloading,
       searchValue,
       searchField,
-      onFiltered,
-      addVehicle,
-      refreshTable,
-      RemoveVehicle,
+      NomenclatureState,
+      vendorState,
+      invoiceNumberState,
       brandState,
       modelState,
       colorState,
@@ -557,10 +702,18 @@ export default {
       releaseYearState,
       doorsState,
       transmissionState,
+      cylinderState,
       vehicleState,
       typeTransmissions,
       showModal,
 
+      onFiltered,
+      addVehicle,
+      refreshTable,
+      RemoveVehicle,
+      validateNomenclature,
+      validateVendor,
+      validateInvoiceNumber,
       validateBrand,
       validateModel,
       validateColor,
@@ -570,7 +723,8 @@ export default {
       validateReleaseYear,
       validateDoors,
       validateTransmission,
-      validateState
+      validateState,
+      validateCylinder
     }
   }
 }

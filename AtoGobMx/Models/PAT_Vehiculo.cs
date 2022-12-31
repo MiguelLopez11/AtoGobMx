@@ -22,7 +22,7 @@ namespace AtoGobMx.Models
         public string? Transmisión { get; set; }
         public string? Version { get; set; }
         public int? Cilindros { get; set; }
-        public string Observaciones { get; set; }
+        public string? Observaciones { get; set; }
         public int? EstatusVehiculoId { get; set; }
 
         public bool Archivado { get; set; }
