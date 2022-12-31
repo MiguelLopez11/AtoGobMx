@@ -313,11 +313,9 @@ namespace AtoGobMx.Migrations
                     b.Property<int>("NumeroExterior")
                         .HasColumnType("int");
 
-                    b.HasKey("CementeriosId");
+                    b.HasKey("CementerioId");
 
-                    b.HasIndex("DireccionId");
-
-                    b.ToTable("Cementerios");
+                    b.ToTable("Cementerio");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Coordenadas_Rutas", b =>
@@ -822,12 +820,18 @@ namespace AtoGobMx.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int>("Costo")
+                        .HasColumnType("int");
+
                     b.Property<int>("DepartamentoId")
                         .HasColumnType("int");
 
                     b.Property<string>("Descripción")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<DateTime>("FechaAdquisición")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<int>("TipoMobiliarioId")
                         .HasColumnType("int");
@@ -1708,6 +1712,8 @@ namespace AtoGobMx.Migrations
 
             modelBuilder.Entity("AtoGobMx.Models.ArchivosCementerios", b =>
                 {
+                    b.HasOne("AtoGobMx.Models.Cementerio", "Cementerio")
+                        .WithMany("ArchivosCementerios")
                         .HasForeignKey("CementerioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1720,12 +1726,10 @@ namespace AtoGobMx.Migrations
                     b.HasOne("AtoGobMx.Models.PAT_EquipoComputo", "EquipoComputo")
                         .WithMany()
                         .HasForeignKey("EquipoComputoId")
-                        .WithMany("ArchivosCementerios")
-                        .HasForeignKey("DireccionId")
                         .OnDelete(DeleteBehavior.Cascade)
-                    b.Navigation("DireccionCementerio");
+                        .IsRequired();
 
-                    b.Navigation("DireccionCementerio");
+                    b.Navigation("EquipoComputo");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.ArchivosObras", b =>
@@ -1737,6 +1741,17 @@ namespace AtoGobMx.Migrations
                         .IsRequired();
 
                     b.Navigation("OP_Obras");
+                });
+
+            modelBuilder.Entity("AtoGobMx.Models.ArchivosVehiculos", b =>
+                {
+                    b.HasOne("AtoGobMx.Models.PAT_Vehiculo", "Vehiculo")
+                        .WithMany()
+                        .HasForeignKey("VehiculoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Vehiculo");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Coordenadas_Rutas", b =>

@@ -76,6 +76,11 @@
           >
         </b-dropdown>
       </template>
+      <template #item-status="items">
+        <b-badge :variant="items.archivado === false ? 'success' : 'danger'">
+          {{ items.archivado === false ? 'Activo' : 'Dado de baja' }}
+        </b-badge>
+      </template>
     </EasyDataTable>
     <b-modal
       id="modal-employee"
@@ -168,6 +173,46 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Fecha de adquisicion">
+              <Field
+                name="DateField"
+                :rules="validateDate"
+                as="number"
+              >
+                <Datepicker
+                  v-model="furnituresFields.fechaAdquisición"
+                  locale="es"
+                  autoApply
+                  :enableTimePicker="false"
+                  :state="dateState"
+                >
+                </Datepicker>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="DateField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group class="mt-3" label="Costo">
+              <Field
+                name="DescriptionField"
+                :rules="validateCost"
+                as="number"
+              >
+                <b-form-input
+                  v-model="furnituresFields.costo"
+                  :state="costState"
+                />
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="DescriptionField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
         </b-row>
         <b-row align-h="end">
           <b-button
@@ -189,6 +234,7 @@
 <script>
 import FurnitureServices from '@/Services/furniture.Services'
 import DepartamentServices from '@/Services/departament.Services'
+import Datepicker from '@vuepic/vue-datepicker'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -197,7 +243,8 @@ export default {
     EasyDataTable: window['vue3-easy-data-table'],
     Form,
     Field,
-    ErrorMessage
+    ErrorMessage,
+    Datepicker
   },
   setup () {
     const {
@@ -223,6 +270,8 @@ export default {
     const typeFurnitureState = ref(false)
     const descriptionState = ref(false)
     const folioState = ref(false)
+    const dateState = ref(false)
+    const costState = ref(false)
     const departamentState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
@@ -234,8 +283,10 @@ export default {
     ])
     const furnituresFields = ref({
       mobiliarioId: 0,
-      codigoInventario: null,
+      codigoInventario: '',
       descripción: '',
+      fechaAdquisición: null,
+      costo: null,
       tipoMobiliarioId: null,
       departamentoId: null,
       archivado: false
@@ -257,6 +308,9 @@ export default {
       { value: 'codigoInventario', text: 'Nomenclatura', sortable: true },
       { value: 'descripción', text: 'Nombre' },
       { value: 'departamentos.nombre', text: 'Departamento' },
+      { value: 'fechaAdquisición', text: 'Fecha de adquisición' },
+      { value: 'costo', text: 'Costo' },
+      { value: 'status', text: 'Estado' },
       { value: 'actions', text: 'Acciones' }
     ])
     const resetFurnitureFields = () => {
@@ -388,6 +442,22 @@ export default {
       descriptionState.value = true
       return true
     }
+    const validateDate = () => {
+      if (!furnituresFields.value.descripción) {
+        dateState.value = false
+        return 'Este campo es requerido'
+      }
+      dateState.value = true
+      return true
+    }
+    const validateCost = () => {
+      if (!furnituresFields.value.descripción) {
+        costState.value = false
+        return 'Este campo es requerido'
+      }
+      costState.value = true
+      return true
+    }
     return {
       furnitures,
       typeFurnitures,
@@ -408,6 +478,8 @@ export default {
       descriptionState,
       departamentState,
       folioState,
+      dateState,
+      costState,
       showModal,
 
       onFiltered,
@@ -418,6 +490,8 @@ export default {
       validateDescription,
       validateDepartament,
       validateFolio,
+      validateDate,
+      validateCost,
       resetFurnitureFields
     }
   }
