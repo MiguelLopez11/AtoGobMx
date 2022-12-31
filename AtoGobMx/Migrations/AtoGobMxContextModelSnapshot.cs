@@ -1720,9 +1720,7 @@ namespace AtoGobMx.Migrations
                     b.HasOne("AtoGobMx.Models.PAT_EquipoComputo", "EquipoComputo")
                         .WithMany()
                         .HasForeignKey("EquipoComputoId")
-                        .WithMany("ArchivosCementerios")
-                        .HasForeignKey("DireccionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Cascade);
                     b.Navigation("DireccionCementerio");
 
                     b.Navigation("DireccionCementerio");
