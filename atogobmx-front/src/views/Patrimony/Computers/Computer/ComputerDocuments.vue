@@ -193,6 +193,7 @@ export default {
               text: 'Posiblemente uno o más de los documentos seleccionados ya existen en el sistema.',
               icon: 'error'
             })
+            refFile.value = null
             disableButton.value = true
           }
         })
@@ -206,6 +207,7 @@ export default {
             text: 'Se ha seleccionado un documento que no es valido, revise e intentelo de nuevo.',
             icon: 'error'
           })
+          refFile.value = null
           disableButton.value = true
         }
       }
@@ -234,6 +236,7 @@ export default {
             }
           })
       })
+      refFile.value = null
       disableButton.value = true
       // refFile.value.files = []
     }

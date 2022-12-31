@@ -3,6 +3,7 @@ using AtoGobMx.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace AtoGobMx.Controllers
 {
@@ -47,6 +48,19 @@ namespace AtoGobMx.Controllers
         [HttpPost]
         public async Task<ActionResult<PAT_Mobiliario>> PostMobiliario(PAT_Mobiliario mobiliario)
         {
+            var Nomenclatura = mobiliario.CodigoInventario.ToString();
+            var host = "ftp://digital.atogobmx.com/Files/Patrimonio/Mobiliario/";
+            #region Create directory patrimonio
+            WebRequest request = WebRequest.Create(host + Nomenclatura);
+            request.Method = WebRequestMethods.Ftp.MakeDirectory;
+            request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+            using (var resp = (FtpWebResponse)request.GetResponse())
+            {
+                request.Abort();
+                resp.Close();
+            }
+            #endregion
+            CreateDocument(host + Nomenclatura);
             _context.Mobiliario.Add(mobiliario);
             await _context.SaveChangesAsync();
             return StatusCode(200, "Se ha credo exitosamente");
@@ -89,6 +103,28 @@ namespace AtoGobMx.Controllers
             _context.Mobiliario.Update(mobiliario);
             await _context.SaveChangesAsync();
             return Ok("Producto archivado");
+        }
+        private static bool CreateDocument(string url)
+        {
+            try
+            {
+                var pathDocument = "/Documentos";
+                WebRequest request = WebRequest.Create(url + pathDocument);
+                request.Method = WebRequestMethods.Ftp.MakeDirectory;
+                request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+                using (var resp = (FtpWebResponse)request.GetResponse())
+                {
+                    request.Abort();
+                    resp.Close();
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
         }
     }
 }
