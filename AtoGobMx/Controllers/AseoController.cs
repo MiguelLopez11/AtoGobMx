@@ -52,6 +52,8 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<Aseo>> PostAseo(Aseo aseo)
         {
             //object value = _context.Aseo.Add(aseo);
+            _context.Aseo.Add(aseo);
+            aseo.Fecha = DateTime.Now;
             var aseopublico = aseo.Nombre.ToString();
             var host = "ftp://digital.atogobmx.com/Files/ServiciosPublicos/AseoPublico/";
             WebRequest request = WebRequest.Create(host + aseopublico);

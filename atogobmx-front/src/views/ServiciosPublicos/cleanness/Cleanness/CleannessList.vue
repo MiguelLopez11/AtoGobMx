@@ -128,6 +128,21 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
+          <!--Agregar Fecha emicion-->
+          <b-col>
+            <b-form-group class="mt-3" label="Fecha">
+              <Field name="DateOfIssueField" :rules="validateDateOfIssue" as="">
+                <Datepicker
+                  locale="es"
+                  name="date"
+                  text-input
+                  v-model="cleannessServiceFields.fecha"
+                  :state="DateOfIssueState"
+                ></Datepicker>
+              </Field>
+              <ErrorMessage name="DateOfIssueField"></ErrorMessage>
+            </b-form-group>
+          </b-col>
           <!--Agregar Domicilio -->
           <b-col>
             <b-form-group class="mt-3" label="Domicilio">
@@ -160,6 +175,25 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
+          <!--Agregar Descripcion-->
+          <b-col>
+            <b-form-group class="mt-3" label="Descripcion">
+              <Field
+                name="DescriptionField"
+                :rules="validateDescription"
+                as="text"
+              >
+                <b-form-input
+                  v-model="cleannessServiceFields.descripcion"
+                  :state="DescriptionState"
+                ></b-form-input>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="DescriptionField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
         </b-row>
 
         <b-row align-h="end">
@@ -184,6 +218,7 @@
 import CleannessService from '@/Services/cleanness.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
+import Datepicker from '@vuepic/vue-datepicker'
 // import { useToast } from 'vue-toast-notification'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
@@ -191,7 +226,8 @@ export default {
     EasyDataTable: window['vue3-easy-data-table'],
     Form,
     Field,
-    ErrorMessage
+    ErrorMessage,
+    Datepicker
   },
   setup () {
     const swal = inject('$swal')
@@ -211,6 +247,8 @@ export default {
     const ProblemState = ref(false)
     const DomicileState = ref(false)
     const ObjectiveState = ref(false)
+    const DateOfIssueState = ref(false)
+    const DescriptionState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
       { text: 'Aseo publico', to: '/ServiciosPublicos/AseoPublico/list' },
@@ -221,8 +259,10 @@ export default {
       aseoId: 0,
       nombre: null,
       problema: null,
+      fecha: null,
       domicilio: null,
       objetivo: null,
+      descripcion: null,
       archivado: false
     })
 
@@ -231,10 +271,12 @@ export default {
     )
 
     const fields = ref([
-      { value: 'nombreServicio', text: 'Nombre del servicio' },
+      { value: 'nombre', text: 'Nombre quien reporto' },
       { value: 'problema', text: 'Problema' },
+      { value: 'fecha', text: 'fecha' },
       { value: 'domicilio', text: 'Domicilio' },
-      { value: 'objetivo', text: 'Objetivo' },
+      // { value: 'objetivo', text: 'Objetivo' },
+      { value: 'descripcion', text: 'Descripcion' },
       { value: 'actions', text: 'Acciones' }
     ])
 
@@ -247,6 +289,8 @@ export default {
       ProblemState.value = false
       DomicileState.value = false
       ObjectiveState.value = false
+      DateOfIssueState.value = false
+      DescriptionState.value = false
     }
 
     getCleanness(data => {
@@ -315,6 +359,15 @@ export default {
       return true
     }
 
+    const validateDateOfIssue = () => {
+      if (!cleannessServiceFields.value.fecha) {
+        DateOfIssueState.value = false
+        return 'Este campo es requerido'
+      }
+      DateOfIssueState.value = false
+      return true
+    }
+
     const validateDomicile = () => {
       if (!cleannessServiceFields.value.domicilio) {
         DomicileState.value = false
@@ -358,6 +411,27 @@ export default {
       }
 
       ObjectiveState.value = true
+      return true
+    }
+
+    const validateDescription = () => {
+      if (!cleannessServiceFields.value.descripcion) {
+        DescriptionState.value = false
+        return 'Este campo es requerido'
+      }
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+          cleannessServiceFields.value.descripcion
+        )
+      ) {
+        DescriptionState.value = false
+        return 'La descripcion solo puede contener letras'
+      }
+      if (!cleannessServiceFields.value.descripcion.trim().length > 0) {
+        DescriptionState.value = false
+        return 'Este campo no puede contener espacios'
+      }
+      DescriptionState.value = true
       return true
     }
 
@@ -426,6 +500,8 @@ export default {
       perPage,
       currentPage,
       filter,
+      DateOfIssueState,
+      DescriptionState,
       showModal,
       perPageSelect,
       isloading,
@@ -441,9 +517,11 @@ export default {
       onFiltered,
       addCleannessService,
       RemoveCleannessService,
+      validateDescription,
       refreshTable,
       validateName,
       validateProblem,
+      validateDateOfIssue,
       validateDomicile,
       validateObjective,
       resetCleannessServiceFields

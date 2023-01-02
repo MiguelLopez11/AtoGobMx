@@ -15,8 +15,8 @@
           type="submit"
           class="w-100"
           style="
-          height: 48px;
-          font-size: 18px;
+          height: 55px;
+          font-size: 15px;
           margin-bottom: 15px;
         "
           @click="showModal = !showModal"
@@ -63,7 +63,7 @@
       </template>
       <template #item-actions="items">
         <b-button
-          @click="RemoveDocument(items.archivoCementerioId)"
+          @click="RemoveDocument(items.archivoId)"
           class="m-1"
           variant="outline-danger"
         >
@@ -272,7 +272,7 @@ export default {
           disableButtonDownload.value = false
         })
     }
-    const RemoveDocument = archivoCementerioId => {
+    const RemoveDocument = archivoId => {
       swal
         .fire({
           title: '¿Estas seguro?',
@@ -286,7 +286,7 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            deleteDocumentsCementerios(props.CementerioId, archivoCementerioId, data => {
+            deleteDocumentsCementerios(props.CementerioId, archivoId, data => {
               swal
                 .fire({
                   title: 'Documento Eliminado!',
