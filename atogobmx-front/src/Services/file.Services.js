@@ -108,8 +108,8 @@ export default function FileServices () {
       callback(response.data)
     })
   }
-  const deleteDocumentsAlumbrado = (AlumbradoId, ArchivoAlumbradoId, callback) => {
-    axiosPrivate.delete(`/Archivos/Documents11/AlumbradoPublico/Eliminar/${AlumbradoId}/${ArchivoAlumbradoId}`)
+  const deleteDocumentsAlumbrado = (AlumbradoId, ArchivoId, callback) => {
+    axiosPrivate.delete(`/Archivos/Documents11/AlumbradoPublico/Eliminar/${AlumbradoId}/${ArchivoId}`)
       .then((response) => {
         callback(response.data)
       })
@@ -130,8 +130,8 @@ export default function FileServices () {
       callback(response.data)
     })
   }
-  const deleteDocumentsCementerios = (CementerioId, ArchivosCementerioId, callback) => {
-    axiosPrivate.delete(`/Archivos/Documents12/Cementerios/Eliminar/${CementerioId}/${ArchivosCementerioId}`)
+  const deleteDocumentsCementerios = (CementerioId, ArchivoId, callback) => {
+    axiosPrivate.delete(`/Archivos/Documents12/Cementerios/Eliminar/${CementerioId}/${ArchivoId}`)
       .then((response) => {
         callback(response.data)
       })
@@ -152,8 +152,8 @@ export default function FileServices () {
       callback(response.data)
     })
   }
-  const deleteDocumentsAseo = (AseoId, ArchivosAseoId, callback) => {
-    axiosPrivate.delete(`/Archivos/Documents13/Aseo/Eliminar/${AseoId}/${ArchivosAseoId}`)
+  const deleteDocumentsAseo = (AseoId, ArchivoId, callback) => {
+    axiosPrivate.delete(`/Archivos/Documents13/Aseo/Eliminar/${AseoId}/${ArchivoId}`)
       .then((response) => {
         callback(response.data)
       })
@@ -174,8 +174,8 @@ export default function FileServices () {
       callback(response.data)
     })
   }
-  const deleteDocumentsObrasPublicas = (ObraId, ArchivosObrasId, callback) => {
-    axiosPrivate.delete(`/Archivos/Documents14/ObrasPublicas/Eliminar/${ObraId}/${ArchivosObrasId}`)
+  const deleteDocumentsObrasPublicas = (ObraId, ArchivoId, callback) => {
+    axiosPrivate.delete(`/Archivos/Documents14/ObrasPublicas/Eliminar/${ObraId}/${ArchivoId}`)
       .then((response) => {
         callback(response.data)
       })
