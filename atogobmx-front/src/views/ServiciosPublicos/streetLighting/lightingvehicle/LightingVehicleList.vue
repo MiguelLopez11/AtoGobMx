@@ -56,7 +56,7 @@
             <i class="bi bi-three-dots-vertical"></i>
           </template>
           <b-dropdown-item
-            @click="RemoveLightingEmployeeService(items.alumbradoEmpleadoId)"
+            @click="RemoveLightingVehicle(items.alumbradoEmpleadoId)"
             class="m-1"
             variant="outline-danger"
             ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item

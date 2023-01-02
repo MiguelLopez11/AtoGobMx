@@ -18,14 +18,14 @@
           height: 50px;
           width: auto;
           font-size: 18px;
-          margin-right: 15px;
+          margin-right : 15px;
           margin-left: 20px;
         "
         @click="showModal = !showModal"
         type="submit"
       >
         <i class="bi bi-person-plus-fill"></i>
-        Agregar Aseo
+        Agregar reporte
       </b-button>
     </b-row>
     <EasyDataTable
@@ -79,7 +79,7 @@
 
     <b-modal
       id="modal-clenness"
-      tittle="Agregar Aseo"
+      tittle="Agregar reporte"
       v-model="showModal"
       size="xl"
       hide-footer
@@ -90,41 +90,41 @@
         <b-row cols="2">
           <!--Agregar nombre -->
           <b-col>
-            <b-form-group class="mt-3" label="Nombre del servicio">
+            <b-form-group class="mt-3" label="Nombre de quie reporta: ">
               <Field
-                name="NameServiceField"
-                :rules="validateNameService"
+                name="NameField"
+                :rules="validateName"
                 as="text"
               >
                 <b-form-input
-                  v-model="cleannessServiceFields.nombreServicio"
-                  :state="NameServiceState"
+                  v-model="cleannessServiceFields.nombre"
+                  :state="NameState"
                 >
                 </b-form-input>
               </Field>
               <ErrorMessage
                 class="text-danger"
-                name="NameServiceField"
+                name="NameField"
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!--Agregar Establecimiento -->
+          <!--Agregar problema -->
           <b-col>
-            <b-form-group class="mt-3" label="Establecimiento publico">
+            <b-form-group class="mt-3" label="Problema">
               <Field
-                name="PublicEstablishmentField"
-                :rules="validatePublicEstablishment"
+                name="ProblemField"
+                :rules="validateProblem"
                 as="text"
               >
                 <b-form-input
-                  v-model="cleannessServiceFields.establecimientoPublico"
-                  :state="PublicEstablishmentState"
+                  v-model="cleannessServiceFields.problema"
+                  :state="ProblemState"
                 >
                 </b-form-input>
               </Field>
               <ErrorMessage
                 class="text-danger"
-                name="PublicEstablishmentField"
+                name="ProblemField"
               ></ErrorMessage>
             </b-form-group>
           </b-col>
@@ -207,8 +207,8 @@ export default {
     const isloading = ref(true)
     const searchValue = ref('')
     const searchField = ref('nombreServicio')
-    const NameServiceState = ref(false)
-    const PublicEstablishmentState = ref(false)
+    const NameState = ref(false)
+    const ProblemState = ref(false)
     const DomicileState = ref(false)
     const ObjectiveState = ref(false)
     const breadcrumbItems = ref([
@@ -219,8 +219,8 @@ export default {
 
     const cleannessServiceFields = ref({
       aseoId: 0,
-      nombreServicio: null,
-      establecimientoPublico: null,
+      nombre: null,
+      problema: null,
       domicilio: null,
       objetivo: null,
       archivado: false
@@ -232,7 +232,7 @@ export default {
 
     const fields = ref([
       { value: 'nombreServicio', text: 'Nombre del servicio' },
-      { value: 'establecimientoPublico', text: 'Establecimiento publico' },
+      { value: 'problema', text: 'Problema' },
       { value: 'domicilio', text: 'Domicilio' },
       { value: 'objetivo', text: 'Objetivo' },
       { value: 'actions', text: 'Acciones' }
@@ -243,8 +243,8 @@ export default {
       cleannessServiceFields.value = JSON.parse(
         JSON.stringify(CleannessServiceFieldsBlank)
       )
-      NameServiceState.value = false
-      PublicEstablishmentState.value = false
+      NameState.value = false
+      ProblemState.value = false
       DomicileState.value = false
       ObjectiveState.value = false
     }
@@ -265,53 +265,53 @@ export default {
       currentPage.value = 1
     }
 
-    const validateNameService = () => {
-      if (!cleannessServiceFields.value.nombreServicio) {
-        NameServiceState.value = false
+    const validateName = () => {
+      if (!cleannessServiceFields.value.nombre) {
+        NameState.value = false
         return 'Este campo es requerido'
       }
 
       if (
         !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
-          cleannessServiceFields.value.nombreServicio
+          cleannessServiceFields.value.nombre
         )
       ) {
-        NameServiceState.value = false
+        NameState.value = false
         return 'Este campo solo puede contener letras'
       }
 
-      if (!cleannessServiceFields.value.nombreServicio.trim().length > 0) {
-        NameServiceState.value = false
+      if (!cleannessServiceFields.value.nombre.trim().length > 0) {
+        NameState.value = false
         return 'Este campo no puede contener espacios'
       }
 
-      NameServiceState.value = true
+      NameState.value = true
       return true
     }
 
-    const validatePublicEstablishment = () => {
-      if (!cleannessServiceFields.value.establecimientoPublico) {
-        PublicEstablishmentState.value = false
+    const validateProblem = () => {
+      if (!cleannessServiceFields.value.problema) {
+        ProblemState.value = false
         return 'Este campo es requerido'
       }
 
       if (
         !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
-          cleannessServiceFields.value.establecimientoPublico
+          cleannessServiceFields.value.problema
         )
       ) {
-        PublicEstablishmentState.value = false
+        ProblemState.value = false
         return 'Este campo solo puede contener numeros'
       }
 
       if (
-        !cleannessServiceFields.value.establecimientoPublico.trim().length > 0
+        !cleannessServiceFields.value.problema.trim().length > 0
       ) {
-        PublicEstablishmentState.value = false
+        ProblemState.value = false
         return 'Este campo no puede contener espacios'
       }
 
-      PublicEstablishmentState.value = true
+      ProblemState.value = true
       return true
     }
 
@@ -433,8 +433,8 @@ export default {
       searchField,
       CleannessServiceFieldsBlank,
       fields,
-      NameServiceState,
-      PublicEstablishmentState,
+      NameState,
+      ProblemState,
       DomicileState,
       ObjectiveState,
 
@@ -442,8 +442,8 @@ export default {
       addCleannessService,
       RemoveCleannessService,
       refreshTable,
-      validateNameService,
-      validatePublicEstablishment,
+      validateName,
+      validateProblem,
       validateDomicile,
       validateObjective,
       resetCleannessServiceFields

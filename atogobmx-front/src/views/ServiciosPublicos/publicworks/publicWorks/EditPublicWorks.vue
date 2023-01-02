@@ -48,6 +48,27 @@
                     </b-form-checkbox>
                   </b-form-group>
                 </b-col>
+                <!--Agregar encargado de obra-->
+                <b-col v-if="isAgency == false">
+                  <b-form-group class="mt-3" label="Encargado obra">
+                    <b-form-input v-model="publicWorks.encargado">
+                    </b-form-input>
+                  </b-form-group>
+                </b-col>
+                <!--Agregar operador de obra-->
+                <b-col v-if="isAgency == false">
+                  <b-form-group class="mt-3" label="Operador de la obra">
+                    <b-form-input v-model="publicWorks.operadorObra">
+                    </b-form-input>
+                  </b-form-group>
+                </b-col>
+                <!--Agregar operador de vehiculo-->
+                <b-col v-if="isAgency == false">
+                  <b-form-group class="mt-3" label="Operador del vehiculo">
+                    <b-form-input v-model="publicWorks.operadorVehiculo">
+                    </b-form-input>
+                  </b-form-group>
+                </b-col>
                 <!--Descripcion-->
                 <b-col>
                   <b-form-group class="mt-3" label="Descripcion">
@@ -108,6 +129,9 @@
         <b-tab title="Empleados">
           <publicWorksEmployeeService :ObraId="obraId" />
         </b-tab>
+        <b-tab title="Vehiculos">
+          <PublicWorkVehicle :ObraId="obraId" />
+        </b-tab>
         <b-tab title="Documentos">
           <ExpedientDocumentsPublickWorks :ObraId="obraId" />
         </b-tab>
@@ -121,6 +145,7 @@ import PublicWorksServices from '@/Services/publickworks.Services'
 import worksStatusServices from '@/Services/worksstatus.Services'
 import publicWorksEmployeeService from '@/views/ServiciosPublicos/publicworks/publicworksemployee/PublicWorksEmployeeList.vue'
 import ExpedientDocumentsPublickWorks from '@/views/ServiciosPublicos/publicworks/publicWorks/DocumentsPublicworks.vue'
+import PublicWorkVehicle from '@/views/ServiciosPublicos/publicworks/publickworkvehicles/PublickWorksVehiclesList.vue'
 import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 // import { useToast } from 'vue-toast-notification'
@@ -132,7 +157,8 @@ export default {
     Field,
     ErrorMessage,
     publicWorksEmployeeService,
-    ExpedientDocumentsPublickWorks
+    ExpedientDocumentsPublickWorks,
+    PublicWorkVehicle
   },
   setup () {
     const swal = inject('$swal')
@@ -148,6 +174,7 @@ export default {
     // const LengthState = ref(false)
     const DescriptionState = ref(false)
     const WorkStatusState = ref(false)
+    const isAgency = ref(false)
     const obraId = ref(parseInt(router.params.ObraId))
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
@@ -279,6 +306,7 @@ export default {
       publicWorks,
       breadcrumbItems,
       worksStatus,
+      isAgency,
       NameWorksState,
       obraId,
       // LatitudeState,

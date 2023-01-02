@@ -37,8 +37,8 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult> GetVehiculosAlumbradoById(int VehiculoAlumbradoId)
         {
             var vehiculos = await _context.VehiculosAlumbrado
-                //.Include(i => i.TareaTipoAlumbrado)
-                //.Include(i => i.Estatus)
+                .Include(i => i.Vehiculo)
+                .Include(i => i.ExpedienteAlumbrado)
                 .FirstOrDefaultAsync(f => f.VehiculoAlumbradoId == VehiculoAlumbradoId);
             if (vehiculos == null)
             {

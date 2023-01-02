@@ -19,6 +19,7 @@ namespace AtoGobMx.Models
         public int? EstatusValeId { get; set; }
         public int? TipoId { get; set; }
         public bool Archivado { get; set; }
+        public bool TieneExpediente { get; set; }
 
         [ForeignKey("DepartamentoId")]
         public Departamentos? Departamentos { get; set; }
@@ -33,5 +34,9 @@ namespace AtoGobMx.Models
 
         [JsonIgnore]
         public virtual IEnumerable<PROV_DetalleVale>? PROV_DetalleVales { get; set; }
+        [JsonIgnore]
+        public virtual IEnumerable<PROV_Vehiculo>? PROV_Vehiculo { get; set; }
+        [JsonIgnore]
+        public virtual IEnumerable<ExpedienteVale>? ExpedienteVale { get; set; }
     }
 }

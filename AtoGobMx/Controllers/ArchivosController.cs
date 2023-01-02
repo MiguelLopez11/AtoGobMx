@@ -988,7 +988,7 @@ namespace AtoGobMx.Controllers
                     return NotFound("No se encuentra Archivo");
                 }
                 var serverPath = "ftp://digital.atogobmx.com/Files/ServiciosPublicos/AseoPublico/";
-                var NombreServicio = aseo.NombreServicio.ToString();
+                var NombreServicio = aseo.Nombre.ToString();
                 var filePath = documento.Nombre.ToString();
                 var ftpRequest = (FtpWebRequest)FtpWebRequest.Create(serverPath + NombreServicio + "/Documentos/" + filePath);
                 var url = serverPath + NombreServicio + "/Documentos/" + filePath;
@@ -1140,6 +1140,44 @@ namespace AtoGobMx.Controllers
             #endregion
         }
         [HttpPost("Documents/Cementerio/{CementerioId}/")]
+        public async Task<IActionResult> DownloadFilesVehiculosZip(int VehiculoId)
+        {
+            var vehiculo = await _context.Vehiculo
+                 .Where(w => !w.Archivado)
+                 .FirstOrDefaultAsync(f => f.VehiculoId == VehiculoId);
+            var UrlHost = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/{5}", "digital.atogobmx.com", "Files", "Patrimonio", "ParqueVehicular", vehiculo.Nomenclatura, "Documentos");
+            var result = GetListFiles(UrlHost);
+            foreach (string line in result)
+            {
+                copyFile(String.Format("ftp://{0}/{1}/{2}/{3}/{4}", "digital.atogobmx.com", "Files", "Patrimonio", "ParqueVehicular", vehiculo.Nomenclatura) + "/", line);
+            }
+            var FolderPath = Path.Combine(Directory.GetCurrentDirectory(), $"Files/Documentos/");
+            var FilePaths = Directory.GetFiles(FolderPath);
+            var zipFileMemoryStream = new MemoryStream();
+            using (ZipArchive archive = new ZipArchive(zipFileMemoryStream, ZipArchiveMode.Update, leaveOpen: true))
+            {
+                foreach (var FilePath in FilePaths)
+                {
+                    var FileName = Path.GetFileName(FilePath);
+                    var entry = archive.CreateEntry(FileName);
+                    using (var entryStream = entry.Open())
+                    using (var fileStream = System.IO.File.OpenRead(FilePath))
+                    {
+                        await fileStream.CopyToAsync(entryStream);
+                    }
+                }
+            }
+
+            zipFileMemoryStream.Seek(0, SeekOrigin.Begin);
+            if (!Directory.Exists("Files/Documentos/"))
+            {
+                Directory.CreateDirectory("Files/Documentos/");
+            }
+            var dir = new DirectoryInfo("Files/Documentos/");
+            dir.Attributes = dir.Attributes & ~FileAttributes.ReadOnly;
+            dir.Delete(true);
+            return File(zipFileMemoryStream, "application/octet-stream", $"Documentos_{DateOnly.FromDateTime(DateTime.Now)}_.zip");
+        }
         public async Task<IActionResult> UploadDocumentsCementerio(List<IFormFile> Files, int CementerioId)
         {
             #region Cargar Archivos
@@ -1230,7 +1268,7 @@ namespace AtoGobMx.Controllers
                     //.Include(i => i.TareaTipoAlumbrado)
                     .FirstOrDefaultAsync(f => f.AseoId == AseoId);
 
-                string serverPath = String.Format("ftp://{0}/{1}/{2}/{3}/{4}", "digital.atogobmx.com", "Files", "ServiciosPublicos", "AseoPublico", aseo.NombreServicio);
+                string serverPath = String.Format("ftp://{0}/{1}/{2}/{3}/{4}", "digital.atogobmx.com", "Files", "ServiciosPublicos", "AseoPublico", aseo.Nombre);
 
                 if (aseo == null)
                 {
@@ -1387,14 +1425,14 @@ namespace AtoGobMx.Controllers
 
             if (alumbrado == null)
             {
-                return NotFound($"No se encuentra expediente con el ID {AlumbradoId}");
+                return NotFound();
             }
             var Archivo = await _context.ArchivosAlumbrado
                 .FirstOrDefaultAsync(f => f.ArchivoAlumbradoId == ArchivoAlumbradoId);
 
             if (Archivo == null)
             {
-                return NotFound($"No se encuentra el documento con el ID {ArchivoAlumbradoId}");
+                return NotFound();
             }
             var serverPath = "ftp://digital.atogobmx.com/Files/ServiciosPublicos/AlumbradoPublico/";
             var NombreObra = alumbrado.NombreObra.ToString();
@@ -1411,7 +1449,8 @@ namespace AtoGobMx.Controllers
             return BadRequest("Error");
 
         }
-        [HttpDelete("Documents12/Cementerios/Eliminar/{CementerioId}/{ArchivoId}")]
+       
+        [HttpDelete("Documents12/Cementerios/Eliminar/{CementerioId}/{ArchivosCementerioId}")]
         public async Task<IActionResult> DeleteDocumentsCementerio(int CementerioId, int ArchivosCementerioId)
         {
             var cementerio = await _context.Cementerio
@@ -1419,19 +1458,19 @@ namespace AtoGobMx.Controllers
 
             if (cementerio == null)
             {
-                return NotFound($"No se encuentra expediente con el ID {CementerioId}");
+                return NotFound();
             }
             var Archivo = await _context.ArchivosCementerios
                 .FirstOrDefaultAsync(f => f.ArchivosCementerioId == ArchivosCementerioId);
 
             if (Archivo == null)
             {
-                return NotFound($"No se encuentra el documento con el ID {ArchivosCementerioId}");
+                return NotFound();
             }
             var serverPath = "ftp://digital.atogobmx.com/Files/ServiciosPublicos/CementerioPublico/";
             var NombreCementerio = cementerio.NombreCementerio.ToString();
             var filePath = Archivo.Nombre.ToString();
-            var Url = $"{serverPath + NombreCementerio + "/" + "Documentos" + filePath}";
+            var Url = $"{serverPath + NombreCementerio + "/" + filePath}";
             var result = DeleteFile(Url);
             if (result)
             {
@@ -1443,7 +1482,7 @@ namespace AtoGobMx.Controllers
             return BadRequest("Error");
 
         }
-        [HttpDelete("Documents13/Aseo/Eliminar/{AseoId}/{ArchivoId}")]
+        [HttpDelete("Documents13/Aseo/Eliminar/{AseoId}/{ArchivosAseoId}")]
         public async Task<IActionResult> DeleteDocumentsAseo(int AseoId, int ArchivosAseoId)
         {
             var aseo = await _context.Aseo
@@ -1451,17 +1490,17 @@ namespace AtoGobMx.Controllers
 
             if (aseo == null)
             {
-                return NotFound($"No se encuentra expediente con el ID {AseoId}");
+                return NotFound();
             }
             var Archivo = await _context.ArchivosAseo
                 .FirstOrDefaultAsync(f => f.ArchivosAseoId == ArchivosAseoId);
 
             if (Archivo == null)
             {
-                return NotFound($"No se encuentra el documento con el ID {ArchivosAseoId}");
+                return NotFound();
             }
             var serverPath = "ftp://digital.atogobmx.com/Files/ServiciosPublicos/AseoPublico/";
-            var NombreServicio = aseo.NombreServicio.ToString();
+            var NombreServicio = aseo.Nombre.ToString();
             var filePath = Archivo.Nombre.ToString();
             var Url = $"{serverPath + NombreServicio + "/" + "Documentos" + filePath}";
             var result = DeleteFile(Url);
@@ -1475,7 +1514,7 @@ namespace AtoGobMx.Controllers
             return BadRequest("Error");
 
         }
-        [HttpDelete("Documents14/ObrasPublicas/Eliminar/{ObraId}/{ArchivoId}")]
+        [HttpDelete("Documents14/ObrasPublicas/Eliminar/{ObraId}/{ArchivosObrasId}")]
         public async Task<IActionResult> DeleteDocumentsObrasPublicas(int ObraId, int ArchivosObrasId)
         {
             var obraspublicas = await _context.ObrasPublicas
@@ -1483,14 +1522,14 @@ namespace AtoGobMx.Controllers
 
             if (obraspublicas == null)
             {
-                return NotFound($"No se encuentra expediente con el ID {ObraId}");
+                return NotFound();
             }
             var Archivo = await _context.ArchivosObras
                 .FirstOrDefaultAsync(f => f.ArchivosObrasId == ArchivosObrasId);
 
             if (Archivo == null)
             {
-                return NotFound($"No se encuentra el documento con el ID {ArchivosObrasId}");
+                return NotFound();
             }
             var serverPath = "ftp://digital.atogobmx.com/Files/ObrasPublicas/";
             var Nombre = obraspublicas.Nombre.ToString();
@@ -1510,36 +1549,21 @@ namespace AtoGobMx.Controllers
 
         //--------Descargar todos los archibos en zip----------------//
         [HttpGet("Documentos1/{AlumbradoId}/Zip")]
-        public async Task<IActionResult> DownloadFilesZipAlumbrado(int AlumbradoId)
+        public async Task<IActionResult> DownloadFilesAlumbradoZip(int AlumbradoId)
         {
             var alumbrado = await _context.Alumbrado
                  //.Include(i => i.ArchivosAlumbrado)
                  .Where(w => !w.Archivado)
                  .FirstOrDefaultAsync(f => f.AlumbradoId == AlumbradoId);
+            if (alumbrado == null)
+            {
+                return NotFound();
+            }
             var UrlHost = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/", "digital.atogobmx.com", "Files", "ServiciosPublicos", "AlumbradoPublico", alumbrado.NombreObra);
-            var result = GetListFiles(alumbrado.NombreObra.ToString());
+            var result = GetListFiles(UrlHost + "Documentos");
             foreach (string line in result)
             {
                 copyFile(UrlHost, line);
-                //FtpWebRequest downloadRequest = (FtpWebRequest)WebRequest.Create(UrlHost + line);
-                //downloadRequest.UsePassive = true;
-                //downloadRequest.UseBinary = true;
-                //downloadRequest.Method = WebRequestMethods.Ftp.DownloadFile;
-                //downloadRequest.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
-                //downloadRequest.UseBinary = true;
-                //downloadRequest.UsePassive = true;
-                //downloadRequest.KeepAlive = true;
-                //var ftpResponse = (FtpWebResponse)downloadRequest.GetResponse();
-                //var ftpStream = ftpResponse.GetResponseStream();
-                //var fileName = @"Files/" + line;
-                //Directory.CreateDirectory(Path.GetDirectoryName(fileName));
-                //FileStream file = System.IO.File.Create(fileName);
-                //byte[] buffer = new byte[1024];
-                //int read;
-                //while ((read = ftpStream.Read(buffer, 0, buffer.Length)) > 0) { file.Write(buffer, 0, read); }
-                //file.Close();
-                //ftpStream.Close();
-                //ftpResponse.Close();
             }
             var FolderPath = Path.Combine(Directory.GetCurrentDirectory(), $"Files/Documentos");
             var FilePaths = Directory.GetFiles(FolderPath);
@@ -1559,6 +1583,10 @@ namespace AtoGobMx.Controllers
             }
 
             zipFileMemoryStream.Seek(0, SeekOrigin.Begin);
+            if (!Directory.Exists("Files/Documentos/"))
+            {
+                Directory.CreateDirectory("Files/Documentos/");
+            }
             var dir = new DirectoryInfo("Files/Documentos");
             dir.Attributes = dir.Attributes & ~FileAttributes.ReadOnly;
             dir.Delete(true);
@@ -1566,36 +1594,22 @@ namespace AtoGobMx.Controllers
             return File(zipFileMemoryStream, "application/octet-stream", $"Documentos_{DateOnly.FromDateTime(DateTime.Now)}_{alumbrado.NombreObra}.zip");
         }
         [HttpGet("Documentos22/{CementerioId}/Zip")]
-        public async Task<IActionResult> DownloadFilesDireccionCementerio(int CementerioId)
+        public async Task<IActionResult> DownloadFilesCementerio(int CementerioId)
         {
-            var direccioncementerio = await _context.Cementerio
+            var cementerio = await _context.Cementerio
                  //.Include(i => i.ArchivosAlumbrado)
                  .Where(w => !w.Archivado)
                  .FirstOrDefaultAsync(f => f.CementerioId == CementerioId);
-            var UrlHost = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/", "digital.atogobmx.com", "Files", "ServiciosPublicos", "CementerioPublico", direccioncementerio.NombreCementerio);
-            var result = GetListFiles(direccioncementerio.NombreCementerio.ToString());
+            if (cementerio == null)
+            {
+                return NotFound();
+            }
+
+            var UrlHost = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/", "digital.atogobmx.com", "Files", "ServiciosPublicos", "CementerioPublico", cementerio.NombreCementerio);
+            var result = GetListFiles(UrlHost + "Documentos");
             foreach (string line in result)
             {
                 copyFile(UrlHost, line);
-                //FtpWebRequest downloadRequest = (FtpWebRequest)WebRequest.Create(UrlHost + line);
-                //downloadRequest.UsePassive = true;
-                //downloadRequest.UseBinary = true;
-                //downloadRequest.Method = WebRequestMethods.Ftp.DownloadFile;
-                //downloadRequest.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
-                //downloadRequest.UseBinary = true;
-                //downloadRequest.UsePassive = true;
-                //downloadRequest.KeepAlive = true;
-                //var ftpResponse = (FtpWebResponse)downloadRequest.GetResponse();
-                //var ftpStream = ftpResponse.GetResponseStream();
-                //var fileName = @"Files/" + line;
-                //Directory.CreateDirectory(Path.GetDirectoryName(fileName));
-                //FileStream file = System.IO.File.Create(fileName);
-                //byte[] buffer = new byte[1024];
-                //int read;
-                //while ((read = ftpStream.Read(buffer, 0, buffer.Length)) > 0) { file.Write(buffer, 0, read); }
-                //file.Close();
-                //ftpStream.Close();
-                //ftpResponse.Close();
             }
             var FolderPath = Path.Combine(Directory.GetCurrentDirectory(), $"Files/Documentos");
             var FilePaths = Directory.GetFiles(FolderPath);
@@ -1615,11 +1629,15 @@ namespace AtoGobMx.Controllers
             }
 
             zipFileMemoryStream.Seek(0, SeekOrigin.Begin);
+            if (!Directory.Exists("Files/Documentos/"))
+            {
+                Directory.CreateDirectory("Files/Documentos/");
+            }
             var dir = new DirectoryInfo("Files/Documentos");
             dir.Attributes = dir.Attributes & ~FileAttributes.ReadOnly;
             dir.Delete(true);
             //Directory.Delete("Files/Documentos");
-            return File(zipFileMemoryStream, "application/octet-stream", $"Documentos_{DateOnly.FromDateTime(DateTime.Now)}_{direccioncementerio.NombreCementerio}.zip");
+            return File(zipFileMemoryStream, "application/octet-stream", $"Documentos_{DateOnly.FromDateTime(DateTime.Now)}_{cementerio.NombreCementerio}.zip");
         }
         [HttpGet("Documentos33/{AseoId}/Zip")]
         public async Task<IActionResult> DownloadFilesAseo(int AseoId)
@@ -1628,30 +1646,16 @@ namespace AtoGobMx.Controllers
                  //.Include(i => i.ArchivosAlumbrado)
                  .Where(w => !w.Archivado)
                  .FirstOrDefaultAsync(f => f.AseoId == AseoId);
-            var UrlHost = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/", "digital.atogobmx.com", "Files", "ServiciosPublicos", "AseoPublico", aseo.NombreServicio);
-            var result = GetListFiles(aseo.NombreServicio.ToString());
+            if (aseo == null)
+            {
+                return NotFound();
+            }
+
+            var UrlHost = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/", "digital.atogobmx.com", "Files", "ServiciosPublicos", "AseoPublico", aseo.Nombre);
+            var result = GetListFiles(UrlHost + "Documentos");
             foreach (string line in result)
             {
                 copyFile(UrlHost, line);
-                //FtpWebRequest downloadRequest = (FtpWebRequest)WebRequest.Create(UrlHost + line);
-                //downloadRequest.UsePassive = true;
-                //downloadRequest.UseBinary = true;
-                //downloadRequest.Method = WebRequestMethods.Ftp.DownloadFile;
-                //downloadRequest.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
-                //downloadRequest.UseBinary = true;
-                //downloadRequest.UsePassive = true;
-                //downloadRequest.KeepAlive = true;
-                //var ftpResponse = (FtpWebResponse)downloadRequest.GetResponse();
-                //var ftpStream = ftpResponse.GetResponseStream();
-                //var fileName = @"Files/" + line;
-                //Directory.CreateDirectory(Path.GetDirectoryName(fileName));
-                //FileStream file = System.IO.File.Create(fileName);
-                //byte[] buffer = new byte[1024];
-                //int read;
-                //while ((read = ftpStream.Read(buffer, 0, buffer.Length)) > 0) { file.Write(buffer, 0, read); }
-                //file.Close();
-                //ftpStream.Close();
-                //ftpResponse.Close();
             }
             var FolderPath = Path.Combine(Directory.GetCurrentDirectory(), $"Files/Documentos");
             var FilePaths = Directory.GetFiles(FolderPath);
@@ -1671,11 +1675,15 @@ namespace AtoGobMx.Controllers
             }
 
             zipFileMemoryStream.Seek(0, SeekOrigin.Begin);
+            if (!Directory.Exists("Files/Documentos/"))
+            {
+                Directory.CreateDirectory("Files/Documentos/");
+            }
             var dir = new DirectoryInfo("Files/Documentos");
             dir.Attributes = dir.Attributes & ~FileAttributes.ReadOnly;
             dir.Delete(true);
             //Directory.Delete("Files/Documentos");
-            return File(zipFileMemoryStream, "application/octet-stream", $"Documentos_{DateOnly.FromDateTime(DateTime.Now)}_{aseo.NombreServicio}.zip");
+            return File(zipFileMemoryStream, "application/octet-stream", $"Documentos_{DateOnly.FromDateTime(DateTime.Now)}_{aseo.Nombre}.zip");
         }
         [HttpGet("Documentos44/{ObraId}/Zip")]
         public async Task<IActionResult> DownloadFilesObrasPublicas(int ObraId)
@@ -1684,30 +1692,15 @@ namespace AtoGobMx.Controllers
                  //.Include(i => i.ArchivosAlumbrado)
                  .Where(w => !w.Archivado)
                  .FirstOrDefaultAsync(f => f.ObraId == ObraId);
+            if (obrapublica == null)
+            {
+                return NotFound();
+            }
             var UrlHost = String.Format("ftp://{0}/{1}/{2}/{3}/", "digital.atogobmx.com", "Files", "ObrasPublicas", obrapublica.Nombre);
-            var result = GetListFiles(obrapublica.Nombre.ToString());
+            var result = GetListFiles(UrlHost + "Documentos");
             foreach (string line in result)
             {
                 copyFile(UrlHost, line);
-                //FtpWebRequest downloadRequest = (FtpWebRequest)WebRequest.Create(UrlHost + line);
-                //downloadRequest.UsePassive = true;
-                //downloadRequest.UseBinary = true;
-                //downloadRequest.Method = WebRequestMethods.Ftp.DownloadFile;
-                //downloadRequest.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
-                //downloadRequest.UseBinary = true;
-                //downloadRequest.UsePassive = true;
-                //downloadRequest.KeepAlive = true;
-                //var ftpResponse = (FtpWebResponse)downloadRequest.GetResponse();
-                //var ftpStream = ftpResponse.GetResponseStream();
-                //var fileName = @"Files/" + line;
-                //Directory.CreateDirectory(Path.GetDirectoryName(fileName));
-                //FileStream file = System.IO.File.Create(fileName);
-                //byte[] buffer = new byte[1024];
-                //int read;
-                //while ((read = ftpStream.Read(buffer, 0, buffer.Length)) > 0) { file.Write(buffer, 0, read); }
-                //file.Close();
-                //ftpStream.Close();
-                //ftpResponse.Close();
             }
             var FolderPath = Path.Combine(Directory.GetCurrentDirectory(), $"Files/Documentos");
             var FilePaths = Directory.GetFiles(FolderPath);
@@ -1727,6 +1720,10 @@ namespace AtoGobMx.Controllers
             }
 
             zipFileMemoryStream.Seek(0, SeekOrigin.Begin);
+            if (!Directory.Exists("Files/Documentos/"))
+            {
+                Directory.CreateDirectory("Files/Documentos/");
+            }
             var dir = new DirectoryInfo("Files/Documentos");
             dir.Attributes = dir.Attributes & ~FileAttributes.ReadOnly;
             dir.Delete(true);
