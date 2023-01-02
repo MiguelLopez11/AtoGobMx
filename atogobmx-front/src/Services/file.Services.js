@@ -79,6 +79,28 @@ export default function FileServices () {
         callback(exception.response)
       })
   }
+  // Documentos Mobiliario
+  const getDocumentsFurniture = (MobiliarioId, callback) => {
+    axiosPrivate.get(`/Archivos/DocumentosMobiliario/${MobiliarioId}`).then((response) => {
+      callback(response.data)
+    })
+  }
+  const createDocumentsFurniture = (MobiliarioId, files, callback) => {
+    axiosPrivate.post(`/Archivos/DocumentosMobiliario/${MobiliarioId}`, files).then((response) => {
+      callback(response)
+    }).catch((exception) => {
+      callback(exception.response.data)
+    })
+  }
+  const deleteDocumentFurniture = (MobiliarioId, ArchivoId, callback) => {
+    axiosPrivate.delete(`/Archivos/DocumentosMobiliario/Eliminar/${MobiliarioId}/${ArchivoId}`)
+      .then((response) => {
+        callback(response.data)
+      })
+      .catch((exception) => {
+        callback(exception.response)
+      })
+  }
   // Servicios creados para la carga de archivos arturo
   // ----------- Alumbrado ---------------- //
   const getDocumentsAlumbrado = (AlumbradoId, callback) => {
@@ -183,6 +205,10 @@ export default function FileServices () {
     getDocumentsVehicle,
     createDocumentsVehicle,
     deleteDocumentVehicle,
+    // Mobiliario
+    getDocumentsFurniture,
+    createDocumentsFurniture,
+    deleteDocumentFurniture,
     // -------Arturo--------- //
     getDocumentsAlumbrado,
     deleteDocumentsAlumbrado,

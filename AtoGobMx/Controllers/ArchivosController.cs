@@ -604,7 +604,218 @@ namespace AtoGobMx.Controllers
             return BadRequest("Error");
 
         }
-        //-----------------Metodos creados en mis espacios-----------------------//
+        //Mobiliario
+        [HttpGet("DocumentosMobiliario/{MobiliarioId}")]
+        public async Task<IActionResult> GetDocumentosMobiliario(int MobiliarioId)
+        {
+            var Documentos = await _context.ArchivosMobiliarios
+                .Include(i => i.Mobiliario)
+                .Where(w => w.MobiliarioId == MobiliarioId)
+                .Where(w => w.TipoArchivo == ".pdf" || w.TipoArchivo == ".docx")
+                .Where(w => !w.Archivado)
+                .ToListAsync();
+            if (Documentos == null)
+            {
+                return BadRequest("No se encuentran documentos registrados, ");
+            }
+            return Ok(Documentos);
+        }
+        [HttpGet("DocumentosMobiliario/Descargar/{MobiliarioId}/{ArchivoMobiliarioId}")]
+        public async Task<IActionResult> DownloadFileMobiliarios(int MobiliarioId, int ArchivoMobiliarioId)
+        {
+            try
+            {
+
+                var Mobiliario = await _context.Mobiliario
+                    .FirstOrDefaultAsync(f => f.MobiliarioId == MobiliarioId);
+                if (Mobiliario == null)
+                {
+                    return NotFound();
+                }
+                var documento = await _context.ArchivosMobiliarios
+                    .Include(i => i.Mobiliario)
+                    .Where(w => w.TipoArchivo == ".pdf" || w.TipoArchivo == ".docx")
+                    .FirstOrDefaultAsync(f => f.ArchivoMobiliarioId == ArchivoMobiliarioId);
+                if (documento == null)
+                {
+                    return NotFound("No se encuentra Archivo");
+                }
+                var serverPath = "ftp://digital.atogobmx.com/Files/Patrimonio/Mobiliario/";
+                var nomenclaturaEquipo = Mobiliario.CodigoInventario.ToString();
+                var filePath = documento.Nombre.ToString();
+                var ftpRequest = (FtpWebRequest)FtpWebRequest.Create(serverPath + nomenclaturaEquipo + "/Documentos/" + filePath);
+                var url = serverPath + nomenclaturaEquipo + "/Documentos/" + filePath;
+                ftpRequest.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+                ftpRequest.UseBinary = true;
+                ftpRequest.UsePassive = true;
+                ftpRequest.KeepAlive = true;
+                ftpRequest.Method = WebRequestMethods.Ftp.DownloadFile;
+                var ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
+                var ftpStream = ftpResponse.GetResponseStream();
+                var provider = new FileExtensionContentTypeProvider();
+                if (!provider.TryGetContentType(url, out var contentType))
+                {
+                    contentType = "application/octet-stream";
+                }
+                return File(ftpStream, contentType, Path.GetFileName(url));
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return NoContent();
+            }
+
+        }
+        [HttpGet("DocumentosMobiliario/{MobiliarioId}/Zip")]
+        public async Task<IActionResult> DownloadFilesMobiliarioZip(int MobiliarioId)
+        {
+            var Mobiliario = await _context.Mobiliario
+                 .Where(w => !w.Archivado)
+                 .FirstOrDefaultAsync(f => f.MobiliarioId == MobiliarioId);
+            var UrlHost = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/{5}", "digital.atogobmx.com", "Files", "Patrimonio", "Mobiliario", Mobiliario.CodigoInventario, "Documentos");
+            var result = GetListFiles(UrlHost);
+            foreach (string line in result)
+            {
+                copyFile(String.Format("ftp://{0}/{1}/{2}/{3}/{4}", "digital.atogobmx.com", "Files", "Patrimonio", "Mobiliario", Mobiliario.CodigoInventario) + "/", line);
+            }
+            var FolderPath = Path.Combine(Directory.GetCurrentDirectory(), $"Files/Documentos/");
+            var FilePaths = Directory.GetFiles(FolderPath);
+            var zipFileMemoryStream = new MemoryStream();
+            using (ZipArchive archive = new ZipArchive(zipFileMemoryStream, ZipArchiveMode.Update, leaveOpen: true))
+            {
+                foreach (var FilePath in FilePaths)
+                {
+                    var FileName = Path.GetFileName(FilePath);
+                    var entry = archive.CreateEntry(FileName);
+                    using (var entryStream = entry.Open())
+                    using (var fileStream = System.IO.File.OpenRead(FilePath))
+                    {
+                        await fileStream.CopyToAsync(entryStream);
+                    }
+                }
+            }
+
+            zipFileMemoryStream.Seek(0, SeekOrigin.Begin);
+            if (!Directory.Exists("Files/Documentos/"))
+            {
+                Directory.CreateDirectory("Files/Documentos/");
+            }
+            var dir = new DirectoryInfo("Files/Documentos/");
+            dir.Attributes = dir.Attributes & ~FileAttributes.ReadOnly;
+            dir.Delete(true);
+            return File(zipFileMemoryStream, "application/octet-stream", $"Documentos_{DateOnly.FromDateTime(DateTime.Now)}_.zip");
+        }
+        [HttpPost("DocumentosMobiliario/{MobiliarioId}/")]
+        public async Task<IActionResult> UploadDocumentsMobiliario(List<IFormFile> Files, int MobiliarioId)
+        {
+            #region Cargar Archivos
+            try
+            {
+
+                #region Comprobar si el expediente existe
+                var mobiliario = await _context.Mobiliario
+                    .FirstOrDefaultAsync(f => f.MobiliarioId == MobiliarioId);
+                if (mobiliario == null)
+                {
+                    return NotFound("No se encuentra el expediente digital");
+                }
+
+                #endregion
+                string serverPath = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/{5}", "digital.atogobmx.com", "Files", "Patrimonio", "Mobiliario", mobiliario.CodigoInventario, "Documentos");
+                if (Files.Count > 0)
+                {
+                    foreach (var file in Files)
+                    {
+                        #region Comprobar que el archivo sea un documento
+                        var fileName = file.FileName;
+                        var fileExtension = Path.GetExtension(fileName);
+                        if (fileExtension != ".pdf" && fileExtension != ".docx")
+                        {
+                            return BadRequest("El tipo de archivo no es válido");
+                        }
+
+                        #endregion
+
+                        #region crear documento al servidor
+                        var request = (FtpWebRequest)WebRequest.Create(serverPath + "/" + file.FileName);
+                        request.Method = WebRequestMethods.Ftp.UploadFile;
+                        request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+                        byte[] buffer = new byte[1024];
+                        var stream = file.OpenReadStream();
+                        byte[] fileContents;
+                        using (var ms = new MemoryStream())
+                        {
+                            int read;
+                            while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+                            {
+                                ms.Write(buffer, 0, read);
+                            }
+                            fileContents = ms.ToArray();
+                        }
+                        using (Stream requestStream = await request.GetRequestStreamAsync())
+                        {
+                            requestStream.Write(fileContents, 0, fileContents.Length);
+                        }
+                        FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+                        var archivo = new ArchivosMobiliario()
+                        {
+                            ArchivoMobiliarioId = 0,
+                            Nombre = file.FileName,
+                            TipoArchivo = fileExtension,
+                            MobiliarioId = MobiliarioId
+                        };
+                        _context.ArchivosMobiliarios.Add(archivo);
+                        await _context.SaveChangesAsync();
+                    }
+                    return Ok("Documento registrado correctamente.");
+                    #endregion
+                }
+                else
+                {
+                    return BadRequest("No se ingresó ningun documento");
+                }
+            }
+            catch
+            {
+                return BadRequest("Ah ocurrido un error inesperado");
+            }
+            #endregion
+        }
+
+        [HttpDelete("DocumentsMobiliario/Eliminar/{MobiliarioId}/{ArchivoId}")]
+        public async Task<IActionResult> DeleteDocumentsMobiliario(int MobiliarioId, int ArchivoId)
+        {
+            var mobiliario = await _context.Mobiliario
+                .FirstOrDefaultAsync(f => f.MobiliarioId == MobiliarioId);
+
+            if (mobiliario == null)
+            {
+                return NotFound();
+            }
+            var Archivo = await _context.ArchivosMobiliarios
+                .FirstOrDefaultAsync(f => f.ArchivoMobiliarioId == ArchivoId);
+
+            if (Archivo == null)
+            {
+                return NotFound();
+            }
+            var serverPath = "ftp://digital.atogobmx.com/Files/Patrimonio/Mobiliario/";
+            var Nomenclatura = mobiliario.CodigoInventario.ToString();
+            var filePath = Archivo.Nombre.ToString();
+            var Url = $"{serverPath + Nomenclatura + "/" + "Documentos/" + filePath}";
+            var result = DeleteFile(Url);
+            if (result)
+            {
+                Archivo.Archivado = true;
+                _context.ArchivosMobiliarios.Update(Archivo);
+                await _context.SaveChangesAsync();
+                return Ok("Documento archivado correctamente.");
+            }
+            return BadRequest("Error");
+
+        }
+        //Metodos creados en mis espacios
         [HttpGet("Documents/AlumbradoPublico/{AlumbradoId}")]
         public async Task<IActionResult> GetDocumentosAlumbrado(int AlumbradoId)
         {

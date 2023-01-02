@@ -198,18 +198,19 @@
           <b-col>
             <b-form-group class="mt-3" label="Costo">
               <Field
-                name="DescriptionField"
+                name="CostField"
                 :rules="validateCost"
                 as="number"
               >
                 <b-form-input
                   v-model="furnituresFields.costo"
                   :state="costState"
+                  type="number"
                 />
               </Field>
               <ErrorMessage
                 class="text-danger"
-                name="DescriptionField"
+                name="CostField"
               ></ErrorMessage>
             </b-form-group>
           </b-col>
@@ -443,7 +444,7 @@ export default {
       return true
     }
     const validateDate = () => {
-      if (!furnituresFields.value.descripción) {
+      if (!furnituresFields.value.fechaAdquisición) {
         dateState.value = false
         return 'Este campo es requerido'
       }
@@ -451,7 +452,7 @@ export default {
       return true
     }
     const validateCost = () => {
-      if (!furnituresFields.value.descripción) {
+      if (!furnituresFields.value.costo) {
         costState.value = false
         return 'Este campo es requerido'
       }
