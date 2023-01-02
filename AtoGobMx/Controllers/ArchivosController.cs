@@ -1128,7 +1128,7 @@ namespace AtoGobMx.Controllers
                     return Ok("Documento registrado correctamente.");
                     #endregion
                 }
-                else 
+                else
                 {
                     return BadRequest("No se ingresó ningun documento");
                 }
@@ -1139,8 +1139,8 @@ namespace AtoGobMx.Controllers
             }
             #endregion
         }
-        [HttpPost("Documents/Cementerio/{CementerioId}/")]
-        public async Task<IActionResult> DownloadFilesVehiculosZip(int VehiculoId)
+        [HttpGet("Documents/Cementerio/{CementerioId}/")]
+        public async Task<IActionResult> DownloadFilesCementerioZip(int VehiculoId)
         {
             var vehiculo = await _context.Vehiculo
                  .Where(w => !w.Archivado)
@@ -1178,84 +1178,85 @@ namespace AtoGobMx.Controllers
             dir.Delete(true);
             return File(zipFileMemoryStream, "application/octet-stream", $"Documentos_{DateOnly.FromDateTime(DateTime.Now)}_.zip");
         }
-        public async Task<IActionResult> UploadDocumentsCementerio(List<IFormFile> Files, int CementerioId)
-        {
-            #region Cargar Archivos
-            try
-            {
+        //[HttpPost("Documents/Cementerio/{CementerioId}/")]
+        //public async Task<IActionResult> UploadDocumentsCementerio(List<IFormFile> Files, int CementerioId)
+        //{
+        //    #region Cargar Archivos
+        //    try
+        //    {
 
-                #region Comprobar si el expediente existe
-                var direccioncementerio = await _context.Cementerio
-                    //.Include(i => i.TareaTipoAlumbrado)
-                    .FirstOrDefaultAsync(f => f.CementerioId == CementerioId);
+        //        #region Comprobar si el expediente existe
+        //        var direccioncementerio = await _context.Cementerio
+        //            //.Include(i => i.TareaTipoAlumbrado)
+        //            .FirstOrDefaultAsync(f => f.CementerioId == CementerioId);
 
-                string serverPath = String.Format("ftp://{0}/{1}/{2}/{3}/{4}", "digital.atogobmx.com", "Files", "ServiciosPublicos", "CementerioPublico", direccioncementerio.NombreCementerio);
+        //        string serverPath = String.Format("ftp://{0}/{1}/{2}/{3}/{4}", "digital.atogobmx.com", "Files", "ServiciosPublicos", "CementerioPublico", direccioncementerio.NombreCementerio);
 
-                if (direccioncementerio == null)
-                {
-                    return NotFound("No se encuentra el expediente digital");
-                }
+        //        if (direccioncementerio == null)
+        //        {
+        //            return NotFound("No se encuentra el expediente digital");
+        //        }
 
-                #endregion
-                if (Files.Count > 0)
-                {
-                    foreach (var file in Files)
-                    {
-                        #region Comprobar que el archivo sea un documento
-                        var fileName = file.FileName;
-                        var fileExtension = Path.GetExtension(fileName);
-                        if (fileExtension != ".pdf" && fileExtension != ".docx")
-                        {
-                            return BadRequest("El tipo de archivo no es válido");
-                        }
+        //        #endregion
+        //        if (Files.Count > 0)
+        //        {
+        //            foreach (var file in Files)
+        //            {
+        //                #region Comprobar que el archivo sea un documento
+        //                var fileName = file.FileName;
+        //                var fileExtension = Path.GetExtension(fileName);
+        //                if (fileExtension != ".pdf" && fileExtension != ".docx")
+        //                {
+        //                    return BadRequest("El tipo de archivo no es válido");
+        //                }
 
-                        #endregion
+        //                #endregion
 
-                        #region Comprobar si ya existe una imagen registrada al expediente, crearlo
-                        var request = (FtpWebRequest)WebRequest.Create(serverPath + "/" + file.FileName);
-                        request.Method = WebRequestMethods.Ftp.UploadFile;
-                        request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
-                        byte[] buffer = new byte[1024];
-                        var stream = file.OpenReadStream();
-                        byte[] fileContents;
-                        using (var ms = new MemoryStream())
-                        {
-                            int read;
-                            while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
-                            {
-                                ms.Write(buffer, 0, read);
-                            }
-                            fileContents = ms.ToArray();
-                        }
-                        using (Stream requestStream = await request.GetRequestStreamAsync())
-                        {
-                            requestStream.Write(fileContents, 0, fileContents.Length);
-                        }
-                        FtpWebResponse response = (FtpWebResponse)request.GetResponse();
-                        var archivo = new ArchivosCementerios()
-                        {
-                            ArchivosCementerioId = 0,
-                            Nombre = file.FileName,
-                            TipoArchivo = fileExtension,
-                            CementerioId = CementerioId
-                        };
-                        _context.ArchivosCementerios.Add(archivo);
-                        await _context.SaveChangesAsync();
-                    }
-                    return Ok("Documento registrado correctamente.");
-                    #endregion
-                }
-                else
-                {
-                    return BadRequest("No se ingresó ningun documento");
-                }
-            }
-            catch
-            {
-                return BadRequest("Ah ocurrido un error inesperado");
-            }
-            #endregion
-        }
+        //                #region Comprobar si ya existe una imagen registrada al expediente, crearlo
+        //                var request = (FtpWebRequest)WebRequest.Create(serverPath + "/" + file.FileName);
+        //                request.Method = WebRequestMethods.Ftp.UploadFile;
+        //                request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+        //                byte[] buffer = new byte[1024];
+        //                var stream = file.OpenReadStream();
+        //                byte[] fileContents;
+        //                using (var ms = new MemoryStream())
+        //                {
+        //                    int read;
+        //                    while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+        //                    {
+        //                        ms.Write(buffer, 0, read);
+        //                    }
+        //                    fileContents = ms.ToArray();
+        //                }
+        //                using (Stream requestStream = await request.GetRequestStreamAsync())
+        //                {
+        //                    requestStream.Write(fileContents, 0, fileContents.Length);
+        //                }
+        //                FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+        //                var archivo = new ArchivosCementerios()
+        //                {
+        //                    ArchivosCementerioId = 0,
+        //                    Nombre = file.FileName,
+        //                    TipoArchivo = fileExtension,
+        //                    CementerioId = CementerioId
+        //                };
+        //                _context.ArchivosCementerios.Add(archivo);
+        //                await _context.SaveChangesAsync();
+        //            }
+        //            return Ok("Documento registrado correctamente.");
+        //            #endregion
+        //        }
+        //        else
+        //        {
+        //            return BadRequest("No se ingresó ningun documento");
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        return BadRequest("Ah ocurrido un error inesperado");
+        //    }
+        //    #endregion
+        //}
         [HttpPost("Documents/Aseo/{AseoId}/")]
         public async Task<IActionResult> UploadDocumentsAseo(List<IFormFile> Files, int AseoId)
         {
