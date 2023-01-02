@@ -1008,121 +1008,19 @@ namespace AtoGobMx.Controllers
             }
             #endregion
         }
-
-        [HttpDelete("Documents11/AlumbradoPublico/Eliminar/{AlumbradoId}/{ArchivoId}")]
-        public async Task<IActionResult> DeleteDocumentsAlumbrado(int AlumbradoId, int ArchivoId)
+        [HttpPost("Documents/Cementerio/{CementerioId}/")]
+        public async Task<IActionResult> DownloadFilesVehiculosZip(int VehiculoId)
         {
-            var alumbrado = await _context.Alumbrado
-                .FirstOrDefaultAsync(f => f.AlumbradoId == AlumbradoId);
-
-            if (alumbrado == null)
-            {
-                return NotFound();
-            }
-            var Archivo = await _context.ArchivosAlumbrado
-                .FirstOrDefaultAsync(f => f.ArchivoAlumbradoId == ArchivoId);
-
-            if (Archivo == null)
-            {
-                return NotFound();
-            }
-            var serverPath = "ftp://digital.atogobmx.com/Files/ServiciosPublicos/AlumbradoPublico/";
-            var NombreObra = alumbrado.NombreObra.ToString();
-            var filePath = Archivo.Nombre.ToString();
-            var Url = $"{serverPath + NombreObra + "/" + "Documentos" + filePath}";
-            var result = DeleteFile(Url);
-            if (result)
-            {
-                Archivo.Archivado = true;
-                _context.ArchivosAlumbrado.Update(Archivo);
-                await _context.SaveChangesAsync();
-                return Ok("Documento archivado correctamente.");
-            }
-            return BadRequest("Error");
-
-        }
-        //----------------------------------------------//
-
-        //--------------Documentos Cementerio--------------------//
-        [HttpGet("Documents/Cementerio/{CementerioId}")]
-        public async Task<IActionResult> GetDocumentosCementerios(int CementerioId)
-        {
-            var Documentos = await _context.ArchivosCementerios
-                .Include(i => i.Cementerio)
-                .Where(w => w.CementerioId == CementerioId)
-                .Where(w => w.TipoArchivo == ".pdf" || w.TipoArchivo == ".docx")
-                .Where(w => !w.Archivado)
-                .ToListAsync();
-            if (Documentos == null)
-            {
-                return BadRequest("No se encuentran documentos registrados, ");
-            }
-            return Ok(Documentos);
-        }
-
-        [HttpGet("Documents/Dowload2/{CementerioId}/{ArchivosCementerioId}")]
-        public async Task<IActionResult> DownloadFileCementerios(int CementerioId, int ArchivosCementerioId)
-        {
-            try
-            {
-                var cementerio = await _context.Cementerio
-                    //.Include(i => i.ArchivosCementerios)
-                    .FirstOrDefaultAsync(f => f.CementerioId == CementerioId);
-                if (cementerio == null)
-                {
-                    return NotFound("El ID del alumbrado no existe");
-                }
-                var documento = await _context.ArchivosCementerios
-                    .Include(i => i.Cementerio)
-                    .Where(w => w.TipoArchivo == ".pdf" || w.TipoArchivo == ".docx")
-                    .FirstOrDefaultAsync(f => f.ArchivosCementerioId == ArchivosCementerioId);
-                if (documento == null)
-                {
-                    return NotFound("No se encuentra Archivo");
-                }
-                var serverPath = "ftp://digital.atogobmx.com/Files/ServiciosPublicos/CementerioPublico/";
-                var NombreCementerio = cementerio.NombreCementerio.ToString();
-                var filePath = documento.Nombre.ToString();
-                var ftpRequest = (FtpWebRequest)FtpWebRequest.Create(serverPath + NombreCementerio + "/Documentos/" + filePath);
-                var url = serverPath + NombreCementerio + "/Documentos/" + filePath;
-                ftpRequest.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
-                ftpRequest.UseBinary = true;
-                ftpRequest.UsePassive = true;
-                ftpRequest.KeepAlive = true;
-                ftpRequest.Method = WebRequestMethods.Ftp.DownloadFile;
-                var ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
-                var ftpStream = ftpResponse.GetResponseStream();
-                var provider = new FileExtensionContentTypeProvider();
-                if (!provider.TryGetContentType(url, out var contentType))
-                {
-                    contentType = "application/octet-stream";
-                }
-                return File(ftpStream, contentType, Path.GetFileName(url));
-
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                return NoContent();
-            }
-
-        }
-
-        [HttpGet("Documentos22/{CementerioId}/Zip")]
-        public async Task<IActionResult> DownloadFilesCementerio(int CementerioId)
-        {
-            var cementerio = await _context.Cementerio
-                 .Include(i => i.ArchivosCementerios)
+            var vehiculo = await _context.Vehiculo
                  .Where(w => !w.Archivado)
-                 .FirstOrDefaultAsync(f => f.CementerioId == CementerioId);
-            var UrlHost = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/{5}", "digital.atogobmx.com", "Files", "ServiciosPublicos", "CementerioPublico", cementerio.NombreCementerio, "Documentos");
-             
+                 .FirstOrDefaultAsync(f => f.VehiculoId == VehiculoId);
+            var UrlHost = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/{5}", "digital.atogobmx.com", "Files", "Patrimonio", "ParqueVehicular", vehiculo.Nomenclatura, "Documentos");
             var result = GetListFiles(UrlHost);
             foreach (string line in result)
             {
-                copyFile(String.Format("ftp://{0}/{1}/{2}/{3}/{4}", "digital.atogobmx.com", "Files", "ServiciosPublicos", "CementerioPublico",cementerio.NombreCementerio) + "/", line);
+                copyFile(String.Format("ftp://{0}/{1}/{2}/{3}/{4}", "digital.atogobmx.com", "Files", "Patrimonio", "ParqueVehicular", vehiculo.Nomenclatura) + "/", line);
             }
-            var FolderPath = Path.Combine(Directory.GetCurrentDirectory(), $"Files/Documentos");
+            var FolderPath = Path.Combine(Directory.GetCurrentDirectory(), $"Files/Documentos/");
             var FilePaths = Directory.GetFiles(FolderPath);
             var zipFileMemoryStream = new MemoryStream();
             using (ZipArchive archive = new ZipArchive(zipFileMemoryStream, ZipArchiveMode.Update, leaveOpen: true))
@@ -1158,10 +1056,10 @@ namespace AtoGobMx.Controllers
             try
             {
 
-                #region Comprobar si el expediente existe
-                var direccioncementerio = await _context.Cementerio
-                    //.Include(i => i.TareaTipoAlumbrado)
-                    .FirstOrDefaultAsync(f => f.CementerioId == CementerioId);
+        //        #region Comprobar si el expediente existe
+        //        var direccioncementerio = await _context.Cementerio
+        //            //.Include(i => i.TareaTipoAlumbrado)
+        //            .FirstOrDefaultAsync(f => f.CementerioId == CementerioId);
 
                 if (direccioncementerio == null)
                 {
@@ -1184,7 +1082,7 @@ namespace AtoGobMx.Controllers
                             return BadRequest("El tipo de archivo no es válido");
                         }
 
-                        #endregion
+        //                #endregion
 
                         #region Comprobar si ya existe una imagen registrada al expediente, crearlo
                         var request = (FtpWebRequest)WebRequest.Create(serverPath + "/" + file.FileName);
