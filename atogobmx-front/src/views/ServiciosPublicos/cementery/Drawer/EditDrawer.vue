@@ -85,13 +85,11 @@
           </b-col>
         </b-row>
         <b-row cols="1" align-h="center">
-          <b-button v-b-toggle.collapse-1 variant="primary"> Mapa </b-button>
-          <b-collapse id="collapse-1" class="mt-2">
-            <b-card>
-              <b-alert variant="warning" dismissible show
+          <b-alert variant="warning" dismissible show
                 >Arrastra el punto del mapa al lugar donde se encuentra su
                 gabeta.</b-alert
               >
+            <b-card>
               <GMapMap
                 :center="center"
                 map-type-id="satellite"
@@ -113,20 +111,24 @@
                 />
               </GMapMap>
             </b-card>
-          </b-collapse>
         </b-row>
-        <b-row align-h="end">
+        <b-row cols="2" class="m-2" align-h="end">
+          <b-col>
+
           <b-button
-            class="col-1 m-2 text-white"
             variant="primary"
             to="/ServiciosPublicos/Gabetas/list"
             type="reset"
           >
             Cancelar</b-button
           >
-          <b-button type="success" class="col-1 m-2" variant="success">
+          </b-col>
+          <b-col>
+
+          <b-button type="success" variant="success">
             Guardar
           </b-button>
+          </b-col>
         </b-row>
       </Form>
     </b-card>

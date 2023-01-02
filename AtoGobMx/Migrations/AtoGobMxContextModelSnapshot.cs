@@ -375,15 +375,15 @@ namespace AtoGobMx.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<float>("Latitud")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Latitud")
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("Localidad")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<float>("Longitud")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Longitud")
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("NombreCementerio")
                         .IsRequired()
@@ -676,11 +676,11 @@ namespace AtoGobMx.Migrations
                     b.Property<int>("EspaciosDisponibles")
                         .HasColumnType("int");
 
-                    b.Property<float>("Latitud")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Latitud")
+                        .HasColumnType("decimal(65,30)");
 
-                    b.Property<float>("Longitud")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Longitud")
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<float>("MetrosCorrespondientes")
                         .HasColumnType("float");

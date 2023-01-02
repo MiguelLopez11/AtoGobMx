@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AtoGobMx.Migrations
 {
-    public partial class OP_Vehiculos : Migration
+    public partial class Correcciones_DB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -19,13 +19,14 @@ namespace AtoGobMx.Migrations
                 {
                     AseoId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    NombreServicio = table.Column<string>(type: "longtext", nullable: false)
+                    Nombre = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    EstablecimientoPublico = table.Column<string>(type: "longtext", nullable: false)
+                    Problema = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    Fecha = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     Domicilio = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Objetivo = table.Column<string>(type: "longtext", nullable: false)
+                    Descripcion = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Archivado = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
@@ -109,8 +110,8 @@ namespace AtoGobMx.Migrations
                     Calle = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     NumeroExterior = table.Column<int>(type: "int", nullable: false),
-                    Longitud = table.Column<float>(type: "float", nullable: false),
-                    Latitud = table.Column<float>(type: "float", nullable: false),
+                    Longitud = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Latitud = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
                     Archivado = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
@@ -414,9 +415,9 @@ namespace AtoGobMx.Migrations
                 {
                     ArchivosAseoId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Nombre = table.Column<string>(type: "longtext", nullable: false)
+                    Nombre = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    TipoArchivo = table.Column<string>(type: "longtext", nullable: false)
+                    TipoArchivo = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Archivado = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     AseoId = table.Column<int>(type: "int", nullable: false)
@@ -566,9 +567,9 @@ namespace AtoGobMx.Migrations
                 {
                     ArchivosCementerioId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Nombre = table.Column<string>(type: "longtext", nullable: false)
+                    Nombre = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    TipoArchivo = table.Column<string>(type: "longtext", nullable: false)
+                    TipoArchivo = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Archivado = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     CementerioId = table.Column<int>(type: "int", nullable: false)
@@ -595,8 +596,8 @@ namespace AtoGobMx.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     NumeroEspasios = table.Column<int>(type: "int", nullable: false),
                     MetrosCorrespondientes = table.Column<float>(type: "float", nullable: false),
-                    Longitud = table.Column<float>(type: "float", nullable: false),
-                    Latitud = table.Column<float>(type: "float", nullable: false),
+                    Longitud = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Latitud = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
                     EspaciosDisponibles = table.Column<int>(type: "int", nullable: false),
                     CementerioId = table.Column<int>(type: "int", nullable: true),
                     Archivado = table.Column<bool>(type: "tinyint(1)", nullable: false)
@@ -914,9 +915,9 @@ namespace AtoGobMx.Migrations
                 {
                     ArchivosObrasId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Nombre = table.Column<string>(type: "longtext", nullable: false)
+                    Nombre = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    TipoArchivo = table.Column<string>(type: "longtext", nullable: false)
+                    TipoArchivo = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Archivado = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     ObraId = table.Column<int>(type: "int", nullable: false)
@@ -959,6 +960,32 @@ namespace AtoGobMx.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "AseoVehiculo",
+                columns: table => new
+                {
+                    AseoVehiculoId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    RutaId = table.Column<int>(type: "int", nullable: true),
+                    VehiculoId = table.Column<int>(type: "int", nullable: true),
+                    Archivado = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AseoVehiculo", x => x.AseoVehiculoId);
+                    table.ForeignKey(
+                        name: "FK_AseoVehiculo_Ruta_RutaId",
+                        column: x => x.RutaId,
+                        principalTable: "Ruta",
+                        principalColumn: "RutaId");
+                    table.ForeignKey(
+                        name: "FK_AseoVehiculo_Vehiculo_VehiculoId",
+                        column: x => x.VehiculoId,
+                        principalTable: "Vehiculo",
+                        principalColumn: "VehiculoId");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "OP_Vehiculos",
                 columns: table => new
                 {
@@ -990,9 +1017,9 @@ namespace AtoGobMx.Migrations
                 {
                     ArchivoAlumbradoId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Nombre = table.Column<string>(type: "longtext", nullable: true)
+                    Nombre = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    TipoArchivo = table.Column<string>(type: "longtext", nullable: false)
+                    TipoArchivo = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Archivado = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     AlumbradoId = table.Column<int>(type: "int", nullable: false)
@@ -1051,6 +1078,31 @@ namespace AtoGobMx.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "ArchivosMobiliarios",
+                columns: table => new
+                {
+                    ArchivoMobiliarioId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Nombre = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    TipoArchivo = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Archivado = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    MobiliarioId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ArchivosMobiliarios", x => x.ArchivoMobiliarioId);
+                    table.ForeignKey(
+                        name: "FK_ArchivosMobiliarios_Mobiliario_MobiliarioId",
+                        column: x => x.MobiliarioId,
+                        principalTable: "Mobiliario",
+                        principalColumn: "MobiliarioId",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Armeria",
                 columns: table => new
                 {
@@ -1075,6 +1127,32 @@ namespace AtoGobMx.Migrations
                         principalTable: "Empleados",
                         principalColumn: "EmpleadoId",
                         onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "AseoEmpleado",
+                columns: table => new
+                {
+                    AseoEmpleadoId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    EmpleadoId = table.Column<int>(type: "int", nullable: true),
+                    RutaId = table.Column<int>(type: "int", nullable: true),
+                    Archivado = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AseoEmpleado", x => x.AseoEmpleadoId);
+                    table.ForeignKey(
+                        name: "FK_AseoEmpleado_Empleados_EmpleadoId",
+                        column: x => x.EmpleadoId,
+                        principalTable: "Empleados",
+                        principalColumn: "EmpleadoId");
+                    table.ForeignKey(
+                        name: "FK_AseoEmpleado_Ruta_RutaId",
+                        column: x => x.RutaId,
+                        principalTable: "Ruta",
+                        principalColumn: "RutaId");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -1124,7 +1202,8 @@ namespace AtoGobMx.Migrations
                     ProveedorId = table.Column<int>(type: "int", nullable: true),
                     EstatusValeId = table.Column<int>(type: "int", nullable: true),
                     TipoId = table.Column<int>(type: "int", nullable: true),
-                    Archivado = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                    Archivado = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    TieneExpediente = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1335,6 +1414,27 @@ namespace AtoGobMx.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "ExpedienteVale",
+                columns: table => new
+                {
+                    ExpedienteValeId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    ControlValeId = table.Column<int>(type: "int", nullable: false),
+                    Archivado = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ExpedienteVale", x => x.ExpedienteValeId);
+                    table.ForeignKey(
+                        name: "FK_ExpedienteVale_ControlDeVales_ControlValeId",
+                        column: x => x.ControlValeId,
+                        principalTable: "ControlDeVales",
+                        principalColumn: "ControlValeId",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "PROV_DetalleVale",
                 columns: table => new
                 {
@@ -1360,6 +1460,32 @@ namespace AtoGobMx.Migrations
                         column: x => x.ProductoId,
                         principalTable: "PROV_Producto",
                         principalColumn: "ProductoId");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "PROV_Vehiculo",
+                columns: table => new
+                {
+                    ProvVehiculoId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    VehiculoId = table.Column<int>(type: "int", nullable: true),
+                    ControlValeId = table.Column<int>(type: "int", nullable: true),
+                    Archivado = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PROV_Vehiculo", x => x.ProvVehiculoId);
+                    table.ForeignKey(
+                        name: "FK_PROV_Vehiculo_ControlDeVales_ControlValeId",
+                        column: x => x.ControlValeId,
+                        principalTable: "ControlDeVales",
+                        principalColumn: "ControlValeId");
+                    table.ForeignKey(
+                        name: "FK_PROV_Vehiculo_Vehiculo_VehiculoId",
+                        column: x => x.VehiculoId,
+                        principalTable: "Vehiculo",
+                        principalColumn: "VehiculoId");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -1475,6 +1601,11 @@ namespace AtoGobMx.Migrations
                 column: "EquipoComputoId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ArchivosMobiliarios_MobiliarioId",
+                table: "ArchivosMobiliarios",
+                column: "MobiliarioId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ArchivosObras_ObraId",
                 table: "ArchivosObras",
                 column: "ObraId");
@@ -1488,6 +1619,26 @@ namespace AtoGobMx.Migrations
                 name: "IX_Armeria_EmpleadoId",
                 table: "Armeria",
                 column: "EmpleadoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AseoEmpleado_EmpleadoId",
+                table: "AseoEmpleado",
+                column: "EmpleadoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AseoEmpleado_RutaId",
+                table: "AseoEmpleado",
+                column: "RutaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AseoVehiculo_RutaId",
+                table: "AseoVehiculo",
+                column: "RutaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AseoVehiculo_VehiculoId",
+                table: "AseoVehiculo",
+                column: "VehiculoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -1622,6 +1773,11 @@ namespace AtoGobMx.Migrations
                 column: "EmpleadoId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ExpedienteVale_ControlValeId",
+                table: "ExpedienteVale",
+                column: "ControlValeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Gabetas_CementerioId",
                 table: "Gabetas",
                 column: "CementerioId");
@@ -1682,6 +1838,16 @@ namespace AtoGobMx.Migrations
                 column: "ProductoId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PROV_Vehiculo_ControlValeId",
+                table: "PROV_Vehiculo",
+                column: "ControlValeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PROV_Vehiculo_VehiculoId",
+                table: "PROV_Vehiculo",
+                column: "VehiculoId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PuestoTrabajo_DepartamentoId",
                 table: "PuestoTrabajo",
                 column: "DepartamentoId");
@@ -1735,6 +1901,9 @@ namespace AtoGobMx.Migrations
                 name: "ArchivosEquipoComputos");
 
             migrationBuilder.DropTable(
+                name: "ArchivosMobiliarios");
+
+            migrationBuilder.DropTable(
                 name: "ArchivosObras");
 
             migrationBuilder.DropTable(
@@ -1742,6 +1911,12 @@ namespace AtoGobMx.Migrations
 
             migrationBuilder.DropTable(
                 name: "Armeria");
+
+            migrationBuilder.DropTable(
+                name: "AseoEmpleado");
+
+            migrationBuilder.DropTable(
+                name: "AseoVehiculo");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -1771,10 +1946,10 @@ namespace AtoGobMx.Migrations
                 name: "ExpedienteMedico");
 
             migrationBuilder.DropTable(
-                name: "Gabetas");
+                name: "ExpedienteVale");
 
             migrationBuilder.DropTable(
-                name: "Mobiliario");
+                name: "Gabetas");
 
             migrationBuilder.DropTable(
                 name: "OP_Empleados");
@@ -1787,6 +1962,9 @@ namespace AtoGobMx.Migrations
 
             migrationBuilder.DropTable(
                 name: "PROV_DetalleVale");
+
+            migrationBuilder.DropTable(
+                name: "PROV_Vehiculo");
 
             migrationBuilder.DropTable(
                 name: "VehiculosAlumbrado");
@@ -1804,6 +1982,9 @@ namespace AtoGobMx.Migrations
                 name: "EquipoComputo");
 
             migrationBuilder.DropTable(
+                name: "Mobiliario");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
@@ -1816,9 +1997,6 @@ namespace AtoGobMx.Migrations
                 name: "Cementerio");
 
             migrationBuilder.DropTable(
-                name: "TipoMobiliario");
-
-            migrationBuilder.DropTable(
                 name: "ObrasPublicas");
 
             migrationBuilder.DropTable(
@@ -1828,16 +2006,19 @@ namespace AtoGobMx.Migrations
                 name: "Receta");
 
             migrationBuilder.DropTable(
-                name: "ControlDeVales");
+                name: "PROV_Producto");
 
             migrationBuilder.DropTable(
-                name: "PROV_Producto");
+                name: "ControlDeVales");
 
             migrationBuilder.DropTable(
                 name: "ExpedienteAlumbrado");
 
             migrationBuilder.DropTable(
                 name: "InventarioEstatus");
+
+            migrationBuilder.DropTable(
+                name: "TipoMobiliario");
 
             migrationBuilder.DropTable(
                 name: "OP_EstatusObras");

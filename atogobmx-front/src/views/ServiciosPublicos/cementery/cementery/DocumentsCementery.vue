@@ -118,10 +118,6 @@ export default {
     CementerioId: {
       type: Number,
       required: true
-    },
-    Cementerio: {
-      type: Object,
-      required: true
     }
   },
   components: {
