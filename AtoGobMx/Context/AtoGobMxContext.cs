@@ -66,7 +66,9 @@ namespace AtoGobMx.Context
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Departamentos>().HasData(new Departamentos { DepartamentoId = 1, Nombre = "Direccion de Sistemas", Descripcion = null, Archivado = false });
+            modelBuilder.Entity<Departamentos>().HasData(new Departamentos { DepartamentoId = 1, Nombre = "Comisaría de Seguridad Pública", Descripcion = null, Archivado = false });
+            modelBuilder.Entity<Departamentos>().HasData(new Departamentos { DepartamentoId = 2, Nombre = "Seguridad Pública", Descripcion = null, Archivado = false });
+            modelBuilder.Entity<Departamentos>().HasData(new Departamentos { DepartamentoId = 3, Nombre = "Sistemas y tecnologías de la información", Descripcion = null, Archivado = false });
             modelBuilder.Entity<PuestoTrabajo>().HasData(new PuestoTrabajo { PuestoTrabajoId = 1, Nombre = "Administrador", DepartamentoId = 1, Archivado = false });
             modelBuilder.Entity<SERMED_EstatusReceta>().HasData(new SERMED_EstatusReceta { EstatusRecetaId = 1, Nombre = "Pendiente", Descripcion = null, Archivado = false });
             modelBuilder.Entity<SERMED_EstatusReceta>().HasData(new SERMED_EstatusReceta { EstatusRecetaId = 2, Nombre = "Surtido", Descripcion = null, Archivado = false });
