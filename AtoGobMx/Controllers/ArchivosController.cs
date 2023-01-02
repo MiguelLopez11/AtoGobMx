@@ -1008,8 +1008,8 @@ namespace AtoGobMx.Controllers
             }
             #endregion
         }
-        [HttpPost("Documents/Cementerio/{CementerioId}/")]
-        public async Task<IActionResult> DownloadFilesVehiculosZip(int VehiculoId)
+        [HttpGet("Documents/Cementerio/{CementerioId}/")]
+        public async Task<IActionResult> DownloadCementeryZip(int VehiculoId)
         {
             var vehiculo = await _context.Vehiculo
                  .Where(w => !w.Archivado)
@@ -1056,10 +1056,10 @@ namespace AtoGobMx.Controllers
             try
             {
 
-        //        #region Comprobar si el expediente existe
-        //        var direccioncementerio = await _context.Cementerio
-        //            //.Include(i => i.TareaTipoAlumbrado)
-        //            .FirstOrDefaultAsync(f => f.CementerioId == CementerioId);
+                //        #region Comprobar si el expediente existe
+                var direccioncementerio = await _context.Cementerio
+                    //.Include(i => i.TareaTipoAlumbrado)
+                    .FirstOrDefaultAsync(f => f.CementerioId == CementerioId);
 
                 if (direccioncementerio == null)
                 {

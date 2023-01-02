@@ -158,7 +158,7 @@
 
 <script>
 import CementeryService from '@/Services/cementery.Services'
-import ExpedientDocumentsCementery from '../Cementery/DocumentsCementery.vue'
+import ExpedientDocumentsCementery from './DocumentsCementery.vue'
 import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 // import { useToast } from 'vue-toast-notification'

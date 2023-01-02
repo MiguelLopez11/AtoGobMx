@@ -24,6 +24,22 @@
                   ></ErrorMessage>
                 </b-form-group>
               </b-col>
+              <!--Agregar problema -->
+              <b-col>
+                <b-form-group class="mt-3" label="Problema">
+                  <Field name="ProblemField" :rules="validateProblem" as="text">
+                    <b-form-input
+                      v-model="cleannessServiceFields.problema"
+                      :state="ProblemState"
+                    >
+                    </b-form-input>
+                  </Field>
+                  <ErrorMessage
+                    class="text-danger"
+                    name="ProblemField"
+                  ></ErrorMessage>
+                </b-form-group>
+              </b-col>
               <!--Agregar Establecimiento publico -->
               <b-col>
                 <b-form-group class="mt-3" label="Establecimiento publico">
@@ -110,7 +126,7 @@
 
 <script>
 import CleannessService from '@/Services/cleanness.Services'
-import ExpedientDocumentsCleanness from '@/views/ServiciosPublicos/cleanness/Cleanness/DocumentsCleanness.vue'
+import ExpedientDocumentsCleanness from './DocumentsCleanness.vue'
 import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 // import { useToast } from 'vue-toast-notification'
@@ -131,7 +147,7 @@ export default {
     const router = useRoute()
     const redirect = useRouter()
     const NameState = ref(false)
-    const PublicEstablishmentState = ref(false)
+    const ProblemState = ref(false)
     const DomicileState = ref(false)
     const ObjectiveState = ref(false)
     const aseoId = ref(parseInt(router.params.AseoId))
@@ -164,9 +180,7 @@ export default {
         return 'Este campo es requerido'
       }
 
-      if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(cleannessService.value.nombre)
-      ) {
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(cleannessService.value.nombre)) {
         NameState.value = false
         return 'Este campo solo puede contener letras'
       }
@@ -180,7 +194,7 @@ export default {
       return true
     }
 
-    const validatePublicEstablishment = () => {
+    const validateProblem = () => {
       if (!cleannessService.value.establecimientoPublico) {
         validateState()
         return 'Este campo es requerido'
@@ -191,7 +205,7 @@ export default {
           cleannessService.value.establecimientoPublico
         )
       ) {
-        PublicEstablishmentState.value = false
+        ProblemState.value = false
         return 'Este campo solo puede contener numeros'
       }
 
@@ -245,25 +259,17 @@ export default {
     }
 
     const validateState = () => {
-      // eslint-disable-next-line no-unneeded-ternary
-      NameState.value =
-        cleannessService.value.nombre === '' ? false : true
-      // eslint-disable-next-line no-unneeded-ternary
-      PublicEstablishmentState.value =
-        cleannessService.value.establecimientoPublico === '' ? false : true
-      // eslint-disable-next-line no-unneeded-ternary
-      DomicileState.value =
-        cleannessService.value.domicilio === '' ? false : true
-      // eslint-disable-next-line no-unneeded-ternary
-      ObjectiveState.value =
-        cleannessService.value.objetivo === '' ? false : true
+      NameState.value = cleannessService.value.nombre !== ''
+      ProblemState.value = cleannessService.value.establecimientoPublico !== ''
+      DomicileState.value = cleannessService.value.domicilio !== ''
+      ObjectiveState.value = cleannessService.value.objetivo !== ''
     }
 
     return {
       cleannessService,
       breadcrumbItems,
       NameState,
-      PublicEstablishmentState,
+      ProblemState,
       DomicileState,
       aseoId,
       ObjectiveState,
@@ -272,7 +278,7 @@ export default {
       onUpdateCleannessService,
       validateState,
       validateName,
-      validatePublicEstablishment,
+      validateProblem,
       validateDomicile,
       validateObjective
     }

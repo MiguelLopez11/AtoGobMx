@@ -11,7 +11,7 @@ namespace AtoGobMx.Models
         public int GabetaId { get; set; }
         public string NombrePropietario { get; set; }
         public int NumeroEspasios { get; set; }
-        public float MetrosCorrespondientes { get; set; }
+        public decimal MetrosCorrespondientes { get; set; }
         public decimal Longitud { get; set; }
         public decimal Latitud { get; set; }
         public int EspaciosDisponibles { get; set; }
