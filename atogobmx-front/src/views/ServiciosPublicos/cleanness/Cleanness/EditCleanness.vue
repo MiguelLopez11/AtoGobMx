@@ -8,23 +8,19 @@
         <b-card>
           <Form @submit="onUpdateCleannessService">
             <b-row cols="2">
-              <!-- Agregar nombre del servicios -->
+              <!--Agregar nombre -->
               <b-col>
-                <b-form-group class="mt-3" label="Nombre del servicio">
-                  <Field
-                    name="NameServiceField"
-                    :rules="validateNameService"
-                    as="text"
-                  >
+                <b-form-group class="mt-3" label="Nombre de quie reporta: ">
+                  <Field name="NameField" :rules="validateName" as="text">
                     <b-form-input
-                      v-model="cleannessService.nombreServicio"
-                      :state="NameServiceState"
+                      v-model="cleannessServiceFields.nombre"
+                      :state="NameState"
                     >
                     </b-form-input>
                   </Field>
                   <ErrorMessage
                     class="text-danger"
-                    name="NameServiceField"
+                    name="NameField"
                   ></ErrorMessage>
                 </b-form-group>
               </b-col>
@@ -134,7 +130,7 @@ export default {
     const cleannessService = ref([])
     const router = useRoute()
     const redirect = useRouter()
-    const NameServiceState = ref(false)
+    const NameState = ref(false)
     const PublicEstablishmentState = ref(false)
     const DomicileState = ref(false)
     const ObjectiveState = ref(false)
@@ -162,16 +158,16 @@ export default {
       cleannessService.value = data
     })
 
-    const validateNameService = () => {
-      if (!cleannessService.value.nombreServicio) {
+    const validateName = () => {
+      if (!cleannessService.value.nombre) {
         validateState()
         return 'Este campo es requerido'
       }
 
       if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(cleannessService.value.nombreServicio)
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(cleannessService.value.nombre)
       ) {
-        NameServiceState.value = false
+        NameState.value = false
         return 'Este campo solo puede contener letras'
       }
 
@@ -250,19 +246,23 @@ export default {
 
     const validateState = () => {
       // eslint-disable-next-line no-unneeded-ternary
-      NameServiceState.value = cleannessService.value.nombreServicio === '' ? false : true
+      NameState.value =
+        cleannessService.value.nombre === '' ? false : true
       // eslint-disable-next-line no-unneeded-ternary
-      PublicEstablishmentState.value = cleannessService.value.establecimientoPublico === '' ? false : true
+      PublicEstablishmentState.value =
+        cleannessService.value.establecimientoPublico === '' ? false : true
       // eslint-disable-next-line no-unneeded-ternary
-      DomicileState.value = cleannessService.value.domicilio === '' ? false : true
+      DomicileState.value =
+        cleannessService.value.domicilio === '' ? false : true
       // eslint-disable-next-line no-unneeded-ternary
-      ObjectiveState.value = cleannessService.value.objetivo === '' ? false : true
+      ObjectiveState.value =
+        cleannessService.value.objetivo === '' ? false : true
     }
 
     return {
       cleannessService,
       breadcrumbItems,
-      NameServiceState,
+      NameState,
       PublicEstablishmentState,
       DomicileState,
       aseoId,
@@ -271,7 +271,7 @@ export default {
 
       onUpdateCleannessService,
       validateState,
-      validateNameService,
+      validateName,
       validatePublicEstablishment,
       validateDomicile,
       validateObjective
