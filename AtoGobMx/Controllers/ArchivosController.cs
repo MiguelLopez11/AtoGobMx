@@ -1139,45 +1139,45 @@ namespace AtoGobMx.Controllers
             }
             #endregion
         }
-        [HttpGet("Documents/Cementerio/{CementerioId}/")]
-        public async Task<IActionResult> DownloadFilesCementerioZip(int VehiculoId)
-        {
-            var vehiculo = await _context.Vehiculo
-                 .Where(w => !w.Archivado)
-                 .FirstOrDefaultAsync(f => f.VehiculoId == VehiculoId);
-            var UrlHost = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/{5}", "digital.atogobmx.com", "Files", "Patrimonio", "ParqueVehicular", vehiculo.Nomenclatura, "Documentos");
-            var result = GetListFiles(UrlHost);
-            foreach (string line in result)
-            {
-                copyFile(String.Format("ftp://{0}/{1}/{2}/{3}/{4}", "digital.atogobmx.com", "Files", "Patrimonio", "ParqueVehicular", vehiculo.Nomenclatura) + "/", line);
-            }
-            var FolderPath = Path.Combine(Directory.GetCurrentDirectory(), $"Files/Documentos/");
-            var FilePaths = Directory.GetFiles(FolderPath);
-            var zipFileMemoryStream = new MemoryStream();
-            using (ZipArchive archive = new ZipArchive(zipFileMemoryStream, ZipArchiveMode.Update, leaveOpen: true))
-            {
-                foreach (var FilePath in FilePaths)
-                {
-                    var FileName = Path.GetFileName(FilePath);
-                    var entry = archive.CreateEntry(FileName);
-                    using (var entryStream = entry.Open())
-                    using (var fileStream = System.IO.File.OpenRead(FilePath))
-                    {
-                        await fileStream.CopyToAsync(entryStream);
-                    }
-                }
-            }
+        //[HttpGet("Documents/Cementerio/{CementerioId}/")]
+        //public async Task<IActionResult> DownloadFilesCementerioZip(int VehiculoId)
+        //{
+        //    var vehiculo = await _context.Vehiculo
+        //         .Where(w => !w.Archivado)
+        //         .FirstOrDefaultAsync(f => f.VehiculoId == VehiculoId);
+        //    var UrlHost = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/{5}", "digital.atogobmx.com", "Files", "Patrimonio", "ParqueVehicular", vehiculo.Nomenclatura, "Documentos");
+        //    var result = GetListFiles(UrlHost);
+        //    foreach (string line in result)
+        //    {
+        //        copyFile(String.Format("ftp://{0}/{1}/{2}/{3}/{4}", "digital.atogobmx.com", "Files", "Patrimonio", "ParqueVehicular", vehiculo.Nomenclatura) + "/", line);
+        //    }
+        //    var FolderPath = Path.Combine(Directory.GetCurrentDirectory(), $"Files/Documentos/");
+        //    var FilePaths = Directory.GetFiles(FolderPath);
+        //    var zipFileMemoryStream = new MemoryStream();
+        //    using (ZipArchive archive = new ZipArchive(zipFileMemoryStream, ZipArchiveMode.Update, leaveOpen: true))
+        //    {
+        //        foreach (var FilePath in FilePaths)
+        //        {
+        //            var FileName = Path.GetFileName(FilePath);
+        //            var entry = archive.CreateEntry(FileName);
+        //            using (var entryStream = entry.Open())
+        //            using (var fileStream = System.IO.File.OpenRead(FilePath))
+        //            {
+        //                await fileStream.CopyToAsync(entryStream);
+        //            }
+        //        }
+        //    }
 
-            zipFileMemoryStream.Seek(0, SeekOrigin.Begin);
-            if (!Directory.Exists("Files/Documentos/"))
-            {
-                Directory.CreateDirectory("Files/Documentos/");
-            }
-            var dir = new DirectoryInfo("Files/Documentos/");
-            dir.Attributes = dir.Attributes & ~FileAttributes.ReadOnly;
-            dir.Delete(true);
-            return File(zipFileMemoryStream, "application/octet-stream", $"Documentos_{DateOnly.FromDateTime(DateTime.Now)}_.zip");
-        }
+        //    zipFileMemoryStream.Seek(0, SeekOrigin.Begin);
+        //    if (!Directory.Exists("Files/Documentos/"))
+        //    {
+        //        Directory.CreateDirectory("Files/Documentos/");
+        //    }
+        //    var dir = new DirectoryInfo("Files/Documentos/");
+        //    dir.Attributes = dir.Attributes & ~FileAttributes.ReadOnly;
+        //    dir.Delete(true);
+        //    return File(zipFileMemoryStream, "application/octet-stream", $"Documentos_{DateOnly.FromDateTime(DateTime.Now)}_.zip");
+        //}
         //[HttpPost("Documents/Cementerio/{CementerioId}/")]
         //public async Task<IActionResult> UploadDocumentsCementerio(List<IFormFile> Files, int CementerioId)
         //{

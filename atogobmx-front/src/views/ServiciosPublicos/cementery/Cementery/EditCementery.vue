@@ -5,160 +5,149 @@
   <b-card class="m-2">
     <b-tabs content-class="mt-3">
       <b-tab title="Cementerios" active>
-          <Form @submit="onUpdateCementeryService">
-            <b-row cols="2">
-              <!-- Agregar nombre -->
-              <b-col>
-                <b-form-group class="mt-3" label="Nombre del cementerio">
-                  <Field
-                    name="NameCementeryField"
-                    :rules="validateNameCementery"
-                    as="text"
-                  >
-                    <b-form-input
-                      v-model="cementeryService.nombreCementerio"
-                      :state="NameCementeryState"
-                    >
-                    </b-form-input>
-                  </Field>
-                  <ErrorMessage
-                    class="text-danger"
-                    name="NameCementeryField"
-                  ></ErrorMessage>
-                </b-form-group>
-              </b-col>
-              <!-- Agregar comunidad -->
-              <b-col>
-                <b-form-group class="mt-3" label="Comunidad">
-                  <Field
-                    name="MunicipalityField"
-                    :rules="validateMunicipality"
-                    as="text"
-                  >
-                    <b-form-input
-                      v-model="cementeryService.comunidad"
-                      :state="MunicipalityState"
-                    >
-                    </b-form-input>
-                  </Field>
-                  <ErrorMessage
-                    class="text-danger"
-                    name="MunicipalityField"
-                  ></ErrorMessage>
-                </b-form-group>
-              </b-col>
-              <!-- Agregar localidad -->
-              <b-col>
-                <b-form-group class="mt-3" label="Localidad">
-                  <Field
-                    name="LocationField"
-                    :rules="validateLocation"
-                    as="text"
-                  >
-                    <b-form-input
-                      v-model="cementeryService.localidad"
-                      :state="LocationState"
-                    >
-                    </b-form-input>
-                  </Field>
-                  <ErrorMessage
-                    class="text-danger"
-                    name="LocationField"
-                  ></ErrorMessage>
-                </b-form-group>
-              </b-col>
-              <!-- Agregar calle -->
-              <b-col>
-                <b-form-group class="mt-3" label="Calle">
-                  <Field name="StreetField" :rules="validateStreet" as="text">
-                    <b-form-input
-                      v-model="cementeryService.calle"
-                      :state="StreetState"
-                      type="text"
-                    >
-                    </b-form-input>
-                  </Field>
-                  <ErrorMessage
-                    class="text-danger"
-                    name="StreetField"
-                  ></ErrorMessage>
-                </b-form-group>
-              </b-col>
-              <!-- Agregar numero exterior -->
-              <b-col>
-                <b-form-group class="mt-3" label="Numero exterior">
-                  <Field
-                    name="NumberOutsideField"
-                    :rules="validateNumberOutside"
-                    as="text"
-                  >
-                    <b-form-input
-                      v-model="cementeryService.numeroExterior"
-                      :state="NumberOutsideState"
-                      type="number"
-                    >
-                    </b-form-input>
-                  </Field>
-                  <ErrorMessage
-                    class="text-danger"
-                    name="NumberOutsideField"
-                  ></ErrorMessage>
-                </b-form-group>
-              </b-col>
-              </b-row>
-              <b-row cols="1">
-                <b-button v-b-toggle.collapse-1 variant="primary">
-                  Mapa
-                </b-button>
-                <b-collapse id="collapse-1" class="mt-2">
-                  <b-card>
-                    <b-alert variant="warning" dismissible show
-                      >Arrastra el punto del mapa al lugar donde se encuentra su
-                      gabeta.</b-alert
-                    >
-                    <GMapMap
-                      :center="center"
-                      map-type-id="satellite"
-                      :zoom="20"
-                      :options="{
-                        zoomControl: true,
-                        mapTypeControl: false,
-                        scaleControl: false,
-                        rotateControl: true,
-                        disableDefaultUi: false
-                      }"
-                      style="width: 100%; height: 500px"
-                    >
-                      <GMapMarker
-                        :zoom="10"
-                        :position="center"
-                        :draggable="true"
-                        @drag="updateCoordinates"
-                      />
-                    </GMapMap>
-                  </b-card>
-                </b-collapse>
-              </b-row>
-              <b-row cols="2" align-h="end">
-                <b-col>
-
-                <b-button
-                  class=" w-75 m-2 text-white"
-                  variant="primary"
-                  to="/ServiciosPublicos/Cementerios/list"
-                  type="reset"
+        <Form @submit="onUpdateCementeryService">
+          <b-row cols="2">
+            <!-- Agregar nombre -->
+            <b-col>
+              <b-form-group class="mt-3" label="Nombre del cementerio">
+                <Field
+                  name="NameCementeryField"
+                  :rules="validateNameCementery"
+                  as="text"
                 >
-                  Cancelar</b-button
+                  <b-form-input
+                    v-model="cementeryService.nombreCementerio"
+                    :state="NameCementeryState"
+                  >
+                  </b-form-input>
+                </Field>
+                <ErrorMessage
+                  class="text-danger"
+                  name="NameCementeryField"
+                ></ErrorMessage>
+              </b-form-group>
+            </b-col>
+            <!-- Agregar comunidad -->
+            <b-col>
+              <b-form-group class="mt-3" label="Comunidad">
+                <Field
+                  name="MunicipalityField"
+                  :rules="validateMunicipality"
+                  as="text"
                 >
-                </b-col>
-                <b-col>
-
-                <b-button type="success" class="w-75 m-2" variant="success">
-                  Guardar
-                </b-button>
-                </b-col>
-              </b-row>
-          </Form>
+                  <b-form-input
+                    v-model="cementeryService.comunidad"
+                    :state="MunicipalityState"
+                  >
+                  </b-form-input>
+                </Field>
+                <ErrorMessage
+                  class="text-danger"
+                  name="MunicipalityField"
+                ></ErrorMessage>
+              </b-form-group>
+            </b-col>
+            <!-- Agregar localidad -->
+            <b-col>
+              <b-form-group class="mt-3" label="Localidad">
+                <Field name="LocationField" :rules="validateLocation" as="text">
+                  <b-form-input
+                    v-model="cementeryService.localidad"
+                    :state="LocationState"
+                  >
+                  </b-form-input>
+                </Field>
+                <ErrorMessage
+                  class="text-danger"
+                  name="LocationField"
+                ></ErrorMessage>
+              </b-form-group>
+            </b-col>
+            <!-- Agregar calle -->
+            <b-col>
+              <b-form-group class="mt-3" label="Calle">
+                <Field name="StreetField" :rules="validateStreet" as="text">
+                  <b-form-input
+                    v-model="cementeryService.calle"
+                    :state="StreetState"
+                    type="text"
+                  >
+                  </b-form-input>
+                </Field>
+                <ErrorMessage
+                  class="text-danger"
+                  name="StreetField"
+                ></ErrorMessage>
+              </b-form-group>
+            </b-col>
+            <!-- Agregar numero exterior -->
+            <b-col>
+              <b-form-group class="mt-3" label="Numero exterior">
+                <Field
+                  name="NumberOutsideField"
+                  :rules="validateNumberOutside"
+                  as="text"
+                >
+                  <b-form-input
+                    v-model="cementeryService.numeroExterior"
+                    :state="NumberOutsideState"
+                    type="number"
+                  >
+                  </b-form-input>
+                </Field>
+                <ErrorMessage
+                  class="text-danger"
+                  name="NumberOutsideField"
+                ></ErrorMessage>
+              </b-form-group>
+            </b-col>
+          </b-row>
+          <b-row cols="1">
+            <b-card>
+              <b-alert variant="warning" dismissible show
+                >Arrastra el punto del mapa al lugar donde se encuentra su
+                gabeta.</b-alert
+              >
+              <GMapMap
+                :center="center"
+                map-type-id="satellite"
+                :zoom="20"
+                :options="{
+                  zoomControl: true,
+                  mapTypeControl: false,
+                  scaleControl: false,
+                  rotateControl: true,
+                  disableDefaultUi: false
+                }"
+                style="width: 100%; height: 500px"
+              >
+                <GMapMarker
+                  :zoom="10"
+                  :position="center"
+                  :draggable="true"
+                  @drag="updateCoordinates"
+                />
+              </GMapMap>
+            </b-card>
+          </b-row>
+          <b-row cols="2" align-h="end">
+            <b-col>
+              <b-button
+                class="w-75 m-2 text-white"
+                variant="primary"
+                to="/ServiciosPublicos/Cementerios/list"
+                type="reset"
+              >
+                Cancelar</b-button
+              >
+            </b-col>
+            <b-col>
+              <b-button type="success" class="w-75 m-2" variant="success">
+                Guardar
+              </b-button>
+            </b-col>
+          </b-row>
+        </Form>
       </b-tab>
       <b-tab title="Documentos">
         <ExpedientDocumentsCementery :CementerioId="cementerioId" />
@@ -184,8 +173,7 @@ export default {
   },
   setup () {
     const swal = inject('$swal')
-    const { getCementeryById, updateCementery } =
-      CementeryService()
+    const { getCementeryById, updateCementery } = CementeryService()
     // const $toast = useToast()
     const cementeryService = ref([])
     const router = useRoute()
@@ -278,11 +266,7 @@ export default {
         return 'Este campo es requerido'
       }
 
-      if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
-          cementeryService.value.comunidad
-        )
-      ) {
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(cementeryService.value.comunidad)) {
         MunicipalityState.value = false
         return 'Este campo solo puede contener letras'
       }
@@ -302,11 +286,7 @@ export default {
         return 'Este campo es requerido'
       }
 
-      if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
-          cementeryService.value.localidad
-        )
-      ) {
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(cementeryService.value.localidad)) {
         LocationState.value = false
         return 'Este campo solo puede contener letras'
       }
@@ -326,9 +306,7 @@ export default {
         return 'Este campo es requerido'
       }
 
-      if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(cementeryService.value.calle)
-      ) {
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(cementeryService.value.calle)) {
         StreetState.value = false
         return 'Este campo solo puede contener letras'
       }

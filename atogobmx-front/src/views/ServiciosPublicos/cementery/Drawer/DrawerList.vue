@@ -37,7 +37,7 @@
       border-cell
       :loading="isloading"
       :headers="fields"
-      :items="drawerService"
+      :items="drawers"
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
@@ -93,20 +93,21 @@
           <b-col>
             <b-form-group class="mt-3" label="Nombre cementerio">
               <Field
-                name="PropietaryField"
-                :rules="validatePropietary"
+                name="CementaryNameField"
+                :rules="validateCementaryName"
                 as="text"
               >
                 <b-form-select
                   v-model="drawerServiceFields.cementerioId"
                   autofocus
-                  :state="PropietaryState"
+                  :state="cementaryNameState"
                   :options="cementeryService"
                   value-field="cementerioId"
                   text-field="nombreCementerio"
+                  @input="onSelectCementery"
                 ></b-form-select>
               </Field>
-              <ErrorMessage class="text-danger" name="StatusField" />
+              <ErrorMessage class="text-danger" name="CementaryNameField" />
             </b-form-group>
           </b-col>
           <!--Agregar propietario -->
@@ -206,12 +207,12 @@
                   disableDefaultUi: false
                 }"
                 style="width: 100%; height: 500px"
+                @click="onAddMaker"
               >
                 <GMapMarker
                   :zoom="10"
-                  :position="center"
+                  :position="maker"
                   :draggable="true"
-                  @drag="updateCoordinates"
                 />
               </GMapMap>
             </b-card>
@@ -255,9 +256,10 @@ export default {
     const showModal = ref(false)
     const { getDrawer, createDrawer, deleteDrawer } =
       DrawerService()
-    const { getCementery } = CementeryService()
-    const drawerService = ref([])
+    const { getCementery, getCementeryById } = CementeryService()
+    const drawers = ref([])
     const cementeryService = ref([])
+    const Cementery = ref({})
     const perPage = ref(5)
     const currentPage = ref(1)
     const filter = ref(null)
@@ -269,6 +271,7 @@ export default {
     const MeterState = ref(false)
     const AvailableState = ref(false)
     const PropietaryState = ref(false)
+    const cementaryNameState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
       {
@@ -304,12 +307,8 @@ export default {
       JSON.parse(JSON.stringify(drawerServiceFields))
     )
 
-    const center = ref({ lat: 20.5546629, lng: -102.4953904 })
-
-    const updateCoordinates = location => {
-      drawerServiceFields.value.latitud = location.latLng.lat()
-      drawerServiceFields.value.longitud = location.latLng.lng()
-    }
+    const center = ref({ lat: 20.5413702, lng: -102.691446 })
+    const maker = ref({ lat: 0, lng: 0 })
     const fields = ref([
       { value: 'cementerio.nombreCementerio', text: 'Nombre del cementerio' },
       { value: 'nombrePropietario', text: 'Nombre de propietario' },
@@ -331,17 +330,28 @@ export default {
     }
 
     getDrawer(data => {
-      drawerService.value = data
+      drawers.value = data
 
-      if (drawerService.value.length > 0) {
+      if (drawers.value.length > 0) {
         isloading.value = false
       } else {
-        if (drawerService.value.length <= 0) {
+        if (drawers.value.length <= 0) {
           isloading.value = false
         }
       }
     })
-
+    const onSelectCementery = () => {
+      getCementeryById(drawerServiceFields.value.cementerioId, data => {
+        center.value.lat = data.latitud
+        center.value.lng = data.longitud
+      })
+    }
+    const onAddMaker = (location) => {
+      maker.value.lat = location.latLng.lat()
+      maker.value.lng = location.latLng.lng()
+      drawerServiceFields.value.latitud = location.latLng.lat()
+      drawerServiceFields.value.longitud = location.latLng.lng()
+    }
     const onFiltered = filteredItems => {
       currentPage.value = 1
     }
@@ -376,6 +386,15 @@ export default {
       }
 
       PropietaryState.value = true
+      return true
+    }
+    const validateCementaryName = () => {
+      if (!drawerServiceFields.value.cementerioId) {
+        cementaryNameState.value = false
+        return 'Este campo es requerido'
+      }
+
+      cementaryNameState.value = true
       return true
     }
 
@@ -446,12 +465,12 @@ export default {
     const refreshTable = () => {
       isloading.value = true
       getDrawer(data => {
-        drawerService.value = data
+        drawers.value = data
 
-        if (drawerService.value.length > 0) {
+        if (drawers.value.length > 0) {
           isloading.value = false
         } else {
-          if (drawerService.value.length <= 0) {
+          if (drawers.value.length <= 0) {
             isloading.value = false
           }
         }
@@ -502,9 +521,10 @@ export default {
     }
 
     return {
-      drawerService,
+      drawers,
       drawerServiceFields,
       cementeryService,
+      Cementery,
       breadcrumbItems,
       perPage,
       currentPage,
@@ -520,11 +540,14 @@ export default {
       SpacesState,
       MeterState,
       AvailableState,
+      cementaryNameState,
       center,
-      updateCoordinates,
-
+      maker,
+      onSelectCementery,
+      onAddMaker,
       onFiltered,
       validatePropietary,
+      validateCementaryName,
       validateSpaces,
       validateMeter,
       validateAvailable,
