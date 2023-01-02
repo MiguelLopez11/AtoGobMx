@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AtoGobMx.Migrations
 {
-    public partial class CorreccionDB2 : Migration
+    public partial class OP_Vehiculos : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -678,11 +678,11 @@ namespace AtoGobMx.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Nombre = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Encargado = table.Column<string>(type: "longtext", nullable: false)
+                    Encargado = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    OperadorObra = table.Column<string>(type: "longtext", nullable: false)
+                    OperadorObra = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    OperadorVehiculo = table.Column<string>(type: "longtext", nullable: false)
+                    OperadorVehiculo = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Latitud = table.Column<float>(type: "float", nullable: true),
                     Longitud = table.Column<float>(type: "float", nullable: true),
@@ -955,6 +955,32 @@ namespace AtoGobMx.Migrations
                         principalTable: "Vehiculo",
                         principalColumn: "VehiculoId",
                         onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "OP_Vehiculos",
+                columns: table => new
+                {
+                    OpVehiculoId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    VehiculoId = table.Column<int>(type: "int", nullable: true),
+                    ObraId = table.Column<int>(type: "int", nullable: true),
+                    Archivado = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OP_Vehiculos", x => x.OpVehiculoId);
+                    table.ForeignKey(
+                        name: "FK_OP_Vehiculos_ObrasPublicas_ObraId",
+                        column: x => x.ObraId,
+                        principalTable: "ObrasPublicas",
+                        principalColumn: "ObraId");
+                    table.ForeignKey(
+                        name: "FK_OP_Vehiculos_Vehiculo_VehiculoId",
+                        column: x => x.VehiculoId,
+                        principalTable: "Vehiculo",
+                        principalColumn: "VehiculoId");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -1626,6 +1652,16 @@ namespace AtoGobMx.Migrations
                 column: "ObraId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_OP_Vehiculos_ObraId",
+                table: "OP_Vehiculos",
+                column: "ObraId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OP_Vehiculos_VehiculoId",
+                table: "OP_Vehiculos",
+                column: "VehiculoId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ProductoReceta_ProductoId",
                 table: "ProductoReceta",
                 column: "ProductoId");
@@ -1742,6 +1778,9 @@ namespace AtoGobMx.Migrations
 
             migrationBuilder.DropTable(
                 name: "OP_Empleados");
+
+            migrationBuilder.DropTable(
+                name: "OP_Vehiculos");
 
             migrationBuilder.DropTable(
                 name: "ProductoReceta");

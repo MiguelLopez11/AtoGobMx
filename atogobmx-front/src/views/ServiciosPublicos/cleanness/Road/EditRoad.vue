@@ -3,97 +3,110 @@
     <b-card class="mb-4">
       <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
     </b-card>
-    <b-card>
-      <div>
-        <h3>Editar ruta</h3>
-      </div>
-      <Form @submit="onUpdateRoadService">
-        <b-row cols="2">
-          <!-- Agregar Observacion -->
-          <b-col>
-            <b-form-group class="mt-3" label="Observacion">
-              <Field
-                name="ObservationField"
-                :rules="validateObservation"
-                as="text"
-              >
-                <b-form-input
-                  v-model="roadService.obsevacion"
-                  :state="ObservationState"
+    <b-tabs content-class="mt-3">
+      <b-tab title="Editar ruta" active>
+        <b-card>
+          <Form @submit="onUpdateRoadService">
+            <b-row cols="2">
+              <!-- Agregar Observacion -->
+              <b-col>
+                <b-form-group class="mt-3" label="Observacion">
+                  <Field
+                    name="ObservationField"
+                    :rules="validateObservation"
+                    as="text"
+                  >
+                    <b-form-input
+                      v-model="roadService.obsevacion"
+                      :state="ObservationState"
+                    >
+                    </b-form-input>
+                  </Field>
+                  <ErrorMessage
+                    class="text-danger"
+                    name="ObservationField"
+                  ></ErrorMessage>
+                </b-form-group>
+              </b-col>
+              <b-col>
+                <b-button
+                  class="mt-5 w-100"
+                  variant="primary"
+                  @click="onAddPolyline"
                 >
-                </b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="ObservationField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <b-col>
-            <b-button
-              class="mt-5 w-100"
-              variant="primary"
-              @click="onAddPolyline"
-            >
-              Marcar Ruta
-            </b-button>
-          </b-col>
-          <b-col>
-            <b-button
-              class="mt-5 w-100"
-              variant="primary"
-              @click="ResetPolyline"
-            >
-              Reiniciar ruta
-            </b-button>
-          </b-col>
-        </b-row>
-        <b-row>
-          <GoogleMap
-            api-key="AIzaSyCYAwe7Fk4PQLI3bBBqxUViN4IOXVGd_z0"
-            style="width: 100%; height: 500px"
-            :center="center"
-            :zoom="20"
-            @click="addMaker"
-          >
-            <MarkerCluster>
-              <Marker
-                v-for="(location, i) in locations"
-                :options="{
-                  position: location,
-                  label: `${i === 0 ? 'Inicio' : ''}`
-                }"
-                :key="i"
-              />
-              <Polyline :options="flightPath" />
-            </MarkerCluster>
-          </GoogleMap>
-          <b-row> </b-row>
-        </b-row>
-        <b-row align-h="end">
-          <b-col>
-          <b-button
-            class=" w-75 col-1 m-2 text-white"
-            variant="primary"
-            to="/ServiciosPublicos/Ruta/list"
-            type="reset"
-          >
-            Cancelar</b-button
-          >
-          </b-col>
-          <b-col>
-          <b-button type="success" class="w-75 col-1 m-2" variant="success">
-            Guardar
-          </b-button>
-          </b-col>
-        </b-row>
-      </Form>
-    </b-card>
+                  Marcar Ruta
+                </b-button>
+              </b-col>
+              <b-col>
+                <b-button
+                  class="mt-5 w-100"
+                  variant="primary"
+                  @click="ResetPolyline"
+                >
+                  Reiniciar ruta
+                </b-button>
+              </b-col>
+            </b-row>
+            <b-row>
+              <GoogleMap
+                api-key="AIzaSyCYAwe7Fk4PQLI3bBBqxUViN4IOXVGd_z0"
+                style="width: 100%; height: 500px"
+                :center="center"
+                :zoom="20"
+                @click="addMaker"
+              >
+                <MarkerCluster>
+                  <Marker
+                    v-for="(location, i) in locations"
+                    :options="{
+                      position: location,
+                      label: `${i === 0 ? 'Inicio' : ''}`
+                    }"
+                    :key="i"
+                  />
+                  <Polyline :options="flightPath" />
+                </MarkerCluster>
+              </GoogleMap>
+              <b-row> </b-row>
+            </b-row>
+            <b-row align-h="end">
+              <b-col>
+                <b-button
+                  class="w-75 col-1 m-2 text-white"
+                  variant="primary"
+                  to="/ServiciosPublicos/Ruta/list"
+                  type="reset"
+                >
+                  Cancelar</b-button
+                >
+              </b-col>
+              <b-col>
+                <b-button
+                  type="success"
+                  class="w-75 col-1 m-2"
+                  variant="success"
+                >
+                  Guardar
+                </b-button>
+              </b-col>
+            </b-row>
+          </Form>
+        </b-card>
+      </b-tab>
+      <b-tab title="Empleados">
+        <CleannessEmployee :RutaId="rutaId" />
+      </b-tab>
+      <b-tab title="Vehiculos">
+        <CleannessVehicle :RutaId="rutaId" />
+      </b-tab>
+    </b-tabs>
   </b-card>
 </template>
 
 <script>
 import RoadService from '@/Services/road.Services'
+import CleannessEmployee from '@/views/ServiciosPublicos/cleanness/cleannessemployee/CleannessEmployeeList.vue'
+import CleannessVehicle from '@/views/ServiciosPublicos/cleanness/cleannessvehicle/CleannessVehicleList.vue'
 import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { GoogleMap, Marker, MarkerCluster, Polyline } from 'vue3-google-map'
@@ -108,7 +121,9 @@ export default {
     GoogleMap,
     Marker,
     MarkerCluster,
-    Polyline
+    Polyline,
+    CleannessEmployee,
+    CleannessVehicle
   },
   setup () {
     const swal = inject('$swal')
@@ -120,6 +135,7 @@ export default {
     const OriginState = ref(false)
     const DestinationState = ref(false)
     const ObservationState = ref(false)
+    const rutaId = ref(parseInt(router.params.RutaId))
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
       { text: 'Ruta', to: '/ServiciosPublicos/Ruta/list' },
@@ -249,6 +265,7 @@ export default {
 
     return {
       roadService,
+      rutaId,
       breadcrumbItems,
       CoordsRoadFields,
       OriginState,

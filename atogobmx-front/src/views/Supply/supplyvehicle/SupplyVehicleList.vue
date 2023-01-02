@@ -33,7 +33,7 @@
       border-cell
       :loading="isloading"
       :headers="fields"
-      :items="lightingvehicle"
+      :items="supplyVehicle"
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
@@ -56,7 +56,7 @@
             <i class="bi bi-three-dots-vertical"></i>
           </template>
           <b-dropdown-item
-            @click="RemoveLightingVehicle(items.alumbradoEmpleadoId)"
+            @click="RemoveSupplyVehicle(items.ProvVehiculoId)"
             class="m-1"
             variant="outline-danger"
             ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
@@ -66,14 +66,14 @@
     </EasyDataTable>
     <b-modal
       id="modal-lightingemployee"
-      tittle="Agregar vehiculos alumbrado"
+      tittle="Agregar vehiculos de proveeduria"
       v-model="showModal"
       size="xl"
       hide-footer
       button-size="lg"
       lazy
     >
-      <Form @submit="addLightingVehicle">
+      <Form @submit="addSupplyVehicle">
         <b-row>
           <!-- Nombre del vehiculo -->
           <b-col>
@@ -131,7 +131,7 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            @click="resetLightingVehicleFields"
+            @click="resetSupplyVehicleFields"
           >
             Cancelar
           </b-button>
@@ -145,7 +145,7 @@
 </template>
 
 <script>
-import LightingVehicleServices from '@/Services/lightingvehicle.Services'
+import SupplyVehicleServices from '@/Services/supplyvehicle.Services'
 import VehiclesServices from '@/Services/vehicles.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
@@ -158,7 +158,7 @@ export default {
     ErrorMessage
   },
   props: {
-    expedienteAlumbradoId: {
+    ControlValeId: {
       type: Number,
       required: true
     }
@@ -166,10 +166,10 @@ export default {
   setup (props) {
     const swal = inject('$swal')
     const showModal = ref(false)
-    const { getLightingVehicle, createLightingVehicle, deleteLightingVehicle } =
-      LightingVehicleServices()
+    const { getSupplyVehicle, createSupplyVehicle, deleteSupplyVehicle } =
+      SupplyVehicleServices()
     const { getVehicles } = VehiclesServices()
-    const lightingvehicle = ref([])
+    const supplyVehicle = ref([])
     const vehicles = ref([])
     const vehicle = ref({
       marca: '',
@@ -184,9 +184,9 @@ export default {
     const searchValue = ref('')
     const searchField = ref('vehiculoId')
     const NameState = ref(false)
-    const lightingVehicleFields = ref({
-      vehiculoAlumbradoId: 0,
-      expedienteAlumbradoId: props.expedienteAlumbradoId,
+    const supplyVehicleFields = ref({
+      provVehiculoId: 0,
+      controlValeId: props.ControlValeId,
       vehiculoId: 0,
       archivado: false
     })
@@ -206,8 +206,8 @@ export default {
       }
     })
 
-    const LightingVehicleFieldsBlank = ref(
-      JSON.parse(JSON.stringify(lightingVehicleFields))
+    const SupplyVehicleFieldsBlank = ref(
+      JSON.parse(JSON.stringify(supplyVehicleFields))
     )
 
     const fields = ref([
@@ -220,21 +220,21 @@ export default {
       { value: 'actions', text: 'Acciones' }
     ])
 
-    const resetLightingVehicleFields = () => {
+    const resetSupplyVehicleFields = () => {
       showModal.value = false
-      lightingVehicleFields.value = JSON.parse(
-        JSON.stringify(LightingVehicleFieldsBlank)
+      supplyVehicleFields.value = JSON.parse(
+        JSON.stringify(SupplyVehicleFieldsBlank)
       )
       NameState.value = false
     }
 
-    getLightingVehicle(data => {
-      lightingvehicle.value = data
+    getSupplyVehicle(data => {
+      supplyVehicle.value = data
 
-      if (lightingvehicle.value.length > 0) {
+      if (supplyVehicle.value.length > 0) {
         isloading.value = false
       } else {
-        if (lightingvehicle.value.length <= 0) {
+        if (supplyVehicle.value.length <= 0) {
           isloading.value = false
         }
       }
@@ -256,13 +256,13 @@ export default {
 
     const refreshTable = () => {
       isloading.value = true
-      getLightingVehicle(data => {
-        lightingvehicle.value = data
+      getSupplyVehicle(data => {
+        supplyVehicle.value = data
 
-        if (lightingvehicle.value.length > 0) {
+        if (supplyVehicle.value.length > 0) {
           isloading.value = false
         } else {
-          if (lightingvehicle.value.length <= 0) {
+          if (supplyVehicle.value.length <= 0) {
             isloading.value = false
           }
         }
@@ -270,10 +270,10 @@ export default {
       return 'datos recargados'
     }
 
-    const addLightingVehicle = () => {
+    const addSupplyVehicle = () => {
       for (let i = 0; i < vehicleSelected.value.length; i++) {
-        lightingVehicleFields.value.vehiculoId = vehicleSelected.value[i]
-        createLightingVehicle(lightingVehicleFields.value, data => {
+        supplyVehicleFields.value.vehiculoId = vehicleSelected.value[i]
+        createSupplyVehicle(supplyVehicleFields.value, data => {
           refreshTable()
         })
       }
@@ -283,10 +283,10 @@ export default {
         icon: 'success'
       })
       showModal.value = false
-      resetLightingVehicleFields()
+      resetSupplyVehicleFields()
     }
 
-    const RemoveLightingVehicle = vehiculoAlumbradoId => {
+    const RemoveSupplyVehicle = ProvVehiculoId => {
       isloading.value = true
       swal
         .fire({
@@ -301,7 +301,7 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            deleteLightingVehicle(vehiculoAlumbradoId, data => {
+            deleteSupplyVehicle(ProvVehiculoId, data => {
               refreshTable()
             })
             swal.fire({
@@ -316,8 +316,8 @@ export default {
     }
 
     return {
-      lightingvehicle,
-      lightingVehicleFields,
+      supplyVehicle,
+      supplyVehicleFields,
       perPage,
       currentPage,
       filter,
@@ -326,7 +326,7 @@ export default {
       isloading,
       searchValue,
       searchField,
-      LightingVehicleFieldsBlank,
+      SupplyVehicleFieldsBlank,
       fields,
       NameState,
       vehicles,
@@ -335,11 +335,11 @@ export default {
       getFieldText,
 
       onFiltered,
-      addLightingVehicle,
-      RemoveLightingVehicle,
+      addSupplyVehicle,
+      RemoveSupplyVehicle,
       refreshTable,
       validateVehicle,
-      resetLightingVehicleFields
+      resetSupplyVehicleFields
     }
   }
 }

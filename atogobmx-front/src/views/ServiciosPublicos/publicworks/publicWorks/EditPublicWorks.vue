@@ -129,6 +129,9 @@
         <b-tab title="Empleados">
           <publicWorksEmployeeService :ObraId="obraId" />
         </b-tab>
+        <b-tab title="Vehiculos">
+          <PublicWorkVehicle :ObraId="obraId" />
+        </b-tab>
         <b-tab title="Documentos">
           <ExpedientDocumentsPublickWorks :ObraId="obraId" />
         </b-tab>
@@ -142,6 +145,7 @@ import PublicWorksServices from '@/Services/publickworks.Services'
 import worksStatusServices from '@/Services/worksstatus.Services'
 import publicWorksEmployeeService from '@/views/ServiciosPublicos/publicworks/publicworksemployee/PublicWorksEmployeeList.vue'
 import ExpedientDocumentsPublickWorks from '@/views/ServiciosPublicos/publicworks/publicWorks/DocumentsPublicworks.vue'
+import PublicWorkVehicle from '@/views/ServiciosPublicos/publicworks/publickworkvehicles/PublickWorksVehiclesList.vue'
 import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 // import { useToast } from 'vue-toast-notification'
@@ -153,7 +157,8 @@ export default {
     Field,
     ErrorMessage,
     publicWorksEmployeeService,
-    ExpedientDocumentsPublickWorks
+    ExpedientDocumentsPublickWorks,
+    PublicWorkVehicle
   },
   setup () {
     const swal = inject('$swal')

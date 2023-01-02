@@ -39,6 +39,18 @@ namespace AtoGobMx.Controllers
             return Ok(controlvale);
         }
 
+        [HttpGet("ServiciosSinExpediente")]
+        public async Task<ActionResult> GetServiciosSinExpedientes()
+        {
+            var expedientes = await _context.Alumbrado
+                //.Include(i => i.TareaTipoAlumbrado)
+                //.Include(i => i.Estatus)
+                .Where(w => !w.TieneExpediente)
+                .Where(w => !w.Archivado)
+                .ToListAsync();
+            return Ok(expedientes);
+        }
+
         [HttpGet("{ControlValeId}")]
         public async Task<ActionResult> GetControlDeValesById(int ControlValeId)
         {

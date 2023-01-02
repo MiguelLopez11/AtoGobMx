@@ -6,7 +6,7 @@
         style="width: 350px"
         v-model="searchValue"
         type="search"
-        placeholder="Buscar empleado alumbrado..."
+        placeholder="Buscar empleado aseo..."
       ></b-form-input>
       <b-button
         variant="primary"
@@ -22,7 +22,7 @@
         type="submit"
       >
         <i class="bi bi-person-plus-fill"></i>
-        Agregar empleado OP
+        Agregar empleado aseo
       </b-button>
     </b-row>
     <EasyDataTable
@@ -33,7 +33,7 @@
       border-cell
       :loading="isloading"
       :headers="fields"
-      :items="publicWorksEmployeeService"
+      :items="cleannessEmployeeService"
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
@@ -56,7 +56,7 @@
             <i class="bi bi-three-dots-vertical"></i>
           </template>
           <b-dropdown-item
-            @click="RemovePublickWorksEmployeeService(items.empleadoObrasId)"
+            @click="RemoveCleannessEmployeeService(items.aseoEmpleadoId)"
             class="m-1"
             variant="outline-danger"
             ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
@@ -66,14 +66,14 @@
     </EasyDataTable>
     <b-modal
       id="modal-lightingemployee"
-      tittle="Agregar empleado OP"
+      tittle="Agregar empleado aseo"
       v-model="showModal"
       size="xl"
       hide-footer
       button-size="lg"
       lazy
     >
-      <Form @submit="addPublickWorksEmployeeService">
+      <Form @submit="addCleannessEmployeeService">
         <b-row cols="2">
           <!-- Nombre del empleado -->
           <b-col>
@@ -97,7 +97,7 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            @click="resetPublicWorksEmployeeServiceFields"
+            @click="resetCleannessEmployeeServiceFields"
           >
             Cancelar
           </b-button>
@@ -111,7 +111,7 @@
 </template>
 
 <script>
-import PublickWorksEmployeeService from '@/Services/publicworksemployee.Services'
+import CleannessEmployeeService from '@/Services/cleannessemployee.Services'
 import EmployeeServices from '@/Services/employee.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
@@ -124,7 +124,7 @@ export default {
     ErrorMessage
   },
   props: {
-    ObraId: {
+    RutaId: {
       type: Number,
       required: true
     }
@@ -133,12 +133,12 @@ export default {
     const swal = inject('$swal')
     const showModal = ref(false)
     const {
-      getPublickWorksEmployee,
-      createPublickWorksEmployee,
-      deletePublickWorksEmployee
-    } = PublickWorksEmployeeService()
+      getCleannessEmployee,
+      createCleannessEmployee,
+      deleteCleannessEmployee
+    } = CleannessEmployeeService()
     const { getEmployees } = EmployeeServices()
-    const publicWorksEmployeeService = ref([])
+    const cleannessEmployeeService = ref([])
     const employees = ref([])
     const employeesSelected = ref([])
     const perPage = ref(5)
@@ -147,11 +147,11 @@ export default {
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('nombreCompleto')
+    const searchField = ref('empleadoId')
     const NameState = ref(false)
-    const publicWorksEmployeeFields = ref({
-      empleadoObrasId: 0,
-      obraId: props.ObraId,
+    const cleannessEmployeeFields = ref({
+      aseoEmpleadoId: 0,
+      rutaId: props.RutaId,
       empleadoId: 0,
       archivado: false
     })
@@ -160,39 +160,39 @@ export default {
       employees.value = data
       if (data.length === 0) {
         swal.fire({
-          title: 'No se encuentra un tipo de Empleado alumbrado',
+          title: 'No se encuentra un tipo de Empleado en aseo',
           text:
-            'No se encuentra tipo de empleado alumbrado registrado en el departamento seleccionado, registre primero un tipo de empleado para continuar',
+            'No se encuentra tipo de empleado en aseo registrado en el departamento seleccionado, registre primero un tipo de empleado para continuar',
           icon: 'warning'
         })
       }
     })
 
-    const PublicWorksEmployeeServiceFieldsBlank = ref(
-      JSON.parse(JSON.stringify(publicWorksEmployeeFields))
+    const CleannessEmployeeServiceFieldsBlank = ref(
+      JSON.parse(JSON.stringify(cleannessEmployeeFields))
     )
 
     const fields = ref([
-      { value: 'empleadoObrasId', text: 'ID', sortable: true },
+      { value: 'alumbradoEmpleadoId', text: 'ID', sortable: true },
       { value: 'empleados.nombreCompleto', text: 'Nombre empleado' },
       { value: 'actions', text: 'Acciones' }
     ])
 
-    const resetPublicWorksEmployeeServiceFields = () => {
+    const resetCleannessEmployeeServiceFields = () => {
       showModal.value = false
-      publicWorksEmployeeFields.value = JSON.parse(
-        JSON.stringify(PublicWorksEmployeeServiceFieldsBlank)
+      cleannessEmployeeFields.value = JSON.parse(
+        JSON.stringify(CleannessEmployeeServiceFieldsBlank)
       )
       NameState.value = false
     }
 
-    getPublickWorksEmployee(data => {
-      publicWorksEmployeeService.value = data
+    getCleannessEmployee(data => {
+      cleannessEmployeeService.value = data
 
-      if (publicWorksEmployeeService.value.length > 0) {
+      if (cleannessEmployeeService.value.length > 0) {
         isloading.value = false
       } else {
-        if (publicWorksEmployeeService.value.length <= 0) {
+        if (cleannessEmployeeService.value.length <= 0) {
           isloading.value = false
         }
       }
@@ -214,13 +214,13 @@ export default {
 
     const refreshTable = () => {
       isloading.value = true
-      getPublickWorksEmployee(data => {
-        publicWorksEmployeeService.value = data
+      getCleannessEmployee(data => {
+        cleannessEmployeeService.value = data
 
-        if (publicWorksEmployeeService.value.length > 0) {
+        if (cleannessEmployeeService.value.length > 0) {
           isloading.value = false
         } else {
-          if (publicWorksEmployeeService.value.length <= 0) {
+          if (cleannessEmployeeService.value.length <= 0) {
             isloading.value = false
           }
         }
@@ -228,25 +228,25 @@ export default {
       return 'datos recargados'
     }
 
-    const addPublickWorksEmployeeService = () => {
+    const addCleannessEmployeeService = () => {
       for (let i = 0; i < employeesSelected.value.length; i++) {
-        publicWorksEmployeeFields.value.empleadoId = employeesSelected.value[i]
-        createPublickWorksEmployee(
-          publicWorksEmployeeFields.value,
+        cleannessEmployeeFields.value.empleadoId = employeesSelected.value[i]
+        createCleannessEmployee(
+          cleannessEmployeeFields.value,
           data => {
             refreshTable()
           })
       }
       swal.fire({
-        title: '¡Empleado alumbrado agregado correctamente!',
-        text: 'Empleado alumbrado registrado satisfactoriamente',
+        title: '¡Empleado aseo agregado correctamente!',
+        text: 'Empleado aseo registrado satisfactoriamente',
         icon: 'success'
       })
       showModal.value = false
-      resetPublicWorksEmployeeServiceFields()
+      resetCleannessEmployeeServiceFields()
     }
 
-    const RemovePublickWorksEmployeeService = empleadoObrasId => {
+    const RemoveCleannessEmployeeService = AseoEmpleadoId => {
       isloading.value = true
       swal
         .fire({
@@ -256,18 +256,18 @@ export default {
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
           cancelButtonColor: '#d33',
-          confirmButtonText: 'Si, Archivar Empleado alumbrado!',
+          confirmButtonText: 'Si, Archivar Empleado aseo!',
           cancelButtonText: 'Cancelar'
         })
         .then(result => {
           if (result.isConfirmed) {
-            deletePublickWorksEmployee(empleadoObrasId, data => {
+            deleteCleannessEmployee(AseoEmpleadoId, data => {
               refreshTable()
             })
             swal.fire({
-              title: '¡Empleado alumbrado archivado!',
+              title: '¡Empleado aseo archivado!',
               text:
-                'El empleado alumbrado ha sido archivado satisfactoriamente.',
+                'El empleado aseo ha sido archivado satisfactoriamente.',
               icon: 'success'
             })
           } else {
@@ -277,8 +277,8 @@ export default {
     }
 
     return {
-      publicWorksEmployeeService,
-      publicWorksEmployeeFields,
+      cleannessEmployeeService,
+      cleannessEmployeeFields,
       perPage,
       currentPage,
       filter,
@@ -287,18 +287,18 @@ export default {
       isloading,
       searchValue,
       searchField,
-      PublicWorksEmployeeServiceFieldsBlank,
+      CleannessEmployeeServiceFieldsBlank,
       fields,
       NameState,
       employees,
       employeesSelected,
 
       onFiltered,
-      addPublickWorksEmployeeService,
-      RemovePublickWorksEmployeeService,
+      addCleannessEmployeeService,
+      RemoveCleannessEmployeeService,
       refreshTable,
       validateName,
-      resetPublicWorksEmployeeServiceFields
+      resetCleannessEmployeeServiceFields
     }
   }
 }

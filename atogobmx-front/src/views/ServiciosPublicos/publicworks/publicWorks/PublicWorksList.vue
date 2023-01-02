@@ -147,12 +147,8 @@
           </b-col>
           <!--agregar un estatus obra-->
           <b-col>
-            <b-form-group class="mt-3" label="Estatus de la Obra">
-              <Field
-                name="WorkStatusField"
-                :rules="validateWorkStatus"
-                as="text"
-              >
+            <b-form-group class="mt-3" label="Estatus de la obra">
+              <Field name="WorkStatusField" :rules="validateWorkStatus" as="text">
                 <b-form-select
                   v-model="publicWorksFields.estatusObraId"
                   autofocus
@@ -277,7 +273,7 @@ export default {
       { value: 'operadorObra', text: 'Operador de la obra' },
       { value: 'operadorVehiculo', text: 'Operador del vehiculo' },
       { value: 'descripcion', text: 'Descripcion' },
-      { value: 'estatusObraId', text: 'Estatus de la obra' },
+      { value: 'oP_EstatusObras.nombre', text: 'Estatus de la obra' },
       { value: 'actions', text: 'Acciones' }
     ])
 

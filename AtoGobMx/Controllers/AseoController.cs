@@ -52,7 +52,7 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<Aseo>> PostAseo(Aseo aseo)
         {
             //object value = _context.Aseo.Add(aseo);
-            var aseopublico = aseo.NombreServicio.ToString();
+            var aseopublico = aseo.Nombre.ToString();
             var host = "ftp://digital.atogobmx.com/Files/ServiciosPublicos/AseoPublico/";
             WebRequest request = WebRequest.Create(host + aseopublico);
             request.Method = WebRequestMethods.Ftp.MakeDirectory;
@@ -83,10 +83,11 @@ namespace AtoGobMx.Controllers
             }
 
             aseopublico.AseoId = AseoId;
-            aseopublico.NombreServicio = aseo.NombreServicio;
-            aseopublico.EstablecimientoPublico = aseo.EstablecimientoPublico;
+            aseopublico.Nombre = aseo.Nombre;
+            aseopublico.Fecha = aseo.Fecha;
+            aseopublico.Problema  = aseo.Problema;
             aseopublico.Domicilio = aseo.Domicilio;
-            aseopublico.Objetivo = aseo.Objetivo;
+            aseopublico.Descripcion = aseo.Descripcion;
             aseopublico.Archivado = aseo.Archivado;
 
             _context.Aseo.Update(aseopublico);

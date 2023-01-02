@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20230101001835_ExpedienteAlumbrado")]
+    partial class ExpedienteAlumbrado
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -101,12 +103,11 @@ namespace AtoGobMx.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Nombre")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("TipoArchivo")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("ArchivoAlumbradoId");
 
@@ -128,12 +129,12 @@ namespace AtoGobMx.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Nombre")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("TipoArchivo")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("ArchivosAseoId");
 
@@ -155,12 +156,12 @@ namespace AtoGobMx.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Nombre")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("TipoArchivo")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("ArchivosCementerioId");
 
@@ -206,15 +207,15 @@ namespace AtoGobMx.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Nombre")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<int>("ObraId")
                         .HasColumnType("int");
 
                     b.Property<string>("TipoArchivo")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("ArchivosObrasId");
 
@@ -259,22 +260,19 @@ namespace AtoGobMx.Migrations
                     b.Property<bool>("Archivado")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("Descripcion")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<string>("Domicilio")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("Fecha")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Nombre")
+                    b.Property<string>("EstablecimientoPublico")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Problema")
+                    b.Property<string>("NombreServicio")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Objetivo")
                         .IsRequired()
                         .HasColumnType("longtext");
 

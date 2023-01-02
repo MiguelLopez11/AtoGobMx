@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20230101221851_CambiosArchivos")]
+    partial class CambiosArchivos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -259,22 +261,19 @@ namespace AtoGobMx.Migrations
                     b.Property<bool>("Archivado")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("Descripcion")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<string>("Domicilio")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("Fecha")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Nombre")
+                    b.Property<string>("EstablecimientoPublico")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Problema")
+                    b.Property<string>("NombreServicio")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Objetivo")
                         .IsRequired()
                         .HasColumnType("longtext");
 

@@ -36,7 +36,6 @@ namespace AtoGobMx.Controllers
             return Ok(expefalla);
         }
 
-        //"Alumbrado/AlumbradoId"
         [HttpGet("{ExpedienteAlumbradoId}")]
         public async Task<ActionResult> GetExpedienteById(int ExpedienteAlumbradoId)
         {
@@ -49,6 +48,7 @@ namespace AtoGobMx.Controllers
             }
             return Ok(expedienteAlumbrado);
         }
+        //"Alumbrado/AlumbradoId"
         [HttpGet("Alumbrado/{AlumbradoId}")]
         public async Task<ActionResult> GetExpedienteAlumbradoByAlumbrado(int AlumbradoId)
         {
