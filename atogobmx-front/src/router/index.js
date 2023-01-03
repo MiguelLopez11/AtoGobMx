@@ -277,7 +277,7 @@ const routes = [
   {
     path: '/ServiciosPublicos/Cementerios/list',
     name: 'Cementerios',
-    component: () => import('@/views/ServiciosPublicos/cementery/cementery/CementeryList.vue'),
+    component: () => import('@/views/ServiciosPublicos/cementery/Cementery/CementeryList.vue'),
     meta: {
       requiresAuth: true,
       rol: 'Empleado'
@@ -287,7 +287,7 @@ const routes = [
   {
     path: '/ServiciosPublicos/Cementerios/:CementerioId',
     name: 'Cementerios-Edit',
-    component: () => import('@/views/ServiciosPublicos/cementery/cementery/EditCementery.vue'),
+    component: () => import('@/views/ServiciosPublicos/cementery/Cementery/EditCementery.vue'),
     meta: {
       requiresAuth: true,
       rol: 'Empleado'

@@ -69,7 +69,6 @@
                 <b-form-group class="mt-3" label="Costo de adquisición">
                   <Field name="CostField" :rules="validateCost" as="text">
                     <b-form-input
-                      placeholder="Describe brevemente el almacenamiento que tiene el equipo"
                       v-model="computer.costo"
                       :state="costState"
                     >
@@ -347,10 +346,10 @@ export default {
     return {
       computer,
       breadcrumbItems,
-      costState,
       DescriptionState,
       serialNumberState,
       departamentState,
+      costState,
       dateState,
       stateComputerState,
       areas,
@@ -361,8 +360,8 @@ export default {
 
       validateDescription,
       validateDate,
-      validateSerialNumber,
       validateCost,
+      validateSerialNumber,
       validateDepartament,
       validateStateComputer,
       onUpdateComputer,

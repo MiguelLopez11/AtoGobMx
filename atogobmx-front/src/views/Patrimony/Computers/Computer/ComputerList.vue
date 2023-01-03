@@ -388,11 +388,6 @@ export default {
         costState.value = false
         return 'Este campo es requerido'
       }
-      // eslint-disable-next-line no-useless-escape
-      if (!computerFields.value.costo.trim() > 0) {
-        costState.value = false
-        return 'El campo no puede contener solo espacios'
-      }
       costState.value = true
       return true
     }
@@ -503,10 +498,10 @@ export default {
       refreshTable,
       RemoveComputer,
       costState,
+      dateState,
       DescriptionState,
       serialNumberState,
       departamentState,
-      dateState,
       stateComputerState,
       showModal,
       departaments,
@@ -517,8 +512,8 @@ export default {
       validateDate,
       validateSerialNumber,
       validateCost,
-      resetRoleFields,
       validateDepartament,
+      resetRoleFields,
       validateStateComputer,
       validateFolio
     }

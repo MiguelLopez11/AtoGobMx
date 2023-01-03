@@ -101,6 +101,28 @@ export default function FileServices () {
         callback(exception.response)
       })
   }
+  // Documentos Armeria
+  const getDocumentsArmary = (ArmaId, callback) => {
+    axiosPrivate.get(`/Archivos/DocumentosArmeria/${ArmaId}`).then((response) => {
+      callback(response.data)
+    })
+  }
+  const createDocumentsArmary = (ArmaId, files, callback) => {
+    axiosPrivate.post(`/Archivos/DocumentosArmeria/${ArmaId}`, files).then((response) => {
+      callback(response)
+    }).catch((exception) => {
+      callback(exception.response.data)
+    })
+  }
+  const deleteDocumentArmary = (ArmaId, ArchivoId, callback) => {
+    axiosPrivate.delete(`/Archivos/DocumentosArmeria/Eliminar/${ArmaId}/${ArchivoId}`)
+      .then((response) => {
+        callback(response.data)
+      })
+      .catch((exception) => {
+        callback(exception.response)
+      })
+  }
   // Servicios creados para la carga de archivos arturo
   // ----------- Alumbrado ---------------- //
   const getDocumentsAlumbrado = (AlumbradoId, callback) => {
@@ -209,6 +231,10 @@ export default function FileServices () {
     getDocumentsFurniture,
     createDocumentsFurniture,
     deleteDocumentFurniture,
+    // Armeria
+    getDocumentsArmary,
+    createDocumentsArmary,
+    deleteDocumentArmary,
     // -------Arturo--------- //
     getDocumentsAlumbrado,
     deleteDocumentsAlumbrado,
