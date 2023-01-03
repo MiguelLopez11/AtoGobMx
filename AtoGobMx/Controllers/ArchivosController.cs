@@ -2003,6 +2003,8 @@ namespace AtoGobMx.Controllers
 
             return result;
         }
+        #endregion
+        #region Armeria
         //Armeria
         [HttpGet("DocumentosArmeria/{ArmaId}")]
         public async Task<IActionResult> GetDocumentosArmeria(int ArmaId)
@@ -2214,6 +2216,7 @@ namespace AtoGobMx.Controllers
             return BadRequest("Error");
 
         }
+        #endregion
 
     }
 }
