@@ -61,6 +61,7 @@ namespace AtoGobMx.Controllers
                 request.Abort();
                 resp.Close();
             }
+            CreateDocument(host + obras);
             _context.ObrasPublicas.Add(op_Obras);
             await _context.SaveChangesAsync();
             return CreatedAtAction("GetObrasPublicasById", new { ObraId  = op_Obras.ObraId }, op_Obras);
@@ -111,6 +112,28 @@ namespace AtoGobMx.Controllers
             _context.ObrasPublicas.Update(obraspublicas);
             await _context.SaveChangesAsync();
             return Ok("Estatus Archivado");
+        }
+        private static bool CreateDocument(string url)
+        {
+            try
+            {
+                var pathDocument = "/Documentos";
+                WebRequest request = WebRequest.Create(url + pathDocument);
+                request.Method = WebRequestMethods.Ftp.MakeDirectory;
+                request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+                using (var resp = (FtpWebResponse)request.GetResponse())
+                {
+                    request.Abort();
+                    resp.Close();
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
         }
     }
 }

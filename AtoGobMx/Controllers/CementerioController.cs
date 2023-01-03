@@ -28,7 +28,6 @@ namespace AtoGobMx.Controllers
         public async Task<ActionResult<Cementerio>> GetCementerios()
         {
             var cementerios = await _context.Cementerio
-                //.OrderBy(o => o.NombreCementerio)
                 .Where(w => !w.Archivado)
                 .Select(s => _mapper.Map<Cementerio>(s))
                 .ToArrayAsync();
@@ -60,6 +59,7 @@ namespace AtoGobMx.Controllers
                 request.Abort();
                 resp.Close();
             }
+            CreateDocument(host+direccioncementerios);
             _context.Cementerio.Add(cementerio);
             await _context.SaveChangesAsync();
             return CreatedAtAction("GetCementeriosById", new { CementerioId = cementerio.CementerioId }, cementerio);
@@ -107,6 +107,27 @@ namespace AtoGobMx.Controllers
             _context.Cementerio.Update(cementerio);
             await _context.SaveChangesAsync();
             return Ok("Cementerio archivado");
+        }
+        private static bool CreateDocument(string url)
+        {
+            try
+            {
+                WebRequest request = WebRequest.Create(url + "/Documentos");
+                request.Method = WebRequestMethods.Ftp.MakeDirectory;
+                request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+                using (var resp = (FtpWebResponse)request.GetResponse())
+                {
+                    request.Abort();
+                    resp.Close();
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
         }
     }
 }

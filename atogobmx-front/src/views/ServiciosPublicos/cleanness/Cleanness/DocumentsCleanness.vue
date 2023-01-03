@@ -63,7 +63,7 @@
       </template>
       <template #item-actions="items">
         <b-button
-          @click="RemoveDocument(items.archivoId)"
+          @click="RemoveDocument(items.archivosAseoId)"
           class="m-1"
           variant="outline-danger"
         >
@@ -117,10 +117,6 @@ export default {
   props: {
     AseoId: {
       type: Number,
-      required: true
-    },
-    Aseo: {
-      type: Object,
       required: true
     }
   },
@@ -228,7 +224,7 @@ export default {
       isloading.value = true
       disableButtonDownload.value = true
       axiosPrivate({
-        url: `/Archivos/Documentos33/${props.AseoId}/Zip`,
+        url: `/Archivos/DocumentosObrasPublicas/${props.AseoId}/Zip`,
         method: 'GET',
         responseType: 'blob' // important
       })
@@ -252,7 +248,7 @@ export default {
       isloading.value = true
       disableButtonDownload.value = true
       axiosPrivate({
-        url: `/Archivos/Documents/Dowload3/${props.AseoId}/${Aseo.archivosAseoId}`,
+        url: `/Archivos/DocumentosObrasPublicas/Dowload/${props.AseoId}/${Aseo.archivosAseoId}`,
         method: 'GET',
         responseType: 'blob' // important
       })

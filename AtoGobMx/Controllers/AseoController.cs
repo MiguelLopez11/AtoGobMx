@@ -64,6 +64,7 @@ namespace AtoGobMx.Controllers
                 request.Abort();
                 resp.Close();
             }
+            CreateDocument(host + aseopublico);
             _context.Aseo.Add(aseo);
             await _context.SaveChangesAsync();
             return CreatedAtAction("GetAseoById", new { AseoId = aseo.AseoId }, aseo);
@@ -111,6 +112,28 @@ namespace AtoGobMx.Controllers
             _context.Aseo.Update(aseopublico);
             await _context.SaveChangesAsync();
             return Ok("Servicio publico aseo Archivado");
+        }
+        private static bool CreateDocument(string url)
+        {
+            try
+            {
+                var pathDocument = "/Documentos";
+                WebRequest request = WebRequest.Create(url + pathDocument);
+                request.Method = WebRequestMethods.Ftp.MakeDirectory;
+                request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+                using (var resp = (FtpWebResponse)request.GetResponse())
+                {
+                    request.Abort();
+                    resp.Close();
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
         }
 
     }

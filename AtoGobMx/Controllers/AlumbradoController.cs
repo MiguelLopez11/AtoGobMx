@@ -66,9 +66,9 @@ namespace AtoGobMx.Controllers
         [HttpPost]
         public async Task<ActionResult<Alumbrado>> PostAlumbrado(Alumbrado alumbrado)
         {
-            var obra = alumbrado.NombreObra.ToString();
+            var lighting = alumbrado.NombreObra.ToString();
             var host = "ftp://digital.atogobmx.com/Files/ServiciosPublicos/AlumbradoPublico/";
-            WebRequest request = WebRequest.Create(host + obra);
+            WebRequest request = WebRequest.Create(host + lighting);
             request.Method = WebRequestMethods.Ftp.MakeDirectory;
             request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
             using (var resp = (FtpWebResponse)request.GetResponse())
@@ -76,6 +76,7 @@ namespace AtoGobMx.Controllers
                 request.Abort();
                 resp.Close();
             }
+            CreateDocument(host + lighting);
             _context.Alumbrado.Add(alumbrado);
             await _context.SaveChangesAsync();
             return CreatedAtAction("GetAlumbradoById", new { AlumbradoId = alumbrado.AlumbradoId }, alumbrado);
