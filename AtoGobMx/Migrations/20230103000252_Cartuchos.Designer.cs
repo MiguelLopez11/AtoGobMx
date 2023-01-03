@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20230103000252_Cartuchos")]
+    partial class Cartuchos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -113,33 +115,6 @@ namespace AtoGobMx.Migrations
                     b.HasIndex("AlumbradoId");
 
                     b.ToTable("ArchivosAlumbrado");
-                });
-
-            modelBuilder.Entity("AtoGobMx.Models.ArchivosArmeria", b =>
-                {
-                    b.Property<int>("ArchivoArmeriaId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Archivado")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<int>("ArmaId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Nombre")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("TipoArchivo")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.HasKey("ArchivoArmeriaId");
-
-                    b.HasIndex("ArmaId");
-
-                    b.ToTable("ArchivosArmeria");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.ArchivosAseo", b =>
@@ -1934,17 +1909,6 @@ namespace AtoGobMx.Migrations
                         .IsRequired();
 
                     b.Navigation("Alumbrado");
-                });
-
-            modelBuilder.Entity("AtoGobMx.Models.ArchivosArmeria", b =>
-                {
-                    b.HasOne("AtoGobMx.Models.PAT_Armeria", "Armeria")
-                        .WithMany()
-                        .HasForeignKey("ArmaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Armeria");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.ArchivosAseo", b =>

@@ -12,8 +12,31 @@ namespace AtoGobMx.Context
         }
         public DbSet<Empleado> Empleados { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<ExpedienteDigital> ExpedienteDigital { get; set; }
+        public DbSet<Archivos> Archivos { get; set; }
+        public DbSet<ArchivosEquipoComputo> ArchivosEquipoComputos { get; set; }
+        public DbSet<ArchivosVehiculos> archivosVehiculos { get; set; }
+        public DbSet<ArchivosMobiliario> ArchivosMobiliarios { get; set; }
+        public DbSet<ArchivosArmeria> ArchivosArmeria { get; set; }
+        public DbSet<Departamentos> Departamentos { get; set; }
+        public DbSet<PuestoTrabajo> PuestoTrabajo { get; set; }
+        public DbSet<PAT_EquipoComputo> EquipoComputo { get; set; }
+        public DbSet<PAT_Vehiculo> Vehiculo { get; set; }
+        public DbSet<PAT_Mobiliario> Mobiliario { get; set; }
+        public DbSet<PAT_TipoMobiliario> TipoMobiliario { get; set; }
+        public DbSet<PAT_EstatusEquipo> InventarioEstatus { get; set; }
+        public DbSet<PAT_EstatusVehiculo> EstatusVehiculo { get; set; }
+        public DbSet<PAT_Armeria> Armeria { get; set; }
+        public DbSet<PAT_ArmeriaCartucho> Cartuchos { get; set; }
+        public DbSet<SERMED_Cita> Cita { get; set; }
+        public DbSet<SERMED_Producto> Medicamento { get; set; }
+        public DbSet<SERMED_ExpedienteMedico> ExpedienteMedico { get; set; }
+        public DbSet<SERMED_ProductosReceta> ProductoReceta { get; set; }
+        public DbSet<SERMED_Receta> Receta { get; set; }
+        public DbSet<SERMED_EstatusReceta> EstatusReceta { get; set; }
+        //Arturo
         public DbSet<Alumbrado> Alumbrado { get; set; }
-        public DbSet<ArchivosAlumbrado> ArchivosAlumbrado  { get; set; }
+        public DbSet<ArchivosAlumbrado> ArchivosAlumbrado { get; set; }
         public DbSet<ArchivosCementerios> ArchivosCementerios { get; set; }
         public DbSet<ArchivosAseo> ArchivosAseo { get; set; }
         public DbSet<ArchivosObras> ArchivosObras { get; set; }
@@ -30,7 +53,6 @@ namespace AtoGobMx.Context
         public DbSet<Zona> Zona { get; set; }
         public DbSet<Gabetas> Gabetas { get; set; }
         public DbSet<Cementerio> Cementerio { get; set; }
-        public DbSet<ExpedienteDigital> ExpedienteDigital { get; set; }
         public DbSet<OP_Empleados> OP_Empleados { get; set; }
         public DbSet<OP_Vehiculos> OP_Vehiculos { get; set; }
         public DbSet<OP_Obras> ObrasPublicas { get; set; }
@@ -43,25 +65,6 @@ namespace AtoGobMx.Context
         public DbSet<PROV_DetalleVale> PROV_DetalleVale { get; set; }
         public DbSet<PROV_Producto> PROV_Producto { get; set; }
         public DbSet<PROV_Proveedor> PROV_Proveedor { get; set; }
-        public DbSet<Archivos> Archivos { get; set; }
-        public DbSet<ArchivosEquipoComputo> ArchivosEquipoComputos { get; set; }
-        public DbSet<ArchivosVehiculos> archivosVehiculos { get; set; }
-        public DbSet<ArchivosMobiliario> ArchivosMobiliarios { get; set; }
-        public DbSet<Departamentos> Departamentos { get; set; }
-        public DbSet<PuestoTrabajo> PuestoTrabajo { get; set; }
-        public DbSet<PAT_EquipoComputo> EquipoComputo { get; set; }
-        public DbSet<PAT_Vehiculo> Vehiculo { get; set; }
-        public DbSet<PAT_Mobiliario> Mobiliario { get; set; }
-        public DbSet<PAT_TipoMobiliario> TipoMobiliario { get; set; }
-        public DbSet<PAT_EstatusEquipo> InventarioEstatus { get; set; }
-        public DbSet<PAT_EstatusVehiculo> EstatusVehiculo { get; set; }
-        public DbSet<PAT_Armeria> Armeria { get; set; }
-        public DbSet<SERMED_Cita> Cita { get; set; }
-        public DbSet<SERMED_Producto> Medicamento { get; set; }
-        public DbSet<SERMED_ExpedienteMedico> ExpedienteMedico { get; set; }
-        public DbSet<SERMED_ProductosReceta> ProductoReceta { get; set; }
-        public DbSet<SERMED_Receta> Receta { get; set; }
-        public DbSet<SERMED_EstatusReceta> EstatusReceta { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

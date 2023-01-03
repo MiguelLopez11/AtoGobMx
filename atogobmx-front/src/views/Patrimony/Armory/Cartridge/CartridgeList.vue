@@ -1,8 +1,5 @@
 <template>
   <b-card class="m-2">
-    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
-  </b-card>
-  <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
       <b-form-input
         size="lg"
@@ -25,7 +22,7 @@
         type="submit"
       >
         <i class="bi bi-car-front-fill" />
-        Agregar Arma
+        Agregar Cartucho
       </b-button>
     </b-row>
     <EasyDataTable
@@ -36,7 +33,7 @@
       border-cell
       :loading="isloading"
       :headers="fields"
-      :items="weapons"
+      :items="cartridges"
       :rows-per-page="5"
       :search-field="searchField"
       :search-value="searchValue"
@@ -59,13 +56,13 @@
             <i class="bi bi-three-dots-vertical"></i>
           </template>
           <b-dropdown-item
-            @click="RemoveArmory(items.armaId)"
+            @click="RemoveCartRidge(items.cartuchoId)"
             class="m-1"
             variant="outline-danger"
           >
             <i class="bi bi-trash3"> Archivar </i>
           </b-dropdown-item>
-          <b-dropdown-item
+          <!-- <b-dropdown-item
             class="m-1"
             variant="outline-warning"
             :to="{
@@ -75,7 +72,7 @@
           >
             <i class="bi bi-pencil-square" />
             Editar
-          </b-dropdown-item>
+          </b-dropdown-item> -->
         </b-dropdown>
       </template>
     </EasyDataTable>
@@ -98,7 +95,7 @@
               >
                 <b-form-input
                   placeholder="Ingresa una nomenclatura"
-                  v-model="weaponsFields.nomenclatura"
+                  v-model="cartridgeFields.nomenclatura"
                   :state="nomenclatureState"
                 >
                 </b-form-input>
@@ -113,8 +110,8 @@
             <b-form-group class="mt-3" label="Marca">
               <Field name="BrandField" :rules="validateBrand" as="text">
                 <b-form-input
-                  placeholder="Ingresa la marca del arma"
-                  v-model="weaponsFields.marca"
+                  placeholder="Ingresa la marca del cartucho"
+                  v-model="cartridgeFields.marca"
                   :state="brandState"
                 >
                 </b-form-input>
@@ -126,11 +123,11 @@
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="Tipo de arma">
+            <b-form-group class="mt-3" label="Tipo de cartucho">
               <Field name="BrandField" :rules="validateTypeWeapon" as="text">
                 <b-form-input
-                  placeholder="Ingresa el tipo de arma"
-                  v-model="weaponsFields.tipoArma"
+                  placeholder="Ingresa el tipo de cartucho"
+                  v-model="cartridgeFields.tipoArma"
                   :state="typeWeaponState"
                 >
                 </b-form-input>
@@ -145,8 +142,8 @@
             <b-form-group class="mt-3" label="Calibre">
               <Field name="modelField" :rules="validateGauge" as="text">
                 <b-form-input
-                  placeholder="Ingresa el calibre del arma"
-                  v-model="weaponsFields.calibre"
+                  placeholder="Ingresa el calibre del cartucho"
+                  v-model="cartridgeFields.calibre"
                   :state="gaugeState"
                   type="number"
                 >
@@ -159,29 +156,10 @@
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="Empleado portador">
-              <Field name="ColorField" :rules="validateEmployee" as="text">
-                <b-form-select
-                  v-model="weaponsFields.empleadoId"
-                  autofocus
-                  :state="employeeState"
-                  value-field="empleadoId"
-                  text-field="nombreCompleto"
-                  :options="employeesArmory"
-                >
-                </b-form-select>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="ColorField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <b-col>
             <b-form-group class="mt-3" label="Fecha de Adquisición">
               <Field name="memoryField" :rules="validateDate" as="text">
                 <Datepicker
-                  v-model="weaponsFields.fechaAdquisicion"
+                  v-model="cartridgeFields.fechaAdquisicion"
                   locale="es"
                   autoApply
                   :enableTimePicker="false"
@@ -199,7 +177,7 @@
             <b-form-group class="mt-3" label="Costo">
               <Field name="CostField" :rules="validateCost" as="text">
                 <b-form-input
-                  v-model="weaponsFields.costo"
+                  v-model="cartridgeFields.costo"
                   :state="costState"
                 >
                 </b-form-input>
@@ -215,7 +193,7 @@
           <b-button
             class="w-auto m-2 text-white"
             variant="primary"
-            @click="resetArmoryFields()"
+            @click="resetCartRidgeFields()"
           >
             Cancelar
           </b-button>
@@ -230,7 +208,6 @@
 
 <script>
 import ArmoryServices from '@/Services/armory.Services'
-import EmployeeServices from '@/Services/employee.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
 import Datepicker from '@vuepic/vue-datepicker'
@@ -244,85 +221,69 @@ export default {
     Datepicker,
     EasyDataTable: window['vue3-easy-data-table']
   },
-  setup () {
+  props: {
+    ArmaId: {
+      type: Number,
+      required: true
+    }
+  },
+  setup (props) {
     const swal = inject('$swal')
-    const { getWeapons, createWeapon, deleteWeapon } = ArmoryServices()
-    const { getEmployeesArmory } = EmployeeServices()
-    const weapons = ref([])
-    const employeesArmory = ref([])
+    const { getCartridges, createCartridge, deleteCartridge } = ArmoryServices()
+    const cartridges = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
     const filter = ref(null)
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('marca')
+    const searchField = ref('nomenclatura')
     const nomenclatureState = ref(false)
     const brandState = ref(false)
     const typeWeaponState = ref(false)
     const gaugeState = ref(false)
-    const employeeState = ref(false)
     const dateState = ref(false)
     const costState = ref(false)
     const showModal = ref(false)
-    const breadcrumbItems = ref([
-      { text: 'Inicio', to: '/' },
-      {
-        text: 'Patrimonio publico',
-        to: '/PatrimonioMunicipal'
-      },
-      { text: 'Armeria' }
-    ])
-    const weaponsFields = ref({
-      armaId: 0,
+    const cartridgeFields = ref({
+      cartuchoId: 0,
       nomenclatura: null,
       marca: null,
       tipoArma: null,
       calibre: null,
-      empleadoId: 0,
+      armeriaId: props.ArmaId,
       fechaAdquisicion: null,
       costo: null,
       archivado: false
     })
-    const weaponsFieldsBlank = ref(JSON.parse(JSON.stringify(weaponsFields)))
+    const cartridgeFieldsBlank = ref(JSON.parse(JSON.stringify(cartridgeFields)))
     const fields = ref([
       { value: 'nomenclatura', text: 'Nomenclatura' },
       { value: 'marca', text: 'Marca' },
-      { value: 'tipoArma', text: 'Tipo de Arma' },
+      { value: 'tipoArma', text: 'Tipo de Cartucho' },
       { value: 'calibre', text: 'Calibre' },
-      { value: 'empleado.nombreCompleto', text: 'Portador' },
       { value: 'fechaAdquisicion', text: 'Fecha de adquisición' },
       { value: 'costo', text: 'Costo de adquisición' },
       { value: 'actions', text: 'Acciones' }
     ])
-    getWeapons(data => {
-      weapons.value = data
-      if (weapons.value.length > 0) {
+    getCartridges(props.ArmaId, data => {
+      cartridges.value = data
+      if (cartridges.value.length > 0) {
         isloading.value = false
       } else {
-        if (weapons.value.length <= 0) {
+        if (cartridges.value.length <= 0) {
           isloading.value = false
         }
       }
     })
-    getEmployeesArmory(data => {
-      employeesArmory.value = data
-      if (data.length === 0) {
-        swal.fire({
-          title: '¡No se encuentran empleados!',
-          text: 'Registre un empleado al que se pueda asignar un arma',
-          icon: 'warning'
-        })
-      }
-    })
     const refreshTable = () => {
       isloading.value = true
-      getWeapons(data => {
-        weapons.value = data
-        if (weapons.value.length > 0) {
+      getCartridges(props.ArmaId, data => {
+        cartridges.value = data
+        if (cartridges.value.length > 0) {
           isloading.value = false
         } else {
-          if (weapons.value.length <= 0) {
+          if (cartridges.value.length <= 0) {
             isloading.value = false
           }
         }
@@ -330,17 +291,17 @@ export default {
       return 'datos recargados'
     }
     const addArmory = () => {
-      createWeapon(weaponsFields.value, data => {
+      createCartridge(cartridgeFields.value, data => {
         refreshTable()
         swal.fire({
-          title: 'Arma registrada correctamente!',
-          text: 'El arma se ha registrado al sistema satisfactoriamente.',
+          title: 'Cartucho registrado correctamente!',
+          text: 'El cartucho se ha registrado al sistema satisfactoriamente.',
           icon: 'success'
         })
       })
-      resetArmoryFields()
+      resetCartRidgeFields()
     }
-    const RemoveArmory = ArmaId => {
+    const RemoveCartRidge = ArmaId => {
       isloading.value = true
       swal
         .fire({
@@ -350,20 +311,20 @@ export default {
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
           cancelButtonColor: '#d33',
-          confirmButtonText: 'Si, archivar arma!',
+          confirmButtonText: 'Si, archivar cartucho!',
           cancelButtonText: 'Cancelar'
         })
         .then(result => {
           if (result.isConfirmed) {
             swal
               .fire({
-                title: 'Arma archivada!',
-                text: 'El arma ha sido archivado satisfactoriamente .',
+                title: 'Cartucho archivado!',
+                text: 'El cartucho ha sido archivado satisfactoriamente .',
                 icon: 'success'
               })
               .then(result => {
                 if (result.isConfirmed) {
-                  deleteWeapon(ArmaId, data => {
+                  deleteCartridge(ArmaId, data => {
                     refreshTable()
                   })
                 }
@@ -378,7 +339,7 @@ export default {
     }
     // VALIDATIONS
     const validateNomeclature = () => {
-      if (!weaponsFields.value.nomenclatura) {
+      if (!cartridgeFields.value.nomenclatura) {
         nomenclatureState.value = false
         return 'Este campo es requerido'
       }
@@ -386,7 +347,7 @@ export default {
       return true
     }
     const validateBrand = () => {
-      if (!weaponsFields.value.marca) {
+      if (!cartridgeFields.value.marca) {
         brandState.value = false
         return 'Este campo es requerido'
       }
@@ -394,7 +355,7 @@ export default {
       return true
     }
     const validateTypeWeapon = () => {
-      if (!weaponsFields.value.tipoArma) {
+      if (!cartridgeFields.value.tipoArma) {
         typeWeaponState.value = false
         return 'Este campo es requerido'
       }
@@ -402,23 +363,15 @@ export default {
       return true
     }
     const validateGauge = () => {
-      if (!weaponsFields.value.calibre) {
+      if (!cartridgeFields.value.calibre) {
         gaugeState.value = false
         return 'Este campo es requerido'
       }
       gaugeState.value = true
       return true
     }
-    const validateEmployee = () => {
-      if (!weaponsFields.value.empleadoId) {
-        employeeState.value = false
-        return 'Este campo es requerido'
-      }
-      employeeState.value = true
-      return true
-    }
     const validateDate = () => {
-      if (!weaponsFields.value.fechaAdquisicion) {
+      if (!cartridgeFields.value.fechaAdquisicion) {
         dateState.value = false
         return 'Este campo es requerido'
       }
@@ -426,33 +379,32 @@ export default {
       return true
     }
     const validateCost = () => {
-      if (!weaponsFields.value.costo) {
+      if (!cartridgeFields.value.costo) {
         costState.value = false
         return 'Este campo es requerido'
       }
       costState.value = true
       return true
     }
-    const resetArmoryFields = () => {
+    const resetCartRidgeFields = () => {
       showModal.value = false
       nomenclatureState.value = false
       brandState.value = false
       typeWeaponState.value = false
       gaugeState.value = false
-      employeeState.value = false
-      weaponsFields.value = JSON.parse(JSON.stringify(weaponsFieldsBlank))
+      costState.value = false
+      dateState.value = false
+      cartridgeFields.value = JSON.parse(JSON.stringify(cartridgeFieldsBlank))
     }
     return {
-      weapons,
-      employeesArmory,
-      breadcrumbItems,
+      cartridges,
       fields,
       perPage,
       currentPage,
       filter,
       perPageSelect,
-      weaponsFieldsBlank,
-      weaponsFields,
+      cartridgeFieldsBlank,
+      cartridgeFields,
       isloading,
       searchValue,
       searchField,
@@ -460,7 +412,6 @@ export default {
       brandState,
       typeWeaponState,
       gaugeState,
-      employeeState,
       costState,
       dateState,
       showModal,
@@ -468,15 +419,14 @@ export default {
       onFiltered,
       addArmory,
       refreshTable,
-      RemoveArmory,
-      resetArmoryFields,
+      RemoveCartRidge,
+      resetCartRidgeFields,
       validateNomeclature,
       validateBrand,
       validateTypeWeapon,
       validateGauge,
       validateDate,
-      validateCost,
-      validateEmployee
+      validateCost
     }
   }
 }

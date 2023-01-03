@@ -1,9 +1,11 @@
 ﻿using AtoGobMx.Context;
+using AtoGobMx.Migrations;
 using AtoGobMx.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace AtoGobMx.Controllers
 {
@@ -46,6 +48,19 @@ namespace AtoGobMx.Controllers
         [HttpPost]
         public async Task<ActionResult<PAT_Armeria>> PostArmeria(PAT_Armeria armeria)
         {
+            var Cartucho = armeria.Nomenclatura.ToString();
+            var host = "ftp://digital.atogobmx.com/Files/Patrimonio/Armeria/";
+            #region Create directory employee
+            WebRequest request = WebRequest.Create(host + Cartucho);
+            request.Method = WebRequestMethods.Ftp.MakeDirectory;
+            request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+            using (var resp = (FtpWebResponse)request.GetResponse())
+            {
+                request.Abort();
+                resp.Close();
+            }
+            #endregion
+            var documentPath = CreateDocument(host + Cartucho);
             _context.Armeria.Add(armeria);
             await _context.SaveChangesAsync();
             return StatusCode(200, "Arma registrada exitosamente");
@@ -68,6 +83,8 @@ namespace AtoGobMx.Controllers
             arma.TipoArma = armeria.TipoArma;
             arma.Calibre = armeria.Calibre;
             arma.EmpleadoId = armeria.EmpleadoId;
+            arma.FechaAdquisicion = armeria.FechaAdquisicion;
+            arma.Costo = armeria.Costo;
             arma.Archivado = armeria.Archivado;
 
             _context.Armeria.Update(arma);
@@ -87,6 +104,28 @@ namespace AtoGobMx.Controllers
             _context.Armeria.Update(arma);
             await _context.SaveChangesAsync();
             return Ok("Arma archivado");
+        }
+        private static bool CreateDocument(string url)
+        {
+            try
+            {
+                var pathDocument = "/Documentos";
+                WebRequest request = WebRequest.Create(url + pathDocument);
+                request.Method = WebRequestMethods.Ftp.MakeDirectory;
+                request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+                using (var resp = (FtpWebResponse)request.GetResponse())
+                {
+                    request.Abort();
+                    resp.Close();
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
         }
     }
 }
