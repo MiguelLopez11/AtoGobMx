@@ -63,7 +63,7 @@
       </template>
       <template #item-actions="items">
         <b-button
-          @click="RemoveDocument(items.archivoId)"
+          @click="RemoveDocument(items.archivoAlumbradoId)"
           class="m-1"
           variant="outline-danger"
         >
@@ -117,10 +117,6 @@ export default {
   props: {
     AlumbradoId: {
       type: Number,
-      required: true
-    },
-    Alumbrado: {
-      type: Object,
       required: true
     }
   },
@@ -228,7 +224,7 @@ export default {
       isloading.value = true
       disableButtonDownload.value = true
       axiosPrivate({
-        url: `/Archivos/Documentos1/${props.AlumbradoId}/Zip`,
+        url: `/Archivos/DocumentosAlumbradoPublico/${props.AlumbradoId}/Zip`,
         method: 'GET',
         responseType: 'blob' // important
       })
@@ -252,7 +248,7 @@ export default {
       isloading.value = true
       disableButtonDownload.value = true
       axiosPrivate({
-        url: `/Archivos/Documents/Dowload/${props.AlumbradoId}/${Alumbrado.archivoAlumbradoId}`,
+        url: `/Archivos/DocumentosAlumbradoPublico/Dowload/${props.AlumbradoId}/${Alumbrado.archivoAlumbradoId}`,
         method: 'GET',
         responseType: 'blob' // important
       })
@@ -272,7 +268,7 @@ export default {
           disableButtonDownload.value = false
         })
     }
-    const RemoveDocument = archivoId => {
+    const RemoveDocument = ArchivoId => {
       swal
         .fire({
           title: '¿Estas seguro?',
@@ -286,7 +282,7 @@ export default {
         })
         .then(result => {
           if (result.isConfirmed) {
-            deleteDocumentsAlumbrado(props.AlumbradoId, archivoId, data => {
+            deleteDocumentsAlumbrado(props.AlumbradoId, ArchivoId, data => {
               swal
                 .fire({
                   title: 'Documento Eliminado!',

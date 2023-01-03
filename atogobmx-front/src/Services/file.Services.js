@@ -104,12 +104,12 @@ export default function FileServices () {
   // Servicios creados para la carga de archivos arturo
   // ----------- Alumbrado ---------------- //
   const getDocumentsAlumbrado = (AlumbradoId, callback) => {
-    axiosPrivate.get(`/Archivos/Documents/AlumbradoPublico/${AlumbradoId}`).then((response) => {
+    axiosPrivate.get(`/Archivos/DocumentosAlumbradoPublico/${AlumbradoId}`).then((response) => {
       callback(response.data)
     })
   }
   const deleteDocumentsAlumbrado = (AlumbradoId, ArchivoId, callback) => {
-    axiosPrivate.delete(`/Archivos/Documents11/AlumbradoPublico/Eliminar/${AlumbradoId}/${ArchivoId}`)
+    axiosPrivate.delete(`/Archivos/DocumentosAlumbradoPublico/Eliminar/${AlumbradoId}/${ArchivoId}`)
       .then((response) => {
         callback(response.data)
       })
@@ -118,7 +118,7 @@ export default function FileServices () {
       })
   }
   const createDocumentsAlumbrado = (AlumbradoId, files, callback) => {
-    axiosPrivate.post(`/Archivos/Documents/AlumbradoPublico/${AlumbradoId}`, files).then((response) => {
+    axiosPrivate.post(`/Archivos/DocumentosAlumbradoPublico/${AlumbradoId}`, files).then((response) => {
       callback(response)
     }).catch((exception) => {
       callback(exception.response.data)
@@ -126,12 +126,12 @@ export default function FileServices () {
   }
   // ----------- Cementerios ---------------- //
   const getDocumentsCementerios = (CementerioId, callback) => {
-    axiosPrivate.get(`/Archivos/Documents/Cementerio/${CementerioId}`).then((response) => {
+    axiosPrivate.get(`/Archivos/DocumentosCementerioPublico/${CementerioId}`).then((response) => {
       callback(response.data)
     })
   }
   const deleteDocumentsCementerios = (CementerioId, ArchivoId, callback) => {
-    axiosPrivate.delete(`/Archivos/Documents12/Cementerios/Eliminar/${CementerioId}/${ArchivoId}`)
+    axiosPrivate.delete(`/Archivos/DocumentosCementerioPublico/Eliminar/${CementerioId}/${ArchivoId}`)
       .then((response) => {
         callback(response.data)
       })
@@ -140,7 +140,7 @@ export default function FileServices () {
       })
   }
   const createDocumentsCementerios = (CementerioId, files, callback) => {
-    axiosPrivate.post(`/Archivos/Documents/Cementerio/${CementerioId}`, files).then((response) => {
+    axiosPrivate.post(`/Archivos/DocumentosCementerioPublico/${CementerioId}`, files).then((response) => {
       callback(response)
     }).catch((exception) => {
       callback(exception.response.data)
@@ -148,12 +148,12 @@ export default function FileServices () {
   }
   // ----------- Aseo ---------------- //
   const getDocumentsAseo = (AseoId, callback) => {
-    axiosPrivate.get(`/Archivos/Documents/Aseo/${AseoId}`).then((response) => {
+    axiosPrivate.get(`/Archivos/DocumentosAseoPublico/${AseoId}`).then((response) => {
       callback(response.data)
     })
   }
   const deleteDocumentsAseo = (AseoId, ArchivoId, callback) => {
-    axiosPrivate.delete(`/Archivos/Documents13/Aseo/Eliminar/${AseoId}/${ArchivoId}`)
+    axiosPrivate.delete(`/Archivos/DocumentosAseoPublico/Eliminar/${AseoId}/${ArchivoId}`)
       .then((response) => {
         callback(response.data)
       })
@@ -162,7 +162,7 @@ export default function FileServices () {
       })
   }
   const createDocumentsAseo = (AseoId, files, callback) => {
-    axiosPrivate.post(`/Archivos/Documents/Aseo/${AseoId}`, files).then((response) => {
+    axiosPrivate.post(`/Archivos/DocumentosAseoPublico/${AseoId}`, files).then((response) => {
       callback(response)
     }).catch((exception) => {
       callback(exception.response.data)
@@ -170,12 +170,12 @@ export default function FileServices () {
   }
   // ----------- Obras publicas ---------------- //
   const getDocumentsObrasPublicas = (ObraId, callback) => {
-    axiosPrivate.get(`/Archivos/Documents/ObrasPublicas/${ObraId}`).then((response) => {
+    axiosPrivate.get(`/Archivos/DocumentosObrasPublicas/${ObraId}`).then((response) => {
       callback(response.data)
     })
   }
   const deleteDocumentsObrasPublicas = (ObraId, ArchivoId, callback) => {
-    axiosPrivate.delete(`/Archivos/Documents14/ObrasPublicas/Eliminar/${ObraId}/${ArchivoId}`)
+    axiosPrivate.delete(`/Archivos/DocumentosObrasPublicas/Eliminar/${ObraId}/${ArchivoId}`)
       .then((response) => {
         callback(response.data)
       })
@@ -184,7 +184,7 @@ export default function FileServices () {
       })
   }
   const createDocumentsObrasPublicas = (ObraId, files, callback) => {
-    axiosPrivate.post(`/Archivos/Documents/Obraspublicas/${ObraId}`, files).then((response) => {
+    axiosPrivate.post(`/Archivos/DocumentosObrasPublicas/${ObraId}`, files).then((response) => {
       callback(response)
     }).catch((exception) => {
       callback(exception.response.data)

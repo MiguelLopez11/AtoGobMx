@@ -10,10 +10,10 @@
             <b-row cols="2">
               <!--Agregar nombre -->
               <b-col>
-                <b-form-group class="mt-3" label="Nombre de quie reporta: ">
+                <b-form-group class="mt-3" label="Nombre de quien reporta: ">
                   <Field name="NameField" :rules="validateName" as="text">
                     <b-form-input
-                      v-model="cleannessServiceFields.nombre"
+                      v-model="cleannessService.nombre"
                       :state="NameState"
                     >
                     </b-form-input>
@@ -29,7 +29,7 @@
                 <b-form-group class="mt-3" label="Problema">
                   <Field name="ProblemField" :rules="validateProblem" as="text">
                     <b-form-input
-                      v-model="cleannessServiceFields.problema"
+                      v-model="cleannessService.problema"
                       :state="ProblemState"
                     >
                     </b-form-input>
@@ -40,27 +40,6 @@
                   ></ErrorMessage>
                 </b-form-group>
               </b-col>
-              <!--Agregar Establecimiento publico -->
-              <b-col>
-                <b-form-group class="mt-3" label="Establecimiento publico">
-                  <Field
-                    name="PublicEstablishmentField"
-                    :rules="validatePublicEstablishment"
-                    as="text"
-                  >
-                    <b-form-input
-                      v-model="cleannessService.establecimientoPublico"
-                      :state="PublicEstablishmentState"
-                    >
-                    </b-form-input>
-                  </Field>
-                  <ErrorMessage
-                    class="text-danger"
-                    name="PublicEstablishmentField"
-                  ></ErrorMessage>
-                </b-form-group>
-              </b-col>
-              <!-- Agregar Domicilio -->
               <b-col>
                 <b-form-group class="mt-3" label="Domicilio">
                   <Field
@@ -80,24 +59,21 @@
                   ></ErrorMessage>
                 </b-form-group>
               </b-col>
-              <!-- Agregar Objetivo -->
+              <!-- Agregar descripcion -->
               <b-col>
-                <b-form-group class="mt-3" label="Objetivo">
+                <b-form-group class="mt-3" label="Descripcion">
                   <Field
-                    name="ObjectiveField"
-                    :rules="validateObjective"
+                    name="DescriptionField"
+                    :rules="validateDescription"
                     as="text"
                   >
-                    <b-form-input
-                      v-model="cleannessService.objetivo"
-                      :state="ObjectiveState"
-                    >
-                    </b-form-input>
+                    <b-form-textarea
+                      v-model="cleannessService.descripcion"
+                      :state="DescriptionState"
+                      rows="4"
+                    ></b-form-textarea>
                   </Field>
-                  <ErrorMessage
-                    class="text-danger"
-                    name="ObjectiveField"
-                  ></ErrorMessage>
+                  <ErrorMessage class="text-danger" name="DescriptionField" />
                 </b-form-group>
               </b-col>
             </b-row>
@@ -148,8 +124,9 @@ export default {
     const redirect = useRouter()
     const NameState = ref(false)
     const ProblemState = ref(false)
+    const PublicEstablishmentState = ref(false)
     const DomicileState = ref(false)
-    const ObjectiveState = ref(false)
+    const DescriptionState = ref(false)
     const aseoId = ref(parseInt(router.params.AseoId))
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
@@ -238,21 +215,23 @@ export default {
       return true
     }
 
-    const validateObjective = () => {
-      if (!cleannessService.value.objetivo) {
+    const validateDescription = () => {
+      if (!cleannessService.value.descripcion) {
         validateState()
         return 'Este campo es requerido'
       }
 
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(cleannessService.value.objetivo)) {
-        ObjectiveState.value = false
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(cleannessService.value.descripcion)
+      ) {
+        DescriptionState.value = false
         return 'Este campo solo puede contener numeros'
       }
 
-      //   if (!cleannessService.value.objetivo.trim().length > 0) {
-      //     ObjectiveState.value = false
-      //     return 'Este campo no puede contener espacios'
-      //   }
+      // if (!cleannessService.value.descripcion.trim().length > 0) {
+      //   DescriptionState.value = false
+      //   return 'Este campo no puede contener espacios'
+      // }
 
       validateState()
       return true
@@ -262,7 +241,7 @@ export default {
       NameState.value = cleannessService.value.nombre !== ''
       ProblemState.value = cleannessService.value.establecimientoPublico !== ''
       DomicileState.value = cleannessService.value.domicilio !== ''
-      ObjectiveState.value = cleannessService.value.objetivo !== ''
+      DescriptionState.value = cleannessService.value.descripcion !== ''
     }
 
     return {
@@ -270,9 +249,10 @@ export default {
       breadcrumbItems,
       NameState,
       ProblemState,
+      PublicEstablishmentState,
       DomicileState,
       aseoId,
-      ObjectiveState,
+      DescriptionState,
       //   router
 
       onUpdateCleannessService,
@@ -280,7 +260,7 @@ export default {
       validateName,
       validateProblem,
       validateDomicile,
-      validateObjective
+      validateDescription
     }
   }
 }

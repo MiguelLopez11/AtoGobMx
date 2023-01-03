@@ -90,7 +90,7 @@
         <b-row cols="2">
           <!--Agregar nombre -->
           <b-col>
-            <b-form-group class="mt-3" label="Nombre de quie reporta: ">
+            <b-form-group class="mt-3" label="Nombre de quien reporta: ">
               <Field
                 name="NameField"
                 :rules="validateName"
@@ -160,7 +160,7 @@
             </b-form-group>
           </b-col>
           <!--Agrgar objetivo -->
-          <b-col>
+          <!-- <b-col>
             <b-form-group class="mt-3" label="Objetivo">
               <Field name="ObjectiveField" :rules="validateObjective" as="text">
                 <b-form-input
@@ -174,9 +174,21 @@
                 name="ObjectiveField"
               ></ErrorMessage>
             </b-form-group>
-          </b-col>
+          </b-col> -->
           <!--Agregar Descripcion-->
           <b-col>
+            <b-form-group class="mt-3" label="Descripcion del problema">
+              <Field name="DescriptionField" :rules="validateDescription" as="text">
+                <b-form-textarea
+                  v-model="cleannessServiceFields.descripcion"
+                  :state="DescriptionState"
+                  rows="4"
+                ></b-form-textarea>
+              </Field>
+              <ErrorMessage class="text-danger" name="DescriptionField" />
+            </b-form-group>
+          </b-col>
+          <!-- <b-col>
             <b-form-group class="mt-3" label="Descripcion">
               <Field
                 name="DescriptionField"
@@ -193,7 +205,7 @@
                 name="DescriptionField"
               ></ErrorMessage>
             </b-form-group>
-          </b-col>
+          </b-col> -->
         </b-row>
 
         <b-row align-h="end">
