@@ -26,11 +26,43 @@ export default function ArmoryServices () {
       callback(response.data)
     })
   }
+  // Cartridge
+  const getCartridges = (armaId, callback) => {
+    axiosPrivate.get(`/PAT_ArmeriaCartuchos/Arma/${armaId}`).then((response) => {
+      callback(response.data)
+    })
+  }
+  const getCartridge = (cartuchoId, callback) => {
+    axiosPrivate.get(`/PAT_ArmeriaCartuchos/${cartuchoId}`).then((response) => {
+      callback(response.data)
+    })
+  }
+  const createCartridge = (data, callback) => {
+    axiosPrivate.post('/PAT_ArmeriaCartuchos', data).then((response) => {
+      callback(response.data)
+    })
+  }
+  const updateCartridge = (data, callback) => {
+    axiosPrivate.put(`/PAT_ArmeriaCartuchos/${data.cartuchoId}`, data).then((response) => {
+      callback(response.data)
+    })
+  }
+  const deleteCartridge = (cartuchoId, callback) => {
+    axiosPrivate.delete(`/PAT_ArmeriaCartuchos/${cartuchoId}`).then((response) => {
+      callback(response.data)
+    })
+  }
   return {
     getWeapons,
     getWeapon,
     createWeapon,
     updateWeapon,
-    deleteWeapon
+    deleteWeapon,
+    // Cartridge
+    getCartridges,
+    getCartridge,
+    createCartridge,
+    updateCartridge,
+    deleteCartridge
   }
 }
