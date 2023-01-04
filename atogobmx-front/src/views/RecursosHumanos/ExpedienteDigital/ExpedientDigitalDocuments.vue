@@ -38,7 +38,6 @@
       type="submit"
       @click="onDownloadFiles"
     >
-      <!-- :href="`http://localhost:5000/api/Archivos/Documentos/${expedienteDigitalId}/Zip`" -->
       <i class="bi bi-download"></i>
       Descargar Documentos
     </b-button>
@@ -74,8 +73,8 @@
       <b-button
         class="m-1"
         variant="outline-warning"
-        :href="`http://localhost:5000/api/Archivos/Documentos/Descargar/${expedienteDigitalId}/${items.archivoId}`"
       >
+        <!-- :href="`http://localhost:5000/api/Archivos/Documentos/Descargar/${expedienteDigitalId}/${items.archivoId}`" -->
         <i class="bi bi-download"></i>
       </b-button>
     </template>
@@ -118,10 +117,6 @@ export default {
   props: {
     ExpedientDigitalId: {
       type: Number,
-      required: true
-    },
-    Employee: {
-      type: Object,
       required: true
     }
   },
@@ -238,20 +233,25 @@ export default {
       isloading.value = true
       disableButtonDownload.value = true
       axiosPrivate({
-        url: `http://localhost:5000/api/Archivos/Documentos/${expedienteDigitalId.value}/Zip`,
+        url: `/Archivos/Documentos/${expedienteDigitalId.value}/Zip`,
         method: 'GET',
         responseType: 'blob' // important
-      }).then(response => {
-        const url = window.URL.createObjectURL(new Blob([response.data]))
-        const link = document.createElement('a')
-        link.href = url
-        link.setAttribute('download', `Expediente_${props.Employee.empleados.NombreCompleto}.zip`)
-        document.body.appendChild(link)
-        link.click()
-      }).then(result => {
-        isloading.value = false
-        disableButtonDownload.value = false
       })
+        .then(response => {
+          const url = window.URL.createObjectURL(new Blob([response.data]))
+          const link = document.createElement('a')
+          link.href = url
+          link.setAttribute(
+            'download',
+            'Expediente.zip'
+          )
+          document.body.appendChild(link)
+          link.click()
+        })
+        .then(result => {
+          isloading.value = false
+          disableButtonDownload.value = false
+        })
     }
     const RemoveDocument = archivoId => {
       swal
