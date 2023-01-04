@@ -40,7 +40,7 @@ export default function ExpedientLighting () {
   return {
     getExpedientLighting,
     getExpedientLightingById,
-    getDocumentsDowloadExpedient,
+    // getDocumentsDowloadExpedient,
     createExpedientLighting,
     updatExpedientLighting,
     getExpedientLightingByAlumbradoId,

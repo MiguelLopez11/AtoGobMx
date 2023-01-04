@@ -209,11 +209,7 @@
                 style="width: 100%; height: 500px"
                 @click="onAddMaker"
               >
-                <GMapMarker
-                  :zoom="10"
-                  :position="maker"
-                  :draggable="true"
-                />
+                <GMapMarker :zoom="10" :position="maker" :draggable="true" />
               </GMapMap>
             </b-card>
           </b-collapse>
@@ -254,8 +250,7 @@ export default {
   setup () {
     const swal = inject('$swal')
     const showModal = ref(false)
-    const { getDrawer, createDrawer, deleteDrawer } =
-      DrawerService()
+    const { getDrawer, createDrawer, deleteDrawer } = DrawerService()
     const { getCementery, getCementeryById } = CementeryService()
     const drawers = ref([])
     const cementeryService = ref([])
@@ -346,7 +341,7 @@ export default {
         center.value.lng = data.longitud
       })
     }
-    const onAddMaker = (location) => {
+    const onAddMaker = location => {
       maker.value.lat = location.latLng.lat()
       maker.value.lng = location.latLng.lng()
       drawerServiceFields.value.latitud = location.latLng.lat()
@@ -428,12 +423,10 @@ export default {
         !/^\d*\.\d+$/i.test(drawerServiceFields.value.metrosCorrespondientes)
       ) {
         MeterState.value = false
-        return 'Este campo solo puede contener numeros'
+        return 'Este campo debe  contener numeros con decimales'
       }
 
-      if (
-        !drawerServiceFields.value.metrosCorrespondientes.trim().length > 0
-      ) {
+      if (!drawerServiceFields.value.metrosCorrespondientes.trim().length > 0) {
         MeterState.value = false
         return 'Este campo no puede contener espacios'
       }
@@ -479,18 +472,25 @@ export default {
     }
 
     const addDrawerService = () => {
-      createDrawer(drawerServiceFields.value, data => {
-        refreshTable()
+      if (maker.value.lng === 0 && maker.value.lat === 0) {
         swal.fire({
-          title: '¡Cementerios agregado correctamente!',
-          text: 'Cementerios registrado satisfactoriamente',
-          icon: 'success'
+          title: '¡Mapa vacío!',
+          text: 'Marque en el mapa donde se encuentra la gabeta para poder continuar.',
+          icon: 'error'
         })
-      })
-      showModal.value = false
-      resetDrawerServiceFields()
+      } else {
+        createDrawer(drawerServiceFields.value, data => {
+          refreshTable()
+          swal.fire({
+            title: '¡Cementerios agregado correctamente!',
+            text: 'Cementerios registrado satisfactoriamente',
+            icon: 'success'
+          })
+        })
+        showModal.value = false
+        resetDrawerServiceFields()
+      }
     }
-
     const RemoveDrawerService = drawerId => {
       isloading.value = true
       swal

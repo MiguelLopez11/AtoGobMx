@@ -31,8 +31,8 @@ export default function RoadService () {
     })
   }
   // Coords Road
-  const getCoordsRoad = (callback) => {
-    axiosPrivate.get('/CoordenadaRuta').then((response) => {
+  const getCoordsRoad = (rutaId, callback) => {
+    axiosPrivate.get(`/CoordenadaRuta/${rutaId}`).then((response) => {
       callback(response.data)
     })
   }

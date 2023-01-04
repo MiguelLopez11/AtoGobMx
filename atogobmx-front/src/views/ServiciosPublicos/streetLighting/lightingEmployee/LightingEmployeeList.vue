@@ -1,29 +1,27 @@
 <template>
   <b-card class="m-2">
-    <b-row align-h="end" class="mb-3 mr-1">
-      <b-form-input
-        size="lg"
-        style="width: 350px"
-        v-model="searchValue"
-        type="search"
-        placeholder="Buscar alumbrado empleado..."
-      ></b-form-input>
-      <b-button
-        variant="primary"
-        style="
-            background-color: rgb(94,80,238);
-            height: 50px;
-            width: auto;
-            font-size: 18px;
-            margin-right: 15px;
-            margin-left: 20px;
-        "
-        @click="showModal = !showModal"
-        type="submit"
-      >
-        <i class="bi bi-person-plus-fill"></i>
-        Agregar alumbrado empleado
-      </b-button>
+    <b-row cols="2" align-h="end" class="mb-3 mr-1">
+      <b-col>
+        <b-form-input
+          size="lg"
+          class="w-75"
+          v-model="searchValue"
+          type="search"
+          placeholder="Buscar alumbrado empleado..."
+        ></b-form-input>
+      </b-col>
+      <b-col>
+        <b-button
+          style="background-color: rgb(94, 80, 238)"
+          size="lg"
+          class="w-75"
+          @click="showModal = !showModal"
+          type="submit"
+        >
+          <i class="bi bi-person-plus-fill"></i>
+          Agregar empleado
+        </b-button>
+      </b-col>
     </b-row>
     <EasyDataTable
       rows-per-page-message="registros por pagina"
@@ -161,8 +159,7 @@ export default {
       if (data.length === 0) {
         swal.fire({
           title: 'No se encuentra un tipo de Empleado alumbrado',
-          text:
-            'No se encuentra tipo de empleado alumbrado registrado en el departamento seleccionado, registre primero un tipo de empleado para continuar',
+          text: 'No se encuentra tipo de empleado alumbrado registrado en el departamento seleccionado, registre primero un tipo de empleado para continuar',
           icon: 'warning'
         })
       }
@@ -231,11 +228,9 @@ export default {
     const addLightingEmployeeService = () => {
       for (let i = 0; i < employeesSelected.value.length; i++) {
         lightingEmployeeFields.value.empleadoId = employeesSelected.value[i]
-        createAddressLightingEmployee(
-          lightingEmployeeFields.value,
-          data => {
-            refreshTable()
-          })
+        createAddressLightingEmployee(lightingEmployeeFields.value, data => {
+          refreshTable()
+        })
       }
       swal.fire({
         title: '¡Empleado alumbrado agregado correctamente!',
@@ -266,8 +261,7 @@ export default {
             })
             swal.fire({
               title: '¡Empleado alumbrado archivado!',
-              text:
-                'El empleado alumbrado ha sido archivado satisfactoriamente.',
+              text: 'El empleado alumbrado ha sido archivado satisfactoriamente.',
               icon: 'success'
             })
           } else {

@@ -127,7 +127,7 @@ export default {
   },
   setup () {
     const swal = inject('$swal')
-    const { getRoadById, updateRoad } = RoadService()
+    const { getRoadById, updateRoad, getCoordsRoad } = RoadService()
     // const $toast = useToast()
     const roadService = ref([])
     const router = useRoute()
@@ -206,6 +206,18 @@ export default {
     getRoadById(router.params.RutaId, data => {
       roadService.value = data
     })
+    getCoordsRoad(router.params.RutaId, data => {
+      for (let i = 0; i < data.length; i++) {
+        locations.value.push({ lat: data[i].latitud, lng: data[i].longitud })
+      }
+      flightPath.value = {
+        path: locations.value,
+        geodesic: true,
+        strokeColor: '#5e50ee',
+        strokeOpacity: 1.0,
+        strokeWeight: 5
+      }
+    })
 
     // const validateOrigin = () => {
     //   if (!roadService.value.origen) {
@@ -260,7 +272,8 @@ export default {
       // eslint-disable-next-line no-unneeded-ternary
       DestinationState.value = roadService.value.destino === '' ? false : true
       // eslint-disable-next-line no-unneeded-ternary
-      ObservationState.value = roadService.value.obsevacion === '' ? false : true
+      ObservationState.value =
+        roadService.value.obsevacion !== ''
     }
 
     return {

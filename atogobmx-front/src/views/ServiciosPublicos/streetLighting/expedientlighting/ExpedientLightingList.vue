@@ -79,7 +79,7 @@
           v-if="expedientLighting.length > 0"
             class="m-1"
             variant="outline-warning"
-            @click="onDownloadFile"
+            @click="onDownloadFile(items)"
           >
             <!-- :href="`http://localhost:5000/api/ExpedienteAlumbrado/ExpedienteAlumbrado/Download/${items.expedienteAlumbradoId}`" -->
             <i class="bi bi-download"></i>
@@ -242,7 +242,7 @@ export default {
       isloading.value = true
       disableButtonDownload.value = true
       axiosPrivate({
-        url: `/ExpedienteAlumbrado/ExpedienteAlumbrado/Download/${props.ExpedienteAlumbradoId}`,
+        url: `/ExpedienteAlumbrado/ExpedienteAlumbrado/Download/${Alumbrado.expedienteAlumbradoId}`,
         method: 'GET',
         responseType: 'blob' // important
       })
@@ -252,7 +252,7 @@ export default {
           link.href = url
           link.setAttribute(
             'download',
-            `${Alumbrado.nombreObra}`
+            `Expediente_${Alumbrado.nomenclatura}.pdf`
           )
           document.body.appendChild(link)
           link.click()

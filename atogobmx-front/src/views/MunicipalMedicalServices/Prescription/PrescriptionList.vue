@@ -151,8 +151,6 @@ import { Form } from 'vee-validate'
 import { ref, inject } from 'vue'
 import { useRouter } from 'vue-router'
 
-// import { useToast } from 'vue-toast-notification'
-import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
     Form,

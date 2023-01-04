@@ -104,20 +104,10 @@
           <!--Agregar descripcion-->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion">
-              <Field
-                name="DescriptionField"
-                :rules="validateDescription"
-                as="text"
-              >
-                <b-form-input
+                <b-form-textarea
                   v-model="statusLightingFields.descripcion"
-                  :state="DescriptionState"
-                ></b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="DescriptionField"
-              ></ErrorMessage>
+                  rows="4"
+                ></b-form-textarea>
             </b-form-group>
           </b-col>
         </b-row>
@@ -167,7 +157,6 @@ export default {
     const isloading = ref(true)
     const searchValue = ref('')
     const searchField = ref('nombreEstatus')
-    const DescriptionState = ref(false)
     const NameState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
@@ -198,7 +187,6 @@ export default {
         JSON.stringify(statusLightingFieldsBlank)
       )
       NameState.value = false
-      DescriptionState.value = false
     }
 
     getStatus(data => {
@@ -238,29 +226,6 @@ export default {
       NameState.value = true
       return true
     }
-
-    const validateDescription = () => {
-      if (!statusLightingFields.value.descripcion) {
-        DescriptionState.value = false
-        return 'Este campo es requerido'
-      }
-      if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ ,;.: 0-9]+$/i.test(
-          statusLightingFields.value.descripcion
-        )
-      ) {
-        DescriptionState.value = false
-        return 'La descripcion solo puede contener letras y numeros'
-      }
-      if (!statusLightingFields.value.descripcion.trim().length > 0) {
-        DescriptionState.value = false
-        return 'Este campo no puede contener espacios'
-      }
-      DescriptionState.value = true
-      return true
-    }
-    // pone mis cambios de mis campos vacios de nuevo
-
     const refreshTable = () => {
       isloading.value = true
       getStatus(data => {
@@ -344,14 +309,12 @@ export default {
       // lightingFailuresValues,
       fields,
       NameState,
-      DescriptionState,
       // option,
       onFiltered,
       addStatusLighting,
       refreshTable,
       RemoveStatusLighting,
       validateName,
-      validateDescription,
       resetPublicLightingFields
       // resetStreetLightingFields
     }

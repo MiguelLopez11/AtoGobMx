@@ -106,7 +106,6 @@
 
 <script>
 import { ref } from 'vue'
-import '@vuepic/vue-datepicker/dist/main.css'
 
 export default {
   setup () {

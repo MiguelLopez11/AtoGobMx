@@ -153,7 +153,7 @@ export default function FileServices () {
     })
   }
   const deleteDocumentsCementerios = (CementerioId, ArchivoId, callback) => {
-    axiosPrivate.delete(`/Archivos/DocumentosCementerioPublico/Eliminar/${CementerioId}/${ArchivoId}`)
+    axiosPrivate.delete(`/Archivos/DocumentosCementerio/Eliminar/${CementerioId}/${ArchivoId}`)
       .then((response) => {
         callback(response.data)
       })

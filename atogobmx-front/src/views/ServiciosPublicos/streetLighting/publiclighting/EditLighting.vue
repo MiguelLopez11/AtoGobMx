@@ -64,7 +64,7 @@
               </b-col>
               <!--agregar domicilio-->
               <b-col>
-                <b-form-group class="mt-3" label="Domicilio">
+                <b-form-group class="mt-3" label="Domicilio/Calles">
                   <Field
                     name="DomicileField"
                     :rules="validateDomicile"
@@ -289,7 +289,7 @@ export default {
         validateState()
         return 'Este campo es requerido'
       }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(publicLighting.value.domicilio)) {
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ 0-9]+$/i.test(publicLighting.value.domicilio)) {
         DomicileState.value = false
         return 'Este campo solo puede contener letras'
       }

@@ -25,13 +25,10 @@
           <!--Agregar descricpcion-->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion">
-              <Field name="DescriptionField" :rules="validateDescription" as="text">
-                <b-form-input
+                <b-form-textarea
                   v-model="taskTypeLighting.descripcion"
-                  :state="DescriptionState"
-                ></b-form-input>
-              </Field>
-              <ErrorMessage class="text-danger" name="DescriptionField"></ErrorMessage>
+                  rows="4"
+                ></b-form-textarea>
             </b-form-group>
           </b-col>
         </b-row>
@@ -92,14 +89,6 @@ export default {
           redirect.push('/ServiciosPublicos/TareaTipoAlumbrado/list')
         }
       })
-      // $toast.open({
-      //   message: 'Tarea Tipo Alumbrado modificado correctamente',
-      //   position: 'top',
-      //   duration: 2000,
-      //   dismissible: true,
-      //   type: 'success',
-      //   onDismiss: () => redirect.push('/TareaTipoAlumbrado/list')
-      // })
     }
 
     getTaskTypeLightingById(router.params.TareaTipoAlumbradoId, data => {
@@ -123,23 +112,6 @@ export default {
       return true
     }
 
-    const validateDescription = () => {
-      if (!taskTypeLighting.value.descripcion) {
-        validateState()
-        return 'Este campo es requerido'
-      }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ ,;.: 0-9]+$/i.test(taskTypeLighting.value.descripcion)) {
-        DescriptionState.value = false
-        return 'El tipo de tarea solo puede contener letras y numeros'
-      }
-      if (!taskTypeLighting.value.descripcion.trim().length > 0) {
-        DescriptionState.value = false
-        return 'Este campo no puede contener espacios'
-      }
-      validateState()
-      return true
-    }
-
     const validateState = () => {
       // eslint-disable-next-line no-unneeded-ternary
       NameState.value = taskTypeLighting.value.nombreTarea !== ''
@@ -151,13 +123,11 @@ export default {
       taskTypeLighting,
       breadcrumbItems,
       NameState,
-      DescriptionState,
       //   router
 
       onUpdateTaskTypeLighting,
       validateName,
-      validateState,
-      validateDescription
+      validateState
     }
   }
 }

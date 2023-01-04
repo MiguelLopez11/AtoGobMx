@@ -1326,14 +1326,14 @@ namespace AtoGobMx.Controllers
         [HttpGet("DocumentosCementerioPublico/{CementerioId}/Zip")]
         public async Task<IActionResult> DownloadCementeryZip(int CementerioId)
         {
-            var vehiculo = await _context.Cementerio
+            var cementerio = await _context.Cementerio
                  .Where(w => !w.Archivado)
                  .FirstOrDefaultAsync(f => f.CementerioId == CementerioId);
-            var UrlHost = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/{5}", "digital.atogobmx.com", "Files", "ServiciosPublicos", "CementerioPublico", vehiculo.NombreCementerio, "Documentos");
+            var UrlHost = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/{5}", "digital.atogobmx.com", "Files", "ServiciosPublicos", "CementerioPublico", cementerio.NombreCementerio, "Documentos");
             var result = GetListFiles(UrlHost);
             foreach (string line in result)
             {
-                copyFile(String.Format("ftp://{0}/{1}/{2}/{3}/{4}", "digital.atogobmx.com", "Files", "ServiciosPublicos", "CementerioPublico", vehiculo.NombreCementerio) + "/", line);
+                copyFile(String.Format("ftp://{0}/{1}/{2}/{3}/{4}", "digital.atogobmx.com", "Files", "ServiciosPublicos", "CementerioPublico", cementerio.NombreCementerio) + "/", line);
             }
             if (!Directory.Exists("Files/Documentos/"))
             {
