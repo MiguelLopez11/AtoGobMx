@@ -315,7 +315,7 @@ export default {
       getExpedientLightingByAlumbradoId(alumbradoId, data => {
         redirect.push({
           name: 'ExpedienteAlumbrado-Edit',
-          params: { ExpedienteAlumbradoId: alumbradoId }
+          params: { ExpedienteAlumbradoId: data.expedienteAlumbradoId }
         })
       })
     }

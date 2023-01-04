@@ -8,7 +8,7 @@ export default function ExpedientLighting () {
   }
 
   const getExpedientLightingByAlumbradoId = (AlumbradoId, callback) => {
-    axiosPrivate.get(`/ExpedienteDigital/Alumbrado/${AlumbradoId}`).then((response) => {
+    axiosPrivate.get(`/ExpedienteAlumbrado/Alumbrado/${AlumbradoId}`).then((response) => {
       callback(response.data)
     })
   }

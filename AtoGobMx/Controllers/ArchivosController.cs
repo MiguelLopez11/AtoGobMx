@@ -156,6 +156,10 @@ namespace AtoGobMx.Controllers
             {
                 copyFile(UrlHost, line);
             }
+            if (!Directory.Exists("Files/Documentos"))
+            {
+                Directory.CreateDirectory("Files/Documentos");
+            }
             var FolderPath = Path.Combine(Directory.GetCurrentDirectory(), $"Files/Documentos");
             var FilePaths = Directory.GetFiles(FolderPath);
             var zipFileMemoryStream = new MemoryStream();
@@ -171,11 +175,6 @@ namespace AtoGobMx.Controllers
                         await fileStream.CopyToAsync(entryStream);
                     }
                 }
-            }
-
-            if (!Directory.Exists("Files/Documentos"))
-            {
-                Directory.CreateDirectory("Files/Documentos");
             }
             zipFileMemoryStream.Seek(0, SeekOrigin.Begin);
             var dir = new DirectoryInfo("Files/Documentos");
@@ -477,6 +476,10 @@ namespace AtoGobMx.Controllers
             {
                 copyFile(String.Format("ftp://{0}/{1}/{2}/{3}/{4}", "digital.atogobmx.com", "Files", "Patrimonio", "EquiposComputacion", equipoComputo.CodigoInventario) + "/" , line);
             }
+            if (!Directory.Exists("Files/Documentos/"))
+            {
+                Directory.CreateDirectory("Files/Documentos/");
+            }
             var FolderPath = Path.Combine(Directory.GetCurrentDirectory(), $"Files/Documentos/");
             var FilePaths = Directory.GetFiles(FolderPath);
             var zipFileMemoryStream = new MemoryStream();
@@ -495,10 +498,6 @@ namespace AtoGobMx.Controllers
             }
 
             zipFileMemoryStream.Seek(0, SeekOrigin.Begin);
-            if (!Directory.Exists("Files/Documentos/"))
-            {
-                Directory.CreateDirectory("Files/Documentos/");
-            }
             var dir = new DirectoryInfo("Files/Documentos/");
             dir.Attributes = dir.Attributes & ~FileAttributes.ReadOnly;
             dir.Delete(true);
@@ -690,6 +689,10 @@ namespace AtoGobMx.Controllers
             {
                 copyFile(String.Format("ftp://{0}/{1}/{2}/{3}/{4}", "digital.atogobmx.com", "Files", "Patrimonio", "ParqueVehicular", vehiculo.Nomenclatura) + "/", line);
             }
+            if (!Directory.Exists("Files/Documentos/"))
+            {
+                Directory.CreateDirectory("Files/Documentos/");
+            }
             var FolderPath = Path.Combine(Directory.GetCurrentDirectory(), $"Files/Documentos/");
             var FilePaths = Directory.GetFiles(FolderPath);
             var zipFileMemoryStream = new MemoryStream();
@@ -708,10 +711,6 @@ namespace AtoGobMx.Controllers
             }
 
             zipFileMemoryStream.Seek(0, SeekOrigin.Begin);
-            if (!Directory.Exists("Files/Documentos/"))
-            {
-                Directory.CreateDirectory("Files/Documentos/");
-            }
             var dir = new DirectoryInfo("Files/Documentos/");
             dir.Attributes = dir.Attributes & ~FileAttributes.ReadOnly;
             dir.Delete(true);
@@ -903,6 +902,10 @@ namespace AtoGobMx.Controllers
             {
                 copyFile(String.Format("ftp://{0}/{1}/{2}/{3}/{4}", "digital.atogobmx.com", "Files", "Patrimonio", "Mobiliario", Mobiliario.CodigoInventario) + "/", line);
             }
+            if (!Directory.Exists("Files/Documentos/"))
+            {
+                Directory.CreateDirectory("Files/Documentos/");
+            }
             var FolderPath = Path.Combine(Directory.GetCurrentDirectory(), $"Files/Documentos/");
             var FilePaths = Directory.GetFiles(FolderPath);
             var zipFileMemoryStream = new MemoryStream();
@@ -921,10 +924,6 @@ namespace AtoGobMx.Controllers
             }
 
             zipFileMemoryStream.Seek(0, SeekOrigin.Begin);
-            if (!Directory.Exists("Files/Documentos/"))
-            {
-                Directory.CreateDirectory("Files/Documentos/");
-            }
             var dir = new DirectoryInfo("Files/Documentos/");
             dir.Attributes = dir.Attributes & ~FileAttributes.ReadOnly;
             dir.Delete(true);
@@ -1119,12 +1118,10 @@ namespace AtoGobMx.Controllers
             {
                 copyFile(String.Format("ftp://{0}/{1}/{2}/{3}/{4}", "digital.atogobmx.com", "Files", "ServiciosPublicos", "AlumbradoPublico", alumbrado.NombreObra) + "/", line);
             }
-            
-            //var result = GetListFiles(UrlHost + "Documentos");
-            //foreach (string line in result)
-            //{
-            //    copyFile(UrlHost, line);
-            //}
+            if (!Directory.Exists("Files/Documentos/"))
+            {
+                Directory.CreateDirectory("Files/Documentos/");
+            }
             var FolderPath = Path.Combine(Directory.GetCurrentDirectory(), $"Files/Documentos");
             var FilePaths = Directory.GetFiles(FolderPath);
             var zipFileMemoryStream = new MemoryStream();
@@ -1143,10 +1140,6 @@ namespace AtoGobMx.Controllers
             }
 
             zipFileMemoryStream.Seek(0, SeekOrigin.Begin);
-            if (!Directory.Exists("Files/Documentos/"))
-            {
-                Directory.CreateDirectory("Files/Documentos/");
-            }
             var dir = new DirectoryInfo("Files/Documentos");
             dir.Attributes = dir.Attributes & ~FileAttributes.ReadOnly;
             dir.Delete(true);
@@ -1342,6 +1335,10 @@ namespace AtoGobMx.Controllers
             {
                 copyFile(String.Format("ftp://{0}/{1}/{2}/{3}/{4}", "digital.atogobmx.com", "Files", "ServiciosPublicos", "CementerioPublico", vehiculo.NombreCementerio) + "/", line);
             }
+            if (!Directory.Exists("Files/Documentos/"))
+            {
+                Directory.CreateDirectory("Files/Documentos/");
+            }
             var FolderPath = Path.Combine(Directory.GetCurrentDirectory(), $"Files/Documentos/");
             var FilePaths = Directory.GetFiles(FolderPath);
             var zipFileMemoryStream = new MemoryStream();
@@ -1360,10 +1357,6 @@ namespace AtoGobMx.Controllers
             }
 
             zipFileMemoryStream.Seek(0, SeekOrigin.Begin);
-            if (!Directory.Exists("Files/Documentos/"))
-            {
-                Directory.CreateDirectory("Files/Documentos/");
-            }
             var dir = new DirectoryInfo("Files/Documentos");
             dir.Attributes = dir.Attributes & ~FileAttributes.ReadOnly;
             dir.Delete(true);
@@ -1557,11 +1550,15 @@ namespace AtoGobMx.Controllers
                  .Where(w => !w.Archivado)
                  .FirstOrDefaultAsync(f => f.AseoId == AseoId);
             var UrlHost = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/{5}", "digital.atogobmx.com", "Files", "ServiciosPublicos", "AseoPublico", aseo.Nombre, "Documentos");
-             
+
             var result = GetListFiles(UrlHost);
             foreach (string line in result)
             {
                 copyFile(String.Format("ftp://{0}/{1}/{2}/{3}/{4}", "digital.atogobmx.com", "Files", "ServiciosPublicos", "AseoPublico", aseo.Nombre) + "/", line);
+            }
+            if (!Directory.Exists("Files/Documentos/"))
+            {
+                Directory.CreateDirectory("Files/Documentos/");
             }
             var FolderPath = Path.Combine(Directory.GetCurrentDirectory(), $"Files/Documentos/");
             var FilePaths = Directory.GetFiles(FolderPath);
@@ -1581,10 +1578,6 @@ namespace AtoGobMx.Controllers
             }
 
             zipFileMemoryStream.Seek(0, SeekOrigin.Begin);
-            if (!Directory.Exists("Files/Documentos/"))
-            {
-                Directory.CreateDirectory("Files/Documentos/");
-            }
             var dir = new DirectoryInfo("Files/Documentos");
             dir.Attributes = dir.Attributes & ~FileAttributes.ReadOnly;
             dir.Delete(true);
@@ -1784,6 +1777,10 @@ namespace AtoGobMx.Controllers
             {
                 copyFile(String.Format("ftp://{0}/{1}/{2}/{3}", "digital.atogobmx.com", "Files", "ObrasPublicas", obrapublica.Nombre) + "/", line);
             }
+            if (!Directory.Exists("Files/Documentos/"))
+            {
+                Directory.CreateDirectory("Files/Documentos/");
+            }
             var FolderPath = Path.Combine(Directory.GetCurrentDirectory(), $"Files/Documentos/");
             var FilePaths = Directory.GetFiles(FolderPath);
             var zipFileMemoryStream = new MemoryStream();
@@ -1802,10 +1799,6 @@ namespace AtoGobMx.Controllers
             }
 
             zipFileMemoryStream.Seek(0, SeekOrigin.Begin);
-            if (!Directory.Exists("Files/Documentos/"))
-            {
-                Directory.CreateDirectory("Files/Documentos/");
-            }
             var dir = new DirectoryInfo("Files/Documentos");
             dir.Attributes = dir.Attributes & ~FileAttributes.ReadOnly;
             dir.Delete(true);
@@ -2080,6 +2073,10 @@ namespace AtoGobMx.Controllers
             {
                 copyFile(String.Format("ftp://{0}/{1}/{2}/{3}/{4}", "digital.atogobmx.com", "Files", "Patrimonio", "Mobiliario", armeria.Nomenclatura) + "/", line);
             }
+            if (!Directory.Exists("Files/Documentos"))
+            {
+                Directory.CreateDirectory("Files/Documentos");
+            }
             var FolderPath = Path.Combine(Directory.GetCurrentDirectory(), $"Files/Documentos/");
             var FilePaths = Directory.GetFiles(FolderPath);
             var zipFileMemoryStream = new MemoryStream();
@@ -2098,10 +2095,6 @@ namespace AtoGobMx.Controllers
             }
 
             zipFileMemoryStream.Seek(0, SeekOrigin.Begin);
-            if (!Directory.Exists("Files/Documentos"))
-            {
-                Directory.CreateDirectory("Files/Documentos");
-            }
             var dir = new DirectoryInfo("Files/Documentos/");
             dir.Attributes = dir.Attributes & ~FileAttributes.ReadOnly;
             dir.Delete(true);

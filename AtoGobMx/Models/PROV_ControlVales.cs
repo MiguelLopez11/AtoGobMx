@@ -11,11 +11,10 @@ namespace AtoGobMx.Models
         public int ControlValeId { get; set; }
         public DateTime? FechaEmicion { get; set; }
         public DateTime? FechaVigencia { get; set; }
-        public string Recibio { get; set; }
-        public string Usuario { get; set; }
-        public string UsuarioAutoriza { get; set; }
+        public string? Recibio { get; set; }
+        public string? Usuario { get; set; }
+        public string? UsuarioAutoriza { get; set; }
         public int? DepartamentoId { get; set; }
-        public int? EmpleadoId { get; set; }
         public int? ProveedorId { get; set; }
         public int? EstatusValeId { get; set; }
         public int? TipoId { get; set; }
@@ -24,8 +23,6 @@ namespace AtoGobMx.Models
 
         [ForeignKey("DepartamentoId")]
         public Departamentos? Departamentos { get; set; }
-        [ForeignKey("EmpleadoId")]
-        public Empleado? Empleados { get; set; }
         [ForeignKey("ProveedorId")]
         public PROV_Proveedor? PROV_Proveedor { get; set; }
         [ForeignKey("EstatusValeId")]

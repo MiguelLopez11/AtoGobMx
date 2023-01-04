@@ -45,7 +45,7 @@
                   value-field="departamentoId"
                   text-field="nombre"
                   :state="departamentState"
-                  @input="getWorkStation(EmployeesFields.departamentoId)"
+                  @input="getWorkStation(employee.departamentoId)"
                 >
                 </b-form-select>
               </Field>
