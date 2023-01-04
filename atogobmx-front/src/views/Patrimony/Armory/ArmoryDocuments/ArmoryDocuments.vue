@@ -239,7 +239,7 @@ export default {
       isloading.value = true
       disableButtonDownload.value = true
       axiosPrivate({
-        url: `/Archivos/DocumentosEquiposComputo/${props.ArmaId}/Zip`,
+        url: `/Archivos/DocumentosArmeria/${props.ArmaId}/Zip`,
         method: 'GET',
         responseType: 'blob' // important
       })
@@ -263,7 +263,7 @@ export default {
       isloading.value = true
       disableButtonDownload.value = true
       axiosPrivate({
-        url: `/Archivos/DocumentosEquiposComputo/Descargar/${props.ArmaId}/${ArchivoArmeria.archivoEquipoId}`,
+        url: `/Archivos/DocumentosArmeria/Descargar/${props.ArmaId}/${ArchivoArmeria.archivoArmeriaId}`,
         method: 'GET',
         responseType: 'blob' // important
       })
