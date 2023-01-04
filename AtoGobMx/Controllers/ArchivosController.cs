@@ -34,7 +34,7 @@ namespace AtoGobMx.Controllers
             var fotoPerfil = await _context.Archivos.FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expedienteDigitalId);
             if (fotoPerfil == null || expediente == null)
             {
-                var perfil = System.IO.File.OpenRead($"Files/images/blank-profile.jpg");
+                var perfil = System.IO.File.OpenRead($"Files/user.png");
                 return File(perfil, "image/jpeg");
             }
             var serverPath = "ftp://digital.atogobmx.com/Files/RecursosHumanos/Empleados/";
@@ -60,7 +60,7 @@ namespace AtoGobMx.Controllers
             var fotoPerfil = await _context.Archivos.FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expediente.ExpedienteDigitalId);
             if (fotoPerfil == null || expediente == null)
             {
-                var perfil = System.IO.File.OpenRead($"Files/images/blank-profile.jpg");
+                var perfil = System.IO.File.OpenRead($"Files/user.png");
                 return File(perfil, "image/jpeg");
             }
             var serverPath = "ftp://digital.atogobmx.com/Files/RecursosHumanos/Empleados/";
@@ -173,11 +173,11 @@ namespace AtoGobMx.Controllers
                 }
             }
 
-            zipFileMemoryStream.Seek(0, SeekOrigin.Begin);
-            if (!Directory.Exists("Files/Documentos/"))
+            if (!Directory.Exists("Files/Documentos"))
             {
-                Directory.CreateDirectory("Files/Documentos/");
+                Directory.CreateDirectory("Files/Documentos");
             }
+            zipFileMemoryStream.Seek(0, SeekOrigin.Begin);
             var dir = new DirectoryInfo("Files/Documentos");
             dir.Attributes = dir.Attributes & ~FileAttributes.ReadOnly;
             dir.Delete(true);
@@ -2098,9 +2098,9 @@ namespace AtoGobMx.Controllers
             }
 
             zipFileMemoryStream.Seek(0, SeekOrigin.Begin);
-            if (!Directory.Exists("Files/Documentos/"))
+            if (!Directory.Exists("Files/Documentos"))
             {
-                Directory.CreateDirectory("Files/Documentos/");
+                Directory.CreateDirectory("Files/Documentos");
             }
             var dir = new DirectoryInfo("Files/Documentos/");
             dir.Attributes = dir.Attributes & ~FileAttributes.ReadOnly;

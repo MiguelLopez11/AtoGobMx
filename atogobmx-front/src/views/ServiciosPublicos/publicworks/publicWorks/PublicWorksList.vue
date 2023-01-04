@@ -182,6 +182,38 @@
             </b-form-group>
           </b-col>
         </b-row>
+        <b-row cols="1" align-h="center">
+          <b-button v-b-toggle.collapse-1 variant="primary"> Mapa </b-button>
+          <b-collapse id="collapse-1" class="mt-2">
+            <b-card>
+              <b-alert variant="warning" dismissible show
+                >Arrastra el punto del mapa al lugar donde se encuentra su
+                gabeta.</b-alert
+              >
+              <GMapMap
+                :center="center"
+                map-type-id="satellite"
+                :zoom="20"
+                :options="{
+                  zoomControl: true,
+                  mapTypeControl: false,
+                  scaleControl: false,
+                  rotateControl: true,
+                  disableDefaultUi: false
+                }"
+                style="width: 100%; height: 500px"
+                @click="onAddMaker"
+              >
+                <GMapMarker
+                  :zoom="10"
+                  :position="maker"
+                  :draggable="true"
+                />
+              </GMapMap>
+            </b-card>
+          </b-collapse>
+          <!-- {{markers}} -->
+        </b-row>
         <b-row align-h="end">
           <b-button
             class="w-auto m-2 text-white"
@@ -202,6 +234,7 @@
 <script>
 import PublicWorksServices from '@/Services/publickworks.Services'
 import worksStatusServices from '@/Services/worksstatus.Services'
+import CementeryService from '@/Services/cementery.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -218,6 +251,7 @@ export default {
     const { getPublicWorks, createPublicWorks, deletePublicWorks } =
       PublicWorksServices()
     const { getWorksStatus } = worksStatusServices()
+    const { getCementeryById } = CementeryService()
     const publicWorks = ref([])
     const worksStatus = ref([])
     const perPage = ref(5)
@@ -262,12 +296,28 @@ export default {
       }
     })
 
+    const center = ref({ lat: 20.5413702, lng: -102.691446 })
+    const maker = ref({ lat: 0, lng: 0 })
+
+    const onSelectCementery = () => {
+      getCementeryById(publicWorksFields.value.cementerioId, data => {
+        center.value.lat = data.latitud
+        center.value.lng = data.longitud
+      })
+    }
+    const onAddMaker = (location) => {
+      maker.value.lat = location.latLng.lat()
+      maker.value.lng = location.latLng.lng()
+      publicWorksFields.value.latitud = location.latLng.lat()
+      publicWorksFields.value.longitud = location.latLng.lng()
+    }
+
     const publicWorksFieldsBlank = ref(
       JSON.parse(JSON.stringify(publicWorksFields))
     )
 
     const fields = ref([
-      { value: 'obraId', text: 'ID', sortable: true },
+      // { value: 'obraId', text: 'ID', sortable: true },
       { value: 'nombre', text: 'Nombre de la obra' },
       { value: 'encargado', text: 'Encargado obra' },
       { value: 'operadorObra', text: 'Operador de la obra' },
@@ -431,6 +481,8 @@ export default {
       publicWorksFields,
       breadcrumbItems,
       showModal,
+      center,
+      maker,
       perPage,
       currentPage,
       filter,
@@ -449,6 +501,8 @@ export default {
       addPublicWorks,
       refreshTable,
       RemovePublicWorks,
+      onAddMaker,
+      onSelectCementery,
       validateNameWorks,
       // validateInCharge,
       validateDescription,

@@ -213,7 +213,7 @@ export default {
       JSON.parse(JSON.stringify(detailVoucherFields))
     )
     const fields = ref([
-      { value: 'detalleValeId', text: 'ID', sortable: true },
+      // { value: 'detalleValeId', text: 'ID', sortable: true },
       { value: 'cantidad', text: 'Cantidad' },
       // { value: 'precio', text: 'Precio' },
       { value: 'importe', text: 'Importe' },

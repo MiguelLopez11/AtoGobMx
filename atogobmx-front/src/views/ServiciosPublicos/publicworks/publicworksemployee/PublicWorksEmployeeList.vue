@@ -173,7 +173,7 @@ export default {
     )
 
     const fields = ref([
-      { value: 'empleadoObrasId', text: 'ID', sortable: true },
+      // { value: 'empleadoObrasId', text: 'ID', sortable: true },
       { value: 'empleados.nombreCompleto', text: 'Nombre empleado' },
       { value: 'actions', text: 'Acciones' }
     ])

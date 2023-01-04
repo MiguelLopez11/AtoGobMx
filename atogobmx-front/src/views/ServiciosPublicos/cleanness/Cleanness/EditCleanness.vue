@@ -206,10 +206,10 @@ export default {
         return 'Este campo solo puede contener numeros'
       }
 
-      //   if (!cleannessService.value.domicilio.trim().length > 0) {
-      //     DomicileState.value = false
-      //     return 'Este campo no puede contener espacios'
-      //   }
+      if (!cleannessService.value.domicilio.trim().length > 0) {
+        DomicileState.value = false
+        return 'Este campo no puede contener espacios'
+      }
 
       validateState()
       return true
@@ -228,10 +228,10 @@ export default {
         return 'Este campo solo puede contener numeros'
       }
 
-      // if (!cleannessService.value.descripcion.trim().length > 0) {
-      //   DescriptionState.value = false
-      //   return 'Este campo no puede contener espacios'
-      // }
+      if (!cleannessService.value.descripcion.trim().length > 0) {
+        DescriptionState.value = false
+        return 'Este campo no puede contener espacios'
+      }
 
       validateState()
       return true

@@ -58,7 +58,7 @@ namespace AtoGobMx.Context
         public DbSet<OP_Obras> ObrasPublicas { get; set; }
         public DbSet<OP_EstatusObras> OP_EstatusObras { get; set; }
         public DbSet<PROV_ControlVales> ControlDeVales { get; set; }
-        public DbSet<ExpedienteVale> ExpedienteVale { get; set; }
+        //public DbSet<ExpedienteVale> ExpedienteVale { get; set; }
         public DbSet<PROV_Vehiculo> PROV_Vehiculo { get; set; }
         public DbSet<PROV_EstatusVale> PROV_EstatusVale { get; set; }
         public DbSet<PROV_TipoVales> TipoVales { get; set; }

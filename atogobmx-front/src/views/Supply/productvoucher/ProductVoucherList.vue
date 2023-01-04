@@ -181,7 +181,7 @@ export default {
       JSON.parse(JSON.stringify(productVoucherFields))
     )
     const fields = ref([
-      { value: 'productoId', text: 'ID', sortable: true },
+      // { value: 'productoId', text: 'ID', sortable: true },
       { value: 'nombre', text: 'Nombre' },
       { value: 'descripcion', text: 'Descripcion' },
       { value: 'actions', text: 'Acciones' }

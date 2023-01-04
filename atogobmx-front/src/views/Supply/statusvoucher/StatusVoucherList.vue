@@ -181,7 +181,7 @@ export default {
       JSON.parse(JSON.stringify(statusVoucherFields))
     )
     const fields = ref([
-      { value: 'estatusValeId', text: 'ID', sortable: true },
+      // { value: 'estatusValeId', text: 'ID', sortable: true },
       { value: 'nombre', text: 'Nombre' },
       { value: 'descripcion', text: 'Descripcion' },
       { value: 'actions', text: 'Acciones' }

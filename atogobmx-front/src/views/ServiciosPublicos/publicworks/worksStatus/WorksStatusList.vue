@@ -181,7 +181,7 @@ export default {
       JSON.parse(JSON.stringify(worksStatusFields))
     )
     const fields = ref([
-      { value: 'estatusObraId', text: 'ID', sortable: true },
+      // { value: 'estatusObraId', text: 'ID', sortable: true },
       { value: 'nombre', text: 'Nombre' },
       { value: 'descripcion', text: 'Descripcion' },
       { value: 'actions', text: 'Acciones' }

@@ -99,14 +99,12 @@ namespace AtoGobMx.Controllers
             controlvale.ControlValeId = ControlValeId;
             controlvale.FechaEmicion = controlDeVales.FechaEmicion;
             controlvale.FechaVigencia = controlDeVales.FechaVigencia;
-            //controlvale.TipoCombustible = controlDeVales.TipoCombustible;
             controlvale.Usuario = controlDeVales.Usuario;
+            controlvale.Recibio = controlDeVales.Recibio;
             controlvale.UsuarioAutoriza = controlDeVales.UsuarioAutoriza;
             controlvale.DepartamentoId = controlDeVales.DepartamentoId;
             controlvale.EmpleadoId = controlDeVales.EmpleadoId;
             controlvale.ProveedorId = controlDeVales.ProveedorId;
-            //controlvale.ProductoId = controlDeVales.ProductoId;
-            //controlvale.DetalleValeId = controlDeVales.DetalleValeId;
             controlvale.EstatusValeId = controlDeVales.EstatusValeId;
             controlvale.TipoId = controlDeVales.TipoId;
             controlvale.Archivado = controlDeVales.Archivado;
