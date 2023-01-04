@@ -75,8 +75,13 @@
             ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
           >
           <b-dropdown-item
-            :href="`http://localhost:5000/api/ExpedienteAlumbrado/ExpedienteAlumbrado/Download/${items.expedienteAlumbradoId}`"
+          :disabled="disableButtonDownload"
+          v-if="expedientLighting.length > 0"
+            class="m-1"
+            variant="outline-warning"
+            @click="onDownloadFile"
           >
+            <!-- :href="`http://localhost:5000/api/ExpedienteAlumbrado/ExpedienteAlumbrado/Download/${items.expedienteAlumbradoId}`" -->
             <i class="bi bi-download"></i>
             Generar Expediente PDF
           </b-dropdown-item>
@@ -125,11 +130,18 @@
 import { ref, inject } from 'vue'
 import ExpedientLighting from '@/Services/expedientlighting.Services'
 import publiclightingServices from '@/Services/publiclighting.Services'
+import { axiosPrivate } from '@/common/axiosPrivate.js'
 export default {
+  props: {
+    AlumbradoId: {
+      type: Number,
+      required: true
+    }
+  },
   components: {
     EasyDataTable: window['vue3-easy-data-table']
   },
-  setup () {
+  setup (props) {
     const showModal = ref(false)
     const swal = inject('$swal')
     const { getPublicLightingExpedient } = publiclightingServices()
@@ -141,10 +153,12 @@ export default {
     const expedientLighting = ref([])
     const publicLighting = ref([])
     const perPage = ref(5)
+    const disableButtonDownload = ref(false)
     const currentPage = ref(1)
     const filter = ref(null)
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
+    const alumbradoId = ref(props.AlumbradoId)
     const searchValue = ref('')
     const searchField = ref('nombreObra')
     const breadcrumbItems = ref([
@@ -224,6 +238,31 @@ export default {
       })
     }
 
+    const onDownloadFile = (Alumbrado) => {
+      isloading.value = true
+      disableButtonDownload.value = true
+      axiosPrivate({
+        url: `/ExpedienteAlumbrado/ExpedienteAlumbrado/Download/${props.ExpedienteAlumbradoId}`,
+        method: 'GET',
+        responseType: 'blob' // important
+      })
+        .then(response => {
+          const url = window.URL.createObjectURL(new Blob([response.data]))
+          const link = document.createElement('a')
+          link.href = url
+          link.setAttribute(
+            'download',
+            `${Alumbrado.nombreObra}`
+          )
+          document.body.appendChild(link)
+          link.click()
+        })
+        .then(result => {
+          isloading.value = false
+          disableButtonDownload.value = false
+        })
+    }
+
     const RemoveExpedientLighting = expedienteDigitalId => {
       isloading.value = true
       swal
@@ -268,11 +307,14 @@ export default {
       publicLighting,
       showModal,
       expedientLightingFields,
+      disableButtonDownload,
+      alumbradoId,
 
       onFiltered,
       RemoveExpedientLighting,
       refreshTable,
-      onAddExpedientLighting
+      onAddExpedientLighting,
+      onDownloadFile
     }
   }
 }

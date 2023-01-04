@@ -64,15 +64,15 @@
             variant="outline-danger"
             ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
           >
-          <!-- <b-dropdown-item
+          <b-dropdown-item
             class="m-1"
             variant="outline-warning"
             :to="{
-              name: 'DetalleProducto-Edit',
-              params: { DetalleProductoId: items.productoId }
+              name: 'Producto-Edit',
+              params: { ProductoId: items.productoId }
             }"
             ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
-          > -->
+          >
         </b-dropdown>
       </template>
     </EasyDataTable>
@@ -103,20 +103,20 @@
           <!--Agregar Descripcion-->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion">
-              <Field
+              <!-- <Field
                 name="DescriptionField"
                 :rules="validateDescription"
                 as="text"
-              >
-                <b-form-input
-                  v-model="productVoucherFields.descripcion"
-                  :state="DescriptionState"
-                ></b-form-input>
-              </Field>
-              <ErrorMessage
+              > -->
+              <b-form-textarea
+                v-model="productVoucherFields.descripcion"
+                rows="4"
+              ></b-form-textarea>
+              <!-- </Field> -->
+              <!-- <ErrorMessage
                 class="text-danger"
                 name="DescriptionField"
-              ></ErrorMessage>
+              ></ErrorMessage> -->
             </b-form-group>
           </b-col>
         </b-row>
@@ -217,7 +217,7 @@ export default {
         return 'Este campo es requerido'
       }
       if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(productVoucherFields.value.nombre)
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ 0-9]+$/i.test(productVoucherFields.value.nombre)
       ) {
         NameState.value = false
         return 'El nombre de estatus de obras publicas solo puede contener letras'
@@ -230,26 +230,26 @@ export default {
       return true
     }
 
-    const validateDescription = () => {
-      if (!productVoucherFields.value.descripcion) {
-        DescriptionState.value = false
-        return 'Este campo es requerido'
-      }
-      if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
-          productVoucherFields.value.descripcion
-        )
-      ) {
-        DescriptionState.value = false
-        return 'La descripcion solo puede contener letras'
-      }
-      if (!productVoucherFields.value.descripcion.trim().length > 0) {
-        DescriptionState.value = false
-        return 'Este campo no puede contener espacios'
-      }
-      DescriptionState.value = true
-      return true
-    }
+    // const validateDescription = () => {
+    //   if (!productVoucherFields.value.descripcion) {
+    //     DescriptionState.value = false
+    //     return 'Este campo es requerido'
+    //   }
+    //   if (
+    //     !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+    //       productVoucherFields.value.descripcion
+    //     )
+    //   ) {
+    //     DescriptionState.value = false
+    //     return 'La descripcion solo puede contener letras'
+    //   }
+    //   if (!productVoucherFields.value.descripcion.trim().length > 0) {
+    //     DescriptionState.value = false
+    //     return 'Este campo no puede contener espacios'
+    //   }
+    //   DescriptionState.value = true
+    //   return true
+    // }
 
     // pone mis cambios de mis campos vacios de nuevo
     const refreshTable = () => {
@@ -331,7 +331,7 @@ export default {
       refreshTable,
       RemoveProductVoucher,
       validateName,
-      validateDescription,
+      // validateDescription,
       resetProductVoucherFields
     }
   }

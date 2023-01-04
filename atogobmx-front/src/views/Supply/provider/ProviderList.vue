@@ -365,9 +365,9 @@ export default {
         return 'Este campo es requerido'
       }
 
-      if (!/^[0-9]+$/i.test(providerFields.value.telefono)) {
+      if (!/^([0-9]{10})+$/i.test(providerFields.value.telefono)) {
         PhoneState.value = false
-        return 'Este campo solo puede contener numeros'
+        return 'Este campo solo puede contener 10 numeros'
       }
       // if (!providerFields.value.telefono.trim().length > 10) {
       //   PhoneState.value = false

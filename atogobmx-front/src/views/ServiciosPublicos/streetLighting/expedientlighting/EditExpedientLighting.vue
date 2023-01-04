@@ -64,63 +64,30 @@
                 <!--Lugar publico-->
                 <b-col v-if="isPublicPlace">
                   <b-form-group class="mt-3" label="Direccion">
-                    <Field
-                      name="PublicPlaceField"
-                      :rules="validatePublicPlace"
-                      as="text"
-                    >
                       <b-form-input
-                        v-model="expedientLighting.lugarPublico"
-                        :state="PublicPlaceState"
-                      />
-                    </Field>
-                    <ErrorMessage name="PublicPlaceField">
-                      <span class="text-danger">Este campo es requerido </span>
-                      <i class="bi bi-exclamation-circle"></i
-                    ></ErrorMessage>
+                        v-model="expedientLighting.direccion"
+                      ></b-form-input>
                   </b-form-group>
                 </b-col>
                 <!--Localidad-->
                 <b-col v-if="isPublicPlace">
                   <b-form-group class="mt-3" label="Localidad">
-                    <Field
-                      name="LocationField"
-                      :rules="validateLocation"
-                      as="text"
-                    >
                       <b-form-input
                         v-model="expedientLighting.localidad"
-                        :state="LocationState"
                       ></b-form-input>
-                    </Field>
-                    <ErrorMessage name="LocationField">
-                      <span class="text-danger">Este campo es requerido </span>
-                      <i class="bi bi-exclamation-circle"></i
-                    ></ErrorMessage>
                   </b-form-group>
                 </b-col>
                 <!--Departamento-->
                 <b-col v-if="!isPublicPlace">
                   <b-form-group class="mt-3" label="Departamento">
-                    <Field
-                      name="DepartamentField"
-                      :rules="validateDepartament"
-                      as="number"
-                    >
                       <b-form-select
                         v-model="expedientLighting.departamentoId"
                         autofocus
                         :options="departaments"
                         value-field="departamentoId"
                         text-field="nombre"
-                        :state="departamentState"
                       >
                       </b-form-select>
-                    </Field>
-                    <ErrorMessage name="DepartamentField">
-                      <span class="text-danger">Este campo es requerido </span>
-                      <i class="bi bi-exclamation-circle"></i
-                    ></ErrorMessage>
                   </b-form-group>
                 </b-col>
                 <!--Descripcion solucion-->
@@ -242,28 +209,8 @@ export default {
       }
     })
 
-    // validations
-
-    const validatePublicPlace = () => {
-      if (!expedientLighting.value.lugarPublico) {
-        validateState()
-        return 'Este campo es requerido'
-      }
-      validateState()
-      return true
-    }
-
     const validateNomenclature = () => {
       if (!expedientLighting.value.nomenclatura) {
-        validateState()
-        return 'Este campo es requerido'
-      }
-      validateState()
-      return true
-    }
-
-    const validateLocation = () => {
-      if (!expedientLighting.value.localidad) {
         validateState()
         return 'Este campo es requerido'
       }
@@ -300,7 +247,7 @@ export default {
 
     const validateState = () => {
       // eslint-disable-next-line no-unneeded-ternary
-      PublicPlaceState.value = expedientLighting.value.lugarPublico !== null
+      PublicPlaceState.value = expedientLighting.value.direccion !== null
       // eslint-disable-next-line no-unneeded-ternary
       HighDateState.value = expedientLighting.value.fechaAlta !== null
       // eslint-disable-next-line no-unneeded-ternary
@@ -328,8 +275,6 @@ export default {
       isPublicPlace,
 
       onUpdateExpedientLighting,
-      validatePublicPlace,
-      validateLocation,
       validateDepartament,
       validateDescriptionSolution,
       validateHighDate,

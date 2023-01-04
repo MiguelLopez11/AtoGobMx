@@ -25,13 +25,13 @@
           <!--Agregar Descripcion-->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion">
-              <Field name="DescriptionField" :rules="validateDescription" as="text">
-                <b-form-input
+              <!-- <Field name="DescriptionField" :rules="validateDescription" as="text"> -->
+                <b-form-textarea
                   v-model="productVoucher.descripcion"
-                  :state="DescriptionState"
-                ></b-form-input>
-              </Field>
-              <ErrorMessage class="text-danger" name="DescriptionField"></ErrorMessage>
+                ></b-form-textarea>
+                  <!-- :state="DescriptionState" -->
+              <!-- </Field> -->
+              <!-- <ErrorMessage class="text-danger" name="DescriptionField"></ErrorMessage> -->
             </b-form-group>
           </b-col>
         </b-row>

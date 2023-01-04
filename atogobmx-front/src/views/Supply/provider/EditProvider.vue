@@ -223,7 +223,7 @@ export default {
         return 'Este campo es requerido'
       }
 
-      if (!/^[0-9]+$/i.test(provider.value.telefono)) {
+      if (!/^([0-9]{10})+$/i.test(provider.value.telefono)) {
         PhoneState.value = false
         return 'Este campo solo puede contener numeros'
       }
@@ -234,7 +234,7 @@ export default {
 
     const validateEmail = () => {
       if (!provider.value.email) {
-        emailState.value = false
+        validateState()
         emailMessage.value = 'Este campo es requerido'
         return emailMessage.value
       }
@@ -266,6 +266,7 @@ export default {
     return {
       provider,
       breadcrumbItems,
+      emailState,
       NameState,
       RFCState,
       LegalRepresentativeState,

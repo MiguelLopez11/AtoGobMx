@@ -90,14 +90,28 @@
           <!--Agregar Fecha emicion-->
           <b-col>
             <b-form-group class="mt-3" label="Fecha emicion">
-              <Field name="DateOfIssueField" :rules="validateDateOfIssue" as="text">
+              <Field
+                name="DateOfIssueField"
+                :rules="validateDateOfIssue"
+                as="text"
+              >
                 <Datepicker
                   v-model="voucherControlFields.fechaEmicion"
                   locale="es"
-                  autoApply
+                  show-now-button
                   :enableTimePicker="false"
                   :state="DateOfIssueState"
+                  cancel-text="Cancelar"
+                  select-text="Seleccionar"
                 >
+                  <template #now-button="{ selectCurrentDate }">
+                    <b-button
+                      @click="selectCurrentDate()"
+                      title="Seleccionar fecha actual"
+                    >
+                      Hoy
+                    </b-button>
+                  </template>
                 </Datepicker>
               </Field>
               <ErrorMessage
@@ -106,19 +120,6 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!-- <b-col>
-            <b-form-group class="mt-3" label="Fecha emicion">
-              <Field name="DateOfIssueField" :rules="validateDateOfIssue" as="">
-                <Datepicker
-                  locale="es"
-                  text-input
-                  v-model="voucherControlFields.fechaEmicion"
-                  :state="DateOfIssueState"
-                ></Datepicker>
-              </Field>
-              <ErrorMessage name="DateOfIssueField"></ErrorMessage>
-            </b-form-group>
-          </b-col> -->
           <!--Agregar usuario proveeduria-->
           <b-col>
             <b-form-group class="mt-3" label="Usuario">
@@ -142,7 +143,11 @@
           <!--Agregar usuario proveeduria-->
           <b-col>
             <b-form-group class="mt-3" label="Usuario autorizador">
-              <Field name="ColorField" :rules="validateUserAuthoriser" as="text">
+              <Field
+                name="ColorField"
+                :rules="validateUserAuthoriser"
+                as="text"
+              >
                 <b-form-select
                   v-model="voucherControlFields.usuarioAutoriza"
                   autofocus
@@ -162,7 +167,11 @@
           <!--Agregar Fecha vigencia-->
           <b-col>
             <b-form-group class="mt-3" label="Fecha vigencia">
-              <Field name="ExpirationDateField" :rules="validateExpirationDate" as="text">
+              <Field
+                name="ExpirationDateField"
+                :rules="validateExpirationDate"
+                as="text"
+              >
                 <Datepicker
                   v-model="voucherControlFields.fechaVigencia"
                   locale="es"
@@ -178,25 +187,6 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!-- <b-col>
-            <b-form-group class="mt-3" label="Fecha vigencia">
-              <Field
-                name="ExpirationDateField"
-                :rules="validateExpirationDate"
-                as=""
-              >
-                <Datepicker
-                  locale="es"
-                  name="date"
-                  text-input
-                  v-model="voucherControlFields.fechaVigencia"
-                  :state="ExpirationDateState"
-                ></Datepicker>
-              </Field>
-              <ErrorMessage name="ExpirationDateField"></ErrorMessage>
-            </b-form-group>
-          </b-col> -->
-          <!--Agregar quien recibio vale-->
           <b-col>
             <b-form-group class="mt-3" label="Recibio">
               <Field name="ReceivedField" :rules="validateReceived" as="text">
@@ -205,7 +195,10 @@
                   :state="ReceivedState"
                 />
               </Field>
-              <ErrorMessage class="text-danger" name="ReceivedField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="ReceivedField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <!--Agregar Departamento-->
