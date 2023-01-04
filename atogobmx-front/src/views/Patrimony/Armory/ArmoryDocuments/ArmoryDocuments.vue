@@ -249,7 +249,7 @@ export default {
           link.href = url
           link.setAttribute(
             'download',
-            'Equipo_Documentos.zip'
+            'Documentos_Armeria.zip'
           )
           document.body.appendChild(link)
           link.click()
