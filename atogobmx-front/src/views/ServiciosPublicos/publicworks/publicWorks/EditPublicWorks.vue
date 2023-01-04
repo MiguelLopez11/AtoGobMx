@@ -5,12 +5,12 @@
     </b-card>
     <b-card>
       <div>
-        <h3>Editar Obras Publicas</h3>
+        <h3>Expediente Alumbrado</h3>
       </div>
       <b-tabs content-class="mt-3">
-        <b-tab title="Obras publicas" active>
+        <b-tab title="Datos generales" active>
           <b-card>
-            <Form @submit="onUpdatePublicWorks">
+            <Form @submit="onUpdatePublicWork">
               <b-row cols="2">
                 <!--Agregar nombre de obra-->
                 <b-col>
@@ -69,6 +69,26 @@
                     </b-form-input>
                   </b-form-group>
                 </b-col>
+                <!--agregar un estatus obra-->
+                <!-- <b-col>
+                  <b-form-group class="mt-3" label="Estatus de la obra">
+                    <Field
+                      name="WorkStatusField"
+                      :rules="validateWorkStatus"
+                      as="text"
+                    >
+                      <b-form-select
+                        v-model="publicWorks.estatusObraId"
+                        autofocus
+                        :state="WorkStatusState"
+                        :options="worksStatus"
+                        value-field="estatusObraId"
+                        text-field="nombre"
+                      ></b-form-select>
+                    </Field>
+                    <ErrorMessage class="text-danger" name="WorkStatusField" />
+                  </b-form-group>
+                </b-col> -->
                 <!--Descripcion-->
                 <b-col>
                   <b-form-group class="mt-3" label="Descripcion">
@@ -87,26 +107,6 @@
                       class="text-danger"
                       name="DescriptionField"
                     ></ErrorMessage>
-                  </b-form-group>
-                </b-col>
-                <!--agregar un estatus obra-->
-                <b-col>
-                  <b-form-group class="mt-3" label="Estatus de la Obra">
-                    <Field
-                      name="WorkStatusField"
-                      :rules="validateWorkStatus"
-                      as="text"
-                    >
-                      <b-form-select
-                        v-model="publicWorks.estatusObraId"
-                        autofocus
-                        :state="WorkStatusState"
-                        :options="worksStatus"
-                        value-field="estatusObraId"
-                        text-field="nombreEstatus"
-                      ></b-form-select>
-                    </Field>
-                    <ErrorMessage class="text-danger" name="WorkStatusField" />
                   </b-form-group>
                 </b-col>
               </b-row>
@@ -140,16 +140,15 @@
               </b-row>
               <b-row align-h="end">
                 <b-button
-                  class="w-75 col-1 m-2 text-white"
+                  class="w-auto m-2 text-white"
                   variant="primary"
                   to="/ServiciosPublicos/ObrasPublicas/list"
-                  type="reset"
                 >
                   Cancelar
                 </b-button>
-                <b-button type="success" class="w-75 col-1 m-2" variant="success">
-                  Guardar
-                </b-button>
+                <b-button class="w-auto m-2" variant="success" type="submit"
+                  >Guardar</b-button
+                >
               </b-row>
             </Form>
           </b-card>
@@ -174,79 +173,60 @@ import worksStatusServices from '@/Services/worksstatus.Services'
 import publicWorksEmployeeService from '@/views/ServiciosPublicos/publicworks/publicworksemployee/PublicWorksEmployeeList.vue'
 import ExpedientDocumentsPublickWorks from '@/views/ServiciosPublicos/publicworks/publicWorks/DocumentsPublicworks.vue'
 import PublicWorkVehicle from '@/views/ServiciosPublicos/publicworks/publickworkvehicles/PublickWorksVehiclesList.vue'
+import { Field, Form, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-// import { useToast } from 'vue-toast-notification'
-import { Form, Field, ErrorMessage } from 'vee-validate'
+// import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
-    Form,
+    // Datepicker,
     Field,
+    Form,
     ErrorMessage,
     publicWorksEmployeeService,
     ExpedientDocumentsPublickWorks,
     PublicWorkVehicle
   },
-  setup () {
+  setup (props) {
     const swal = inject('$swal')
     const { getPublicWorksById, updatePublicWorks } = PublicWorksServices()
     const { getWorksStatus } = worksStatusServices()
     const publicWorks = ref([])
     const worksStatus = ref([])
-    // const obraId = ref(parseInt(router.params.ObraId))
     const router = useRoute()
     const redirect = useRouter()
+    const obraId = ref(parseInt(router.params.ObraId))
     const NameWorksState = ref(false)
-    // const LatitudeState = ref(false)
-    // const LengthState = ref(false)
     const DescriptionState = ref(false)
     const WorkStatusState = ref(false)
     const isAgency = ref(false)
-    const obraId = ref(parseInt(router.params.ObraId))
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
       { text: 'Obras publicas', to: '/ServiciosPublicos/ObrasPublicas/list' },
       { text: 'Editar-Obras publicas' }
     ])
 
-    const center = ref({ lat: 0, lng: 0 })
-
-    const updateCoordinates = (location) => {
-      publicWorks.value.latitud = location.latLng.lat()
-      publicWorks.value.longitud = location.latLng.lng()
-    }
-
-    getWorksStatus(data => {
-      worksStatus.value = data
-      if (data.length === 0) {
-        swal.fire({
-          title: 'No se encuentra un tipo de obra publica registrado!',
-          text: 'No se encuentra tipo de obra publica registrado en el departamento seleccionado, registre primero un tipo de obra publica para continuar',
-          icon: 'warning'
-        })
-      }
-    })
-
-    const onUpdatePublicWorks = () => {
-      updatePublicWorks(publicWorks.value, data => {})
-      swal
-        .fire({
-          title: '¡Obras publicas modificado correctamente!',
-          text: 'Las obras publicas se ha modificado  satisfactoriamente.',
-          icon: 'success'
-        })
-        .then(result => {
-          if (result.isConfirmed) {
-            redirect.push('/ServiciosPublicos/ObrasPublicas/list')
-          }
-        })
-    }
     getPublicWorksById(router.params.ObraId, data => {
       publicWorks.value = data
       center.value.lat = data.latitud
       center.value.lng = data.longitud
+      validateState()
     })
+
+    const onUpdatePublicWork = () => {
+      updatePublicWorks(publicWorks.value, data => {
+        swal
+          .fire({
+            title: '¡Obras publicas modificado correctamente!',
+            text: 'Las obras publicas se ha modificado  satisfactoriamente.',
+            icon: 'success'
+          })
+          .then(result => {
+            redirect.push('/ServiciosPublicos/ObrasPublicas/list')
+          })
+      })
+    }
 
     getWorksStatus(data => {
       publicWorks.value = data
@@ -259,42 +239,34 @@ export default {
       }
     })
 
+    const center = ref({ lat: 0, lng: 0 })
+
+    const updateCoordinates = location => {
+      publicWorks.value.latitud = location.latLng.lat()
+      publicWorks.value.longitud = location.latLng.lng()
+    }
+
     const validateNameWorks = () => {
       if (!publicWorks.value.nombre) {
         validateState()
         return 'Este campo es requerido'
       }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(publicWorks.value.nombre)) {
-        validateState()
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ 0-9]+$/i.test(publicWorks.value.nombre)) {
+        NameWorksState.value = false
         return 'El nombre de la obra solo puede contener letras'
+      }
+      if (!publicWorks.value.nombre.trim().length > 0) {
+        NameWorksState.value = false
+        return 'Este campo no puede contener espacios'
       }
       validateState()
       return true
     }
 
-    // const validateLatitude = () => {
-    //   if (!publicWorks.value.latitud) {
+    // const validateWorkStatus = () => {
+    //   if (!publicWorks.value.estatusObraId) {
     //     validateState()
     //     return 'Este campo es requerido'
-    //   }
-
-    //   if (!/^[0-9]+$/i.test(publicWorks.value.latitud)) {
-    //     validateState()
-    //     return 'Este campo solo puede contener numeros'
-    //   }
-    //   validateState()
-    //   return true
-    // }
-
-    // const validateLength = () => {
-    //   if (!publicWorks.value.longitud) {
-    //     validateState()
-    //     return 'Este campo es requerido'
-    //   }
-
-    //   if (!/^[0-9]+$/i.test(publicWorks.value.longitud)) {
-    //     validateState()
-    //     return 'Este campo solo puede contener numeros'
     //   }
     //   validateState()
     //   return true
@@ -306,21 +278,16 @@ export default {
         return 'Este campo es requerido'
       }
       if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ ,;:. 0-9]+$/i.test(
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
           publicWorks.value.descripcion
         )
       ) {
-        validateState()
-        return 'La descripcion solo puede contener letras y nnumeros'
+        DescriptionState.value = false
+        return 'La descripcion solo puede contener letras y numeros'
       }
-      validateState()
-      return true
-    }
-
-    const validateWorkStatus = () => {
-      if (!publicWorks.value.estatusObraId) {
-        validateState()
-        return 'Este campo es requerido'
+      if (!publicWorks.value.descripcion.trim().length > 0) {
+        DescriptionState.value = false
+        return 'Este campo no puede contener espacios'
       }
       validateState()
       return true
@@ -329,8 +296,6 @@ export default {
     const validateState = () => {
       NameWorksState.value =
         publicWorks.value.nombre !== '' || publicWorks.value.nombre !== null
-      // LatitudeState.value = publicWorks.value.latitud !== '' || publicWorks.value.latitud !== null
-      // LengthState.value = publicWorks.value.longitud !== '' || publicWorks.value.longitud !== null
       DescriptionState.value =
         publicWorks.value.descripcion !== '' ||
         publicWorks.value.descripcion !== null
@@ -341,28 +306,28 @@ export default {
 
     return {
       publicWorks,
-      breadcrumbItems,
       worksStatus,
-      isAgency,
-      NameWorksState,
-      center,
       obraId,
-      // LatitudeState,
-      // LengthState,
+      breadcrumbItems,
+      router,
+      NameWorksState,
       DescriptionState,
       WorkStatusState,
+      isAgency,
+      center,
 
-      onUpdatePublicWorks,
+      onUpdatePublicWork,
       updateCoordinates,
       validateNameWorks,
-      // validateLatitude,
-      // validateLength,
-      validateDescription,
-      validateWorkStatus,
-      validateState
+      // validateWorkStatus
+      validateDescription
     }
   }
 }
 </script>
 
-<style></style>
+<style scoped>
+.form-check {
+  display: inline-block;
+}
+</style>

@@ -25,13 +25,10 @@
           <!--Agregar descripcion-->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion">
-              <Field name="DescriptionField" :rules="validateDescription" as="text">
-                <b-form-input
+                <b-form-textarea
                   v-model="worksStatus.descripcion"
-                  :state="DescriptionState"
-                ></b-form-input>
-              </Field>
-              <ErrorMessage class="text-danger" name="DescriptionField"></ErrorMessage>
+                  rows="4"
+                ></b-form-textarea>
             </b-form-group>
           </b-col>
         </b-row>
@@ -107,20 +104,6 @@ export default {
       validateState()
       return true
     }
-
-    const validateDescription = () => {
-      if (!worksStatus.value.descripcion) {
-        validateState()
-        return 'Este campo es requerido'
-      }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ ,;:. 0-9]+$/i.test(worksStatus.value.descripcion)) {
-        DescriptionState.value = false
-        return 'La descripcion solo puede contener letras y numeros'
-      }
-      validateState()
-      return true
-    }
-
     const validateState = () => {
       // eslint-disable-next-line no-unneeded-ternary
       NameState.value = worksStatus.value.nombre === '' ? false : true
@@ -136,8 +119,7 @@ export default {
 
       onUpdateWorksStatus,
       validateName,
-      validateState,
-      validateDescription
+      validateState
     }
   }
 }
