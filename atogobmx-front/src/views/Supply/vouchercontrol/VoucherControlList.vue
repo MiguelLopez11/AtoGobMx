@@ -128,7 +128,7 @@
                   v-model="voucherControlFields.usuario"
                   autofocus
                   :state="employeeState"
-                  value-field="empleadoId"
+                  value-field="nombreCompleto"
                   text-field="nombreCompleto"
                   :options="employeesProvider"
                 >
@@ -152,7 +152,7 @@
                   v-model="voucherControlFields.usuarioAutoriza"
                   autofocus
                   :state="employeeAuthoriserState"
-                  value-field="empleadoId"
+                  value-field="nombreCompleto"
                   text-field="nombreCompleto"
                   :options="employeesProvider"
                 >
@@ -357,7 +357,7 @@ export default {
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('empleadoId')
+    const searchField = ref('fechaEmicion')
     const DateOfIssueState = ref(false)
     const ExpirationDateState = ref(false)
     const departamentState = ref(false)
@@ -383,7 +383,6 @@ export default {
       usuario: null,
       usuarioAutoriza: null,
       departamentoId: null,
-      empleadoId: 0,
       proveedorId: null,
       estatusValeId: null,
       tipoId: null,
@@ -455,12 +454,11 @@ export default {
 
     const fields = ref([
       // { value: 'controlValeId', text: 'ID', sortable: true },
-      { value: 'fechaEmicion', text: 'Fecha emicion' },
+      { value: 'fechaEmicion', text: 'Fecha emision' },
       { value: 'fechaVigencia', text: 'Fecha vigencia' },
       { value: 'usuario', text: 'Usuario' },
       { value: 'usuarioAutoriza', text: 'Autorizado por:' },
       { value: 'departamentos.nombre', text: 'Departamento' },
-      { value: 'empleados.nombreCompleto', text: 'Empleado' },
       { value: 'proV_Proveedor.nombre', text: 'Proveedor' },
       { value: 'proV_EstatusVale.nombre', text: 'Proveedor' },
       { value: 'tipoVales.nombre', text: 'Tipo vale' },

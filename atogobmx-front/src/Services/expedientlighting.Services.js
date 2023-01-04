@@ -7,14 +7,8 @@ export default function ExpedientLighting () {
     })
   }
 
-  const getExpedientLightingByAlumbradoId = (ExpedienteAlumbradoId, callback) => {
-    axiosPrivate.get(`/ExpedienteAlumbrado/ExpedienteAlumbrado/Download/${ExpedienteAlumbradoId}`).then((response) => {
-      callback(response.data)
-    })
-  }
-
-  const getDocumentsDowloadExpedient = (ObraId, callback) => {
-    axiosPrivate.get(`/Archivos/DocumentosObrasPublicas/${ObraId}`).then((response) => {
+  const getExpedientLightingByAlumbradoId = (AlumbradoId, callback) => {
+    axiosPrivate.get(`/ExpedienteDigital/Alumbrado/${AlumbradoId}`).then((response) => {
       callback(response.data)
     })
   }
