@@ -211,7 +211,7 @@ export default {
     )
 
     const fields = ref([
-      { value: 'vehiculoAlumbradoId', text: 'ID', sortable: true },
+      // { value: 'vehiculoAlumbradoId', text: 'ID', sortable: true },
       { value: 'vehiculo.marca', text: 'Marca' },
       { value: 'vehiculo.modelo', text: 'Modelo' },
       { value: 'vehiculo.añoLanzamiento', text: 'Año de lanzamiento' },

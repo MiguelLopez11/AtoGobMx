@@ -21,6 +21,11 @@ export default function EmployeeServices () {
       callback(response.data)
     })
   }
+  const getEmployeesProvider = (callback) => {
+    axiosPrivate.get('/Empleados/Proveeduria').then((response) => {
+      callback(response.data)
+    })
+  }
   const getEmployee = (EmployeeId, callback) => {
     axiosPrivate.get(`/Empleados/${EmployeeId}`).then((response) => {
       callback(response.data)
@@ -50,6 +55,7 @@ export default function EmployeeServices () {
     getEmployees,
     getEmployeesUnfiled,
     getEmployeesArmory,
+    getEmployeesProvider,
     getEmployeesWithoutExpedient,
     getEmployee,
     createEmployee,

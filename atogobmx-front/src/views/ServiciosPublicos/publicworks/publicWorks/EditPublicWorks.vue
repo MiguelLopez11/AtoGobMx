@@ -110,16 +110,44 @@
                   </b-form-group>
                 </b-col>
               </b-row>
+              <b-row cols="1" align-h="center">
+                <b-alert variant="warning" dismissible show
+                  >Arrastra el punto del mapa al lugar donde se encuentra su
+                  gabeta.</b-alert
+                >
+                <b-card>
+                  <GMapMap
+                    :center="center"
+                    map-type-id="satellite"
+                    :zoom="20"
+                    :options="{
+                      zoomControl: true,
+                      mapTypeControl: false,
+                      scaleControl: false,
+                      rotateControl: true,
+                      disableDefaultUi: false
+                    }"
+                    style="width: 100%; height: 500px"
+                  >
+                    <GMapMarker
+                      :zoom="10"
+                      :position="center"
+                      :draggable="true"
+                      @drag="updateCoordinates"
+                    />
+                  </GMapMap>
+                </b-card>
+              </b-row>
               <b-row align-h="end">
                 <b-button
-                  class="col-1 m-2 text-white"
+                  class="w-75 col-1 m-2 text-white"
                   variant="primary"
                   to="/ServiciosPublicos/ObrasPublicas/list"
                   type="reset"
                 >
                   Cancelar
                 </b-button>
-                <b-button type="success" class="col-1 m-2" variant="success">
+                <b-button type="success" class="w-75 col-1 m-2" variant="success">
                   Guardar
                 </b-button>
               </b-row>
@@ -182,6 +210,13 @@ export default {
       { text: 'Editar-Obras publicas' }
     ])
 
+    const center = ref({ lat: 0, lng: 0 })
+
+    const updateCoordinates = (location) => {
+      publicWorks.value.latitud = location.latLng.lat()
+      publicWorks.value.longitud = location.latLng.lng()
+    }
+
     getWorksStatus(data => {
       worksStatus.value = data
       if (data.length === 0) {
@@ -209,6 +244,8 @@ export default {
     }
     getPublicWorksById(router.params.ObraId, data => {
       publicWorks.value = data
+      center.value.lat = data.latitud
+      center.value.lng = data.longitud
     })
 
     getWorksStatus(data => {
@@ -308,6 +345,7 @@ export default {
       worksStatus,
       isAgency,
       NameWorksState,
+      center,
       obraId,
       // LatitudeState,
       // LengthState,
@@ -315,6 +353,7 @@ export default {
       WorkStatusState,
 
       onUpdatePublicWorks,
+      updateCoordinates,
       validateNameWorks,
       // validateLatitude,
       // validateLength,

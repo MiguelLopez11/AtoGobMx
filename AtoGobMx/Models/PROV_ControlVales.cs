@@ -11,6 +11,7 @@ namespace AtoGobMx.Models
         public int ControlValeId { get; set; }
         public DateTime? FechaEmicion { get; set; }
         public DateTime? FechaVigencia { get; set; }
+        public string Recibio { get; set; }
         public string Usuario { get; set; }
         public string UsuarioAutoriza { get; set; }
         public int? DepartamentoId { get; set; }
@@ -36,7 +37,7 @@ namespace AtoGobMx.Models
         public virtual IEnumerable<PROV_DetalleVale>? PROV_DetalleVales { get; set; }
         [JsonIgnore]
         public virtual IEnumerable<PROV_Vehiculo>? PROV_Vehiculo { get; set; }
-        [JsonIgnore]
-        public virtual IEnumerable<ExpedienteVale>? ExpedienteVale { get; set; }
+        //[JsonIgnore]
+        //public virtual IEnumerable<ExpedienteVale>? ExpedienteVale { get; set; }
     }
 }

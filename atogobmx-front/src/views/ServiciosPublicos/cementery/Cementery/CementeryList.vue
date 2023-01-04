@@ -112,21 +112,10 @@
           <!--Agregar comunidad -->
           <b-col>
             <b-form-group class="mt-3" label="Comunidad">
-              <Field
-                name="MunicipalityField"
-                :rules="validateMunicipality"
-                as="text"
-              >
                 <b-form-input
                   v-model="cementeryServiceFields.comunidad"
-                  :state="MunicipalityState"
                 >
                 </b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="MunicipalityField"
-              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <!--Agregar Localidad -->
@@ -263,7 +252,7 @@ export default {
     const searchValue = ref('')
     const searchField = ref('nombreCementerio')
     const NameCementeryState = ref(false)
-    const MunicipalityState = ref(false)
+    // const MunicipalityState = ref(false)
     const LocationState = ref(false)
     const StreetState = ref(false)
     const NumberOutsideState = ref(false)
@@ -327,7 +316,7 @@ export default {
         JSON.stringify(CementeryServiceFieldsBlank)
       )
       NameCementeryState.value = false
-      MunicipalityState.value = false
+      // MunicipalityState.value = false
       LocationState.value = false
       StreetState.value = false
       NumberOutsideState.value = false
@@ -375,29 +364,29 @@ export default {
       return true
     }
 
-    const validateMunicipality = () => {
-      if (!cementeryServiceFields.value.comunidad) {
-        MunicipalityState.value = false
-        return 'Este campo es requerido'
-      }
+    // const validateMunicipality = () => {
+    //   if (!cementeryServiceFields.value.comunidad) {
+    //     MunicipalityState.value = false
+    //     return 'Este campo es requerido'
+    //   }
 
-      if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
-          cementeryServiceFields.value.comunidad
-        )
-      ) {
-        MunicipalityState.value = false
-        return 'Este campo solo puede contener letras'
-      }
+    //   if (
+    //     !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+    //       cementeryServiceFields.value.comunidad
+    //     )
+    //   ) {
+    //     MunicipalityState.value = false
+    //     return 'Este campo solo puede contener letras'
+    //   }
 
-      if (!cementeryServiceFields.value.comunidad.trim().length > 0) {
-        MunicipalityState.value = false
-        return 'Este campo no puede contener espacios'
-      }
+    //   if (!cementeryServiceFields.value.comunidad.trim().length > 0) {
+    //     MunicipalityState.value = false
+    //     return 'Este campo no puede contener espacios'
+    //   }
 
-      MunicipalityState.value = true
-      return true
-    }
+    //   MunicipalityState.value = true
+    //   return true
+    // }
 
     const validateLocation = () => {
       if (!cementeryServiceFields.value.localidad) {
@@ -545,7 +534,7 @@ export default {
       searchField,
       fields,
       NameCementeryState,
-      MunicipalityState,
+      // MunicipalityState,
       LocationState,
       StreetState,
       NumberOutsideState,
@@ -558,7 +547,7 @@ export default {
       addCementeryService,
       RemoveCementeryService,
       validateNameCementery,
-      validateMunicipality,
+      // validateMunicipality,
       validateLocation,
       validateStreet,
       validateNumberOutside,

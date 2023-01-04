@@ -90,10 +90,27 @@
           <!--Agregar Fecha emicion-->
           <b-col>
             <b-form-group class="mt-3" label="Fecha emicion">
+              <Field name="DateOfIssueField" :rules="validateDateOfIssue" as="text">
+                <Datepicker
+                  v-model="voucherControlFields.fechaEmicion"
+                  locale="es"
+                  autoApply
+                  :enableTimePicker="false"
+                  :state="DateOfIssueState"
+                >
+                </Datepicker>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="DateOfIssueField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <!-- <b-col>
+            <b-form-group class="mt-3" label="Fecha emicion">
               <Field name="DateOfIssueField" :rules="validateDateOfIssue" as="">
                 <Datepicker
                   locale="es"
-                  name="date"
                   text-input
                   v-model="voucherControlFields.fechaEmicion"
                   :state="DateOfIssueState"
@@ -101,59 +118,67 @@
               </Field>
               <ErrorMessage name="DateOfIssueField"></ErrorMessage>
             </b-form-group>
-          </b-col>
-          <!--Checkbox-->
+          </b-col> -->
+          <!--Agregar usuario proveeduria-->
           <b-col>
-            <b-form-group horizontal class="mt-3" label="¿Autorizacion?">
-              <b-form-checkbox
-                style=""
-                size="lg"
-                v-model="isAgency"
-                :state="departamentState"
-              />
-            </b-form-group>
-          </b-col>
-          <!--Agregar usuario-->
-          <b-col v-if="isAgency == false">
             <b-form-group class="mt-3" label="Usuario">
-              <Field
-                name="UserNameField"
-                :rules="validateUserName"
-                as="text"
-              >
-                <b-form-input
+              <Field name="ColorField" :rules="validateEmployee" as="text">
+                <b-form-select
                   v-model="voucherControlFields.usuario"
-                  :state="UserNameState"
-                ></b-form-input>
+                  autofocus
+                  :state="employeeState"
+                  value-field="empleadoId"
+                  text-field="nombreCompleto"
+                  :options="employeesProvider"
+                >
+                </b-form-select>
               </Field>
               <ErrorMessage
                 class="text-danger"
-                name="UserNameField"
+                name="ColorField"
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!--Agregar usuario autorizado-->
-          <b-col v-if="isUserName == false">
-            <b-form-group class="mt-3" label="Autorizado">
-              <Field
-                name="AuthorizedUserField"
-                :rules="validateAuthorizedUser"
-                as="text"
-              >
-                <b-form-input
+          <!--Agregar usuario proveeduria-->
+          <b-col>
+            <b-form-group class="mt-3" label="Usuario autorizador">
+              <Field name="ColorField" :rules="validateUserAuthoriser" as="text">
+                <b-form-select
                   v-model="voucherControlFields.usuarioAutoriza"
-                  :state="AuthorizedUserState"
+                  autofocus
+                  :state="employeeAuthoriserState"
+                  value-field="empleadoId"
+                  text-field="nombreCompleto"
+                  :options="employeesProvider"
                 >
-                </b-form-input>
+                </b-form-select>
               </Field>
               <ErrorMessage
                 class="text-danger"
-                name="AuthorizedUserField"
+                name="ColorField"
               ></ErrorMessage>
             </b-form-group>
           </b-col>
           <!--Agregar Fecha vigencia-->
           <b-col>
+            <b-form-group class="mt-3" label="Fecha vigencia">
+              <Field name="ExpirationDateField" :rules="validateExpirationDate" as="text">
+                <Datepicker
+                  v-model="voucherControlFields.fechaVigencia"
+                  locale="es"
+                  autoApply
+                  :enableTimePicker="false"
+                  :state="ExpirationDateState"
+                >
+                </Datepicker>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="ExpirationDateField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <!-- <b-col>
             <b-form-group class="mt-3" label="Fecha vigencia">
               <Field
                 name="ExpirationDateField"
@@ -167,9 +192,20 @@
                   v-model="voucherControlFields.fechaVigencia"
                   :state="ExpirationDateState"
                 ></Datepicker>
-                <!-- @input="getAreas(voucherControlFields.departamentoId)" -->
               </Field>
               <ErrorMessage name="ExpirationDateField"></ErrorMessage>
+            </b-form-group>
+          </b-col> -->
+          <!--Agregar quien recibio vale-->
+          <b-col>
+            <b-form-group class="mt-3" label="Recibio">
+              <Field name="ReceivedField" :rules="validateReceived" as="text">
+                <b-form-input
+                  v-model="voucherControlFields.recibio"
+                  :state="ReceivedState"
+                />
+              </Field>
+              <ErrorMessage class="text-danger" name="ReceivedField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <!--Agregar Departamento-->
@@ -193,26 +229,6 @@
               <ErrorMessage
                 class="text-danger"
                 name="DepartamentField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!--Agregar Empleado-->
-          <b-col>
-            <b-form-group class="mt-3" label="Empleado: ">
-              <Field name="EmployeeField" :rules="validateEmployee" as="text">
-                <b-form-select
-                  v-model="voucherControlFields.empleadoId"
-                  autofocus
-                  :options="employees"
-                  value-field="empleadoId"
-                  text-field="nombreCompleto"
-                  :state="EmployeeState"
-                >
-                </b-form-select>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="EmployeeField"
               ></ErrorMessage>
             </b-form-group>
           </b-col>
@@ -329,7 +345,7 @@ export default {
     const { getVoucherControl, createVoucherControl, deleteVoucherControl } =
       VoucherControlServices()
     const { getDepartaments } = DepartamentServices()
-    const { getEmployees } = EmployeeServices()
+    const { getEmployees, getEmployeesProvider } = EmployeeServices()
     const { getProvider } = ProviderServices()
     const { getStatusVoucher } = StatusVoucherServices()
     const { getTypeVoucher } = TypeVoucherServices()
@@ -341,6 +357,7 @@ export default {
     // const detailVoucher = ref([])
     const statusVoucher = ref([])
     const typeVoucher = ref([])
+    const employeesProvider = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
     const filter = ref(null)
@@ -351,8 +368,10 @@ export default {
     const DateOfIssueState = ref(false)
     const ExpirationDateState = ref(false)
     const departamentState = ref(false)
-    const EmployeeState = ref(false)
+    const employeeState = ref(false)
+    const employeeAuthoriserState = ref(false)
     const ProviderState = ref(false)
+    const ReceivedState = ref(false)
     const ProductState = ref(false)
     const DetailVoucherState = ref(false)
     const StatusVoucherState = ref(false)
@@ -367,37 +386,34 @@ export default {
       controlValeId: 0,
       fechaEmicion: null,
       fechaVigencia: null,
+      recibio: null,
       usuario: null,
       usuarioAutoriza: null,
       departamentoId: null,
-      empleadoId: null,
+      empleadoId: 0,
       proveedorId: null,
       estatusValeId: null,
       tipoId: null,
       archivado: false
-      // productoId: null,
-      // detalleValeId: null,
     })
 
     const voucherControlFieldsBlank = ref(
       JSON.parse(JSON.stringify(voucherControlFields))
     )
 
-    // const getAreas = departamentoId => {
-    //   getAreasByDepartament(departamentoId, data => {
-    //     areas.value = data
-    //     if (data.length === 0) {
-    //       swal.fire({
-    //         title: 'No se encuentran areas registradas!',
-    //         text: 'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
-    //         icon: 'warning'
-    //       })
-    //     }
-    //   })
-    // }
-
     getDepartaments(data => {
       departaments.value = data
+    })
+
+    getEmployeesProvider(data => {
+      employeesProvider.value = data
+      if (data.length === 0) {
+        swal.fire({
+          title: '¡No se encuentran empleados!',
+          text: 'Registre un empleado del area de proveeduria para autorizacion',
+          icon: 'warning'
+        })
+      }
     })
 
     getEmployees(data => {
@@ -421,28 +437,6 @@ export default {
         })
       }
     })
-
-    // getProductVoucher(data => {
-    //   productVoucher.value = data
-    //   if (data.length === 0) {
-    //     swal.fire({
-    //       title: 'No se encuentran productos registrados!',
-    //       text: 'No se encuentran  productos registrados en el sistema, registre primero un producto para continuar.',
-    //       icon: 'warning'
-    //     })
-    //   }
-    // })
-
-    // getDetailVoucher(data => {
-    //   detailVoucher.value = data
-    //   if (data.length === 0) {
-    //     swal.fire({
-    //       title: 'No se encuentra el detalle del vale registrado!',
-    //       text: 'No se encuentra el detalle del vale registrado en el sistema, registre primero un detalle de vale para continuar.',
-    //       icon: 'warning'
-    //     })
-    //   }
-    // })
 
     getStatusVoucher(data => {
       statusVoucher.value = data
@@ -488,7 +482,8 @@ export default {
       DateOfIssueState.value = false
       ExpirationDateState.value = false
       departamentState.value = false
-      EmployeeState.value = false
+      employeeState.value = false
+      employeeAuthoriserState.value = false
       ProviderState.value = false
       ProductState.value = false
       DetailVoucherState.value = false
@@ -539,11 +534,39 @@ export default {
     }
 
     const validateEmployee = () => {
-      if (!voucherControlFields.value.empleadoId) {
-        EmployeeState.value = false
+      if (!voucherControlFields.value.usuario) {
+        employeeState.value = false
         return 'Este campo es requerido'
       }
-      EmployeeState.value = true
+      employeeState.value = true
+      return true
+    }
+
+    const validateReceived = () => {
+      if (!voucherControlFields.value.recibio) {
+        ReceivedState.value = false
+        return 'Este campo es requerido'
+      }
+      if (!voucherControlFields.value.recibio.trim().length > 0) {
+        ReceivedState.value = false
+        return 'Este campo no puede contener solo espacios'
+      }
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(voucherControlFields.value.recibio)
+      ) {
+        ReceivedState.value = false
+        return 'El nombre solo puede contener letras'
+      }
+      ReceivedState.value = true
+      return true
+    }
+
+    const validateUserAuthoriser = () => {
+      if (!voucherControlFields.value.usuarioAutoriza) {
+        employeeAuthoriserState.value = false
+        return 'Este campo es requerido'
+      }
+      employeeAuthoriserState.value = true
       return true
     }
 
@@ -650,8 +673,10 @@ export default {
     return {
       voucherControl,
       employees,
+      employeesProvider,
       breadcrumbItems,
       departaments,
+      ReceivedState,
       provider,
       statusVoucher,
       typeVoucher,
@@ -669,7 +694,8 @@ export default {
       DateOfIssueState,
       ExpirationDateState,
       departamentState,
-      EmployeeState,
+      employeeState,
+      employeeAuthoriserState,
       ProviderState,
       ProductState,
       DetailVoucherState,
@@ -685,6 +711,8 @@ export default {
       validateExpirationDate,
       validateDepartament,
       validateEmployee,
+      validateReceived,
+      validateUserAuthoriser,
       validateProvider,
       validateProduct,
       validateDetailVoucher,

@@ -13,8 +13,8 @@ namespace AtoGobMx.Models
         public string? Encargado { get; set; }
         public string? OperadorObra { get; set; }
         public string? OperadorVehiculo { get; set; }
-        public float? Latitud { get; set; }
-        public float? Longitud { get; set; }
+        public decimal Latitud { get; set; }
+        public decimal Longitud { get; set; }
         public string Descripcion { get; set; }
         public int? EstatusObraId { get; set; }
         public bool Archivado { get; set; }

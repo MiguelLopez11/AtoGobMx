@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20230103215224_CambiosObras")]
+    partial class CambiosObras
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -784,11 +786,11 @@ namespace AtoGobMx.Migrations
                     b.Property<int?>("EstatusObraId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Latitud")
-                        .HasColumnType("decimal(65,30)");
+                    b.Property<float>("Latitud")
+                        .HasColumnType("float");
 
-                    b.Property<decimal>("Longitud")
-                        .HasColumnType("decimal(65,30)");
+                    b.Property<float>("Longitud")
+                        .HasColumnType("float");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -1147,10 +1149,6 @@ namespace AtoGobMx.Migrations
 
                     b.Property<int?>("ProveedorId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Recibio")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.Property<bool>("TieneExpediente")
                         .HasColumnType("tinyint(1)");

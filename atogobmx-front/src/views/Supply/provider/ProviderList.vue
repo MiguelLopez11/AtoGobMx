@@ -251,7 +251,7 @@ export default {
 
     const providerFieldsBlank = ref(JSON.parse(JSON.stringify(providerFields)))
     const fields = ref([
-      { value: 'proveedorId', text: 'ID', sortable: true },
+      // { value: 'proveedorId', text: 'ID', sortable: true },
       { value: 'nombre', text: 'Nombre' },
       { value: 'rfc', text: 'RFC' },
       { value: 'representanteLegal', text: 'Representante legal' },
