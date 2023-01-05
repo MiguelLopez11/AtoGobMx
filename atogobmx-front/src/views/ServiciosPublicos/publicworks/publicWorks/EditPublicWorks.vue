@@ -69,8 +69,38 @@
                     </b-form-input>
                   </b-form-group>
                 </b-col>
+                <!--Agregar nombre agencia-->
+                <b-col v-if="isAgency == false">
+                  <b-form-group class="mt-3" label="Nombre agencia">
+                    <!-- <Field
+                      name="AgencyNameField"
+                      :rules="validateAgencyName"
+                      as="text"
+                    > -->
+                    <b-form-input v-model="publicWorks.agencia"> </b-form-input>
+                    <!-- </Field>
+                    <ErrorMessage
+                      class="text-danger"
+                      name="AgencyNameField"
+                    ></ErrorMessage> -->
+                  </b-form-group>
+                </b-col>
+                <!--Agregar representante legal-->
+                <b-col v-if="isAgency == false">
+                  <b-form-group class="mt-3" label="Representante legal">
+                    <b-form-input v-model="publicWorks.representante">
+                    </b-form-input>
+                  </b-form-group>
+                </b-col>
+                <!--Agregar RFC-->
+                <b-col v-if="isAgency == false">
+                  <b-form-group class="mt-3" label="RFC">
+                    <b-form-input v-model="publicWorks.rFC">
+                    </b-form-input>
+                  </b-form-group>
+                </b-col>
                 <!--agregar un estatus obra-->
-                <!-- <b-col>
+                <b-col>
                   <b-form-group class="mt-3" label="Estatus de la obra">
                     <Field
                       name="WorkStatusField"
@@ -88,7 +118,7 @@
                     </Field>
                     <ErrorMessage class="text-danger" name="WorkStatusField" />
                   </b-form-group>
-                </b-col> -->
+                </b-col>
                 <!--Descripcion-->
                 <b-col>
                   <b-form-group class="mt-3" label="Descripcion">
@@ -200,6 +230,7 @@ export default {
     const NameWorksState = ref(false)
     const DescriptionState = ref(false)
     const WorkStatusState = ref(false)
+    // const AgencyNameState = ref(false)
     const isAgency = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
@@ -263,25 +294,21 @@ export default {
       return true
     }
 
-    // const validateWorkStatus = () => {
-    //   if (!publicWorks.value.estatusObraId) {
-    //     validateState()
-    //     return 'Este campo es requerido'
-    //   }
-    //   validateState()
-    //   return true
-    // }
+    const validateWorkStatus = () => {
+      if (!publicWorks.value.estatusObraId) {
+        validateState()
+        return 'Este campo es requerido'
+      }
+      validateState()
+      return true
+    }
 
     const validateDescription = () => {
       if (!publicWorks.value.descripcion) {
         validateState()
         return 'Este campo es requerido'
       }
-      if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
-          publicWorks.value.descripcion
-        )
-      ) {
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(publicWorks.value.descripcion)) {
         DescriptionState.value = false
         return 'La descripcion solo puede contener letras y numeros'
       }
@@ -319,7 +346,7 @@ export default {
       onUpdatePublicWork,
       updateCoordinates,
       validateNameWorks,
-      // validateWorkStatus
+      validateWorkStatus,
       validateDescription
     }
   }

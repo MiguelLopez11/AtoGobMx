@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PuppeteerSharp.Media;
+using PuppeteerSharp;
 
 namespace AtoGobMx.Controllers
 {
@@ -37,16 +39,62 @@ namespace AtoGobMx.Controllers
             return Ok(controlvale);
         }
 
-        [HttpGet("ServiciosSinExpediente")]
-        public async Task<ActionResult> GetServiciosSinExpedientes()
+        [HttpGet("ControlDeVale/Download/{ControlValeId}")]
+        public async Task<ActionResult<PROV_ControlVales>> DownloadExpedienteAlumbrado(int ControlValeId)
         {
-            var expedientes = await _context.Alumbrado
-                //.Include(i => i.TareaTipoAlumbrado)
-                //.Include(i => i.Estatus)
-                .Where(w => !w.TieneExpediente)
+            var departamento = "";
+            var vale = await _context.ControlDeVales
+                .Include(i => i.Departamentos)
+                .Include(i => i.PROV_Proveedor)
+                .Include(i => i.PROV_EstatusVale)
+                .Include(i => i.TipoVales)
                 .Where(w => !w.Archivado)
-                .ToListAsync();
-            return Ok(expedientes);
+                .FirstOrDefaultAsync(f => f.ControlValeId == ControlValeId);
+            //Tomar empleados relacionados al expediente
+            //var empleados = await _context.EmpleadosAlumbrado
+            //    .Include(i => i.Empleados)
+            //    .Where(w => w.ExpedienteAlumbradoId == ControlValeId)
+            //    .ToListAsync();
+            //Tomar vehiculos relacionados al expediente
+            //var vehiculos = await _context.VehiculosAlumbrado
+            //    .Include(i => i.Vehiculo)
+            //    .Where(w => w.ExpedienteAlumbradoId == ControlValeId)
+            //    .ToListAsync();
+            if (vale.DepartamentoId != null)
+            {
+                departamento = vale.Departamentos.Nombre;
+            }
+            await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultChromiumRevision);
+            await using var browser = await Puppeteer.LaunchAsync(new LaunchOptions
+            {
+                Headless = true
+            });
+            var htmlContent = $"";
+
+            //var empleadosHtml = "";
+            //foreach (var empleado in empleados)
+            //{
+            //    empleadosHtml += $"<tr>\r\n          <td>\r\n            <h4>\r\n              <p class=\"label2\">{empleado.Empleados.NombreCompleto}</p>\r\n            </h4>\r\n          </td>\r\n        </tr>\r\n      </tbody>\r\n    </table>\r\n  </div>";
+            //}
+            
+            //var vehiculosHTML = "";
+            //foreach (var vehiculo in vehiculos)
+            //{
+            //    vehiculosHTML += $"";
+            //}
+
+            //htmlContent += empleadosHtml;
+            //htmlContent += vehiculosHTML;
+            await using var page = await browser.NewPageAsync();
+            await page.EmulateMediaTypeAsync(MediaType.Screen);
+            await page.SetContentAsync(htmlContent);
+
+            var pdfContent = await page.PdfStreamAsync(new PdfOptions
+            {
+                Format = PaperFormat.A4,
+                PrintBackground = true
+            });
+            return File(pdfContent, "application/pdf", "converted.pdf");
         }
 
         [HttpGet("{ControlValeId}")]

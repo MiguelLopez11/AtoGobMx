@@ -73,6 +73,15 @@
             }"
             ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
           >
+          <b-dropdown-item
+            class="m-1"
+            variant="outline-warning"
+            @click="onDownloadFile(items)"
+          >
+            <!-- :href="`http://localhost:5000/api/ExpedienteAlumbrado/ExpedienteAlumbrado/Download/${items.expedienteAlumbradoId}`" -->
+            <i class="bi bi-download"></i>
+            Generar vale
+          </b-dropdown-item>
         </b-dropdown>
       </template>
     </EasyDataTable>
@@ -322,9 +331,16 @@ import StatusVoucherServices from '@/Services/statusvoucher.Services'
 import TypeVoucherServices from '@/Services/typevoucher.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
+import { axiosPrivate } from '@/common/axiosPrivate.js'
 import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
+  props: {
+    ControlValeId: {
+      type: Number,
+      required: true
+    }
+  },
   components: {
     EasyDataTable: window['vue3-easy-data-table'],
     Datepicker,
@@ -332,7 +348,7 @@ export default {
     Field,
     ErrorMessage
   },
-  setup () {
+  setup (props) {
     const swal = inject('$swal')
     const showModal = ref(false)
     const { getVoucherControl, createVoucherControl, deleteVoucherControl } =
@@ -369,6 +385,8 @@ export default {
     const DetailVoucherState = ref(false)
     const StatusVoucherState = ref(false)
     const TypeVoucherState = ref(false)
+    const disableButtonDownload = ref(false)
+    const controlValeId = ref(props.ControlValeId)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
       { text: 'Proveeduria', to: '/Proveeduria' },
@@ -396,6 +414,28 @@ export default {
     getDepartaments(data => {
       departaments.value = data
     })
+
+    const onDownloadFile = Aseo => {
+      isloading.value = true
+      disableButtonDownload.value = true
+      axiosPrivate({
+        url: `/Archivos/DocumentosAseoPublico/Dowload/${props.AseoId}/${Aseo.archivosAseoId}`,
+        method: 'GET',
+        responseType: 'blob' // important
+      })
+        .then(response => {
+          const url = window.URL.createObjectURL(new Blob([response.data]))
+          const link = document.createElement('a')
+          link.href = url
+          link.setAttribute('download', `${Aseo.nombre}${Aseo.tipoArchivo}`)
+          document.body.appendChild(link)
+          link.click()
+        })
+        .then(result => {
+          isloading.value = false
+          disableButtonDownload.value = false
+        })
+    }
 
     getEmployeesProvider(data => {
       employeesProvider.value = data
@@ -482,7 +522,7 @@ export default {
       TypeVoucherState.value = false
     }
 
-    getVoucherControl(data => {
+    getVoucherControl(props.ControlValeId, data => {
       voucherControl.value = data
       if (voucherControl.value.length > 0) {
         isloading.value = false
@@ -609,7 +649,7 @@ export default {
     // pone mis cambios de mis campos vacios de nuevo
     const refreshTable = () => {
       isloading.value = true
-      getVoucherControl(data => {
+      getVoucherControl(props.ControlValeId, data => {
         voucherControl.value = data
         if (voucherControl.value.length > 0) {
           isloading.value = false
@@ -692,6 +732,8 @@ export default {
       DetailVoucherState,
       StatusVoucherState,
       TypeVoucherState,
+      disableButtonDownload,
+      controlValeId,
 
       onFiltered,
       addVoucherControl,
@@ -709,6 +751,7 @@ export default {
       validateDetailVoucher,
       validateStatusVoucher,
       validateTypeVoucher,
+      onDownloadFile,
       resetVoucherControlFields
     }
   }

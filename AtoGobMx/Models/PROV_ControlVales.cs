@@ -19,7 +19,7 @@ namespace AtoGobMx.Models
         public int? EstatusValeId { get; set; }
         public int? TipoId { get; set; }
         public bool Archivado { get; set; }
-        public bool TieneExpediente { get; set; }
+        //public bool TieneExpediente { get; set; }
 
         [ForeignKey("DepartamentoId")]
         public Departamentos? Departamentos { get; set; }
