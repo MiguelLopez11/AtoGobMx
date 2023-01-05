@@ -90,11 +90,7 @@
           <!-- Agregar Nombre -->
           <b-col>
             <b-form-group class="mt-3" label="Nombre de la ruta">
-              <Field
-                name="NameRoadField"
-                :rules="validateNameRoad"
-                as="text"
-              >
+              <Field name="NameRoadField" :rules="validateNameRoad" as="text">
                 <b-form-input
                   v-model="RoadServiceFields.nombre"
                   :state="NameRoadState"
@@ -129,26 +125,14 @@
           </b-col>
           <!-- Agregar horario -->
           <b-col>
-            <b-form-group class="mt-3" label="Horarios aseo">
-              <Field
-                name="HoraryField"
-                :rules="validateHorary"
-                as="text"
-              >
-                <Datepicker
-                      v-model="date"
-                      placeholder="Seleccionar ..."
-                      selectText="Seleccionar"
-                      cancelText="Cancelar"
-                      locale="es"
-                      time-picker
-                      disable-time-range-validation
-                      range
-                      modelType="hh:mm aa"
-                      :is-24="false"
-                      :state="HoraryState"
-                    >
-                    </Datepicker>
+            <b-form-group class="mt-3" label="Horario de ruta">
+              <Field name="HoraryField" :rules="validateHorary" as="text">
+                <b-form-input
+                  v-model="RoadServiceFields.horario"
+                  placeholder="Ingresa el rango de horas del horario de la ruta"
+                  :state="HoraryState"
+                >
+                </b-form-input>
               </Field>
               <ErrorMessage
                 class="text-danger"
@@ -156,39 +140,48 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <b-col>
-              <b-button class="mt-5 w-100" variant="primary" @click="onAddPolyline">
+        </b-row>
+        <b-card>
+          <b-row cols="2">
+            <b-col>
+              <b-button
+                class="mb-5 w-100"
+                variant="primary"
+                @click="onAddPolyline"
+              >
                 Marcar Ruta
               </b-button>
-          </b-col>
-          <b-col>
-              <b-button class="mt-5 w-100" variant="primary" @click="ResetPolyline">
+            </b-col>
+            <b-col>
+              <b-button
+                class="mb-5 w-100"
+                variant="primary"
+                @click="ResetPolyline"
+              >
                 Reiniciar ruta
               </b-button>
-          </b-col>
-        </b-row>
-        <b-row>
-          <GoogleMap
-            api-key="AIzaSyCYAwe7Fk4PQLI3bBBqxUViN4IOXVGd_z0"
-            style="width: 100%; height: 500px"
-            :center="center"
-            :zoom="20"
-            @click="addMaker"
-          >
-            <MarkerCluster>
-              <Marker
-                v-for="(location, i) in locations"
-                :options="{
-                  position: location,
-                  label: `${i === 0 ? 'Inicio' : ''}`
-                }"
-                :key="i"
-              />
-              <Polyline :options="flightPath" />
-            </MarkerCluster>
-          </GoogleMap>
-          <b-row> </b-row>
-        </b-row>
+            </b-col>
+            <GoogleMap
+              api-key="AIzaSyCYAwe7Fk4PQLI3bBBqxUViN4IOXVGd_z0"
+              style="width: 100%; height: 350px"
+              :center="center"
+              :zoom="18"
+              @click="addMaker"
+            >
+              <MarkerCluster>
+                <Marker
+                  v-for="(location, i) in locations"
+                  :options="{
+                    position: location,
+                    label: `${i === 0 ? 'Inicio' : ''}`
+                  }"
+                  :key="i"
+                />
+                <Polyline :options="flightPath" />
+              </MarkerCluster>
+            </GoogleMap>
+          </b-row>
+        </b-card>
         <b-row align-h="end">
           <b-button
             class="w-auto m-2 text-white"
@@ -211,7 +204,6 @@ import RoadServices from '@/Services/road.Services'
 import { Form, ErrorMessage, Field } from 'vee-validate'
 import { ref, inject } from 'vue'
 import { GoogleMap, Marker, MarkerCluster, Polyline } from 'vue3-google-map'
-import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
@@ -222,8 +214,7 @@ export default {
     GoogleMap,
     Marker,
     MarkerCluster,
-    Polyline,
-    Datepicker
+    Polyline
   },
   setup () {
     const swal = inject('$swal')
@@ -281,8 +272,6 @@ export default {
       { value: 'observacion', text: 'Observacion' },
       { value: 'nombre', text: 'Nombre de la ruta' },
       { value: 'horario', text: 'Horarios' },
-      // { value: 'longitud', text: 'longitud' },
-      // { value: 'latitud', text: 'latitud' },
       { value: 'actions', text: 'Acciones' }
     ])
     const addMaker = location => {
@@ -360,9 +349,7 @@ export default {
         return 'Este campo es requerido'
       }
       if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ 0-9]+$/i.test(
-          RoadServiceFields.value.nombre
-        )
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ 0-9]+$/i.test(RoadServiceFields.value.nombre)
       ) {
         NameRoadState.value = false
         return 'Este campo solo puede contener letras'
@@ -377,7 +364,7 @@ export default {
     }
 
     const validateHorary = () => {
-      if (!date.value) {
+      if (!RoadServiceFields.value.horario) {
         HoraryState.value = false
         return 'Este campo es requerido'
       }
@@ -403,28 +390,37 @@ export default {
     }
 
     const addRoadService = () => {
-      RoadServiceFields.value.horario = `de ${date.value[0].hours} : ${date.value[0].minutes} a ${date.value[1].hours} : ${date.value[1].minutes}  `
-      createRoad(RoadServiceFields.value, data => {
-        console.log(data)
-        for (let i = 0; i < locations.value.length; i++) {
-          createCoordsRoad({
-            coordenadaId: 0,
-            latitud: locations.value[i].lat,
-            longitud: locations.value[i].lng,
-            rutaId: data.rutaId,
-            ordenCoordenada: i
-          }, data => {
-          })
-          refreshTable()
-          showModal.value = false
-          resetRoadServiceFields()
-          swal.fire({
-            title: '¡Ruta agregada correctamente!',
-            text: 'Ruta registrado satisfactoriamente',
-            icon: 'success'
-          })
-        }
-      })
+      if (!locations.value[0]) {
+        swal.fire({
+          title: '¡Mapa vacío!',
+          text: 'Marque en el mapa donde se encuentra el cementerio.',
+          icon: 'error'
+        })
+      } else {
+        createRoad(RoadServiceFields.value, data => {
+          for (let i = 0; i < locations.value.length; i++) {
+            createCoordsRoad(
+              {
+                coordenadaId: 0,
+                latitud: locations.value[i].lat,
+                longitud: locations.value[i].lng,
+                rutaId: data.rutaId,
+                ordenCoordenada: i
+              },
+              data => {
+                refreshTable()
+                showModal.value = false
+                resetRoadServiceFields()
+                swal.fire({
+                  title: '¡Ruta agregada correctamente!',
+                  text: 'Ruta registrado satisfactoriamente',
+                  icon: 'success'
+                })
+              }
+            )
+          }
+        })
+      }
     }
 
     const RemoveRoadService = routeId => {

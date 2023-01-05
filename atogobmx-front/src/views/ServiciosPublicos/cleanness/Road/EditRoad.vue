@@ -1,13 +1,12 @@
 <template>
   <b-card class="m-2">
-    <b-card class="mb-4">
-      <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
-    </b-card>
+    <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
+  </b-card>
+  <b-card class="m-2">
     <b-tabs content-class="mt-3">
       <b-tab title="Editar ruta" active>
-        <b-card>
           <Form @submit="onUpdateRoadService">
-            <b-row cols="2">
+            <b-row cols="3">
               <!-- Agregar Nombre -->
               <b-col>
                 <b-form-group class="mt-3" label="Nombre de la ruta">
@@ -50,22 +49,14 @@
               </b-col>
               <!-- Agregar horario -->
               <b-col>
-                <b-form-group class="mt-3" label="Horarios aseo">
+                <b-form-group class="mt-3" label="Horario de ruta">
                   <Field name="HoraryField" :rules="validateHorary" as="text">
-                    <Datepicker
-                      v-model="date "
-                      placeholder="Seleccionar ..."
-                      selectText="Seleccionar"
-                      cancelText="Cancelar"
-                      locale="es"
-                      time-picker
-                      disable-time-range-validation
-                      range
-                      modelType="hh:mm aa"
-                      :is-24="false"
+                    <b-form-input
+                      v-model="RoadService.horario"
+                      placeholder="Ingresa el rango de horas del horario de la ruta"
                       :state="HoraryState"
                     >
-                    </Datepicker>
+                    </b-form-input>
                   </Field>
                   <ErrorMessage
                     class="text-danger"
@@ -73,70 +64,61 @@
                   ></ErrorMessage>
                 </b-form-group>
               </b-col>
-              <b-col>
-                <b-button
-                  class="mt-5 w-100"
-                  variant="primary"
-                  @click="onAddPolyline"
-                >
-                  Marcar Ruta
-                </b-button>
-              </b-col>
-              <b-col>
-                <b-button
-                  class="mt-5 w-100"
-                  variant="primary"
-                  @click="ResetPolyline"
-                >
-                  Reiniciar ruta
-                </b-button>
-              </b-col>
             </b-row>
-            <b-row>
-              <GoogleMap
-                api-key="AIzaSyCYAwe7Fk4PQLI3bBBqxUViN4IOXVGd_z0"
-                style="width: 100%; height: 500px"
-                :center="center"
-                :zoom="20"
-                @click="addMaker"
+             <b-card class="m-2">
+          <b-row cols="2">
+            <b-col>
+              <b-button
+                class="mb-5 w-100"
+                variant="primary"
+                @click="onAddPolyline"
               >
-                <MarkerCluster>
-                  <Marker
-                    v-for="(location, i) in locations"
-                    :options="{
-                      position: location,
-                      label: `${i === 0 ? 'Inicio' : ''}`
-                    }"
-                    :key="i"
-                  />
-                  <Polyline :options="flightPath" />
-                </MarkerCluster>
-              </GoogleMap>
-              <b-row> </b-row>
-            </b-row>
+                Marcar Ruta
+              </b-button>
+            </b-col>
+            <b-col>
+              <b-button
+                class="mb-5 w-100"
+                variant="primary"
+                @click="ResetPolyline"
+              >
+                Reiniciar ruta
+              </b-button>
+            </b-col>
+            <GoogleMap
+              api-key="AIzaSyCYAwe7Fk4PQLI3bBBqxUViN4IOXVGd_z0"
+              style="width: 100%; height: 250px"
+              :center="center"
+              :zoom="18"
+              @click="addMaker"
+            >
+              <MarkerCluster>
+                <Marker
+                  v-for="(location, i) in locations"
+                  :options="{
+                    position: location,
+                    label: `${i === 0 ? 'Inicio' : ''}`
+                  }"
+                  :key="i"
+                />
+                <Polyline :options="flightPath" />
+              </MarkerCluster>
+            </GoogleMap>
+          </b-row>
+        </b-card>
             <b-row align-h="end">
-              <b-col>
-                <b-button
-                  class="w-75 col-1 m-2 text-white"
-                  variant="primary"
-                  to="/ServiciosPublicos/Ruta/list"
-                  type="reset"
-                >
-                  Cancelar</b-button
-                >
-              </b-col>
-              <b-col>
-                <b-button
-                  type="success"
-                  class="w-75 col-1 m-2"
-                  variant="success"
-                >
-                  Guardar
-                </b-button>
-              </b-col>
+              <b-button
+                class="w-auto m-2 text-white"
+                variant="primary"
+                to="/ServiciosPublicos/Ruta/list"
+              >
+                Cancelar
+              </b-button>
+              <b-button class="w-auto m-2" variant="success" type="submit">
+                Guardar
+              </b-button>
             </b-row>
           </Form>
-        </b-card>
       </b-tab>
       <b-tab title="Empleados">
         <CleannessEmployee :RutaId="rutaId" />
@@ -157,7 +139,6 @@ import { useRoute, useRouter } from 'vue-router'
 import { GoogleMap, Marker, MarkerCluster, Polyline } from 'vue3-google-map'
 // import { useToast } from 'vue-toast-notification'
 import { Form, Field, ErrorMessage } from 'vee-validate'
-import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
@@ -169,16 +150,15 @@ export default {
     MarkerCluster,
     Polyline,
     CleannessEmployee,
-    CleannessVehicle,
-    Datepicker
+    CleannessVehicle
   },
   setup () {
     const swal = inject('$swal')
     const { getRoadById, updateRoad, getCoordsRoad } = RoadServices()
     // const $toast = useToast()
     const RoadService = ref([])
-    const router = useRoute()
     const date = ref()
+    const router = useRoute()
     const redirect = useRouter()
     const OriginState = ref(false)
     const DestinationState = ref(false)
@@ -207,10 +187,6 @@ export default {
       strokeWeight: 5
     })
     const center = ref({ lat: 20.5546629, lng: -102.4953904 })
-    // const fields = ref([
-    //   { value: 'observacion', text: 'Observacion' },
-    //   { value: 'actions', text: 'Acciones' }
-    // ])
     const addMaker = location => {
       locations.value.push({
         lat: location.latLng.lat(),
@@ -240,7 +216,6 @@ export default {
       }
     }
     const onUpdateRoadService = () => {
-      // RoadService.value.horario = `de ${date.value[0].hours} : ${date.value[0].minutes} a ${date.value[1].hours} : ${date.value[1].minutes}  `
       updateRoad(RoadService.value, data => {})
       swal
         .fire({
@@ -307,7 +282,7 @@ export default {
       return true
     }
     const validateHorary = () => {
-      if (!date.value) {
+      if (!RoadService.value.horario) {
         validateState()
         return 'Este campo es requerido'
       }
@@ -317,11 +292,13 @@ export default {
     }
 
     const validateState = () => {
-      OriginState.value = RoadService.value.origen !== ''
-      DestinationState.value = RoadService.value.destino !== ''
-      NameRoadState.value = RoadService.value.nombre !== ''
-      ObservationState.value = RoadService.value.observacion !== ''
-      HoraryState.value = RoadService.value.horario !== ''
+      NameRoadState.value =
+        RoadService.value.nombre !== '' && RoadService.value.nombre !== null
+      ObservationState.value =
+        RoadService.value.observacion !== '' &&
+        RoadService.value.observacion !== null
+      HoraryState.value =
+        RoadService.value.horario !== '' && RoadService.value.horario !== null
     }
 
     return {
