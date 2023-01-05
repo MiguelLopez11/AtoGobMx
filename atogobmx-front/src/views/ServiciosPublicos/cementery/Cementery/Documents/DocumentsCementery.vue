@@ -224,7 +224,7 @@ export default {
       isloading.value = true
       disableButtonDownload.value = true
       axiosPrivate({
-        url: `/api/Archivos/DocumentosCementerioPublico/${props.CementerioId}/Zip`,
+        url: `/Archivos/DocumentosCementerioPublico/${props.CementerioId}/Zip`,
         method: 'GET',
         responseType: 'blob' // important
       })

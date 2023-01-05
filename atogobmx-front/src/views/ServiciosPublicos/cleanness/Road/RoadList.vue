@@ -87,6 +87,26 @@
     >
       <Form @submit="addRoadService">
         <b-row cols="3">
+          <!-- Agregar Nombre -->
+          <b-col>
+            <b-form-group class="mt-3" label="Nombre de la ruta">
+              <Field
+                name="NameRoadField"
+                :rules="validateNameRoad"
+                as="text"
+              >
+                <b-form-input
+                  v-model="RoadServiceFields.nombre"
+                  :state="NameRoadState"
+                >
+                </b-form-input>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="NameRoadField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
           <!-- Agregar Observacion -->
           <b-col>
             <b-form-group class="mt-3" label="Observacion">
@@ -104,6 +124,35 @@
               <ErrorMessage
                 class="text-danger"
                 name="ObservationField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <!-- Agregar horario -->
+          <b-col>
+            <b-form-group class="mt-3" label="Horarios aseo">
+              <Field
+                name="HoraryField"
+                :rules="validateHorary"
+                as="text"
+              >
+                <Datepicker
+                      v-model="date"
+                      placeholder="Seleccionar ..."
+                      selectText="Seleccionar"
+                      cancelText="Cancelar"
+                      locale="es"
+                      time-picker
+                      disable-time-range-validation
+                      range
+                      modelType="hh:mm aa"
+                      :is-24="false"
+                      :state="HoraryState"
+                    >
+                    </Datepicker>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="HoraryField"
               ></ErrorMessage>
             </b-form-group>
           </b-col>
@@ -158,10 +207,11 @@
 </template>
 
 <script>
-import RoadService from '@/Services/road.Services'
+import RoadServices from '@/Services/road.Services'
 import { Form, ErrorMessage, Field } from 'vee-validate'
 import { ref, inject } from 'vue'
 import { GoogleMap, Marker, MarkerCluster, Polyline } from 'vue3-google-map'
+import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
@@ -172,23 +222,27 @@ export default {
     GoogleMap,
     Marker,
     MarkerCluster,
-    Polyline
+    Polyline,
+    Datepicker
   },
   setup () {
     const swal = inject('$swal')
     const showModal = ref(false)
-    const { getRoad, createRoad, deleteRoad, createCoordsRoad } = RoadService()
+    const { getRoad, createRoad, deleteRoad, createCoordsRoad } = RoadServices()
     const roadService = ref([])
+    const date = ref()
     const perPage = ref(5)
     const currentPage = ref(1)
     const filter = ref(null)
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('origen')
+    const searchField = ref('nombre')
     const OriginState = ref(false)
     const DestinationState = ref(false)
     const ObservationState = ref(false)
+    const NameRoadState = ref(false)
+    const HoraryState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
       { text: 'Aseo publico', to: '/ServiciosPublicos/AseoPublico/list' },
@@ -200,6 +254,8 @@ export default {
       origen: null,
       destino: null,
       observacion: null,
+      nombre: null,
+      horario: null,
       archivado: false
     })
     const CoordsRoadFields = ref({
@@ -223,6 +279,10 @@ export default {
     const center = ref({ lat: 20.5546629, lng: -102.4953904 })
     const fields = ref([
       { value: 'observacion', text: 'Observacion' },
+      { value: 'nombre', text: 'Nombre de la ruta' },
+      { value: 'horario', text: 'Horarios' },
+      // { value: 'longitud', text: 'longitud' },
+      // { value: 'latitud', text: 'latitud' },
       { value: 'actions', text: 'Acciones' }
     ])
     const addMaker = location => {
@@ -261,6 +321,8 @@ export default {
       OriginState.value = false
       DestinationState.value = false
       ObservationState.value = false
+      NameRoadState.value = false
+      HoraryState.value = false
     }
 
     getRoad(data => {
@@ -292,6 +354,38 @@ export default {
       return true
     }
 
+    const validateNameRoad = () => {
+      if (!RoadServiceFields.value.nombre) {
+        NameRoadState.value = false
+        return 'Este campo es requerido'
+      }
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ 0-9]+$/i.test(
+          RoadServiceFields.value.nombre
+        )
+      ) {
+        NameRoadState.value = false
+        return 'Este campo solo puede contener letras'
+      }
+      if (!RoadServiceFields.value.nombre.trim().length > 0) {
+        NameRoadState.value = false
+        return 'Este campo no puede contener espacios'
+      }
+
+      NameRoadState.value = true
+      return true
+    }
+
+    const validateHorary = () => {
+      if (!date.value) {
+        HoraryState.value = false
+        return 'Este campo es requerido'
+      }
+
+      HoraryState.value = true
+      return true
+    }
+
     const refreshTable = () => {
       isloading.value = true
       getRoad(data => {
@@ -309,6 +403,7 @@ export default {
     }
 
     const addRoadService = () => {
+      RoadServiceFields.value.horario = `de ${date.value[0].hours} : ${date.value[0].minutes} a ${date.value[1].hours} : ${date.value[1].minutes}  `
       createRoad(RoadServiceFields.value, data => {
         console.log(data)
         for (let i = 0; i < locations.value.length; i++) {
@@ -379,9 +474,12 @@ export default {
       OriginState,
       DestinationState,
       ObservationState,
+      NameRoadState,
+      HoraryState,
       center,
       locations,
       flightPath,
+      date,
 
       onFiltered,
       addRoadService,
@@ -391,6 +489,8 @@ export default {
       // validateDestination,
       validateObservation,
       resetRoadServiceFields,
+      validateNameRoad,
+      validateHorary,
       addMaker,
       onAddPolyline,
       ResetPolyline

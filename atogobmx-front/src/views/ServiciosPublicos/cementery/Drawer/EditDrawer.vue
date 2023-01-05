@@ -3,7 +3,6 @@
     <b-card class="mb-4">
       <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
     </b-card>
-    <b-card>
       <div>
         <h3>Editar gabeta</h3>
       </div>
@@ -89,7 +88,6 @@
                 >Arrastra el punto del mapa al lugar donde se encuentra su
                 gabeta.</b-alert
               >
-            <b-card>
               <GMapMap
                 :center="center"
                 map-type-id="satellite"
@@ -110,7 +108,6 @@
                   @drag="updateCoordinates"
                 />
               </GMapMap>
-            </b-card>
         </b-row>
         <b-row cols="2" class="m-2" align-h="end">
           <b-col>
@@ -132,7 +129,6 @@
         </b-row>
       </Form>
     </b-card>
-  </b-card>
 </template>
 
 <script>

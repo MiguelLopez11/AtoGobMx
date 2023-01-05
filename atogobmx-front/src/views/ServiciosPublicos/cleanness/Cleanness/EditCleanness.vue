@@ -62,18 +62,10 @@
               <!-- Agregar descripcion -->
               <b-col>
                 <b-form-group class="mt-3" label="Descripcion">
-                  <Field
-                    name="DescriptionField"
-                    :rules="validateDescription"
-                    as="text"
-                  >
                     <b-form-textarea
                       v-model="cleannessService.descripcion"
-                      :state="DescriptionState"
                       rows="4"
                     ></b-form-textarea>
-                  </Field>
-                  <ErrorMessage class="text-danger" name="DescriptionField" />
                 </b-form-group>
               </b-col>
             </b-row>
@@ -126,7 +118,6 @@ export default {
     const ProblemState = ref(false)
     const PublicEstablishmentState = ref(false)
     const DomicileState = ref(false)
-    const DescriptionState = ref(false)
     const aseoId = ref(parseInt(router.params.AseoId))
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
@@ -215,33 +206,10 @@ export default {
       return true
     }
 
-    const validateDescription = () => {
-      if (!cleannessService.value.descripcion) {
-        validateState()
-        return 'Este campo es requerido'
-      }
-
-      if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(cleannessService.value.descripcion)
-      ) {
-        DescriptionState.value = false
-        return 'Este campo solo puede contener numeros'
-      }
-
-      if (!cleannessService.value.descripcion.trim().length > 0) {
-        DescriptionState.value = false
-        return 'Este campo no puede contener espacios'
-      }
-
-      validateState()
-      return true
-    }
-
     const validateState = () => {
       NameState.value = cleannessService.value.nombre !== ''
       ProblemState.value = cleannessService.value.establecimientoPublico !== ''
       DomicileState.value = cleannessService.value.domicilio !== ''
-      DescriptionState.value = cleannessService.value.descripcion !== ''
     }
 
     return {
@@ -252,15 +220,13 @@ export default {
       PublicEstablishmentState,
       DomicileState,
       aseoId,
-      DescriptionState,
       //   router
 
       onUpdateCleannessService,
       validateState,
       validateName,
       validateProblem,
-      validateDomicile,
-      validateDescription
+      validateDomicile
     }
   }
 }

@@ -395,28 +395,24 @@ namespace AtoGobMx.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Calle")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Comunidad")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<decimal>("Latitud")
+                    b.Property<decimal?>("Latitud")
                         .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("Localidad")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<decimal>("Longitud")
+                    b.Property<decimal?>("Longitud")
                         .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("NombreCementerio")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("NumeroExterior")
+                    b.Property<int?>("NumeroExterior")
                         .HasColumnType("int");
 
                     b.HasKey("CementerioId");
@@ -433,11 +429,11 @@ namespace AtoGobMx.Migrations
                     b.Property<bool>("Archivado")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<double>("Latitud")
-                        .HasColumnType("double");
+                    b.Property<decimal>("Latitud")
+                        .HasColumnType("decimal(65,30)");
 
-                    b.Property<double>("Longitud")
-                        .HasColumnType("double");
+                    b.Property<decimal>("Longitud")
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<int>("OrdenCoordenada")
                         .HasColumnType("int");

@@ -112,10 +112,8 @@
           <!--Agregar comunidad -->
           <b-col>
             <b-form-group class="mt-3" label="Comunidad">
-                <b-form-input
-                  v-model="cementeryServiceFields.comunidad"
-                >
-                </b-form-input>
+              <b-form-input v-model="cementeryServiceFields.comunidad">
+              </b-form-input>
             </b-form-group>
           </b-col>
           <!--Agregar Localidad -->
@@ -193,17 +191,16 @@
                   disableDefaultUi: false
                 }"
                 style="width: 100%; height: 500px"
+                @click="updateCoordinates"
               >
                 <GMapMarker
                   :zoom="10"
-                  :position="center"
+                  :position="markers.position"
                   :draggable="true"
-                  @drag="updateCoordinates"
                 />
               </GMapMap>
             </b-card>
           </b-collapse>
-          <!-- {{markers}} -->
         </b-row>
         <b-row align-h="end">
           <b-button
@@ -211,7 +208,6 @@
             variant="primary"
             @click="resetCementeryServiceFields"
           >
-            <!-- v-b-modal.modal-cementery -->
             Cancelar
           </b-button>
           <b-button class="w-auto m-2" variant="success" type="submit">
@@ -227,7 +223,6 @@
 import CementeryService from '@/Services/cementery.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
-import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
     EasyDataTable: window['vue3-easy-data-table'],
@@ -238,11 +233,8 @@ export default {
   setup () {
     const swal = inject('$swal')
     const showModal = ref(false)
-    const {
-      getCementery,
-      createCementery,
-      deleteCementery
-    } = CementeryService()
+    const { getCementery, createCementery, deleteCementery } =
+      CementeryService()
     const cementeryService = ref([])
     const perPage = ref(5)
     const currentPage = ref(1)
@@ -281,24 +273,18 @@ export default {
       JSON.parse(JSON.stringify(cementeryServiceFields))
     )
 
-    const markers = ref([
-      {
-        position: {
-          lat: 20.5546629,
-          lng: -102.4953904
-        }
+    const markers = ref({
+      position: {
+        lat: 0,
+        lng: 0
       }
-    ])
+    })
 
     const center = ref({ lat: 20.5546629, lng: -102.4953904 })
 
-    const updateCoordinates = (location) => {
-      markers.value = {
-        position: {
-          lat: location.latLng.lat(),
-          lng: location.latLng.lng()
-        }
-      }
+    const updateCoordinates = location => {
+      markers.value.position.lat = location.latLng.lat()
+      markers.value.position.lng = location.latLng.lng()
     }
 
     const fields = ref([
@@ -316,7 +302,6 @@ export default {
         JSON.stringify(CementeryServiceFieldsBlank)
       )
       NameCementeryState.value = false
-      // MunicipalityState.value = false
       LocationState.value = false
       StreetState.value = false
       NumberOutsideState.value = false
@@ -353,9 +338,7 @@ export default {
         return 'Este campo solo puede contener letras'
       }
 
-      if (
-        !cementeryServiceFields.value.nombreCementerio.trim().length > 0
-      ) {
+      if (!cementeryServiceFields.value.nombreCementerio.trim().length > 0) {
         NameCementeryState.value = false
         return 'Este campo no puede contener espacios'
       }
@@ -363,31 +346,6 @@ export default {
       NameCementeryState.value = true
       return true
     }
-
-    // const validateMunicipality = () => {
-    //   if (!cementeryServiceFields.value.comunidad) {
-    //     MunicipalityState.value = false
-    //     return 'Este campo es requerido'
-    //   }
-
-    //   if (
-    //     !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
-    //       cementeryServiceFields.value.comunidad
-    //     )
-    //   ) {
-    //     MunicipalityState.value = false
-    //     return 'Este campo solo puede contener letras'
-    //   }
-
-    //   if (!cementeryServiceFields.value.comunidad.trim().length > 0) {
-    //     MunicipalityState.value = false
-    //     return 'Este campo no puede contener espacios'
-    //   }
-
-    //   MunicipalityState.value = true
-    //   return true
-    // }
-
     const validateLocation = () => {
       if (!cementeryServiceFields.value.localidad) {
         LocationState.value = false
@@ -419,9 +377,7 @@ export default {
       }
 
       if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
-          cementeryServiceFields.value.calle
-        )
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(cementeryServiceFields.value.calle)
       ) {
         StreetState.value = false
         return 'Este campo solo puede contener letras'
@@ -442,16 +398,12 @@ export default {
         return 'Este campo es requerido'
       }
 
-      if (
-        !/^[0-9]+$/i.test(cementeryServiceFields.value.numeroExterior)
-      ) {
+      if (!/^[0-9]+$/i.test(cementeryServiceFields.value.numeroExterior)) {
         NumberOutsideState.value = false
         return 'Este campo solo puede contener numeros'
       }
 
-      if (
-        !cementeryServiceFields.value.numeroExterior.trim().length > 0
-      ) {
+      if (!cementeryServiceFields.value.numeroExterior.trim().length > 0) {
         NumberOutsideState.value = false
         return 'Este campo no puede contener espacios'
       }
@@ -477,18 +429,29 @@ export default {
     }
 
     const addCementeryService = () => {
-      cementeryServiceFields.value.latitud = markers.value.position.lat
-      cementeryServiceFields.value.longitud = markers.value.position.lng
-      createCementery(cementeryServiceFields.value, data => {
-        refreshTable()
+      if (
+        markers.value.position.lat === 0 &&
+        markers.value.position.lng === 0
+      ) {
         swal.fire({
-          title: '¡Direccion cementerios agregado correctamente!',
-          text: 'Direccion cementerios registrado satisfactoriamente',
-          icon: 'success'
+          title: '¡Mapa vacío!',
+          text: 'Marque en el mapa donde se encuentra el cementerio.',
+          icon: 'error'
         })
-      })
-      showModal.value = false
-      resetCementeryServiceFields()
+      } else {
+        cementeryServiceFields.value.latitud = markers.value.position.lat
+        cementeryServiceFields.value.longitud = markers.value.position.lng
+        createCementery(cementeryServiceFields.value, data => {
+          refreshTable()
+          swal.fire({
+            title: '¡Direccion cementerios agregado correctamente!',
+            text: 'Direccion cementerios registrado satisfactoriamente',
+            icon: 'success'
+          })
+        })
+        showModal.value = false
+        resetCementeryServiceFields()
+      }
     }
 
     const RemoveCementeryService = CementeryId => {

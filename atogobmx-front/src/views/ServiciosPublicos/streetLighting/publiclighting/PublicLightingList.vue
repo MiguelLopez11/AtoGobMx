@@ -163,7 +163,7 @@
           </b-col>
           <!--agregar domicilio-->
           <b-col>
-            <b-form-group class="mt-3" label="Domicilio">
+            <b-form-group class="mt-3" label="Domicilio/Calles">
               <Field name="DomicileField" :rules="validateDomicile" as="text">
                 <b-form-input
                   v-model="publicLightingFields.domicilio"
@@ -384,7 +384,7 @@ export default {
         return 'Este campo es requerido'
       }
       if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(publicLightingFields.value.domicilio)
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ 0-9]+$/i.test(publicLightingFields.value.domicilio)
       ) {
         DomicileState.value = false
         return 'Este campo solo puede contener letras'
@@ -429,7 +429,7 @@ export default {
       { value: 'tareaTipoAlumbrado.nombreTarea', text: 'Tipo de tarea' },
       { value: 'nombreObra', text: 'Nombre de obra alumbrado' },
       { value: 'descripcionProblema', text: 'Descripcion del problema' },
-      { value: 'domicilio', text: 'Domicilio' },
+      { value: 'domicilio', text: 'Domicilio/Calles' },
       { value: 'descripcionDomicilio', text: 'Descripcion Domicilio' },
       { value: 'actions', text: 'Acciones' }
     ])

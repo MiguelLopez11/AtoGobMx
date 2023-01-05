@@ -206,7 +206,6 @@ import ExpedientMedicalAppointmentList from '@/views/MunicipalMedicalServices/Me
 import { ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Form, Field, ErrorMessage } from 'vee-validate'
-import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
     Form,

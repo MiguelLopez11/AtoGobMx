@@ -8,8 +8,8 @@ namespace AtoGobMx.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int  CoordenadaId { get; set; }
-        public double Latitud { get; set; }
-        public double Longitud { get; set; }
+        public decimal Latitud { get; set; }
+        public decimal Longitud { get; set; }
         public int RutaId { get; set; }
         public bool Archivado { get; set; }
 

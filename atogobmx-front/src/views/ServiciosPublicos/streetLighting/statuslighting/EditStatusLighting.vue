@@ -25,20 +25,10 @@
           <!--Agregar descripcion-->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion">
-              <Field
-                name="DescriptionField"
-                :rules="validateDescription"
-                as="text"
-              >
-                <b-form-input
+                <b-form-textarea
                   v-model="statusLighting.descripcion"
-                  :state="DescriptionState"
-                ></b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="DescriptionField"
-              ></ErrorMessage>
+                  rows="4"
+                ></b-form-textarea>
             </b-form-group>
           </b-col>
         </b-row>
@@ -81,7 +71,6 @@ export default {
     const router = useRoute()
     const redirect = useRouter()
     const NameState = ref(false)
-    const DescriptionState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
       { text: 'Departamento estatus', to: '/ServiciosPublicos/EstatusAlumbrado/list' },
@@ -132,41 +121,19 @@ export default {
       return true
     }
 
-    const validateDescription = () => {
-      if (!statusLighting.value.descripcion) {
-        validateState()
-        return 'Este campo es requerido'
-      }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ ,;.: 0-9]+$/i.test(statusLighting.value.descripcion)) {
-        DescriptionState.value = false
-        return 'La descripcion solo puede contener letras y numeros'
-      }
-      if (!statusLighting.value.descripcion.trim().length > 0) {
-        DescriptionState.value = false
-        return 'Este campo no puede contener espacios'
-      }
-      validateState()
-      return true
-    }
-
     const validateState = () => {
-      // eslint-disable-next-line no-unneeded-ternary
-      NameState.value = statusLighting.value.nombreEstatus === '' ? false : true
-      // eslint-disable-next-line no-unneeded-ternary
-      DescriptionState.value = statusLighting.value.descripcion === '' ? false : true
+      NameState.value = statusLighting.value.nombreEstatus !== ''
     }
 
     return {
       statusLighting,
       breadcrumbItems,
       NameState,
-      DescriptionState,
       //   router
 
       onUpdateStatusLighting,
       validateName,
-      validateState,
-      validateDescription
+      validateState
     }
   }
 }

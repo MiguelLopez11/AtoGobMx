@@ -30,21 +30,10 @@
             <!-- Agregar comunidad -->
             <b-col>
               <b-form-group class="mt-3" label="Comunidad">
-                <Field
-                  name="MunicipalityField"
-                  :rules="validateMunicipality"
-                  as="text"
-                >
                   <b-form-input
                     v-model="cementeryService.comunidad"
-                    :state="MunicipalityState"
                   >
                   </b-form-input>
-                </Field>
-                <ErrorMessage
-                  class="text-danger"
-                  name="MunicipalityField"
-                ></ErrorMessage>
               </b-form-group>
             </b-col>
             <!-- Agregar localidad -->
@@ -179,7 +168,6 @@ export default {
     const router = useRoute()
     const redirect = useRouter()
     const NameCementeryState = ref(false)
-    const MunicipalityState = ref(false)
     const LocationState = ref(false)
     const StreetState = ref(false)
     const NumberOutsideState = ref(false)
@@ -260,26 +248,6 @@ export default {
       return true
     }
 
-    const validateMunicipality = () => {
-      if (!cementeryService.value.comunidad) {
-        validateState()
-        return 'Este campo es requerido'
-      }
-
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(cementeryService.value.comunidad)) {
-        MunicipalityState.value = false
-        return 'Este campo solo puede contener letras'
-      }
-
-      // if (!cementeryService.value.comunidad.trim().length > 0) {
-      //   MunicipalityState.value = false
-      //   return 'Este campo no puede contener espacios'
-      // }
-
-      validateState()
-      return true
-    }
-
     const validateLocation = () => {
       if (!cementeryService.value.localidad) {
         validateState()
@@ -342,7 +310,6 @@ export default {
 
     const validateState = () => {
       NameCementeryState.value = cementeryService.value.nombreCementerio !== ''
-      MunicipalityState.value = cementeryService.value.comunidad !== ''
       LocationState.value = cementeryService.value.localidad !== ''
       StreetState.value = cementeryService.value.calle !== ''
       NumberOutsideState.value = cementeryService.value.numeroExterior !== ''
@@ -352,7 +319,6 @@ export default {
       cementeryService,
       breadcrumbItems,
       NameCementeryState,
-      MunicipalityState,
       LocationState,
       StreetState,
       NumberOutsideState,
@@ -364,7 +330,6 @@ export default {
       onUpdateCementeryService,
       validateState,
       validateNameCementery,
-      validateMunicipality,
       validateLocation,
       validateStreet,
       validateNumberOutside,

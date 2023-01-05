@@ -1,6 +1,6 @@
 import { axiosPrivate } from '@/common/axiosPrivate.js'
 
-export default function RoadService () {
+export default function RoadServices () {
   const getRoad = (callback) => {
     axiosPrivate.get('/Ruta').then((response) => {
       callback(response.data)
@@ -31,8 +31,8 @@ export default function RoadService () {
     })
   }
   // Coords Road
-  const getCoordsRoad = (callback) => {
-    axiosPrivate.get('/CoordenadaRuta').then((response) => {
+  const getCoordsRoad = (rutaId, callback) => {
+    axiosPrivate.get(`/CoordenadaRuta/${rutaId}`).then((response) => {
       callback(response.data)
     })
   }

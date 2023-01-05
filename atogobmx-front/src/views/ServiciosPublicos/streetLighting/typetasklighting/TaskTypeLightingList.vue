@@ -105,20 +105,10 @@
           <!--Agregar descripcion-->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion">
-              <Field
-                name="DescriptionField"
-                :rules="validateDescription"
-                as="text"
-              >
-                <b-form-input
+                <b-form-textarea
                   v-model="taskTypeLightingFields.descripcion"
-                  :state="DescriptionState"
-                ></b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="DescriptionField"
-              ></ErrorMessage>
+                  rows="4"
+                ></b-form-textarea>
             </b-form-group>
           </b-col>
         </b-row>
@@ -171,7 +161,6 @@ export default {
     const isloading = ref(true)
     const searchValue = ref('')
     const searchField = ref('nombreTarea')
-    const DescriptionState = ref(false)
     const NameState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
@@ -201,7 +190,6 @@ export default {
         JSON.stringify(taskTypeLightingFieldsBlank)
       )
       NameState.value = false
-      DescriptionState.value = false
     }
 
     getTaskTypeLighting(data => {
@@ -241,47 +229,6 @@ export default {
       NameState.value = true
       return true
     }
-
-    // const input = document.getTaskTypeLighting('inputName')
-    // input.addTaskTypeLighting('input', function () {
-    //   this.value = this.value.trim()
-    // })
-    // const validateDescription = () => {
-    //   if (!statusLightingFields.value.descripcionDomicilio) {
-    //     DescriptionState.value = false
-    //     return 'Este campo es requerido'
-    //   }
-    //   DescriptionState.value = true
-    //   return true
-    // }
-
-    const validateDescription = () => {
-      if (!taskTypeLightingFields.value.descripcion) {
-        DescriptionState.value = false
-        return 'Este campo es requerido'
-      }
-      if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ ,;.: 0-9]+$/i.test(
-          taskTypeLightingFields.value.descripcion
-        )
-      ) {
-        DescriptionState.value = false
-        return 'la descripcion del tipo de tarea solo puede contener letras y numeros'
-      }
-      if (!taskTypeLightingFields.value.descripcion.trim().length > 0) {
-        DescriptionState.value = false
-        return 'Este campo no puede contener espacios'
-      }
-      DescriptionState.value = true
-      return true
-    }
-
-    // function validar (taskTypeLightingFields) {
-    //   if (taskTypeLightingFields.target.value.trim() === '') { alert('debe ingresar un valor en el campo') } else alert('ingreso ' + taskTypeLightingFields.target.value.trim() + ', es correcto!')
-    // }
-
-    // validar()
-
     // pone mis cambios de mis campos vacios de nuevo
     const refreshTable = () => {
       isloading.value = true
@@ -366,15 +313,13 @@ export default {
       // lightingFailuresValues,
       fields,
       NameState,
-      DescriptionState,
       // option,
       resetTaskTypeLightingFields,
       onFiltered,
       addTaskTypeLighting,
       refreshTable,
       RemoveTaskTypeLighting,
-      validateName,
-      validateDescription
+      validateName
       // resetStreetLightingFields
     }
   }

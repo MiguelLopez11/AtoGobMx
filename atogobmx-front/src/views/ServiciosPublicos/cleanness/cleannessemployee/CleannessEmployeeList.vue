@@ -147,7 +147,7 @@ export default {
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('empleadoId')
+    const searchField = ref('empleados.nombreCompleto')
     const NameState = ref(false)
     const cleannessEmployeeFields = ref({
       aseoEmpleadoId: 0,

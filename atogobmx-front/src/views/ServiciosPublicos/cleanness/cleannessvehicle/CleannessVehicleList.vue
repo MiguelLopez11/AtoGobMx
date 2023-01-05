@@ -56,7 +56,7 @@
             <i class="bi bi-three-dots-vertical"></i>
           </template>
           <b-dropdown-item
-            @click="RemoveCleannessVehicle(items.AseoVehiculoId)"
+            @click="RemoveCleannessVehicle(items.aseoVehiculoId)"
             class="m-1"
             variant="outline-danger"
             ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item
@@ -185,7 +185,7 @@ export default {
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('vehiculoId')
+    const searchField = ref('vehiculo.marca')
     const NameState = ref(false)
     const cleannessVehicleFields = ref({
       aseoVehiculoId: 0,

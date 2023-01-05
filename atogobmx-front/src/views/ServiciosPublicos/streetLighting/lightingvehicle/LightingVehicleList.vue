@@ -1,6 +1,8 @@
 <template>
   <b-card class="m-2">
     <b-row align-h="end" class="mb-3 mr-1">
+      <b-col>
+
       <b-form-input
         size="lg"
         style="width: 350px"
@@ -8,22 +10,22 @@
         type="search"
         placeholder="Buscar vehiculo..."
       ></b-form-input>
+      </b-col>
+      <b-col>
+
       <b-button
-        variant="primary"
-        style="
+         style="
           background-color: rgb(94, 80, 238);
-          height: 50px;
-          width: auto;
-          font-size: 18px;
-          margin-right: 15px;
-          margin-left: 20px;
         "
+        class="w-75"
+        size="lg"
         @click="showModal = !showModal"
         type="submit"
       >
         <i class="bi bi-person-plus-fill"></i>
         Agregar vehiculo
       </b-button>
+      </b-col>
     </b-row>
     <EasyDataTable
       rows-per-page-message="registros por pagina"
@@ -56,7 +58,7 @@
             <i class="bi bi-three-dots-vertical"></i>
           </template>
           <b-dropdown-item
-            @click="RemoveLightingVehicle(items.alumbradoEmpleadoId)"
+            @click="RemoveLightingVehicle(items.vehiculoAlumbradoId)"
             class="m-1"
             variant="outline-danger"
             ><i class="bi bi-trash3"> Archivar</i></b-dropdown-item

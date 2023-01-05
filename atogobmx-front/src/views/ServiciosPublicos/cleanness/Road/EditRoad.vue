@@ -8,6 +8,26 @@
         <b-card>
           <Form @submit="onUpdateRoadService">
             <b-row cols="2">
+              <!-- Agregar Nombre -->
+              <b-col>
+                <b-form-group class="mt-3" label="Nombre de la ruta">
+                  <Field
+                    name="NameRoadField"
+                    :rules="validateNameRoad"
+                    as="text"
+                  >
+                    <b-form-input
+                      v-model="RoadService.nombre"
+                      :state="NameRoadState"
+                    >
+                    </b-form-input>
+                  </Field>
+                  <ErrorMessage
+                    class="text-danger"
+                    name="NameRoadField"
+                  ></ErrorMessage>
+                </b-form-group>
+              </b-col>
               <!-- Agregar Observacion -->
               <b-col>
                 <b-form-group class="mt-3" label="Observacion">
@@ -17,7 +37,7 @@
                     as="text"
                   >
                     <b-form-input
-                      v-model="roadService.obsevacion"
+                      v-model="RoadService.observacion"
                       :state="ObservationState"
                     >
                     </b-form-input>
@@ -25,6 +45,31 @@
                   <ErrorMessage
                     class="text-danger"
                     name="ObservationField"
+                  ></ErrorMessage>
+                </b-form-group>
+              </b-col>
+              <!-- Agregar horario -->
+              <b-col>
+                <b-form-group class="mt-3" label="Horarios aseo">
+                  <Field name="HoraryField" :rules="validateHorary" as="text">
+                    <Datepicker
+                      v-model="date "
+                      placeholder="Seleccionar ..."
+                      selectText="Seleccionar"
+                      cancelText="Cancelar"
+                      locale="es"
+                      time-picker
+                      disable-time-range-validation
+                      range
+                      modelType="hh:mm aa"
+                      :is-24="false"
+                      :state="HoraryState"
+                    >
+                    </Datepicker>
+                  </Field>
+                  <ErrorMessage
+                    class="text-danger"
+                    name="HoraryField"
                   ></ErrorMessage>
                 </b-form-group>
               </b-col>
@@ -104,7 +149,7 @@
 </template>
 
 <script>
-import RoadService from '@/Services/road.Services'
+import RoadServices from '@/Services/road.Services'
 import CleannessEmployee from '@/views/ServiciosPublicos/cleanness/cleannessemployee/CleannessEmployeeList.vue'
 import CleannessVehicle from '@/views/ServiciosPublicos/cleanness/cleannessvehicle/CleannessVehicleList.vue'
 import { ref, inject } from 'vue'
@@ -112,6 +157,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { GoogleMap, Marker, MarkerCluster, Polyline } from 'vue3-google-map'
 // import { useToast } from 'vue-toast-notification'
 import { Form, Field, ErrorMessage } from 'vee-validate'
+import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
   components: {
@@ -123,18 +169,22 @@ export default {
     MarkerCluster,
     Polyline,
     CleannessEmployee,
-    CleannessVehicle
+    CleannessVehicle,
+    Datepicker
   },
   setup () {
     const swal = inject('$swal')
-    const { getRoadById, updateRoad } = RoadService()
+    const { getRoadById, updateRoad, getCoordsRoad } = RoadServices()
     // const $toast = useToast()
-    const roadService = ref([])
+    const RoadService = ref([])
     const router = useRoute()
+    const date = ref()
     const redirect = useRouter()
     const OriginState = ref(false)
     const DestinationState = ref(false)
     const ObservationState = ref(false)
+    const NameRoadState = ref(false)
+    const HoraryState = ref(false)
     const rutaId = ref(parseInt(router.params.RutaId))
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
@@ -157,10 +207,10 @@ export default {
       strokeWeight: 5
     })
     const center = ref({ lat: 20.5546629, lng: -102.4953904 })
-    const fields = ref([
-      { value: 'observacion', text: 'Observacion' },
-      { value: 'actions', text: 'Acciones' }
-    ])
+    // const fields = ref([
+    //   { value: 'observacion', text: 'Observacion' },
+    //   { value: 'actions', text: 'Acciones' }
+    // ])
     const addMaker = location => {
       locations.value.push({
         lat: location.latLng.lat(),
@@ -190,7 +240,8 @@ export default {
       }
     }
     const onUpdateRoadService = () => {
-      updateRoad(roadService.value, data => {})
+      // RoadService.value.horario = `de ${date.value[0].hours} : ${date.value[0].minutes} a ${date.value[1].hours} : ${date.value[1].minutes}  `
+      updateRoad(RoadService.value, data => {})
       swal
         .fire({
           title: '¡Ruta modificado correctamente!',
@@ -204,47 +255,49 @@ export default {
         })
     }
     getRoadById(router.params.RutaId, data => {
-      roadService.value = data
+      RoadService.value = data
+    })
+    getCoordsRoad(router.params.RutaId, data => {
+      for (let i = 0; i < data.length; i++) {
+        locations.value.push({ lat: data[i].latitud, lng: data[i].longitud })
+      }
+      flightPath.value = {
+        path: locations.value,
+        geodesic: true,
+        strokeColor: '#5e50ee',
+        strokeOpacity: 1.0,
+        strokeWeight: 5
+      }
     })
 
-    // const validateOrigin = () => {
-    //   if (!roadService.value.origen) {
-    //     validateState()
-    //     return 'Este campo es requerido'
-    //   }
+    const validateNameRoad = () => {
+      if (!RoadService.value.nombre) {
+        validateState()
+        return 'Este campo es requerido'
+      }
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ 0-9]+$/i.test(RoadService.value.nombre)) {
+        NameRoadState.value = false
+        return 'Este campo solo puede contener letras'
+      }
+      if (!RoadService.value.nombre.trim().length > 0) {
+        NameRoadState.value = false
+        return 'Este campo no puede contener espacios'
+      }
 
-    //   if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(roadService.value.origen)) {
-    //     OriginState.value = false
-    //     return 'Este campo solo puede contener letras'
-    //   }
-
-    //   validateState()
-    //   return true
-    // }
-
-    // const validateDestination = () => {
-    //   if (!roadService.value.destino) {
-    //     validateState()
-    //     return 'Este campo es requerido'
-    //   }
-
-    //   if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(roadService.value.destino)) {
-    //     DestinationState.value = false
-    //     return 'Este campo solo puede contener numeros'
-    //   }
-
-    //   validateState()
-    //   return true
-    // }
+      validateState()
+      return true
+    }
 
     const validateObservation = () => {
-      if (!roadService.value.obsevacion) {
+      if (!RoadService.value.observacion) {
         validateState()
         return 'Este campo es requerido'
       }
 
       if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ ,;:. 0-9]+$/i.test(roadService.value.obsevacion)
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ ,;:. 0-9]+$/i.test(
+          RoadService.value.observacion
+        )
       ) {
         ObservationState.value = false
         return 'Este campo solo puede contener numeros'
@@ -253,28 +306,39 @@ export default {
       validateState()
       return true
     }
+    const validateHorary = () => {
+      if (!date.value) {
+        validateState()
+        return 'Este campo es requerido'
+      }
+
+      validateState()
+      return true
+    }
 
     const validateState = () => {
-      // eslint-disable-next-line no-unneeded-ternary
-      OriginState.value = roadService.value.origen === '' ? false : true
-      // eslint-disable-next-line no-unneeded-ternary
-      DestinationState.value = roadService.value.destino === '' ? false : true
-      // eslint-disable-next-line no-unneeded-ternary
-      ObservationState.value = roadService.value.obsevacion === '' ? false : true
+      OriginState.value = RoadService.value.origen !== ''
+      DestinationState.value = RoadService.value.destino !== ''
+      NameRoadState.value = RoadService.value.nombre !== ''
+      ObservationState.value = RoadService.value.observacion !== ''
+      HoraryState.value = RoadService.value.horario !== ''
     }
 
     return {
-      roadService,
+      RoadService,
       rutaId,
       breadcrumbItems,
       CoordsRoadFields,
       OriginState,
       DestinationState,
       ObservationState,
-      fields,
+      NameRoadState,
+      // fields,
       center,
       locations,
       flightPath,
+      date,
+      HoraryState,
       //   router
 
       onUpdateRoadService,
@@ -282,6 +346,8 @@ export default {
       // validateOrigin,
       // validateDestination,
       validateObservation,
+      validateNameRoad,
+      validateHorary,
       addMaker,
       onAddPolyline,
       ResetPolyline

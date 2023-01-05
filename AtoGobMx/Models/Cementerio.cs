@@ -10,13 +10,13 @@ namespace AtoGobMx.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CementerioId { get; set; }
-        public string NombreCementerio { get; set; }
-        public string Comunidad { get; set; }
-        public string Localidad { get; set; }
-        public string Calle { get; set; }
-        public int NumeroExterior { get; set; }
-        public decimal Longitud { get; set; }
-        public decimal Latitud { get; set; }
+        public string? NombreCementerio { get; set; }
+        public string? Comunidad { get; set; }
+        public string? Localidad { get; set; }
+        public string? Calle { get; set; }
+        public int? NumeroExterior { get; set; }
+        public decimal? Longitud { get; set; }
+        public decimal? Latitud { get; set; }
         public bool Archivado { get; set; }
 
         [JsonIgnore]
