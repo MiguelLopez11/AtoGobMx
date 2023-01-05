@@ -178,14 +178,10 @@
           <!--Agregar Descripcion-->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion del problema">
-              <Field name="DescriptionField" :rules="validateDescription" as="text">
                 <b-form-textarea
                   v-model="cleannessServiceFields.descripcion"
-                  :state="DescriptionState"
                   rows="4"
                 ></b-form-textarea>
-              </Field>
-              <ErrorMessage class="text-danger" name="DescriptionField" />
             </b-form-group>
           </b-col>
           <!-- <b-col>
@@ -254,13 +250,12 @@ export default {
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('nombreServicio')
+    const searchField = ref('nombre')
     const NameState = ref(false)
     const ProblemState = ref(false)
     const DomicileState = ref(false)
     const ObjectiveState = ref(false)
     const DateOfIssueState = ref(false)
-    const DescriptionState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
       { text: 'Aseo publico', to: '/ServiciosPublicos/AseoPublico/list' },
@@ -302,7 +297,6 @@ export default {
       DomicileState.value = false
       ObjectiveState.value = false
       DateOfIssueState.value = false
-      DescriptionState.value = false
     }
 
     getCleanness(data => {
@@ -426,27 +420,6 @@ export default {
       return true
     }
 
-    const validateDescription = () => {
-      if (!cleannessServiceFields.value.descripcion) {
-        DescriptionState.value = false
-        return 'Este campo es requerido'
-      }
-      if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
-          cleannessServiceFields.value.descripcion
-        )
-      ) {
-        DescriptionState.value = false
-        return 'La descripcion solo puede contener letras'
-      }
-      if (!cleannessServiceFields.value.descripcion.trim().length > 0) {
-        DescriptionState.value = false
-        return 'Este campo no puede contener espacios'
-      }
-      DescriptionState.value = true
-      return true
-    }
-
     const refreshTable = () => {
       isloading.value = true
       getCleanness(data => {
@@ -513,7 +486,6 @@ export default {
       currentPage,
       filter,
       DateOfIssueState,
-      DescriptionState,
       showModal,
       perPageSelect,
       isloading,
@@ -529,7 +501,6 @@ export default {
       onFiltered,
       addCleannessService,
       RemoveCleannessService,
-      validateDescription,
       refreshTable,
       validateName,
       validateProblem,

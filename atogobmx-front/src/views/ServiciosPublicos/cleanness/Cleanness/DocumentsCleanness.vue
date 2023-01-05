@@ -224,7 +224,7 @@ export default {
       isloading.value = true
       disableButtonDownload.value = true
       axiosPrivate({
-        url: `/Archivos/DocumentosObrasPublicas/${props.AseoId}/Zip`,
+        url: `/Archivos/DocumentosAseoPublico/${props.AseoId}/Zip`,
         method: 'GET',
         responseType: 'blob' // important
       })
@@ -248,7 +248,7 @@ export default {
       isloading.value = true
       disableButtonDownload.value = true
       axiosPrivate({
-        url: `/Archivos/DocumentosObrasPublicas/Dowload/${props.AseoId}/${Aseo.archivosAseoId}`,
+        url: `/Archivos/DocumentosAseoPublico/Dowload/${props.AseoId}/${Aseo.archivosAseoId}`,
         method: 'GET',
         responseType: 'blob' // important
       })

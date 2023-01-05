@@ -87,26 +87,6 @@
     >
       <Form @submit="addRoadService">
         <b-row cols="3">
-          <!-- Agregar Observacion -->
-          <b-col>
-            <b-form-group class="mt-3" label="Observacion">
-              <Field
-                name="ObservationField"
-                :rules="validateObservation"
-                as="text"
-              >
-                <b-form-input
-                  v-model="RoadServiceFields.observacion"
-                  :state="ObservationState"
-                >
-                </b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="ObservationField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
           <!-- Agregar Nombre -->
           <b-col>
             <b-form-group class="mt-3" label="Nombre de la ruta">
@@ -124,6 +104,26 @@
               <ErrorMessage
                 class="text-danger"
                 name="NameRoadField"
+              ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <!-- Agregar Observacion -->
+          <b-col>
+            <b-form-group class="mt-3" label="Observacion">
+              <Field
+                name="ObservationField"
+                :rules="validateObservation"
+                as="text"
+              >
+                <b-form-input
+                  v-model="RoadServiceFields.observacion"
+                  :state="ObservationState"
+                >
+                </b-form-input>
+              </Field>
+              <ErrorMessage
+                class="text-danger"
+                name="ObservationField"
               ></ErrorMessage>
             </b-form-group>
           </b-col>
@@ -207,7 +207,7 @@
 </template>
 
 <script>
-import RoadService from '@/Services/road.Services'
+import RoadServices from '@/Services/road.Services'
 import { Form, ErrorMessage, Field } from 'vee-validate'
 import { ref, inject } from 'vue'
 import { GoogleMap, Marker, MarkerCluster, Polyline } from 'vue3-google-map'
@@ -228,7 +228,7 @@ export default {
   setup () {
     const swal = inject('$swal')
     const showModal = ref(false)
-    const { getRoad, createRoad, deleteRoad, createCoordsRoad } = RoadService()
+    const { getRoad, createRoad, deleteRoad, createCoordsRoad } = RoadServices()
     const roadService = ref([])
     const date = ref()
     const perPage = ref(5)
@@ -237,7 +237,7 @@ export default {
     const perPageSelect = ref([5, 10, 25, 50, 100])
     const isloading = ref(true)
     const searchValue = ref('')
-    const searchField = ref('origen')
+    const searchField = ref('nombre')
     const OriginState = ref(false)
     const DestinationState = ref(false)
     const ObservationState = ref(false)
@@ -281,8 +281,8 @@ export default {
       { value: 'observacion', text: 'Observacion' },
       { value: 'nombre', text: 'Nombre de la ruta' },
       { value: 'horario', text: 'Horarios' },
-      { value: 'longitud', text: 'longitud' },
-      { value: 'latitud', text: 'latitud' },
+      // { value: 'longitud', text: 'longitud' },
+      // { value: 'latitud', text: 'latitud' },
       { value: 'actions', text: 'Acciones' }
     ])
     const addMaker = location => {

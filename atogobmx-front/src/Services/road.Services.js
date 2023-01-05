@@ -1,6 +1,6 @@
 import { axiosPrivate } from '@/common/axiosPrivate.js'
 
-export default function RoadService () {
+export default function RoadServices () {
   const getRoad = (callback) => {
     axiosPrivate.get('/Ruta').then((response) => {
       callback(response.data)
