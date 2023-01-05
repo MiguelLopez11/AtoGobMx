@@ -13,6 +13,9 @@ namespace AtoGobMx.Models
         public string? Encargado { get; set; }
         public string? OperadorObra { get; set; }
         public string? OperadorVehiculo { get; set; }
+        public string? Agencia { get; set; }
+        public string? Representante { get; set; }
+        public string? RFC { get; set; }
         public decimal Latitud { get; set; }
         public decimal Longitud { get; set; }
         public string Descripcion { get; set; }

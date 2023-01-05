@@ -87,6 +87,9 @@ namespace AtoGobMx.Controllers
             obrapublic.Encargado = obrasPublicas.Encargado;
             obrapublic.OperadorObra = obrasPublicas.OperadorObra;
             obrapublic.OperadorVehiculo = obrasPublicas.OperadorVehiculo;
+            obrapublic.Agencia = obrasPublicas.Agencia;
+            obrapublic.Representante = obrasPublicas.Representante;
+            obrapublic.RFC = obrasPublicas.RFC;
             obrapublic.Latitud = obrasPublicas.Latitud;
             obrapublic.Longitud = obrasPublicas.Longitud;
             obrapublic.Descripcion = obrasPublicas.Descripcion;

@@ -122,34 +122,65 @@
           <!--Agregar encargado de obra-->
           <b-col v-if="isAgency == false">
             <b-form-group class="mt-3" label="Encargado obra">
-                <b-form-input
-                  v-model="publicWorksFields.encargado"
-                >
-                </b-form-input>
+              <b-form-input v-model="publicWorksFields.encargado">
+              </b-form-input>
             </b-form-group>
           </b-col>
           <!--Agregar operador de obra-->
           <b-col v-if="isAgency == false">
             <b-form-group class="mt-3" label="Operador de la obra">
-                <b-form-input
-                  v-model="publicWorksFields.operadorObra"
-                >
-                </b-form-input>
+              <b-form-input v-model="publicWorksFields.operadorObra">
+              </b-form-input>
             </b-form-group>
           </b-col>
           <!--Agregar operador de vehiculo-->
           <b-col v-if="isAgency == false">
             <b-form-group class="mt-3" label="Operador del vehiculo">
+              <b-form-input v-model="publicWorksFields.operadorVehiculo">
+              </b-form-input>
+            </b-form-group>
+          </b-col>
+          <!--Agregar nombre agencia-->
+          <b-col v-if="isAgency == false">
+            <b-form-group class="mt-3" label="Nombre agencia">
+              <!-- <Field
+                name="AgencyNameField"
+                :rules="validateAgencyName"
+                as="text"
+              > -->
                 <b-form-input
-                  v-model="publicWorksFields.operadorVehiculo"
+                  v-model="publicWorks.agencia"
                 >
                 </b-form-input>
+              <!-- </Field> -->
+              <!-- <ErrorMessage
+                class="text-danger"
+                name="AgencyNameField"
+              ></ErrorMessage> -->
+            </b-form-group>
+          </b-col>
+          <!--Agregar representante legal-->
+          <b-col v-if="isAgency == false">
+            <b-form-group class="mt-3" label="Representante legal">
+              <b-form-input v-model="publicWorksFields.representante">
+              </b-form-input>
+            </b-form-group>
+          </b-col>
+          <!--Agregar RFC-->
+          <b-col v-if="isAgency == false">
+            <b-form-group class="mt-3" label="RFC">
+              <b-form-input v-model="publicWorksFields.rFC">
+              </b-form-input>
             </b-form-group>
           </b-col>
           <!--agregar un estatus obra-->
           <b-col>
             <b-form-group class="mt-3" label="Estatus de la obra">
-              <Field name="WorkStatusField" :rules="validateWorkStatus" as="text">
+              <Field
+                name="WorkStatusField"
+                :rules="validateWorkStatus"
+                as="text"
+              >
                 <b-form-select
                   v-model="publicWorksFields.estatusObraId"
                   autofocus
@@ -205,11 +236,7 @@
                 style="width: 100%; height: 500px"
                 @click="onAddMaker"
               >
-                <GMapMarker
-                  :zoom="10"
-                  :position="maker"
-                  :draggable="true"
-                />
+                <GMapMarker :zoom="10" :position="maker" :draggable="true" />
               </GMapMap>
             </b-card>
           </b-collapse>
@@ -266,6 +293,7 @@ export default {
     const DescriptionState = ref(false)
     const WorkStatusState = ref(false)
     const isAgency = ref(false)
+    // const AgencyNameState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
       { text: 'Obras publicas', to: '/Obras' },
@@ -281,6 +309,9 @@ export default {
       latitud: null,
       longitud: null,
       descripcion: null,
+      agencia: null,
+      representante: null,
+      rFC: null,
       estatusObraId: null,
       archivado: false
     })
@@ -306,7 +337,7 @@ export default {
         center.value.lng = data.longitud
       })
     }
-    const onAddMaker = (location) => {
+    const onAddMaker = location => {
       maker.value.lat = location.latLng.lat()
       maker.value.lng = location.latLng.lng()
       publicWorksFields.value.latitud = location.latLng.lat()
@@ -323,6 +354,9 @@ export default {
       { value: 'encargado', text: 'Encargado obra' },
       { value: 'operadorObra', text: 'Operador de la obra' },
       { value: 'operadorVehiculo', text: 'Operador del vehiculo' },
+      { value: 'agencia', text: 'Nombre de la agencia' },
+      { value: 'representante', text: 'Representate legal' },
+      { value: 'rFC', text: 'RFC' },
       { value: 'descripcion', text: 'Descripcion' },
       { value: 'oP_EstatusObras.nombre', text: 'Estatus de la obra' },
       { value: 'actions', text: 'Acciones' }
@@ -336,6 +370,7 @@ export default {
       NameWorksState.value = false
       DescriptionState.value = false
       WorkStatusState.value = false
+      // AgencyNameState.value = false
     }
 
     getPublicWorks(data => {
@@ -359,7 +394,9 @@ export default {
         NameWorksState.value = false
         return 'Este campo es requerido'
       }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ 0-9]+$/i.test(publicWorksFields.value.nombre)) {
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ 0-9]+$/i.test(publicWorksFields.value.nombre)
+      ) {
         NameWorksState.value = false
         return 'El nombre de la obra solo puede contener letras'
       }
@@ -371,15 +408,32 @@ export default {
       return true
     }
 
+    // const validateAgencyName = () => {
+    //   if (!publicWorksFields.value.agencia) {
+    //     AgencyNameState.value = false
+    //     return 'Este campo es requerido'
+    //   }
+    //   if (
+    //     !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ 0-9]+$/i.test(publicWorksFields.value.agencia)
+    //   ) {
+    //     AgencyNameState.value = false
+    //     return 'El nombre de la obra solo puede contener letras'
+    //   }
+    //   if (!publicWorksFields.value.agencia.trim().length > 0) {
+    //     AgencyNameState.value = false
+    //     return 'Este campo no puede contener espacios'
+    //   }
+    //   AgencyNameState.value = true
+    //   return true
+    // }
+
     const validateDescription = () => {
       if (!publicWorksFields.value.descripcion) {
         DescriptionState.value = false
         return 'Este campo es requerido'
       }
       if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
-          publicWorksFields.value.descripcion
-        )
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(publicWorksFields.value.descripcion)
       ) {
         DescriptionState.value = false
         return 'La descripcion solo puede contener letras y numeros'
@@ -479,6 +533,7 @@ export default {
       NameWorksState,
       WorkStatusState,
       DescriptionState,
+      // AgencyNameState,
       isAgency,
 
       onFiltered,
@@ -491,6 +546,7 @@ export default {
       // validateInCharge,
       validateDescription,
       validateWorkStatus,
+      // validateAgencyName,
       resetPublicWorksFields
     }
   }
@@ -499,6 +555,6 @@ export default {
 
 <style scoped>
 .form-check {
-    display: inline-block;
-    }
+  display: inline-block;
+}
 </style>
