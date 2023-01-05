@@ -1,5 +1,4 @@
 <template>
-  <b-card class="m-2">
     <b-row cols="3" align-h="end" class="m-3">
         <b-col>
         <b-form-input
@@ -78,7 +77,6 @@
         </b-button>
       </template>
     </EasyDataTable>
-  </b-card>
   <b-modal
     ref="DocumentModal"
     v-model="showModal"
@@ -189,6 +187,7 @@ export default {
               icon: 'error'
             })
             disableButton.value = true
+            refFile.value = null
           }
         })
       }
@@ -201,6 +200,7 @@ export default {
           text: 'No se ha seleccionado ningún documento.',
           icon: 'error'
         })
+        refFile.value = null
         return ''
       }
       createDocumentsAseo(props.AseoId, formData, data => {
@@ -218,6 +218,7 @@ export default {
           })
       })
       disableButton.value = true
+      refFile.value = null
       // refFile.value.files = []
     }
     const onDownloadFiles = () => {
@@ -242,6 +243,7 @@ export default {
         .then(result => {
           isloading.value = false
           disableButtonDownload.value = false
+          refFile.value = null
         })
     }
     const onDownloadFile = (Aseo) => {

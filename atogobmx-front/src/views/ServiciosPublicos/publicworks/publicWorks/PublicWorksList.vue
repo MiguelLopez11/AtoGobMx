@@ -114,63 +114,49 @@
                 style=""
                 v-model="isAgency"
                 size="lg"
-                :state="NameWorksState"
+                :state="true"
               >
               </b-form-checkbox>
             </b-form-group>
           </b-col>
           <!--Agregar encargado de obra-->
-          <b-col v-if="isAgency == false">
+          <b-col v-if="isAgency === false">
             <b-form-group class="mt-3" label="Encargado obra">
               <b-form-input v-model="publicWorksFields.encargado">
               </b-form-input>
             </b-form-group>
           </b-col>
           <!--Agregar operador de obra-->
-          <b-col v-if="isAgency == false">
+          <b-col v-if="isAgency === false">
             <b-form-group class="mt-3" label="Operador de la obra">
               <b-form-input v-model="publicWorksFields.operadorObra">
               </b-form-input>
             </b-form-group>
           </b-col>
           <!--Agregar operador de vehiculo-->
-          <b-col v-if="isAgency == false">
+          <b-col v-if="isAgency === false">
             <b-form-group class="mt-3" label="Operador del vehiculo">
               <b-form-input v-model="publicWorksFields.operadorVehiculo">
               </b-form-input>
             </b-form-group>
           </b-col>
           <!--Agregar nombre agencia-->
-          <b-col v-if="isAgency == false">
+          <b-col v-if="isAgency">
             <b-form-group class="mt-3" label="Nombre agencia">
-              <!-- <Field
-                name="AgencyNameField"
-                :rules="validateAgencyName"
-                as="text"
-              > -->
-                <b-form-input
-                  v-model="publicWorks.agencia"
-                >
-                </b-form-input>
-              <!-- </Field> -->
-              <!-- <ErrorMessage
-                class="text-danger"
-                name="AgencyNameField"
-              ></ErrorMessage> -->
+              <b-form-input v-model="publicWorks.agencia"> </b-form-input>
             </b-form-group>
           </b-col>
           <!--Agregar representante legal-->
-          <b-col v-if="isAgency == false">
+          <b-col v-if="isAgency">
             <b-form-group class="mt-3" label="Representante legal">
               <b-form-input v-model="publicWorksFields.representante">
               </b-form-input>
             </b-form-group>
           </b-col>
           <!--Agregar RFC-->
-          <b-col v-if="isAgency == false">
+          <b-col v-if="isAgency">
             <b-form-group class="mt-3" label="RFC">
-              <b-form-input v-model="publicWorksFields.rFC">
-              </b-form-input>
+              <b-form-input v-model="publicWorksFields.rFC"> </b-form-input>
             </b-form-group>
           </b-col>
           <!--agregar un estatus obra-->
@@ -224,8 +210,7 @@
               >
               <GMapMap
                 :center="center"
-                map-type-id="satellite"
-                :zoom="20"
+                :zoom="15"
                 :options="{
                   zoomControl: true,
                   mapTypeControl: false,
@@ -236,7 +221,10 @@
                 style="width: 100%; height: 500px"
                 @click="onAddMaker"
               >
-                <GMapMarker :zoom="10" :position="maker" :draggable="true" />
+                <GMapMarker
+                  :position="maker.position"
+                  :draggable="true"
+                />
               </GMapMap>
             </b-card>
           </b-collapse>
@@ -329,7 +317,12 @@ export default {
     })
 
     const center = ref({ lat: 20.5413702, lng: -102.691446 })
-    const maker = ref({ lat: 0, lng: 0 })
+    const maker = ref({
+      position: {
+        lat: 0,
+        lng: 0
+      }
+    })
 
     const onSelectCementery = () => {
       getCementeryById(publicWorksFields.value.cementerioId, data => {
@@ -338,8 +331,8 @@ export default {
       })
     }
     const onAddMaker = location => {
-      maker.value.lat = location.latLng.lat()
-      maker.value.lng = location.latLng.lng()
+      maker.value.position.lat = location.latLng.lat()
+      maker.value.position.lng = location.latLng.lng()
       publicWorksFields.value.latitud = location.latLng.lat()
       publicWorksFields.value.longitud = location.latLng.lng()
     }
@@ -351,12 +344,6 @@ export default {
     const fields = ref([
       // { value: 'obraId', text: 'ID', sortable: true },
       { value: 'nombre', text: 'Nombre de la obra' },
-      { value: 'encargado', text: 'Encargado obra' },
-      { value: 'operadorObra', text: 'Operador de la obra' },
-      { value: 'operadorVehiculo', text: 'Operador del vehiculo' },
-      { value: 'agencia', text: 'Nombre de la agencia' },
-      { value: 'representante', text: 'Representate legal' },
-      { value: 'rFC', text: 'RFC' },
       { value: 'descripcion', text: 'Descripcion' },
       { value: 'oP_EstatusObras.nombre', text: 'Estatus de la obra' },
       { value: 'actions', text: 'Acciones' }
@@ -408,25 +395,6 @@ export default {
       return true
     }
 
-    // const validateAgencyName = () => {
-    //   if (!publicWorksFields.value.agencia) {
-    //     AgencyNameState.value = false
-    //     return 'Este campo es requerido'
-    //   }
-    //   if (
-    //     !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ 0-9]+$/i.test(publicWorksFields.value.agencia)
-    //   ) {
-    //     AgencyNameState.value = false
-    //     return 'El nombre de la obra solo puede contener letras'
-    //   }
-    //   if (!publicWorksFields.value.agencia.trim().length > 0) {
-    //     AgencyNameState.value = false
-    //     return 'Este campo no puede contener espacios'
-    //   }
-    //   AgencyNameState.value = true
-    //   return true
-    // }
-
     const validateDescription = () => {
       if (!publicWorksFields.value.descripcion) {
         DescriptionState.value = false
@@ -472,16 +440,26 @@ export default {
     }
 
     const addPublicWorks = () => {
-      createPublicWorks(publicWorksFields.value, data => {
-        refreshTable()
+      if (maker.value.position.lat === 0 && maker.value.position.lng === 0) {
         swal.fire({
-          title: '¡Obras publicas registrado correctamente!',
-          text: 'La obra publica se ha registrado al sistema satisfactoriamente.',
-          icon: 'success'
+          title: '¡Mapa vacío!',
+          text: 'Marque en el mapa donde se encuentra el cementerio.',
+          icon: 'error'
         })
-      })
-      showModal.value = false
-      resetPublicWorksFields()
+      } else {
+        publicWorksFields.value.latitud = maker.value.position.lat
+        publicWorksFields.value.longitud = maker.value.position.lng
+        createPublicWorks(publicWorksFields.value, data => {
+          refreshTable()
+          swal.fire({
+            title: '¡Obras publicas registrado correctamente!',
+            text: 'La obra publica se ha registrado al sistema satisfactoriamente.',
+            icon: 'success'
+          })
+        })
+        showModal.value = false
+        resetPublicWorksFields()
+      }
     }
 
     const RemovePublicWorks = StreetLightingId => {

@@ -84,7 +84,7 @@
             <circle class="st0" cx="359.25" cy="299.36" r="13.92" />
             <circle class="st0" cx="378.97" cy="934.07" r="24.37" />
           </svg>
-          <p>Registro Aseo</p>
+          <p>Reportes Ciudadano</p>
         </b-button>
       </b-col>
       <b-col>
