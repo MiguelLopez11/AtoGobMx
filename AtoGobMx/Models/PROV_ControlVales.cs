@@ -13,6 +13,8 @@ namespace AtoGobMx.Models
         public DateTime? FechaVigencia { get; set; }
         public string? Recibio { get; set; }
         public string? Usuario { get; set; }
+        public string? Dependencia { get; set; }
+        public string? Subprograma { get; set; }
         public string? UsuarioAutoriza { get; set; }
         public int? DepartamentoId { get; set; }
         public int? ProveedorId { get; set; }

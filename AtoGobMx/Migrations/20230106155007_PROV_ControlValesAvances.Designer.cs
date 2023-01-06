@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20230106155007_PROV_ControlValesAvances")]
+    partial class PROV_ControlValesAvances
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1203,13 +1205,6 @@ namespace AtoGobMx.Migrations
 
                     b.Property<float?>("Importe")
                         .HasColumnType("float");
-
-                    b.Property<string>("Medida")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<double?>("Precio")
-                        .HasColumnType("double");
 
                     b.Property<int?>("ProductoId")
                         .HasColumnType("int");

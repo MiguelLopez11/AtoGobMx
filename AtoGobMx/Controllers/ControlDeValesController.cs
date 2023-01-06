@@ -40,61 +40,47 @@ namespace AtoGobMx.Controllers
         }
 
         [HttpGet("ControlDeVale/Download/{ControlValeId}")]
-        public async Task<ActionResult<PROV_ControlVales>> DownloadExpedienteAlumbrado(int ControlValeId)
+        public async Task<ActionResult<PROV_ControlVales>> DownloadControlDeVale(int ControlValeId)
         {
-            var departamento = "";
+            //var departamento = "";
             var vale = await _context.ControlDeVales
                 .Include(i => i.Departamentos)
                 .Include(i => i.PROV_Proveedor)
                 .Include(i => i.PROV_EstatusVale)
                 .Include(i => i.TipoVales)
+                .Include(i => i.PROV_DetalleVales)
                 .Where(w => !w.Archivado)
                 .FirstOrDefaultAsync(f => f.ControlValeId == ControlValeId);
-            //Tomar empleados relacionados al expediente
-            //var empleados = await _context.EmpleadosAlumbrado
-            //    .Include(i => i.Empleados)
-            //    .Where(w => w.ExpedienteAlumbradoId == ControlValeId)
-            //    .ToListAsync();
-            //Tomar vehiculos relacionados al expediente
-            //var vehiculos = await _context.VehiculosAlumbrado
-            //    .Include(i => i.Vehiculo)
-            //    .Where(w => w.ExpedienteAlumbradoId == ControlValeId)
-            //    .ToListAsync();
-            if (vale.DepartamentoId != null)
-            {
-                departamento = vale.Departamentos.Nombre;
-            }
+            //Tomar detalle relacionados al vale
+            var detallevale = await _context.PROV_DetalleVale
+                .Include(i => i.PROV_Producto)
+                .Where(w => w.ControlValeId == ControlValeId)
+                .ToListAsync();
             await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultChromiumRevision);
             await using var browser = await Puppeteer.LaunchAsync(new LaunchOptions
             {
                 Headless = true
             });
+
             var htmlContent = $"";
 
-            //var empleadosHtml = "";
-            //foreach (var empleado in empleados)
-            //{
-            //    empleadosHtml += $"<tr>\r\n          <td>\r\n            <h4>\r\n              <p class=\"label2\">{empleado.Empleados.NombreCompleto}</p>\r\n            </h4>\r\n          </td>\r\n        </tr>\r\n      </tbody>\r\n    </table>\r\n  </div>";
-            //}
-            
-            //var vehiculosHTML = "";
-            //foreach (var vehiculo in vehiculos)
-            //{
-            //    vehiculosHTML += $"";
-            //}
+            var detallevaleHTML = "";
+            foreach (var detalle in detallevale)
+            {
+                detallevaleHTML += $"";
+            }
 
-            //htmlContent += empleadosHtml;
-            //htmlContent += vehiculosHTML;
+            htmlContent += detallevaleHTML;
             await using var page = await browser.NewPageAsync();
             await page.EmulateMediaTypeAsync(MediaType.Screen);
             await page.SetContentAsync(htmlContent);
 
             var pdfContent = await page.PdfStreamAsync(new PdfOptions
             {
-                Format = PaperFormat.A4,
+                Format = PaperFormat.A0,
                 PrintBackground = true
             });
-            return File(pdfContent, "application/pdf", "converted.pdf");
+            return File(pdfContent, "application/pdf", $"Vale.pdf");
         }
 
         [HttpGet("{ControlValeId}")]

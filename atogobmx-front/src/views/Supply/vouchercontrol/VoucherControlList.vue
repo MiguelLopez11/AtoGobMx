@@ -325,8 +325,6 @@ import VoucherControlServices from '@/Services/vouchercontrol.Services'
 import EmployeeServices from '@/Services/employee.Services'
 import DepartamentServices from '@/Services/departament.Services'
 import ProviderServices from '@/Services/provider.Services'
-// import ProductVoucherServices from '@/Services/productvoucher.Services'
-// import DetailVoucherServices from '@/Services/detailvoucher.Services'
 import StatusVoucherServices from '@/Services/statusvoucher.Services'
 import TypeVoucherServices from '@/Services/typevoucher.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
@@ -362,8 +360,6 @@ export default {
     const employees = ref([])
     const departaments = ref([])
     const provider = ref([])
-    // const productVoucher = ref([])
-    // const detailVoucher = ref([])
     const statusVoucher = ref([])
     const typeVoucher = ref([])
     const employeesProvider = ref([])
@@ -415,11 +411,11 @@ export default {
       departaments.value = data
     })
 
-    const onDownloadFile = Aseo => {
+    const onDownloadFile = ControlVale => {
       isloading.value = true
       disableButtonDownload.value = true
       axiosPrivate({
-        url: `/Archivos/DocumentosAseoPublico/Dowload/${props.AseoId}/${Aseo.archivosAseoId}`,
+        url: `/ControlDeVales/ControlDeVale/Download/${ControlVale.controlValeId}`,
         method: 'GET',
         responseType: 'blob' // important
       })
@@ -427,7 +423,7 @@ export default {
           const url = window.URL.createObjectURL(new Blob([response.data]))
           const link = document.createElement('a')
           link.href = url
-          link.setAttribute('download', `${Aseo.nombre}${Aseo.tipoArchivo}`)
+          link.setAttribute('download', `Expediente_${ControlVale.recibio}.pdf`)
           document.body.appendChild(link)
           link.click()
         })
@@ -522,7 +518,7 @@ export default {
       TypeVoucherState.value = false
     }
 
-    getVoucherControl(props.ControlValeId, data => {
+    getVoucherControl(data => {
       voucherControl.value = data
       if (voucherControl.value.length > 0) {
         isloading.value = false
@@ -649,7 +645,7 @@ export default {
     // pone mis cambios de mis campos vacios de nuevo
     const refreshTable = () => {
       isloading.value = true
-      getVoucherControl(props.ControlValeId, data => {
+      getVoucherControl(data => {
         voucherControl.value = data
         if (voucherControl.value.length > 0) {
           isloading.value = false
