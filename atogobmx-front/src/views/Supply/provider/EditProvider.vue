@@ -209,9 +209,9 @@ export default {
         validateState()
         return 'Este campo es requerido'
       }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(provider.value.direccion)) {
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ .# 0-9]+$/i.test(provider.value.direccion)) {
         DirectionState.value = false
-        return 'La descripcion solo puede contener letras'
+        return 'La direccion solo puede contener letras y numeros'
       }
       validateState()
       return true

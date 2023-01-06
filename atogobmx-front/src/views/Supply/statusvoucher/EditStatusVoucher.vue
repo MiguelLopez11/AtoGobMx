@@ -27,6 +27,7 @@
             <b-form-group class="mt-3" label="Descripcion">
                 <b-form-textarea
                   v-model="statusVoucher.descripcion"
+                  rows="4"
                 ></b-form-textarea>
             </b-form-group>
           </b-col>

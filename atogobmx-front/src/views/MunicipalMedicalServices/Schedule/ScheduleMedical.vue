@@ -74,6 +74,7 @@
                       selectText="Seleccionar"
                       cancelText="Cancelar"
                       modelType="yyyy-MM-dd HH:mm"
+                      :auto-position="false"
                       locale="es"
                       :state="dateState"
                     >
