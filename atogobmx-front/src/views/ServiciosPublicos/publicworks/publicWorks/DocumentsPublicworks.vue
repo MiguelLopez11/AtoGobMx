@@ -1,5 +1,4 @@
 <template>
-  <b-card class="m-2">
     <b-row cols="3" align-h="end" class="m-3">
         <b-col>
         <b-form-input
@@ -13,12 +12,8 @@
         <b-button
           variant="success"
           type="submit"
+          size="lg"
           class="w-100"
-          style="
-          height: 55px;
-          font-size: 15px;
-          margin-bottom: 15px;
-        "
           @click="showModal = !showModal"
         >
           <i class="bi bi-file-earmark-plus"></i>
@@ -31,11 +26,7 @@
           v-if="documents.length > 0"
           variant="primary"
           size="lg"
-          class="w-100"
-          style="
-            font-size: 18px;
-            text-align: center;
-          "
+          class="w-100 display-6"
           type="submit"
           @click="onDownloadFiles"
         >
@@ -78,7 +69,6 @@
         </b-button>
       </template>
     </EasyDataTable>
-  </b-card>
   <b-modal
     ref="DocumentModal"
     v-model="showModal"

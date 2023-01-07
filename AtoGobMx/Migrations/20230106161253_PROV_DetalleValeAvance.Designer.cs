@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20230106161253_PROV_DetalleValeAvance")]
+    partial class PROV_DetalleValeAvance
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1205,6 +1207,7 @@ namespace AtoGobMx.Migrations
                         .HasColumnType("float");
 
                     b.Property<string>("Medida")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<double?>("Precio")
@@ -2267,7 +2270,7 @@ namespace AtoGobMx.Migrations
             modelBuilder.Entity("AtoGobMx.Models.PROV_DetalleVale", b =>
                 {
                     b.HasOne("AtoGobMx.Models.PROV_ControlVales", "PROV_ControlVale")
-                        .WithMany("PROV_DetalleVale")
+                        .WithMany("PROV_DetalleVales")
                         .HasForeignKey("ControlValeId");
 
                     b.HasOne("AtoGobMx.Models.PROV_Producto", "PROV_Producto")
@@ -2522,7 +2525,7 @@ namespace AtoGobMx.Migrations
 
             modelBuilder.Entity("AtoGobMx.Models.PROV_ControlVales", b =>
                 {
-                    b.Navigation("PROV_DetalleVale");
+                    b.Navigation("PROV_DetalleVales");
 
                     b.Navigation("PROV_Vehiculo");
                 });

@@ -149,7 +149,7 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!--Agregar usuario proveeduria-->
+          <!--Agregar usuario autorizado-->
           <b-col>
             <b-form-group class="mt-3" label="Usuario autorizador">
               <Field
@@ -171,6 +171,32 @@
                 class="text-danger"
                 name="ColorField"
               ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <!--Agregar dependencia-->
+          <b-col>
+            <b-form-group class="mt-3" label="Dependencia">
+              <Field name="DependencyField" :rules="validateDependency" as="text">
+                <b-form-input
+                  v-model="voucherControlFields.dependencia"
+                  :state="DependencyState"
+                >
+                </b-form-input>
+              </Field>
+              <ErrorMessage class="text-danger" name="DependencyField"></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <!--Agregar subprograma-->
+          <b-col>
+            <b-form-group class="mt-3" label="Subprograma">
+              <Field name="AppletField" :rules="validateApplet" as="text">
+                <b-form-input
+                  v-model="voucherControlFields.subprograma"
+                  :state="AppletState"
+                >
+                </b-form-input>
+              </Field>
+              <ErrorMessage class="text-danger" name="AppletField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <!--Agregar Fecha vigencia-->
@@ -325,8 +351,6 @@ import VoucherControlServices from '@/Services/vouchercontrol.Services'
 import EmployeeServices from '@/Services/employee.Services'
 import DepartamentServices from '@/Services/departament.Services'
 import ProviderServices from '@/Services/provider.Services'
-// import ProductVoucherServices from '@/Services/productvoucher.Services'
-// import DetailVoucherServices from '@/Services/detailvoucher.Services'
 import StatusVoucherServices from '@/Services/statusvoucher.Services'
 import TypeVoucherServices from '@/Services/typevoucher.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
@@ -362,8 +386,6 @@ export default {
     const employees = ref([])
     const departaments = ref([])
     const provider = ref([])
-    // const productVoucher = ref([])
-    // const detailVoucher = ref([])
     const statusVoucher = ref([])
     const typeVoucher = ref([])
     const employeesProvider = ref([])
@@ -386,6 +408,8 @@ export default {
     const StatusVoucherState = ref(false)
     const TypeVoucherState = ref(false)
     const disableButtonDownload = ref(false)
+    const DependencyState = ref(false)
+    const AppletState = ref(false)
     const controlValeId = ref(props.ControlValeId)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
@@ -399,6 +423,8 @@ export default {
       fechaVigencia: null,
       recibio: null,
       usuario: null,
+      dependencia: null,
+      subprograma: null,
       usuarioAutoriza: null,
       departamentoId: null,
       proveedorId: null,
@@ -415,11 +441,11 @@ export default {
       departaments.value = data
     })
 
-    const onDownloadFile = Aseo => {
+    const onDownloadFile = ControlVale => {
       isloading.value = true
       disableButtonDownload.value = true
       axiosPrivate({
-        url: `/Archivos/DocumentosAseoPublico/Dowload/${props.AseoId}/${Aseo.archivosAseoId}`,
+        url: `/ControlDeVales/ControlDeVale/Download/${ControlVale.controlValeId}`,
         method: 'GET',
         responseType: 'blob' // important
       })
@@ -427,7 +453,7 @@ export default {
           const url = window.URL.createObjectURL(new Blob([response.data]))
           const link = document.createElement('a')
           link.href = url
-          link.setAttribute('download', `${Aseo.nombre}${Aseo.tipoArchivo}`)
+          link.setAttribute('download', `Expediente_${ControlVale.recibio}.pdf`)
           document.body.appendChild(link)
           link.click()
         })
@@ -520,9 +546,11 @@ export default {
       DetailVoucherState.value = false
       StatusVoucherState.value = false
       TypeVoucherState.value = false
+      DependencyState.value = false
+      AppletState.value = false
     }
 
-    getVoucherControl(props.ControlValeId, data => {
+    getVoucherControl(data => {
       voucherControl.value = data
       if (voucherControl.value.length > 0) {
         isloading.value = false
@@ -592,6 +620,44 @@ export default {
       return true
     }
 
+    const validateDependency = () => {
+      if (!voucherControlFields.value.dependencia) {
+        DependencyState.value = false
+        return 'Este campo es requerido'
+      }
+      if (!voucherControlFields.value.dependencia.trim().length > 0) {
+        DependencyState.value = false
+        return 'Este campo no puede contener solo espacios'
+      }
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(voucherControlFields.value.dependencia)
+      ) {
+        DependencyState.value = false
+        return 'El nombre solo puede contener letras'
+      }
+      DependencyState.value = true
+      return true
+    }
+
+    const validateApplet = () => {
+      if (!voucherControlFields.value.subprograma) {
+        AppletState.value = false
+        return 'Este campo es requerido'
+      }
+      if (!voucherControlFields.value.subprograma.trim().length > 0) {
+        AppletState.value = false
+        return 'Este campo no puede contener solo espacios'
+      }
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(voucherControlFields.value.subprograma)
+      ) {
+        AppletState.value = false
+        return 'El nombre solo puede contener letras'
+      }
+      AppletState.value = true
+      return true
+    }
+
     const validateUserAuthoriser = () => {
       if (!voucherControlFields.value.usuarioAutoriza) {
         employeeAuthoriserState.value = false
@@ -649,7 +715,7 @@ export default {
     // pone mis cambios de mis campos vacios de nuevo
     const refreshTable = () => {
       isloading.value = true
-      getVoucherControl(props.ControlValeId, data => {
+      getVoucherControl(data => {
         voucherControl.value = data
         if (voucherControl.value.length > 0) {
           isloading.value = false
@@ -732,6 +798,8 @@ export default {
       DetailVoucherState,
       StatusVoucherState,
       TypeVoucherState,
+      DependencyState,
+      AppletState,
       disableButtonDownload,
       controlValeId,
 
@@ -751,6 +819,8 @@ export default {
       validateDetailVoucher,
       validateStatusVoucher,
       validateTypeVoucher,
+      validateDependency,
+      validateApplet,
       onDownloadFile,
       resetVoucherControlFields
     }

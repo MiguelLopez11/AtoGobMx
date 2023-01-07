@@ -25,13 +25,9 @@
           <!--Agregar Descripcion-->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion">
-              <!-- <Field name="DescriptionField" :rules="validateDescription" as="text"> -->
                 <b-form-textarea
                   v-model="productVoucher.descripcion"
                 ></b-form-textarea>
-                  <!-- :state="DescriptionState" -->
-              <!-- </Field> -->
-              <!-- <ErrorMessage class="text-danger" name="DescriptionField"></ErrorMessage> -->
             </b-form-group>
           </b-col>
         </b-row>
@@ -72,7 +68,6 @@ export default {
     const router = useRoute()
     const redirect = useRouter()
     const NameState = ref(false)
-    const DescriptionState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
       { text: 'Productos', to: '/ServiciosPublicos/Producto/list' },
@@ -109,36 +104,19 @@ export default {
       return true
     }
 
-    const validateDescription = () => {
-      if (!productVoucher.value.descripcion) {
-        validateState()
-        return 'Este campo es requerido'
-      }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(productVoucher.value.descripcion)) {
-        DescriptionState.value = false
-        return 'La descripcion solo puede contener letras'
-      }
-      validateState()
-      return true
-    }
-
     const validateState = () => {
       // eslint-disable-next-line no-unneeded-ternary
       NameState.value = productVoucher.value.nombre === '' ? false : true
-      // eslint-disable-next-line no-unneeded-ternary
-      DescriptionState.value = productVoucher.value.descripcion === '' ? false : true
     }
 
     return {
       productVoucher,
       breadcrumbItems,
       NameState,
-      DescriptionState,
 
       onUpdateProductVoucher,
       validateName,
-      validateState,
-      validateDescription
+      validateState
     }
   }
 }

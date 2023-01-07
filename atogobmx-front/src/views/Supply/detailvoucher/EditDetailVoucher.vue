@@ -23,65 +23,38 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
+          <!--Agregar medida -->
+          <b-col>
+            <b-form-group class="mt-3" label="Medida">
+              <b-form-input v-model="detailVoucher.medida" >
+              </b-form-input>
+            </b-form-group>
+          </b-col>
           <!--Agregar Precio -->
           <b-col>
             <b-form-group class="mt-3" label="Precio">
-              <Field name="PriceField" :rules="validatePrice" as="number">
-                <b-form-input
-                  v-model="detailVoucher.precio"
-                  :state="PriceState"
-                  type="number"
-                >
-                </b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="PriceField"
-              ></ErrorMessage>
+              <b-form-input v-model="detailVoucher.precio" type="number">
+              </b-form-input>
             </b-form-group>
           </b-col>
-          <!--Agregar IVA-->
+          <!--Agregar importe -->
           <b-col>
-            <b-form-group class="mt-3" label="IVA">
-              <Field name="IVAField" :rules="validateIVA" as="number">
-                <b-form-input
-                  v-model="detailVoucher.iva"
-                  :state="IVAState"
-                  type="number"
-                >
-                </b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="IVAField"
-              ></ErrorMessage>
+            <b-form-group class="mt-3" label="Importe">
+              <b-form-input v-model="detailVoucher.importe" type="number">
+              </b-form-input>
             </b-form-group>
           </b-col>
-          <!--Agregar subtotal -->
+          <!--Agregar Total -->
           <b-col>
             <b-form-group class="mt-3" label="Total">
-              <Field name="TotalField" :rules="validateTotal" as="number">
-                <b-form-input
-                  v-model="detailVoucher.subtotal"
-                  :state="TotalState"
-                  type="number"
-                >
-                </b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="TotalField"
-              ></ErrorMessage>
+              <b-form-input v-model="detailVoucher.subtotal" type="number">
+              </b-form-input>
             </b-form-group>
           </b-col>
           <!--Agregar Producto-->
           <b-col>
             <b-form-group class="mt-3" label="Producto: ">
-              <Field
-                name="ProductField"
-                :rules="validateProduct"
-                as="text"
-              >
+              <Field name="ProductField" :rules="validateProduct" as="text">
                 <b-form-select
                   v-model="detailVoucher.productoId"
                   autofocus
@@ -132,16 +105,15 @@ export default {
   },
   setup () {
     const swal = inject('$swal')
-    const { getDetailVoucherById, updateDetailVoucher } = DetailVoucherServices()
+    const { getDetailVoucherById, updateDetailVoucher } =
+      DetailVoucherServices()
     const { getProductVoucher } = ProductVoucherServices()
     const detailVoucher = ref([])
     const productVoucher = ref([])
     const router = useRoute()
     const redirect = useRouter()
     const QuantityState = ref(false)
-    const PriceState = ref(false)
     const IVAState = ref(false)
-    const TotalState = ref(false)
     const ProductState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
@@ -191,20 +163,6 @@ export default {
       return true
     }
 
-    const validatePrice = () => {
-      if (!detailVoucher.value.precio) {
-        validateState()
-        return 'Este campo es requerido'
-      }
-
-      if (!/^[0-9]+$/i.test(detailVoucher.value.precio)) {
-        PriceState.value = false
-        return 'Este campo solo puede contener numeros'
-      }
-      validateState()
-      return true
-    }
-
     const validateIVA = () => {
       if (!detailVoucher.value.iva) {
         validateState()
@@ -216,20 +174,6 @@ export default {
         return 'Este campo solo puede contener numeros'
       }
       validateState()
-      return true
-    }
-
-    const validateTotal = () => {
-      if (!detailVoucher.value.subtotal) {
-        TotalState.value = false
-        return 'Este campo es requerido'
-      }
-
-      if (!/^[0-9]+$/i.test(detailVoucher.value.subtotal)) {
-        TotalState.value = false
-        return 'Este campo solo puede contener numeros'
-      }
-      TotalState.value = false
       return true
     }
 
@@ -246,11 +190,7 @@ export default {
       // eslint-disable-next-line no-unneeded-ternary
       QuantityState.value = detailVoucher.value.cantidad === '' ? false : true
       // eslint-disable-next-line no-unneeded-ternary
-      PriceState.value = detailVoucher.value.precio === '' ? false : true
-      // eslint-disable-next-line no-unneeded-ternary
       IVAState.value = detailVoucher.value.iva === '' ? false : true
-      // eslint-disable-next-line no-unneeded-ternary
-      TotalState.value = detailVoucher.value.subtotal === '' ? false : true
       // eslint-disable-next-line no-unneeded-ternary
       ProductState.value = detailVoucher.value.productoId === '' ? false : true
     }
@@ -261,14 +201,11 @@ export default {
       breadcrumbItems,
       QuantityState,
       IVAState,
-      TotalState,
       ProductState,
 
       onUpdateDetailVoucher,
       validateQuantity,
-      validatePrice,
       validateIVA,
-      validateTotal,
       validateProduct
     }
   }

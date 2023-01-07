@@ -3,6 +3,7 @@ using System;
 using AtoGobMx.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    partial class AtoGobMxContextModelSnapshot : ModelSnapshot
+    [Migration("20230106155007_PROV_ControlValesAvances")]
+    partial class PROV_ControlValesAvances
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1204,12 +1206,6 @@ namespace AtoGobMx.Migrations
                     b.Property<float?>("Importe")
                         .HasColumnType("float");
 
-                    b.Property<string>("Medida")
-                        .HasColumnType("longtext");
-
-                    b.Property<double?>("Precio")
-                        .HasColumnType("double");
-
                     b.Property<int?>("ProductoId")
                         .HasColumnType("int");
 
@@ -2267,7 +2263,7 @@ namespace AtoGobMx.Migrations
             modelBuilder.Entity("AtoGobMx.Models.PROV_DetalleVale", b =>
                 {
                     b.HasOne("AtoGobMx.Models.PROV_ControlVales", "PROV_ControlVale")
-                        .WithMany("PROV_DetalleVale")
+                        .WithMany("PROV_DetalleVales")
                         .HasForeignKey("ControlValeId");
 
                     b.HasOne("AtoGobMx.Models.PROV_Producto", "PROV_Producto")
@@ -2522,7 +2518,7 @@ namespace AtoGobMx.Migrations
 
             modelBuilder.Entity("AtoGobMx.Models.PROV_ControlVales", b =>
                 {
-                    b.Navigation("PROV_DetalleVale");
+                    b.Navigation("PROV_DetalleVales");
 
                     b.Navigation("PROV_Vehiculo");
                 });

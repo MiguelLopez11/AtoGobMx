@@ -11,6 +11,8 @@ namespace AtoGobMx.Models
         public int DetalleValeId { get; set; }
         public int? ProductoId { get; set; }
         public int? Cantidad { get; set; }
+        public string? Medida { get; set; }
+        public double? Precio { get; set; }
         public float? Importe { get; set; }
         public float? Total { get; set; }
         public int? ControlValeId { get; set; }

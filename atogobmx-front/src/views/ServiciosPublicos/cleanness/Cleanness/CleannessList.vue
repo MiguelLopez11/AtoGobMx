@@ -133,10 +133,10 @@
             <b-form-group class="mt-3" label="Fecha">
               <Field name="DateOfIssueField" :rules="validateDateOfIssue" as="">
                 <Datepicker
-                  locale="es"
-                  name="date"
-                  text-input
                   v-model="cleannessServiceFields.fecha"
+                  locale="es"
+                  autoApply
+                  :enableTimePicker="false"
                   :state="DateOfIssueState"
                 ></Datepicker>
               </Field>
@@ -159,23 +159,6 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!--Agrgar objetivo -->
-          <!-- <b-col>
-            <b-form-group class="mt-3" label="Objetivo">
-              <Field name="ObjectiveField" :rules="validateObjective" as="text">
-                <b-form-input
-                  v-model="cleannessServiceFields.objetivo"
-                  :state="ObjectiveState"
-                >
-                </b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="ObjectiveField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col> -->
-          <!--Agregar Descripcion-->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion del problema">
                 <b-form-textarea
@@ -184,24 +167,6 @@
                 ></b-form-textarea>
             </b-form-group>
           </b-col>
-          <!-- <b-col>
-            <b-form-group class="mt-3" label="Descripcion">
-              <Field
-                name="DescriptionField"
-                :rules="validateDescription"
-                as="text"
-              >
-                <b-form-input
-                  v-model="cleannessServiceFields.descripcion"
-                  :state="DescriptionState"
-                ></b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="DescriptionField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col> -->
         </b-row>
 
         <b-row align-h="end">
@@ -210,7 +175,6 @@
             variant="primary"
             @click="resetCleannessServiceFields"
           >
-            <!-- v-b-modal.modal-cementery -->
             Cancelar
           </b-button>
           <b-button class="w-auto m-2" variant="success" type="submit">
@@ -259,7 +223,7 @@ export default {
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
       { text: 'Aseo publico', to: '/ServiciosPublicos/AseoPublico/list' },
-      { text: 'Aseo publico' }
+      { text: 'Reporte Ciuadadano' }
     ])
 
     const cleannessServiceFields = ref({
@@ -282,7 +246,6 @@ export default {
       { value: 'problema', text: 'Problema' },
       { value: 'fecha', text: 'fecha' },
       { value: 'domicilio', text: 'Domicilio' },
-      // { value: 'objetivo', text: 'Objetivo' },
       { value: 'descripcion', text: 'Descripcion' },
       { value: 'actions', text: 'Acciones' }
     ])

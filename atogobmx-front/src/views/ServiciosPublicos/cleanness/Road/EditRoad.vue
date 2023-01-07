@@ -87,9 +87,9 @@
             </b-col>
             <GoogleMap
               api-key="AIzaSyCYAwe7Fk4PQLI3bBBqxUViN4IOXVGd_z0"
-              style="width: 100%; height: 250px"
+              style="width: 100%; height: 450px"
               :center="center"
-              :zoom="18"
+              :zoom="14"
               @click="addMaker"
             >
               <MarkerCluster>
@@ -186,7 +186,7 @@ export default {
       strokeOpacity: 1.0,
       strokeWeight: 5
     })
-    const center = ref({ lat: 20.5546629, lng: -102.4953904 })
+    const center = ref({ lat: 20.5530788, lng: -102.5316817 })
     const addMaker = location => {
       locations.value.push({
         lat: location.latLng.lat(),

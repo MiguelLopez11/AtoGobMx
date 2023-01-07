@@ -59,10 +59,12 @@
                   </div>
                   <div class="text-center text-lg-start mt-4 pt-2">
                     <button
+                      :disabled="isLoggin"
                       type="success"
                       class="btn btn-lg"
                       style="padding-left: 2.5rem; background-color: rgb(94,80,238); color:white; padding-right: 2.5rem;"
                     >
+                      <b-spinner v-if="isLoggin" small></b-spinner>
                       Iniciar Sesión
                     </button>
                   </div>
@@ -93,12 +95,14 @@ export default {
     const { LogIn } = LogInServices()
     const userNameState = ref(false)
     const passwordState = ref(false)
+    const isLoggin = ref(false)
     window.sessionStorage.removeItem('session')
     const user = ref({
       userName: '',
       password: ''
     })
     const onLogIn = () => {
+      isLoggin.value = true
       LogIn(user.value, data => {
         if (data.token) {
           window.sessionStorage.setItem('isLogged', true)
@@ -118,6 +122,7 @@ export default {
             })
             .then(result => {
               if (result.isConfirmed) {
+                isLoggin.value = false
                 redirect.go('/')
               }
             })
@@ -127,6 +132,7 @@ export default {
             text: 'Usuario o contraseña ingresado no es correcto.',
             icon: 'error'
           })
+          isLoggin.value = false
         }
       })
     }
@@ -178,7 +184,8 @@ export default {
       validateUserName,
       validatePassword,
       validateState,
-      onLogIn
+      onLogIn,
+      isLoggin
     }
   }
 }

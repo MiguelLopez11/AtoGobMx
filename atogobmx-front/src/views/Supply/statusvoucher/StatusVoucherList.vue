@@ -103,20 +103,10 @@
           <!--Agregar Descripcion-->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion">
-              <Field
-                name="DescriptionField"
-                :rules="validateDescription"
-                as="text"
-              >
-                <b-form-input
+                <b-form-textarea
                   v-model="statusVoucherFields.descripcion"
-                  :state="DescriptionState"
-                ></b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="DescriptionField"
-              ></ErrorMessage>
+                  rows="4"
+                ></b-form-textarea>
             </b-form-group>
           </b-col>
         </b-row>
@@ -163,7 +153,6 @@ export default {
     const searchValue = ref('')
     const searchField = ref('nombre')
     const NameState = ref(false)
-    const DescriptionState = ref(false)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
       { text: 'Proveeduria', to: '/Proveeduria' },
@@ -193,7 +182,6 @@ export default {
         JSON.stringify(statusVoucherFieldsBlank)
       )
       NameState.value = false
-      DescriptionState.value = false
     }
 
     getStatusVoucher(data => {
@@ -225,25 +213,6 @@ export default {
         return 'Este campo no puede contener espacios'
       }
       NameState.value = true
-      return true
-    }
-
-    const validateDescription = () => {
-      if (!statusVoucherFields.value.descripcion) {
-        DescriptionState.value = false
-        return 'Este campo es requerido'
-      }
-      if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(statusVoucherFields.value.descripcion)
-      ) {
-        DescriptionState.value = false
-        return 'La descripcion solo puede contener letras'
-      }
-      if (!statusVoucherFields.value.descripcion.trim().length > 0) {
-        DescriptionState.value = false
-        return 'Este campo no puede contener espacios'
-      }
-      DescriptionState.value = true
       return true
     }
 
@@ -320,14 +289,12 @@ export default {
       statusVoucherFieldsBlank,
       fields,
       NameState,
-      DescriptionState,
 
       onFiltered,
       addStatusVoucher,
       refreshTable,
       RemoveStatusVoucher,
       validateName,
-      validateDescription,
       resetStatusVoucherFields
     }
   }

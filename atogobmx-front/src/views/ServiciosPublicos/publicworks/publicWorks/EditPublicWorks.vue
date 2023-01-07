@@ -4,9 +4,6 @@
       <b-breadcrumb class="p-0" :items="breadcrumbItems"> </b-breadcrumb>
     </b-card>
     <b-card>
-      <div>
-        <h3>Expediente Alumbrado</h3>
-      </div>
       <b-tabs content-class="mt-3">
         <b-tab title="Datos generales" active>
           <b-card>
@@ -43,57 +40,47 @@
                       style=""
                       v-model="isAgency"
                       size="lg"
-                      :state="NameWorksState"
+                      :state="true"
                     >
                     </b-form-checkbox>
                   </b-form-group>
                 </b-col>
                 <!--Agregar encargado de obra-->
-                <b-col v-if="isAgency == false">
+                <b-col v-if="isAgency === false">
                   <b-form-group class="mt-3" label="Encargado obra">
                     <b-form-input v-model="publicWorks.encargado">
                     </b-form-input>
                   </b-form-group>
                 </b-col>
                 <!--Agregar operador de obra-->
-                <b-col v-if="isAgency == false">
+                <b-col v-if="isAgency === false">
                   <b-form-group class="mt-3" label="Operador de la obra">
                     <b-form-input v-model="publicWorks.operadorObra">
                     </b-form-input>
                   </b-form-group>
                 </b-col>
                 <!--Agregar operador de vehiculo-->
-                <b-col v-if="isAgency == false">
+                <b-col v-if="isAgency === false">
                   <b-form-group class="mt-3" label="Operador del vehiculo">
                     <b-form-input v-model="publicWorks.operadorVehiculo">
                     </b-form-input>
                   </b-form-group>
                 </b-col>
                 <!--Agregar nombre agencia-->
-                <b-col v-if="isAgency == false">
+                <b-col v-if="isAgency">
                   <b-form-group class="mt-3" label="Nombre agencia">
-                    <!-- <Field
-                      name="AgencyNameField"
-                      :rules="validateAgencyName"
-                      as="text"
-                    > -->
                     <b-form-input v-model="publicWorks.agencia"> </b-form-input>
-                    <!-- </Field>
-                    <ErrorMessage
-                      class="text-danger"
-                      name="AgencyNameField"
-                    ></ErrorMessage> -->
                   </b-form-group>
                 </b-col>
                 <!--Agregar representante legal-->
-                <b-col v-if="isAgency == false">
+                <b-col v-if="isAgency">
                   <b-form-group class="mt-3" label="Representante legal">
                     <b-form-input v-model="publicWorks.representante">
                     </b-form-input>
                   </b-form-group>
                 </b-col>
                 <!--Agregar RFC-->
-                <b-col v-if="isAgency == false">
+                <b-col v-if="isAgency">
                   <b-form-group class="mt-3" label="RFC">
                     <b-form-input v-model="publicWorks.rFC">
                     </b-form-input>
@@ -148,8 +135,7 @@
                 <b-card>
                   <GMapMap
                     :center="center"
-                    map-type-id="satellite"
-                    :zoom="20"
+                    :zoom="15"
                     :options="{
                       zoomControl: true,
                       mapTypeControl: false,
@@ -160,7 +146,6 @@
                     style="width: 100%; height: 500px"
                   >
                     <GMapMarker
-                      :zoom="10"
                       :position="center"
                       :draggable="true"
                       @drag="updateCoordinates"
@@ -260,7 +245,7 @@ export default {
     }
 
     getWorksStatus(data => {
-      publicWorks.value = data
+      worksStatus.value = data
       if (data.length === 0) {
         swal.fire({
           title: 'No se encuentra un estatus_OP registrado!',
@@ -269,7 +254,6 @@ export default {
         })
       }
     })
-
     const center = ref({ lat: 0, lng: 0 })
 
     const updateCoordinates = location => {

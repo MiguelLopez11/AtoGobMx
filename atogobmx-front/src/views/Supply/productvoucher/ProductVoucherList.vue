@@ -103,20 +103,10 @@
           <!--Agregar Descripcion-->
           <b-col>
             <b-form-group class="mt-3" label="Descripcion">
-              <!-- <Field
-                name="DescriptionField"
-                :rules="validateDescription"
-                as="text"
-              > -->
               <b-form-textarea
                 v-model="productVoucherFields.descripcion"
                 rows="4"
               ></b-form-textarea>
-              <!-- </Field> -->
-              <!-- <ErrorMessage
-                class="text-danger"
-                name="DescriptionField"
-              ></ErrorMessage> -->
             </b-form-group>
           </b-col>
         </b-row>
@@ -230,27 +220,6 @@ export default {
       return true
     }
 
-    // const validateDescription = () => {
-    //   if (!productVoucherFields.value.descripcion) {
-    //     DescriptionState.value = false
-    //     return 'Este campo es requerido'
-    //   }
-    //   if (
-    //     !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
-    //       productVoucherFields.value.descripcion
-    //     )
-    //   ) {
-    //     DescriptionState.value = false
-    //     return 'La descripcion solo puede contener letras'
-    //   }
-    //   if (!productVoucherFields.value.descripcion.trim().length > 0) {
-    //     DescriptionState.value = false
-    //     return 'Este campo no puede contener espacios'
-    //   }
-    //   DescriptionState.value = true
-    //   return true
-    // }
-
     // pone mis cambios de mis campos vacios de nuevo
     const refreshTable = () => {
       isloading.value = true
@@ -331,7 +300,6 @@ export default {
       refreshTable,
       RemoveProductVoucher,
       validateName,
-      // validateDescription,
       resetProductVoucherFields
     }
   }
