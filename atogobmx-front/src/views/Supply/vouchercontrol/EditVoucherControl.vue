@@ -27,53 +27,83 @@
                   <ErrorMessage name="DateOfIssueField"></ErrorMessage>
                 </b-form-group>
               </b-col>
-              <!--Checkbox-->
+              <!--Agregar usuario proveeduria-->
               <b-col>
-                <b-form-group horizontal class="mt-3" label="¿Autorizacion?">
-                  <b-form-checkbox
-                    style=""
-                    size="lg"
-                    v-model="isAgency"
-                    :state="departamentState"
-                  />
-                </b-form-group>
-              </b-col>
-              <!--Agregar usuario-->
-              <b-col v-if="isAgency == false">
                 <b-form-group class="mt-3" label="Usuario">
-                  <Field
-                    name="UserNameField"
-                    :rules="validateUserName"
-                    as="text"
-                  >
-                    <b-form-input
+                  <Field name="ColorField" :rules="validateEmployee" as="text">
+                    <b-form-select
                       v-model="voucherControl.usuario"
-                      :state="UserNameState"
-                    ></b-form-input>
+                      autofocus
+                      :state="employeeState"
+                      value-field="nombreCompleto"
+                      text-field="nombreCompleto"
+                      :options="employeesProvider"
+                    >
+                    </b-form-select>
                   </Field>
                   <ErrorMessage
                     class="text-danger"
-                    name="UserNameField"
+                    name="ColorField"
                   ></ErrorMessage>
                 </b-form-group>
               </b-col>
               <!--Agregar usuario autorizado-->
-              <b-col v-if="isUserName == false">
-                <b-form-group class="mt-3" label="Autorizado">
+              <b-col>
+                <b-form-group class="mt-3" label="Usuario autorizador">
                   <Field
-                    name="AuthorizedUserField"
-                    :rules="validateAuthorizedUser"
+                    name="ColorField"
+                    :rules="validateUserAuthoriser"
+                    as="text"
+                  >
+                    <b-form-select
+                      v-model="voucherControl.usuarioAutoriza"
+                      autofocus
+                      :state="employeeAuthoriserState"
+                      value-field="nombreCompleto"
+                      text-field="nombreCompleto"
+                      :options="employeesProvider"
+                    >
+                    </b-form-select>
+                  </Field>
+                  <ErrorMessage
+                    class="text-danger"
+                    name="ColorField"
+                  ></ErrorMessage>
+                </b-form-group>
+              </b-col>
+              <!--Agregar dependencia-->
+              <b-col>
+                <b-form-group class="mt-3" label="Dependencia">
+                  <Field
+                    name="DependencyField"
+                    :rules="validateDependency"
                     as="text"
                   >
                     <b-form-input
-                      v-model="voucherControl.usuarioAutoriza"
-                      :state="AuthorizedUserState"
+                      v-model="voucherControl.dependencia"
+                      :state="DependencyState"
                     >
                     </b-form-input>
                   </Field>
                   <ErrorMessage
                     class="text-danger"
-                    name="AuthorizedUserField"
+                    name="DependencyField"
+                  ></ErrorMessage>
+                </b-form-group>
+              </b-col>
+              <!--Agregar subprograma-->
+              <b-col>
+                <b-form-group class="mt-3" label="Subprograma">
+                  <Field name="AppletField" :rules="validateApplet" as="text">
+                    <b-form-input
+                      v-model="voucherControl.subprograma"
+                      :state="AppletState"
+                    >
+                    </b-form-input>
+                  </Field>
+                  <ErrorMessage
+                    class="text-danger"
+                    name="AppletField"
                   ></ErrorMessage>
                 </b-form-group>
               </b-col>
@@ -122,7 +152,7 @@
                 </b-form-group>
               </b-col>
               <!--Agregar Empleado-->
-              <b-col>
+              <!-- <b-col>
                 <b-form-group class="mt-3" label="Empleado: ">
                   <Field
                     name="EmployeeField"
@@ -144,7 +174,7 @@
                     name="EmployeeField"
                   ></ErrorMessage>
                 </b-form-group>
-              </b-col>
+              </b-col> -->
               <!--Agregar Proveedor-->
               <b-col>
                 <b-form-group class="mt-3" label="Nombre proveedor: ">
@@ -270,7 +300,7 @@ export default {
     const swal = inject('$swal')
     const { getVoucherControlById, updateVoucherControl } =
       VoucherControlServices()
-    const { getEmployees } = EmployeeServices()
+    const { getEmployees, getEmployeesProvider } = EmployeeServices()
     const { getDepartaments } = DepartamentServices()
     const { getProvider } = ProviderServices()
     const { getStatusVoucher } = StatusVoucherServices()
@@ -281,17 +311,21 @@ export default {
     const provider = ref([])
     const statusVoucher = ref([])
     const typeVoucher = ref([])
+    const employeesProvider = ref([])
     const router = useRoute()
     const redirect = useRouter()
     const DateOfIssueState = ref(false)
     const ExpirationDateState = ref(false)
     const departamentState = ref(false)
-    const EmployeeState = ref(false)
+    const employeeState = ref(false)
     const ProviderState = ref(false)
     const ProductState = ref(false)
     const DetailVoucherState = ref(false)
     const StatusVoucherState = ref(false)
     const TypeVoucherState = ref(false)
+    const DependencyState = ref(false)
+    const AppletState = ref(false)
+    const employeeAuthoriserState = ref(false)
     const controlValeId = ref(parseInt(router.params.ControlValeId))
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
@@ -321,6 +355,17 @@ export default {
         swal.fire({
           title: 'No se encuentran empleados registrados!',
           text: 'No se encuentran  empleados registrados en el sistema, registre primero un empleado para continuar.',
+          icon: 'warning'
+        })
+      }
+    })
+
+    getEmployeesProvider(data => {
+      employeesProvider.value = data
+      if (data.length === 0) {
+        swal.fire({
+          title: '¡No se encuentran empleados!',
+          text: 'Registre un empleado del area de proveeduria para autorizacion',
           icon: 'warning'
         })
       }
@@ -401,14 +446,14 @@ export default {
       return true
     }
 
-    const validateEmployee = () => {
-      if (!voucherControl.value.empleadoId) {
-        validateState()
-        return 'Este campo es requerido'
-      }
-      validateState()
-      return true
-    }
+    // const validateEmployee = () => {
+    //   if (!voucherControl.value.empleadoId) {
+    //     validateState()
+    //     return 'Este campo es requerido'
+    //   }
+    //   validateState()
+    //   return true
+    // }
 
     const validateProvider = () => {
       if (!voucherControl.value.proveedorId) {
@@ -437,6 +482,58 @@ export default {
       return true
     }
 
+    const validateEmployee = () => {
+      if (!voucherControl.value.usuario) {
+        validateState()
+        return 'Este campo es requerido'
+      }
+      validateState()
+      return true
+    }
+
+    const validateUserAuthoriser = () => {
+      if (!voucherControl.value.usuarioAutoriza) {
+        validateState()
+        return 'Este campo es requerido'
+      }
+      validateState()
+      return true
+    }
+
+    const validateDependency = () => {
+      if (!voucherControl.value.dependencia) {
+        validateState()
+        return 'Este campo es requerido'
+      }
+      if (!voucherControl.value.dependencia.trim().length > 0) {
+        DependencyState.value = false
+        return 'Este campo no puede contener solo espacios'
+      }
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(voucherControl.value.dependencia)) {
+        DependencyState.value = false
+        return 'El nombre solo puede contener letras'
+      }
+      validateState()
+      return true
+    }
+
+    const validateApplet = () => {
+      if (!voucherControl.value.subprograma) {
+        validateState()
+        return 'Este campo es requerido'
+      }
+      if (!voucherControl.value.subprograma.trim().length > 0) {
+        AppletState.value = false
+        return 'Este campo no puede contener solo espacios'
+      }
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(voucherControl.value.subprograma)) {
+        AppletState.value = false
+        return 'El nombre solo puede contener letras'
+      }
+      validateState()
+      return true
+    }
+
     const validateState = () => {
       // eslint-disable-next-line no-unneeded-ternary
       DateOfIssueState.value = voucherControl.value.fechaEmicion !== ''
@@ -445,18 +542,22 @@ export default {
       // eslint-disable-next-line no-unneeded-ternary
       departamentState.value = voucherControl.value.departamentoId !== ''
       // eslint-disable-next-line no-unneeded-ternary
-      EmployeeState.value = voucherControl.value.empleadoId !== ''
-      // eslint-disable-next-line no-unneeded-ternary
       ProviderState.value = voucherControl.value.proveedorId !== ''
       // eslint-disable-next-line no-unneeded-ternary
       StatusVoucherState.value = voucherControl.value.estatusValeId !== ''
       // eslint-disable-next-line no-unneeded-ternary
       TypeVoucherState.value = voucherControl.value.tipoId !== ''
+      // eslint-disable-next-line no-unneeded-ternary
+      DependencyState.value = voucherControl.value.dependencia !== ''
+      AppletState.value = voucherControl.value.subprograma !== ''
+      employeeState.value = voucherControl.value.usuario !== ''
+      employeeAuthoriserState.value = voucherControl.value.usuarioAutoriza !== ''
     }
 
     return {
       voucherControl,
       breadcrumbItems,
+      employeesProvider,
       DateOfIssueState,
       employees,
       controlValeId,
@@ -466,12 +567,15 @@ export default {
       typeVoucher,
       ExpirationDateState,
       departamentState,
-      EmployeeState,
+      employeeState,
       ProviderState,
       ProductState,
       DetailVoucherState,
       StatusVoucherState,
       TypeVoucherState,
+      employeeAuthoriserState,
+      DependencyState,
+      AppletState,
       router,
 
       onUpdateAddVoucherControl,
@@ -482,6 +586,9 @@ export default {
       validateProvider,
       validateStatusVoucher,
       validateTypeVoucher,
+      validateDependency,
+      validateApplet,
+      validateUserAuthoriser,
       validateState
       // validateTask,
       // validateProblem,

@@ -149,7 +149,7 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!--Agregar usuario proveeduria-->
+          <!--Agregar usuario autorizado-->
           <b-col>
             <b-form-group class="mt-3" label="Usuario autorizador">
               <Field
@@ -171,6 +171,32 @@
                 class="text-danger"
                 name="ColorField"
               ></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <!--Agregar dependencia-->
+          <b-col>
+            <b-form-group class="mt-3" label="Dependencia">
+              <Field name="DependencyField" :rules="validateDependency" as="text">
+                <b-form-input
+                  v-model="voucherControlFields.dependencia"
+                  :state="DependencyState"
+                >
+                </b-form-input>
+              </Field>
+              <ErrorMessage class="text-danger" name="DependencyField"></ErrorMessage>
+            </b-form-group>
+          </b-col>
+          <!--Agregar subprograma-->
+          <b-col>
+            <b-form-group class="mt-3" label="Subprograma">
+              <Field name="AppletField" :rules="validateApplet" as="text">
+                <b-form-input
+                  v-model="voucherControlFields.subprograma"
+                  :state="AppletState"
+                >
+                </b-form-input>
+              </Field>
+              <ErrorMessage class="text-danger" name="AppletField"></ErrorMessage>
             </b-form-group>
           </b-col>
           <!--Agregar Fecha vigencia-->
@@ -382,6 +408,8 @@ export default {
     const StatusVoucherState = ref(false)
     const TypeVoucherState = ref(false)
     const disableButtonDownload = ref(false)
+    const DependencyState = ref(false)
+    const AppletState = ref(false)
     const controlValeId = ref(props.ControlValeId)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
@@ -395,6 +423,8 @@ export default {
       fechaVigencia: null,
       recibio: null,
       usuario: null,
+      dependencia: null,
+      subprograma: null,
       usuarioAutoriza: null,
       departamentoId: null,
       proveedorId: null,
@@ -516,6 +546,8 @@ export default {
       DetailVoucherState.value = false
       StatusVoucherState.value = false
       TypeVoucherState.value = false
+      DependencyState.value = false
+      AppletState.value = false
     }
 
     getVoucherControl(data => {
@@ -585,6 +617,44 @@ export default {
         return 'El nombre solo puede contener letras'
       }
       ReceivedState.value = true
+      return true
+    }
+
+    const validateDependency = () => {
+      if (!voucherControlFields.value.dependencia) {
+        DependencyState.value = false
+        return 'Este campo es requerido'
+      }
+      if (!voucherControlFields.value.dependencia.trim().length > 0) {
+        DependencyState.value = false
+        return 'Este campo no puede contener solo espacios'
+      }
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(voucherControlFields.value.dependencia)
+      ) {
+        DependencyState.value = false
+        return 'El nombre solo puede contener letras'
+      }
+      DependencyState.value = true
+      return true
+    }
+
+    const validateApplet = () => {
+      if (!voucherControlFields.value.subprograma) {
+        AppletState.value = false
+        return 'Este campo es requerido'
+      }
+      if (!voucherControlFields.value.subprograma.trim().length > 0) {
+        AppletState.value = false
+        return 'Este campo no puede contener solo espacios'
+      }
+      if (
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(voucherControlFields.value.subprograma)
+      ) {
+        AppletState.value = false
+        return 'El nombre solo puede contener letras'
+      }
+      AppletState.value = true
       return true
     }
 
@@ -728,6 +798,8 @@ export default {
       DetailVoucherState,
       StatusVoucherState,
       TypeVoucherState,
+      DependencyState,
+      AppletState,
       disableButtonDownload,
       controlValeId,
 
@@ -747,6 +819,8 @@ export default {
       validateDetailVoucher,
       validateStatusVoucher,
       validateTypeVoucher,
+      validateDependency,
+      validateApplet,
       onDownloadFile,
       resetVoucherControlFields
     }

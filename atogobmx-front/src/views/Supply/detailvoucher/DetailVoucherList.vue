@@ -62,88 +62,99 @@
             }"
             ><i class="bi bi-pencil-square" /> Editar</b-dropdown-item
           > -->
-        </b-dropdown>
-      </template>
-    </EasyDataTable>
-    <b-modal
-      id="modal-detailVoucher"
-      title="Agregar Producto"
-      v-model="showModal"
-      size="xl"
-      hide-footer
-      button-size="lg"
-      lazy
-    >
-      <Form @submit="addDetailVoucher">
-        <b-row cols="2">
-          <!--Agregar Producto-->
+      </b-dropdown>
+    </template>
+  </EasyDataTable>
+  <b-modal
+    id="modal-detailVoucher"
+    title="Agregar Producto"
+    v-model="showModal"
+    size="xl"
+    hide-footer
+    button-size="lg"
+    lazy
+  >
+    <Form @submit="addDetailVoucher">
+      <b-row cols="2">
+        <!--Agregar Producto-->
+        <b-col>
+          <b-form-group class="mt-3" label="Producto: ">
+            <Field name="ProductField" :rules="validateProduct" as="number">
+              <b-form-select
+                v-model="detailVoucherFields.productoId"
+                autofocus
+                :options="productVoucher"
+                value-field="productoId"
+                text-field="nombre"
+                :state="ProductState"
+              >
+              </b-form-select>
+            </Field>
+            <ErrorMessage class="text-danger" name="ProductField"></ErrorMessage>
+          </b-form-group>
+        </b-col>
+        <!--Agregar cantidad -->
+        <b-col>
+          <b-form-group class="mt-3" label="Cantidad">
+            <Field name="QuantityField" :rules="validateQuantity" as="number">
+              <b-form-input
+                v-model="detailVoucherFields.cantidad"
+                :state="QuantityState"
+                min="1"
+                type="number"
+              >
+              </b-form-input>
+            </Field>
+            <ErrorMessage
+              class="text-danger"
+              name="QuantityField"
+            ></ErrorMessage>
+          </b-form-group>
+        </b-col>
+        <!--Agregar importe -->
+        <b-col>
+          <b-form-group class="mt-3" label="Importe">
+            <b-form-input v-model="detailVoucherFields.importe" type="number">
+            </b-form-input>
+          </b-form-group>
+        </b-col>
+        <!--Agregar  total-->
+        <b-col>
+          <b-form-group class="mt-3" label="Total">
+            <b-form-input v-model="detailVoucherFields.subtotal" type="number">
+            </b-form-input>
+          </b-form-group>
+        </b-col>
+        <!--Agregar medida -->
           <b-col>
-            <b-form-group class="mt-3" label="Producto: ">
-                <b-form-select
-                  v-model="detailVoucherFields.productoId"
-                  autofocus
-                  :options="productVoucher"
-                  value-field="productoId"
-                  text-field="nombre"
-                  :state="ProductState"
-                >
-                </b-form-select>
-            </b-form-group>
-          </b-col>
-          <!--Agregar cantidad -->
-          <b-col>
-            <b-form-group class="mt-3" label="Cantidad">
-              <Field name="QuantityField" :rules="validateQuantity" as="number">
-                <b-form-input
-                  v-model="detailVoucherFields.cantidad"
-                  :state="QuantityState"
-                  min="1"
-                  type="number"
-                >
-                </b-form-input>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="QuantityField"
-              ></ErrorMessage>
+            <b-form-group class="mt-3" label="Medida">
+              <b-form-input v-model="detailVoucherFields.medida" >
+              </b-form-input>
             </b-form-group>
           </b-col>
           <!--Agregar Precio -->
           <b-col>
-            <b-form-group class="mt-3" label="Importe">
-                <b-form-input
-                  v-model="detailVoucherFields.importe"
-                  type="number"
-                >
-                </b-form-input>
+            <b-form-group class="mt-3" label="Precio">
+              <b-form-input v-model="detailVoucherFields.precio" type="number">
+              </b-form-input>
             </b-form-group>
           </b-col>
-          <!--Agregar subtotal -->
-          <b-col>
-            <b-form-group class="mt-3" label="Total">
-                <b-form-input
-                  v-model="detailVoucherFields.subtotal"
-                  type="number"
-                >
-                </b-form-input>
-            </b-form-group>
-          </b-col>
-          <!--termino de cada campo a registrar-->
-        </b-row>
-        <b-row align-h="end">
-          <b-button
-            class="w-auto m-2 text-white"
-            variant="primary"
-            @click="resetDetailVoucherFields"
-          >
-            Cancelar
-          </b-button>
-          <b-button class="w-auto m-2" variant="success" type="submit">
-            Guardar
-          </b-button>
-        </b-row>
-      </Form>
-    </b-modal>
+        <!--termino de cada campo a registrar-->
+      </b-row>
+      <b-row align-h="end">
+        <b-button
+          class="w-auto m-2 text-white"
+          variant="primary"
+          @click="resetDetailVoucherFields"
+        >
+          Cancelar
+        </b-button>
+        <b-button class="w-auto m-2" variant="success" type="submit">
+          Guardar
+        </b-button>
+      </b-row>
+    </Form>
+  </b-modal>
 </template>
 
 <script>
