@@ -16,7 +16,5 @@ namespace AtoGobMx.Models
 
         [ForeignKey("DepartamentoId")]
         public Departamentos? Departamentos { get; set; }
-        //[ForeignKey("AreaId")]
-        //public Area? Area { get; set; }
     }
 }

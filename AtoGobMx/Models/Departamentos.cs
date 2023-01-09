@@ -17,7 +17,5 @@ namespace AtoGobMx.Models
         public virtual IEnumerable<ExpedienteAlumbrado>? ExpedienteAlumbrado { get; set; }
         [JsonIgnore]
         public virtual IEnumerable<PROV_ControlVales>? ControlDeVales { get; set; }
-        //[JsonIgnore]
-        //public virtual IEnumerable<Inventario>? Inventario { get; set; }
     }
 }
