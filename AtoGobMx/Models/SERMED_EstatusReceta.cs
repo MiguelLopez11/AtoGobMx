@@ -14,7 +14,5 @@ namespace AtoGobMx.Models
         public string? Descripcion { get; set; }
         public bool Archivado { get; set; }
 
-        [JsonIgnore]
-        public virtual IEnumerable<SERMED_EstatusReceta>? EstatusRecetas { get; set; }
     }
 }
