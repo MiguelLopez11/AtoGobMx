@@ -14,7 +14,7 @@ namespace AtoGobMx.Models
         public string Problema { get; set; }
         public DateTime? Fecha { get; set; }
         public string Domicilio { get; set; }
-        public string Descripcion { get; set; }
+        public string? Descripcion { get; set; }
         public bool Archivado { get; set; }
         //public int? RutaId { get; set; }
 
