@@ -25,7 +25,7 @@
         type="submit"
       >
         <i class="bi bi-person-plus-fill"></i>
-        Agregar reporte
+        Agregar reporte aseo
       </b-button>
     </b-row>
     <EasyDataTable
