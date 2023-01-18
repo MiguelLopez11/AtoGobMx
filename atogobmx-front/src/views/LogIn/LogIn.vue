@@ -106,13 +106,8 @@ export default {
       LogIn(user.value, data => {
         if (data.token) {
           window.sessionStorage.setItem('isLogged', true)
-
           window.sessionStorage.setItem('Token', data.token)
           window.sessionStorage.setItem('RefreshToken', data.refreshToken)
-          // window.sessionStorage.setItem('Departamento', data.empleado.departamentos.nombre)
-          // window.sessionStorage.setItem('Area', data.empleado.area.nombre)
-          // window.sessionStorage.setItem('Empleado', data.empleado.nombreCompleto)
-          // window.sessionStorage.setItem('EmpleadoId', data.empleado.empleadoId)
           swal
             .fire({
               title: 'Inicio de sesión correcto.!',

@@ -229,8 +229,8 @@ export default {
               getEmployees()
             })
             swal.fire({
-              title: '¡Empleado archivado!',
-              text: 'El empleado ha sido archivado satisfactoriamente .',
+              title: '¡Expediente archivado!',
+              text: 'El expediente ha sido archivado satisfactoriamente .',
               icon: 'success'
             })
           } else {

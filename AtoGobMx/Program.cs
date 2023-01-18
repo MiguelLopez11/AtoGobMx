@@ -56,6 +56,7 @@ builder.Services.AddCors(options =>
                       policy =>
                       {
                           policy.WithOrigins("https://digital.atogobmx.com");
+                          policy.WithOrigins("http://localhost:8080");
                           policy.AllowAnyHeader();
                           policy.AllowCredentials();
                           policy.AllowAnyMethod();

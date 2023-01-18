@@ -29,15 +29,5 @@ namespace AtoGobMx.Models
         public virtual IEnumerable<ExpedienteAlumbrado>? ExpedienteAlumbrado { get; set; }
         [JsonIgnore]
         public virtual IEnumerable<ArchivosAlumbrado>? ArchivosAlumbrado { get; set; }
-
-        //public string Tarea { get; set; }
-        //public string DescripcionSolucion { get; set; }
-        //public DateTime FechaAlta { get; set; }
-        //public DateTime FechaBaja { get; set; }
-
-        //public int? ExpedienteAlumbradoId { get; set; }
-        //public int? TareaTipoId { get; set; }
-        //[ForeignKey("ExpedienteAlumbradoId")]
-        //public ExpedienteAlumbrado? ExpedienteAlumbrado { get; set; }
     }
 }

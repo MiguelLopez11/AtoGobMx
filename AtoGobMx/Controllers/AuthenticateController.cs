@@ -87,6 +87,7 @@ namespace JWTRefreshToken.NET6._0.Controllers
             }
             return Unauthorized();
         }
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
@@ -108,6 +109,7 @@ namespace JWTRefreshToken.NET6._0.Controllers
 
             return Ok(new Response { Status = "Success", Message = "Usuario registrado correctamente!" });
         }
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpPost]
         [Route("register-admin")]
         public async Task<IActionResult> RegisterAdmin([FromBody] RegisterModel model)
@@ -142,7 +144,7 @@ namespace JWTRefreshToken.NET6._0.Controllers
             }
             return Ok(new Response { Status = "Success", Message = "usuario creado correctamente!" });
         }
-
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpPost]
         [Route("refresh-token")]
         public async Task<IActionResult> RefreshToken(TokenModel tokenModel)
@@ -160,12 +162,7 @@ namespace JWTRefreshToken.NET6._0.Controllers
             {
                 return BadRequest("Invalid access token or refresh token");
             }
-
-#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
             string username = principal.Identity.Name;
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
-#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
 
             var user = await _userManager.FindByNameAsync(username);
 

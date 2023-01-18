@@ -228,12 +228,13 @@ export default {
     const addUser = () => {
       if (isAdmin.value) {
         createAdminUser(userFields.value, data => {
-          if (data.status) {
+          console.log(data)
+          if (!data.status) {
             refreshTable()
             resetRoleFields()
             swal.fire({
-              title: 'Usuario Sin permiso!',
-              text: 'No tiene permiso para realizar esta acción.',
+              title: '¡Error!',
+              text: 'El usuario logeado no tiene permiso para realizar esta acción o uno de los campos ingresados no es correcto.',
               icon: 'error'
             })
           } else {

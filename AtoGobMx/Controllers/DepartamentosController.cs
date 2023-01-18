@@ -72,13 +72,6 @@ namespace AtoGobMx.Controllers
             {
                 return NotFound();
             }
-            //var areas = await _context.Area
-            //    .Where(w => w.DepartamentoId == DepartamentoId)
-            //    .ToListAsync();
-            //foreach (var area in areas)
-            //{
-            //    area.Archivado = true;
-            //}
             var puestos = await _context.PuestoTrabajo
                 .Where(w => w.DepartamentoId == DepartamentoId)
                 .ToListAsync();

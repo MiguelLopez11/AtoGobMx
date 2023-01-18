@@ -2,7 +2,7 @@
 
 // export default function ExpedientLighting () {
 //   const getInventoryLighting = (callback) => {
-//     axiosPrivate.get('http://localhost:5000/api/InventarioAlumbrado').then((response) => {
+//     axiosPrivate.get('https://digitalatogobmxwebservices.somee.com/api/InventarioAlumbrado').then((response) => {
 //       callback(response.data)
 //     })
 //   }
@@ -14,7 +14,7 @@
 //   }
 
 //   const createInventoryLighting = (data, callback) => {
-//     axiosPrivate.post('http://localhost:5000/api/InventarioAlumbrado', data).then((response) => {
+//     axiosPrivate.post('https://digitalatogobmxwebservices.somee.com/api/InventarioAlumbrado', data).then((response) => {
 //       callback(response.data)
 //     })
 //   }

@@ -154,8 +154,6 @@ import { useRouter } from 'vue-router'
 export default {
   components: {
     Form,
-    // Field,
-    // ErrorMessage,
     EasyDataTable: window['vue3-easy-data-table']
   },
   setup () {
@@ -282,56 +280,6 @@ export default {
     const onFiltered = filteredItems => {
       currentPage.value = 1
     }
-    // VALIDATIONS
-    // const validateNomeclature = () => {
-    //   if (!prescriptionFields.value.nomenclatura) {
-    //     nomenclatureState.value = false
-    //     return 'Este campo es requerido'
-    //   }
-    //   nomenclatureState.value = true
-    //   return true
-    // }
-    // const validateBrand = () => {
-    //   if (!prescriptionFields.value.marca) {
-    //     brandState.value = false
-    //     return 'Este campo es requerido'
-    //   }
-    //   brandState.value = true
-    //   return true
-    // }
-    // const validateTypeWeapon = () => {
-    //   if (!prescriptionFields.value.tipoArma) {
-    //     typeWeaponState.value = false
-    //     return 'Este campo es requerido'
-    //   }
-    //   typeWeaponState.value = true
-    //   return true
-    // }
-    // const validateGauge = () => {
-    //   if (!prescriptionFields.value.calibre) {
-    //     gaugeState.value = false
-    //     return 'Este campo es requerido'
-    //   }
-    //   gaugeState.value = true
-    //   return true
-    // }
-    // const validateEmployee = () => {
-    //   if (!prescriptionFields.value.empleadoId) {
-    //     employeeState.value = false
-    //     return 'Este campo es requerido'
-    //   }
-    //   employeeState.value = true
-    //   return true
-    // }
-    // const resetArmoryFields = () => {
-    //   showModal.value = false
-    //   nomenclatureState.value = false
-    //   brandState.value = false
-    //   typeWeaponState.value = false
-    //   gaugeState.value = false
-    //   employeeState.value = false
-    //   prescriptionFields.value = JSON.parse(JSON.stringify(weaponsFieldsBlank))
-    // }
     return {
       prescriptions,
       employees,
@@ -347,11 +295,6 @@ export default {
       searchValue,
       showModal,
       searchField,
-      //   nomenclatureState,
-      //   brandState,
-      //   typeWeaponState,
-      //   gaugeState,
-      //   employeeState,
 
       onFiltered,
       addPrescription,

@@ -218,22 +218,6 @@ const routes = [
       // departamento: 'Servicios Publicos'
     }
   },
-  // {
-  //   path: '/InventarioAlumbrado/list',
-  //   name: 'InventarioAlumbradorado',
-  //   component: () => import('@/views/ServiciosPublicos/streetLighting/inventorylighting/InventoryLightingList.vue'),
-  //   meta: {
-  //     requiresAuth: true
-  //   }
-  // },
-  // {
-  //   path: '/InventarioAlumbrado/:InventarioAlumbradoId',
-  //   name: 'InventarioAlumbrado-Edit',
-  //   component: () => import('@/views/ServiciosPublicos/streetLighting/inventorylighting/EditInventoryLighting.vue'),
-  //   meta: {
-  //     requiresAuth: true
-  //   }
-  // },
   {
     path: '/ServiciosPublicos/TareaTipoAlumbrado/list',
     name: 'TareaTipoAlumbradorado',
@@ -277,7 +261,7 @@ const routes = [
   {
     path: '/ServiciosPublicos/Cementerios/list',
     name: 'Cementerios',
-    component: () => import('@/views/ServiciosPublicos/cementery/cementery/CementeryList.vue'),
+    component: () => import('@/views/ServiciosPublicos/cementery/Cementery/CementeryList.vue'),
     meta: {
       requiresAuth: true,
       rol: 'Empleado'
@@ -287,7 +271,7 @@ const routes = [
   {
     path: '/ServiciosPublicos/Cementerios/:CementerioId',
     name: 'Cementerios-Edit',
-    component: () => import('@/views/ServiciosPublicos/cementery/cementery/EditCementery.vue'),
+    component: () => import('@/views/ServiciosPublicos/cementery/Cementery/EditCementery.vue'),
     meta: {
       requiresAuth: true,
       rol: 'Empleado'
@@ -334,32 +318,6 @@ const routes = [
       // departamento: 'Servicios Publicos'
     }
   },
-  // {
-  //   path: '/Zona/list',
-  //   name: 'Zona',
-  //   component: () => import('@/views/ServiciosPublicos/cleanness/Zone/ZoneList.vue'),
-  //   meta: {
-  //     requiresAuth: true
-  //   }
-  // },
-  // {
-  //   path: '/Zona/:ZonaId',
-  //   name: 'Zona-Edit',
-  //   component: () => import('@/views/ServiciosPublicos/cleanness/Zone/EditZone.vue'),
-  //   meta: {
-  //     requiresAuth: true
-  //   }
-  // },
-  // {
-  //   path: '/ServiciosPublicos/AlumbradoEmpleado/list',
-  //   name: 'AlumbradoEmpleado',
-  //   component: () => import('@/views/ServiciosPublicos/streetLighting/lightingEmployee/LightingEmployeeList.vue'),
-  //   meta: {
-  //     requiresAuth: true,
-  //     rol: 'Empleado',
-  //     departamento: 'Servicios Publicos'
-  //   }
-  // },
   {
     path: '/ServiciosPublicos/ObrasPublicas/list',
     name: 'ObrasPublicas',
@@ -400,26 +358,6 @@ const routes = [
       // departamento: 'Obras Publicas'
     }
   },
-  // {
-  //   path: '/ServiciosPublicos/DetalleProducto/list',
-  //   name: 'DetalleProducto',
-  //   component: () => import('@/views/Supply/detailproduct/DetailProductList.vue'),
-  //   meta: {
-  //     requiresAuth: true
-  //     // rol: 'Empleado',
-  //     // departamento: 'Control de vales'
-  //   }
-  // },
-  // {
-  //   path: '/ServiciosPublicos/DetalleProducto/:DetalleProductoId',
-  //   name: 'DetalleProducto-Edit',
-  //   component: () => import('@/views/Supply/detailproduct/EditDetailProduct.vue'),
-  //   meta: {
-  //     requiresAuth: true
-  //     // rol: 'Empleado',
-  //     // departamento: 'Control de vales'
-  //   }
-  // },
   {
     path: '/ServiciosPublicos/DetalleVale/list',
     name: 'DetalleVale',
@@ -551,30 +489,10 @@ const routes = [
       // departamento: 'Dirección de Sistemas y Tecnologías de la Comunicación'
     }
   },
-  {
-    path: '/Usuarios/:usuarioId',
-    name: 'Usuarios-Edit',
-    component: () => import('@/views/Users/UserEdit.vue'),
-    meta: {
-      requiresAuth: true
-      // rol: 'Empleado',
-      // departamento: 'Dirección de Sistemas y Tecnologías de la Comunicación'
-    }
-  },
   // {
-  //   path: '/Administrador/Roles/list',
-  //   name: 'Roles',
-  //   component: () => import('@/views/Roles/RoleList.vue'),
-  //   meta: {
-  //     requiresAuth: true
-  //     // rol: 'Empleado',
-  //     // departamento: 'Dirección de Sistemas y Tecnologías de la Comunicación'
-  //   }
-  // },
-  // {
-  //   path: '/Administrador/Roles/:RoleId',
-  //   name: 'Roles-Edit',
-  //   component: () => import('@/views/Roles/RoleEdit.vue'),
+  //   path: '/Usuarios/:usuarioId',
+  //   name: 'Usuarios-Edit',
+  //   component: () => import('@/views/Users/UserEdit.vue'),
   //   meta: {
   //     requiresAuth: true
   //     // rol: 'Empleado',

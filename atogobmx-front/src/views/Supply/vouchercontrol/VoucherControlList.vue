@@ -78,7 +78,7 @@
             variant="outline-warning"
             @click="onDownloadFile(items)"
           >
-            <!-- :href="`http://localhost:5000/api/ExpedienteAlumbrado/ExpedienteAlumbrado/Download/${items.expedienteAlumbradoId}`" -->
+            <!-- :href="`https://digitalatogobmxwebservices.somee.com/api/ExpedienteAlumbrado/ExpedienteAlumbrado/Download/${items.expedienteAlumbradoId}`" -->
             <i class="bi bi-download"></i>
             Generar vale
           </b-dropdown-item>
