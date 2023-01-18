@@ -78,11 +78,55 @@
             variant="outline-warning"
             @click="onDownloadFile(items)"
           >
-            <!-- :href="`https://digitalatogobmxwebservices.somee.com/api/ExpedienteAlumbrado/ExpedienteAlumbrado/Download/${items.expedienteAlumbradoId}`" -->
+            <!-- :href="`http://localhost:5000/api/ExpedienteAlumbrado/ExpedienteAlumbrado/Download/${items.expedienteAlumbradoId}`" -->
             <i class="bi bi-download"></i>
             Generar vale
           </b-dropdown-item>
+          <b-dropdown-item
+            v-if="
+              items.proV_EstatusVale.nombre === 'Pendiente' && !items.autorizado
+            "
+            @click="onAutorized(items.controlValeId)"
+            class="m-1"
+            variant="outline-danger"
+            ><i class="bi bi-trash3">Validar</i></b-dropdown-item
+          >
+          <b-dropdown-item
+            v-if="
+              items.proV_EstatusVale.nombre === 'Validado' && items.autorizado
+            "
+            @click="onDeliver(items.controlValeId)"
+            class="m-1"
+            variant="outline-danger"
+            ><i class="bi bi-trash3">Entregar vale</i></b-dropdown-item
+          >
+          <b-dropdown-item
+            v-if="
+              items.proV_EstatusVale.nombre === 'Entregado' && items.autorizado
+            "
+            @click="onReceiver(items.controlValeId)"
+            class="m-1"
+            variant="outline-danger"
+            ><i class="bi bi-trash3">Recibir vale</i></b-dropdown-item
+          >
         </b-dropdown>
+      </template>
+      <template #item-estatus="items">
+        <b-badge
+          :variant="
+            items.proV_EstatusVale.nombre === 'Recibido'
+              ? 'success'
+              : '' || items.proV_EstatusVale.nombre === 'Pendiente'
+              ? 'warning'
+              : '' || items.proV_EstatusVale.nombre === 'Validado'
+              ? 'primary'
+              : '' || items.proV_EstatusVale.nombre === 'Entregado'
+              ? 'primary'
+              : ''
+          "
+        >
+          {{ items.proV_EstatusVale.nombre }}
+        </b-badge>
       </template>
     </EasyDataTable>
     <b-modal
@@ -173,17 +217,28 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!--Agregar dependencia-->
+          <!--Agregar departamento-->
           <b-col>
-            <b-form-group class="mt-3" label="Dependencia">
-              <Field name="DependencyField" :rules="validateDependency" as="text">
-                <b-form-input
-                  v-model="voucherControlFields.dependencia"
-                  :state="DependencyState"
+            <b-form-group class="mt-3" label="Dependencia: ">
+              <Field
+                name="DepartamentField"
+                :rules="validateDepartament"
+                as="text"
+              >
+                <b-form-select
+                  v-model="voucherControlFields.departamentoId"
+                  autofocus
+                  :options="departaments"
+                  value-field="departamentoId"
+                  text-field="nombre"
+                  :state="departamentState"
                 >
-                </b-form-input>
+                </b-form-select>
               </Field>
-              <ErrorMessage class="text-danger" name="DependencyField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="DepartamentField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <!--Agregar subprograma-->
@@ -196,7 +251,10 @@
                 >
                 </b-form-input>
               </Field>
-              <ErrorMessage class="text-danger" name="AppletField"></ErrorMessage>
+              <ErrorMessage
+                class="text-danger"
+                name="AppletField"
+              ></ErrorMessage>
             </b-form-group>
           </b-col>
           <!--Agregar Fecha vigencia-->
@@ -236,30 +294,6 @@
               ></ErrorMessage>
             </b-form-group>
           </b-col>
-          <!--Agregar Departamento-->
-          <b-col>
-            <b-form-group class="mt-3" label="Departamento: ">
-              <Field
-                name="DepartamentField"
-                :rules="validateDepartament"
-                as="text"
-              >
-                <b-form-select
-                  v-model="voucherControlFields.departamentoId"
-                  autofocus
-                  :options="departaments"
-                  value-field="departamentoId"
-                  text-field="nombre"
-                  :state="departamentState"
-                >
-                </b-form-select>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="DepartamentField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
           <!--Agregar Proveedor-->
           <b-col>
             <b-form-group class="mt-3" label="Nombre proveedor: ">
@@ -277,30 +311,6 @@
               <ErrorMessage
                 class="text-danger"
                 name="ProviderField"
-              ></ErrorMessage>
-            </b-form-group>
-          </b-col>
-          <!--Agregar Estatus vale-->
-          <b-col>
-            <b-form-group class="mt-3" label="Estatus vale: ">
-              <Field
-                name="StatusVoucherField"
-                :rules="validateStatusVoucher"
-                as="text"
-              >
-                <b-form-select
-                  v-model="voucherControlFields.estatusValeId"
-                  autofocus
-                  :options="statusVoucher"
-                  value-field="estatusValeId"
-                  text-field="nombre"
-                  :state="StatusVoucherState"
-                >
-                </b-form-select>
-              </Field>
-              <ErrorMessage
-                class="text-danger"
-                name="StatusVoucherField"
               ></ErrorMessage>
             </b-form-group>
           </b-col>
@@ -359,12 +369,6 @@ import { axiosPrivate } from '@/common/axiosPrivate.js'
 import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 export default {
-  props: {
-    ControlValeId: {
-      type: Number,
-      required: true
-    }
-  },
   components: {
     EasyDataTable: window['vue3-easy-data-table'],
     Datepicker,
@@ -372,11 +376,17 @@ export default {
     Field,
     ErrorMessage
   },
-  setup (props) {
+  setup () {
     const swal = inject('$swal')
     const showModal = ref(false)
-    const { getVoucherControl, createVoucherControl, deleteVoucherControl } =
-      VoucherControlServices()
+    const {
+      getVoucherControl,
+      createVoucherControl,
+      deleteVoucherControl,
+      autorizeVoucherControl,
+      receiveVoucherControl,
+      DeliveryVoucherControl
+    } = VoucherControlServices()
     const { getDepartaments } = DepartamentServices()
     const { getEmployees, getEmployeesProvider } = EmployeeServices()
     const { getProvider } = ProviderServices()
@@ -410,7 +420,6 @@ export default {
     const disableButtonDownload = ref(false)
     const DependencyState = ref(false)
     const AppletState = ref(false)
-    const controlValeId = ref(props.ControlValeId)
     const breadcrumbItems = ref([
       { text: 'Inicio', to: '/' },
       { text: 'Proveeduria', to: '/Proveeduria' },
@@ -430,6 +439,7 @@ export default {
       proveedorId: null,
       estatusValeId: null,
       tipoId: null,
+      folio: '-',
       archivado: false
     })
 
@@ -526,7 +536,7 @@ export default {
       { value: 'usuarioAutoriza', text: 'Autorizado por:' },
       { value: 'departamentos.nombre', text: 'Departamento' },
       { value: 'proV_Proveedor.nombre', text: 'Proveedor' },
-      { value: 'proV_EstatusVale.nombre', text: 'Proveedor' },
+      { value: 'estatus', text: 'Proveedor' },
       { value: 'tipoVales.nombre', text: 'Tipo vale' },
       { value: 'actions', text: 'Acciones' }
     ])
@@ -630,7 +640,9 @@ export default {
         return 'Este campo no puede contener solo espacios'
       }
       if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(voucherControlFields.value.dependencia)
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+          voucherControlFields.value.dependencia
+        )
       ) {
         DependencyState.value = false
         return 'El nombre solo puede contener letras'
@@ -649,7 +661,9 @@ export default {
         return 'Este campo no puede contener solo espacios'
       }
       if (
-        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(voucherControlFields.value.subprograma)
+        !/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(
+          voucherControlFields.value.subprograma
+        )
       ) {
         AppletState.value = false
         return 'El nombre solo puede contener letras'
@@ -767,6 +781,36 @@ export default {
           }
         })
     }
+    const onAutorized = controlValeId => {
+      autorizeVoucherControl(controlValeId, data => {
+        swal.fire({
+          title: '¡Control de vales autorizado correctamente!',
+          text: 'El control de vales se ha autorizado al sistema satisfactoriamente.',
+          icon: 'success'
+        })
+        refreshTable()
+      })
+    }
+    const onDeliver = controlValeId => {
+      DeliveryVoucherControl(controlValeId, data => {
+        swal.fire({
+          title: '¡Control de vales entregado correctamente!',
+          text: 'El control de vales se ha entregado al solicitante satisfactoriamente.',
+          icon: 'success'
+        })
+        refreshTable()
+      })
+    }
+    const onReceiver = controlValeId => {
+      receiveVoucherControl(controlValeId, data => {
+        swal.fire({
+          title: '¡Control de vales entregado correctamente!',
+          text: 'El control de vales se ha entregado al solicitante satisfactoriamente.',
+          icon: 'success'
+        })
+        refreshTable()
+      })
+    }
     return {
       voucherControl,
       employees,
@@ -801,7 +845,6 @@ export default {
       DependencyState,
       AppletState,
       disableButtonDownload,
-      controlValeId,
 
       onFiltered,
       addVoucherControl,
@@ -822,7 +865,10 @@ export default {
       validateDependency,
       validateApplet,
       onDownloadFile,
-      resetVoucherControlFields
+      resetVoucherControlFields,
+      onAutorized,
+      onDeliver,
+      onReceiver
     }
   }
 }

@@ -1,4 +1,5 @@
 ﻿using AtoGobMx.Auth;
+using AtoGobMx.Context;
 using AtoGobMx.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -17,6 +18,7 @@ namespace JWTRefreshToken.NET6._0.Controllers
     [ApiController]
     public class AuthenticateController : ControllerBase
     {
+        private readonly AtoGobMxContext _context;
         private readonly UserManager<Usuario> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
@@ -24,8 +26,10 @@ namespace JWTRefreshToken.NET6._0.Controllers
         public AuthenticateController(
             UserManager<Usuario> userManager,
             RoleManager<IdentityRole> roleManager,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            AtoGobMxContext context)
         {
+            _context = context;
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
@@ -37,6 +41,8 @@ namespace JWTRefreshToken.NET6._0.Controllers
             var user = _userManager.Users.ToArray();
             foreach (var usuario in user)
             {
+            //var employee = _context.Empleados
+            //    .Where(w => w.EmpleadoId == usuario.)
                 var userObject = new
                 {
                     NombreUsuario = usuario.UserName,

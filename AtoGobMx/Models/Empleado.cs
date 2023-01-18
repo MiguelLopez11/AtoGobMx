@@ -1,4 +1,5 @@
 ﻿
+using AtoGobMx.Auth;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
@@ -17,7 +18,7 @@ namespace AtoGobMx.Models
         public string? Estatus { get; set; }
         public string? Antigüedad { get; set; }
         public float? SueldoQuincenal { get; set; }
-        public DateTime? FechaAlta { get; set; }
+        public DateTime FechaAlta { get; set; }
         public DateTime? FechaBaja { get; set; }
         [Required]
         public bool Archivado { get; set; }

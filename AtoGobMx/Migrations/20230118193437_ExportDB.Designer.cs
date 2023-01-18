@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    [Migration("20230103031610_archivos_Armeria")]
-    partial class archivos_Armeria
+    [Migration("20230118193437_ExportDB")]
+    partial class ExportDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -316,7 +316,6 @@ namespace AtoGobMx.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Descripcion")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Domicilio")
@@ -397,28 +396,24 @@ namespace AtoGobMx.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Calle")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Comunidad")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<decimal>("Latitud")
+                    b.Property<decimal?>("Latitud")
                         .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("Localidad")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<decimal>("Longitud")
+                    b.Property<decimal?>("Longitud")
                         .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("NombreCementerio")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("NumeroExterior")
+                    b.Property<int?>("NumeroExterior")
                         .HasColumnType("int");
 
                     b.HasKey("CementerioId");
@@ -435,11 +430,11 @@ namespace AtoGobMx.Migrations
                     b.Property<bool>("Archivado")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<double>("Latitud")
-                        .HasColumnType("double");
+                    b.Property<decimal>("Latitud")
+                        .HasColumnType("decimal(65,30)");
 
-                    b.Property<double>("Longitud")
-                        .HasColumnType("double");
+                    b.Property<decimal>("Longitud")
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<int>("OrdenCoordenada")
                         .HasColumnType("int");
@@ -479,19 +474,8 @@ namespace AtoGobMx.Migrations
                         {
                             DepartamentoId = 1,
                             Archivado = false,
-                            Nombre = "Comisaría de Seguridad Pública"
-                        },
-                        new
-                        {
-                            DepartamentoId = 2,
-                            Archivado = false,
-                            Nombre = "Seguridad Pública"
-                        },
-                        new
-                        {
-                            DepartamentoId = 3,
-                            Archivado = false,
-                            Nombre = "Sistemas y tecnologías de la información"
+                            Descripcion = "Sistemas",
+                            Nombre = "Dirección de sistemas y tecnologías de la información"
                         });
                 });
 
@@ -516,7 +500,7 @@ namespace AtoGobMx.Migrations
                     b.Property<string>("Estatus")
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("FechaAlta")
+                    b.Property<DateTime>("FechaAlta")
                         .HasColumnType("datetime(6)");
 
                     b.Property<DateTime?>("FechaBaja")
@@ -546,6 +530,19 @@ namespace AtoGobMx.Migrations
                     b.HasIndex("PuestoTrabajoId");
 
                     b.ToTable("Empleados");
+
+                    b.HasData(
+                        new
+                        {
+                            EmpleadoId = 1,
+                            Archivado = false,
+                            DepartamentoId = 1,
+                            FechaAlta = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            NombreCompleto = "Rogelio Gonzales Camacho",
+                            PuestoTrabajoId = 1,
+                            TieneExpediente = false,
+                            TieneExpedienteMédico = false
+                        });
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.EmpleadosAlumbrado", b =>
@@ -683,25 +680,6 @@ namespace AtoGobMx.Migrations
                     b.ToTable("ExpedienteDigital");
                 });
 
-            modelBuilder.Entity("AtoGobMx.Models.ExpedienteVale", b =>
-                {
-                    b.Property<int>("ExpedienteValeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Archivado")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<int>("ControlValeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ExpedienteValeId");
-
-                    b.HasIndex("ControlValeId");
-
-                    b.ToTable("ExpedienteVale");
-                });
-
             modelBuilder.Entity("AtoGobMx.Models.Gabetas", b =>
                 {
                     b.Property<int>("GabetaId")
@@ -792,6 +770,9 @@ namespace AtoGobMx.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<string>("Agencia")
+                        .HasColumnType("longtext");
+
                     b.Property<bool>("Archivado")
                         .HasColumnType("tinyint(1)");
 
@@ -805,11 +786,11 @@ namespace AtoGobMx.Migrations
                     b.Property<int?>("EstatusObraId")
                         .HasColumnType("int");
 
-                    b.Property<float?>("Latitud")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Latitud")
+                        .HasColumnType("decimal(65,30)");
 
-                    b.Property<float?>("Longitud")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Longitud")
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -819,6 +800,12 @@ namespace AtoGobMx.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("OperadorVehiculo")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("RFC")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Representante")
                         .HasColumnType("longtext");
 
                     b.HasKey("ObraId");
@@ -990,6 +977,20 @@ namespace AtoGobMx.Migrations
                     b.HasKey("EstatusEquipoId");
 
                     b.ToTable("InventarioEstatus");
+
+                    b.HasData(
+                        new
+                        {
+                            EstatusEquipoId = 1,
+                            Archivado = false,
+                            Nombre = "Dado de baja"
+                        },
+                        new
+                        {
+                            EstatusEquipoId = 2,
+                            Archivado = false,
+                            Nombre = "En funcionamiento"
+                        });
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.PAT_EstatusVehiculo", b =>
@@ -1151,6 +1152,9 @@ namespace AtoGobMx.Migrations
                     b.Property<bool>("Archivado")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<bool>("Autorizado")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<int?>("DepartamentoId")
                         .HasColumnType("int");
 
@@ -1166,21 +1170,26 @@ namespace AtoGobMx.Migrations
                     b.Property<DateTime?>("FechaVigencia")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("Folio")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<int?>("ProveedorId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("TieneExpediente")
-                        .HasColumnType("tinyint(1)");
+                    b.Property<string>("Recibio")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Subprograma")
+                        .HasColumnType("longtext");
 
                     b.Property<int?>("TipoId")
                         .HasColumnType("int");
 
                     b.Property<string>("Usuario")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("UsuarioAutoriza")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("ControlValeId");
@@ -1216,6 +1225,12 @@ namespace AtoGobMx.Migrations
                     b.Property<float?>("Importe")
                         .HasColumnType("float");
 
+                    b.Property<string>("Medida")
+                        .HasColumnType("longtext");
+
+                    b.Property<double?>("Precio")
+                        .HasColumnType("double");
+
                     b.Property<int?>("ProductoId")
                         .HasColumnType("int");
 
@@ -1241,7 +1256,6 @@ namespace AtoGobMx.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Descripcion")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Nombre")
@@ -1251,6 +1265,36 @@ namespace AtoGobMx.Migrations
                     b.HasKey("EstatusValeId");
 
                     b.ToTable("PROV_EstatusVale");
+
+                    b.HasData(
+                        new
+                        {
+                            EstatusValeId = 1,
+                            Archivado = false,
+                            Descripcion = "Se ha generado el vale para ser validado por el director del departamento de Proveeduría",
+                            Nombre = "Pendiente"
+                        },
+                        new
+                        {
+                            EstatusValeId = 2,
+                            Archivado = false,
+                            Descripcion = "El vale ha sido revisado y confirmado por el director del departamento de proveeduría",
+                            Nombre = "Validado"
+                        },
+                        new
+                        {
+                            EstatusValeId = 3,
+                            Archivado = false,
+                            Descripcion = "El vale a sido entregado correctamente al solicitante",
+                            Nombre = "Entregado"
+                        },
+                        new
+                        {
+                            EstatusValeId = 4,
+                            Archivado = false,
+                            Descripcion = "El solicitante entregó el vale al departamento de proveeduría",
+                            Nombre = "Recibido"
+                        });
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.PROV_Producto", b =>
@@ -1263,7 +1307,6 @@ namespace AtoGobMx.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Descripcion")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Nombre")
@@ -1324,7 +1367,6 @@ namespace AtoGobMx.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Descripcion")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Nombre")
@@ -1387,7 +1429,7 @@ namespace AtoGobMx.Migrations
                             PuestoTrabajoId = 1,
                             Archivado = false,
                             DepartamentoId = 1,
-                            Nombre = "Administrador"
+                            Nombre = "Auxiliar de soporte"
                         });
                 });
 
@@ -1465,12 +1507,7 @@ namespace AtoGobMx.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("SERMED_EstatusRecetaEstatusRecetaId")
-                        .HasColumnType("int");
-
                     b.HasKey("EstatusRecetaId");
-
-                    b.HasIndex("SERMED_EstatusRecetaEstatusRecetaId");
 
                     b.ToTable("EstatusReceta");
 
@@ -1486,6 +1523,12 @@ namespace AtoGobMx.Migrations
                             EstatusRecetaId = 2,
                             Archivado = false,
                             Nombre = "Surtido"
+                        },
+                        new
+                        {
+                            EstatusRecetaId = 3,
+                            Archivado = false,
+                            Nombre = "Atendido"
                         });
                 });
 
@@ -2116,17 +2159,6 @@ namespace AtoGobMx.Migrations
                     b.Navigation("Empleados");
                 });
 
-            modelBuilder.Entity("AtoGobMx.Models.ExpedienteVale", b =>
-                {
-                    b.HasOne("AtoGobMx.Models.PROV_ControlVales", "ControlDeVales")
-                        .WithMany("ExpedienteVale")
-                        .HasForeignKey("ControlValeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ControlDeVales");
-                });
-
             modelBuilder.Entity("AtoGobMx.Models.Gabetas", b =>
                 {
                     b.HasOne("AtoGobMx.Models.Cementerio", "Cementerio")
@@ -2256,7 +2288,7 @@ namespace AtoGobMx.Migrations
                         .WithMany("ControlDeVales")
                         .HasForeignKey("DepartamentoId");
 
-                    b.HasOne("AtoGobMx.Models.Empleado", "Empleados")
+                    b.HasOne("AtoGobMx.Models.Empleado", null)
                         .WithMany("ControlDeVales")
                         .HasForeignKey("EmpleadoId");
 
@@ -2274,8 +2306,6 @@ namespace AtoGobMx.Migrations
 
                     b.Navigation("Departamentos");
 
-                    b.Navigation("Empleados");
-
                     b.Navigation("PROV_EstatusVale");
 
                     b.Navigation("PROV_Proveedor");
@@ -2286,7 +2316,7 @@ namespace AtoGobMx.Migrations
             modelBuilder.Entity("AtoGobMx.Models.PROV_DetalleVale", b =>
                 {
                     b.HasOne("AtoGobMx.Models.PROV_ControlVales", "PROV_ControlVale")
-                        .WithMany("PROV_DetalleVales")
+                        .WithMany("PROV_DetalleVale")
                         .HasForeignKey("ControlValeId");
 
                     b.HasOne("AtoGobMx.Models.PROV_Producto", "PROV_Producto")
@@ -2331,13 +2361,6 @@ namespace AtoGobMx.Migrations
                         .IsRequired();
 
                     b.Navigation("Empleados");
-                });
-
-            modelBuilder.Entity("AtoGobMx.Models.SERMED_EstatusReceta", b =>
-                {
-                    b.HasOne("AtoGobMx.Models.SERMED_EstatusReceta", null)
-                        .WithMany("EstatusRecetas")
-                        .HasForeignKey("SERMED_EstatusRecetaEstatusRecetaId");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.SERMED_ExpedienteMedico", b =>
@@ -2541,9 +2564,7 @@ namespace AtoGobMx.Migrations
 
             modelBuilder.Entity("AtoGobMx.Models.PROV_ControlVales", b =>
                 {
-                    b.Navigation("ExpedienteVale");
-
-                    b.Navigation("PROV_DetalleVales");
+                    b.Navigation("PROV_DetalleVale");
 
                     b.Navigation("PROV_Vehiculo");
                 });
@@ -2575,11 +2596,6 @@ namespace AtoGobMx.Migrations
                     b.Navigation("AseoEmpleado");
 
                     b.Navigation("AseoVehiculo");
-                });
-
-            modelBuilder.Entity("AtoGobMx.Models.SERMED_EstatusReceta", b =>
-                {
-                    b.Navigation("EstatusRecetas");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.SERMED_Producto", b =>

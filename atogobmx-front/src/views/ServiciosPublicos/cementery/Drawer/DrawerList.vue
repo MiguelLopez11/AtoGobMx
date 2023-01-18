@@ -291,8 +291,8 @@ export default {
       cementeryService.value = data
       if (data.length === 0) {
         swal.fire({
-          title: 'No se encuentra un cementerio registrado!',
-          text: 'No se encuentra un cementerio registrado en el departamento seleccionado, registre primero un tipo de cementerio para continuar',
+          title: 'No se encuentra una gaveta registrado!',
+          text: 'No se encuentra un gaveta registrado en el departamento seleccionado, registre primero un tipo de gaveta para continuar',
           icon: 'warning'
         })
       }
@@ -482,8 +482,8 @@ export default {
         createDrawer(drawerServiceFields.value, data => {
           refreshTable()
           swal.fire({
-            title: '¡Cementerios agregado correctamente!',
-            text: 'Cementerios registrado satisfactoriamente',
+            title: 'Gaveta agregado correctamente!',
+            text: 'Gaveta registrado satisfactoriamente',
             icon: 'success'
           })
         })
@@ -501,7 +501,7 @@ export default {
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
           cancelButtonColor: '#d33',
-          confirmButtonText: 'Si, Archivar Cementerios!',
+          confirmButtonText: 'Si, Archivar Gaveta!',
           cancelButtonText: 'Cancelar'
         })
         .then(result => {
@@ -511,7 +511,7 @@ export default {
             })
             swal.fire({
               title: '¡Cementerio archivado!',
-              text: 'El cementerio ha sido archivado satisfactoriamente.',
+              text: 'La gaveta ha sido archivado satisfactoriamente.',
               icon: 'success'
             })
           } else {
