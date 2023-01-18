@@ -68,9 +68,16 @@ namespace AtoGobMx.Context
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<SERMED_EstatusReceta>().HasData(new SERMED_EstatusReceta { EstatusRecetaId = 1, Nombre = "Pendiente", Descripcion = null, Archivado = false });
             modelBuilder.Entity<SERMED_EstatusReceta>().HasData(new SERMED_EstatusReceta { EstatusRecetaId = 2, Nombre = "Surtido", Descripcion = null, Archivado = false });
-            modelBuilder.Entity<SERMED_EstatusReceta>().HasData(new SERMED_EstatusReceta { EstatusRecetaId = 1, Nombre = "Atendido", Descripcion = null, Archivado = false });
+            modelBuilder.Entity<SERMED_EstatusReceta>().HasData(new SERMED_EstatusReceta { EstatusRecetaId = 3, Nombre = "Atendido", Descripcion = null, Archivado = false });
             modelBuilder.Entity<PAT_EstatusEquipo>().HasData(new PAT_EstatusEquipo { EstatusEquipoId = 1, Nombre = "Dado de baja", Descripcion = null, Archivado = false });
-            modelBuilder.Entity<PAT_EstatusEquipo>().HasData(new PAT_EstatusEquipo { EstatusEquipoId = 1, Nombre = "En funcionamiento", Descripcion = null, Archivado = false });
+            modelBuilder.Entity<PAT_EstatusEquipo>().HasData(new PAT_EstatusEquipo { EstatusEquipoId = 2, Nombre = "En funcionamiento", Descripcion = null, Archivado = false });
+            modelBuilder.Entity<PROV_EstatusVale>().HasData(new PROV_EstatusVale { EstatusValeId = 1, Nombre = "Pendiente", Descripcion = "Se ha generado el vale para ser validado por el director del departamento de Proveeduría", Archivado = false });
+            modelBuilder.Entity<PROV_EstatusVale>().HasData(new PROV_EstatusVale { EstatusValeId = 2, Nombre = "Validado", Descripcion = "El vale ha sido revisado y confirmado por el director del departamento de proveeduría", Archivado = false });
+            modelBuilder.Entity<PROV_EstatusVale>().HasData(new PROV_EstatusVale { EstatusValeId = 3, Nombre = "Entregado", Descripcion = "El vale a sido entregado correctamente al solicitante", Archivado = false });
+            modelBuilder.Entity<PROV_EstatusVale>().HasData(new PROV_EstatusVale { EstatusValeId = 4, Nombre = "Recibido", Descripcion = "El solicitante entregó el vale al departamento de proveeduría", Archivado = false });
+            modelBuilder.Entity<Departamentos>().HasData(new Departamentos { DepartamentoId = 1, Nombre = "Dirección de sistemas y tecnologías de la información", Descripcion = "Sistemas", Archivado = false });
+            modelBuilder.Entity<PuestoTrabajo>().HasData(new PuestoTrabajo { PuestoTrabajoId = 1, Nombre = "Auxiliar de soporte", DepartamentoId = 1, Archivado = false });
+            modelBuilder.Entity<Empleado>().HasData(new Empleado { EmpleadoId = 1, NombreCompleto = "Rogelio Gonzales Camacho", DepartamentoId = 1, PuestoTrabajoId = 1, Archivado = false });
         }
     }
 }

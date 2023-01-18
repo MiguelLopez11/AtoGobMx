@@ -1,5 +1,4 @@
 ﻿using AtoGobMx.Context;
-using AtoGobMx.Migrations;
 using AtoGobMx.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

@@ -32,6 +32,21 @@ export default function VoucherControlServices () {
       callback(response.data)
     })
   }
+  const autorizeVoucherControl = (controlValeId, callback) => {
+    axiosPrivate.put(`/ControlDeVales/Autoriza/${controlValeId}`).then((response) => {
+      callback(response.data)
+    })
+  }
+  const DeliveryVoucherControl = (controlValeId, callback) => {
+    axiosPrivate.put(`/ControlDeVales/Entrega/${controlValeId}`).then((response) => {
+      callback(response.data)
+    })
+  }
+  const receiveVoucherControl = (controlValeId, callback) => {
+    axiosPrivate.put(`/ControlDeVales/Recibir/${controlValeId}`).then((response) => {
+      callback(response.data)
+    })
+  }
 
   const deleteVoucherControl = (controlValeId, callback) => {
     axiosPrivate.delete(`/ControlDeVales/${controlValeId}`).then((response) => {
@@ -45,6 +60,9 @@ export default function VoucherControlServices () {
     getVoucherControls,
     createVoucherControl,
     updateVoucherControl,
-    deleteVoucherControl
+    autorizeVoucherControl,
+    deleteVoucherControl,
+    DeliveryVoucherControl,
+    receiveVoucherControl
   }
 }
