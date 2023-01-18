@@ -9,11 +9,11 @@ namespace AtoGobMx.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ControlValeId { get; set; }
+        public string Folio { get; set; }
         public DateTime? FechaEmicion { get; set; }
         public DateTime? FechaVigencia { get; set; }
         public string? Recibio { get; set; }
         public string? Usuario { get; set; }
-        public string? Dependencia { get; set; }
         public string? Subprograma { get; set; }
         public string? UsuarioAutoriza { get; set; }
         public int? DepartamentoId { get; set; }
@@ -21,7 +21,7 @@ namespace AtoGobMx.Models
         public int? EstatusValeId { get; set; }
         public int? TipoId { get; set; }
         public bool Archivado { get; set; }
-        //public bool TieneExpediente { get; set; }
+        public bool Autorizado { get; set; }
 
         [ForeignKey("DepartamentoId")]
         public Departamentos? Departamentos { get; set; }
@@ -36,7 +36,5 @@ namespace AtoGobMx.Models
         public virtual IEnumerable<PROV_DetalleVale>? PROV_DetalleVale { get; set; }
         [JsonIgnore]
         public virtual IEnumerable<PROV_Vehiculo>? PROV_Vehiculo { get; set; }
-        //[JsonIgnore]
-        //public virtual IEnumerable<ExpedienteVale>? ExpedienteVale { get; set; }
     }
 }

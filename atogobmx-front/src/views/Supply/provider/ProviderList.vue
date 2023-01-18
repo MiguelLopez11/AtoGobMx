@@ -309,7 +309,7 @@ export default {
         RFCState.value = false
         return 'Este campo es requerido'
       }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(providerFields.value.rfc)) {
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ 0-9]+$/i.test(providerFields.value.rfc)) {
         RFCState.value = false
         return 'El RFC solo puede contener letras'
       }
@@ -347,7 +347,7 @@ export default {
         DirectionState.value = false
         return 'Este campo es requerido'
       }
-      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/i.test(providerFields.value.direccion)) {
+      if (!/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ .# 0-9]+$/i.test(providerFields.value.direccion)) {
         DirectionState.value = false
         return 'La descripcion solo puede contener letras'
       }
