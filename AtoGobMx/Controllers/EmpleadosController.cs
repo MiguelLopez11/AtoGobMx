@@ -95,7 +95,7 @@ namespace AtoGobMx.Controllers
             var empleados = await _context.Empleados
                 //.Include(i => i.ControlDeVales)
                 .Include(i => i.Departamentos)
-                .Where(w => w.Departamentos.Nombre == "Proveeduria")
+                .Where(w => w.Departamentos.Nombre == "Proveeduría")
                 .Where(w => !w.Archivado)
                 .ToListAsync();
             return Ok(empleados);

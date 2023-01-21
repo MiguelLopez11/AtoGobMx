@@ -105,7 +105,11 @@ export default {
       isLoggin.value = true
       LogIn(user.value, data => {
         if (data.token) {
-          window.sessionStorage.setItem('isLogged', true)
+          window.sessionStorage.setItem('Nombre', data.nombre)
+          window.sessionStorage.setItem('EmpleadoId', data.empleadoId)
+          window.sessionStorage.setItem('Departamento', data.departamento)
+          window.sessionStorage.setItem('PuestoTrabajo', data.puestoTrabajo)
+          window.sessionStorage.setItem('Role', data.role)
           window.sessionStorage.setItem('Token', data.token)
           window.sessionStorage.setItem('RefreshToken', data.refreshToken)
           swal
