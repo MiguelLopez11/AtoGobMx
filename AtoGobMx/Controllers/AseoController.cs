@@ -84,6 +84,29 @@ namespace AtoGobMx.Controllers
             {
                 return BadRequest("El Registro del aseo no existe");
             }
+            if (!aseo.Nombre.Equals(aseopublico.Nombre))
+            {
+                try
+                {
+                    string serverUri = $"ftp://digital.atogobmx.com/Files/ServiciosPublicos/AseoPublico/{aseopublico.Nombre}";
+                    FtpWebRequest request = (FtpWebRequest)WebRequest.Create(serverUri);
+                    request.Method = WebRequestMethods.Ftp.Rename;
+                    request.Proxy = null;
+                    request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+                    request.RenameTo = $"{aseo.Nombre}";
+                    FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+                    Stream respStream = response.GetResponseStream();
+                    StreamReader reader = new StreamReader(respStream);
+                    string streamContent = reader.ReadToEnd();
+                    respStream.Close();
+                    response.Close();
+
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
 
             aseopublico.AseoId = AseoId;
             aseopublico.Nombre = aseo.Nombre;

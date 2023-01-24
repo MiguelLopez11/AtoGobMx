@@ -72,6 +72,29 @@ namespace AtoGobMx.Controllers
             {
                 return NotFound();
             }
+            if (!vehiculo.Nomenclatura.Equals(Vehiculo.Nomenclatura))
+            {
+                try
+                {
+                    string serverUri = $"ftp://digital.atogobmx.com/Files/ServiciosPublicos/AseoPublico/{vehiculo.Nomenclatura}";
+                    FtpWebRequest request = (FtpWebRequest)WebRequest.Create(serverUri);
+                    request.Method = WebRequestMethods.Ftp.Rename;
+                    request.Proxy = null;
+                    request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+                    request.RenameTo = $"{vehiculo.Nomenclatura}";
+                    FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+                    Stream respStream = response.GetResponseStream();
+                    StreamReader reader = new StreamReader(respStream);
+                    string streamContent = reader.ReadToEnd();
+                    respStream.Close();
+                    response.Close();
+
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
             Vehiculo.VehiculoId = vehiculo.VehiculoId;
             Vehiculo.Nomenclatura = vehiculo.Nomenclatura;
             Vehiculo.ProveedorId = vehiculo.ProveedorId;

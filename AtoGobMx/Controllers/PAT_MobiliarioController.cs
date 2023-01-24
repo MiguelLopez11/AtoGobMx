@@ -77,6 +77,29 @@ namespace AtoGobMx.Controllers
             {
                 return NotFound();
             }
+            if (!mobiliario.CodigoInventario.Equals(PAT_Mobiliario.CodigoInventario))
+            {
+                try
+                {
+                    string serverUri = $"ftp://digital.atogobmx.com/Files/ServiciosPublicos/AseoPublico/{PAT_Mobiliario.CodigoInventario}";
+                    FtpWebRequest request = (FtpWebRequest)WebRequest.Create(serverUri);
+                    request.Method = WebRequestMethods.Ftp.Rename;
+                    request.Proxy = null;
+                    request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+                    request.RenameTo = $"{mobiliario.CodigoInventario}";
+                    FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+                    Stream respStream = response.GetResponseStream();
+                    StreamReader reader = new StreamReader(respStream);
+                    string streamContent = reader.ReadToEnd();
+                    respStream.Close();
+                    response.Close();
+
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
             PAT_Mobiliario.MobiliarioId = mobiliario.MobiliarioId;
             PAT_Mobiliario.CodigoInventario = mobiliario.CodigoInventario;
             PAT_Mobiliario.Descripción = mobiliario.Descripción;

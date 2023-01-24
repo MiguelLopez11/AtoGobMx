@@ -1,6 +1,7 @@
 <template>
   <div>
     <VueSidebarMenuAkahon
+      style="height: 98%; margin-top: 8px;"
       v-if="Token"
       menuTitle="AtoGobMX"
       bgColor="#ffffff"
@@ -38,7 +39,6 @@ export default {
     const background = ref(LogoAtogobMx)
     const ImageProfile = ref(AtogobMx)
     const empleadoId = window.sessionStorage.getItem('EmpleadoId')
-    console.log(empleadoId)
     const Token = window.sessionStorage.getItem('Token')
     const departament = window.sessionStorage.getItem('Departamento')
     const puestoTrabajo = window.sessionStorage.getItem('PuestoTrabajo')
@@ -96,10 +96,7 @@ export default {
       departament,
       puestoTrabajo,
       employee,
-      // role,
-      // area,
       menu,
-      // employee,
       empleadoId,
 
       removeLocalStorgare
@@ -110,13 +107,6 @@ export default {
 
 <style>
 @import '@/css/table-easy-documents.css';
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
 .sidebar .nav-list {
   margin-left: -30px;
 }

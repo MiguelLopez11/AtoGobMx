@@ -77,6 +77,29 @@ namespace AtoGobMx.Controllers
             {
                 return NotFound();
             }
+            if (!equipoComputo.CodigoInventario.Equals(equipo.CodigoInventario))
+            {
+                try
+                {
+                    string serverUri = $"ftp://digital.atogobmx.com/Files/ServiciosPublicos/AseoPublico/{equipo.CodigoInventario}";
+                    FtpWebRequest request = (FtpWebRequest)WebRequest.Create(serverUri);
+                    request.Method = WebRequestMethods.Ftp.Rename;
+                    request.Proxy = null;
+                    request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+                    request.RenameTo = $"{equipoComputo.CodigoInventario}";
+                    FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+                    Stream respStream = response.GetResponseStream();
+                    StreamReader reader = new StreamReader(respStream);
+                    string streamContent = reader.ReadToEnd();
+                    respStream.Close();
+                    response.Close();
+
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
             equipo.EquipoComputoId = equipoComputo.EquipoComputoId;
             equipo.CodigoInventario = equipoComputo.CodigoInventario;
             equipo.Caracteristicas = equipoComputo.Caracteristicas;

@@ -79,7 +79,7 @@
       <Form @submit="addUser">
         <b-row cols="3">
           <b-col>
-            <b-form-group class="mt-3" label="Nombre de Usuario">
+            <b-form-group label="Nombre de Usuario">
               <Field name="userNameField" :rules="validateUserName" as="text">
                 <b-form-input
                   type="text"
@@ -92,7 +92,7 @@
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="Contraseña">
+            <b-form-group label="Contraseña">
               <Field name="passwordField" :rules="validatePassword" as="text">
                 <b-form-input
                   type="password"
@@ -104,17 +104,52 @@
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="CorreoElectronico">
-              <b-form-input type="email" v-model="userFields.email" />
+            <b-form-group label="CorreoElectronico">
+              <Field name="EmailField" :rules="validateEmail" as="text">
+                <b-form-input
+                  type="email"
+                  v-model="userFields.email"
+                  :state="emailState"
+                />
+              </Field>
+              <ErrorMessage class="text-danger" name="EmailField" />
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="Numero de telefono">
-              <b-form-input v-model="userFields.phoneNumber" />
+            <b-form-group label="Numero de telefono">
+              <Field name="PhoneField" :rules="validatePhone" as="number">
+                <b-form-input
+                  v-model="userFields.phoneNumber"
+                  :state="phoneState"
+                  type="number"
+                >
+                </b-form-input>
+              </Field>
+              <ErrorMessage class="text-danger" name="PhoneField" />
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group class="mt-3" label="Administrador">
+            <b-form-group label="Empleado">
+              <Field
+                name="EmployeeField"
+                as="text"
+                :rules="validateEmployee"
+              >
+                <b-form-select
+                  v-model="userFields.empleadoId"
+                  autofocus
+                  :state="employeeState"
+                  value-field="empleadoId"
+                  text-field="nombreCompleto"
+                  :options="employees"
+                >
+                </b-form-select>
+              </Field>
+              <ErrorMessage class="text-danger" name="EmployeeField" />
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group label="¿Es Administrador?">
               <b-form-checkbox size="lg" v-model="isAdmin" />
             </b-form-group>
           </b-col>
@@ -138,6 +173,7 @@
 
 <script>
 import UsersServices from '@/Services/users.Services'
+import EmployeeServices from '@/Services/employee.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -153,11 +189,16 @@ export default {
     // Services
     const { getUsers, deleteUser, createUser, createAdminUser } =
       UsersServices()
+    const { getEmployeesUnfiled } = EmployeeServices()
     // Data
     const showModal = ref(false)
     const users = ref([])
+    const employees = ref([])
     const userNameState = ref(false)
     const passwordState = ref(false)
+    const emailState = ref(false)
+    const phoneState = ref(false)
+    const employeeState = ref(false)
     const isAdmin = ref(false)
     const perPage = ref(5)
     const currentPage = ref(1)
@@ -181,7 +222,8 @@ export default {
       username: null,
       email: null,
       phoneNumber: null,
-      password: null
+      password: null,
+      empleadoId: null
     })
     const areasFieldsBlank = ref(JSON.parse(JSON.stringify(userFields)))
     const fields = ref([
@@ -200,6 +242,9 @@ export default {
           isloading.value = false
         }
       }
+    })
+    getEmployeesUnfiled(data => {
+      employees.value = data
     })
     const onFiltered = filteredItems => {
       currentPage.value = 1
@@ -330,6 +375,47 @@ export default {
       passwordState.value = true
       return true
     }
+    const validatePhone = () => {
+      if (!userFields.value.phoneNumber) {
+        phoneState.value = false
+        return 'Este campo es requerido'
+      }
+
+      if (!/^([0-9]{10})+$/i.test(userFields.value.phoneNumber)) {
+        phoneState.value = false
+        return 'Este campo solo puede contener 10 numeros'
+      }
+
+      if (!userFields.value.phoneNumber.trim().length > 0) {
+        phoneState.value = false
+        return 'Este campo no puede contener espacios'
+      }
+
+      phoneState.value = true
+      return true
+    }
+
+    const validateEmail = () => {
+      if (!userFields.value.email) {
+        emailState.value = false
+        return 'Este campo es requerido'
+      }
+      const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
+      if (!regex.test(userFields.value.email)) {
+        emailState.value = false
+        return 'Este campo debe ser un correo electrónico válido'
+      }
+      emailState.value = true
+      return true
+    }
+    const validateEmployee = value => {
+      if (!userFields.value.empleadoId) {
+        employeeState.value = false
+        return 'Este campo es requerido'
+      }
+      employeeState.value = true
+      return true
+    }
     return {
       fields,
       breadcrumbItems,
@@ -338,10 +424,14 @@ export default {
       filter,
       perPageSelect,
       users,
+      employees,
       areasFieldsBlank,
       userFields,
       userNameState,
       passwordState,
+      emailState,
+      phoneState,
+      employeeState,
       isloading,
       searchValue,
       searchField,
@@ -356,8 +446,10 @@ export default {
       RemoveUser,
       resetRoleFields,
       validateUserName,
+      validateEmail,
+      validatePhone,
       // validateRole,
-      // validateEmployee,
+      validateEmployee,
       // validateState,
       validatePassword
     }
