@@ -1,9 +1,12 @@
 ﻿using AtoGobMx.Context;
 using AtoGobMx.Models;
 using AutoMapper;
+using AutoMapper.Internal;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PuppeteerSharp;
 using System.Net;
 
 namespace AtoGobMx.Controllers
@@ -95,7 +98,7 @@ namespace AtoGobMx.Controllers
             var empleados = await _context.Empleados
                 //.Include(i => i.ControlDeVales)
                 .Include(i => i.Departamentos)
-                .Where(w => w.Departamentos.Nombre == "Proveeduria")
+                .Where(w => w.Departamentos.Nombre == "Proveeduría")
                 .Where(w => !w.Archivado)
                 .ToListAsync();
             return Ok(empleados);
@@ -142,7 +145,7 @@ namespace AtoGobMx.Controllers
             _context.Empleados.Add(Empleado);
             await _context.SaveChangesAsync();
             return CreatedAtAction("GetEmpleadosById", new { EmpleadoId = Empleado.EmpleadoId }, Empleado);
-     
+
         }
         [HttpPut("{EmpleadoId}")]
         public async Task<ActionResult> PutEmpleado(int EmpleadoId, Empleado empleado)
@@ -156,6 +159,29 @@ namespace AtoGobMx.Controllers
             {
                 return BadRequest("El empledo no existe");
             }
+            if (!empleado.NombreCompleto.Equals(emp.NombreCompleto))
+            {
+                try
+                {
+                    string serverUri = $"ftp://digital.atogobmx.com/Files/RecursosHumanos/Empleados/{emp.NombreCompleto}";
+                    FtpWebRequest request = (FtpWebRequest)WebRequest.Create(serverUri);
+                    request.Method = WebRequestMethods.Ftp.Rename;
+                    request.Proxy = null;
+                    request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+                    request.RenameTo = $"{empleado.NombreCompleto}";
+                    FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+                    Stream respStream = response.GetResponseStream();
+                    StreamReader reader = new StreamReader(respStream);
+                    string streamContent = reader.ReadToEnd();
+                    respStream.Close();
+                    response.Close();
+
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
             emp.EmpleadoId = empleado.EmpleadoId;
             emp.NombreCompleto = empleado.NombreCompleto;
             emp.CódigoEmpleado = empleado.CódigoEmpleado;
@@ -166,7 +192,7 @@ namespace AtoGobMx.Controllers
             emp.DepartamentoId = empleado.DepartamentoId;
             emp.PuestoTrabajoId = empleado.PuestoTrabajoId;
             emp.Archivado = empleado.Archivado;
-
+            
             _context.Empleados.Update(emp);
             await _context.SaveChangesAsync();
             return Ok("Empleado actualizado correctamente");
@@ -174,13 +200,13 @@ namespace AtoGobMx.Controllers
         [HttpPut("DesArchivar/{EmpleadoId}")]
         public async Task<ActionResult> DesArchivarEmpleado(int EmpleadoId)
         {
-            
+
             var empleado = await _context.Empleados.FirstOrDefaultAsync(f => f.EmpleadoId == EmpleadoId);
             if (empleado == null)
             {
                 return BadRequest("El empledo no existe");
             }
-            
+
             empleado.Archivado = false;
 
             _context.Empleados.Update(empleado);

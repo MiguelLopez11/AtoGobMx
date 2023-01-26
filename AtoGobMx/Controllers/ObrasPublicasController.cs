@@ -81,7 +81,29 @@ namespace AtoGobMx.Controllers
             {
                 return BadRequest("El Registro de la obra publica no existe");
             }
+            if (!obrasPublicas.Nombre.Equals(obrapublic.Nombre))
+            {
+                try
+                {
+                    string serverUri = $"ftp://digital.atogobmx.com/Files/ServiciosPublicos/AseoPublico/{obrapublic.Nombre}";
+                    FtpWebRequest request = (FtpWebRequest)WebRequest.Create(serverUri);
+                    request.Method = WebRequestMethods.Ftp.Rename;
+                    request.Proxy = null;
+                    request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+                    request.RenameTo = $"{obrasPublicas.Nombre}";
+                    FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+                    Stream respStream = response.GetResponseStream();
+                    StreamReader reader = new StreamReader(respStream);
+                    string streamContent = reader.ReadToEnd();
+                    respStream.Close();
+                    response.Close();
 
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
             obrapublic.ObraId = ObraId;
             obrapublic.Nombre = obrasPublicas.Nombre;
             obrapublic.Encargado = obrasPublicas.Encargado;

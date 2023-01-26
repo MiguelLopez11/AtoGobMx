@@ -248,7 +248,6 @@ namespace AtoGobMx.Controllers
                 else
                 {
                     string Url = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/{5}", "digital.atogobmx.com", "Files", "RecursosHumanos", "Empleados", expediente.Empleados.NombreCompleto, archivoExpediente.Nombre);
-                    //string uploadUrl = String.Format("ftp://{0}/{1}/{2}/{3}/{4}/{5}", "digital.atogobmx.com", "Files", "RecursosHumanos", "Empleados", expediente.Empleados.NombreCompleto, file.FileName);
                     var delete = DeleteFile(Url);
                     if (delete)
                     {

@@ -76,6 +76,29 @@ namespace AtoGobMx.Controllers
             {
                 return NotFound();
             }
+            if (!armeria.Nomenclatura.Equals(arma.Nomenclatura))
+            {
+                try
+                {
+                    string serverUri = $"ftp://digital.atogobmx.com/Files/Patrimonio/Armeria/{arma.Nomenclatura}";
+                    FtpWebRequest request = (FtpWebRequest)WebRequest.Create(serverUri);
+                    request.Method = WebRequestMethods.Ftp.Rename;
+                    request.Proxy = null;
+                    request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+                    request.RenameTo = $"{armeria.Nomenclatura}";
+                    FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+                    Stream respStream = response.GetResponseStream();
+                    StreamReader reader = new StreamReader(respStream);
+                    string streamContent = reader.ReadToEnd();
+                    respStream.Close();
+                    response.Close();
+
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
             arma.ArmaId = armeria.ArmaId;
             arma.Nomenclatura = armeria.Nomenclatura;
             arma.Marca = armeria.Marca;

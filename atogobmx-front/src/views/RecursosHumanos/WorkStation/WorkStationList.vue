@@ -159,7 +159,7 @@
 
 <script>
 import workStationServices from '@/Services/workStation.Services'
-import AreasServices from '@/Services/area.Services'
+// import AreasServices from '@/Services/area.Services'
 import DepartamentServices from '@/Services/departament.Services'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref, inject } from 'vue'
@@ -175,7 +175,7 @@ export default {
     const swal = inject('$swal')
     const { getWorkStations, createWorkStation, deleteWorkStation } =
       workStationServices()
-    const { getAreasByDepartament } = AreasServices()
+    // const { getAreasByDepartament } = AreasServices()
     const { getDepartaments } = DepartamentServices()
     const showModal = ref(false)
     const workStations = ref([])
@@ -236,20 +236,20 @@ export default {
         })
       }
     })
-    const getAreas = departamentoId => {
-      getAreasByDepartament(departamentoId, data => {
-        areas.value = data
-        if (data.length === 0) {
-          if (data.length === 0) {
-            swal.fire({
-              title: 'No se encuentran areas registradas!',
-              text: 'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
-              icon: 'error'
-            })
-          }
-        }
-      })
-    }
+    // const getAreas = departamentoId => {
+    //   getAreasByDepartament(departamentoId, data => {
+    //     areas.value = data
+    //     if (data.length === 0) {
+    //       if (data.length === 0) {
+    //         swal.fire({
+    //           title: 'No se encuentran areas registradas!',
+    //           text: 'No se encuentran areas registradas en el departamento seleccionado, registre primero una area para continuar.',
+    //           icon: 'error'
+    //         })
+    //       }
+    //     }
+    //   })
+    // }
     const onFiltered = filteredItems => {
       rows.value = filteredItems.length
       currentPage.value = 1
@@ -378,8 +378,8 @@ export default {
       validateName,
       validateArea,
       validateDepartament,
-      resetWorkStationFields,
-      getAreas
+      resetWorkStationFields
+      // getAreas
     }
   }
 }

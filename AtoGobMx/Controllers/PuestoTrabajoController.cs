@@ -85,7 +85,7 @@ namespace AtoGobMx.Controllers
             return Ok("Puesto trabajo actualizado correctamente");
         }
         [HttpDelete("{PuestoTrabajoId}")]
-        public async Task<IActionResult> DeleteExpedienteDigital(int PuestoTrabajoId)
+        public async Task<IActionResult> DeletePuestoTrabajo(int PuestoTrabajoId)
         {
             var puestoTrabajo = await _context.PuestoTrabajo
                 .FirstOrDefaultAsync(f => f.PuestoTrabajoId == PuestoTrabajoId);

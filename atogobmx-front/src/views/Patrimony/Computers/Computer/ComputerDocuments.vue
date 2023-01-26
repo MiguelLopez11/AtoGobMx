@@ -74,7 +74,7 @@
           variant="outline-warning"
           @click="onDownloadFile(items)"
         >
-          <!-- :href="`http://localhost:5000/api/Archivos/DocumentosEquipoComputo/Descargar/${equipoComputoId}/${}`" -->
+          <!-- :href="`https://digitalatogobmxwebservices.somee.com/api/Archivos/DocumentosEquipoComputo/Descargar/${equipoComputoId}/${}`" -->
           <i class="bi bi-download"></i>
         </b-button>
       </template>

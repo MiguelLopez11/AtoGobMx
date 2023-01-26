@@ -1,22 +1,25 @@
 <template>
-  <VueSidebarMenuAkahon
-    v-if="isLogged"
-    menuTitle="AtoGobMX"
-    bgColor="#ffffff"
-    secondaryColor="#ffffff"
-    :menuLogo="background"
-    :isSearch="false"
-    :menuItems="menu"
-    logoTitleColor="#7b7a81"
-    menuItemsTextColor="#807e85"
-    menuFooterTextColor="#807e85"
-    iconsColor="#807e85"
-    menuItemsHoverColor="#9d94f4"
-    :profileImg="ImageProfile"
-    :profileName="null"
-    :profileRole="null"
-    @button-exit-clicked="removeLocalStorgare()"
-  />
+  <div>
+    <VueSidebarMenuAkahon
+      style="height: 98%; margin-top: 8px;"
+      v-if="Token"
+      menuTitle="AtoGobMX"
+      bgColor="#ffffff"
+      secondaryColor="#ffffff"
+      :menuLogo="background"
+      :isSearch="false"
+      :menuItems="menu"
+      logoTitleColor="#7b7a81"
+      menuItemsTextColor="#807e85"
+      menuFooterTextColor="#807e85"
+      iconsColor="#807e85"
+      menuItemsHoverColor="#9d94f4"
+      :profileImg="`http://localhost:5000/api/Archivos/FotoPerfil/Empleado/${empleadoId}`"
+      :profileName="employee"
+      :profileRole="departament + ', ' + puestoTrabajo"
+      @button-exit-clicked="removeLocalStorgare()"
+    />
+  </div>
   <router-view></router-view>
 </template>
 <script>
@@ -35,12 +38,11 @@ export default {
     const swal = inject('$swal')
     const background = ref(LogoAtogobMx)
     const ImageProfile = ref(AtogobMx)
-    const isLogged = window.sessionStorage.getItem('isLogged')
-    // const departament = window.sessionStorage.getItem('Departamento')
-    // const role = window.sessionStorage.getItem('Role')
-    // const area = window.sessionStorage.getItem('Area')
-    // const employee = window.sessionStorage.getItem('Empleado')
-    // const empleadoId = window.sessionStorage.getItem('EmpleadoId')
+    const empleadoId = window.sessionStorage.getItem('EmpleadoId')
+    const Token = window.sessionStorage.getItem('Token')
+    const departament = window.sessionStorage.getItem('Departamento')
+    const puestoTrabajo = window.sessionStorage.getItem('PuestoTrabajo')
+    const employee = window.sessionStorage.getItem('Nombre')
     const menu = ref([
       { link: '/', name: 'Inicio', icon: 'bi bi-house' },
       {
@@ -76,7 +78,7 @@ export default {
       }
     ])
     const removeLocalStorgare = () => {
-      window.sessionStorage.removeItem('isLogged')
+      window.sessionStorage.removeItem('Token')
       swal
         .fire({
           title: 'Cerrar Sesión!',
@@ -90,13 +92,12 @@ export default {
     return {
       background,
       ImageProfile,
-      isLogged,
-      // departament,
-      // role,
-      // area,
+      Token,
+      departament,
+      puestoTrabajo,
+      employee,
       menu,
-      // employee,
-      // empleadoId,
+      empleadoId,
 
       removeLocalStorgare
     }
@@ -106,18 +107,26 @@ export default {
 
 <style>
 @import '@/css/table-easy-documents.css';
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
 .sidebar .nav-list {
   margin-left: -30px;
 }
+.sidebar div.profile {
+  height: 90px;
+}
+.sidebar div.profile .name {
+  font-size: 12px;
+  white-space: pre-line;
+}
 .sidebar div.profile .job {
-  font-size: 10px;
+  font-size: 9px;
+  white-space: pre-line;
+}
+.sidebar div.profile #log_out {
+  height: 90px;
+}
+.sidebar div img {
+  height: 60px;
+  width: 60px;
 }
 body {
   background-color: #f8f7fa !important;

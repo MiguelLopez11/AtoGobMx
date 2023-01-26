@@ -440,6 +440,8 @@ export default {
       typeWeaponState.value = false
       gaugeState.value = false
       employeeState.value = false
+      costState.value = false
+      dateState.value = false
       weaponsFields.value = JSON.parse(JSON.stringify(weaponsFieldsBlank))
     }
     return {

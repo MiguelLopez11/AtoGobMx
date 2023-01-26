@@ -78,7 +78,29 @@ namespace AtoGobMx.Controllers
             {
                 return BadRequest("El registro del cementerio no existe");
             }
+            if (!cementerio.NombreCementerio.Equals(cementerios.NombreCementerio))
+            {
+                try
+                {
+                    string serverUri = $"ftp://digital.atogobmx.com/Files/ServiciosPublicos/AseoPublico/{cementerios.NombreCementerio}";
+                    FtpWebRequest request = (FtpWebRequest)WebRequest.Create(serverUri);
+                    request.Method = WebRequestMethods.Ftp.Rename;
+                    request.Proxy = null;
+                    request.Credentials = new NetworkCredential("atogobmxdigital@digital.atogobmx.com", "LosAhijados22@");
+                    request.RenameTo = $"{cementerio.NombreCementerio}";
+                    FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+                    Stream respStream = response.GetResponseStream();
+                    StreamReader reader = new StreamReader(respStream);
+                    string streamContent = reader.ReadToEnd();
+                    respStream.Close();
+                    response.Close();
 
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
             cementerios.CementerioId = CementerioId;
             cementerios.NombreCementerio = cementerio.NombreCementerio;
             cementerios.Comunidad = cementerio.Comunidad;

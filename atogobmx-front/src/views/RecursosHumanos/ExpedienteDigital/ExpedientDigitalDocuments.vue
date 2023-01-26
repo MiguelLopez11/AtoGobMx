@@ -74,7 +74,7 @@
         class="m-1"
         variant="outline-warning"
       >
-        <!-- :href="`http://localhost:5000/api/Archivos/Documentos/Descargar/${expedienteDigitalId}/${items.archivoId}`" -->
+        <!-- :href="`https://digitalatogobmxwebservices.somee.com/api/Archivos/Documentos/Descargar/${expedienteDigitalId}/${items.archivoId}`" -->
         <i class="bi bi-download"></i>
       </b-button>
     </template>

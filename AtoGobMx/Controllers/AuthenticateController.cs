@@ -11,7 +11,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace JWTRefreshToken.NET6._0.Controllers
+namespace AtoGobMx.Controllers
 {
 
     [Route("api/[controller]")]
@@ -37,28 +37,47 @@ namespace JWTRefreshToken.NET6._0.Controllers
         [HttpGet("/api/Usuarios")]
         public IActionResult Get()
         {
+            try
+            {
+
             List<object> usuarios = new List<object>();
-            var user = _userManager.Users.ToArray();
+            var user = _userManager.Users
+                .Include(i => i.Empleado)
+                .Include(i => i.Empleado.Departamentos)
+                .Include(i => i.Empleado.PuestoTrabajo)
+                .ToArray();
             foreach (var usuario in user)
             {
-            //var employee = _context.Empleados
-            //    .Where(w => w.EmpleadoId == usuario.)
                 var userObject = new
                 {
                     NombreUsuario = usuario.UserName,
                     Email = usuario.Email,
-                    NumeroTelefono = usuario.PhoneNumber
+                    NumeroTelefono = usuario.PhoneNumber,
+                    EmpleadoId = usuario.Empleado.EmpleadoId,
+                    Nombre = usuario.Empleado.NombreCompleto,
+                    Departamento = usuario.Empleado.Departamentos.Nombre,
+                    PuestoTrabajo = usuario.Empleado.PuestoTrabajo.Nombre
                 };
                 usuarios.Add(userObject);
             }
             return Ok(usuarios);
+            } catch (Exception ex) 
+            {
+                return BadRequest(ex.Message.ToString());
+            }
         }
 
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
-            var user = await _userManager.FindByNameAsync(model.Username);
+            var user = await _userManager
+                .FindByNameAsync(model.Username);
+            var employeeUser = await _userManager.Users
+                .Include(i => i.Empleado)
+                .Include(i => i.Empleado.Departamentos)
+                .Include(i => i.Empleado.PuestoTrabajo)
+                .FirstOrDefaultAsync(f => f.UserName == user.UserName);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
                 var userRoles = await _userManager.GetRolesAsync(user);
@@ -83,16 +102,21 @@ namespace JWTRefreshToken.NET6._0.Controllers
                 user.RefreshTokenExpiryTime = DateTime.Now.AddDays(refreshTokenValidityInDays);
 
                 await _userManager.UpdateAsync(user);
-
                 return Ok(new
                 {
                     Token = new JwtSecurityTokenHandler().WriteToken(token),
                     RefreshToken = refreshToken,
-                    Expiration = token.ValidTo
+                    Expiration = token.ValidTo,
+                    EmpleadoId = employeeUser.Empleado.EmpleadoId,
+                    Nombre = employeeUser.Empleado.NombreCompleto,
+                    Departamento = employeeUser.Empleado.Departamentos.Nombre,
+                    PuestoTrabajo = employeeUser.Empleado.PuestoTrabajo.Nombre,
+                    Role = userRoles[0]
                 });
             }
             return Unauthorized();
         }
+        [Authorize]
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
@@ -106,7 +130,8 @@ namespace JWTRefreshToken.NET6._0.Controllers
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = model.Username,
                 PhoneNumber =  model.PhoneNumber,
-                Email = model.Email
+                Email = model.Email,
+                EmpleadoId = model.EmpleadoId
             };
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
@@ -114,6 +139,7 @@ namespace JWTRefreshToken.NET6._0.Controllers
 
             return Ok(new Response { Status = "Success", Message = "Usuario registrado correctamente!" });
         }
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpPost]
         [Route("register-admin")]
         public async Task<IActionResult> RegisterAdmin([FromBody] RegisterModel model)
@@ -127,7 +153,8 @@ namespace JWTRefreshToken.NET6._0.Controllers
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = model.Username,
                 PhoneNumber = model.PhoneNumber,
-                Email = model.Email
+                Email = model.Email,
+                EmpleadoId = model.EmpleadoId
             };
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
@@ -148,7 +175,7 @@ namespace JWTRefreshToken.NET6._0.Controllers
             }
             return Ok(new Response { Status = "Success", Message = "usuario creado correctamente!" });
         }
-
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpPost]
         [Route("refresh-token")]
         public async Task<IActionResult> RefreshToken(TokenModel tokenModel)
@@ -166,12 +193,7 @@ namespace JWTRefreshToken.NET6._0.Controllers
             {
                 return BadRequest("Invalid access token or refresh token");
             }
-
-#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
             string username = principal.Identity.Name;
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
-#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
 
             var user = await _userManager.FindByNameAsync(username);
 

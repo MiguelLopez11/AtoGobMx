@@ -85,10 +85,11 @@
             v-if="
               items.proV_EstatusVale.nombre === 'Pendiente' && !items.autorizado
             "
+            :disabled="user !== items.usuarioAutoriza"
             @click="onAutorized(items.controlValeId)"
             class="m-1"
             variant="outline-danger"
-            ><i class="bi bi-trash3">Validar</i></b-dropdown-item
+            ><i class="bi bi-check">Validar</i></b-dropdown-item
           >
           <b-dropdown-item
             v-if="
@@ -97,7 +98,7 @@
             @click="onDeliver(items.controlValeId)"
             class="m-1"
             variant="outline-danger"
-            ><i class="bi bi-trash3">Entregar vale</i></b-dropdown-item
+            ><i class="bi bi-capslock-fill">Entregar vale</i></b-dropdown-item
           >
           <b-dropdown-item
             v-if="
@@ -106,7 +107,7 @@
             @click="onReceiver(items.controlValeId)"
             class="m-1"
             variant="outline-danger"
-            ><i class="bi bi-trash3">Recibir vale</i></b-dropdown-item
+            ><i class="bi bi-arrow-down-up">Recibir vale</i></b-dropdown-item
           >
         </b-dropdown>
       </template>
@@ -391,6 +392,7 @@ export default {
     const { getProvider } = ProviderServices()
     const { getStatusVoucher } = StatusVoucherServices()
     const { getTypeVoucher } = TypeVoucherServices()
+    const user = window.sessionStorage.getItem('Nombre')
     const voucherControl = ref([])
     const employees = ref([])
     const departaments = ref([])
@@ -813,6 +815,7 @@ export default {
     return {
       voucherControl,
       employees,
+      user,
       employeesProvider,
       breadcrumbItems,
       departaments,

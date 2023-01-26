@@ -60,7 +60,7 @@ namespace AtoGobMx.Controllers
             return StatusCode(200, "Cita Se ha credo exitosamente");
         }
         [HttpPut("{CitaId}")]
-        public async Task<IActionResult> PutCategoria(int CitaId, SERMED_Cita cita)
+        public async Task<IActionResult> PutCita(int CitaId, SERMED_Cita cita)
         {
             if (cita.CitaId != CitaId)
             {
@@ -83,7 +83,7 @@ namespace AtoGobMx.Controllers
             return Ok("Cita actualizada correctamente");
         }
         [HttpDelete("{CitaId}")]
-        public async Task<IActionResult> DeleteInventario(int CitaId)
+        public async Task<IActionResult> DeleteCita(int CitaId)
         {
             var cita = await _context.Cita
                 .FirstOrDefaultAsync(f => f.CitaId == CitaId);
