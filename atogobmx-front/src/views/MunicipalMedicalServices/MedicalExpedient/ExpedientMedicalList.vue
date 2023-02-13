@@ -14,22 +14,6 @@
       >
       </b-form-input>
       </b-col>
-      <b-col>
-
-      <b-button
-        style="
-          background-color: #7367f0;
-          height: 50px;
-          font-size: 18px;
-        "
-        class="w-100"
-        @click="showModal = !showModal"
-        type="submit"
-      >
-        <i class="bi bi-folder-fill m-1" />
-        Agregar Expediente Médico
-      </b-button>
-      </b-col>
     </b-row>
     <EasyDataTable
       rows-per-page-message="registros por pagina"
@@ -91,6 +75,7 @@
             v-if="items.archivado"
             class="m-1"
             variant="outline-warning"
+            @click="onUnfiledExpedient(items.expedienteMedicoId)"
           >
             <i class="bi bi-back" />
             Desarchivar
@@ -146,7 +131,8 @@ export default {
     const {
       getExpedientsMedical,
       deleteExpedientMedical,
-      createExpedientMedical
+      createExpedientMedical,
+      unfiledExpedient
     } = MunicipalMedicalServices()
     const { getEmployeesWithoutExpedient } = EmployeeServices()
     const expedients = ref([])
@@ -225,6 +211,17 @@ export default {
         })
       })
     }
+    const onUnfiledExpedient = (expedienteMedicoId) => {
+      unfiledExpedient(expedienteMedicoId, data => {
+        swal.fire({
+          title: 'Expediente médico desarchivado!',
+          text: 'El Expediente médico ha sido desarchivado satisfactoriamente .',
+          icon: 'success'
+        })
+        refreshTable()
+        getEmployees()
+      })
+    }
     const RemoveExpedient = expedienteDigitalId => {
       isloading.value = true
       swal
@@ -272,7 +269,8 @@ export default {
       onFiltered,
       RemoveExpedient,
       refreshTable,
-      onAddExpedient
+      onAddExpedient,
+      onUnfiledExpedient
     }
   }
 }

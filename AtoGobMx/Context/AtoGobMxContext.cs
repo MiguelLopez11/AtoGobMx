@@ -76,6 +76,12 @@ namespace AtoGobMx.Context
             modelBuilder.Entity<PROV_EstatusVale>().HasData(new PROV_EstatusVale { EstatusValeId = 3, Nombre = "Entregado", Descripcion = "El vale a sido entregado correctamente al solicitante", Archivado = false });
             modelBuilder.Entity<PROV_EstatusVale>().HasData(new PROV_EstatusVale { EstatusValeId = 4, Nombre = "Recibido", Descripcion = "El solicitante entregó el vale al departamento de proveeduría", Archivado = false });
             modelBuilder.Entity<Departamentos>().HasData(new Departamentos { DepartamentoId = 1, Nombre = "Dirección de sistemas y tecnologías de la información", Descripcion = "Sistemas", Archivado = false });
+            modelBuilder.Entity<Departamentos>().HasData(new Departamentos { DepartamentoId = 2, Nombre = "Servicios médicos", Archivado = false });
+            modelBuilder.Entity<Departamentos>().HasData(new Departamentos { DepartamentoId = 3, Nombre = "Patrimonio Público", Archivado = false });
+            modelBuilder.Entity<Departamentos>().HasData(new Departamentos { DepartamentoId = 4, Nombre = "Recursos Humanos", Archivado = false });
+            modelBuilder.Entity<Departamentos>().HasData(new Departamentos { DepartamentoId = 5, Nombre = "Proveeduría", Archivado = false });
+            modelBuilder.Entity<Departamentos>().HasData(new Departamentos { DepartamentoId = 6, Nombre = "Obras públicas", Archivado = false });
+            modelBuilder.Entity<Departamentos>().HasData(new Departamentos { DepartamentoId = 7, Nombre = "Servicios públicos", Archivado = false });
             modelBuilder.Entity<PuestoTrabajo>().HasData(new PuestoTrabajo { PuestoTrabajoId = 1, Nombre = "Auxiliar de soporte", DepartamentoId = 1, Archivado = false });
             modelBuilder.Entity<Empleado>().HasData(new Empleado { EmpleadoId = 1, NombreCompleto = "Rogelio Gonzales Camacho", DepartamentoId = 1, PuestoTrabajoId = 1, Archivado = false });
         }

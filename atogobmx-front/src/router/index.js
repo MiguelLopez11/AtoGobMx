@@ -138,7 +138,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'SERVICIOS PÚBLICOS' || 'Servicios públicos'
+      departamento: 'Servicios públicos'
       // rol: 'Empleado'
     }
   },
@@ -149,7 +149,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'SERVICIOS PÚBLICOS' || 'Servicios públicos'
+      departamento: 'Servicios públicos'
     }
   },
   {
@@ -159,7 +159,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'SERVICIOS PÚBLICOS' || 'Servicios públicos'
+      departamento: 'Servicios públicos'
     }
   },
   {
@@ -169,7 +169,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'SERVICIOS PÚBLICOS' || 'Servicios públicos'
+      departamento: 'Servicios públicos'
     }
   },
   {
@@ -179,7 +179,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'SERVICIOS PÚBLICOS' || 'Servicios públicos'
+      departamento: 'Servicios públicos'
     }
   },
   {
@@ -189,7 +189,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Administrador',
-      departamento: 'SERVICIOS PÚBLICOS' || 'Servicios públicos'
+      departamento: 'Servicios públicos'
     }
   },
   {
@@ -199,7 +199,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Administrador',
-      departamento: 'SERVICIOS PÚBLICOS' || 'Servicios públicos'
+      departamento: 'Servicios públicos'
     }
   },
   {
@@ -209,7 +209,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'SERVICIOS PÚBLICOS' || 'Servicios públicos'
+      departamento: 'Servicios públicos'
     }
   },
   {
@@ -219,7 +219,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'SERVICIOS PÚBLICOS' || 'Servicios públicos'
+      departamento: 'Servicios públicos'
     }
   },
   {
@@ -229,7 +229,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Administrador',
-      departamento: 'SERVICIOS PÚBLICOS' || 'Servicios públicos'
+      departamento: 'Servicios públicos'
     }
   },
   {
@@ -239,7 +239,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Administrador',
-      departamento: 'SERVICIOS PÚBLICOS' || 'Servicios públicos'
+      departamento: 'Servicios públicos'
     }
   },
   {
@@ -249,7 +249,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'SERVICIOS PÚBLICOS' || 'Servicios públicos'
+      departamento: 'Servicios públicos'
     }
   },
   {
@@ -259,7 +259,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'SERVICIOS PÚBLICOS' || 'Servicios públicos'
+      departamento: 'Servicios públicos'
     }
   },
   {
@@ -269,7 +269,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'SERVICIOS PÚBLICOS' || 'Servicios públicos'
+      departamento: 'Servicios públicos'
     }
   },
   {
@@ -279,7 +279,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'SERVICIOS PÚBLICOS' || 'Servicios públicos'
+      departamento: 'Servicios públicos'
     }
   },
   {
@@ -289,7 +289,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'SERVICIOS PÚBLICOS' || 'Servicios públicos'
+      departamento: 'Servicios públicos'
     }
   },
   {
@@ -299,7 +299,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'SERVICIOS PÚBLICOS' || 'Servicios públicos'
+      departamento: 'Servicios públicos'
     }
   },
   {
@@ -309,7 +309,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'SERVICIOS PÚBLICOS' || 'Servicios públicos'
+      departamento: 'Servicios públicos'
     }
   },
   {
@@ -319,7 +319,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'SERVICIOS PÚBLICOS' || 'Servicios públicos'
+      departamento: 'Servicios públicos'
     }
   },
   {
@@ -329,7 +329,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'OBRAS PÚBLICAS' || 'Obras públicas'
+      departamento: 'Obras públicas'
     }
   },
   {
@@ -339,7 +339,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'OBRAS PÚBLICAS' || 'Obras públicas'
+      departamento: 'Obras públicas'
     }
   },
   {
@@ -349,7 +349,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'OBRAS PÚBLICAS' || 'Obras públicas'
+      departamento: 'Obras públicas'
     }
   },
   {
@@ -359,7 +359,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Administrador',
-      departamento: 'OBRAS PÚBLICAS' || 'Obras públicas'
+      departamento: 'Obras públicas'
     }
   },
   {
@@ -369,7 +369,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'PROVEEDURíA' || 'Proveeduría'
+      departamento: 'Proveeduría'
     }
   },
   {
@@ -379,7 +379,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'PROVEEDURíA' || 'Proveeduría'
+      departamento: 'Proveeduría'
     }
   },
   {
@@ -389,7 +389,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'PROVEEDURíA' || 'Proveeduría'
+      departamento: 'Proveeduría'
     }
   },
   {
@@ -399,7 +399,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'PROVEEDURíA' || 'Proveeduría'
+      departamento: 'Proveeduría'
     }
   },
   {
@@ -409,7 +409,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'PROVEEDURíA' || 'Proveeduría'
+      departamento: 'Proveeduría'
     }
   },
   {
@@ -419,7 +419,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'PROVEEDURíA' || 'Proveeduría'
+      departamento: 'Proveeduría'
     }
   },
   {
@@ -429,7 +429,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Administrador',
-      departamento: 'PROVEEDURíA' || 'Proveeduría'
+      departamento: 'Proveeduría'
     }
   },
   {
@@ -439,7 +439,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Administrador',
-      departamento: 'PROVEEDURíA' || 'Proveeduría'
+      departamento: 'Proveeduría'
     }
   },
   {
@@ -449,7 +449,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Administrador',
-      departamento: 'PROVEEDURíA' || 'Proveeduría'
+      departamento: 'Proveeduría'
     }
   },
   {
@@ -459,7 +459,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Administrador',
-      departamento: 'PROVEEDURíA' || 'Proveeduría'
+      departamento: 'Proveeduría'
     }
   },
   {
@@ -469,7 +469,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Administrador',
-      departamento: 'PROVEEDURíA' || 'Proveeduría'
+      departamento: 'Proveeduría'
     }
   },
   {
@@ -479,7 +479,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Administrador',
-      departamento: 'PROVEEDURíA' || 'Proveeduría'
+      departamento: 'Proveeduría'
     }
   },
   // termino modulos arturo
@@ -490,19 +490,9 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'DIRECCIÓN DE SISTEMAS Y TECNOLOGÍAS DE LA INFORMACIÓN' || 'Dirección de sistemas y tecnologías de la información'
+      departamento: 'Dirección de sistemas y tecnologías de la información'
     }
   },
-  // {
-  //   path: '/Usuarios/:usuarioId',
-  //   name: 'Usuarios-Edit',
-  //   component: () => import('@/views/Users/UserEdit.vue'),
-  //   meta: {
-  //     requiresAuth: true
-  //     // rol: 'Empleado',
-  //     // departamento: 'Dirección de Sistemas y Tecnologías de la Comunicación'
-  //   }
-  // },
   {
     path: '/RecursosHumanos/Departamentos/list',
     name: 'Departamentos',
@@ -550,7 +540,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'Patrimonio Público' || 'PATRIMONIO PÚBLICO'
+      departamento: 'Patrimonio Público'
     }
   },
   {
@@ -560,7 +550,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'Patrimonio Público' || 'PATRIMONIO PÚBLICO'
+      departamento: 'Patrimonio Público'
     }
   },
   {
@@ -570,7 +560,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Administrador',
-      departamento: 'Patrimonio Público' || 'PATRIMONIO PÚBLICO'
+      departamento: 'Patrimonio Público'
     }
   },
   {
@@ -580,7 +570,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Administrador',
-      departamento: 'Patrimonio Público' || 'PATRIMONIO PÚBLICO'
+      departamento: 'Patrimonio Público'
     }
   },
   {
@@ -590,7 +580,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'Patrimonio Público' || 'PATRIMONIO PÚBLICO'
+      departamento: 'Patrimonio Público'
     }
   },
   {
@@ -600,7 +590,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'Patrimonio Público' || 'PATRIMONIO PÚBLICO'
+      departamento: 'Patrimonio Público'
     }
   },
   {
@@ -610,7 +600,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'Patrimonio Público' || 'PATRIMONIO PÚBLICO'
+      departamento: 'Patrimonio Público'
     }
   },
   {
@@ -620,7 +610,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'Patrimonio Público' || 'PATRIMONIO PÚBLICO'
+      departamento: 'Patrimonio Público'
     }
   },
   {
@@ -630,7 +620,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'Patrimonio Público' || 'PATRIMONIO PÚBLICO'
+      departamento: 'Patrimonio Público'
     }
   },
   {
@@ -640,7 +630,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'Patrimonio Público' || 'PATRIMONIO PÚBLICO'
+      departamento: 'Patrimonio Público'
     }
   },
   {
@@ -650,7 +640,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Administrador',
-      departamento: 'Patrimonio Público' || 'PATRIMONIO PÚBLICO'
+      departamento: 'Patrimonio Público'
     }
   },
   {
@@ -660,7 +650,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Administrador',
-      departamento: 'Patrimonio Público' || 'PATRIMONIO PÚBLICO'
+      departamento: 'Patrimonio Público'
     }
   },
   {
@@ -670,7 +660,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'Patrimonio Público' || 'PATRIMONIO PÚBLICO'
+      departamento: 'Patrimonio Público'
     }
   },
   {
@@ -680,7 +670,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'Patrimonio Público' || 'PATRIMONIO PÚBLICO'
+      departamento: 'Patrimonio Público'
     }
   },
   {
@@ -690,7 +680,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'Servicios Médicos' || 'SERVICIOS MÉDICOS' || 'Servicios médicos'
+      departamento: 'Servicios médicos'
     }
   },
   {
@@ -700,7 +690,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'Servicios Médicos' || 'SERVICIOS MÉDICOS' || 'Servicios médicos'
+      departamento: 'Servicios médicos'
     }
   },
   {
@@ -710,7 +700,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'Servicios Médicos' || 'SERVICIOS MÉDICOS' || 'Servicios médicos'
+      departamento: 'Servicios médicos'
     }
   },
   {
@@ -719,8 +709,6 @@ const routes = [
     component: () => import('@/views/MunicipalMedicalServices/MedicalExpedient/ExpedientMedicalList'),
     meta: {
       requiresAuth: true
-      // rol: 'Empleado',
-      // departamento: 'Direccion de servicios medicos municipales'
     }
   },
   {
@@ -729,8 +717,6 @@ const routes = [
     component: () => import('@/views/MunicipalMedicalServices/MedicalExpedient/ExpedientMedicalEdit'),
     meta: {
       requiresAuth: true
-      // rol: 'Empleado',
-      // departamento: 'Direccion de servicios medicos municipales'
     }
   },
   {
@@ -740,7 +726,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'Servicios Médicos' || 'SERVICIOS MÉDICOS' || 'Servicios médicos'
+      departamento: 'Servicios médicos'
     }
   },
   {
@@ -750,7 +736,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'Servicios Médicos' || 'SERVICIOS MÉDICOS' || 'Servicios médicos'
+      departamento: 'Servicios médicos'
     }
   },
   {
@@ -760,7 +746,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'Servicios Médicos' || 'SERVICIOS MÉDICOS' || 'Servicios médicos'
+      departamento: 'Servicios médicos'
     }
   },
   {
@@ -770,7 +756,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'Servicios Médicos' || 'SERVICIOS MÉDICOS' || 'Servicios médicos'
+      departamento: 'Servicios médicos'
     }
   },
   {
@@ -780,7 +766,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       rol: 'Empleado',
-      departamento: 'Servicios Médicos' || 'SERVICIOS MÉDICOS' || 'Servicios médicos'
+      departamento: 'Servicios médicos'
     }
   }
 ]
@@ -800,7 +786,7 @@ router.beforeEach(async (to, from, next) => {
       path: '/Login',
       query: { redirect: to.fullPath }
     })
-  } else if (to.meta.rol && to.meta.departamento && departamento !== to.meta.departamento && role !== to.meta.rol && role !== 'Administrador') {
+  } else if (to.meta.rol && to.meta.departamento && departamento !== to.meta.departamento && role !== 'Administrador') {
     next({ name: 'PageNotPermission' })
   } else {
     next()

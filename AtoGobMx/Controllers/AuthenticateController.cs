@@ -40,28 +40,28 @@ namespace AtoGobMx.Controllers
             try
             {
 
-            List<object> usuarios = new List<object>();
-            var user = _userManager.Users
-                .Include(i => i.Empleado)
-                .Include(i => i.Empleado.Departamentos)
-                .Include(i => i.Empleado.PuestoTrabajo)
-                .ToArray();
-            foreach (var usuario in user)
-            {
-                var userObject = new
+                List<object> usuarios = new List<object>();
+                var user = _userManager.Users
+                    .Include(i => i.Empleado)
+                    .Include(i => i.Empleado.Departamentos)
+                    .Include(i => i.Empleado.PuestoTrabajo)
+                    .ToArray();
+                foreach (var usuario in user)
                 {
-                    NombreUsuario = usuario.UserName,
-                    Email = usuario.Email,
-                    NumeroTelefono = usuario.PhoneNumber,
-                    EmpleadoId = usuario.Empleado.EmpleadoId,
-                    Nombre = usuario.Empleado.NombreCompleto,
-                    Departamento = usuario.Empleado.Departamentos.Nombre,
-                    PuestoTrabajo = usuario.Empleado.PuestoTrabajo.Nombre
-                };
-                usuarios.Add(userObject);
-            }
-            return Ok(usuarios);
-            } catch (Exception ex) 
+                    var userObject = new
+                    {
+                        NombreUsuario = usuario.UserName,
+                        Email = usuario.Email,
+                        NumeroTelefono = usuario.PhoneNumber,
+                        EmpleadoId = usuario.Empleado.EmpleadoId,
+                        Nombre = usuario.Empleado.NombreCompleto,
+                        Departamento = usuario.Empleado.Departamentos.Nombre,
+                        PuestoTrabajo = usuario.Empleado.PuestoTrabajo.Nombre
+                    };
+                    usuarios.Add(userObject);
+                }
+                return Ok(usuarios);
+            } catch (Exception ex)
             {
                 return BadRequest(ex.Message.ToString());
             }
@@ -102,6 +102,7 @@ namespace AtoGobMx.Controllers
                 user.RefreshTokenExpiryTime = DateTime.Now.AddDays(refreshTokenValidityInDays);
 
                 await _userManager.UpdateAsync(user);
+                //var rol = await = _roleManager
                 return Ok(new
                 {
                     Token = new JwtSecurityTokenHandler().WriteToken(token),
@@ -116,7 +117,6 @@ namespace AtoGobMx.Controllers
             }
             return Unauthorized();
         }
-        [Authorize]
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
@@ -129,17 +129,24 @@ namespace AtoGobMx.Controllers
             {
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = model.Username,
-                PhoneNumber =  model.PhoneNumber,
+                PhoneNumber = model.PhoneNumber,
                 Email = model.Email,
                 EmpleadoId = model.EmpleadoId
             };
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." });
+            if (!await _roleManager.RoleExistsAsync(UserRoles.Admin))
+                await _roleManager.CreateAsync(new IdentityRole(UserRoles.Admin));
+            if (!await _roleManager.RoleExistsAsync(UserRoles.User))
+                await _roleManager.CreateAsync(new IdentityRole(UserRoles.User));
 
+            if (await _roleManager.RoleExistsAsync(UserRoles.Admin))
+            {
+                await _userManager.AddToRoleAsync(user, UserRoles.User);
+            }
             return Ok(new Response { Status = "Success", Message = "Usuario registrado correctamente!" });
         }
-        [Authorize(Roles = UserRoles.Admin)]
         [HttpPost]
         [Route("register-admin")]
         public async Task<IActionResult> RegisterAdmin([FromBody] RegisterModel model)
@@ -168,10 +175,6 @@ namespace AtoGobMx.Controllers
             if (await _roleManager.RoleExistsAsync(UserRoles.Admin))
             {
                 await _userManager.AddToRoleAsync(user, UserRoles.Admin);
-            }
-            if (await _roleManager.RoleExistsAsync(UserRoles.Admin))
-            {
-                await _userManager.AddToRoleAsync(user, UserRoles.User);
             }
             return Ok(new Response { Status = "Success", Message = "usuario creado correctamente!" });
         }
@@ -243,7 +246,7 @@ namespace AtoGobMx.Controllers
 
             return NoContent();
         }
-        [Authorize(Roles = UserRoles.Admin)]
+        [Authorize]
         [HttpDelete("{userName}")]
         public async Task<IActionResult> DeleteUser(string userName)
         {

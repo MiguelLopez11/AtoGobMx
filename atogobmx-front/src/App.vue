@@ -14,7 +14,7 @@
       menuFooterTextColor="#807e85"
       iconsColor="#807e85"
       menuItemsHoverColor="#9d94f4"
-      :profileImg="`http://localhost:5000/api/Archivos/FotoPerfil/Empleado/${empleadoId}`"
+      :profileImg="`https://digitalatogobmxwebservices.somee.com/api/Archivos/FotoPerfil/Empleado/${empleadoId}`"
       :profileName="employee"
       :profileRole="departament + ', ' + puestoTrabajo"
       @button-exit-clicked="removeLocalStorgare()"

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { memoizedRefreshToken } from './refreshToken'
 
-axios.defaults.baseURL = 'http://localhost:5000/api'
+axios.defaults.baseURL = 'https://digitalatogobmxwebservices.somee.com/api'
 
 axios.interceptors.request.use(
   async (config) => {

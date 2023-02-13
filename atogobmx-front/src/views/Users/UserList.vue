@@ -130,11 +130,7 @@
           </b-col>
           <b-col>
             <b-form-group label="Empleado">
-              <Field
-                name="EmployeeField"
-                as="text"
-                :rules="validateEmployee"
-              >
+              <Field name="EmployeeField" as="text" :rules="validateEmployee">
                 <b-form-select
                   v-model="userFields.empleadoId"
                   autofocus
@@ -191,6 +187,8 @@ export default {
       UsersServices()
     const { getEmployeesUnfiled } = EmployeeServices()
     // Data
+    const departament = window.sessionStorage.getItem('Departamento')
+    const role = window.sessionStorage.getItem('Role')
     const showModal = ref(false)
     const users = ref([])
     const employees = ref([])
@@ -227,6 +225,9 @@ export default {
     })
     const areasFieldsBlank = ref(JSON.parse(JSON.stringify(userFields)))
     const fields = ref([
+      { value: 'nombre', text: 'Empleado' },
+      { value: 'departamento', text: 'Departamento' },
+      { value: 'puestoTrabajo', text: 'Puesto trabajo' },
       { value: 'nombreUsuario', text: 'Nombre de usuario' },
       { value: 'email', text: 'Correo electronico' },
       { value: 'numeroTelefono', text: 'Numero de telefono' },
@@ -272,37 +273,27 @@ export default {
     }
     const addUser = () => {
       if (isAdmin.value) {
-        createAdminUser(userFields.value, data => {
-          console.log(data)
-          if (!data.status) {
-            refreshTable()
-            resetRoleFields()
-            swal.fire({
-              title: '¡Error!',
-              text: 'El usuario logeado no tiene permiso para realizar esta acción o uno de los campos ingresados no es correcto.',
-              icon: 'error'
-            })
-          } else {
-            refreshTable()
-            resetRoleFields()
+        if (role === 'Administrador') {
+          createAdminUser(userFields.value, data => {
             swal.fire({
               title: 'Usuario registrado correctamente!',
               text: 'El Usuario se ha registrado al sistema satisfactoriamente.',
               icon: 'success'
             })
-          }
-        })
+            refreshTable()
+            resetRoleFields()
+          })
+        } else {
+          swal.fire({
+            title: '¡Error!',
+            text: 'El usuario logeado no tiene permiso para realizar esta acción o uno de los campos ingresados no es correcto.',
+            icon: 'error'
+          })
+        }
       } else {
-        createUser(userFields.value, data => {
-          if (data.status) {
-            refreshTable()
-            resetRoleFields()
-            swal.fire({
-              title: 'Usuario Sin permiso!',
-              text: 'No tiene permiso para realizar esta acción.',
-              icon: 'error'
-            })
-          } else {
+        // eslint-disable-next-line no-constant-condition
+        if (departament === 'DIRECCIÓN DE SISTEMAS Y TECNOLOGÍAS DE LA INFORMACIÓN' || 'Dirección de sistemas y tecnologías de la información') {
+          createUser(userFields.value, data => {
             refreshTable()
             resetRoleFields()
             swal.fire({
@@ -310,8 +301,14 @@ export default {
               text: 'El Usuario se ha registrado al sistema satisfactoriamente.',
               icon: 'success'
             })
-          }
-        })
+          })
+        } else {
+          swal.fire({
+            title: '¡Error!',
+            text: 'El usuario logeado no tiene permiso para realizar esta acción o uno de los campos ingresados no es correcto.',
+            icon: 'error'
+          })
+        }
       }
     }
     const RemoveUser = UserName => {
@@ -337,10 +334,17 @@ export default {
               })
               .then(result => {
                 if (result.isConfirmed) {
-                  deleteUser(UserName, data => {
-                    refreshTable()
-                    resetRoleFields()
-                  })
+                  if (
+                  // eslint-disable-next-line no-constant-condition
+                    departament !==
+                      'Dirección de sistemas y tecnologías de la información' ||
+                    'Dirección de sistemas y tecnologías de la información'
+                  ) {
+                    deleteUser(UserName, data => {
+                      refreshTable()
+                      resetRoleFields()
+                    })
+                  }
                 }
               })
           } else {

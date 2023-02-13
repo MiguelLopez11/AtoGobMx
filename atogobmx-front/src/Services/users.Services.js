@@ -16,16 +16,16 @@ export default function UsersServices () {
   }
   const createAdminUser = (data, callback) => {
     axiosPrivate.post('/Authenticate/register-admin', data).then((response) => {
-      console.log(response)
       callback(response.data)
-    }).catch(({ response }) => {
-      callback(response)
+    }).catch(({ data }) => {
+      callback(data)
     })
   }
   const deleteUser = (UserName, callback) => {
-    axiosPrivate.delete(`/Authenticate/${UserName}`).then((response) => {
-      callback(response.data)
-    })
+    axiosPrivate.delete(`/Authenticate/${UserName}`)
+      .then((response) => {
+        callback(response.data)
+      })
   }
   return {
     getUsers,

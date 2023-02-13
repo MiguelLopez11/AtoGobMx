@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtoGobMx.Migrations
 {
     [DbContext(typeof(AtoGobMxContext))]
-    [Migration("20230118193437_ExportDB")]
-    partial class ExportDB
+    [Migration("20230126202820_exportDB")]
+    partial class exportDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -476,6 +476,42 @@ namespace AtoGobMx.Migrations
                             Archivado = false,
                             Descripcion = "Sistemas",
                             Nombre = "Dirección de sistemas y tecnologías de la información"
+                        },
+                        new
+                        {
+                            DepartamentoId = 2,
+                            Archivado = false,
+                            Nombre = "Servicios médicos"
+                        },
+                        new
+                        {
+                            DepartamentoId = 3,
+                            Archivado = false,
+                            Nombre = "Patrimonio Público"
+                        },
+                        new
+                        {
+                            DepartamentoId = 4,
+                            Archivado = false,
+                            Nombre = "Recursos Humanos"
+                        },
+                        new
+                        {
+                            DepartamentoId = 5,
+                            Archivado = false,
+                            Nombre = "Proveeduría"
+                        },
+                        new
+                        {
+                            DepartamentoId = 6,
+                            Archivado = false,
+                            Nombre = "Obras públicas"
+                        },
+                        new
+                        {
+                            DepartamentoId = 7,
+                            Archivado = false,
+                            Nombre = "Servicios públicos"
                         });
                 });
 
@@ -1935,11 +1971,16 @@ namespace AtoGobMx.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
+                    b.Property<int?>("EmpleadoId")
+                        .HasColumnType("int");
+
                     b.Property<string>("RefreshToken")
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("RefreshTokenExpiryTime")
                         .HasColumnType("datetime(6)");
+
+                    b.HasIndex("EmpleadoId");
 
                     b.HasDiscriminator().HasValue("Usuario");
                 });
@@ -2472,6 +2513,15 @@ namespace AtoGobMx.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("AtoGobMx.Models.Usuario", b =>
+                {
+                    b.HasOne("AtoGobMx.Models.Empleado", "Empleado")
+                        .WithMany()
+                        .HasForeignKey("EmpleadoId");
+
+                    b.Navigation("Empleado");
                 });
 
             modelBuilder.Entity("AtoGobMx.Models.Alumbrado", b =>

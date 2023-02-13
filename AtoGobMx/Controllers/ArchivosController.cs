@@ -34,7 +34,7 @@ namespace AtoGobMx.Controllers
             var fotoPerfil = await _context.Archivos.FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expedienteDigitalId);
             if (fotoPerfil == null || expediente == null)
             {
-                var perfil = System.IO.File.OpenRead($"Files/user.png");
+                var perfil = System.IO.File.OpenRead("https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png");
                 return File(perfil, "image/jpeg");
             }
             var serverPath = "ftp://digital.atogobmx.com/Files/RecursosHumanos/Empleados/";
@@ -60,7 +60,7 @@ namespace AtoGobMx.Controllers
             var fotoPerfil = await _context.Archivos.FirstOrDefaultAsync(f => f.ExpedienteDigitalId == expediente.ExpedienteDigitalId);
             if (fotoPerfil == null || expediente == null)
             {
-                var perfil = System.IO.File.OpenRead($"Files/user.png");
+                var perfil = System.IO.File.OpenRead("https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png");
                 return File(perfil, "image/jpeg");
             }
             var serverPath = "ftp://digital.atogobmx.com/Files/RecursosHumanos/Empleados/";

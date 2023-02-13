@@ -116,7 +116,11 @@ namespace AtoGobMx.Controllers
             {
                 return NotFound();
             }
+            var empleado = await _context.Empleados
+                .FirstOrDefaultAsync(f => f.EmpleadoId == expedienteMedico.EmpleadoId);
+            empleado.TieneExpedienteMédico = false;
             expedienteMedico.Archivado = true;
+            _context.Empleados.Update(empleado);
             _context.ExpedienteMedico.Update(expedienteMedico);
             await _context.SaveChangesAsync();
             return Ok("Expediente medico archivada");
